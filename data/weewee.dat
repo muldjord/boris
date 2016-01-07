@@ -2,6 +2,7 @@ title=Relieve yourself
 category=Bladder
 bladder=-100
 fun=-5
+social=-5
 oneShot
 #Frames
 0;300;0;0;0;0;0;data/sfx/zipper_down.wav;

@@ -2,7 +2,6 @@ title=Headbang
 category=Fun
 energy=-5
 fun=6
-social=-3
 hunger=4
 #Frames
 0;75;0;0;0;0;0;data/sfx/headbang.wav;
