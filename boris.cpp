@@ -255,7 +255,7 @@ void Boris::changeBehaviour(QString behav, int time)
   
   // Pick random behaviour except sleep and weewee
   do {
-    curBehav = (qrand() % (behaviours->size() - 23)) + 23;
+    curBehav = (qrand() % (behaviours->size() - 21)) + 21;
   } while(behaviours->at(curBehav).file == "weewee" || behaviours->at(curBehav).file == "sleep");
   // If a specific behaviour is requested, use that instead of the random one
   if(behav != "") {
