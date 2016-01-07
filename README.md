@@ -14,7 +14,7 @@ Copyright 2016 Lars Muldjord. This program is distributed under the terms of the
 
 ## Building from source (Linux)
 ### Requirements
-* Qt 5 including multimedia package
+* Qt 5 dev libs including multimedia package
 
 ### Build commands
 * qmake
