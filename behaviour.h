@@ -44,6 +44,7 @@ struct Frame
 
 struct Behaviour
 {
+  QString file;
   QString title;
   QString category;
   int energy;

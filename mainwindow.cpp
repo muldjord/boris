@@ -156,6 +156,7 @@ bool MainWindow::loadBehaviours()
       b.bladder = 0;
       b.social = 0;
       b.fun = 0;
+      b.file = info.completeBaseName();
       b.title = info.completeBaseName();
       b.category = "";
       qDebug("Adding behaviour: %s\n", b.title.toStdString().c_str());

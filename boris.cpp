@@ -96,7 +96,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   connect(socialMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   connect(funMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   for(int i = 0; i < behaviours->length(); ++i) {
-    if(behaviours->at(i).title.left(1) != "_") {
+    if(behaviours->at(i).file.left(1) != "_") {
       if(behaviours->at(i).category == "Energy") {
         energyMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
       } else if(behaviours->at(i).category == "Hunger") {
@@ -153,7 +153,7 @@ Boris::~Boris()
 void Boris::changeBehaviour(QString behav, int time)
 {
   // Check if Boris is dead... If so, don't do anything. :(
-  if(behaviours->at(curBehav).title == "_drop_dead") {
+  if(behaviours->at(curBehav).file == "_drop_dead") {
     behavTimer.stop();
     statTimer.stop();
     // RIP
@@ -161,11 +161,11 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   // Stop stat flashing no matter what
-  if(behaviours->at(curBehav).title == "_energy" ||
-     behaviours->at(curBehav).title == "_hunger" ||
-     behaviours->at(curBehav).title == "_bladder" ||
-     behaviours->at(curBehav).title == "_social" ||
-     behaviours->at(curBehav).title == "_fun") {
+  if(behaviours->at(curBehav).file == "_energy" ||
+     behaviours->at(curBehav).file == "_hunger" ||
+     behaviours->at(curBehav).file == "_bladder" ||
+     behaviours->at(curBehav).file == "_social" ||
+     behaviours->at(curBehav).file == "_fun") {
     stats->flashStat("none");
   }
 
@@ -220,12 +220,12 @@ void Boris::changeBehaviour(QString behav, int time)
   // Pick random behaviour except sleep and weewee
   do {
     curBehav = (qrand() % (behaviours->size() - 23)) + 23;
-  } while(behaviours->at(curBehav).title == "Relieve yourself" || behaviours->at(curBehav).title == "Take a nap");
+  } while(behaviours->at(curBehav).file == "weewee" || behaviours->at(curBehav).file == "sleep");
   // If a specific behaviour is requested, use that instead of the random one
   if(behav != "") {
     //behav = "_fun"; // Use this to test behaviours
     for(int a = 0; a < behaviours->size(); ++a) {
-      if(behaviours->at(a).title == behav) {
+      if(behaviours->at(a).file == behav) {
         curBehav = a;
       }
     }
@@ -238,7 +238,7 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 #ifdef DEBUG
   qDebug("Changing to behaviour '%d' titled '%s' for %d ms\n",
-         curBehav, behaviours->at(curBehav).title.toStdString().c_str(),
+         curBehav, behaviours->at(curBehav).file.toStdString().c_str(),
          behavTimer.interval());
 #endif
 
@@ -265,7 +265,7 @@ void Boris::nextFrame()
 {
   sanityCheck();
   
-  if(!falling && !grabbed && behaviours->at(curBehav).title != "_sleep" && behaviours->at(curBehav).title != "Take a nap") {
+  if(!falling && !grabbed && behaviours->at(curBehav).file != "_sleep" && behaviours->at(curBehav).file != "sleep") {
     QPoint p = QCursor::pos();
     int minX = borisSize * 2;
     int maxX = QApplication::desktop()->width() - borisSize * 2;
@@ -389,7 +389,11 @@ void Boris::moveBoris(int dX, int dY)
 }
 
 void Boris::handleBehaviourChange(QAction* a) {
-  behavQueue.append(a->text());
+  for(int i = 0; i < behaviours->length(); ++i) {
+    if(behaviours->at(i).title == a->text()) {
+      behavQueue.append(behaviours->at(i).file);
+    }
+  }
 }
 
 void Boris::showBoris()
@@ -405,9 +409,9 @@ void Boris::hideBoris()
 void Boris::enterEvent(QEvent *event)
 {
   event->accept();
-  if(behaviours->at(curBehav).title != "_drop_dead" &&
-     behaviours->at(curBehav).title != "_sleep" &&
-     behaviours->at(curBehav).title != "Take a nap") {
+  if(behaviours->at(curBehav).file != "_drop_dead" &&
+     behaviours->at(curBehav).file != "_sleep" &&
+     behaviours->at(curBehav).file != "sleep") {
     social += 5;
   }
   if(!showStats) {
@@ -431,7 +435,7 @@ void Boris::mousePressEvent(QMouseEvent* event)
     bMenu->exec(QCursor::pos());
   }
   if(event->button() == Qt::LeftButton) {
-    if(behaviours->at(curBehav).title == "_sleep" || behaviours->at(curBehav).title == "Take a nap") {
+    if(behaviours->at(curBehav).file == "_sleep" || behaviours->at(curBehav).file == "sleep") {
       energy -= 100;
     }
     setCursor(QCursor(QPixmap(":mouse_grab.png")));
@@ -558,7 +562,7 @@ void Boris::statProgress()
   energy -= qrand() % 4;
   hunger += qrand() % 4;
   //bladder += 0;
-  social -= qrand() % 1;
+  social -= qrand() % 4;
   fun -= qrand() % 20;
 }
 
@@ -623,7 +627,7 @@ void Boris::sanityCheck()
   stats->updateStats(energy, hunger, bladder, social, fun);
 
   // Check if Boris is dying or is already dead
-  if(behaviours->at(curBehav).title != "_drop_dead") {
+  if(behaviours->at(curBehav).file != "_drop_dead") {
     if(energy + social + fun + ((hunger - 100) *-1) < 50) {
       qDebug("Boris has died... RIP!\n");
       changeBehaviour("_drop_dead");
