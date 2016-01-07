@@ -1,4 +1,4 @@
-# boris
+# Boris
 Boris desktop screenmate written entirely in Qt
 
 * Programming: Lars Muldjord
