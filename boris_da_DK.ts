@@ -219,22 +219,27 @@ Copyright 2015 Lars Muldjord. This software is distributed under the terms of th
         <translation>Boris kloner (1-100):</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="129"/>
+        <location filename="about.cpp" line="134"/>
+        <source>Independence:</source>
+        <translation>Selvstændighed:</translation>
+    </message>
+    <message>
+        <location filename="about.cpp" line="142"/>
         <source>Enable sound</source>
         <translation>Aktivér lyd</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="134"/>
+        <location filename="about.cpp" line="129"/>
         <source>Always show vitality stats</source>
         <translation>Vis altid Boris&apos; helbred</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="139"/>
+        <location filename="about.cpp" line="147"/>
         <source>Sound volume:</source>
         <translation>Lyd niveau:</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="157"/>
+        <location filename="about.cpp" line="167"/>
         <source>Show this on startup</source>
         <translation>Vis dette vindue ved startup</translation>
     </message>
@@ -242,32 +247,32 @@ Copyright 2015 Lars Muldjord. This software is distributed under the terms of th
 <context>
     <name>Boris</name>
     <message>
-        <location filename="boris.cpp" line="82"/>
+        <location filename="boris.cpp" line="84"/>
         <source>Behaviours</source>
         <translation>Opførsler</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="83"/>
+        <location filename="boris.cpp" line="85"/>
         <source>Energy</source>
         <translation>Energi</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="85"/>
+        <location filename="boris.cpp" line="87"/>
         <source>Hunger</source>
         <translation>Sult</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="87"/>
+        <location filename="boris.cpp" line="89"/>
         <source>Toilet</source>
         <translation>Toilet</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="89"/>
+        <location filename="boris.cpp" line="91"/>
         <source>Social</source>
         <translation>Social</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="91"/>
+        <location filename="boris.cpp" line="93"/>
         <source>Fun</source>
         <translation>Sjov</translation>
     </message>
@@ -283,37 +288,37 @@ Copyright 2015 Lars Muldjord. This software is distributed under the terms of th
         <translation type="obsolete">&amp;Bring frem</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="271"/>
+        <location filename="mainwindow.cpp" line="275"/>
         <source>&amp;Config / about...</source>
         <translation>&amp;Konfigurér / om...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="275"/>
+        <location filename="mainwindow.cpp" line="279"/>
         <source>&amp;Earthquake</source>
         <translation>&amp;Jordskælv</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="276"/>
+        <location filename="mainwindow.cpp" line="280"/>
         <source>Walk up</source>
         <translation>Gå opad</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="277"/>
+        <location filename="mainwindow.cpp" line="281"/>
         <source>Walk down</source>
         <translation>Gå nedad</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="278"/>
+        <location filename="mainwindow.cpp" line="282"/>
         <source>Walk left</source>
         <translation>Gå mod venstre</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="279"/>
+        <location filename="mainwindow.cpp" line="283"/>
         <source>Walk right</source>
         <translation>Gå mod højre</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="281"/>
+        <location filename="mainwindow.cpp" line="285"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>

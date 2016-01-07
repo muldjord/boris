@@ -23,6 +23,10 @@ Copyright 2016 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
+#### Version 1.6.5 (8th January 2016):
+* Added independece slider to adjust how much attention Boris needs
+* Added guitar shredding behaviour
+
 #### Version 1.6.3 (7th January 2016):
 * First public release on Github
 * Now categorizes behaviours
