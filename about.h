@@ -48,6 +48,7 @@ private:
   QCheckBox *showStats;
   QCheckBox *enableSound;
   QCheckBox *showWelcome;
+  QSlider *independenceSlider;
   QSlider *volumeSlider;
 };
 

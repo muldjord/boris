@@ -50,6 +50,7 @@ public:
   void changeSize(int newSize);
   void soundEnable(bool enabled);
   void statsEnable(bool enabled);
+  void setIndependence(int value);
                                 
 public slots:
   void nextFrame();
@@ -81,9 +82,12 @@ private slots:
   void statProgress();
 
 private:
+  int independence;
+  
   int energy;
   int hunger;
   int bladder;
+  int hygiene;
   int social;
   int fun;
 
@@ -109,6 +113,7 @@ private:
   Stats *stats;
   bool showStats;
   QList<QString> behavQueue;
+  QString chooseFromCategory(QString category);
   
 };
 

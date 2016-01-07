@@ -75,8 +75,10 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   energy = 75 + qrand() % 25;
   hunger = qrand() % 25;
   bladder = qrand() % 25;
+  hygiene = qrand() % 25;
   social = 75 + qrand() % 25;
   fun = 75 + qrand() % 25;
+  independence = settings->value("independence", "0").toInt();
   
   bMenu = new QMenu();
   bMenu->setTitle(tr("Behaviours"));
@@ -150,6 +152,24 @@ Boris::~Boris()
   delete bMenu;
 }
 
+QString Boris::chooseFromCategory(QString category)
+{
+  QList<QString> b;
+  for(int i = 0; i < behaviours->length(); ++i) {
+    if(behaviours->at(i).category == category) {
+      b.append(behaviours->at(i).file);
+    }
+  }
+  int chosen = qrand() % b.length();
+  for(int i = 0; i < behaviours->length(); ++i) {
+    if(behaviours->at(i).file == b.at(chosen)) {
+      chosen = i;
+      break;
+    }
+  }
+  return behaviours->at(chosen).file;
+}
+
 void Boris::changeBehaviour(QString behav, int time)
 {
   // Check if Boris is dead... If so, don't do anything. :(
@@ -178,37 +198,53 @@ void Boris::changeBehaviour(QString behav, int time)
   // Stat check
   if(behav == "" && time == 0) {
     if(energy <= 50) {
-      if(energy <= 5) {
-        behav = "_sleep";
-      } else if(qrand() % (100 - energy) > 75) {
+      if(qrand() % (100 - energy) > 75) {
         stats->flashStat("energy");
         behav = "_energy";
+      } else if(energy <= 0) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Energy");
+        }
       }
     }
     if(hunger >= 50) {
       if(qrand() % hunger > 75) {
         stats->flashStat("hunger");
         behav = "_hunger";
+      } else if(hunger >= 100) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Hunger");
+        }
       }
     }
     if(bladder >= 50) {
-      if(bladder >= 95) {
-        behav = "_weewee";
-      } else if(qrand() % bladder > 75) {
+      if(qrand() % bladder > 75) {
         stats->flashStat("bladder");
         behav = "_bladder";
+      } else if(bladder >= 100) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Bladder");
+        }
       }
     }
     if(social <= 50) {
       if(qrand() % (100 - social) > 75) {
         stats->flashStat("social");
         behav = "_social";
+      } else if(social <= 0) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Social");
+        }
       }
     }
     if(fun <= 50) {
       if(qrand() % (100 - fun) > 75) {
         stats->flashStat("fun");
         behav = "_fun";
+      } else if(fun <= 0) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Fun");
+        }
       }
     }
   }
@@ -485,6 +521,11 @@ void Boris::changeSize(int newSize)
   resetTransform();
   setFixedSize(borisSize, borisSize);
   scale((qreal)borisSize / 32.0, (qreal)borisSize / 32.0);
+}
+
+void Boris::setIndependence(int value)
+{
+  independence = value;
 }
 
 void Boris::soundEnable(bool enabled)

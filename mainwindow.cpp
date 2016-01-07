@@ -60,6 +60,9 @@ MainWindow::MainWindow()
   if(!settings->contains("size")) {
     settings->setValue("size", "64");
   }
+  if(!settings->contains("independence")) {
+    settings->setValue("independence", "0");
+  }
   if(!settings->contains("stats")) {
     settings->setValue("stats", "false");
   }
@@ -310,11 +313,13 @@ void MainWindow::aboutBox()
   int newSize = settings->value("size", "32").toInt();
   bool soundEnable = settings->value("sound", "true").toBool();
   bool statsEnable = settings->value("stats", "true").toBool();
+  int independence = settings->value("independence", "0").toInt();
   qreal volume = (qreal)settings->value("volume", "100").toInt() / 100.0;
   for(int a = 0; a < borises.length(); ++a) {
     borises.at(a)->changeSize(newSize);
     borises.at(a)->statsEnable(statsEnable);
     borises.at(a)->soundEnable(soundEnable);
+    borises.at(a)->setIndependence(independence);
     for(int b = 0; b < behaviours->length(); ++b) {
       for(int c = 0; c < behaviours->at(b).behaviour.length(); ++c) {
         if(behaviours->at(b).behaviour.at(c).soundFx != NULL) {

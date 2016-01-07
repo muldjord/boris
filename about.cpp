@@ -43,7 +43,7 @@ extern QSettings *settings;
 
 About::About(QWidget *parent) : QDialog(parent)
 {
-  setFixedSize(450, 500);
+  setFixedSize(450, 600);
   setWindowIcon(QIcon(":icon.png"));
   setWindowTitle("Boris v"VERSION);
 
@@ -126,14 +126,22 @@ About::About(QWidget *parent) : QDialog(parent)
     clonesLineEdit->setText(settings->value("clones").toString());
   }
   
-  enableSound = new QCheckBox(tr("Enable sound"));
-  if(settings->value("sound") == "true") {
-    enableSound->setCheckState(Qt::Checked);
-  }
-
   showStats = new QCheckBox(tr("Always show vitality stats"));
   if(settings->value("stats") == "true") {
     showStats->setCheckState(Qt::Checked);
+  }
+
+  QLabel *independenceLabel = new QLabel(tr("Independence:"));
+  independenceSlider = new QSlider(Qt::Horizontal);
+  independenceSlider->setMinimum(0);
+  independenceSlider->setMaximum(100);
+  if(settings->contains("independence")) {
+    independenceSlider->setValue(settings->value("independence").toInt());
+  }
+
+  enableSound = new QCheckBox(tr("Enable sound"));
+  if(settings->value("sound") == "true") {
+    enableSound->setCheckState(Qt::Checked);
   }
 
   QLabel *volumeLabel = new QLabel(tr("Sound volume:"));
@@ -150,6 +158,8 @@ About::About(QWidget *parent) : QDialog(parent)
   configLayout->addWidget(clonesLabel);
   configLayout->addWidget(clonesLineEdit);
   configLayout->addWidget(showStats);
+  configLayout->addWidget(independenceLabel);
+  configLayout->addWidget(independenceSlider);
   configLayout->addWidget(enableSound);
   configLayout->addWidget(volumeLabel);
   configLayout->addWidget(volumeSlider);
@@ -203,6 +213,8 @@ void About::saveAll()
   } else {
     settings->setValue("stats", "false");
   }
+
+  settings->setValue("independence", independenceSlider->value());
 
   if(enableSound->isChecked()) {
     settings->setValue("sound", "true");

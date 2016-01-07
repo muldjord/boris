@@ -50,6 +50,7 @@ struct Behaviour
   int energy;
   int hunger;
   int bladder;
+  int hygiene;
   int social;
   int fun;
   bool oneShot;
