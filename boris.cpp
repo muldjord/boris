@@ -202,7 +202,7 @@ void Boris::changeBehaviour(QString behav, int time)
     return;
   }
 
-  // Stop stat flashing no matter what
+  // Stop stat flashing if ending a stat attention behaviour
   if(behaviours->at(curBehav).file == "_energy" ||
      behaviours->at(curBehav).file == "_hunger" ||
      behaviours->at(curBehav).file == "_bladder" ||
