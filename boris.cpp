@@ -198,7 +198,7 @@ void Boris::changeBehaviour(QString behav, int time)
   // Stat check
   if(behav == "" && time == 0) {
     if(energy <= 50) {
-      if(qrand() % (100 - energy) > 75) {
+      if(qrand() % (100 - energy) > independence) {
         stats->flashStat("energy");
         behav = "_energy";
       } else if(energy <= 5) {
@@ -208,7 +208,7 @@ void Boris::changeBehaviour(QString behav, int time)
       }
     }
     if(hunger >= 50) {
-      if(qrand() % hunger > 75) {
+      if(qrand() % hunger > independence) {
         stats->flashStat("hunger");
         behav = "_hunger";
       } else if(hunger >= 95) {
@@ -218,7 +218,7 @@ void Boris::changeBehaviour(QString behav, int time)
       }
     }
     if(bladder >= 50) {
-      if(qrand() % bladder > 75) {
+      if(qrand() % bladder > independence) {
         stats->flashStat("bladder");
         behav = "_bladder";
       } else if(bladder >= 95) {
@@ -228,7 +228,7 @@ void Boris::changeBehaviour(QString behav, int time)
       }
     }
     if(social <= 50) {
-      if(qrand() % (100 - social) > 75) {
+      if(qrand() % (100 - social) > independence) {
         stats->flashStat("social");
         behav = "_social";
       } else if(social <= 5) {
@@ -238,7 +238,7 @@ void Boris::changeBehaviour(QString behav, int time)
       }
     }
     if(fun <= 50) {
-      if(qrand() % (100 - fun) > 75) {
+      if(qrand() % (100 - fun) > independence) {
         stats->flashStat("fun");
         behav = "_fun";
       } else if(fun <= 5) {
