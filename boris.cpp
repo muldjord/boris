@@ -79,7 +79,60 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   social = 75 + qrand() % 25;
   fun = 75 + qrand() % 25;
   independence = settings->value("independence", "0").toInt();
+  energyQueue = 0;
+  hungerQueue = 0;
+  bladderQueue = 0;
+  socialQueue = 0;
+  funQueue = 0;
   
+  createBehavMenu();
+
+  showStats = false;
+  stats = new Stats(this);
+  if(settings->value("stats", "true").toBool()) {
+    stats->show();
+    showStats = true;
+  }
+  
+  staticBehavs = 0;
+  // Figure out how many static behaviours there are
+  for(int i = 0; i < behaviours->length(); ++i) {
+    if(behaviours->at(i).file.left(1) == "_") {
+      staticBehavs++;
+    }
+  }
+
+  connect(&behavTimer, SIGNAL(timeout()), this, SLOT(changeBehaviour()));
+  behavTimer.setInterval((qrand() % 8000) + 1000);
+  behavTimer.start();
+
+  physicsTimer.setInterval(30);
+  physicsTimer.setSingleShot(true);
+  connect(&physicsTimer, SIGNAL(timeout()), this, SLOT(handlePhysics()));
+
+  animTimer.setInterval(0);
+  animTimer.setSingleShot(true);
+  connect(&animTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
+  animTimer.start();
+
+  statTimer.setInterval(60000);
+  connect(&statTimer, SIGNAL(timeout()), this, SLOT(statProgress()));
+  statTimer.start();
+
+  statQueueTimer.setInterval(200);
+  connect(&statQueueTimer, SIGNAL(timeout()), this, SLOT(statQueueProgress()));
+  statQueueTimer.start();
+  
+  setCursor(QCursor(QPixmap(":mouse_hover.png")));
+}
+
+Boris::~Boris()
+{
+  delete bMenu;
+}
+
+void Boris::createBehavMenu()
+{
   bMenu = new QMenu();
   bMenu->setTitle(tr("Behaviours"));
   QMenu *energyMenu = new QMenu(tr("Energy"), bMenu);
@@ -117,48 +170,8 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   bMenu->addMenu(bladderMenu);
   bMenu->addMenu(socialMenu);
   bMenu->addMenu(funMenu);
-
-  showStats = false;
-  stats = new Stats(this);
-  if(settings->value("stats", "true").toBool()) {
-    stats->show();
-    showStats = true;
-  }
-  
-  staticBehavs = 0;
-  // Figure out how many static behaviours there are
-  for(int i = 0; i < behaviours->length(); ++i) {
-    if(behaviours->at(i).file.left(1) == "_") {
-      staticBehavs++;
-    }
-  }
-
-  connect(&behavTimer, SIGNAL(timeout()), this, SLOT(changeBehaviour()));
-  behavTimer.setInterval((qrand() % 8000) + 1000);
-  behavTimer.start();
-
-  physicsTimer.setInterval(30);
-  physicsTimer.setSingleShot(true);
-  connect(&physicsTimer, SIGNAL(timeout()), this, SLOT(handlePhysics()));
-
-  animTimer.setInterval(0);
-  animTimer.setSingleShot(true);
-  connect(&animTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
-  animTimer.start();
-
-  statTimer.setInterval(60000);
-  connect(&statTimer, SIGNAL(timeout()), this, SLOT(statProgress()));
-  statTimer.start();
-  
-  changeBehaviour("_dropped");
-
-  setCursor(QCursor(QPixmap(":mouse_hover.png")));
 }
 
-Boris::~Boris()
-{
-  delete bMenu;
-}
 
 QString Boris::chooseFromCategory(QString category)
 {
@@ -287,11 +300,18 @@ void Boris::changeBehaviour(QString behav, int time)
 #endif
 
   // Applying behaviour stats to Boris
+  energyQueue = behaviours->at(curBehav).energy;
+  hungerQueue = behaviours->at(curBehav).hunger;
+  bladderQueue = behaviours->at(curBehav).bladder;
+  socialQueue = behaviours->at(curBehav).social;
+  funQueue = behaviours->at(curBehav).fun;
+  /*
   energy += behaviours->at(curBehav).energy;
   hunger += behaviours->at(curBehav).hunger;
   bladder += behaviours->at(curBehav).bladder;
   social += behaviours->at(curBehav).social;
   fun += behaviours->at(curBehav).fun;
+  */
   
   curFrame = 0;
   if(behaviours->at(curBehav).oneShot) {
@@ -309,7 +329,7 @@ void Boris::nextFrame()
 {
   sanityCheck();
   
-  if(!falling && !grabbed && behaviours->at(curBehav).file != "_sleep" && behaviours->at(curBehav).file != "sleep") {
+  if(!falling && !grabbed && behaviours->at(curBehav).file != "sleep") {
     QPoint p = QCursor::pos();
     int minX = borisSize * 2;
     int maxX = QApplication::desktop()->width() - borisSize * 2;
@@ -454,7 +474,6 @@ void Boris::enterEvent(QEvent *event)
 {
   event->accept();
   if(behaviours->at(curBehav).file != "_drop_dead" &&
-     behaviours->at(curBehav).file != "_sleep" &&
      behaviours->at(curBehav).file != "sleep") {
     social += 5;
   }
@@ -479,7 +498,7 @@ void Boris::mousePressEvent(QMouseEvent* event)
     bMenu->exec(QCursor::pos());
   }
   if(event->button() == Qt::LeftButton) {
-    if(behaviours->at(curBehav).file == "_sleep" || behaviours->at(curBehav).file == "sleep") {
+    if(behaviours->at(curBehav).file == "sleep" && energy < 100) {
       energy -= 100;
     }
     setCursor(QCursor(QPixmap(":mouse_grab.png")));
@@ -681,5 +700,49 @@ void Boris::sanityCheck()
       qDebug("Boris has died... RIP!\n");
       changeBehaviour("_drop_dead");
     }
+  }
+}
+
+void Boris::statQueueProgress()
+{
+  if(energyQueue > 0) {
+    energyQueue--;
+    energy++;
+  }
+  if(energyQueue < 0) {
+    energyQueue++;
+    energy--;
+  }
+  if(hungerQueue > 0) {
+    hungerQueue--;
+    hunger++;
+  }
+  if(hungerQueue < 0) {
+    hungerQueue++;
+    hunger--;
+  }
+  if(bladderQueue > 0) {
+    bladderQueue--;
+    bladder++;
+  }
+  if(bladderQueue < 0) {
+    bladderQueue++;
+    bladder--;
+  }
+  if(socialQueue > 0) {
+    socialQueue--;
+    social++;
+  }
+  if(socialQueue < 0) {
+    socialQueue++;
+    social--;
+  }
+  if(funQueue > 0) {
+    funQueue--;
+    fun++;
+  }
+  if(funQueue < 0) {
+    funQueue++;
+    fun--;
   }
 }

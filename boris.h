@@ -80,8 +80,10 @@ private slots:
   void handlePhysics();
   void changeBehaviour(QString behav = "", int time = 0);
   void statProgress();
+  void statQueueProgress();
 
 private:
+  void createBehavMenu();
   int staticBehavs;
   int independence;
   
@@ -100,6 +102,7 @@ private:
   QTimer animTimer;
   QTimer physicsTimer;
   QTimer statTimer;
+  QTimer statQueueTimer;
   bool mMoving;
   QPoint mLastMousePosition;
   bool alreadyEvading;
@@ -114,6 +117,11 @@ private:
   Stats *stats;
   bool showStats;
   QList<QString> behavQueue;
+  int energyQueue;
+  int hungerQueue;
+  int bladderQueue;
+  int socialQueue;
+  int funQueue;
   QString chooseFromCategory(QString category);
   
 };
