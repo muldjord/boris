@@ -61,7 +61,7 @@ MainWindow::MainWindow()
     settings->setValue("size", "64");
   }
   if(!settings->contains("independence")) {
-    settings->setValue("independence", "25");
+    settings->setValue("independence", "75");
   }
   if(!settings->contains("stats")) {
     settings->setValue("stats", "false");
