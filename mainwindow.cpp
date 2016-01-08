@@ -54,6 +54,9 @@ MainWindow::MainWindow()
   if(!settings->contains("show_welcome")) {
     settings->setValue("show_welcome", "true");
   }
+  if(!settings->contains("behavs_path")) {
+    settings->setValue("behavs_path", "data/behavs");
+  }
   if(!settings->contains("clones")) {
     settings->setValue("clones", "1");
   }
@@ -61,7 +64,7 @@ MainWindow::MainWindow()
     settings->setValue("size", "64");
   }
   if(!settings->contains("independence")) {
-    settings->setValue("independence", "75");
+    settings->setValue("independence", "60");
   }
   if(!settings->contains("stats")) {
     settings->setValue("stats", "false");
@@ -105,7 +108,7 @@ MainWindow::~MainWindow()
 
 bool MainWindow::loadBehaviours()
 {
-  QDir d(settings->value("data_folder", "data").toString(),
+  QDir d(settings->value("behavs_path", "data/behavs").toString(),
          "*.png",
          QDir::Name,
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);

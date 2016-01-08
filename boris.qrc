@@ -7,12 +7,12 @@
     <file alias="icon_quit.png">icons/icon_quit.png</file>
     <file alias="mouse_hover.png">icons/mouse_hover.png</file>
     <file alias="mouse_grab.png">icons/mouse_grab.png</file>
-    <file alias="stats.png">gfx/stats.png</file>
-    <file alias="flash_icon.png">gfx/flash_icon.png</file>
-    <file alias="energy.png">gfx/energy.png</file>
-    <file alias="hunger.png">gfx/hunger.png</file>
-    <file alias="bladder.png">gfx/bladder.png</file>
-    <file alias="social.png">gfx/social.png</file>
-    <file alias="fun.png">gfx/fun.png</file>
+    <file alias="stats.png">data/gfx/stats.png</file>
+    <file alias="flash_icon.png">data/gfx/flash_icon.png</file>
+    <file alias="energy.png">data/gfx/energy.png</file>
+    <file alias="hunger.png">data/gfx/hunger.png</file>
+    <file alias="bladder.png">data/gfx/bladder.png</file>
+    <file alias="social.png">data/gfx/social.png</file>
+    <file alias="fun.png">data/gfx/fun.png</file>
   </qresource>
 </RCC>

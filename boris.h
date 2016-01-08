@@ -82,6 +82,7 @@ private slots:
   void statProgress();
 
 private:
+  int staticBehavs;
   int independence;
   
   int energy;
