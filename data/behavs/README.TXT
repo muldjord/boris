@@ -1,8 +1,8 @@
 The files in this folder defines the behaviours of Boris. You can add
-new behaviours simply by supplying a new set of png+dat files.
+new behaviours simply by supplying a new pair of png+dat files.
 
-Note: The "_dropped" and "_grabbed" are special behaviours that are used
-when Boris is dragged and dropped using the mouse. These MUST exist!
+Note: All behaviours that start with "_" MUST be available. These are used
+      in various places in the code.
 
 The png files are a vertical set of sprites using 32x32 pixels. The color
 format of the pngs are not important as long as they are pngs.
@@ -16,6 +16,9 @@ sprite;time;deltax;deltay;hide;show;change;soundfx;
 ---- file end, this line not included ----
 
 flags, one flag per line, available flags are:
+       title=string: The title used by the behaviour when right-clicking Boris
+       category=string: The stat category for this behaviour:
+                        (Energy, Hunger, Bladder, Social, Fun)
        energy=int: The amount of energy this behaviour will increase or decrease stats
        hunger=int: The amount of hunger this behaviour will increase or decrease stats
        bladder=int: The amount of bladder this behaviour will increase or decrease stats
