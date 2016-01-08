@@ -97,14 +97,14 @@ Hvis dine venner / kollegaer er misundelige og vil have deres egen Boris, så be
 
 Functions:
 - You can throw Boris around your desktop by left-clicking him.
-- Right-clicking Boris brings up a menu where you can order him to do certain things.
+- Right-clicking Boris brings up a menu where you can select what you want Boris to do. Each activity is added to a queue and performed in the order you select them.
 - Right-click the tray icon to either quit, cause an earthquake, move all clones at the same time or open this config/about box.
 
 Vitality description:
-- The &apos;Zz&apos; icon signifies Boris&apos; energy level. Tell him to sleep to give him more energy.
+- The &apos;Zz&apos; icon signifies Boris&apos; energy level. Tell him to relax to give him more energy.
 - The &apos;knife and fork&apos; icon shows how hungry Boris is. Tell him to eat to remove his hunger.
 - The &apos;toilet&apos; icon is an indicator of Boris&apos; need to go to the toilet. Tell him to weewee to make him feel better.
-- The &apos;speech bubble&apos; icon shows Boris&apos; need for social interaction. Move your mouse over him repeatedly to make him feel loved (you might also scare him by doing so, but that&apos;s ok).
+- The &apos;speech bubble&apos; icon shows Boris&apos; need for social interaction. Move your mouse over him repeatedly to make him feel loved (don&apos;t move the mouse too fast or you&apos;ll scare him).
 - The &apos;smiley&apos; icon indicates if Boris is in a good mood. If he&apos;s sad, tell him to do something fun.
 
 If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit http://www.muldjord.com/boris and download it. You can also download the full source code in there if you like. This software is COMPLETELY FREE and OPEN SOURCE (GPLv3).</source>
@@ -120,22 +120,22 @@ Vitality description:
 - The &apos;knife and fork&apos; icon shows how hungry Boris is. Tell him to eat to remove his hunger.
 - The &apos;toilet&apos; icon is an indicator of Boris&apos; need to go to the toilet. Tell him to weewee to make him feel better.
 - The &apos;speech bubble&apos; icon shows Boris&apos; need for social interaction. Move your mouse over him repeatedly to make him feel loved (you might also scare him by doing so, but that&apos;s ok).
-- The &apos;smiley&apos; icon indicates if Boris is having fun. If he&apos;s sad, tell him to do something fun.
+- The &apos;smiley&apos; icon indicates if Boris is in a good mood. If he&apos;s sad, tell him to do something fun.
 
 If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit http://www.muldjord.com/boris and download it. You can also download the full source code in there if you like. This software is COMPLETELY FREE and OPEN SOURCE (GPLv3).</oldsource>
         <translation>Boris byder dig velkommen! Han er her for at underholde dig gennem alle årets årstider. Han er lidt af en baryler, så hold godt øje med ham!
 
 Funktioner:
 - Du kan smide Boris rundt på skrivebordet ved at venstre-klikke.
-- Højreklik på Boris frembringer en menu hvor du kan vælge hvad han skal lave.
+- Højreklik på Boris frembringer en menu hvor du kan vælge hvad han skal lave. Hver aktivitet sættes i kø, hvorefter de afvikles i den rækkefølge de er tilføjet.
 - Højreklik tray ikonet for at quitte, forårsage et jordskælv, flytte all kloner på én gang eller vise dette vindue.
 
 Helbreds beskrivelse:
 - &apos;Zz&apos; ikonet viser Boris&apos; energi niveau. Bed ham tage en lur for at gøre ham frisk igen.
-- &apos;kniv og gaffel&apos; ikonet viser hvor sulten Boris er. Bed ham om at spise for at fjerne hans sult.
-- &apos;toilet&apos; ikonet er en indikator for Boris&apos; behov for et toilet besøg. Bed ham besøge det lille hus for lette trykket.
-- &apos;tale boble&apos; ikonet viser Boris&apos; behov for socialt samvær. Flyt musen henover Boris flere gange så han føler sig værdsat (han kan blive skræmt når du gør det, men det er ok).
-- &apos;smiley&apos; ikonet indikerer om Boris har det sjovt. Hvis han er ked af det, så bed ham lave noget der gør ham glad.
+- &apos;Kniv og gaffel&apos; ikonet viser hvor sulten Boris er. Bed ham om at spise for at fjerne hans sult.
+- &apos;Toilet&apos; ikonet er en indikator for Boris&apos; behov for et toilet besøg. Bed ham besøge det lille hus for lette trykket.
+- &apos;Tale boble&apos; ikonet viser Boris&apos; behov for socialt samvær. Flyt musen henover Boris flere gange, så han føler sig værdsat (bevæg ikke musen for hurtigt, så bliver han bange).
+- &apos;Smiley&apos; ikonet indikerer om Boris har det sjovt. Hvis han er ked af det, så bed ham lave noget der gør ham glad.
 
 Hvis dine venner / kollegaer er misundelige og vil have deres egen Boris, så bed dem besøge http://www.muldjord.com/boris. Her kan de hente deres helt egen version af Boris kvit og frit. Du kan også hente den fulde kildekode derinde. Koden er GPLv3.</translation>
     </message>
@@ -247,32 +247,32 @@ Copyright 2015 Lars Muldjord. This software is distributed under the terms of th
 <context>
     <name>Boris</name>
     <message>
-        <location filename="boris.cpp" line="84"/>
+        <location filename="boris.cpp" line="138"/>
         <source>Behaviours</source>
         <translation>Opførsler</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="85"/>
+        <location filename="boris.cpp" line="139"/>
         <source>Energy</source>
         <translation>Energi</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="87"/>
+        <location filename="boris.cpp" line="141"/>
         <source>Hunger</source>
         <translation>Sult</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="89"/>
+        <location filename="boris.cpp" line="143"/>
         <source>Toilet</source>
         <translation>Toilet</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="91"/>
+        <location filename="boris.cpp" line="145"/>
         <source>Social</source>
         <translation>Social</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="93"/>
+        <location filename="boris.cpp" line="147"/>
         <source>Fun</source>
         <translation>Sjov</translation>
     </message>
@@ -288,37 +288,37 @@ Copyright 2015 Lars Muldjord. This software is distributed under the terms of th
         <translation type="obsolete">&amp;Bring frem</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="275"/>
+        <location filename="mainwindow.cpp" line="278"/>
         <source>&amp;Config / about...</source>
         <translation>&amp;Konfigurér / om...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="279"/>
+        <location filename="mainwindow.cpp" line="282"/>
         <source>&amp;Earthquake</source>
         <translation>&amp;Jordskælv</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="280"/>
+        <location filename="mainwindow.cpp" line="283"/>
         <source>Walk up</source>
         <translation>Gå opad</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="281"/>
+        <location filename="mainwindow.cpp" line="284"/>
         <source>Walk down</source>
         <translation>Gå nedad</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="282"/>
+        <location filename="mainwindow.cpp" line="285"/>
         <source>Walk left</source>
         <translation>Gå mod venstre</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="283"/>
+        <location filename="mainwindow.cpp" line="286"/>
         <source>Walk right</source>
         <translation>Gå mod højre</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="285"/>
+        <location filename="mainwindow.cpp" line="288"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>
