@@ -107,9 +107,10 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   behavTimer.start();
 
   physicsTimer.setInterval(30);
-  physicsTimer.setSingleShot(true);
+  //physicsTimer.setSingleShot(true);
   connect(&physicsTimer, SIGNAL(timeout()), this, SLOT(handlePhysics()));
-
+  physicsTimer.start();
+  
   animTimer.setInterval(0);
   animTimer.setSingleShot(true);
   connect(&animTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
@@ -344,7 +345,7 @@ void Boris::nextFrame()
       if(p.x() > this->pos().x() + (borisSize / 2.0) - 100 && p.x() < this->pos().x() + (borisSize / 2.0) + 100 &&
          p.y() > this->pos().y() + (borisSize / 2.0) - 100 && p.y() < this->pos().y() + (borisSize / 2.0) + 100) {
         if(!alreadyEvading) {
-          if(qrand() % 3 >= 2) {
+          if(fabs(hVel) > 10.0 || fabs(vVel) > 10.0) {
             if(p.x() < this->pos().x() + (borisSize / 2.0)) {
               if(p.y() < this->pos().y() + (borisSize / 2.0) - 25) {
                 changeBehaviour("_flee_right_down");
@@ -576,12 +577,13 @@ void Boris::handlePhysics()
     moveBoris(hVel, vVel);
     vVel += 0.5;
     if(this->pos().y() < alt) {
-      physicsTimer.start();
+      //physicsTimer.start();
     } else {
       changeBehaviour("_landing");
       falling = false;
     }
-  } else if (grabbed) {
+  }
+  if(!falling) {
     hVel = (QCursor::pos().x() - oldCursor.x()) / 4.0;
     vVel = (QCursor::pos().y() - oldCursor.y()) / 4.0;
 #ifdef DEBUG
@@ -589,7 +591,7 @@ void Boris::handlePhysics()
     qDebug("vVel is %f\n", vVel);
 #endif
     oldCursor = QCursor::pos();
-    physicsTimer.start();
+    //physicsTimer.start();
   }
 }
 
@@ -601,7 +603,7 @@ void Boris::earthquake()
     alt = this->pos().y();
     vVel = ((qrand() % 10) * -1) - 5;
     hVel = qrand() % 20 - 11;
-    physicsTimer.start();
+    //physicsTimer.start();
   }
 }
 
