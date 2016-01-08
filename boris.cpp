@@ -726,8 +726,8 @@ void Boris::statQueueProgress()
     bladder++;
   }
   if(bladderQueue < 0) {
-    bladderQueue++;
-    bladder--;
+    bladderQueue += 2;
+    bladder -= 2;
   }
   if(socialQueue > 0) {
     socialQueue--;
