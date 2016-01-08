@@ -125,6 +125,14 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
     showStats = true;
   }
   
+  staticBehavs = 0;
+  // Figure out how many static behaviours there are
+  for(int i = 0; i < behaviours->length(); ++i) {
+    if(behaviours->at(i).file.left(1) == "_") {
+      staticBehavs++;
+    }
+  }
+
   connect(&behavTimer, SIGNAL(timeout()), this, SLOT(changeBehaviour()));
   behavTimer.setInterval((qrand() % 8000) + 1000);
   behavTimer.start();
@@ -255,7 +263,7 @@ void Boris::changeBehaviour(QString behav, int time)
   
   // Pick random behaviour except sleep and weewee
   do {
-    curBehav = (qrand() % (behaviours->size() - 21)) + 21;
+    curBehav = (qrand() % (behaviours->size() - staticBehavs)) + staticBehavs;
   } while(behaviours->at(curBehav).file == "weewee" || behaviours->at(curBehav).file == "sleep");
   // If a specific behaviour is requested, use that instead of the random one
   if(behav != "") {
