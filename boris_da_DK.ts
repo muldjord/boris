@@ -105,7 +105,7 @@ Vitality description:
 - The &apos;knife and fork&apos; icon shows how hungry Boris is. Tell him to eat to remove his hunger.
 - The &apos;toilet&apos; icon is an indicator of Boris&apos; need to go to the toilet. Tell him to weewee to make him feel better.
 - The &apos;speech bubble&apos; icon shows Boris&apos; need for social interaction. Move your mouse over him repeatedly to make him feel loved (you might also scare him by doing so, but that&apos;s ok).
-- The &apos;smiley&apos; icon indicates if Boris is having fun. If he&apos;s sad, tell him to do something fun.
+- The &apos;smiley&apos; icon indicates if Boris is in a good mood. If he&apos;s sad, tell him to do something fun.
 
 If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit http://www.muldjord.com/boris and download it. You can also download the full source code in there if you like. This software is COMPLETELY FREE and OPEN SOURCE (GPLv3).</source>
         <oldsource>Boris bids you welcome! He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye out for him!
@@ -116,7 +116,7 @@ Functions:
 - Right-click the tray icon to either quit, cause an earthquake, move all clones at the same time or open this config/about box.
 
 Vitality description:
-- The &apos;Zz&apos; icon signifies Boris energy level. Tell him to sleep to give him more energy.
+- The &apos;Zz&apos; icon signifies Boris&apos; energy level. Tell him to sleep to give him more energy.
 - The &apos;knife and fork&apos; icon shows how hungry Boris is. Tell him to eat to remove his hunger.
 - The &apos;toilet&apos; icon is an indicator of Boris&apos; need to go to the toilet. Tell him to weewee to make him feel better.
 - The &apos;speech bubble&apos; icon shows Boris&apos; need for social interaction. Move your mouse over him repeatedly to make him feel loved (you might also scare him by doing so, but that&apos;s ok).
