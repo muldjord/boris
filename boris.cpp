@@ -201,7 +201,7 @@ void Boris::changeBehaviour(QString behav, int time)
       if(qrand() % (100 - energy) > independence) {
         stats->flashStat("energy");
         behav = "_energy";
-      } else if(energy <= 5) {
+      } else if(energy <= 10) {
         if(qrand() % 100 < independence) {
           behav = chooseFromCategory("Energy");
         }
@@ -211,7 +211,7 @@ void Boris::changeBehaviour(QString behav, int time)
       if(qrand() % hunger > independence) {
         stats->flashStat("hunger");
         behav = "_hunger";
-      } else if(hunger >= 95) {
+      } else if(hunger >= 90) {
         if(qrand() % 100 < independence) {
           behav = chooseFromCategory("Hunger");
         }
@@ -221,7 +221,7 @@ void Boris::changeBehaviour(QString behav, int time)
       if(qrand() % bladder > independence) {
         stats->flashStat("bladder");
         behav = "_bladder";
-      } else if(bladder >= 95) {
+      } else if(bladder >= 90) {
         if(qrand() % 100 < independence) {
           behav = chooseFromCategory("Bladder");
         }
@@ -231,7 +231,7 @@ void Boris::changeBehaviour(QString behav, int time)
       if(qrand() % (100 - social) > independence) {
         stats->flashStat("social");
         behav = "_social";
-      } else if(social <= 5) {
+      } else if(social <= 10) {
         if(qrand() % 100 < independence) {
           behav = chooseFromCategory("Social");
         }
@@ -241,7 +241,7 @@ void Boris::changeBehaviour(QString behav, int time)
       if(qrand() % (100 - fun) > independence) {
         stats->flashStat("fun");
         behav = "_fun";
-      } else if(fun <= 5) {
+      } else if(fun <= 10) {
         if(qrand() % 100 < independence) {
           behav = chooseFromCategory("Fun");
         }
