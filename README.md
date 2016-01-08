@@ -23,6 +23,10 @@ Copyright 2016 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
+#### Version 1.6.6 (8th January 2016):
+* Stat changes are now applied over a period of time instead of instantly
+* Bug fixes
+
 #### Version 1.6.5 (8th January 2016):
 * Added independece slider to adjust how much attention Boris needs
 * Added guitar shredding behaviour
