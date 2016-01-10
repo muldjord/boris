@@ -60,10 +60,6 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   
-  connect(this, SIGNAL(_moveBoris(int, int)), this, SLOT(moveBoris(int, int)));
-  connect(this, SIGNAL(_showBoris()), this, SLOT(showBoris()));
-  connect(this, SIGNAL(_hideBoris()), this, SLOT(hideBoris()));
-
   QGraphicsScene *scene = new QGraphicsScene();
   setScene(scene);
   sprite = scene->addPixmap(QPixmap());
@@ -130,6 +126,22 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
 Boris::~Boris()
 {
   delete bMenu;
+}
+
+void Boris::stopTimers()
+{
+  physicsTimer.stop();
+  animTimer.stop();
+  statTimer.stop();
+  statQueueTimer.stop();
+}
+
+void Boris::startTimers()
+{
+  physicsTimer.start();
+  animTimer.start();
+  statTimer.start();
+  statQueueTimer.start();
 }
 
 void Boris::createBehavMenu()
@@ -201,6 +213,9 @@ void Boris::changeBehaviour(QString behav, int time)
     // RIP
     return;
   }
+
+  // Make sure we don't get any timeouts while this function is running to avoid weird bugs
+  stopTimers();
 
   // Stop stat flashing if ending a stat attention behaviour
   if(behaviours->at(curBehav).file == "_energy" ||
@@ -324,6 +339,9 @@ void Boris::changeBehaviour(QString behav, int time)
     behavTimer.start();
   }
   animTimer.setInterval(0);
+
+  // Start all timers again
+  startTimers();
 }
 
 void Boris::nextFrame()
@@ -386,8 +404,8 @@ void Boris::nextFrame()
   animTimer.setInterval(behaviours->at(curBehav).behaviour.at(curFrame).time);
 
   if(behaviours->at(curBehav).behaviour.at(curFrame).dx != 0 || behaviours->at(curBehav).behaviour.at(curFrame).dy != 0) {
-  emit moveBoris(behaviours->at(curBehav).behaviour.at(curFrame).dx,
-                 behaviours->at(curBehav).behaviour.at(curFrame).dy);
+    moveBoris(behaviours->at(curBehav).behaviour.at(curFrame).dx,
+              behaviours->at(curBehav).behaviour.at(curFrame).dy);
 }
 
   if(behaviours->at(curBehav).behaviour.at(curFrame).show) {
@@ -418,9 +436,21 @@ void Boris::nextFrame()
 void Boris::moveBoris(int dX, int dY)
 {
   sanityCheck();
-  
-  dX = ceil((double)borisSize / 32.0) * dX;
-  dY = ceil((double)borisSize / 32.0) * dY;
+
+  if(dX == 666) { // If dX == 666 we are meant to move Boris randomly
+    dX = (qrand() % (QApplication::desktop()->width() - borisSize)) - this->pos().x();
+    qDebug("dX is %d\n", dX);
+  } else {
+    // Multiply delta by the factor or Boris' current size
+    dX *= ceil((double)borisSize / 32.0);
+  }
+  if(dY == 666) { // If dX == 666 we are meant to move Boris randomly
+    dY = (qrand() % (QApplication::desktop()->height() - borisSize)) - this->pos().y();
+    qDebug("dY is %d\n", dY);
+  } else {
+    // Multiply delta by the factor or Boris' current size
+    dY *= ceil((double)borisSize / 32.0);
+  }
   int minX = 0;
   int maxX = QApplication::desktop()->width() - borisSize;
   int minY = 0;

@@ -206,8 +206,16 @@ bool MainWindow::loadBehaviours()
         QList<QString> snippets = extractSnippets(line);
         f.sprite = sprites.at(snippets.at(0).toInt());
         f.time = snippets.at(1).toInt();
-        f.dx = snippets.at(2).toInt();
-        f.dy = snippets.at(3).toInt();
+        if(snippets.at(2) == "rand") {
+          f.dx = 666; // This is an ugly way of setting it to random since it's an int
+        } else {
+          f.dx = snippets.at(2).toInt();
+        }
+        if(snippets.at(3) == "rand") {
+          f.dy = 666; // This is an ugly way of setting it to random since it's an int
+        } else {
+          f.dy = snippets.at(3).toInt();
+        }
         f.hide = snippets.at(4).toInt();
         f.show = snippets.at(5).toInt();
         f.change = snippets.at(6).toInt();

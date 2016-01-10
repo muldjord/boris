@@ -60,11 +60,6 @@ public slots:
   void walkLeft();
   void walkRight();
   
-signals:
-  void _moveBoris(int dx, int dy);
-  void _showBoris();
-  void _hideBoris();
-
 protected:
   void mouseMoveEvent(QMouseEvent* event);
   void mousePressEvent(QMouseEvent* event);
@@ -73,9 +68,6 @@ protected:
   void leaveEvent(QEvent *event);
 
 private slots:
-  void moveBoris(int dX, int dY);
-  void showBoris();
-  void hideBoris();
   void handleBehaviourChange(QAction* a);
   void handlePhysics();
   void changeBehaviour(QString behav = "", int time = 0);
@@ -83,6 +75,9 @@ private slots:
   void statQueueProgress();
 
 private:
+  void moveBoris(int dX, int dY);
+  void showBoris();
+  void hideBoris();
   void createBehavMenu();
   int staticBehavs;
   int independence;
@@ -123,6 +118,8 @@ private:
   int socialQueue;
   int funQueue;
   QString chooseFromCategory(QString category);
+  void stopTimers();
+  void startTimers();
   
 };
 
