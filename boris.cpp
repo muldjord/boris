@@ -148,6 +148,8 @@ void Boris::createBehavMenu()
 {
   bMenu = new QMenu();
   bMenu->setTitle(tr("Behaviours"));
+  QMenu *movementMenu = new QMenu(tr("Movement"), bMenu);
+  movementMenu->setIcon(QIcon(":movement.png"));
   QMenu *energyMenu = new QMenu(tr("Energy"), bMenu);
   energyMenu->setIcon(QIcon(":energy.png"));
   QMenu *hungerMenu = new QMenu(tr("Hunger"), bMenu);
@@ -158,6 +160,7 @@ void Boris::createBehavMenu()
   socialMenu->setIcon(QIcon(":social.png"));
   QMenu *funMenu = new QMenu(tr("Fun"), bMenu);
   funMenu->setIcon(QIcon(":fun.png"));
+  connect(movementMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   connect(energyMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   connect(hungerMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   connect(bladderMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
@@ -165,7 +168,9 @@ void Boris::createBehavMenu()
   connect(funMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   for(int i = 0; i < behaviours->length(); ++i) {
     if(behaviours->at(i).file.left(1) != "_") {
-      if(behaviours->at(i).category == "Energy") {
+      if(behaviours->at(i).category == "Movement") {
+        movementMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
+      } else if(behaviours->at(i).category == "Energy") {
         energyMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
       } else if(behaviours->at(i).category == "Hunger") {
         hungerMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
@@ -178,6 +183,7 @@ void Boris::createBehavMenu()
       }
     }
   }
+  bMenu->addMenu(movementMenu);
   bMenu->addMenu(energyMenu);
   bMenu->addMenu(hungerMenu);
   bMenu->addMenu(bladderMenu);
@@ -296,7 +302,7 @@ void Boris::changeBehaviour(QString behav, int time)
   } while(behaviours->at(curBehav).file == "weewee" || behaviours->at(curBehav).file == "sleep");
   // If a specific behaviour is requested, use that instead of the random one
   if(behav != "") {
-    //behav = "_fun"; // Use this to test behaviours
+    //behav = "teleport"; // Use this to test behaviours
     for(int a = 0; a < behaviours->size(); ++a) {
       if(behaviours->at(a).file == behav) {
         curBehav = a;
@@ -437,35 +443,35 @@ void Boris::moveBoris(int dX, int dY)
 {
   sanityCheck();
 
-  if(dX == 666) { // If dX == 666 we are meant to move Boris randomly
-    dX = (qrand() % (QApplication::desktop()->width() - borisSize)) - this->pos().x();
-    qDebug("dX is %d\n", dX);
-  } else {
-    // Multiply delta by the factor or Boris' current size
-    dX *= ceil((double)borisSize / 32.0);
-  }
-  if(dY == 666) { // If dX == 666 we are meant to move Boris randomly
-    dY = (qrand() % (QApplication::desktop()->height() - borisSize)) - this->pos().y();
-    qDebug("dY is %d\n", dY);
-  } else {
-    // Multiply delta by the factor or Boris' current size
-    dY *= ceil((double)borisSize / 32.0);
-  }
   int minX = 0;
   int maxX = QApplication::desktop()->width() - borisSize;
   int minY = 0;
   int maxY = QApplication::desktop()->height() - borisSize;
 
+  if(dX == 666) { // If dX == 666 we are meant to move Boris randomly
+    dX = qrand() % maxX - this->pos().x();
+  } else {
+    // Multiply delta by the factor or Boris' current size
+    dX *= ceil((double)borisSize / 32.0);
+  }
+  if(dY == 666) { // If dX == 666 we are meant to move Boris randomly
+    dY = qrand() % maxY - this->pos().y();
+  } else {
+    // Multiply delta by the factor or Boris' current size
+    dY *= ceil((double)borisSize / 32.0);
+  }
+
   // Always move Boris, even outside borders. sanitycheck() will rectify later.
-  move(this->pos().x() + dX,
-       this->pos().y() + dY);
-  stats->move(this->pos().x() + (borisSize / 2) - (stats->width() / 2), this->pos().y() - stats->height());
+  move(this->pos().x() + dX, this->pos().y() + dY);
+  stats->move(this->pos().x() + (borisSize / 2) - (stats->width() / 2),
+              this->pos().y() - stats->height());
   if(stats->pos().y() < 0) {
-    stats->move(this->pos().x() + (borisSize / 2) - (stats->width() / 2), this->pos().y() + borisSize);
+    stats->move(this->pos().x() + (borisSize / 2) - (stats->width() / 2),
+                this->pos().y() + borisSize);
   }
   // if Boris is outside borders
-  if(this->pos().x() + dX > maxX || this->pos().x() + dX < minX ||
-     this->pos().y() + dY > maxY || this->pos().y() + dY < minY) {
+  if(this->pos().x() > maxX || this->pos().x() < minX ||
+     this->pos().y() > maxY || this->pos().y() < minY) {
     if(falling) {
       // Physics velocity when hitting borders
       if(this->pos().x() + dX > maxX || this->pos().x() + dX < minX) {
