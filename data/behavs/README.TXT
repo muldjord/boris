@@ -38,10 +38,10 @@ time: Time in miliseconds this frame will be shown before proceeding to next
 frame
 
 deltax: Move Boris this number of pixels on the x axis when this frame is
-shown
+shown. Use '666' if you want him to move to a random location on the x axis.
 
 deltay: Same as deltax but for the y axis. Keep in mind that it counts from
-top to bottom
+top to bottom. Use '666' if you want him to move to a random location on the y axis.
 
 hide: Bool (0/1) which tells Boris to hide when this frame is shown
 
