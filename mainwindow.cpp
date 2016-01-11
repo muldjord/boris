@@ -220,7 +220,7 @@ bool MainWindow::loadBehaviours()
         f.show = snippets.at(5).toInt();
         f.change = snippets.at(6).toInt();
         if(snippets.length() == 8) {
-          f.soundFx = new QSoundEffect();
+          f.soundFx = new QSoundEffect(this);
           f.soundFx->setSource(QUrl::fromLocalFile(snippets.at(7)));
           f.soundFx->setVolume(volume);
 #ifdef DEBUG
