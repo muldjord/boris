@@ -51,7 +51,9 @@ public:
   void soundEnable(bool enabled);
   void statsEnable(bool enabled);
   void setIndependence(int value);
-                                
+  int borisSize;
+  void collide(Boris *b);
+                            
 public slots:
   void nextFrame();
   void earthquake();
@@ -68,13 +70,16 @@ protected:
   void leaveEvent(QEvent *event);
 
 private slots:
+  void changeBehaviour(QString behav = "", int time = 0);
   void handleBehaviourChange(QAction* a);
   void handlePhysics();
-  void changeBehaviour(QString behav = "", int time = 0);
   void statProgress();
   void statQueueProgress();
 
 private:
+  bool falling;
+  bool grabbed;
+  Boris *boris;
   void moveBoris(int dX, int dY);
   void showBoris();
   void hideBoris();
@@ -90,7 +95,6 @@ private:
   int fun;
 
   QMenu* bMenu;
-  int borisSize;
   bool soundEnabled;
   int curFrame;
   int curBehav;
@@ -105,9 +109,7 @@ private:
   double vVel;
   double hVel;
   int alt;
-  bool falling;
   QPoint oldCursor;
-  bool grabbed;
   void sanityCheck();
   Stats *stats;
   bool showStats;

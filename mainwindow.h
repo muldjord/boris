@@ -33,6 +33,7 @@
 #include <QWidget>
 #include <QSystemTrayIcon>
 #include <QMenu>
+#include <QTimer>
 
 class MainWindow : public QWidget
 {
@@ -41,11 +42,12 @@ public:
   MainWindow();
   ~MainWindow();
 
-private slots:
-  void aboutBox();
-
 protected:
   void mousePressEvent(QMouseEvent* event);
+
+private slots:
+  void aboutBox();
+  void checkCollisions();
 
 private:
   bool loadBehaviours();
@@ -67,6 +69,7 @@ private:
   int clones;
   void addBoris(int clones);
   void removeBoris(int clones);
+  QTimer collisTimer;
   
 };
 

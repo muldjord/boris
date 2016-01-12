@@ -68,6 +68,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   curBehav = 0;
   grabbed = false;
   falling = false;
+  boris = NULL;
   energy = 75 + qrand() % 25;
   hunger = qrand() % 25;
   bladder = qrand() % 25;
@@ -230,6 +231,19 @@ void Boris::changeBehaviour(QString behav, int time)
      behaviours->at(curBehav).file == "_social" ||
      behaviours->at(curBehav).file == "_fun") {
     stats->flashStat("none");
+  }
+
+  // Check if already colliding with other Boris
+  if(boris != NULL) {
+    int borisSizeB = boris->borisSize;
+    int xB = boris->pos().x();
+    int yB = boris->pos().y();
+    if(this->pos().x() + borisSize * 2 <= xB ||
+       this->pos().x() >= xB + borisSizeB * 2||
+       this->pos().y() + borisSize * 2 <= yB ||
+       this->pos().y() >= yB + borisSizeB * 2) {
+      boris = NULL;
+    }
   }
 
   // Check if there are behaviours in queue
@@ -782,5 +796,17 @@ void Boris::statQueueProgress()
   if(funQueue < 0) {
     funQueue++;
     fun--;
+  }
+}
+
+void Boris::collide(Boris *b)
+{
+  if(!falling && !grabbed && boris == NULL) {
+    boris = b;
+    if(pos().x() <= boris->pos().x()) {
+      changeBehaviour("_casual_wave_right");
+    } else if(pos().x() >= boris->pos().x()) {
+      changeBehaviour("_casual_wave_left");
+    }
   }
 }

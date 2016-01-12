@@ -99,6 +99,11 @@ MainWindow::MainWindow()
   clones = settings->value("clones", "4").toInt();
   qDebug("Spawning %d clone(s)\n", clones);
   addBoris(settings->value("clones", "4").toInt());
+
+  collisTimer.setInterval(1000);
+  collisTimer.setSingleShot(true);
+  connect(&collisTimer, SIGNAL(timeout()), this, SLOT(checkCollisions()));
+  collisTimer.start();
 }
 
 MainWindow::~MainWindow()
@@ -354,4 +359,29 @@ void MainWindow::mousePressEvent(QMouseEvent* event)
   if(event->button() == Qt::RightButton) {
     trayIconMenu->exec(QCursor::pos());
   }
+}
+
+void MainWindow::checkCollisions()
+{
+  for(int a = 0; a < borises.length(); ++a) {
+    for(int b = 0; b < borises.length(); ++b) {
+      if(a == b) {
+        continue;
+      }
+      int borisSizeA = borises.at(a)->borisSize;
+      int borisSizeB = borises.at(b)->borisSize;
+      int xA = borises.at(a)->pos().x();
+      int xB = borises.at(b)->pos().x();
+      int yA = borises.at(a)->pos().y();
+      int yB = borises.at(b)->pos().y();
+      if(xA + borisSizeA >= xB &&
+         xA <= xB + borisSizeB &&
+         yA + borisSizeA >= yB &&
+         yA <= yB + borisSizeB) {
+        borises.at(a)->collide(borises.at(b));
+        borises.at(b)->collide(borises.at(a));
+      }
+    }
+  }
+  collisTimer.start();
 }
