@@ -238,10 +238,8 @@ void Boris::changeBehaviour(QString behav, int time)
     int borisSizeB = boris->borisSize;
     int xB = boris->pos().x();
     int yB = boris->pos().y();
-    if(this->pos().x() + borisSize * 2 <= xB ||
-       this->pos().x() >= xB + borisSizeB * 2||
-       this->pos().y() + borisSize * 2 <= yB ||
-       this->pos().y() >= yB + borisSizeB * 2) {
+    double hypotenuse = sqrt((yB - this->pos().y()) * (yB - this->pos().y()) + (xB - this->pos().x()) * (xB - this->pos().x()));
+    if(hypotenuse > borisSizeB * 2) {
       boris = NULL;
     }
   }
