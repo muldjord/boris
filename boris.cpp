@@ -422,8 +422,12 @@ void Boris::nextFrame()
         p.x() < borisSize / 2.0 ||
         p.y() > QApplication::desktop()->height() - borisSize / 2.0 ||
         p.y() < borisSize / 2.0)) {
-      if(p.x() > this->pos().x() + (borisSize / 2.0) - 100 && p.x() < this->pos().x() + (borisSize / 2.0) + 100 &&
-         p.y() > this->pos().y() + (borisSize / 2.0) - 100 && p.y() < this->pos().y() + (borisSize / 2.0) + 100) {
+      int xA = p.x();
+      int yA = p.y();
+      int xB = this->pos().x();
+      int yB = this->pos().y();
+      double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
+      if(hypotenuse < borisSize * 2) {
         if(!alreadyEvading) {
           if(fabs(hVel) > 10.0 || fabs(vVel) > 10.0) {
             double fleeAngle = atan2((this->pos().y() + (borisSize / 2.0)) - p.y(),
@@ -809,7 +813,7 @@ void Boris::statQueueProgress()
 
 void Boris::collide(Boris *b)
 {
-  if(!falling && !grabbed && boris == NULL) {
+  if(!falling && !grabbed && behaviours->at(curBehav).file != "sleep" && boris == NULL) {
     boris = b;
 
     double socialAngle = atan2(this->pos().y() - boris->pos().y(), boris->pos().x() - this->pos().x()) * 180.0 / 3.1415927;

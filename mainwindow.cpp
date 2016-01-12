@@ -29,6 +29,7 @@
 #include "about.h"
 
 #include <stdio.h>
+#include <math.h>
 #include <QApplication>
 #include <QTime>
 #include <QSettings>
@@ -372,16 +373,16 @@ void MainWindow::checkCollisions()
       if(a == b) {
         continue;
       }
-      int borisSizeA = borises.at(a)->borisSize;
-      int borisSizeB = borises.at(b)->borisSize;
+      int borisSize = borises.at(a)->borisSize;
+      if(borises.at(b)->borisSize > borisSize) {
+        borisSize = borises.at(b)->borisSize;
+      }
       int xA = borises.at(a)->pos().x();
-      int xB = borises.at(b)->pos().x();
       int yA = borises.at(a)->pos().y();
+      int xB = borises.at(b)->pos().x();
       int yB = borises.at(b)->pos().y();
-      if(xA + borisSizeA >= xB &&
-         xA <= xB + borisSizeB &&
-         yA + borisSizeA >= yB &&
-         yA <= yB + borisSizeB) {
+      double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
+      if(fabs(hypotenuse) < borisSize) {
         borises.at(a)->collide(borises.at(b));
         borises.at(b)->collide(borises.at(a));
       }
