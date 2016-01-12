@@ -803,10 +803,31 @@ void Boris::collide(Boris *b)
 {
   if(!falling && !grabbed && boris == NULL) {
     boris = b;
-    if(pos().x() <= boris->pos().x()) {
-      changeBehaviour("_casual_wave_right");
-    } else if(pos().x() >= boris->pos().x()) {
-      changeBehaviour("_casual_wave_left");
+
+    double socialAngle = atan2(this->pos().y() - boris->pos().y(), boris->pos().x() - this->pos().x()) * 180.0 / 3.1415927;
+    if (socialAngle < 0) {
+      socialAngle += 360;
+    } else if (socialAngle > 360) {
+      socialAngle -= 360;
     }
+    
+    if((socialAngle >= 0.0 && socialAngle < 22.5) || (socialAngle >= 337.5 && socialAngle < 360.0)) {
+      changeBehaviour("_casual_wave_right");
+    } else if(socialAngle >= 22.5 && socialAngle < 67.5) {
+      changeBehaviour("_casual_wave_right_up");
+    } else if(socialAngle >= 67.5 && socialAngle < 112.5) {
+      changeBehaviour("_casual_wave_up");
+    } else if(socialAngle >= 112.5 && socialAngle < 157.5) {
+      changeBehaviour("_casual_wave_left_up");
+    } else if(socialAngle >= 157.5 && socialAngle < 202.5) {
+      changeBehaviour("_casual_wave_left");
+    } else if(socialAngle >= 202.5 && socialAngle < 247.5) {
+      changeBehaviour("_casual_wave_left_down");
+    } else if(socialAngle >= 247.5 && socialAngle < 292.5) {
+      changeBehaviour("_casual_wave_down");
+    } else if(socialAngle >= 292.5 && socialAngle < 337.5) {
+      changeBehaviour("_casual_wave_right_down");
+    }      
+      
   }
 }
