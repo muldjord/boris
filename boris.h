@@ -53,6 +53,7 @@ public:
   void setIndependence(int value);
   int borisSize;
   void collide(Boris *b);
+  Boris *boris;
                             
 public slots:
   void nextFrame();
@@ -79,7 +80,6 @@ private slots:
 private:
   bool falling;
   bool grabbed;
-  Boris *boris;
   void moveBoris(int dX, int dY);
   void showBoris();
   void hideBoris();

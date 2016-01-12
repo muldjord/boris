@@ -368,48 +368,6 @@ void Boris::nextFrame()
 {
   sanityCheck();
   
-  if(!falling && !grabbed && behaviours->at(curBehav).file != "sleep") {
-    QPoint p = QCursor::pos();
-    int minX = borisSize * 2;
-    int maxX = QApplication::desktop()->width() - borisSize * 2;
-    int minY = borisSize * 2;
-    int maxY = QApplication::desktop()->height() - borisSize * 2;
-    if((this->pos().x() <= maxX && this->pos().x() >= minX &&
-        this->pos().y() <= maxY && this->pos().y() >= minY) ||
-       (p.x() > QApplication::desktop()->width() - borisSize / 2.0 ||
-        p.x() < borisSize / 2.0 ||
-        p.y() > QApplication::desktop()->height() - borisSize / 2.0 ||
-        p.y() < borisSize / 2.0)) {
-      if(p.x() > this->pos().x() + (borisSize / 2.0) - 100 && p.x() < this->pos().x() + (borisSize / 2.0) + 100 &&
-         p.y() > this->pos().y() + (borisSize / 2.0) - 100 && p.y() < this->pos().y() + (borisSize / 2.0) + 100) {
-        if(!alreadyEvading) {
-          if(fabs(hVel) > 10.0 || fabs(vVel) > 10.0) {
-            if(p.x() < this->pos().x() + (borisSize / 2.0)) {
-              if(p.y() < this->pos().y() + (borisSize / 2.0) - 25) {
-                changeBehaviour("_flee_right_down");
-              } else if(p.y() > this->pos().y() + (borisSize / 2.0) + 25) {
-                changeBehaviour("_flee_right_up");
-              } else {
-                changeBehaviour("_flee_right");
-              }
-            } else if(p.x() > this->pos().x() + (borisSize / 2.0)) {
-              if(p.y() < this->pos().y() + (borisSize / 2.0) - 25) {
-                changeBehaviour("_flee_left_down");
-              } else if(p.y() > this->pos().y() + (borisSize / 2.0) + 25) {
-                changeBehaviour("_flee_left_up");
-              } else {
-                changeBehaviour("_flee_left");
-              }
-            }
-          }
-        }
-        alreadyEvading = true;
-      } else {
-        alreadyEvading = false;
-      }
-    }
-  }
-  
   if(curFrame >= behaviours->at(curBehav).behaviour.size()) {
     curFrame = 0;
     if(!behavTimer.isActive() && !grabbed) {
@@ -451,6 +409,56 @@ void Boris::nextFrame()
 
   curFrame++;
   animTimer.start();
+
+  if(!falling && !grabbed && behaviours->at(curBehav).file != "sleep") {
+    QPoint p = QCursor::pos();
+    int minX = borisSize * 2;
+    int maxX = QApplication::desktop()->width() - borisSize * 2;
+    int minY = borisSize * 2;
+    int maxY = QApplication::desktop()->height() - borisSize * 2;
+    if((this->pos().x() <= maxX && this->pos().x() >= minX &&
+        this->pos().y() <= maxY && this->pos().y() >= minY) ||
+       (p.x() > QApplication::desktop()->width() - borisSize / 2.0 ||
+        p.x() < borisSize / 2.0 ||
+        p.y() > QApplication::desktop()->height() - borisSize / 2.0 ||
+        p.y() < borisSize / 2.0)) {
+      if(p.x() > this->pos().x() + (borisSize / 2.0) - 100 && p.x() < this->pos().x() + (borisSize / 2.0) + 100 &&
+         p.y() > this->pos().y() + (borisSize / 2.0) - 100 && p.y() < this->pos().y() + (borisSize / 2.0) + 100) {
+        if(!alreadyEvading) {
+          if(fabs(hVel) > 10.0 || fabs(vVel) > 10.0) {
+            double fleeAngle = atan2((this->pos().y() + (borisSize / 2.0)) - p.y(),
+                                     p.x() - (this->pos().x() + (borisSize / 2.0))
+                                     ) * 180.0 / 3.1415927;
+            if (fleeAngle < 0) {
+              fleeAngle += 360;
+            } else if (fleeAngle > 360) {
+              fleeAngle -= 360;
+            }
+            if((fleeAngle >= 0.0 && fleeAngle < 22.5) || (fleeAngle >= 337.5 && fleeAngle < 360.0)) {
+              changeBehaviour("_flee_left");
+            } else if(fleeAngle >= 22.5 && fleeAngle < 67.5) {
+              changeBehaviour("_flee_left_down");
+            } else if(fleeAngle >= 67.5 && fleeAngle < 112.5) {
+              changeBehaviour("_flee_down");
+            } else if(fleeAngle >= 112.5 && fleeAngle < 157.5) {
+              changeBehaviour("_flee_right_down");
+            } else if(fleeAngle >= 157.5 && fleeAngle < 202.5) {
+              changeBehaviour("_flee_right");
+            } else if(fleeAngle >= 202.5 && fleeAngle < 247.5) {
+              changeBehaviour("_flee_right_up");
+            } else if(fleeAngle >= 247.5 && fleeAngle < 292.5) {
+              changeBehaviour("_flee_up");
+            } else if(fleeAngle >= 292.5 && fleeAngle < 337.5) {
+              changeBehaviour("_flee_left_up");
+            }
+          }
+        }
+        alreadyEvading = true;
+      } else {
+        alreadyEvading = false;
+      }
+    }
+  }
 }
 
 void Boris::moveBoris(int dX, int dY)

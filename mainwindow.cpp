@@ -280,6 +280,10 @@ void MainWindow::addBoris(int clones)
 
 void MainWindow::removeBoris(int clones)
 {
+  // Reset all Boris collide pointers within all existing clones to prevent crash
+  for(int a = 0; a < borises.length(); ++a) {
+    borises.at(a)->boris = NULL;
+  }
   for(int a = 0; a < clones; ++a) {
     delete borises.last();
     borises.removeLast();
