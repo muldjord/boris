@@ -842,7 +842,7 @@ void Boris::statQueueProgress()
     hygiene--;
   }
 
-  dirt->setOpacity(0.30 - ((qreal)hygiene) * 0.01);
+  dirt->setOpacity(0.35 - ((qreal)hygiene) * 0.01);
 }
 
 void Boris::collide(Boris *b)
