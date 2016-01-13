@@ -317,6 +317,7 @@ void Boris::changeBehaviour(QString behav, int time)
     }
     if(hygiene <= 50) {
       if(qrand() % (100 - hygiene) > independence) {
+        stats->flashStat("none");
         behav = "_hygiene";
       } else if(hygiene <= 10) {
         if(qrand() % 100 < independence) {
