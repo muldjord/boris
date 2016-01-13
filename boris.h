@@ -54,7 +54,8 @@ public:
   int borisSize;
   void collide(Boris *b);
   Boris *boris;
-                            
+  int getHygiene();
+              
 public slots:
   void nextFrame();
   void earthquake();
