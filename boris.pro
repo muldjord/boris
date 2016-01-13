@@ -13,13 +13,15 @@ HEADERS += mainwindow.h \
            about.h \
            boris.h \
            behaviour.h \
-           stats.h
+           stats.h \
+           loader.h
 
 SOURCES += mainwindow.cpp \
            about.cpp \
            boris.cpp \
            main.cpp \
-           stats.cpp
+           stats.cpp \
+           loader.cpp
 
 RESOURCES += boris.qrc
 TRANSLATIONS = boris_da_DK.ts

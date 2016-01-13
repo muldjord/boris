@@ -32,6 +32,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QSettings>
+#include <QBitmap>
 
 #include "boris.h"
 
@@ -63,7 +64,9 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   QGraphicsScene *scene = new QGraphicsScene();
   setScene(scene);
   sprite = scene->addPixmap(QPixmap());
-
+  origDirt.load(":dirt.png");
+  dirt = scene->addPixmap(origDirt);
+  
   curFrame = 0;
   curBehav = 0;
   grabbed = false;
@@ -72,7 +75,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   energy = 75 + qrand() % 25;
   hunger = qrand() % 25;
   bladder = qrand() % 25;
-  hygiene = qrand() % 25;
+  hygiene = 100;
   social = 75 + qrand() % 25;
   fun = 75 + qrand() % 25;
   independence = settings->value("independence", "0").toInt();
@@ -81,6 +84,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   bladderQueue = 0;
   socialQueue = 0;
   funQueue = 0;
+  hygieneQueue = 0;
   
   createBehavMenu();
 
@@ -90,7 +94,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
     stats->show();
     showStats = true;
   }
-  
+
   staticBehavs = 0;
   // Figure out how many static behaviours there are
   for(int i = 0; i < behaviours->length(); ++i) {
@@ -126,6 +130,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
 
 Boris::~Boris()
 {
+  delete stats;
   delete bMenu;
 }
 
@@ -339,13 +344,7 @@ void Boris::changeBehaviour(QString behav, int time)
   bladderQueue = behaviours->at(curBehav).bladder;
   socialQueue = behaviours->at(curBehav).social;
   funQueue = behaviours->at(curBehav).fun;
-  /*
-  energy += behaviours->at(curBehav).energy;
-  hunger += behaviours->at(curBehav).hunger;
-  bladder += behaviours->at(curBehav).bladder;
-  social += behaviours->at(curBehav).social;
-  fun += behaviours->at(curBehav).fun;
-  */
+  hygieneQueue = behaviours->at(curBehav).hygiene;
   
   curFrame = 0;
   if(behaviours->at(curBehav).oneShot) {
@@ -374,6 +373,11 @@ void Boris::nextFrame()
     }
   }
   sprite->setPixmap(behaviours->at(curBehav).behaviour.at(curFrame).sprite);
+
+  QPixmap dirtPixmap(origDirt);
+  dirtPixmap.setMask(behaviours->at(curBehav).behaviour.at(curFrame).sprite.createMaskFromColor(QColor(0, 0, 0, 0)));
+  dirt->setPixmap(dirtPixmap);
+  
   if(soundEnabled && behaviours->at(curBehav).behaviour.at(curFrame).soundFx != NULL) {
     behaviours->at(curBehav).behaviour.at(curFrame).soundFx->play();
   }
@@ -599,7 +603,6 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
   }
 }
 
-
 void Boris::changeSize(int newSize)
 {
   borisSize = newSize;
@@ -753,6 +756,12 @@ void Boris::sanityCheck()
   if(fun >= 100) {
     fun = 100;
   }
+  if(hygiene <= 0) {
+    hygiene = 0;
+  }
+  if(hygiene >= 100) {
+    hygiene = 100;
+  }
 
   stats->updateStats(energy, hunger, bladder, social, fun);
 
@@ -807,6 +816,17 @@ void Boris::statQueueProgress()
     funQueue++;
     fun--;
   }
+  if(hygieneQueue > 0) {
+    hygieneQueue--;
+    hygiene++;
+  }
+  if(hygieneQueue < 0) {
+    hygieneQueue++;
+    hygiene--;
+  }
+
+  dirt->setOpacity(0.30 - ((qreal)hygiene) * 0.01);
+  qDebug("hygiene is %d\n", hygiene);
 }
 
 void Boris::collide(Boris *b)

@@ -105,7 +105,11 @@ private:
   bool mMoving;
   QPoint mLastMousePosition;
   bool alreadyEvading;
+
   QGraphicsPixmapItem *sprite;
+  QGraphicsPixmapItem *dirt;
+  QPixmap origDirt;
+  
   double vVel;
   double hVel;
   int alt;
@@ -119,6 +123,7 @@ private:
   int bladderQueue;
   int socialQueue;
   int funQueue;
+  int hygieneQueue;
   QString chooseFromCategory(QString category);
   void stopTimers();
   void startTimers();
