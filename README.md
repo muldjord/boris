@@ -23,6 +23,10 @@ Copyright 2016 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
+#### Version 1.7.0 (13th January 2016):
+* Added hygiene stat
+* Added shower behaviour and "complain" behaviour for when hygiene is low
+
 #### Version 1.6.8 (12th January 2016):
 * Boris now greets other Borises
 * Added teleport behaviour (but no sound on it yet)
