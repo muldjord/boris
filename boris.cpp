@@ -66,6 +66,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   sprite = scene->addPixmap(QPixmap());
   origDirt.load(":dirt.png");
   dirt = scene->addPixmap(origDirt);
+  dirt->setOpacity(0.0);
   
   curFrame = 0;
   curBehav = 0;
