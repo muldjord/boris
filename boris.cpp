@@ -712,6 +712,7 @@ void Boris::statProgress()
   hunger += qrand() % 4;
   //bladder += 0;
   social -= qrand() % 4;
+  hygiene -= qrand() % 2;
   fun -= qrand() % 20;
 }
 
