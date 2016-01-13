@@ -104,22 +104,23 @@ Vitality description:
 - The &apos;Zz&apos; icon signifies Boris&apos; energy level. Tell him to relax to give him more energy.
 - The &apos;knife and fork&apos; icon shows how hungry Boris is. Tell him to eat to remove his hunger.
 - The &apos;toilet&apos; icon is an indicator of Boris&apos; need to go to the toilet. Tell him to weewee to make him feel better.
-- The &apos;speech bubble&apos; icon shows Boris&apos; need for social interaction. Move your mouse over him repeatedly to make him feel loved (don&apos;t move the mouse too fast or you&apos;ll scare him).
+- The &apos;speech bubble&apos; icon shows Boris&apos; need for social interaction. Move your mouse over him repeatedly to make him feel loved (don&apos;t move the mouse too fast or you&apos;ll scare him). Boris will also socialize with other Boris clones when he meets them.
 - The &apos;smiley&apos; icon indicates if Boris is in a good mood. If he&apos;s sad, tell him to do something fun.
+- If Boris is getting dirty, tell him to take a shower.
 
 If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit http://www.muldjord.com/boris and download it. You can also download the full source code in there if you like. This software is COMPLETELY FREE and OPEN SOURCE (GPLv3).</source>
         <oldsource>Boris bids you welcome! He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye out for him!
 
 Functions:
 - You can throw Boris around your desktop by left-clicking him.
-- Right-clicking Boris brings up a menu where you can order him to do certain things.
+- Right-clicking Boris brings up a menu where you can select what you want Boris to do. Each activity is added to a queue and performed in the order you select them.
 - Right-click the tray icon to either quit, cause an earthquake, move all clones at the same time or open this config/about box.
 
 Vitality description:
-- The &apos;Zz&apos; icon signifies Boris&apos; energy level. Tell him to sleep to give him more energy.
+- The &apos;Zz&apos; icon signifies Boris&apos; energy level. Tell him to relax to give him more energy.
 - The &apos;knife and fork&apos; icon shows how hungry Boris is. Tell him to eat to remove his hunger.
 - The &apos;toilet&apos; icon is an indicator of Boris&apos; need to go to the toilet. Tell him to weewee to make him feel better.
-- The &apos;speech bubble&apos; icon shows Boris&apos; need for social interaction. Move your mouse over him repeatedly to make him feel loved (you might also scare him by doing so, but that&apos;s ok).
+- The &apos;speech bubble&apos; icon shows Boris&apos; need for social interaction. Move your mouse over him repeatedly to make him feel loved (don&apos;t move the mouse too fast or you&apos;ll scare him).
 - The &apos;smiley&apos; icon indicates if Boris is in a good mood. If he&apos;s sad, tell him to do something fun.
 
 If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit http://www.muldjord.com/boris and download it. You can also download the full source code in there if you like. This software is COMPLETELY FREE and OPEN SOURCE (GPLv3).</oldsource>
@@ -134,8 +135,9 @@ Helbreds beskrivelse:
 - &apos;Zz&apos; ikonet viser Boris&apos; energi niveau. Bed ham tage en lur for at gøre ham frisk igen.
 - &apos;Kniv og gaffel&apos; ikonet viser hvor sulten Boris er. Bed ham om at spise for at fjerne hans sult.
 - &apos;Toilet&apos; ikonet er en indikator for Boris&apos; behov for et toilet besøg. Bed ham besøge det lille hus for lette trykket.
-- &apos;Tale boble&apos; ikonet viser Boris&apos; behov for socialt samvær. Flyt musen henover Boris flere gange, så han føler sig værdsat (bevæg ikke musen for hurtigt, så bliver han bange).
+- &apos;Tale boble&apos; ikonet viser Boris&apos; behov for socialt samvær. Flyt musen henover Boris flere gange, så han føler sig værdsat (bevæg ikke musen for hurtigt, så bliver han bange). Boris vil også socialisere med andre Boris kloner når han møder dem.
 - &apos;Smiley&apos; ikonet indikerer om Boris har det sjovt. Hvis han er ked af det, så bed ham lave noget der gør ham glad.
+- Hvis Boris er blevet beskidt, så bed ham tage et bad.
 
 Hvis dine venner / kollegaer er misundelige og vil have deres egen Boris, så bed dem besøge http://www.muldjord.com/boris. Her kan de hente deres helt egen version af Boris kvit og frit. Du kan også hente den fulde kildekode derinde. Koden er GPLv3.</translation>
     </message>
