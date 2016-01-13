@@ -240,7 +240,8 @@ void Boris::changeBehaviour(QString behav, int time)
      behaviours->at(curBehav).file == "_hunger" ||
      behaviours->at(curBehav).file == "_bladder" ||
      behaviours->at(curBehav).file == "_social" ||
-     behaviours->at(curBehav).file == "_fun") {
+     behaviours->at(curBehav).file == "_fun" ||
+     behaviours->at(curBehav).file == "_hygiene") {
     stats->flashStat("none");
   }
 
