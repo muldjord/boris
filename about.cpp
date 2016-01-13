@@ -65,7 +65,7 @@ About::About(QWidget *parent) : QDialog(parent)
 
   // Author tab
   QWidget *authorWidget = new QWidget;
-  QLabel *authorText = new QLabel(tr("Programming: Lars Muldjord\nGraphics: Lars Muldjord\n\nBoris was programmed using the Qt framework (http://www.qt.io) and C++.\n\nBug reports, suggestions and / or comments can be emailed to me at:\nmuldjordlars@gmail.com.\n\nIf your friends / colleagues would like to get their own Boris, tell them to visit:\n\nhttp://www.muldjord.com/boris\n\nIt's FREE and OPEN SOURCE (GPLv3), so there's absolutely no strings attached, just download away. You can also download the full source code in there if you like.\n\nCopyright 2015 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the 'License' tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html."));
+  QLabel *authorText = new QLabel(tr("Programming: Lars Muldjord\nGraphics: Lars Muldjord\n\nBoris was programmed using the Qt framework (http://www.qt.io) and C++.\n\nBug reports, suggestions and / or comments can be emailed to me at:\nmuldjordlars@gmail.com.\n\nIf your friends / colleagues would like to get their own Boris, tell them to visit:\n\nhttp://www.muldjord.com/boris\n\nIt's FREE and OPEN SOURCE (GPLv3), so there's absolutely no strings attached, just download away. You can also download the full source code in there if you like.\n\nCopyright 2016 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the 'License' tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html."));
   authorText->setWordWrap(true);
   authorText->setMaximumWidth(400);
 

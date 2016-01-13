@@ -157,11 +157,11 @@ http://www.muldjord.com/boris
 
 It&apos;s FREE and OPEN SOURCE (GPLv3), so there&apos;s absolutely no strings attached, just download away. You can also download the full source code in there if you like.
 
-Copyright 2015 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the &apos;License&apos; tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.</source>
+Copyright 2016 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the &apos;License&apos; tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.</source>
         <oldsource>Programming: Lars Muldjord
 Graphics: Lars Muldjord
 
-Boris was programmed using the Qt framework (http://www.qt-project.org) and C++.
+Boris was programmed using the Qt framework (http://www.qt.io) and C++.
 
 Bug reports, suggestions and / or comments can be emailed to me at:
 muldjordlars@gmail.com.
@@ -186,7 +186,7 @@ http://www.muldjord.com/boris
 
 Boris er gratis og open source (GPLv3). Kildekoden kan ligeledes hentes fra hjemmesiden.
 
-Copyright 2015 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the &apos;License&apos; tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.</translation>
+Copyright 2016 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the &apos;License&apos; tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.</translation>
     </message>
     <message>
         <location filename="about.cpp" line="106"/>
