@@ -2,6 +2,7 @@ title=Take a nap
 category=Energy
 energy=100
 bladder=10
+hygiene=-10
 oneShot
 #Frames
 0;75;0;0;0;0;0;

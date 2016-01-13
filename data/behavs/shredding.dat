@@ -3,6 +3,7 @@ category=Fun
 energy=-10
 fun=15
 hunger=3
+hygiene=-3
 oneShot
 #Frames
 0;65;0;0;0;0;0;

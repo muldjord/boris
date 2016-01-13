@@ -3,7 +3,7 @@ category=Bladder
 bladder=-100
 fun=-5
 social=-5
-hygiene=-50
+hygiene=-80
 oneShot
 #Frames
 0;300;0;0;0;0;0;data/sfx/zipper_down.wav;

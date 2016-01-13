@@ -4,6 +4,7 @@ energy=10
 hunger=-50
 bladder=30
 social=-1
+hygiene=-10
 #Frames
 0;75;0;0;0;0;0;
 1;75;0;0;0;0;0;

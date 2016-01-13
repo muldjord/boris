@@ -4,6 +4,7 @@ energy=10
 social=5
 fun=5
 hunger=2
+hygiene=-2
 oneShot
 #Frames
 0;75;0;0;0;0;0;

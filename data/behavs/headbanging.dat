@@ -3,6 +3,7 @@ category=Fun
 energy=-5
 fun=6
 hunger=4
+hygiene=-10
 #Frames
 0;75;0;0;0;0;0;data/sfx/headbang.wav;
 1;75;0;0;0;0;0;
