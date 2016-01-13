@@ -166,12 +166,15 @@ void Boris::createBehavMenu()
   socialMenu->setIcon(QIcon(":social.png"));
   QMenu *funMenu = new QMenu(tr("Fun"), bMenu);
   funMenu->setIcon(QIcon(":fun.png"));
+  QMenu *hygieneMenu = new QMenu(tr("Hygiene"), bMenu);
+  hygieneMenu->setIcon(QIcon(":hygiene.png"));
   connect(movementMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   connect(energyMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   connect(hungerMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   connect(bladderMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   connect(socialMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   connect(funMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
+  connect(hygieneMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   for(int i = 0; i < behaviours->length(); ++i) {
     if(behaviours->at(i).file.left(1) != "_") {
       if(behaviours->at(i).category == "Movement") {
@@ -186,6 +189,8 @@ void Boris::createBehavMenu()
         socialMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
       } else if(behaviours->at(i).category == "Fun") {
         funMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
+      } else if(behaviours->at(i).category == "Hygiene") {
+        hygieneMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
       }
     }
   }
@@ -193,6 +198,7 @@ void Boris::createBehavMenu()
   bMenu->addMenu(energyMenu);
   bMenu->addMenu(hungerMenu);
   bMenu->addMenu(bladderMenu);
+  bMenu->addMenu(hygieneMenu);
   bMenu->addMenu(socialMenu);
   bMenu->addMenu(funMenu);
 }
@@ -304,6 +310,15 @@ void Boris::changeBehaviour(QString behav, int time)
       } else if(fun <= 10) {
         if(qrand() % 100 < independence) {
           behav = chooseFromCategory("Fun");
+        }
+      }
+    }
+    if(hygiene <= 50) {
+      if(qrand() % (100 - hygiene) > independence) {
+        behav = "_hygiene";
+      } else if(hygiene <= 10) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Hygiene");
         }
       }
     }
@@ -826,7 +841,6 @@ void Boris::statQueueProgress()
   }
 
   dirt->setOpacity(0.30 - ((qreal)hygiene) * 0.01);
-  qDebug("hygiene is %d\n", hygiene);
 }
 
 void Boris::collide(Boris *b)
