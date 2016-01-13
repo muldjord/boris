@@ -60,7 +60,7 @@ MainWindow::MainWindow()
     settings->setValue("behavs_path", "data/behavs");
   }
   if(!settings->contains("clones")) {
-    settings->setValue("clones", "1");
+    settings->setValue("clones", "2");
   }
   if(!settings->contains("size")) {
     settings->setValue("size", "64");
