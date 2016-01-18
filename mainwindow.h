@@ -48,7 +48,8 @@ protected:
 private slots:
   void aboutBox();
   void checkCollisions();
-
+  void killAll();
+  
 private:
   bool loadBehaviours();
   QList<QString> extractSnippets(QString line);

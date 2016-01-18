@@ -63,6 +63,7 @@ public slots:
   void walkDown();
   void walkLeft();
   void walkRight();
+  void changeBehaviour(QString behav = "", int time = 0);
   
 protected:
   void mouseMoveEvent(QMouseEvent* event);
@@ -72,7 +73,6 @@ protected:
   void leaveEvent(QEvent *event);
 
 private slots:
-  void changeBehaviour(QString behav = "", int time = 0);
   void handleBehaviourChange(QAction* a);
   void handlePhysics();
   void statProgress();
