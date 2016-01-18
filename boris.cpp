@@ -33,6 +33,7 @@
 #include <QDesktopWidget>
 #include <QSettings>
 #include <QBitmap>
+#include <QScreen>
 
 #include "boris.h"
 
@@ -225,7 +226,7 @@ QString Boris::chooseFromCategory(QString category)
   return behaviours->at(chosen).file;
 }
 
-void Boris::runAi(QString &behav, int &time)
+void Boris::processAi(QString &behav, int &time)
 {
   if(behav == "") {
     if(behaviours->at(curBehav).file.contains("casual_walk_") && qrand() % 9 >= 3 ) {
@@ -365,8 +366,8 @@ void Boris::changeBehaviour(QString behav, int time)
     behavQueue.removeFirst();
   }
 
-  // Run the AI
-  runAi(behav, time);
+  // Process the AI
+  processAi(behav, time);
   
   if(behav == "") {
     alreadyEvading = false;
@@ -708,6 +709,8 @@ void Boris::handlePhysics()
   qDebug("mouseHVel is %f\n", mouseHVel);("mouseVVel is %f\n", mouseVVel);
 #endif
   oldCursor = QCursor::pos();
+
+  processVision();
 }
 
 void Boris::earthquake()
@@ -952,5 +955,82 @@ void Boris::collide(Boris *b)
         changeBehaviour("_flee_left_up");
       }
     }      
+  }
+}
+
+void Boris::processVision()
+{
+  if(falling || grabbed) {
+    return;
+  }
+  
+  int border = 2;
+  QImage vision = QGuiApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId(), this->pos().x() - border, this->pos().y() - border, borisSize + border * 2, borisSize + border *2).toImage();
+
+  bool wallDetect;
+  QRgb wallColor;
+
+  // Check for wall to the west
+  wallDetect = true;
+  wallColor = vision.pixel(0, border);
+  for(int a = border; a < borisSize + border; ++a) {
+    if(vision.pixel(0, a) != wallColor ||
+       vision.pixel(1, a) == wallColor) {
+      wallDetect = false;
+      break;
+    }
+  }
+  if(wallDetect) {
+    moveBoris(1, 0);
+    changeBehaviour();
+    return;
+  }
+
+  // Check for wall to the east
+  wallDetect = true;
+  wallColor = vision.pixel(vision.width() - 1, border);
+  for(int a = border; a < borisSize + border; ++a) {
+    if(vision.pixel(vision.width() - 1, a) != wallColor ||
+       vision.pixel(vision.width() - 2, a) == wallColor) {
+      wallDetect = false;
+      break;
+    }
+  }
+  if(wallDetect) {
+    moveBoris(-1, 0);
+    changeBehaviour();
+    return;
+  }
+
+  // Check for wall to the north
+  wallDetect = true;
+  wallColor = vision.pixel(border, 0);
+  for(int a = border; a < borisSize + border; ++a) {
+    if(vision.pixel(a, 0) != wallColor ||
+       vision.pixel(a, 1) == wallColor) {
+      wallDetect = false;
+      break;
+    }
+  }
+  if(wallDetect) {
+    moveBoris(0, 1);
+    changeBehaviour();
+    return;
+  }
+
+  // Check for wall to the south
+  wallDetect = true;
+  wallColor = vision.pixel(border, vision.height() - 1);
+  for(int a = border; a < borisSize + border; ++a) {
+    if(vision.pixel(a, vision.height() - 1) != wallColor ||
+       vision.pixel(a, vision.height() - 2) == wallColor) {
+      wallDetect = false;
+      break;
+    }
+  }
+  if(wallDetect) {
+    moveBoris(0, -1);
+    changeBehaviour();
+    return;
   }
 }

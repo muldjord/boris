@@ -130,7 +130,8 @@ private:
   QString chooseFromCategory(QString category);
   void stopTimers();
   void startTimers();
-  void runAi(QString &behav, int &time);
+  void processAi(QString &behav, int &time);
+  void processVision();
   
 };
 
