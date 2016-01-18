@@ -249,42 +249,46 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
 <context>
     <name>Boris</name>
     <message>
-        <location filename="boris.cpp" line="156"/>
+        <location filename="boris.cpp" line="159"/>
         <source>Behaviours</source>
         <translation>Opførsler</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="157"/>
+        <location filename="boris.cpp" line="160"/>
         <source>Movement</source>
         <translation>Bevægelse</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="159"/>
+        <location filename="boris.cpp" line="162"/>
         <source>Energy</source>
         <translation>Energi</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="161"/>
         <source>Hunger</source>
-        <translation>Sult</translation>
+        <translation type="vanished">Sult</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="163"/>
+        <location filename="boris.cpp" line="164"/>
+        <source>Food</source>
+        <translation type="unfinished">Mad</translation>
+    </message>
+    <message>
+        <location filename="boris.cpp" line="166"/>
         <source>Toilet</source>
         <translation>Toilet</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="165"/>
+        <location filename="boris.cpp" line="168"/>
         <source>Social</source>
         <translation>Social</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="167"/>
+        <location filename="boris.cpp" line="170"/>
         <source>Fun</source>
         <translation>Sjov</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="169"/>
+        <location filename="boris.cpp" line="172"/>
         <source>Hygiene</source>
         <translation>Hygiejne</translation>
     </message>
