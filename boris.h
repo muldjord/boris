@@ -113,6 +113,8 @@ private:
   
   double vVel;
   double hVel;
+  double mouseVVel;
+  double mouseHVel;
   int alt;
   QPoint oldCursor;
   void sanityCheck();
@@ -128,6 +130,7 @@ private:
   QString chooseFromCategory(QString category);
   void stopTimers();
   void startTimers();
+  void runAi(QString &behav, int &time);
   
 };
 

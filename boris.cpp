@@ -44,6 +44,11 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
 {
   this->behaviours = behaviours;
 
+  vVel = 0.0;
+  hVel = 0.0;
+  mouseVVel = 0.0;
+  mouseHVel = 0.0;
+
   soundEnabled = settings->value("sound", "true").toBool();
   changeSize(settings->value("size", 32).toInt());
   int borisX = settings->value("boris_x", QApplication::desktop()->width() / 2).toInt();
@@ -86,7 +91,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   socialQueue = 0;
   funQueue = 0;
   hygieneQueue = 0;
-  
+
   createBehavMenu();
 
   showStats = false;
@@ -109,7 +114,6 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   behavTimer.start();
 
   physicsTimer.setInterval(30);
-  //physicsTimer.setSingleShot(true);
   connect(&physicsTimer, SIGNAL(timeout()), this, SLOT(handlePhysics()));
   physicsTimer.start();
   
@@ -137,7 +141,6 @@ Boris::~Boris()
 
 void Boris::stopTimers()
 {
-  physicsTimer.stop();
   animTimer.stop();
   statTimer.stop();
   statQueueTimer.stop();
@@ -145,7 +148,6 @@ void Boris::stopTimers()
 
 void Boris::startTimers()
 {
-  physicsTimer.start();
   animTimer.start();
   statTimer.start();
   statQueueTimer.start();
@@ -159,7 +161,7 @@ void Boris::createBehavMenu()
   movementMenu->setIcon(QIcon(":movement.png"));
   QMenu *energyMenu = new QMenu(tr("Energy"), bMenu);
   energyMenu->setIcon(QIcon(":energy.png"));
-  QMenu *hungerMenu = new QMenu(tr("Hunger"), bMenu);
+  QMenu *hungerMenu = new QMenu(tr("Food"), bMenu);
   hungerMenu->setIcon(QIcon(":hunger.png"));
   QMenu *bladderMenu = new QMenu(tr("Toilet"), bMenu);
   bladderMenu->setIcon(QIcon(":bladder.png"));
@@ -223,44 +225,38 @@ QString Boris::chooseFromCategory(QString category)
   return behaviours->at(chosen).file;
 }
 
-void Boris::changeBehaviour(QString behav, int time)
+void Boris::runAi(QString &behav, int &time)
 {
-  // Check if Boris is dead... If so, don't do anything. :(
-  if(behaviours->at(curBehav).file == "_drop_dead") {
-    behavTimer.stop();
-    statTimer.stop();
-    // RIP
-    return;
-  }
-
-  // Make sure we don't get any timeouts while this function is running to avoid weird bugs
-  stopTimers();
-
-  // Stop stat flashing if ending a stat attention behaviour
-  if(behaviours->at(curBehav).file == "_energy" ||
-     behaviours->at(curBehav).file == "_hunger" ||
-     behaviours->at(curBehav).file == "_bladder" ||
-     behaviours->at(curBehav).file == "_social" ||
-     behaviours->at(curBehav).file == "_fun" ||
-     behaviours->at(curBehav).file == "_hygiene") {
-    stats->flashStat("none");
-  }
-
-  // Check if already colliding with other Boris
-  if(boris != NULL) {
-    int borisSizeB = boris->borisSize;
-    int xB = boris->pos().x();
-    int yB = boris->pos().y();
-    double hypotenuse = sqrt((yB - this->pos().y()) * (yB - this->pos().y()) + (xB - this->pos().x()) * (xB - this->pos().x()));
-    if(hypotenuse > borisSizeB * 2) {
-      boris = NULL;
+  if(behav == "") {
+    if(behaviours->at(curBehav).file.contains("casual_walk_") && qrand() % 9 >= 3 ) {
+      int nextWalk = qrand() % 7;
+      switch(nextWalk) {
+      case 0:
+        behav = "casual_walk_up";
+        break;
+      case 1:
+        behav = "casual_walk_down";
+        break;
+      case 2:
+        behav = "casual_walk_left";
+        break;
+      case 3:
+        behav = "casual_walk_right";
+        break;
+      case 4:
+        behav = "casual_walk_left_up";
+        break;
+      case 5:
+        behav = "casual_walk_left_down";
+        break;
+      case 6:
+        behav = "casual_walk_right_up";
+        break;
+      case 7:
+        behav = "casual_walk_right_down";
+        break;
+      }
     }
-  }
-
-  // Check if there are behaviours in queue
-  if(behavQueue.length() != 0 && behav == "") {
-    behav = behavQueue.first();
-    behavQueue.removeFirst();
   }
 
   // Stat check
@@ -326,7 +322,52 @@ void Boris::changeBehaviour(QString behav, int time)
       }
     }
   }
+}
 
+void Boris::changeBehaviour(QString behav, int time)
+{
+  // Check if Boris is dead... If so, don't do anything. :(
+  if(behaviours->at(curBehav).file == "_drop_dead") {
+    behavTimer.stop();
+    statTimer.stop();
+    // RIP
+    return;
+  }
+
+  // Make sure we don't get any timeouts while this function is running to avoid weird bugs
+  stopTimers();
+
+  // Stop stat flashing if ending a stat attention behaviour
+  if(behaviours->at(curBehav).file == "_energy" ||
+     behaviours->at(curBehav).file == "_hunger" ||
+     behaviours->at(curBehav).file == "_bladder" ||
+     behaviours->at(curBehav).file == "_social" ||
+     behaviours->at(curBehav).file == "_fun" ||
+     behaviours->at(curBehav).file == "_hygiene") {
+    stats->flashStat("none");
+  }
+
+  // Check if already colliding with other Boris
+  if(boris != NULL) {
+    int borisSizeB = boris->borisSize;
+    int xB = boris->pos().x();
+    int yB = boris->pos().y();
+    double hypotenuse = sqrt((yB - this->pos().y()) * (yB - this->pos().y()) + (xB - this->pos().x()) * (xB - this->pos().x()));
+    if(hypotenuse > borisSizeB * 2) {
+      // Reset Boris pointer to make Boris wave at a new Boris again
+      boris = NULL;
+    }
+  }
+
+  // Check if there are behaviours in queue, these are prioritized
+  if(behav == "" && behavQueue.length() != 0) {
+    behav = behavQueue.first();
+    behavQueue.removeFirst();
+  }
+
+  // Run the AI
+  runAi(behav, time);
+  
   if(behav == "") {
     alreadyEvading = false;
   }
@@ -383,7 +424,7 @@ void Boris::nextFrame()
 {
   sanityCheck();
   
-  if(curFrame >= behaviours->at(curBehav).behaviour.size()) {
+  if(curFrame >= behaviours->at(curBehav).behaviour.length()) {
     curFrame = 0;
     if(!behavTimer.isActive() && !grabbed) {
       behavTimer.start();
@@ -432,6 +473,7 @@ void Boris::nextFrame()
 
   if(!falling && !grabbed && behaviours->at(curBehav).file != "sleep") {
     QPoint p = QCursor::pos();
+    /*
     int minX = borisSize * 2;
     int maxX = QApplication::desktop()->width() - borisSize * 2;
     int minY = borisSize * 2;
@@ -442,45 +484,45 @@ void Boris::nextFrame()
         p.x() < borisSize / 2.0 ||
         p.y() > QApplication::desktop()->height() - borisSize / 2.0 ||
         p.y() < borisSize / 2.0)) {
-      int xA = p.x();
-      int yA = p.y();
-      int xB = this->pos().x();
-      int yB = this->pos().y();
-      double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
-      if(hypotenuse < borisSize * 2) {
-        if(!alreadyEvading) {
-          if(fabs(hVel) > 10.0 || fabs(vVel) > 10.0) {
-            double fleeAngle = atan2((this->pos().y() + (borisSize / 2.0)) - p.y(),
-                                     p.x() - (this->pos().x() + (borisSize / 2.0))
-                                     ) * 180.0 / 3.1415927;
-            if (fleeAngle < 0) {
-              fleeAngle += 360;
-            } else if (fleeAngle > 360) {
-              fleeAngle -= 360;
-            }
-            if((fleeAngle >= 0.0 && fleeAngle < 22.5) || (fleeAngle >= 337.5 && fleeAngle < 360.0)) {
-              changeBehaviour("_flee_left");
-            } else if(fleeAngle >= 22.5 && fleeAngle < 67.5) {
-              changeBehaviour("_flee_left_down");
-            } else if(fleeAngle >= 67.5 && fleeAngle < 112.5) {
-              changeBehaviour("_flee_down");
-            } else if(fleeAngle >= 112.5 && fleeAngle < 157.5) {
-              changeBehaviour("_flee_right_down");
-            } else if(fleeAngle >= 157.5 && fleeAngle < 202.5) {
-              changeBehaviour("_flee_right");
-            } else if(fleeAngle >= 202.5 && fleeAngle < 247.5) {
-              changeBehaviour("_flee_right_up");
-            } else if(fleeAngle >= 247.5 && fleeAngle < 292.5) {
-              changeBehaviour("_flee_up");
-            } else if(fleeAngle >= 292.5 && fleeAngle < 337.5) {
-              changeBehaviour("_flee_left_up");
-            }
+    */
+    int xA = p.x();
+    int yA = p.y();
+    int xB = this->pos().x();
+    int yB = this->pos().y();
+    double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
+    if(hypotenuse < borisSize * 2) {
+      if(!alreadyEvading) {
+        if(fabs(mouseHVel) > 10.0 || fabs(mouseVVel) > 10.0) {
+          double fleeAngle = atan2((this->pos().y() + (borisSize / 2.0)) - p.y(),
+                                   p.x() - (this->pos().x() + (borisSize / 2.0))
+                                   ) * 180.0 / 3.1415927;
+          if (fleeAngle < 0) {
+            fleeAngle += 360;
+          } else if (fleeAngle > 360) {
+            fleeAngle -= 360;
+          }
+          if((fleeAngle >= 0.0 && fleeAngle < 22.5) || (fleeAngle >= 337.5 && fleeAngle < 360.0)) {
+            changeBehaviour("_flee_left");
+          } else if(fleeAngle >= 22.5 && fleeAngle < 67.5) {
+            changeBehaviour("_flee_left_down");
+          } else if(fleeAngle >= 67.5 && fleeAngle < 112.5) {
+            changeBehaviour("_flee_down");
+          } else if(fleeAngle >= 112.5 && fleeAngle < 157.5) {
+            changeBehaviour("_flee_right_down");
+          } else if(fleeAngle >= 157.5 && fleeAngle < 202.5) {
+            changeBehaviour("_flee_right");
+          } else if(fleeAngle >= 202.5 && fleeAngle < 247.5) {
+            changeBehaviour("_flee_right_up");
+          } else if(fleeAngle >= 247.5 && fleeAngle < 292.5) {
+            changeBehaviour("_flee_up");
+          } else if(fleeAngle >= 292.5 && fleeAngle < 337.5) {
+            changeBehaviour("_flee_left_up");
           }
         }
-        alreadyEvading = true;
-      } else {
-        alreadyEvading = false;
       }
+      alreadyEvading = true;
+    } else {
+      alreadyEvading = false;
     }
   }
 }
@@ -527,10 +569,8 @@ void Boris::moveBoris(int dX, int dY)
         hVel *= 0.2;
         vVel = 0.0;
       }
-    } else {
-      if(!grabbed) {
-        changeBehaviour();
-      }
+    } else if(!grabbed) {
+      changeBehaviour();
     }
   }
 }
@@ -558,7 +598,7 @@ void Boris::enterEvent(QEvent *event)
   event->accept();
   if(behaviours->at(curBehav).file != "_drop_dead" &&
      behaviours->at(curBehav).file != "sleep") {
-    social += 5;
+    socialQueue += 5;
   }
   if(!showStats) {
     stats->show();
@@ -575,8 +615,6 @@ void Boris::leaveEvent(QEvent *event)
 
 void Boris::mousePressEvent(QMouseEvent* event)
 {
-  if(event->type() == QEvent::MouseButtonDblClick) {
-  }
   if(event->button() == Qt::RightButton) {
     bMenu->exec(QCursor::pos());
   }
@@ -591,7 +629,6 @@ void Boris::mousePressEvent(QMouseEvent* event)
     this->move(event->globalPos().x() - (float)borisSize / 32.0 * 17.0, 
                event->globalPos().y() - (float)borisSize / 32.0 * 2.0);
     oldCursor = QCursor::pos();
-    physicsTimer.start();
   }
 }
 
@@ -617,6 +654,8 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
     settings->setValue("boris_y", this->pos().y());
     changeBehaviour("_falling", 20000);
     falling = true;
+    hVel = mouseHVel;
+    vVel = mouseVVel;
     alt = QCursor::pos().y() + 40;
   }
 }
@@ -658,22 +697,17 @@ void Boris::handlePhysics()
     moveBoris(hVel, vVel);
     vVel += 0.5;
     if(this->pos().y() < alt) {
-      //physicsTimer.start();
     } else {
       changeBehaviour("_landing");
       falling = false;
     }
   }
-  if(!falling) {
-    hVel = (QCursor::pos().x() - oldCursor.x()) / 4.0;
-    vVel = (QCursor::pos().y() - oldCursor.y()) / 4.0;
+  mouseHVel = (QCursor::pos().x() - oldCursor.x()) / 4.0;
+  mouseVVel = (QCursor::pos().y() - oldCursor.y()) / 4.0;
 #ifdef DEBUG
-    qDebug("hVel is %f\n", hVel);
-    qDebug("vVel is %f\n", vVel);
+  qDebug("mouseHVel is %f\n", mouseHVel);("mouseVVel is %f\n", mouseVVel);
 #endif
-    oldCursor = QCursor::pos();
-    //physicsTimer.start();
-  }
+  oldCursor = QCursor::pos();
 }
 
 void Boris::earthquake()
@@ -681,10 +715,9 @@ void Boris::earthquake()
   if(!falling && !grabbed) {
     changeBehaviour("_falling", 20000);
     falling = true;
-    alt = this->pos().y();
     vVel = ((qrand() % 10) * -1) - 5;
     hVel = qrand() % 20 - 11;
-    //physicsTimer.start();
+    alt = this->pos().y();
   }
 }
 
@@ -854,9 +887,15 @@ int Boris::getHygiene()
 
 void Boris::collide(Boris *b)
 {
+  if(this->pos().y() > b->pos().y()) {
+    // Bring this Boris to the front, because he is considered closer in 3D space
+    raise();
+    setFocus();
+  }
+  
   if(!falling && !grabbed && behaviours->at(curBehav).file != "sleep" && boris == NULL) {
     boris = b;
-
+    
     double socialAngle = atan2(this->pos().y() - boris->pos().y(), boris->pos().x() - this->pos().x()) * 180.0 / 3.1415927;
     if (socialAngle < 0) {
       socialAngle += 360;
@@ -913,6 +952,5 @@ void Boris::collide(Boris *b)
         changeBehaviour("_flee_left_up");
       }
     }      
-      
   }
 }
