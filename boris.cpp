@@ -79,12 +79,12 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   grabbed = false;
   falling = false;
   boris = NULL;
-  energy = 75 + qrand() % 25;
-  hunger = qrand() % 25;
-  bladder = qrand() % 25;
+  energy = 50 + qrand() % 25;
+  hunger = (qrand() % 25) + 15;
+  bladder = (qrand() % 25) + 15;
   hygiene = 100;
-  social = 75 + qrand() % 25;
-  fun = 75 + qrand() % 25;
+  social = 50 + qrand() % 25;
+  fun = 50 + qrand() % 25;
   independence = settings->value("independence", "0").toInt();
   energyQueue = 0;
   hungerQueue = 0;
@@ -703,6 +703,7 @@ void Boris::handlePhysics()
 #endif
   oldCursor = QCursor::pos();
 
+  // Check if Boris is 'seeing' a wall
   processVision();
 }
 
@@ -811,14 +812,14 @@ void Boris::sanityCheck()
     hygiene = 100;
   }
 
+  // Update stat bars
   stats->updateStats(energy, hunger, bladder, social, fun);
 
   // Check if Boris is dying or is already dead
-  if(behaviours->at(curBehav).file != "_drop_dead") {
-    if(energy + social + fun + ((hunger - 100) *-1) < 75) {
-      qDebug("Boris has died... RIP!\n");
-      changeBehaviour("_drop_dead");
-    }
+  if(behaviours->at(curBehav).file != "_drop_dead" &&
+     energy + social + fun + ((hunger - 100) *-1) < 75) {
+    qDebug("Boris has died... RIP!\n");
+    changeBehaviour("_drop_dead");
   }
 }
 
