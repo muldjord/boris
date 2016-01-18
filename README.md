@@ -23,6 +23,10 @@ Copyright 2016 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
+#### Version 1.7.1 (18th January 2016):
+* Boris walks a bit more than before
+* Moved AI behaviour to own function
+
 #### Version 1.7.0 (13th January 2016):
 * Added hygiene stat
 * Added shower behaviour and "complain" behaviour for when hygiene is low
