@@ -338,15 +338,8 @@ void Boris::changeBehaviour(QString behav, int time)
   // Make sure we don't get any timeouts while this function is running to avoid weird bugs
   stopTimers();
 
-  // Stop stat flashing if ending a stat attention behaviour
-  if(behaviours->at(curBehav).file == "_energy" ||
-     behaviours->at(curBehav).file == "_hunger" ||
-     behaviours->at(curBehav).file == "_bladder" ||
-     behaviours->at(curBehav).file == "_social" ||
-     behaviours->at(curBehav).file == "_fun" ||
-     behaviours->at(curBehav).file == "_hygiene") {
-    stats->flashStat("none");
-  }
+  // Stop stat flashing
+  stats->flashStat("none");
 
   // Check if already colliding with other Boris
   if(boris != NULL) {
@@ -822,7 +815,7 @@ void Boris::sanityCheck()
 
   // Check if Boris is dying or is already dead
   if(behaviours->at(curBehav).file != "_drop_dead") {
-    if(energy + social + fun + ((hunger - 100) *-1) < 50) {
+    if(energy + social + fun + ((hunger - 100) *-1) < 75) {
       qDebug("Boris has died... RIP!\n");
       changeBehaviour("_drop_dead");
     }

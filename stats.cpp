@@ -99,7 +99,6 @@ void Stats::updateStats(int energy, int hunger, int bladder, int social, int fun
 void Stats::flashStat(QString stat)
 {
   if(stat == "none") {
-    setVisible(settings->value("stats", "false").toBool());
     flashIcon->setVisible(false);
     flashTimer.stop();
   } else {
@@ -114,7 +113,6 @@ void Stats::flashStat(QString stat)
     } else if(stat == "fun") {
       flashIcon->setPos(7, 64);
     }
-    setVisible(true);
     flashTimer.start();
   }
 }
