@@ -29,8 +29,6 @@
 
 #include "behaviour.h"
 #include "stats.h"
-#include "ai.h"
-#include "vision.h"
 
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
