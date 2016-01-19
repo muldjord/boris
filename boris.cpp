@@ -207,7 +207,6 @@ void Boris::createBehavMenu()
   bMenu->addMenu(funMenu);
 }
 
-
 QString Boris::chooseFromCategory(QString category)
 {
   QList<QString> b;
@@ -224,105 +223,6 @@ QString Boris::chooseFromCategory(QString category)
     }
   }
   return behaviours->at(chosen).file;
-}
-
-void Boris::processAi(QString &behav, int &time)
-{
-  if(behav == "") {
-    if(behaviours->at(curBehav).file.contains("casual_walk_") && qrand() % 9 >= 3 ) {
-      int nextWalk = qrand() % 7;
-      switch(nextWalk) {
-      case 0:
-        behav = "casual_walk_up";
-        break;
-      case 1:
-        behav = "casual_walk_down";
-        break;
-      case 2:
-        behav = "casual_walk_left";
-        break;
-      case 3:
-        behav = "casual_walk_right";
-        break;
-      case 4:
-        behav = "casual_walk_left_up";
-        break;
-      case 5:
-        behav = "casual_walk_left_down";
-        break;
-      case 6:
-        behav = "casual_walk_right_up";
-        break;
-      case 7:
-        behav = "casual_walk_right_down";
-        break;
-      }
-    }
-  }
-
-  // Stat check
-  if(behav == "" && time == 0) {
-    if(energy <= 50) {
-      if(qrand() % (100 - energy) > independence) {
-        stats->flashStat("energy");
-        behav = "_energy";
-      } else if(energy <= 10) {
-        if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Energy");
-        }
-      }
-    }
-    if(hunger >= 50) {
-      if(qrand() % hunger > independence) {
-        stats->flashStat("hunger");
-        behav = "_hunger";
-      } else if(hunger >= 90) {
-        if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Hunger");
-        }
-      }
-    }
-    if(bladder >= 50) {
-      if(qrand() % bladder > independence) {
-        stats->flashStat("bladder");
-        behav = "_bladder";
-      } else if(bladder >= 90) {
-        if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Bladder");
-        }
-      }
-    }
-    if(social <= 50) {
-      if(qrand() % (100 - social) > independence) {
-        stats->flashStat("social");
-        behav = "_social";
-      } else if(social <= 10) {
-        if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Social");
-        }
-      }
-    }
-    if(fun <= 50) {
-      if(qrand() % (100 - fun) > independence) {
-        stats->flashStat("fun");
-        behav = "_fun";
-      } else if(fun <= 10) {
-        if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Fun");
-        }
-      }
-    }
-    if(hygiene <= 50) {
-      if(qrand() % (100 - hygiene) > independence) {
-        stats->flashStat("none");
-        behav = "_hygiene";
-      } else if(hygiene <= 10) {
-        if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Hygiene");
-        }
-      }
-    }
-  }
 }
 
 void Boris::changeBehaviour(QString behav, int time)
@@ -359,8 +259,10 @@ void Boris::changeBehaviour(QString behav, int time)
     behavQueue.removeFirst();
   }
 
-  // Process the AI
-  processAi(behav, time);
+  // Process the AI if no forced behaviour is set
+  if(behav == "" && time == 0) {
+    processAi(behav, time);
+  }
   
   if(behav == "") {
     alreadyEvading = false;
@@ -704,7 +606,9 @@ void Boris::handlePhysics()
   oldCursor = QCursor::pos();
 
   // Check if Boris is 'seeing' a wall
-  processVision();
+  if(!falling && !grabbed) {
+    processVision();
+  }
 }
 
 void Boris::earthquake()
@@ -954,12 +858,8 @@ void Boris::collide(Boris *b)
 
 void Boris::processVision()
 {
-  if(falling || grabbed) {
-    return;
-  }
-  
   int border = 2;
-  QImage vision = QGuiApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId(), this->pos().x() - border, this->pos().y() - border, borisSize + border * 2, borisSize + border *2).toImage();
+  QImage vision = QGuiApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId(), pos().x() - border, pos().y() - border, borisSize + border * 2, borisSize + border *2).toImage();
 
   bool wallDetect;
   QRgb wallColor;
@@ -1026,5 +926,163 @@ void Boris::processVision()
     moveBoris(0, -1);
     changeBehaviour();
     return;
+  }
+}
+
+void Boris::processAi(QString &behav, int &time)
+{
+  if(behaviours->at(curBehav).file.contains("casual_walk_")) {
+    time /= 2;
+  }
+  
+  if(behaviours->at(curBehav).file.contains("casual_walk_up") && qrand() % 9 >= 4 ) {
+    int nextWalk = qrand() % 1;
+    switch(nextWalk) {
+    case 0:
+      behav = "casual_walk_left_up";
+      break;
+    case 1:
+      behav = "casual_walk_right_up";
+      break;
+    }
+  }
+  if(behaviours->at(curBehav).file.contains("casual_walk_right_up") && qrand() % 9 >= 4 ) {
+    int nextWalk = qrand() % 1;
+    switch(nextWalk) {
+    case 0:
+      behav = "casual_walk_up";
+      break;
+    case 1:
+      behav = "casual_walk_right";
+      break;
+    }
+  }
+  if(behaviours->at(curBehav).file.contains("casual_walk_right") && qrand() % 9 >= 4 ) {
+    int nextWalk = qrand() % 1;
+    switch(nextWalk) {
+    case 0:
+      behav = "casual_walk_right_up";
+      break;
+    case 1:
+      behav = "casual_walk_right_down";
+      break;
+    }
+  }
+  if(behaviours->at(curBehav).file.contains("casual_walk_right_down") && qrand() % 9 >= 4 ) {
+    int nextWalk = qrand() % 1;
+    switch(nextWalk) {
+    case 0:
+      behav = "casual_walk_right";
+      break;
+    case 1:
+      behav = "casual_walk_down";
+      break;
+    }
+  }
+  if(behaviours->at(curBehav).file.contains("casual_walk_down") && qrand() % 9 >= 4 ) {
+    int nextWalk = qrand() % 1;
+    switch(nextWalk) {
+    case 0:
+      behav = "casual_walk_right_down";
+      break;
+    case 1:
+      behav = "casual_walk_left_down";
+      break;
+    }
+  }
+  if(behaviours->at(curBehav).file.contains("casual_walk_left_down") && qrand() % 9 >= 4 ) {
+    int nextWalk = qrand() % 1;
+    switch(nextWalk) {
+    case 0:
+      behav = "casual_walk_down";
+      break;
+    case 1:
+      behav = "casual_walk_left";
+      break;
+    }
+  }
+  if(behaviours->at(curBehav).file.contains("casual_walk_left") && qrand() % 9 >= 4 ) {
+    int nextWalk = qrand() % 1;
+    switch(nextWalk) {
+    case 0:
+      behav = "casual_walk_left_down";
+      break;
+    case 1:
+      behav = "casual_walk_left_up";
+      break;
+    }
+  }
+  if(behaviours->at(curBehav).file.contains("casual_walk_left_up") && qrand() % 9 >= 4 ) {
+    int nextWalk = qrand() % 1;
+    switch(nextWalk) {
+    case 0:
+      behav = "casual_walk_left";
+      break;
+    case 1:
+      behav = "casual_walk_up";
+      break;
+    }
+  }
+  
+  // Stat check
+  if(energy <= 50) {
+    if(qrand() % (100 - energy) > independence) {
+      stats->flashStat("energy");
+      behav = "_energy";
+    } else if(energy <= 10) {
+      if(qrand() % 100 < independence) {
+        behav = chooseFromCategory("Energy");
+      }
+    }
+  }
+  if(hunger >= 50) {
+    if(qrand() % hunger > independence) {
+      stats->flashStat("hunger");
+      behav = "_hunger";
+    } else if(hunger >= 90) {
+      if(qrand() % 100 < independence) {
+        behav = chooseFromCategory("Hunger");
+      }
+    }
+  }
+  if(bladder >= 50) {
+    if(qrand() % bladder > independence) {
+      stats->flashStat("bladder");
+      behav = "_bladder";
+    } else if(bladder >= 90) {
+      if(qrand() % 100 < independence) {
+        behav = chooseFromCategory("Bladder");
+      }
+    }
+  }
+  if(social <= 50) {
+    if(qrand() % (100 - social) > independence) {
+      stats->flashStat("social");
+      behav = "_social";
+    } else if(social <= 10) {
+      if(qrand() % 100 < independence) {
+        behav = chooseFromCategory("Social");
+      }
+    }
+  }
+  if(fun <= 50) {
+    if(qrand() % (100 - fun) > independence) {
+      stats->flashStat("fun");
+      behav = "_fun";
+    } else if(fun <= 10) {
+      if(qrand() % 100 < independence) {
+        behav = chooseFromCategory("Fun");
+      }
+    }
+  }
+  if(hygiene <= 50) {
+    if(qrand() % (100 - hygiene) > independence) {
+      stats->flashStat("none");
+      behav = "_hygiene";
+    } else if(hygiene <= 10) {
+      if(qrand() % 100 < independence) {
+        behav = chooseFromCategory("Hygiene");
+      }
+    }
   }
 }

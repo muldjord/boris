@@ -29,6 +29,8 @@
 
 #include "behaviour.h"
 #include "stats.h"
+#include "ai.h"
+#include "vision.h"
 
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
@@ -38,6 +40,8 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QMenu>
+
+class Vision;
 
 class Boris : public QGraphicsView
 {
@@ -55,6 +59,7 @@ public:
   void collide(Boris *b);
   Boris *boris;
   int getHygiene();
+  void moveBoris(int dX, int dY);
               
 public slots:
   void nextFrame();
@@ -81,7 +86,6 @@ private slots:
 private:
   bool falling;
   bool grabbed;
-  void moveBoris(int dX, int dY);
   void showBoris();
   void hideBoris();
   void createBehavMenu();
@@ -130,11 +134,9 @@ private:
   QString chooseFromCategory(QString category);
   void stopTimers();
   void startTimers();
-  void processAi(QString &behav, int &time);
   void processVision();
+  void processAi(QString &behav, int &time);
   
 };
 
 #endif // _BORIS_H
-
-// behaviours.at(1).
