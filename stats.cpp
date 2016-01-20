@@ -36,8 +36,15 @@
 
 extern QSettings *settings;
 
-Stats::Stats(QWidget *parent) : QGraphicsView(parent)
+Stats::Stats(int energy, int hunger, int bladder, int social, int fun, int hygiene, QWidget *parent) : QGraphicsView(parent)
 {
+  this->energy = energy;
+  this->hunger = hunger;
+  this->bladder = bladder;
+  this->social = social;
+  this->fun = fun;
+  this->hygiene = hygiene;
+  
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
   setFrameShape(QFrame::NoFrame);
@@ -57,15 +64,114 @@ Stats::Stats(QWidget *parent) : QGraphicsView(parent)
   flashIcon = scene->addPixmap(QPixmap(":flash_icon.png"));
   flashIcon->setVisible(false);
   
-  flashTimer.setInterval(150);
-  connect(&flashTimer, SIGNAL(timeout()), this, SLOT(showHide()));
+  flasherEnabled = false;
+
+  statTimer.setInterval(200);
+  connect(&statTimer, SIGNAL(timeout()), this, SLOT(updateStats()));
+  statTimer.start();
 }
 
 Stats::~Stats()
 {
 }
 
-void Stats::updateStats(int energy, int hunger, int bladder, int social, int fun)
+int Stats::getEnergy()
+{
+  return energy;
+}
+
+int Stats::getHunger()
+{
+  return hunger;
+}
+
+int Stats::getBladder()
+{
+  return bladder;
+}
+
+int Stats::getSocial()
+{
+  return social;
+}
+
+int Stats::getFun()
+{
+  return fun;
+}
+
+int Stats::getHygiene()
+{
+  return hygiene;
+}
+
+void Stats::deltaEnergy(int value)
+{
+  if(energy + value > 100) {
+    energy = 100;
+  } else if(energy + value < 0) {
+    energy = 0;
+  } else {
+    energy += value;
+  }
+}
+
+void Stats::deltaHunger(int value)
+{
+  if(hunger + value > 100) {
+    hunger = 100;
+  } else if(hunger + value < 0) {
+    hunger = 0;
+  } else {
+    hunger += value;
+  }
+}
+
+void Stats::deltaBladder(int value)
+{
+  if(bladder + value > 100) {
+    bladder = 100;
+  } else if(bladder + value < 0) {
+    bladder = 0;
+  } else {
+    bladder += value;
+  }
+}
+
+void Stats::deltaSocial(int value)
+{
+  if(social + value > 100) {
+    social = 100;
+  } else if(social + value < 0) {
+    social = 0;
+  } else {
+    social += value;
+  }
+}
+
+void Stats::deltaFun(int value)
+{
+  if(fun + value > 100) {
+    fun = 100;
+  } else if(fun + value < 0) {
+    fun = 0;
+  } else {
+    fun += value;
+  }
+}
+
+void Stats::deltaHygiene(int value)
+{
+  if(hygiene + value > 100) {
+    hygiene = 100;
+  } else if(hygiene + value < 0) {
+    hygiene = 0;
+  } else {
+    hygiene += value;
+  }
+}
+
+void Stats::updateStats()
 {
   QColor energyColor((5.1 * (energy - 100) * -1 > 255 ? 255 : round(5.1 * (energy - 100) * -1)),
                      (5.1 * energy > 255 ? 255 : round(5.1 * energy)), 0);
@@ -94,13 +200,17 @@ void Stats::updateStats(int energy, int hunger, int bladder, int social, int fun
   bladderBar->setRect(17, 39, 0.6 * bladder, 1);
   socialBar->setRect(17, 55, 0.6 * social, 1);
   funBar->setRect(17, 71, 0.6 * fun, 1);
+
+  if(flasherEnabled) {
+    flashIcon->setVisible(!flashIcon->isVisible());
+  }
 }
 
 void Stats::flashStat(QString stat)
 {
   if(stat == "none") {
+    flasherEnabled = false;
     flashIcon->setVisible(false);
-    flashTimer.stop();
   } else {
     if(stat == "energy") {
       flashIcon->setPos(7, 0);
@@ -113,11 +223,7 @@ void Stats::flashStat(QString stat)
     } else if(stat == "fun") {
       flashIcon->setPos(7, 64);
     }
-    flashTimer.start();
+    flasherEnabled = true;
+    flashIcon->setVisible(true);
   }
-}
-
-void Stats::showHide()
-{
-  flashIcon->setVisible(!flashIcon->isVisible());
 }

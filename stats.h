@@ -37,15 +37,27 @@ class Stats : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Stats(QWidget *parent);
+  Stats(int energy, int hunger, int bladder, int social, int fun, int hygiene, QWidget *parent);
   ~Stats();
-  void updateStats(int energy, int hunger, int bladder, int social, int fun);
   void flashStat(QString stat = "none");
-                                                                            
+  int getEnergy();
+  int getHunger();
+  int getBladder();
+  int getSocial();
+  int getFun();
+  int getHygiene();
+  void deltaEnergy(int value);
+  void deltaHunger(int value);
+  void deltaBladder(int value);
+  void deltaSocial(int value);
+  void deltaFun(int value);
+  void deltaHygiene(int value);
+
 private slots:
-  void showHide();
+  void updateStats();
   
 private:
+  bool flasherEnabled;
   QImage image;
   QGraphicsPixmapItem *sprite;
   QGraphicsRectItem *energyBar;
@@ -55,7 +67,13 @@ private:
   QGraphicsRectItem *funBar;
   QGraphicsPixmapItem *flashIcon;
   bool visibility;
-  QTimer flashTimer;
+  QTimer statTimer;
+  int energy;
+  int hunger;
+  int bladder;
+  int social;
+  int fun;
+  int hygiene;
   
 };
 

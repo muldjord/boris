@@ -90,13 +90,6 @@ private:
   int staticBehavs;
   int independence;
   
-  int energy;
-  int hunger;
-  int bladder;
-  int hygiene;
-  int social;
-  int fun;
-
   QMenu* bMenu;
   bool soundEnabled;
   int curFrame;
@@ -130,10 +123,9 @@ private:
   int funQueue;
   int hygieneQueue;
   QString chooseFromCategory(QString category);
-  void stopTimers();
-  void startTimers();
   void processVision();
   void processAi(QString &behav, int &time);
+  int timeFactor;
   
 };
 

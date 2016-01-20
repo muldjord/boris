@@ -76,27 +76,28 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   
   curFrame = 0;
   curBehav = 0;
+  timeFactor = settings->value("timeFactor", "1").toInt();
   grabbed = false;
   falling = false;
   boris = NULL;
-  energy = 50 + qrand() % 25;
-  hunger = (qrand() % 25) + 15;
-  bladder = (qrand() % 25) + 15;
-  hygiene = 100;
-  social = 50 + qrand() % 25;
-  fun = 50 + qrand() % 25;
-  independence = settings->value("independence", "0").toInt();
+  independence = settings->value("independence", "60").toInt();
+
+  createBehavMenu();
+
+  showStats = false;
+  int energy = 50 + qrand() % 25;
+  int hunger = (qrand() % 25) + 15;
+  int bladder = (qrand() % 25) + 15;
+  int hygiene = 100;
+  int social = 50 + qrand() % 25;
+  int fun = 50 + qrand() % 25;
   energyQueue = 0;
   hungerQueue = 0;
   bladderQueue = 0;
   socialQueue = 0;
   funQueue = 0;
   hygieneQueue = 0;
-
-  createBehavMenu();
-
-  showStats = false;
-  stats = new Stats(this);
+  stats = new Stats(energy, hunger, bladder, social, fun, hygiene, this);
   if(settings->value("stats", "true").toBool()) {
     stats->show();
     showStats = true;
@@ -123,11 +124,11 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   connect(&animTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
   animTimer.start();
 
-  statTimer.setInterval(60000);
+  statTimer.setInterval(60000 / timeFactor);
   connect(&statTimer, SIGNAL(timeout()), this, SLOT(statProgress()));
   statTimer.start();
 
-  statQueueTimer.setInterval(200);
+  statQueueTimer.setInterval(200 / timeFactor);
   connect(&statQueueTimer, SIGNAL(timeout()), this, SLOT(statQueueProgress()));
   statQueueTimer.start();
   
@@ -138,20 +139,6 @@ Boris::~Boris()
 {
   delete stats;
   delete bMenu;
-}
-
-void Boris::stopTimers()
-{
-  animTimer.stop();
-  statTimer.stop();
-  statQueueTimer.stop();
-}
-
-void Boris::startTimers()
-{
-  animTimer.start();
-  statTimer.start();
-  statQueueTimer.start();
 }
 
 void Boris::createBehavMenu()
@@ -235,9 +222,6 @@ void Boris::changeBehaviour(QString behav, int time)
     return;
   }
 
-  // Make sure we don't get any timeouts while this function is running to avoid weird bugs
-  stopTimers();
-
   // Stop stat flashing
   stats->flashStat("none");
 
@@ -283,7 +267,7 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   if(time == 0) {
-    behavTimer.setInterval((qrand() % 8000) + 1000);
+    behavTimer.setInterval(((qrand() % 8000) + 1000) / timeFactor);
   } else {
     behavTimer.setInterval(time);
   }
@@ -311,9 +295,6 @@ void Boris::changeBehaviour(QString behav, int time)
     behavTimer.start();
   }
   animTimer.setInterval(0);
-
-  // Start all timers again
-  startTimers();
 }
 
 void Boris::nextFrame()
@@ -336,7 +317,7 @@ void Boris::nextFrame()
   if(soundEnabled && behaviours->at(curBehav).behaviour.at(curFrame).soundFx != NULL) {
     behaviours->at(curBehav).behaviour.at(curFrame).soundFx->play();
   }
-  animTimer.setInterval(behaviours->at(curBehav).behaviour.at(curFrame).time);
+  animTimer.setInterval(behaviours->at(curBehav).behaviour.at(curFrame).time / timeFactor);
 
   if(behaviours->at(curBehav).behaviour.at(curFrame).dx != 0 || behaviours->at(curBehav).behaviour.at(curFrame).dy != 0) {
     moveBoris(behaviours->at(curBehav).behaviour.at(curFrame).dx,
@@ -386,7 +367,7 @@ void Boris::nextFrame()
     int xB = this->pos().x();
     int yB = this->pos().y();
     double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
-    if(hypotenuse < borisSize * 2) {
+    if(hypotenuse < borisSize * 3) {
       if(!alreadyEvading) {
         if(fabs(mouseHVel) > 10.0 || fabs(mouseVVel) > 10.0) {
           double fleeAngle = atan2((this->pos().y() + (borisSize / 2.0)) - p.y(),
@@ -515,8 +496,8 @@ void Boris::mousePressEvent(QMouseEvent* event)
     bMenu->exec(QCursor::pos());
   }
   if(event->button() == Qt::LeftButton) {
-    if(behaviours->at(curBehav).file == "sleep" && energy < 100) {
-      energy -= 100;
+    if(behaviours->at(curBehav).file == "sleep" && stats->getEnergy() < 100) {
+      stats->deltaEnergy(-100);
     }
     setCursor(QCursor(QPixmap(":mouse_grab.png")));
     grabbed = true;
@@ -644,12 +625,12 @@ void Boris::walkRight()
 
 void Boris::statProgress()
 {
-  energy -= qrand() % 4;
-  hunger += qrand() % 4;
+  stats->deltaEnergy(- qrand() % 4);
+  stats->deltaHunger(qrand() % 4);
   //bladder += 0;
-  social -= qrand() % 4;
-  hygiene -= qrand() % 2;
-  fun -= qrand() % 20;
+  stats->deltaSocial(- qrand() % 4);
+  stats->deltaHygiene(- qrand() % 2);
+  stats->deltaFun(- qrand() % 20);
 }
 
 void Boris::sanityCheck()
@@ -678,50 +659,9 @@ void Boris::sanityCheck()
     alt = maxY;
   }
 
-  // Make sure Boris stats aren't out of bounds
-  if(energy <= 0) {
-    energy = 0;
-  }
-  if(energy >= 100) {
-    energy = 100;
-  }
-  if(hunger <= 0) {
-    hunger = 0;
-  }
-  if(hunger >= 100) {
-    hunger = 100;
-  }
-  if(bladder <= 0) {
-    bladder = 0;
-  }
-  if(bladder >= 100) {
-    bladder = 100;
-  }
-  if(social <= 0) {
-    social = 0;
-  }
-  if(social >= 100) {
-    social = 100;
-  }
-  if(fun <= 0) {
-    fun = 0;
-  }
-  if(fun >= 100) {
-    fun = 100;
-  }
-  if(hygiene <= 0) {
-    hygiene = 0;
-  }
-  if(hygiene >= 100) {
-    hygiene = 100;
-  }
-
-  // Update stat bars
-  stats->updateStats(energy, hunger, bladder, social, fun);
-
   // Check if Boris is dying or is already dead
   if(behaviours->at(curBehav).file != "_drop_dead" &&
-     energy + social + fun + ((hunger - 100) *-1) < 75) {
+     stats->getEnergy() + stats->getSocial() + stats->getFun() + ((stats->getHunger() - 100) *-1) < 75) {
     qDebug("Boris has died... RIP!\n");
     changeBehaviour("_drop_dead");
   }
@@ -731,59 +671,59 @@ void Boris::statQueueProgress()
 {
   if(energyQueue > 0) {
     energyQueue--;
-    energy++;
+    stats->deltaEnergy(1);
   }
   if(energyQueue < 0) {
     energyQueue++;
-    energy--;
+    stats->deltaEnergy(-1);
   }
   if(hungerQueue > 0) {
     hungerQueue--;
-    hunger++;
+    stats->deltaHunger(1);
   }
   if(hungerQueue < 0) {
     hungerQueue++;
-    hunger--;
+    stats->deltaHunger(-1);
   }
   if(bladderQueue > 0) {
     bladderQueue--;
-    bladder++;
+    stats->deltaBladder(1);
   }
   if(bladderQueue < 0) {
     bladderQueue += 2;
-    bladder -= 2;
+    stats->deltaBladder(-1);
   }
   if(socialQueue > 0) {
     socialQueue--;
-    social++;
+    stats->deltaSocial(1);
   }
   if(socialQueue < 0) {
     socialQueue++;
-    social--;
+    stats->deltaSocial(-1);
   }
   if(funQueue > 0) {
     funQueue--;
-    fun++;
+    stats->deltaFun(1);
   }
   if(funQueue < 0) {
     funQueue++;
-    fun--;
+    stats->deltaFun(-1);
   }
   if(hygieneQueue > 0) {
     hygieneQueue--;
-    hygiene++;
+    stats->deltaHygiene(1);
   }
   if(hygieneQueue < 0) {
     hygieneQueue++;
-    hygiene--;
+    stats->deltaHygiene(-1);
   }
 
-  dirt->setOpacity(0.35 - ((qreal)hygiene) * 0.01);
+  dirt->setOpacity(0.35 - ((qreal)stats->getHygiene()) * 0.01);
 }
 
 int Boris::getHygiene()
 {
-  return hygiene;
+  return stats->getHygiene();
 }
 
 void Boris::collide(Boris *b)
@@ -1025,61 +965,61 @@ void Boris::processAi(QString &behav, int &time)
   }
   
   // Stat check
-  if(energy <= 50) {
-    if(qrand() % (100 - energy) > independence) {
+  if(stats->getEnergy() <= 50) {
+    if(qrand() % (100 - stats->getEnergy()) > independence) {
       stats->flashStat("energy");
       behav = "_energy";
-    } else if(energy <= 10) {
+    } else if(stats->getEnergy() <= 10) {
       if(qrand() % 100 < independence) {
         behav = chooseFromCategory("Energy");
       }
     }
   }
-  if(hunger >= 50) {
-    if(qrand() % hunger > independence) {
+  if(stats->getHunger() >= 50) {
+    if(qrand() % stats->getHunger() > independence) {
       stats->flashStat("hunger");
       behav = "_hunger";
-    } else if(hunger >= 90) {
+    } else if(stats->getHunger() >= 90) {
       if(qrand() % 100 < independence) {
         behav = chooseFromCategory("Hunger");
       }
     }
   }
-  if(bladder >= 50) {
-    if(qrand() % bladder > independence) {
+  if(stats->getBladder() >= 50) {
+    if(qrand() % stats->getBladder() > independence) {
       stats->flashStat("bladder");
       behav = "_bladder";
-    } else if(bladder >= 90) {
+    } else if(stats->getBladder() >= 90) {
       if(qrand() % 100 < independence) {
         behav = chooseFromCategory("Bladder");
       }
     }
   }
-  if(social <= 50) {
-    if(qrand() % (100 - social) > independence) {
+  if(stats->getSocial() <= 50) {
+    if(qrand() % (100 - stats->getSocial()) > independence) {
       stats->flashStat("social");
       behav = "_social";
-    } else if(social <= 10) {
+    } else if(stats->getSocial() <= 10) {
       if(qrand() % 100 < independence) {
         behav = chooseFromCategory("Social");
       }
     }
   }
-  if(fun <= 50) {
-    if(qrand() % (100 - fun) > independence) {
+  if(stats->getFun() <= 50) {
+    if(qrand() % (100 - stats->getFun()) > independence) {
       stats->flashStat("fun");
       behav = "_fun";
-    } else if(fun <= 10) {
+    } else if(stats->getFun() <= 10) {
       if(qrand() % 100 < independence) {
         behav = chooseFromCategory("Fun");
       }
     }
   }
-  if(hygiene <= 50) {
-    if(qrand() % (100 - hygiene) > independence) {
+  if(stats->getHygiene() <= 50) {
+    if(qrand() % (100 - stats->getHygiene()) > independence) {
       stats->flashStat("none");
       behav = "_hygiene";
-    } else if(hygiene <= 10) {
+    } else if(stats->getHygiene() <= 10) {
       if(qrand() % 100 < independence) {
         behav = chooseFromCategory("Hygiene");
       }

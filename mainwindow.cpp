@@ -80,6 +80,9 @@ MainWindow::MainWindow()
   if(!settings->contains("lemmy_mode")) {
     settings->setValue("lemmy_mode", "false");
   }
+  if(!settings->contains("timeFactor")) {
+    settings->setValue("timeFactor", "1");
+  }
 
   if(settings->value("show_welcome", "true").toBool()) {
     About about(this);
