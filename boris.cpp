@@ -354,10 +354,10 @@ void Boris::nextFrame()
     QPoint p = QCursor::pos();
     int xA = p.x();
     int yA = p.y();
-    int xB = this->pos().x();
-    int yB = this->pos().y();
+    int xB = this->pos().x() + (borisSize / 2);
+    int yB = this->pos().y() + (borisSize / 2);
     double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
-    if(hypotenuse < borisSize * 2) {
+    if(hypotenuse < borisSize * 3) {
       if(!alreadyEvading) {
         if(fabs(mouseHVel) > 10.0 || fabs(mouseVVel) > 10.0) {
           double fleeAngle = atan2((this->pos().y() + (borisSize / 2.0)) - p.y(),
