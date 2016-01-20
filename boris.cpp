@@ -248,9 +248,11 @@ void Boris::changeBehaviour(QString behav, int time)
     processAi(behav, time);
   }
   
+  /*
   if(behav == "") {
     alreadyEvading = false;
   }
+  */
   
   // Pick random behaviour except sleep and weewee
   do {
@@ -267,7 +269,7 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   if(time == 0) {
-    behavTimer.setInterval(((qrand() % 8000) + 1000) / timeFactor);
+    behavTimer.setInterval(((qrand() % 7000) + 2000) / timeFactor);
   } else {
     behavTimer.setInterval(time);
   }
@@ -350,24 +352,12 @@ void Boris::nextFrame()
 
   if(!falling && !grabbed && behaviours->at(curBehav).file != "sleep") {
     QPoint p = QCursor::pos();
-    /*
-    int minX = borisSize * 2;
-    int maxX = QApplication::desktop()->width() - borisSize * 2;
-    int minY = borisSize * 2;
-    int maxY = QApplication::desktop()->height() - borisSize * 2;
-    if((this->pos().x() <= maxX && this->pos().x() >= minX &&
-        this->pos().y() <= maxY && this->pos().y() >= minY) ||
-       (p.x() > QApplication::desktop()->width() - borisSize / 2.0 ||
-        p.x() < borisSize / 2.0 ||
-        p.y() > QApplication::desktop()->height() - borisSize / 2.0 ||
-        p.y() < borisSize / 2.0)) {
-    */
     int xA = p.x();
     int yA = p.y();
     int xB = this->pos().x();
     int yB = this->pos().y();
     double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
-    if(hypotenuse < borisSize * 3) {
+    if(hypotenuse < borisSize * 2) {
       if(!alreadyEvading) {
         if(fabs(mouseHVel) > 10.0 || fabs(mouseVVel) > 10.0) {
           double fleeAngle = atan2((this->pos().y() + (borisSize / 2.0)) - p.y(),
@@ -395,6 +385,8 @@ void Boris::nextFrame()
           } else if(fleeAngle >= 292.5 && fleeAngle < 337.5) {
             changeBehaviour("_flee_left_up");
           }
+        } else {
+          changeBehaviour(chooseFromCategory("Social"));
         }
       }
       alreadyEvading = true;
@@ -473,10 +465,13 @@ void Boris::hideBoris()
 void Boris::enterEvent(QEvent *event)
 {
   event->accept();
+  /*
   if(behaviours->at(curBehav).file != "_drop_dead" &&
      behaviours->at(curBehav).file != "sleep") {
     socialQueue += 5;
+    changeBehaviour(chooseFromCategory("Social"));
   }
+  */
   if(!showStats) {
     stats->show();
   }
@@ -541,7 +536,7 @@ void Boris::changeSize(int newSize)
 {
   borisSize = newSize;
   if(borisSize == 0) {
-    borisSize = (qrand() % 64) + 32;
+    borisSize = (qrand() % 65) + 32;
   }
   resetTransform();
   setFixedSize(borisSize, borisSize);
@@ -872,157 +867,119 @@ void Boris::processVision()
 
 void Boris::processAi(QString &behav, int &time)
 {
-  if(behaviours->at(curBehav).file.contains("casual_walk_")) {
-    time /= 2;
-  }
-  
-  if(behaviours->at(curBehav).file.contains("casual_walk_up") && qrand() % 9 >= 4 ) {
-    int nextWalk = qrand() % 1;
-    switch(nextWalk) {
-    case 0:
-      behav = "casual_walk_left_up";
-      break;
-    case 1:
-      behav = "casual_walk_right_up";
-      break;
+  if(behav == "" && time == 0 && qrand() % 10 >= 5 && behaviours->at(curBehav).file.contains("casual_walk_")) {
+    time = qrand() % 1500 + 500;
+    if(behaviours->at(curBehav).file == "casual_walk_up") {
+      if(qrand() % 2) {
+        behav = "casual_walk_left_up";
+      } else {
+        behav = "casual_walk_right_up";
+      }
+    } else if(behaviours->at(curBehav).file == "casual_walk_right_up") {
+      if(qrand() % 2) {
+        behav = "casual_walk_up";
+      } else {
+        behav = "casual_walk_right";
+      }
+    } else if(behaviours->at(curBehav).file == "casual_walk_right") {
+      if(qrand() % 2) {
+        behav = "casual_walk_right_up";
+      } else {
+        behav = "casual_walk_right_down";
+      }
+    } else if(behaviours->at(curBehav).file == "casual_walk_right_down") {
+      if(qrand() % 2) {
+        behav = "casual_walk_right";
+      } else {
+        behav = "casual_walk_down";
+      }
+    } else if(behaviours->at(curBehav).file == "casual_walk_down") {
+      if(qrand() % 2) {
+        behav = "casual_walk_right_down";
+      } else {
+        behav = "casual_walk_left_down";
+      }
+    } else if(behaviours->at(curBehav).file == "casual_walk_left_down") {
+      if(qrand() % 2) {
+        behav = "casual_walk_down";
+      } else {
+        behav = "casual_walk_left";
+      }
+    } else if(behaviours->at(curBehav).file == "casual_walk_left") {
+      if(qrand() % 2) {
+        behav = "casual_walk_left_down";
+      } else {
+        behav = "casual_walk_left_up";
+      }
+    } else if(behaviours->at(curBehav).file == "casual_walk_left_up") {
+      if(qrand() % 2) {
+        behav = "casual_walk_left";
+      } else {
+        behav = "casual_walk_up";
+      }
     }
   }
-  if(behaviours->at(curBehav).file.contains("casual_walk_right_up") && qrand() % 9 >= 4 ) {
-    int nextWalk = qrand() % 1;
-    switch(nextWalk) {
-    case 0:
-      behav = "casual_walk_up";
-      break;
-    case 1:
-      behav = "casual_walk_right";
-      break;
-    }
-  }
-  if(behaviours->at(curBehav).file.contains("casual_walk_right") && qrand() % 9 >= 4 ) {
-    int nextWalk = qrand() % 1;
-    switch(nextWalk) {
-    case 0:
-      behav = "casual_walk_right_up";
-      break;
-    case 1:
-      behav = "casual_walk_right_down";
-      break;
-    }
-  }
-  if(behaviours->at(curBehav).file.contains("casual_walk_right_down") && qrand() % 9 >= 4 ) {
-    int nextWalk = qrand() % 1;
-    switch(nextWalk) {
-    case 0:
-      behav = "casual_walk_right";
-      break;
-    case 1:
-      behav = "casual_walk_down";
-      break;
-    }
-  }
-  if(behaviours->at(curBehav).file.contains("casual_walk_down") && qrand() % 9 >= 4 ) {
-    int nextWalk = qrand() % 1;
-    switch(nextWalk) {
-    case 0:
-      behav = "casual_walk_right_down";
-      break;
-    case 1:
-      behav = "casual_walk_left_down";
-      break;
-    }
-  }
-  if(behaviours->at(curBehav).file.contains("casual_walk_left_down") && qrand() % 9 >= 4 ) {
-    int nextWalk = qrand() % 1;
-    switch(nextWalk) {
-    case 0:
-      behav = "casual_walk_down";
-      break;
-    case 1:
-      behav = "casual_walk_left";
-      break;
-    }
-  }
-  if(behaviours->at(curBehav).file.contains("casual_walk_left") && qrand() % 9 >= 4 ) {
-    int nextWalk = qrand() % 1;
-    switch(nextWalk) {
-    case 0:
-      behav = "casual_walk_left_down";
-      break;
-    case 1:
-      behav = "casual_walk_left_up";
-      break;
-    }
-  }
-  if(behaviours->at(curBehav).file.contains("casual_walk_left_up") && qrand() % 9 >= 4 ) {
-    int nextWalk = qrand() % 1;
-    switch(nextWalk) {
-    case 0:
-      behav = "casual_walk_left";
-      break;
-    case 1:
-      behav = "casual_walk_up";
-      break;
-    }
-  }
-  
+
   // Stat check
-  if(stats->getEnergy() <= 50) {
-    if(qrand() % (100 - stats->getEnergy()) > independence) {
-      stats->flashStat("energy");
-      behav = "_energy";
-    } else if(stats->getEnergy() <= 10) {
-      if(qrand() % 100 < independence) {
-        behav = chooseFromCategory("Energy");
+  if(behav == "" && time == 0) {
+    if(stats->getEnergy() <= 50) {
+      if(qrand() % (100 - stats->getEnergy()) > independence) {
+        stats->flashStat("energy");
+        behav = "_energy";
+      } else if(stats->getEnergy() <= 10) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Energy");
+        }
       }
     }
-  }
-  if(stats->getHunger() >= 50) {
-    if(qrand() % stats->getHunger() > independence) {
-      stats->flashStat("hunger");
-      behav = "_hunger";
-    } else if(stats->getHunger() >= 90) {
-      if(qrand() % 100 < independence) {
-        behav = chooseFromCategory("Hunger");
+    if(stats->getHunger() >= 50) {
+      if(qrand() % stats->getHunger() > independence) {
+        stats->flashStat("hunger");
+        behav = "_hunger";
+      } else if(stats->getHunger() >= 90) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Hunger");
+        }
       }
     }
-  }
-  if(stats->getBladder() >= 50) {
-    if(qrand() % stats->getBladder() > independence) {
-      stats->flashStat("bladder");
-      behav = "_bladder";
-    } else if(stats->getBladder() >= 90) {
-      if(qrand() % 100 < independence) {
-        behav = chooseFromCategory("Bladder");
+    if(stats->getBladder() >= 50) {
+      if(qrand() % stats->getBladder() > independence) {
+        stats->flashStat("bladder");
+        behav = "_bladder";
+      } else if(stats->getBladder() >= 90) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Bladder");
+        }
       }
     }
-  }
-  if(stats->getSocial() <= 50) {
-    if(qrand() % (100 - stats->getSocial()) > independence) {
-      stats->flashStat("social");
-      behav = "_social";
-    } else if(stats->getSocial() <= 10) {
-      if(qrand() % 100 < independence) {
-        behav = chooseFromCategory("Social");
+    if(stats->getSocial() <= 50) {
+      if(qrand() % (100 - stats->getSocial()) > independence) {
+        stats->flashStat("social");
+        behav = "_social";
+      } else if(stats->getSocial() <= 10) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Social");
+        }
       }
     }
-  }
-  if(stats->getFun() <= 50) {
-    if(qrand() % (100 - stats->getFun()) > independence) {
-      stats->flashStat("fun");
-      behav = "_fun";
-    } else if(stats->getFun() <= 10) {
-      if(qrand() % 100 < independence) {
-        behav = chooseFromCategory("Fun");
+    if(stats->getFun() <= 50) {
+      if(qrand() % (100 - stats->getFun()) > independence) {
+        stats->flashStat("fun");
+        behav = "_fun";
+      } else if(stats->getFun() <= 10) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Fun");
+        }
       }
     }
-  }
-  if(stats->getHygiene() <= 50) {
-    if(qrand() % (100 - stats->getHygiene()) > independence) {
-      stats->flashStat("none");
-      behav = "_hygiene";
-    } else if(stats->getHygiene() <= 10) {
-      if(qrand() % 100 < independence) {
-        behav = chooseFromCategory("Hygiene");
+    if(stats->getHygiene() <= 50) {
+      if(qrand() % (100 - stats->getHygiene()) > independence) {
+        stats->flashStat("none");
+        behav = "_hygiene";
+      } else if(stats->getHygiene() <= 10) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Hygiene");
+        }
       }
     }
   }
