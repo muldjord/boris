@@ -65,10 +65,6 @@ Stats::Stats(int energy, int hunger, int bladder, int social, int fun, int hygie
   flashIcon->setVisible(false);
   
   flasherEnabled = false;
-
-  statTimer.setInterval(200);
-  connect(&statTimer, SIGNAL(timeout()), this, SLOT(updateStats()));
-  statTimer.start();
 }
 
 Stats::~Stats()

@@ -52,8 +52,6 @@ public:
   void deltaSocial(int value);
   void deltaFun(int value);
   void deltaHygiene(int value);
-
-private slots:
   void updateStats();
   
 private:
@@ -67,7 +65,6 @@ private:
   QGraphicsRectItem *funBar;
   QGraphicsPixmapItem *flashIcon;
   bool visibility;
-  QTimer statTimer;
   int energy;
   int hunger;
   int bladder;

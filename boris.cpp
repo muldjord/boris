@@ -691,7 +691,7 @@ void Boris::statQueueProgress()
   }
   if(bladderQueue < 0) {
     bladderQueue += 2;
-    stats->deltaBladder(-1);
+    stats->deltaBladder(-2);
   }
   if(socialQueue > 0) {
     socialQueue--;
@@ -719,6 +719,7 @@ void Boris::statQueueProgress()
   }
 
   dirt->setOpacity(0.35 - ((qreal)stats->getHygiene()) * 0.01);
+  stats->updateStats();
 }
 
 int Boris::getHygiene()
