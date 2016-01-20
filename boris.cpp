@@ -582,9 +582,11 @@ void Boris::handlePhysics()
   oldCursor = QCursor::pos();
 
   // Check if Boris is 'seeing' a wall
+  /*
   if(!falling && !grabbed) {
     processVision();
   }
+  */
 }
 
 void Boris::earthquake()
