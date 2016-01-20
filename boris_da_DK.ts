@@ -249,17 +249,17 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
 <context>
     <name>Boris</name>
     <message>
-        <location filename="boris.cpp" line="159"/>
+        <location filename="boris.cpp" line="147"/>
         <source>Behaviours</source>
         <translation>Opførsler</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="160"/>
+        <location filename="boris.cpp" line="148"/>
         <source>Movement</source>
         <translation>Bevægelse</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="162"/>
+        <location filename="boris.cpp" line="150"/>
         <source>Energy</source>
         <translation>Energi</translation>
     </message>
@@ -268,27 +268,27 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
         <translation type="vanished">Sult</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="164"/>
+        <location filename="boris.cpp" line="152"/>
         <source>Food</source>
-        <translation type="unfinished">Mad</translation>
+        <translation>Mad</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="166"/>
+        <location filename="boris.cpp" line="154"/>
         <source>Toilet</source>
         <translation>Toilet</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="168"/>
+        <location filename="boris.cpp" line="156"/>
         <source>Social</source>
         <translation>Social</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="170"/>
+        <location filename="boris.cpp" line="158"/>
         <source>Fun</source>
         <translation>Sjov</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="172"/>
+        <location filename="boris.cpp" line="160"/>
         <source>Hygiene</source>
         <translation>Hygiejne</translation>
     </message>
@@ -304,37 +304,37 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
         <translation type="obsolete">&amp;Bring frem</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="297"/>
+        <location filename="mainwindow.cpp" line="147"/>
         <source>&amp;Config / about...</source>
         <translation>&amp;Konfigurér / om...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="301"/>
+        <location filename="mainwindow.cpp" line="151"/>
         <source>&amp;Earthquake</source>
         <translation>&amp;Jordskælv</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="302"/>
+        <location filename="mainwindow.cpp" line="152"/>
         <source>Walk up</source>
         <translation>Gå opad</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="303"/>
+        <location filename="mainwindow.cpp" line="153"/>
         <source>Walk down</source>
         <translation>Gå nedad</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="304"/>
+        <location filename="mainwindow.cpp" line="154"/>
         <source>Walk left</source>
         <translation>Gå mod venstre</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="305"/>
+        <location filename="mainwindow.cpp" line="155"/>
         <source>Walk right</source>
         <translation>Gå mod højre</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="307"/>
+        <location filename="mainwindow.cpp" line="157"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>
