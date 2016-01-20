@@ -661,7 +661,7 @@ void Boris::sanityCheck()
 
   // Check if Boris is dying or is already dead
   if(behaviours->at(curBehav).file != "_drop_dead" &&
-     stats->getEnergy() + stats->getSocial() + stats->getFun() + ((stats->getHunger() - 100) *-1) < 75) {
+     stats->getEnergy() + stats->getSocial() + stats->getFun() + ((stats->getHunger() - 100) *-1) < 50) {
     qDebug("Boris has died... RIP!\n");
     changeBehaviour("_drop_dead");
   }
