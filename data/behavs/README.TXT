@@ -38,17 +38,17 @@ time: Time in miliseconds this frame will be shown before proceeding to next
 frame
 
 deltax: Move Boris this number of pixels on the x axis when this frame is
-shown. Use '666' if you want him to move to a random location on the x axis.
+shown. Use 'rand' if you want him to move to a random location on the x axis.
 
 deltay: Same as deltax but for the y axis. Keep in mind that it counts from
-top to bottom. Use '666' if you want him to move to a random location on the y axis.
+top to bottom. Use 'rand' if you want him to move to a random location on the y axis.
 
 hide: Bool (0/1) which tells Boris to hide when this frame is shown
 
 show: Similar to hide, but show instead.
 
 change: Bool (0/1) that tells Boris to change behaviour when this frame
-is reached. Used for bahaviours that don't work well when looped.
+is reached. Used for bahaviours that don't work well when looped. This option is deprecated since it automatically switches behaviour for oneshot behaviours when the last frame is reached.
 
 soundfx: Filename for sound fx that will be played when this frame is
 reached.
