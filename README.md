@@ -23,6 +23,10 @@ Copyright 2016 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
+#### Version 1.7.2 (20th January 2016):
+* Moved AI back into Boris class, it was too ugly the other way
+* All stats are now handled inside Stats class
+
 #### Version 1.7.1 (18th January 2016):
 * Boris walks a bit more than before
 * Moved AI behaviour to own function
