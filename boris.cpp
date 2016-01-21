@@ -1018,7 +1018,7 @@ void Boris::processAi(QString &behav, int &time)
       }
     }
     if(stats->getHealth() <= 50) {
-      if(qrand() % (100 - stats->getHealth()) > independence) {
+      if(qrand() % (150 - stats->getHealth()) > independence) {
         stats->flashStat("none");
         behav = "_health";
         // No else on this one. The "patch up" behaviour must be user applied
