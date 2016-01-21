@@ -446,6 +446,7 @@ void Boris::moveBoris(int dX, int dY)
   if(this->pos().x() > maxX || this->pos().x() < minX ||
      this->pos().y() > maxY || this->pos().y() < minY) {
     if(falling) {
+      stats->deltaHealth(-5); // It hurts to hit the borders
       // Physics velocity when hitting borders
       if(this->pos().x() + dX > maxX || this->pos().x() + dX < minX) {
         hVel *= -0.4;
@@ -676,6 +677,9 @@ void Boris::sanityCheck()
   if(behaviours->at(curBehav).file != "_drop_dead") {
     if(stats->getHealth() <= 2 || stats->getEnergy() + stats->getSocial() + stats->getFun() + ((stats->getHunger() - 100) *-1) < 50) {
       qDebug("Boris has died... RIP!\n");
+      statQueueTimer.stop();
+      dirt->setOpacity(0.0);
+      bruises->setOpacity(0.0);
       changeBehaviour("_drop_dead");
     }
   }
