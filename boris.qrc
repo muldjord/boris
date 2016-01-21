@@ -9,8 +9,10 @@
     <file alias="mouse_grab.png">icons/mouse_grab.png</file>
     <file alias="stats.png">data/gfx/stats.png</file>
     <file alias="flash_icon.png">data/gfx/flash_icon.png</file>
+    <file alias="bruises.png">data/gfx/bruises.png</file>
     <file alias="dirt.png">data/gfx/dirt.png</file>
     <file alias="movement.png">data/gfx/movement.png</file>
+    <file alias="health.png">data/gfx/health.png</file>
     <file alias="energy.png">data/gfx/energy.png</file>
     <file alias="hunger.png">data/gfx/hunger.png</file>
     <file alias="bladder.png">data/gfx/bladder.png</file>

@@ -91,6 +91,7 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours, QWidg
       // Create behaviour container
       Behaviour b;
       b.oneShot = false;
+      b.health = 0;
       b.energy = 0;
       b.hunger = 0;
       b.bladder = 0;
@@ -114,6 +115,9 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours, QWidg
         if(line.contains("category")) {
           b.category = line.mid(9,line.length());
         }
+        if(line.contains("health")) {
+          b.health = line.mid(7,line.length()).toInt();
+        }
         if(line.contains("energy")) {
           b.energy = line.mid(7,line.length()).toInt();
         }
@@ -135,7 +139,7 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours, QWidg
         line = in.readLine();
       }
 #ifdef DEBUG
-      qDebug("Energy: %d\nHunger: %d\nBladder: %d\nSocial: %d\nFun: %d\n", b.energy, b.hunger, b.bladder, b.social, b.fun);
+      qDebug("Health: %d\nEnergy: %d\nHunger: %d\nBladder: %d\nSocial: %d\nFun: %d\nHygiene: %d\n", b.health, b.energy, b.hunger, b.bladder, b.social, b.fun, b.hygiene);
 #endif
       line = in.readLine();
       qreal volume = (qreal)settings->value("volume", "100").toInt() / 100.0;

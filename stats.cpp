@@ -36,8 +36,9 @@
 
 extern QSettings *settings;
 
-Stats::Stats(int energy, int hunger, int bladder, int social, int fun, int hygiene, QWidget *parent) : QGraphicsView(parent)
+Stats::Stats(int health, int energy, int hunger, int bladder, int social, int fun, int hygiene, QWidget *parent) : QGraphicsView(parent)
 {
+  this->health = health;
   this->energy = energy;
   this->hunger = hunger;
   this->bladder = bladder;
@@ -71,6 +72,11 @@ Stats::~Stats()
 {
 }
 
+int Stats::getHealth()
+{
+  return health;
+}
+
 int Stats::getEnergy()
 {
   return energy;
@@ -99,6 +105,17 @@ int Stats::getFun()
 int Stats::getHygiene()
 {
   return hygiene;
+}
+
+void Stats::deltaHealth(int value)
+{
+  if(health + value > 100) {
+    health = 100;
+  } else if(health + value < 0) {
+    health = 0;
+  } else {
+    health += value;
+  }
 }
 
 void Stats::deltaEnergy(int value)

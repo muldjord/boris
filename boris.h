@@ -105,6 +105,8 @@ private:
   QGraphicsPixmapItem *sprite;
   QGraphicsPixmapItem *dirt;
   QPixmap origDirt;
+  QGraphicsPixmapItem *bruises;
+  QPixmap origBruises;
   
   double vVel;
   double hVel;
@@ -116,6 +118,7 @@ private:
   Stats *stats;
   bool showStats;
   QList<QString> behavQueue;
+  int healthQueue;
   int energyQueue;
   int hungerQueue;
   int bladderQueue;

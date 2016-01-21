@@ -47,12 +47,13 @@ struct Behaviour
   QString file;
   QString title;
   QString category;
+  int health;
   int energy;
   int hunger;
   int bladder;
-  int hygiene;
   int social;
   int fun;
+  int hygiene;
   bool oneShot;
   QList<Frame> behaviour;
 };

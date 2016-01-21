@@ -73,6 +73,9 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   origDirt.load(":dirt.png");
   dirt = scene->addPixmap(origDirt);
   dirt->setOpacity(0.0);
+  origBruises.load(":bruises.png");
+  bruises = scene->addPixmap(origBruises);
+  bruises->setOpacity(0.0);
   
   curFrame = 0;
   curBehav = 0;
@@ -85,19 +88,21 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   createBehavMenu();
 
   showStats = false;
+  int health = 100;
   int energy = 50 + qrand() % 25;
   int hunger = (qrand() % 25) + 15;
   int bladder = (qrand() % 25) + 15;
   int hygiene = 100;
   int social = 50 + qrand() % 25;
   int fun = 50 + qrand() % 25;
+  healthQueue = 0;
   energyQueue = 0;
   hungerQueue = 0;
   bladderQueue = 0;
   socialQueue = 0;
   funQueue = 0;
   hygieneQueue = 0;
-  stats = new Stats(energy, hunger, bladder, social, fun, hygiene, this);
+  stats = new Stats(health, energy, hunger, bladder, social, fun, hygiene, this);
   if(settings->value("stats", "true").toBool()) {
     stats->show();
     showStats = true;
@@ -145,27 +150,30 @@ void Boris::createBehavMenu()
 {
   bMenu = new QMenu();
   bMenu->setTitle(tr("Behaviours"));
-  QMenu *movementMenu = new QMenu(tr("Movement"), bMenu);
-  movementMenu->setIcon(QIcon(":movement.png"));
+  QMenu *healthMenu = new QMenu(tr("Health"), bMenu);
+  healthMenu->setIcon(QIcon(":health.png"));
   QMenu *energyMenu = new QMenu(tr("Energy"), bMenu);
   energyMenu->setIcon(QIcon(":energy.png"));
   QMenu *hungerMenu = new QMenu(tr("Food"), bMenu);
   hungerMenu->setIcon(QIcon(":hunger.png"));
   QMenu *bladderMenu = new QMenu(tr("Toilet"), bMenu);
   bladderMenu->setIcon(QIcon(":bladder.png"));
+  QMenu *hygieneMenu = new QMenu(tr("Hygiene"), bMenu);
+  hygieneMenu->setIcon(QIcon(":hygiene.png"));
   QMenu *socialMenu = new QMenu(tr("Social"), bMenu);
   socialMenu->setIcon(QIcon(":social.png"));
   QMenu *funMenu = new QMenu(tr("Fun"), bMenu);
   funMenu->setIcon(QIcon(":fun.png"));
-  QMenu *hygieneMenu = new QMenu(tr("Hygiene"), bMenu);
-  hygieneMenu->setIcon(QIcon(":hygiene.png"));
-  connect(movementMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
+  QMenu *movementMenu = new QMenu(tr("Movement"), bMenu);
+  movementMenu->setIcon(QIcon(":movement.png"));
+  connect(healthMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   connect(energyMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   connect(hungerMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   connect(bladderMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
+  connect(hygieneMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   connect(socialMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   connect(funMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
-  connect(hygieneMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
+  connect(movementMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
   for(int i = 0; i < behaviours->length(); ++i) {
     if(behaviours->at(i).file.left(1) != "_") {
       if(behaviours->at(i).category == "Movement") {
@@ -182,16 +190,19 @@ void Boris::createBehavMenu()
         funMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
       } else if(behaviours->at(i).category == "Hygiene") {
         hygieneMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
+      } else if(behaviours->at(i).category == "Health") {
+        healthMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
       }
     }
   }
-  bMenu->addMenu(movementMenu);
+  bMenu->addMenu(healthMenu);
   bMenu->addMenu(energyMenu);
   bMenu->addMenu(hungerMenu);
   bMenu->addMenu(bladderMenu);
   bMenu->addMenu(hygieneMenu);
   bMenu->addMenu(socialMenu);
   bMenu->addMenu(funMenu);
+  bMenu->addMenu(movementMenu);
 }
 
 QString Boris::chooseFromCategory(QString category)
@@ -280,6 +291,7 @@ void Boris::changeBehaviour(QString behav, int time)
 #endif
 
   // Applying behaviour stats to Boris
+  healthQueue = behaviours->at(curBehav).health;
   energyQueue = behaviours->at(curBehav).energy;
   hungerQueue = behaviours->at(curBehav).hunger;
   bladderQueue = behaviours->at(curBehav).bladder;
@@ -315,7 +327,11 @@ void Boris::nextFrame()
   QPixmap dirtPixmap(origDirt);
   dirtPixmap.setMask(behaviours->at(curBehav).behaviour.at(curFrame).sprite.createMaskFromColor(QColor(0, 0, 0, 0)));
   dirt->setPixmap(dirtPixmap);
-  
+
+  QPixmap bruisesPixmap(origBruises);
+  bruisesPixmap.setMask(behaviours->at(curBehav).behaviour.at(curFrame).sprite.createMaskFromColor(QColor(0, 0, 0, 0)));
+  bruises->setPixmap(bruisesPixmap);
+
   if(soundEnabled && behaviours->at(curBehav).behaviour.at(curFrame).soundFx != NULL) {
     behaviours->at(curBehav).behaviour.at(curFrame).soundFx->play();
   }
@@ -624,10 +640,10 @@ void Boris::statProgress()
 {
   stats->deltaEnergy(- qrand() % 4);
   stats->deltaHunger(qrand() % 4);
-  //bladder += 0;
   stats->deltaSocial(- qrand() % 4);
   stats->deltaHygiene(- qrand() % 2);
   stats->deltaFun(- qrand() % 20);
+  // Nothing needed for 'health' and 'bladder'
 }
 
 void Boris::sanityCheck()
@@ -657,15 +673,24 @@ void Boris::sanityCheck()
   }
 
   // Check if Boris is dying or is already dead
-  if(behaviours->at(curBehav).file != "_drop_dead" &&
-     stats->getEnergy() + stats->getSocial() + stats->getFun() + ((stats->getHunger() - 100) *-1) < 50) {
-    qDebug("Boris has died... RIP!\n");
-    changeBehaviour("_drop_dead");
+  if(behaviours->at(curBehav).file != "_drop_dead") {
+    if(stats->getHealth() <= 2 || stats->getEnergy() + stats->getSocial() + stats->getFun() + ((stats->getHunger() - 100) *-1) < 50) {
+      qDebug("Boris has died... RIP!\n");
+      changeBehaviour("_drop_dead");
+    }
   }
 }
 
 void Boris::statQueueProgress()
 {
+  if(healthQueue > 0) {
+    healthQueue--;
+    stats->deltaHealth(1);
+  }
+  if(healthQueue < 0) {
+    healthQueue++;
+    stats->deltaHealth(-1);
+  }
   if(energyQueue > 0) {
     energyQueue--;
     stats->deltaEnergy(1);
@@ -716,9 +741,11 @@ void Boris::statQueueProgress()
   }
 
   dirt->setOpacity(0.35 - ((qreal)stats->getHygiene()) * 0.01);
+  bruises->setOpacity(0.50 - ((qreal)stats->getHealth()) * 0.01);
   stats->updateStats();
 }
 
+// Used by 'other Boris' to determine whether to flee or greet
 int Boris::getHygiene()
 {
   return stats->getHygiene();
@@ -981,6 +1008,16 @@ void Boris::processAi(QString &behav, int &time)
       } else if(stats->getHygiene() <= 10) {
         if(qrand() % 100 < independence) {
           behav = chooseFromCategory("Hygiene");
+        }
+      }
+    }
+    if(stats->getHealth() <= 50) {
+      if(qrand() % (100 - stats->getHealth()) > independence) {
+        stats->flashStat("none");
+        behav = "_health";
+      } else if(stats->getHealth() <= 10) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Health");
         }
       }
     }
