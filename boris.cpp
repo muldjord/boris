@@ -123,7 +123,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   physicsTimer.setInterval(30);
   connect(&physicsTimer, SIGNAL(timeout()), this, SLOT(handlePhysics()));
   physicsTimer.start();
-  
+
   animTimer.setInterval(0);
   animTimer.setSingleShot(true);
   connect(&animTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
@@ -688,8 +688,8 @@ void Boris::sanityCheck()
 void Boris::statQueueProgress()
 {
   if(healthQueue > 0) {
-    healthQueue--;
-    stats->deltaHealth(1);
+    healthQueue -= 2;
+    stats->deltaHealth(2);
   }
   if(healthQueue < 0) {
     healthQueue++;
@@ -736,8 +736,8 @@ void Boris::statQueueProgress()
     stats->deltaFun(-1);
   }
   if(hygieneQueue > 0) {
-    hygieneQueue--;
-    stats->deltaHygiene(1);
+    hygieneQueue -= 2;
+    stats->deltaHygiene(2);
   }
   if(hygieneQueue < 0) {
     hygieneQueue++;
