@@ -271,7 +271,7 @@ void Boris::changeBehaviour(QString behav, int time)
   } while(behaviours->at(curBehav).file == "weewee" || behaviours->at(curBehav).file == "sleep");
   // If a specific behaviour is requested, use that instead of the random one
   if(behav != "") {
-    //behav = "teleport"; // Use this to test behaviours
+    //behav = "_health"; // Use this to test behaviours
     for(int a = 0; a < behaviours->size(); ++a) {
       if(behaviours->at(a).file == behav) {
         curBehav = a;
@@ -402,7 +402,9 @@ void Boris::nextFrame()
             changeBehaviour("_flee_left_up");
           }
         } else {
-          changeBehaviour(chooseFromCategory("Social"));
+          if(stats->getFun() > 35) {
+            changeBehaviour(chooseFromCategory("Social"));
+          }
         }
       }
       alreadyEvading = true;
