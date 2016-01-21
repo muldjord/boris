@@ -96,7 +96,7 @@ Hvis dine venner / kollegaer er misundelige og vil have deres egen Boris, så be
         <source>Boris bids you welcome! He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye out for him!
 
 Functions:
-- You can throw Boris around your desktop by left-clicking him.
+- You can throw Boris around your desktop by left-clicking him. Don&apos;t throw him too much though, or you&apos;ll bruise him...
 - Right-clicking Boris brings up a menu where you can select what you want Boris to do. Each activity is added to a queue and performed in the order you select them.
 - Right-click the tray icon to either quit, cause an earthquake, move all clones at the same time or open this config/about box.
 
@@ -120,14 +120,15 @@ Vitality description:
 - The &apos;Zz&apos; icon signifies Boris&apos; energy level. Tell him to relax to give him more energy.
 - The &apos;knife and fork&apos; icon shows how hungry Boris is. Tell him to eat to remove his hunger.
 - The &apos;toilet&apos; icon is an indicator of Boris&apos; need to go to the toilet. Tell him to weewee to make him feel better.
-- The &apos;speech bubble&apos; icon shows Boris&apos; need for social interaction. Move your mouse over him repeatedly to make him feel loved (don&apos;t move the mouse too fast or you&apos;ll scare him).
+- The &apos;speech bubble&apos; icon shows Boris&apos; need for social interaction. Move your mouse over him repeatedly to make him feel loved (don&apos;t move the mouse too fast or you&apos;ll scare him). Boris will also socialize with other Boris clones when he meets them.
 - The &apos;smiley&apos; icon indicates if Boris is in a good mood. If he&apos;s sad, tell him to do something fun.
+- If Boris is getting dirty, tell him to take a shower.
 
 If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit http://www.muldjord.com/boris and download it. You can also download the full source code in there if you like. This software is COMPLETELY FREE and OPEN SOURCE (GPLv3).</oldsource>
         <translation>Boris byder dig velkommen! Han er her for at underholde dig gennem alle årets årstider. Han er lidt af en baryler, så hold godt øje med ham!
 
 Funktioner:
-- Du kan smide Boris rundt på skrivebordet ved at venstre-klikke.
+- Du kan smide Boris rundt på skrivebordet ved at venstre-klikke. Men pas på! Hvis du smider ham for meget, får han blå mærker.
 - Højreklik på Boris frembringer en menu hvor du kan vælge hvad han skal lave. Hver aktivitet sættes i kø, hvorefter de afvikles i den rækkefølge de er tilføjet.
 - Højreklik tray ikonet for at quitte, forårsage et jordskælv, flytte all kloner på én gang eller vise dette vindue.
 
@@ -249,17 +250,22 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
 <context>
     <name>Boris</name>
     <message>
-        <location filename="boris.cpp" line="147"/>
+        <location filename="boris.cpp" line="152"/>
         <source>Behaviours</source>
         <translation>Opførsler</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="148"/>
+        <location filename="boris.cpp" line="153"/>
+        <source>Health</source>
+        <translation>Helbred</translation>
+    </message>
+    <message>
+        <location filename="boris.cpp" line="167"/>
         <source>Movement</source>
         <translation>Bevægelse</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="150"/>
+        <location filename="boris.cpp" line="155"/>
         <source>Energy</source>
         <translation>Energi</translation>
     </message>
@@ -268,27 +274,27 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
         <translation type="vanished">Sult</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="152"/>
+        <location filename="boris.cpp" line="157"/>
         <source>Food</source>
         <translation>Mad</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="154"/>
+        <location filename="boris.cpp" line="159"/>
         <source>Toilet</source>
         <translation>Toilet</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="156"/>
+        <location filename="boris.cpp" line="163"/>
         <source>Social</source>
         <translation>Social</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="158"/>
+        <location filename="boris.cpp" line="165"/>
         <source>Fun</source>
         <translation>Sjov</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="160"/>
+        <location filename="boris.cpp" line="161"/>
         <source>Hygiene</source>
         <translation>Hygiejne</translation>
     </message>
