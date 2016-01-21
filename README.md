@@ -23,6 +23,10 @@ Copyright 2016 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
+#### Version 1.8.0 (21th January 2016):
+* Added health stat, deacreses when thrown. Don't throw him too much...
+* Chooses "social" behaviour if fun stat is high enough and the mouse comes close
+
 #### Version 1.7.2 (20th January 2016):
 * Moved AI back into Boris class, it was too ugly the other way
 * All stats are now handled inside Stats class
