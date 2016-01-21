@@ -745,7 +745,7 @@ void Boris::statQueueProgress()
   }
 
   dirt->setOpacity(0.35 - ((qreal)stats->getHygiene()) * 0.01);
-  bruises->setOpacity(0.50 - ((qreal)stats->getHealth()) * 0.01);
+  bruises->setOpacity(0.75 - ((qreal)stats->getHealth()) * 0.01);
   stats->updateStats();
 }
 
@@ -1019,10 +1019,13 @@ void Boris::processAi(QString &behav, int &time)
       if(qrand() % (100 - stats->getHealth()) > independence) {
         stats->flashStat("none");
         behav = "_health";
+        // No else on this one. The "patch up" behaviour must be user applied
+        /*
       } else if(stats->getHealth() <= 10) {
         if(qrand() % 100 < independence) {
           behav = chooseFromCategory("Health");
         }
+        */
       }
     }
   }
