@@ -401,10 +401,8 @@ void Boris::nextFrame()
           } else if(fleeAngle >= 292.5 && fleeAngle < 337.5) {
             changeBehaviour("_flee_left_up");
           }
-        } else {
-          if(stats->getFun() > 30 && qrand() % 4 >= 3) {
-            changeBehaviour(chooseFromCategory("Social"));
-          }
+        } else if(stats->getFun() > 40 && qrand() % 3 >= 2) {
+          changeBehaviour(chooseFromCategory("Social"));
         }
       }
       alreadyEvading = true;
