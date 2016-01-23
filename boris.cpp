@@ -88,6 +88,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   createBehavMenu();
 
   showStats = false;
+  alreadyEvading = false;
   int health = 100;
   int energy = 50 + qrand() % 25;
   int hunger = (qrand() % 25) + 15;
@@ -259,12 +260,6 @@ void Boris::changeBehaviour(QString behav, int time)
     processAi(behav, time);
   }
   
-  /*
-  if(behav == "") {
-    alreadyEvading = false;
-  }
-  */
-  
   // Pick random behaviour except sleep and weewee
   do {
     curBehav = (qrand() % (behaviours->size() - staticBehavs)) + staticBehavs;
@@ -324,12 +319,14 @@ void Boris::nextFrame()
   }
   sprite->setPixmap(behaviours->at(curBehav).behaviour.at(curFrame).sprite);
 
+  QBitmap mask = behaviours->at(curBehav).behaviour.at(curFrame).sprite.createMaskFromColor(QColor(0, 0, 0, 0));
+
   QPixmap dirtPixmap(origDirt);
-  dirtPixmap.setMask(behaviours->at(curBehav).behaviour.at(curFrame).sprite.createMaskFromColor(QColor(0, 0, 0, 0)));
+  dirtPixmap.setMask(mask);
   dirt->setPixmap(dirtPixmap);
 
   QPixmap bruisesPixmap(origBruises);
-  bruisesPixmap.setMask(behaviours->at(curBehav).behaviour.at(curFrame).sprite.createMaskFromColor(QColor(0, 0, 0, 0)));
+  bruisesPixmap.setMask(mask);
   bruises->setPixmap(bruisesPixmap);
 
   if(soundEnabled && behaviours->at(curBehav).behaviour.at(curFrame).soundFx != NULL) {
@@ -356,60 +353,8 @@ void Boris::nextFrame()
     emit hideBoris();
   }
 
-  if(behaviours->at(curBehav).behaviour.at(curFrame).change) {
-#ifdef DEBUG
-    qDebug("Telling Boris to change behaviour...\n");
-#endif
-    changeBehaviour();
-  }
-
   curFrame++;
   animTimer.start();
-
-  if(!falling && !grabbed && behaviours->at(curBehav).file != "sleep") {
-    QPoint p = QCursor::pos();
-    int xA = p.x();
-    int yA = p.y();
-    int xB = this->pos().x() + (borisSize / 2);
-    int yB = this->pos().y() + (borisSize / 2);
-    double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
-    if(hypotenuse < borisSize * 3) {
-      if(!alreadyEvading) {
-        if(fabs(mouseHVel) > 10.0 || fabs(mouseVVel) > 10.0) {
-          double fleeAngle = atan2((this->pos().y() + (borisSize / 2.0)) - p.y(),
-                                   p.x() - (this->pos().x() + (borisSize / 2.0))
-                                   ) * 180.0 / 3.1415927;
-          if (fleeAngle < 0) {
-            fleeAngle += 360;
-          } else if (fleeAngle > 360) {
-            fleeAngle -= 360;
-          }
-          if((fleeAngle >= 0.0 && fleeAngle < 22.5) || (fleeAngle >= 337.5 && fleeAngle < 360.0)) {
-            changeBehaviour("_flee_left");
-          } else if(fleeAngle >= 22.5 && fleeAngle < 67.5) {
-            changeBehaviour("_flee_left_down");
-          } else if(fleeAngle >= 67.5 && fleeAngle < 112.5) {
-            changeBehaviour("_flee_down");
-          } else if(fleeAngle >= 112.5 && fleeAngle < 157.5) {
-            changeBehaviour("_flee_right_down");
-          } else if(fleeAngle >= 157.5 && fleeAngle < 202.5) {
-            changeBehaviour("_flee_right");
-          } else if(fleeAngle >= 202.5 && fleeAngle < 247.5) {
-            changeBehaviour("_flee_right_up");
-          } else if(fleeAngle >= 247.5 && fleeAngle < 292.5) {
-            changeBehaviour("_flee_up");
-          } else if(fleeAngle >= 292.5 && fleeAngle < 337.5) {
-            changeBehaviour("_flee_left_up");
-          }
-        } else if(stats->getFun() > 40 && qrand() % 3 >= 2) {
-          changeBehaviour(chooseFromCategory("Social"));
-        }
-      }
-      alreadyEvading = true;
-    } else {
-      alreadyEvading = false;
-    }
-  }
 }
 
 void Boris::moveBoris(int dX, int dY)
@@ -591,12 +536,53 @@ void Boris::handlePhysics()
 #endif
   oldCursor = QCursor::pos();
 
-  // Check if Boris is 'seeing' a wall
-  /*
-  if(!falling && !grabbed) {
-    processVision();
+  if(!falling && !grabbed &&
+     behaviours->at(curBehav).file != "shower" &&
+     behaviours->at(curBehav).file != "weewee" &&
+     behaviours->at(curBehav).file != "sleep") {
+    QPoint p = QCursor::pos();
+    int xA = p.x();
+    int yA = p.y();
+    int xB = this->pos().x() + (borisSize / 2);
+    int yB = this->pos().y() + (borisSize / 2);
+    double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
+    if(hypotenuse < borisSize * 3) {
+      if(!alreadyEvading) {
+        if(fabs(mouseHVel) > 10.0 || fabs(mouseVVel) > 10.0) {
+          double fleeAngle = atan2((this->pos().y() + (borisSize / 2.0)) - p.y(),
+                                   p.x() - (this->pos().x() + (borisSize / 2.0))
+                                   ) * 180.0 / 3.1415927;
+          if (fleeAngle < 0) {
+            fleeAngle += 360;
+          } else if (fleeAngle > 360) {
+            fleeAngle -= 360;
+          }
+          if((fleeAngle >= 0.0 && fleeAngle < 22.5) || (fleeAngle >= 337.5 && fleeAngle < 360.0)) {
+            changeBehaviour("_flee_left");
+          } else if(fleeAngle >= 22.5 && fleeAngle < 67.5) {
+            changeBehaviour("_flee_left_down");
+          } else if(fleeAngle >= 67.5 && fleeAngle < 112.5) {
+            changeBehaviour("_flee_down");
+          } else if(fleeAngle >= 112.5 && fleeAngle < 157.5) {
+            changeBehaviour("_flee_right_down");
+          } else if(fleeAngle >= 157.5 && fleeAngle < 202.5) {
+            changeBehaviour("_flee_right");
+          } else if(fleeAngle >= 202.5 && fleeAngle < 247.5) {
+            changeBehaviour("_flee_right_up");
+          } else if(fleeAngle >= 247.5 && fleeAngle < 292.5) {
+            changeBehaviour("_flee_up");
+          } else if(fleeAngle >= 292.5 && fleeAngle < 337.5) {
+            changeBehaviour("_flee_left_up");
+          }
+        } else if(stats->getFun() > 40 && qrand() % 100 >= 75) {
+          changeBehaviour(chooseFromCategory("Social"));
+        }
+      }
+      alreadyEvading = true;
+    } else {
+      alreadyEvading = false;
+    }
   }
-  */
 }
 
 void Boris::earthquake()
