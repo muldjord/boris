@@ -402,7 +402,7 @@ void Boris::nextFrame()
             changeBehaviour("_flee_left_up");
           }
         } else {
-          if(stats->getFun() > 35) {
+          if(stats->getFun() > 40 && qrand() % 4 >= 3) {
             changeBehaviour(chooseFromCategory("Social"));
           }
         }
@@ -484,13 +484,6 @@ void Boris::hideBoris()
 void Boris::enterEvent(QEvent *event)
 {
   event->accept();
-  /*
-  if(behaviours->at(curBehav).file != "_drop_dead" &&
-     behaviours->at(curBehav).file != "sleep") {
-    socialQueue += 5;
-    changeBehaviour(chooseFromCategory("Social"));
-  }
-  */
   if(!showStats) {
     stats->show();
   }
