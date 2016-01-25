@@ -260,7 +260,7 @@ void Boris::changeBehaviour(QString behav, int time)
     processAi(behav, time);
   }
   
-  // Pick random behaviour except sleep and weewee
+  // Pick random behaviour except sleep, weewee and patch_up
   do {
     curBehav = (qrand() % (behaviours->size() - staticBehavs)) + staticBehavs;
   } while(behaviours->at(curBehav).file == "weewee" || behaviours->at(curBehav).file == "sleep" || behaviours->at(curBehav).file == "patch_up");
@@ -537,9 +537,7 @@ void Boris::handlePhysics()
   oldCursor = QCursor::pos();
 
   if(!falling && !grabbed &&
-     behaviours->at(curBehav).file != "shower" &&
-     behaviours->at(curBehav).file != "weewee" &&
-     behaviours->at(curBehav).file != "sleep") {
+     !behaviours->at(curBehav).doNotDisturb) {
     QPoint p = QCursor::pos();
     int xA = p.x();
     int yA = p.y();
@@ -742,7 +740,7 @@ void Boris::collide(Boris *b)
     setFocus();
   }
   
-  if(!falling && !grabbed && behaviours->at(curBehav).file != "sleep" && boris == NULL) {
+  if(!falling && !grabbed && !behaviours->at(curBehav).doNotDisturb && boris == NULL) {
     boris = b;
     
     double socialAngle = atan2(this->pos().y() - boris->pos().y(), boris->pos().x() - this->pos().x()) * 180.0 / 3.1415927;

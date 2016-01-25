@@ -91,6 +91,7 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours, QWidg
       // Create behaviour container
       Behaviour b;
       b.oneShot = false;
+      b.doNotDisturb = false;
       b.health = 0;
       b.energy = 0;
       b.hunger = 0;
@@ -108,6 +109,9 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours, QWidg
       while (line != "#Frames") {
         if(line == "oneShot") {
           b.oneShot = true;
+        }
+        if(line == "doNotDisturb") {
+          b.doNotDisturb = true;
         }
         if(line.contains("title")) {
           b.title = line.mid(6,line.length());
@@ -160,7 +164,6 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours, QWidg
         }
         f.hide = snippets.at(4).toInt();
         f.show = snippets.at(5).toInt();
-        f.change = snippets.at(6).toInt();
         if(snippets.length() == 8) {
           f.soundFx = new QSoundEffect(parent);
           f.soundFx->setSource(QUrl::fromLocalFile(snippets.at(7)));

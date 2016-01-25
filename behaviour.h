@@ -38,7 +38,6 @@ struct Frame
   int dy;
   bool hide;
   bool show;
-  bool change;
   QSoundEffect *soundFx;
 };
 
@@ -55,6 +54,7 @@ struct Behaviour
   int fun;
   int hygiene;
   bool oneShot;
+  bool doNotDisturb;
   QList<Frame> behaviour;
 };
 

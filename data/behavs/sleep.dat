@@ -4,6 +4,7 @@ energy=100
 bladder=10
 hygiene=-10
 oneShot
+doNotDisturb
 #Frames
 0;75;0;0;0;0;0;
 1;75;0;0;0;0;0;

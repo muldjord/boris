@@ -26,6 +26,8 @@ flags, one flag per line, available flags are:
        fun=int: The amount of fun this behaviour will increase or decrease stats
        oneShot: This behaviour will be played from start to finish and then
                 switch to a new behaviour.
+       doNotDisturb: If this exists, Boris will not be disturbed by the mouse while it
+       		     is playing.
 
 The line "#Frames" MUST be there, so the software knows when the frame
 descriptions begin and the flag section ends.

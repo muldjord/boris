@@ -2,6 +2,7 @@ title=Shower
 category=Hygiene
 hygiene=100
 oneShot
+doNotDisturb
 #Frames
 0;75;0;0;0;0;0;
 1;75;0;0;0;0;0;
