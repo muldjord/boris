@@ -12,7 +12,7 @@ The format of the dat files is as follows:
 ---- file start, this line not included ----
 flags
 #Frames
-sprite;time;deltax;deltay;hide;show;change;soundfx;
+sprite;time;deltax;deltay;hide;show;soundfx(optional);
 ---- file end, this line not included ----
 
 flags, one flag per line, available flags are:
@@ -26,8 +26,8 @@ flags, one flag per line, available flags are:
        fun=int: The amount of fun this behaviour will increase or decrease stats
        oneShot: This behaviour will be played from start to finish and then
                 switch to a new behaviour.
-       doNotDisturb: If this exists, Boris will not be disturbed by the mouse while it
-       		     is playing.
+       doNotDisturb: If this exists, Boris will not be disturbed by the mouse while this
+       		     behaviour is in progress.
 
 The line "#Frames" MUST be there, so the software knows when the frame
 descriptions begin and the flag section ends.
@@ -49,8 +49,5 @@ hide: Bool (0/1) which tells Boris to hide when this frame is shown
 
 show: Similar to hide, but show instead.
 
-change: Bool (0/1) that tells Boris to change behaviour when this frame
-is reached. Used for bahaviours that don't work well when looped. This option is deprecated since it automatically switches behaviour for oneshot behaviours when the last frame is reached.
-
 soundfx: Filename for sound fx that will be played when this frame is
-reached.
+reached. This can be left out if it's a silent frame.
