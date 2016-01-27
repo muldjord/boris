@@ -244,8 +244,8 @@ void MainWindow::checkCollisions()
 
 void MainWindow::killAll()
 {
-  QTimer::singleShot(5000, qApp, SLOT(quit()));
+  QTimer::singleShot(2000, qApp, SLOT(quit()));
   for(int a = 0; a < borises.length(); ++a) {
-    borises.at(a)->changeBehaviour("_drop_dead");
+    borises.at(a)->changeBehaviour("casual_wave");
   }
 }
