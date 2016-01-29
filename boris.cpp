@@ -556,21 +556,21 @@ void Boris::handlePhysics()
             fleeAngle -= 360;
           }
           if((fleeAngle >= 0.0 && fleeAngle < 22.5) || (fleeAngle >= 337.5 && fleeAngle < 360.0)) {
-            changeBehaviour("_flee_left");
+            changeBehaviour("_flee_left", (qrand() % 2000) + 1000);
           } else if(fleeAngle >= 22.5 && fleeAngle < 67.5) {
-            changeBehaviour("_flee_left_down");
+            changeBehaviour("_flee_left_down", (qrand() % 2000) + 1000);
           } else if(fleeAngle >= 67.5 && fleeAngle < 112.5) {
-            changeBehaviour("_flee_down");
+            changeBehaviour("_flee_down", (qrand() % 2000) + 1000);
           } else if(fleeAngle >= 112.5 && fleeAngle < 157.5) {
-            changeBehaviour("_flee_right_down");
+            changeBehaviour("_flee_right_down", (qrand() % 2000) + 1000);
           } else if(fleeAngle >= 157.5 && fleeAngle < 202.5) {
-            changeBehaviour("_flee_right");
+            changeBehaviour("_flee_right", (qrand() % 2000) + 1000);
           } else if(fleeAngle >= 202.5 && fleeAngle < 247.5) {
-            changeBehaviour("_flee_right_up");
+            changeBehaviour("_flee_right_up", (qrand() % 2000) + 1000);
           } else if(fleeAngle >= 247.5 && fleeAngle < 292.5) {
-            changeBehaviour("_flee_up");
+            changeBehaviour("_flee_up", (qrand() % 2000) + 1000);
           } else if(fleeAngle >= 292.5 && fleeAngle < 337.5) {
-            changeBehaviour("_flee_left_up");
+            changeBehaviour("_flee_left_up", (qrand() % 2000) + 1000);
           }
         } else if(stats->getFun() > 40 && qrand() % 100 >= 75) {
           changeBehaviour(chooseFromCategory("Social"));
