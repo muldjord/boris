@@ -754,49 +754,49 @@ void Boris::collide(Boris *b)
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_right");
       } else {
-        changeBehaviour("_flee_left");
+        changeBehaviour("_flee_left", (qrand() % 2000) + 1500);
       }
     } else if(socialAngle >= 22.5 && socialAngle < 67.5) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_right_up");
       } else {
-        changeBehaviour("_flee_left_down");
+        changeBehaviour("_flee_left_down", (qrand() % 2000) + 1500);
       }
     } else if(socialAngle >= 67.5 && socialAngle < 112.5) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_up");
       } else {
-        changeBehaviour("_flee_down");
+        changeBehaviour("_flee_down", (qrand() % 2000) + 1500);
       }
     } else if(socialAngle >= 112.5 && socialAngle < 157.5) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_left_up");
       } else {
-        changeBehaviour("_flee_right_down");
+        changeBehaviour("_flee_right_down", (qrand() % 2000) + 1500);
       }
     } else if(socialAngle >= 157.5 && socialAngle < 202.5) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_left");
       } else {
-        changeBehaviour("_flee_right");
+        changeBehaviour("_flee_right", (qrand() % 2000) + 1500);
       }
     } else if(socialAngle >= 202.5 && socialAngle < 247.5) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_left_down");
       } else {
-        changeBehaviour("_flee_right_up");
+        changeBehaviour("_flee_right_up", (qrand() % 2000) + 1500);
       }
     } else if(socialAngle >= 247.5 && socialAngle < 292.5) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_down");
       } else {
-        changeBehaviour("_flee_up");
+        changeBehaviour("_flee_up", (qrand() % 2000) + 1500);
       }
     } else if(socialAngle >= 292.5 && socialAngle < 337.5) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_right_down");
       } else {
-        changeBehaviour("_flee_left_up");
+        changeBehaviour("_flee_left_up", (qrand() % 2000) + 1500);
       }
     }      
   }
