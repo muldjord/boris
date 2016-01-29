@@ -277,7 +277,7 @@ void Boris::changeBehaviour(QString behav, int time)
   if(time == 0) {
     behavTimer.setInterval(((qrand() % 7000) + 5000) / timeFactor);
   } else {
-    behavTimer.setInterval(time);
+    behavTimer.setInterval(time / timeFactor);
   }
 #ifdef DEBUG
   qDebug("Changing to behaviour '%d' titled '%s' for %d ms\n",
@@ -311,6 +311,9 @@ void Boris::nextFrame()
   sanityCheck();
   
   if(curFrame >= behaviours->at(curBehav).behaviour.length()) {
+    if(behaviours->at(curBehav).file == "_drop_dead") {
+      return;
+    }
     curFrame = 0;
     if(!behavTimer.isActive() && !grabbed) {
       behavTimer.start();
