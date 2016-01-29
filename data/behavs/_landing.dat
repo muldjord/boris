@@ -3,6 +3,7 @@ energy=-5
 fun=-5
 social=-2
 oneShot
+doNotDisturb
 #Frames
 0;75;0;0;0;0;data/sfx/dropped.wav;
 1;75;0;0;0;0;
