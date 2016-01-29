@@ -220,10 +220,7 @@ void MainWindow::mousePressEvent(QMouseEvent* event)
 void MainWindow::checkCollisions()
 {
   for(int a = 0; a < borises.length(); ++a) {
-    for(int b = 0; b < borises.length(); ++b) {
-      if(a == b) {
-        continue;
-      }
+    for(int b = a + 1; b < borises.length(); ++b) {
       int borisSize = borises.at(a)->borisSize;
       if(borises.at(b)->borisSize > borisSize) {
         borisSize = borises.at(b)->borisSize;
@@ -233,7 +230,7 @@ void MainWindow::checkCollisions()
       int xB = borises.at(b)->pos().x();
       int yB = borises.at(b)->pos().y();
       double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
-      if(fabs(hypotenuse) < borisSize) {
+      if(fabs(hypotenuse) < borisSize * 2) {
         borises.at(a)->collide(borises.at(b));
         borises.at(b)->collide(borises.at(a));
       }
