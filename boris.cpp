@@ -275,7 +275,7 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   if(time == 0) {
-    behavTimer.setInterval(((qrand() % 6000) + 4000) / timeFactor);
+    behavTimer.setInterval(((qrand() % 7000) + 5000) / timeFactor);
   } else {
     behavTimer.setInterval(time);
   }
