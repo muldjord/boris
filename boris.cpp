@@ -746,56 +746,56 @@ void Boris::collide(Boris *b)
   if(!falling && !grabbed && !behaviours->at(curBehav).doNotDisturb && boris == NULL) {
     boris = b;
     
-    double socialAngle = atan2(this->pos().y() - boris->pos().y(), boris->pos().x() - this->pos().x()) * 180.0 / 3.1415927;
-    if (socialAngle < 0) {
-      socialAngle += 360;
-    } else if (socialAngle > 360) {
-      socialAngle -= 360;
+    double approachAngle = atan2(this->pos().y() - boris->pos().y(), boris->pos().x() - this->pos().x()) * 180.0 / 3.1415927;
+    if (approachAngle < 0) {
+      approachAngle += 360;
+    } else if (approachAngle > 360) {
+      approachAngle -= 360;
     }
     
-    if((socialAngle >= 0.0 && socialAngle < 22.5) || (socialAngle >= 337.5 && socialAngle < 360.0)) {
+    if((approachAngle >= 0.0 && approachAngle < 22.5) || (approachAngle >= 337.5 && approachAngle < 360.0)) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_right");
       } else {
         changeBehaviour("_flee_left", (qrand() % 2000) + 1500);
       }
-    } else if(socialAngle >= 22.5 && socialAngle < 67.5) {
+    } else if(approachAngle >= 22.5 && approachAngle < 67.5) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_right_up");
       } else {
         changeBehaviour("_flee_left_down", (qrand() % 2000) + 1500);
       }
-    } else if(socialAngle >= 67.5 && socialAngle < 112.5) {
+    } else if(approachAngle >= 67.5 && approachAngle < 112.5) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_up");
       } else {
         changeBehaviour("_flee_down", (qrand() % 2000) + 1500);
       }
-    } else if(socialAngle >= 112.5 && socialAngle < 157.5) {
+    } else if(approachAngle >= 112.5 && approachAngle < 157.5) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_left_up");
       } else {
         changeBehaviour("_flee_right_down", (qrand() % 2000) + 1500);
       }
-    } else if(socialAngle >= 157.5 && socialAngle < 202.5) {
+    } else if(approachAngle >= 157.5 && approachAngle < 202.5) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_left");
       } else {
         changeBehaviour("_flee_right", (qrand() % 2000) + 1500);
       }
-    } else if(socialAngle >= 202.5 && socialAngle < 247.5) {
+    } else if(approachAngle >= 202.5 && approachAngle < 247.5) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_left_down");
       } else {
         changeBehaviour("_flee_right_up", (qrand() % 2000) + 1500);
       }
-    } else if(socialAngle >= 247.5 && socialAngle < 292.5) {
+    } else if(approachAngle >= 247.5 && approachAngle < 292.5) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_down");
       } else {
         changeBehaviour("_flee_up", (qrand() % 2000) + 1500);
       }
-    } else if(socialAngle >= 292.5 && socialAngle < 337.5) {
+    } else if(approachAngle >= 292.5 && approachAngle < 337.5) {
       if(boris->getHygiene() >= 15) {
         changeBehaviour("_casual_wave_right_down");
       } else {

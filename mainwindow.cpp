@@ -37,6 +37,7 @@
 #include <QDir>
 #include <QTextStream>
 #include <QDesktopWidget>
+#include <QElapsedTimer>
 
 //#define DEBUG
 
@@ -230,7 +231,7 @@ void MainWindow::checkCollisions()
       int xB = borises.at(b)->pos().x();
       int yB = borises.at(b)->pos().y();
       double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
-      if(fabs(hypotenuse) < borisSize * 2) {
+      if(hypotenuse < borisSize * 2) {
         borises.at(a)->collide(borises.at(b));
         borises.at(b)->collide(borises.at(a));
       }
