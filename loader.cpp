@@ -58,31 +58,7 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours, QWidg
       // Set seasonal color of Boris outfit
       // Default outfit is christmas, so no change for month 12
       QImage rawImage(info.absoluteFilePath());
-      if(settings->value("lemmy_mode", "true").toBool()) {
-        rawImage.setColor(1, QColor(255, 0, 0).rgb());
-        rawImage.setColor(8, QColor(0, 0, 0).rgb());
-        rawImage.setColor(9, QColor(20, 20, 20).rgb());
-        rawImage.setColor(10, QColor(40, 40, 40).rgb());
-      } else {
-        if(QDate::currentDate().month() == 1 || QDate::currentDate().month() == 2) { // Winter outfit
-          rawImage.setColor(8, QColor(109, 123, 130).rgb());
-          rawImage.setColor(9, QColor(133, 151, 161).rgb());
-          rawImage.setColor(10, QColor(160, 179, 189).rgb());
-        } else if(QDate::currentDate().month() == 3 || QDate::currentDate().month() == 4 || QDate::currentDate().month() == 5) { // Spring outfit
-          rawImage.setColor(8, QColor(13, 121, 0).rgb());
-          rawImage.setColor(9, QColor(13, 166, 0).rgb());
-          rawImage.setColor(10, QColor(13, 200, 0).rgb());
-        } else if(QDate::currentDate().month() == 6 || QDate::currentDate().month() == 7 || QDate::currentDate().month() == 8) { // Summer outfit
-          rawImage.setColor(8, QColor(0, 90, 190).rgb());
-          rawImage.setColor(9, QColor(0, 121, 221).rgb());
-          rawImage.setColor(10, QColor(0, 155, 255).rgb());
-        } else if(QDate::currentDate().month() == 9 || QDate::currentDate().month() == 10 || QDate::currentDate().month() == 11) { // Autumn outfit
-          rawImage.setColor(8, QColor(148, 81, 0).rgb());
-          rawImage.setColor(9, QColor(176, 97, 0).rgb());
-          rawImage.setColor(10, QColor(217, 119, 0).rgb());
-        }
-      }
-
+      setClothesColor(rawImage);
       QPixmap t = QPixmap::fromImage(rawImage);
       for (int i = 0; i < t.width() / 32; ++i) {
         sprites.append(t.copy(32 * i, 0, 32, 32));
@@ -204,3 +180,30 @@ QList<QString> Loader::extractSnippets(QString line)
   return snippets;
 }
 
+void Loader::setClothesColor(QImage &image)
+{
+  if(settings->value("lemmy_mode", "true").toBool()) {
+    image.setColor(1, QColor(255, 0, 0).rgb());
+    image.setColor(8, QColor(0, 0, 0).rgb());
+    image.setColor(9, QColor(20, 20, 20).rgb());
+    image.setColor(10, QColor(40, 40, 40).rgb());
+  } else {
+    if(QDate::currentDate().month() == 1 || QDate::currentDate().month() == 2) { // Winter outfit
+      image.setColor(8, QColor(109, 123, 130).rgb());
+      image.setColor(9, QColor(133, 151, 161).rgb());
+      image.setColor(10, QColor(160, 179, 189).rgb());
+    } else if(QDate::currentDate().month() == 3 || QDate::currentDate().month() == 4 || QDate::currentDate().month() == 5) { // Spring outfit
+      image.setColor(8, QColor(13, 121, 0).rgb());
+      image.setColor(9, QColor(13, 166, 0).rgb());
+      image.setColor(10, QColor(13, 200, 0).rgb());
+    } else if(QDate::currentDate().month() == 6 || QDate::currentDate().month() == 7 || QDate::currentDate().month() == 8) { // Summer outfit
+      image.setColor(8, QColor(0, 90, 190).rgb());
+      image.setColor(9, QColor(0, 121, 221).rgb());
+      image.setColor(10, QColor(0, 155, 255).rgb());
+    } else if(QDate::currentDate().month() == 9 || QDate::currentDate().month() == 10 || QDate::currentDate().month() == 11) { // Autumn outfit
+      image.setColor(8, QColor(148, 81, 0).rgb());
+      image.setColor(9, QColor(176, 97, 0).rgb());
+      image.setColor(10, QColor(217, 119, 0).rgb());
+    }
+  }
+}

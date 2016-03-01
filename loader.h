@@ -33,10 +33,11 @@ class Loader
 {
 public:
   static bool loadBehaviours(QString dataDir, QList<Behaviour> *behaviours, QWidget *parent);
+  static void setClothesColor(QImage &image);
 
 private:
   static QList<QString> extractSnippets(QString line);
- 
+  
 };
 
 #endif // _LOADER_H

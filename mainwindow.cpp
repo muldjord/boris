@@ -173,7 +173,10 @@ void MainWindow::createTrayIcon()
   trayIconMenu->addAction(quitAction);
 
   trayIcon = new QSystemTrayIcon(this);
-  QIcon icon(":icon.png");
+
+  QImage iconImage(":icon.png");
+  Loader::setClothesColor(iconImage);
+  QIcon icon(QPixmap::fromImage(iconImage));
   trayIcon->setToolTip("Boris");
   trayIcon->setIcon(icon);
   trayIcon->setContextMenu(trayIconMenu);
