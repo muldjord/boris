@@ -50,8 +50,6 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   mouseVVel = 0.0;
   mouseHVel = 0.0;
 
-  soundEnabled = settings->value("sound", "true").toBool();
-  changeSize(settings->value("size", 32).toInt());
   int borisX = settings->value("boris_x", QApplication::desktop()->width() / 2).toInt();
   int borisY = settings->value("boris_y", QApplication::desktop()->height() / 2).toInt();
   if(borisY > QApplication::desktop()->height() - borisSize) {
@@ -82,12 +80,9 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   timeFactor = settings->value("timeFactor", "1").toInt();
   grabbed = false;
   falling = false;
-  boris = NULL;
-  independence = settings->value("independence", "60").toInt();
 
   createBehavMenu();
 
-  showStats = false;
   alreadyEvading = false;
   int health = 100;
   int energy = 50 + qrand() % 25;
@@ -139,6 +134,11 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   statQueueTimer.start();
   
   setCursor(QCursor(QPixmap(":mouse_hover.png")));
+
+  updateBoris(settings->value("size", 32).toInt(),
+              false,
+              settings->value("sound", "true").toBool(),
+              settings->value("independence", "60").toInt());
 }
 
 Boris::~Boris()
@@ -239,11 +239,10 @@ void Boris::changeBehaviour(QString behav, int time)
 
   // Check if already colliding with other Boris
   if(boris != NULL) {
-    int borisSizeB = boris->borisSize;
     int xB = boris->pos().x();
     int yB = boris->pos().y();
     double hypotenuse = sqrt((yB - this->pos().y()) * (yB - this->pos().y()) + (xB - this->pos().x()) * (xB - this->pos().x()));
-    if(hypotenuse > borisSizeB * 2) {
+    if(hypotenuse > 128) {
       // Reset Boris pointer to make Boris wave at a new Boris again
       boris = NULL;
     }
@@ -488,37 +487,6 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
     vVel = mouseVVel;
     alt = QCursor::pos().y() + 40;
   }
-}
-
-void Boris::changeSize(int newSize)
-{
-  borisSize = newSize;
-  if(borisSize == 0) {
-    borisSize = (qrand() % 65) + 32;
-  }
-  resetTransform();
-  setFixedSize(borisSize, borisSize);
-  scale((qreal)borisSize / 32.0, (qreal)borisSize / 32.0);
-}
-
-void Boris::setIndependence(int value)
-{
-  independence = value;
-}
-
-void Boris::soundEnable(bool enabled)
-{
-  soundEnabled = enabled;
-}
-
-void Boris::statsEnable(bool enabled)
-{
-  if(enabled) {
-    stats->show();
-  } else {
-    stats->hide();
-  }
-  showStats = enabled;
 }
 
 void Boris::handlePhysics()
@@ -999,14 +967,36 @@ void Boris::processAi(QString &behav, int &time)
       if(qrand() % (150 - stats->getHealth()) > independence) {
         stats->flashStat("none");
         behav = "_health";
-        // No else on this one. The "patch up" behaviour must be user applied
-        /*
-      } else if(stats->getHealth() <= 10) {
-        if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Health");
-        }
-        */
       }
     }
   }
+}
+
+void Boris::updateBoris(int newSize, bool statsEnable, bool soundEnable, int newIndependence)
+{
+  // Reset Boris pointer
+  boris = NULL;
+
+  // Set new size
+  borisSize = newSize;
+  if(borisSize == 0) {
+    borisSize = (qrand() % 65) + 32;
+  }
+  resetTransform();
+  setFixedSize(borisSize, borisSize);
+  scale((qreal)borisSize / 32.0, (qreal)borisSize / 32.0);
+
+  // Set new independence value
+  independence = newIndependence;
+
+  // Enable or disable sound
+  soundEnabled = soundEnable;
+
+  // Show or hide stats
+  if(statsEnable) {
+    stats->show();
+  } else {
+    stats->hide();
+  }
+  showStats = statsEnable;
 }

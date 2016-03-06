@@ -49,10 +49,7 @@ public:
   ~Boris();
   QTimer behavTimer;
   QList<Behaviour> *behaviours;
-  void changeSize(int newSize);
-  void soundEnable(bool enabled);
-  void statsEnable(bool enabled);
-  void setIndependence(int value);
+  void updateBoris(int newSize, bool statsEnable, bool soundEnable, int newIndependence);
   int borisSize;
   void collide(Boris *b);
   Boris *boris;

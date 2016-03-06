@@ -192,10 +192,7 @@ void MainWindow::aboutBox()
   int independence = settings->value("independence", "0").toInt();
   qreal volume = (qreal)settings->value("volume", "100").toInt() / 100.0;
   for(int a = 0; a < borises.length(); ++a) {
-    borises.at(a)->changeSize(newSize);
-    borises.at(a)->statsEnable(statsEnable);
-    borises.at(a)->soundEnable(soundEnable);
-    borises.at(a)->setIndependence(independence);
+    borises.at(a)->updateBoris(newSize, statsEnable, soundEnable, independence);
     for(int b = 0; b < behaviours->length(); ++b) {
       for(int c = 0; c < behaviours->at(b).behaviour.length(); ++c) {
         if(behaviours->at(b).behaviour.at(c).soundFx != NULL) {
@@ -225,16 +222,18 @@ void MainWindow::checkCollisions()
 {
   for(int a = 0; a < borises.length(); ++a) {
     for(int b = a + 1; b < borises.length(); ++b) {
+      /*
       int borisSize = borises.at(a)->borisSize;
       if(borises.at(b)->borisSize > borisSize) {
         borisSize = borises.at(b)->borisSize;
       }
+      */
       int xA = borises.at(a)->pos().x();
       int yA = borises.at(a)->pos().y();
       int xB = borises.at(b)->pos().x();
       int yB = borises.at(b)->pos().y();
       double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
-      if(hypotenuse < borisSize * 2) {
+      if(hypotenuse < 128) {
         borises.at(a)->collide(borises.at(b));
         borises.at(b)->collide(borises.at(a));
       }
