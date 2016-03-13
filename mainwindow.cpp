@@ -122,10 +122,7 @@ void MainWindow::addBoris(int clones)
   for(int a = 0; a < clones; ++a) {
     borises.append(new Boris(behaviours, this));
     connect(earthquakeAction, SIGNAL(triggered()), borises.last(), SLOT(earthquake()));
-    connect(upAction, SIGNAL(triggered()), borises.last(), SLOT(walkUp()));
-    connect(downAction, SIGNAL(triggered()), borises.last(), SLOT(walkDown()));
-    connect(leftAction, SIGNAL(triggered()), borises.last(), SLOT(walkLeft()));
-    connect(rightAction, SIGNAL(triggered()), borises.last(), SLOT(walkRight()));
+    connect(teleportAction, SIGNAL(triggered()), borises.last(), SLOT(teleport()));
     borises.last()->show();
     borises.last()->earthquake();
   }
@@ -149,11 +146,8 @@ void MainWindow::createActions()
   aboutAction->setIcon(QIcon(":icon_about.png"));
   connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutBox()));
 
-  earthquakeAction = new QAction(tr("&Earthquake"), this);
-  upAction = new QAction(tr("Walk up"), this);
-  downAction = new QAction(tr("Walk down"), this);
-  leftAction = new QAction(tr("Walk left"), this);
-  rightAction = new QAction(tr("Walk right"), this);
+  earthquakeAction = new QAction(tr("&Earthquake!!!"), this);
+  teleportAction = new QAction(tr("&Beam me up, Scotty!"), this);
 
   quitAction = new QAction(tr("&Quit"), this);
   quitAction->setIcon(QIcon(":icon_quit.png"));
@@ -165,10 +159,7 @@ void MainWindow::createTrayIcon()
   trayIconMenu = new QMenu(this);
   trayIconMenu->addAction(aboutAction);
   trayIconMenu->addAction(earthquakeAction);
-  trayIconMenu->addAction(upAction);
-  trayIconMenu->addAction(downAction);
-  trayIconMenu->addAction(leftAction);
-  trayIconMenu->addAction(rightAction);
+  trayIconMenu->addAction(teleportAction);
   trayIconMenu->addSeparator();
   trayIconMenu->addAction(quitAction);
 

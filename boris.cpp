@@ -565,24 +565,11 @@ void Boris::earthquake()
   }
 }
 
-void Boris::walkUp()
+void Boris::teleport()
 {
-  changeBehaviour("_zombie_walk_up");
-}
-
-void Boris::walkDown()
-{
-  changeBehaviour("_zombie_walk_down");
-}
-
-void Boris::walkLeft()
-{
-  changeBehaviour("_zombie_walk_left");
-}
-
-void Boris::walkRight()
-{
-  changeBehaviour("_zombie_walk_right");
+  if(!falling && !grabbed) {
+    changeBehaviour("teleport");
+  }
 }
 
 void Boris::statProgress()

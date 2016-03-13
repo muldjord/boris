@@ -58,10 +58,7 @@ private:
   void createActions();
   QAction *aboutAction;
   QAction *earthquakeAction;
-  QAction *upAction;
-  QAction *downAction;
-  QAction *leftAction;
-  QAction *rightAction;
+  QAction *teleportAction;
   QAction *quitAction;
   QSystemTrayIcon *trayIcon;
   QMenu *trayIconMenu;

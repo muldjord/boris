@@ -59,10 +59,7 @@ public:
 public slots:
   void nextFrame();
   void earthquake();
-  void walkUp();
-  void walkDown();
-  void walkLeft();
-  void walkRight();
+  void teleport();
   void changeBehaviour(QString behav = "", int time = 0);
   
 protected:
