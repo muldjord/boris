@@ -4,6 +4,8 @@ The following are ideas / thoughts I have for future development of Boris.
 ## LUA scripting
 I'd like to implement LUA scripting of Boris' AI. Currently it is hardcoded and not very streamlined.
 
+I could implement functions to allow for checking for encounters. For instance to use when meeting other Boris instances, or if I ever implement objects in the scene such as presents or food. These should interrupt Boris' current behaviour.
+
 ### Considerations
 Currently Boris has several different behaviours depending on his mental state. I need to implement some kind of priority for these, probably based on how urgent each state is. I need to do a dice roll among all states before deciding on which state is more relevant. And the dice roll should be weighted depending on the mental state of each stat. As it is now, all state possibilities are assessed top down, and when one is "true" it simply doesn't assess the rest, leaving them to be chosen less often than the ones higher up. This is not good practice.
 
