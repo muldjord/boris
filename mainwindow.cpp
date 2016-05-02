@@ -37,9 +37,15 @@
 #include <QDir>
 #include <QTextStream>
 #include <QDesktopWidget>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QElapsedTimer>
 
 //#define DEBUG
+
+// How to get weather
+// http://api.openweathermap.org/data/2.5/weather?q=Aarhus&appid=fe9fe6cf47c03d2640d5063fbfa053a2
 
 extern QSettings *settings;
 
@@ -89,7 +95,7 @@ MainWindow::MainWindow()
     About about(this);
     about.exec();
   }
-  
+
   behaviours = new QList<Behaviour>;
 
   if(Loader::loadBehaviours(settings->value("behavs_path", "data/behavs").toString(), behaviours, this)) {
@@ -102,6 +108,14 @@ MainWindow::MainWindow()
   createTrayIcon();
   trayIcon->show();
 
+  QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+  connect(manager, SIGNAL(finished(QNetworkReply*)),
+          this, SLOT(weatherReply(QNetworkReply*)));
+
+  QString weatherRequest = "http://api.openweathermap.org/data/2.5/weather?q=" + settings->value("weatherCity", "Copenhagen").toString() + "&appid=fe9fe6cf47c03d2640d5063fbfa053a2";
+  //manager->get(QNetworkRequest(QUrl(weatherRequest)));
+  weatherReply();
+  
   clones = settings->value("clones", "4").toInt();
   qDebug("Spawning %d clone(s)\n", clones);
   addBoris(settings->value("clones", "4").toInt());
@@ -239,4 +253,19 @@ void MainWindow::killAll()
   for(int a = 0; a < borises.length(); ++a) {
     borises.at(a)->changeBehaviour("casual_wave");
   }
+}
+
+//void MainWindow::weatherReply(QNetworkReply *r)
+void MainWindow::weatherReply()
+{
+  QByteArray rawData = "{\"coord\":{\"lon\":10.21,\"lat\":56.16},\"weather\":[{\"id\":804,\"main\":\"Clouds\",\"description\":\"overcast clouds\",\"icon\":\"04n\"}],\"base\":\"cmc stations\",\"main\":{\"temp\":286.364,\"pressure\":1028.65,\"humidity\":67,\"temp_min\":286.364,\"temp_max\":286.364,\"sea_level\":1032.6,\"grnd_level\":1028.65},\"wind\":{\"speed\":5.62,\"deg\":207.502},\"clouds\":{\"all\":88},\"dt\":1462215751,\"sys\":{\"message\":0.0027,\"country\":\"DK\",\"sunrise\":1462159790,\"sunset\":1462215813},\"id\":2624652,\"name\":\"Arhus\",\"cod\":200}";
+  //QByteArray rawData = r->readAll();
+  //r->close();
+  QList<QByteArray> snippets = rawData.split(',');
+  for(int a = 0; a < snippets.length(); ++a) {
+    qDebug("%s\n", snippets.at(a).data());
+  }
+  
+  qDebug("%s\n", rawData.data());
+  qDebug("Weather:\n");
 }

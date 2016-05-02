@@ -45,6 +45,7 @@ private slots:
 private:
   QLineEdit *clonesLineEdit;
   QLineEdit *sizeLineEdit;
+  QLineEdit *weatherLineEdit;
   QCheckBox *showStats;
   QCheckBox *enableSound;
   QCheckBox *showWelcome;

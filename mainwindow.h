@@ -34,6 +34,7 @@
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QTimer>
+#include <QNetworkReply>
 
 class MainWindow : public QWidget
 {
@@ -49,6 +50,8 @@ private slots:
   void aboutBox();
   void checkCollisions();
   void killAll();
+  //void weatherReply(QNetworkReply *r);
+  void weatherReply();
   
 private:
   bool loadBehaviours();
