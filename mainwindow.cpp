@@ -255,6 +255,8 @@ void MainWindow::killAll()
   }
 }
 
+// More info: http://openweathermap.org/weather-conditions
+
 //void MainWindow::weatherReply(QNetworkReply *r)
 void MainWindow::weatherReply()
 {
