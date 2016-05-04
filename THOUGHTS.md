@@ -1,6 +1,15 @@
 # THOUGHTS
 The following are ideas / thoughts I have for future development of Boris.
 
+## Implementing weather ##
+### Type ###
+Icon above his head, signifying how the weather is. Icon based sortof.
+### Temperature ###
+If it's chilly he'll clack his teeth. If it's hot, he'll sweat.
+### Combination ###
+If the temperature is high, and the type is "sunny" Boris could lay down with sunglasses on on a beach chair.
+If the temperature is below freezing and it's snowing, he could built a snowman.
+
 ## LUA scripting
 I'd like to implement LUA scripting of Boris' AI. Currently it is hardcoded and not very streamlined.
 
