@@ -43,6 +43,9 @@ void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QStri
   // Decide which type of debug message it is, and add string to signify it
   // Then append the debug message itself to the same string.
   switch (type) {
+  case QtInfoMsg:
+    txt += QString(": Info: %1").arg(msg);
+    break;
   case QtDebugMsg:
     txt += QString(": Debug: %1").arg(msg);
     break;
