@@ -242,6 +242,6 @@ void MainWindow::killAll()
 
 void MainWindow::updateWeather()
 {
-  weatherAction->setText(QString::number(weatherComm->getTemp()) + " degrees Celsius");
+  weatherAction->setText(QString::number(weatherComm->getTemp()) + tr(" degrees Celsius"));
   weatherAction->setIcon(QIcon("./data/gfx/weather/" + weatherComm->getIcon() + ".png"));
 }

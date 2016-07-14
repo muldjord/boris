@@ -336,6 +336,11 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
         <translation>Opdaterer vejr...</translation>
     </message>
     <message>
+        <location filename="mainwindow.cpp" line="245"/>
+        <source> degrees Celsius</source>
+        <translation> grader Celsius</translation>
+    </message>
+    <message>
         <source>Walk up</source>
         <translation type="vanished">Gå opad</translation>
     </message>
