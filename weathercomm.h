@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /***************************************************************************
- *            mainwindow.h
+ *            weathercomm.h
  *
  *  Tue Nov 26 16:56:00 CEST 2013
  *  Copyright 2013 Lars Muldjord
@@ -24,58 +24,32 @@
  *  along with Boris; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
-#ifndef _MAINWINDOW_H
-#define _MAINWINDOW_H
+#ifndef _WEATHERCOMM_H
+#define _WEATHERCOMM_H
 
-#include "boris.h"
-#include "behaviour.h"
-#include "weathercomm.h"
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
-#include <QWidget>
-#include <QSystemTrayIcon>
-#include <QMenu>
-#include <QTimer>
-
-class MainWindow : public QWidget
+class WeatherComm : public QNetworkAccessManager
 {
   Q_OBJECT;
 public:
-  MainWindow();
-  ~MainWindow();
+  WeatherComm();
+  ~WeatherComm();
+  QString getIcon();
+  double getTemp();
 
-protected:
-  void mousePressEvent(QMouseEvent* event);
+signals:
+  void weatherUpdated();
 
 private slots:
-  void aboutBox();
-  void checkCollisions();
-  void killAll();
-  //void weatherReply(QNetworkReply *r);
-  void updateWeather();
+  void weatherReply(QNetworkReply *r);
+  //void weatherReply();
+  void getWeather();
   
 private:
-  WeatherComm *weatherComm;
-  bool loadBehaviours();
-  QList<QString> extractSnippets(QString line);
-  QString *aboutText;
-  void createTrayIcon();
-  void createActions();
-  QAction *aboutAction;
-  QAction *earthquakeAction;
-  QAction *teleportAction;
-  QAction *weatherAction;
-  QAction *quitAction;
-  QSystemTrayIcon *trayIcon;
-  QMenu *trayIconMenu;
-  QList<Boris*> borises;
-  QList<Behaviour> *behaviours;
-  int clones;
-  void addBoris(int clones);
-  void removeBoris(int clones);
-  QTimer collisTimer;
   QString weatherIcon;
   double weatherTemp;
-  
 };
 
-#endif // _MAINWINDOW_H
+#endif // _WEATHERCOMM_H

@@ -14,14 +14,16 @@ HEADERS += mainwindow.h \
            boris.h \
            behaviour.h \
            stats.h \
-           loader.h
+           loader.h \
+           weathercomm.h
 
 SOURCES += mainwindow.cpp \
            about.cpp \
            boris.cpp \
            main.cpp \
            stats.cpp \
-           loader.cpp
+           loader.cpp \
+           weathercomm.cpp
 
 RESOURCES += boris.qrc
 TRANSLATIONS = boris_da_DK.ts

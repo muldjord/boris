@@ -37,15 +37,8 @@
 #include <QDir>
 #include <QTextStream>
 #include <QDesktopWidget>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QElapsedTimer>
 
 //#define DEBUG
-
-// How to get weather
-// http://api.openweathermap.org/data/2.5/weather?q=Aarhus&appid=fe9fe6cf47c03d2640d5063fbfa053a2
 
 extern QSettings *settings;
 
@@ -108,13 +101,8 @@ MainWindow::MainWindow()
   createTrayIcon();
   trayIcon->show();
 
-  QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-  connect(manager, SIGNAL(finished(QNetworkReply*)),
-          this, SLOT(weatherReply(QNetworkReply*)));
-
-  QString weatherRequest = "http://api.openweathermap.org/data/2.5/weather?q=" + settings->value("weatherCity", "Copenhagen").toString() + "&appid=fe9fe6cf47c03d2640d5063fbfa053a2";
-  //manager->get(QNetworkRequest(QUrl(weatherRequest)));
-  weatherReply();
+  weatherComm = new WeatherComm();
+  connect(weatherComm, SIGNAL(weatherUpdated()), this, SLOT(updateWeather()));
   
   clones = settings->value("clones", "4").toInt();
   qDebug("Spawning %d clone(s)\n", clones);
@@ -163,6 +151,8 @@ void MainWindow::createActions()
   earthquakeAction = new QAction(tr("&Earthquake!!!"), this);
   teleportAction = new QAction(tr("&Beam me up, Scotty!"), this);
 
+  weatherAction = new QAction(tr("Updating weather..."), this);
+  
   quitAction = new QAction(tr("&Quit"), this);
   quitAction->setIcon(QIcon(":icon_quit.png"));
   connect(quitAction, SIGNAL(triggered()), this, SLOT(killAll()));
@@ -174,6 +164,7 @@ void MainWindow::createTrayIcon()
   trayIconMenu->addAction(aboutAction);
   trayIconMenu->addAction(earthquakeAction);
   trayIconMenu->addAction(teleportAction);
+  trayIconMenu->addAction(weatherAction);
   trayIconMenu->addSeparator();
   trayIconMenu->addAction(quitAction);
 
@@ -227,12 +218,6 @@ void MainWindow::checkCollisions()
 {
   for(int a = 0; a < borises.length(); ++a) {
     for(int b = a + 1; b < borises.length(); ++b) {
-      /*
-      int borisSize = borises.at(a)->borisSize;
-      if(borises.at(b)->borisSize > borisSize) {
-        borisSize = borises.at(b)->borisSize;
-      }
-      */
       int xA = borises.at(a)->pos().x();
       int yA = borises.at(a)->pos().y();
       int xB = borises.at(b)->pos().x();
@@ -255,17 +240,8 @@ void MainWindow::killAll()
   }
 }
 
-// More info: http://openweathermap.org/weather-conditions
-
-//void MainWindow::weatherReply(QNetworkReply *r)
-void MainWindow::weatherReply()
+void MainWindow::updateWeather()
 {
-  QByteArray rawData = "{\"coord\":{\"lon\":10.21,\"lat\":56.16},\"weather\":[{\"id\":804,\"main\":\"Clouds\",\"description\":\"overcast clouds\",\"icon\":\"04n\"}],\"base\":\"cmc stations\",\"main\":{\"temp\":286.364,\"pressure\":1028.65,\"humidity\":67,\"temp_min\":286.364,\"temp_max\":286.364,\"sea_level\":1032.6,\"grnd_level\":1028.65},\"wind\":{\"speed\":5.62,\"deg\":207.502},\"clouds\":{\"all\":88},\"dt\":1462215751,\"sys\":{\"message\":0.0027,\"country\":\"DK\",\"sunrise\":1462159790,\"sunset\":1462215813},\"id\":2624652,\"name\":\"Arhus\",\"cod\":200}";
-  //QByteArray rawData = r->readAll();
-  //r->close();
-  QString weatherIcon = rawData.mid(rawData.indexOf("icon\":\"") + 7, 3);
-  double weatherTemp = rawData.mid(rawData.indexOf("temp\":") + 6, rawData.indexOf(",\"pressure") - (rawData.indexOf("temp\":") + 6)).toDouble();
-  qDebug("%s\n", rawData.data());
-  qDebug("Weather icon: %s\n", weatherIcon.toStdString().c_str());
-  qDebug("Weather temp: %f\n", weatherTemp);
+  weatherAction->setText(QString::number(weatherComm->getTemp()) + " degrees Celsius");
+  weatherAction->setIcon(QIcon("./data/gfx/weather/" + weatherComm->getIcon() + ".png"));
 }
