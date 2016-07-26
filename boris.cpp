@@ -65,14 +65,13 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   
-  QGraphicsScene *scene = new QGraphicsScene();
-  setScene(scene);
-  sprite = scene->addPixmap(QPixmap());
+  setScene(new QGraphicsScene);
+  sprite = this->scene()->addPixmap(QPixmap());
   origDirt.load(":dirt.png");
-  dirt = scene->addPixmap(origDirt);
+  dirt = this->scene()->addPixmap(origDirt);
   dirt->setOpacity(0.0);
   origBruises.load(":bruises.png");
-  bruises = scene->addPixmap(origBruises);
+  bruises = this->scene()->addPixmap(origBruises);
   bruises->setOpacity(0.0);
   
   curFrame = 0;
