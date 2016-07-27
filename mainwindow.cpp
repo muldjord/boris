@@ -83,6 +83,9 @@ MainWindow::MainWindow()
   if(!settings->contains("time_factor")) {
     settings->setValue("time_factor", "1");
   }
+  if(!settings->contains("weather_path")) {
+    settings->setValue("weather_path", "data/weathers");
+  }
   if(!settings->contains("weather")) {
     settings->setValue("weather", "false");
   }
@@ -99,11 +102,18 @@ MainWindow::MainWindow()
   }
 
   behaviours = new QList<Behaviour>;
-
+  weathers = new QList<Behaviour>;
+  
   if(Loader::loadBehaviours(settings->value("behavs_path", "data/behavs").toString(), behaviours, this)) {
     qDebug("Behaviours loaded ok... :)\n");
   } else {
     qDebug("Error when loading some behaviours, please check your png and dat files\n");
+  }
+  
+  if(Loader::loadBehaviours(settings->value("weather_path", "data/weather").toString(), weathers, this)) {
+    qDebug("Weather types loaded ok... :)\n");
+  } else {
+    qDebug("Error when loading some weather types, please check your png and dat files\n");
   }
 
   createActions();
@@ -131,13 +141,13 @@ MainWindow::~MainWindow()
 void MainWindow::addBoris(int clones)
 {
   for(int a = 0; a < clones; ++a) {
-    borises.append(new Boris(behaviours, this));
+    borises.append(new Boris(behaviours, weathers, this));
     connect(earthquakeAction, SIGNAL(triggered()), borises.last(), SLOT(earthquake()));
     connect(teleportAction, SIGNAL(triggered()), borises.last(), SLOT(teleport()));
     borises.last()->show();
     borises.last()->earthquake();
-    updateWeather();
   }
+  updateWeather();
 }
 
 void MainWindow::removeBoris(int clones)
@@ -254,7 +264,7 @@ void MainWindow::killAll()
 void MainWindow::updateWeather()
 {
   for(int a = 0; a < borises.length(); ++a) {
-    borises.at(a)->setWeatherSprite(weatherComm->getIcon());
+    borises.at(a)->setWeatherType(weatherComm->getIcon());
   }
   weatherAction->setText(QString::number(weatherComm->getTemp()) + tr(" degrees Celsius"));
   weatherAction->setIcon(QIcon(":" + weatherComm->getIcon() + ".png"));

@@ -45,20 +45,20 @@ class Boris : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Boris(QList<Behaviour> *behaviours, QWidget *parent);
+  Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, QWidget *parent);
   ~Boris();
   QTimer behavTimer;
   QList<Behaviour> *behaviours;
+  QList<Behaviour> *weathers;
   void updateBoris(int newSize, bool alwaysWeather, bool statsEnable, bool soundEnable, int newIndependence);
   int borisSize;
   void collide(Boris *b);
   Boris *boris;
   int getHygiene();
   void moveBoris(int dX, int dY);
-  void setWeatherSprite(QString icon);
+  void setWeatherType(QString type);
                                 
 public slots:
-  void nextFrame();
   void earthquake();
   void teleport();
   void changeBehaviour(QString behav = "", int time = 0);
@@ -75,6 +75,8 @@ private slots:
   void handlePhysics();
   void statProgress();
   void statQueueProgress();
+  void nextFrame();
+  void nextWeatherFrame();
 
 private:
   bool falling;
@@ -90,6 +92,7 @@ private:
   int curFrame;
   int curBehav;
   QTimer animTimer;
+  QTimer weatherTimer;
   QTimer physicsTimer;
   QTimer statTimer;
   QTimer statQueueTimer;
@@ -125,6 +128,8 @@ private:
   void processVision();
   void processAi(QString &behav, int &time);
   int timeFactor;
+  int curWeather;
+  int curWeatherFrame;
   
 };
 

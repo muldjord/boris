@@ -41,9 +41,10 @@
 
 extern QSettings *settings;
 
-Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(parent)
+Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, QWidget *parent) : QGraphicsView(parent)
 {
   this->behaviours = behaviours;
+  this->weathers = weathers;
 
   vVel = 0.0;
   hVel = 0.0;
@@ -67,7 +68,6 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   
   setScene(new QGraphicsScene);
   sprite = this->scene()->addPixmap(QPixmap());
-  //sprite->setPos(0, 0);
   origDirt.load(":dirt.png");
   dirt = this->scene()->addPixmap(origDirt);
   dirt->setOpacity(0.0);
@@ -78,6 +78,8 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   weatherSprite = this->scene()->addPixmap(QPixmap(32, 32));
   weatherSprite->setPos(0, 0 - 16);
   
+  curWeather = 0;
+  curWeatherFrame = 0;
   curFrame = 0;
   curBehav = 0;
   timeFactor = settings->value("time_factor", "1").toInt();
@@ -128,6 +130,11 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   connect(&animTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
   animTimer.start();
 
+  weatherTimer.setInterval(0);
+  weatherTimer.setSingleShot(true);
+  connect(&weatherTimer, SIGNAL(timeout()), this, SLOT(nextWeatherFrame()));
+  weatherTimer.start();
+  
   statTimer.setInterval(60000 / timeFactor);
   connect(&statTimer, SIGNAL(timeout()), this, SLOT(statProgress()));
   statTimer.start();
@@ -999,7 +1006,23 @@ void Boris::updateBoris(int newSize, bool alwaysWeather, bool statsEnable, bool 
   showStats = statsEnable;
 }
 
-void Boris::setWeatherSprite(QString sprite)
+void Boris::setWeatherType(QString type)
 {
-  weatherSprite->setPixmap(QPixmap(":" + sprite + ".png"));
+  for(int a = 0; a < weathers->length(); ++a) {
+    if(weathers->at(a).title == type) {
+      curWeather = a;
+      break;
+    }
+  }
+}
+
+void Boris::nextWeatherFrame()
+{
+  curWeatherFrame++;
+  if(curWeatherFrame >= weathers->at(curWeather).behaviour.length()) {
+    curWeatherFrame = 0;
+  }
+  weatherSprite->setPixmap(weathers->at(curWeather).behaviour.at(curWeatherFrame).sprite);
+  weatherTimer.setInterval(weathers->at(curWeather).behaviour.at(curWeatherFrame).time);
+  weatherTimer.start();
 }

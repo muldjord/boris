@@ -69,6 +69,7 @@ private:
   QMenu *trayIconMenu;
   QList<Boris*> borises;
   QList<Behaviour> *behaviours;
+  QList<Behaviour> *weathers;
   int clones;
   void addBoris(int clones);
   void removeBoris(int clones);
