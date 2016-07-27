@@ -56,7 +56,7 @@ public:
   Boris *boris;
   int getHygiene();
   void moveBoris(int dX, int dY);
-  void setWeatherType(QString type);
+  void setWeatherType(QString type, double temp);
                                 
 public slots:
   void earthquake();
@@ -130,6 +130,7 @@ private:
   int timeFactor;
   int curWeather;
   int curWeatherFrame;
+  double curTemp;
   
 };
 

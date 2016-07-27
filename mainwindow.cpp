@@ -95,6 +95,9 @@ MainWindow::MainWindow()
   if(!settings->contains("weather_interval")) {
     settings->setValue("weather_interval", "30");
   }
+  if(!settings->contains("weather_key")) {
+    settings->setValue("weather_key", "fe9fe6cf47c03d2640d5063fbfa053a2");
+  }
 
   if(settings->value("show_welcome", "true").toBool()) {
     About about(this);
@@ -263,9 +266,10 @@ void MainWindow::killAll()
 
 void MainWindow::updateWeather()
 {
+  double temp = weatherComm->getTemp();
   for(int a = 0; a < borises.length(); ++a) {
-    borises.at(a)->setWeatherType(weatherComm->getIcon());
+    borises.at(a)->setWeatherType(weatherComm->getIcon(), temp);
   }
-  weatherAction->setText(QString::number(weatherComm->getTemp()) + tr(" degrees Celsius"));
+  weatherAction->setText(QString::number(temp) + tr(" degrees Celsius"));
   weatherAction->setIcon(QIcon(":" + weatherComm->getIcon() + ".png"));
 }

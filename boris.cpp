@@ -1006,8 +1006,9 @@ void Boris::updateBoris(int newSize, bool alwaysWeather, bool statsEnable, bool 
   showStats = statsEnable;
 }
 
-void Boris::setWeatherType(QString type)
+void Boris::setWeatherType(QString type, double temp)
 {
+  curTemp = temp;
   for(int a = 0; a < weathers->length(); ++a) {
     if(weathers->at(a).title == type) {
       curWeather = a;
