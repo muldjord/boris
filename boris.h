@@ -77,7 +77,8 @@ private slots:
   void statQueueProgress();
   void nextFrame();
   void nextWeatherFrame();
-
+  void hideWeather();
+  
 private:
   bool falling;
   bool grabbed;

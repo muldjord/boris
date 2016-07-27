@@ -130,10 +130,8 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, QWidget *
   connect(&animTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
   animTimer.start();
 
-  weatherTimer.setInterval(0);
   weatherTimer.setSingleShot(true);
   connect(&weatherTimer, SIGNAL(timeout()), this, SLOT(nextWeatherFrame()));
-  weatherTimer.start();
   
   statTimer.setInterval(60000 / timeFactor);
   connect(&statTimer, SIGNAL(timeout()), this, SLOT(statProgress()));
@@ -1015,15 +1013,27 @@ void Boris::setWeatherType(QString type, double temp)
       break;
     }
   }
+  if(!settings->value("weather", "false").toBool()) {
+    weatherSprite->show();
+    QTimer::singleShot(60000, this, SLOT(hideWeather()));
+  }
+  curWeatherFrame = 0;
+  weatherTimer.setInterval(0);
+  weatherTimer.start();
 }
 
 void Boris::nextWeatherFrame()
 {
+  weatherSprite->setPixmap(weathers->at(curWeather).behaviour.at(curWeatherFrame).sprite);
   curWeatherFrame++;
   if(curWeatherFrame >= weathers->at(curWeather).behaviour.length()) {
     curWeatherFrame = 0;
   }
-  weatherSprite->setPixmap(weathers->at(curWeather).behaviour.at(curWeatherFrame).sprite);
   weatherTimer.setInterval(weathers->at(curWeather).behaviour.at(curWeatherFrame).time);
   weatherTimer.start();
+}
+
+void Boris::hideWeather()
+{
+  weatherSprite->hide();
 }
