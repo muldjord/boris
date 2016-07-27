@@ -23,6 +23,9 @@ Copyright 2016 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
+#### Version 1.9.0 (27th July 2016):
+* Added animated weather using the OpenWeatherMap API (http://www.openweathermap.org)
+
 #### Version 1.8.0 (21th January 2016):
 * Added health stat, deacreses when thrown. Don't throw him too much...
 * Chooses "social" behaviour if fun stat is high enough and the mouse comes close
