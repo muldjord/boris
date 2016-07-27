@@ -59,7 +59,7 @@ WeatherComm::~WeatherComm()
 
 void WeatherComm::getWeather()
 {
-  QString weatherRequest = "http://api.openweathermap.org/data/2.5/weather?q=" + settings->value("weather_city", "Copenhagen").toString() + "&appid=fe9fe6cf47c03d2640d5063fbfa053a2";
+  QString weatherRequest = "http://api.openweathermap.org/data/2.5/weather?q=" + settings->value("weather_city", "Copenhagen").toString() + "&appid=" + settings->value("weather_key", "fe9fe6cf47c03d2640d5063fbfa053a2").toString();
   get(QNetworkRequest(QUrl(weatherRequest)));
   //weatherReply();
 }
