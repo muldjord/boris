@@ -80,8 +80,17 @@ MainWindow::MainWindow()
   if(!settings->contains("lemmy_mode")) {
     settings->setValue("lemmy_mode", "false");
   }
-  if(!settings->contains("timeFactor")) {
-    settings->setValue("timeFactor", "1");
+  if(!settings->contains("time_factor")) {
+    settings->setValue("time_factor", "1");
+  }
+  if(!settings->contains("weather")) {
+    settings->setValue("weather", "false");
+  }
+  if(!settings->contains("weather_city")) {
+    settings->setValue("weather_city", "Copenhagen");
+  }
+  if(!settings->contains("weather_interval")) {
+    settings->setValue("weather_interval", "30");
   }
 
   if(settings->value("show_welcome", "true").toBool()) {
@@ -127,6 +136,7 @@ void MainWindow::addBoris(int clones)
     connect(teleportAction, SIGNAL(triggered()), borises.last(), SLOT(teleport()));
     borises.last()->show();
     borises.last()->earthquake();
+    updateWeather();
   }
 }
 
@@ -185,10 +195,11 @@ void MainWindow::aboutBox()
   int newSize = settings->value("size", "32").toInt();
   bool soundEnable = settings->value("sound", "true").toBool();
   bool statsEnable = settings->value("stats", "true").toBool();
+  bool alwaysWeather = settings->value("weather", "false").toBool();
   int independence = settings->value("independence", "0").toInt();
   qreal volume = (qreal)settings->value("volume", "100").toInt() / 100.0;
   for(int a = 0; a < borises.length(); ++a) {
-    borises.at(a)->updateBoris(newSize, statsEnable, soundEnable, independence);
+    borises.at(a)->updateBoris(newSize, alwaysWeather, statsEnable, soundEnable, independence);
     for(int b = 0; b < behaviours->length(); ++b) {
       for(int c = 0; c < behaviours->at(b).behaviour.length(); ++c) {
         if(behaviours->at(b).behaviour.at(c).soundFx != NULL) {
@@ -242,6 +253,9 @@ void MainWindow::killAll()
 
 void MainWindow::updateWeather()
 {
+  for(int a = 0; a < borises.length(); ++a) {
+    borises.at(a)->setWeatherSprite(weatherComm->getIcon());
+  }
   weatherAction->setText(QString::number(weatherComm->getTemp()) + tr(" degrees Celsius"));
-  weatherAction->setIcon(QIcon("./data/gfx/weather/" + weatherComm->getIcon() + ".png"));
+  weatherAction->setIcon(QIcon(":" + weatherComm->getIcon() + ".png"));
 }

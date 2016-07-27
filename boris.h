@@ -49,13 +49,14 @@ public:
   ~Boris();
   QTimer behavTimer;
   QList<Behaviour> *behaviours;
-  void updateBoris(int newSize, bool statsEnable, bool soundEnable, int newIndependence);
+  void updateBoris(int newSize, bool alwaysWeather, bool statsEnable, bool soundEnable, int newIndependence);
   int borisSize;
   void collide(Boris *b);
   Boris *boris;
   int getHygiene();
   void moveBoris(int dX, int dY);
-              
+  void setWeatherSprite(QString icon);
+                                
 public slots:
   void nextFrame();
   void earthquake();
@@ -101,6 +102,7 @@ private:
   QPixmap origDirt;
   QGraphicsPixmapItem *bruises;
   QPixmap origBruises;
+  QGraphicsPixmapItem *weatherSprite;
   
   double vVel;
   double hVel;

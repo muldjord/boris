@@ -126,10 +126,15 @@ About::About(QWidget *parent) : QDialog(parent)
     clonesLineEdit->setText(settings->value("clones").toString());
   }
 
+  alwaysWeather = new QCheckBox(tr("Always show weather"));
+  if(settings->value("weather") == "true") {
+    alwaysWeather->setCheckState(Qt::Checked);
+  }
+
   QLabel *weatherLabel = new QLabel(tr("Show weather for city:"));
   weatherLineEdit = new QLineEdit();
-  if(settings->contains("weatherCity")) {
-    weatherLineEdit->setText(settings->value("weatherCity").toString());
+  if(settings->contains("weather_city")) {
+    weatherLineEdit->setText(settings->value("weather_city").toString());
   }
 
   showStats = new QCheckBox(tr("Always show vitality stats"));
@@ -163,6 +168,7 @@ About::About(QWidget *parent) : QDialog(parent)
   configLayout->addWidget(sizeLineEdit);
   configLayout->addWidget(clonesLabel);
   configLayout->addWidget(clonesLineEdit);
+  configLayout->addWidget(alwaysWeather);
   configLayout->addWidget(weatherLabel);
   configLayout->addWidget(weatherLineEdit);
   configLayout->addWidget(showStats);
@@ -216,7 +222,13 @@ void About::saveAll()
   }
   settings->setValue("clones", clonesLineEdit->text());
 
-  settings->setValue("weatherCity", weatherLineEdit->text());
+  if(alwaysWeather->isChecked()) {
+    settings->setValue("weather", "true");
+  } else {
+    settings->setValue("weather", "false");
+  }
+
+  settings->setValue("weather_city", weatherLineEdit->text());
   
   if(showStats->isChecked()) {
     settings->setValue("stats", "true");

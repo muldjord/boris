@@ -52,11 +52,11 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
 
   int borisX = settings->value("boris_x", QApplication::desktop()->width() / 2).toInt();
   int borisY = settings->value("boris_y", QApplication::desktop()->height() / 2).toInt();
-  if(borisY > QApplication::desktop()->height() - borisSize) {
-    borisY = QApplication::desktop()->height() - borisSize;
+  if(borisY > QApplication::desktop()->height() - height()) {
+    borisY = QApplication::desktop()->height() - height();
   }
   
-  move(borisX, borisY);
+  move(borisX + (qrand() % 200) - 100, borisY + (qrand() % 200) - 100);
 
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
@@ -67,16 +67,20 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   
   setScene(new QGraphicsScene);
   sprite = this->scene()->addPixmap(QPixmap());
+  //sprite->setPos(0, 0);
   origDirt.load(":dirt.png");
   dirt = this->scene()->addPixmap(origDirt);
   dirt->setOpacity(0.0);
   origBruises.load(":bruises.png");
   bruises = this->scene()->addPixmap(origBruises);
   bruises->setOpacity(0.0);
+
+  weatherSprite = this->scene()->addPixmap(QPixmap(32, 32));
+  weatherSprite->setPos(0, 0 - 16);
   
   curFrame = 0;
   curBehav = 0;
-  timeFactor = settings->value("timeFactor", "1").toInt();
+  timeFactor = settings->value("time_factor", "1").toInt();
   grabbed = false;
   falling = false;
 
@@ -135,7 +139,8 @@ Boris::Boris(QList<Behaviour> *behaviours, QWidget *parent) : QGraphicsView(pare
   setCursor(QCursor(QPixmap(":mouse_hover.png")));
 
   updateBoris(settings->value("size", 32).toInt(),
-              false,
+              settings->value("weather", "false").toBool(),
+              settings->value("stats", "false").toBool(),
               settings->value("sound", "true").toBool(),
               settings->value("independence", "60").toInt());
 }
@@ -364,8 +369,8 @@ void Boris::moveBoris(int dX, int dY)
 
   int minX = 0;
   int maxX = QApplication::desktop()->width() - borisSize;
-  int minY = 0;
-  int maxY = QApplication::desktop()->height() - borisSize;
+  int minY = 0 - (borisSize / 2);
+  int maxY = QApplication::desktop()->height() - height();
 
   if(dX == 666) { // If dX == 666 we are meant to move Boris randomly
     dX = qrand() % maxX - this->pos().x();
@@ -386,7 +391,7 @@ void Boris::moveBoris(int dX, int dY)
               this->pos().y() - stats->height());
   if(stats->pos().y() < 0) {
     stats->move(this->pos().x() + (borisSize / 2) - (stats->width() / 2),
-                this->pos().y() + borisSize);
+                this->pos().y() + borisSize + borisSize / 3);
   }
   // if Boris is outside borders
   if(this->pos().x() > maxX || this->pos().x() < minX ||
@@ -455,7 +460,7 @@ void Boris::mousePressEvent(QMouseEvent* event)
     changeBehaviour("_grabbed", 100000);
     mMoving = true;
     this->move(event->globalPos().x() - (float)borisSize / 32.0 * 17.0, 
-               event->globalPos().y() - (float)borisSize / 32.0 * 2.0);
+               event->globalPos().y() - (float)borisSize / 32.0 * 16.0);
     oldCursor = QCursor::pos();
   }
 }
@@ -464,10 +469,10 @@ void Boris::mouseMoveEvent(QMouseEvent* event)
 {
   if(event->buttons().testFlag(Qt::LeftButton) && mMoving) {
     this->move(event->globalPos().x() - (float)borisSize / 32.0 * 17.0, 
-               event->globalPos().y() - (float)borisSize / 32.0 * 2.0);
+               event->globalPos().y() - (float)borisSize / 32.0 * 16.0);
     stats->move(this->pos().x() + (borisSize / 2) - (stats->width() / 2), this->pos().y() - stats->height());
     if(stats->pos().y() < 0) {
-      stats->move(this->pos().x() + (borisSize / 2) - (stats->width() / 2), this->pos().y() + borisSize);
+      stats->move(this->pos().x() + (borisSize / 2) - (stats->width() / 2), this->pos().y() + borisSize + borisSize / 3);
     }
   }
 }
@@ -585,8 +590,8 @@ void Boris::sanityCheck()
 {
   int minX = 0;
   int maxX = QApplication::desktop()->width() - borisSize;
-  int minY = 0;
-  int maxY = QApplication::desktop()->height() - borisSize;
+  int minY = 0 - (borisSize / 2);
+  int maxY = QApplication::desktop()->height() - height();
 
   // Make sure Boris is not located outside boundaries
   if(this->pos().y() < minY) {
@@ -958,7 +963,7 @@ void Boris::processAi(QString &behav, int &time)
   }
 }
 
-void Boris::updateBoris(int newSize, bool statsEnable, bool soundEnable, int newIndependence)
+void Boris::updateBoris(int newSize, bool alwaysWeather, bool statsEnable, bool soundEnable, int newIndependence)
 {
   // Reset Boris pointer
   boris = NULL;
@@ -969,7 +974,7 @@ void Boris::updateBoris(int newSize, bool statsEnable, bool soundEnable, int new
     borisSize = (qrand() % 65) + 32;
   }
   resetTransform();
-  setFixedSize(borisSize, borisSize);
+  setFixedSize(borisSize, borisSize + borisSize / 2.0);
   scale((qreal)borisSize / 32.0, (qreal)borisSize / 32.0);
 
   // Set new independence value
@@ -979,10 +984,22 @@ void Boris::updateBoris(int newSize, bool statsEnable, bool soundEnable, int new
   soundEnabled = soundEnable;
 
   // Show or hide stats
+  if(alwaysWeather) {
+    weatherSprite->show();
+  } else {
+    weatherSprite->hide();
+  }
+
+  // Show or hide stats
   if(statsEnable) {
     stats->show();
   } else {
     stats->hide();
   }
   showStats = statsEnable;
+}
+
+void Boris::setWeatherSprite(QString sprite)
+{
+  weatherSprite->setPixmap(QPixmap(":" + sprite + ".png"));
 }

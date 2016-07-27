@@ -19,5 +19,23 @@
     <file alias="social.png">data/gfx/social.png</file>
     <file alias="fun.png">data/gfx/fun.png</file>
     <file alias="hygiene.png">data/gfx/hygiene.png</file>
+    <file alias="01d.png">data/gfx/weather/01d.png</file>
+    <file alias="01n.png">data/gfx/weather/01n.png</file>
+    <file alias="02d.png">data/gfx/weather/02d.png</file>
+    <file alias="02n.png">data/gfx/weather/02n.png</file>
+    <file alias="03d.png">data/gfx/weather/03d.png</file>
+    <file alias="03n.png">data/gfx/weather/03n.png</file>
+    <file alias="04d.png">data/gfx/weather/04d.png</file>
+    <file alias="04n.png">data/gfx/weather/04n.png</file>
+    <file alias="09d.png">data/gfx/weather/09d.png</file>
+    <file alias="09n.png">data/gfx/weather/09n.png</file>
+    <file alias="10d.png">data/gfx/weather/10d.png</file>
+    <file alias="10n.png">data/gfx/weather/10n.png</file>
+    <file alias="11d.png">data/gfx/weather/11d.png</file>
+    <file alias="11n.png">data/gfx/weather/11n.png</file>
+    <file alias="13d.png">data/gfx/weather/13d.png</file>
+    <file alias="13n.png">data/gfx/weather/13n.png</file>
+    <file alias="50d.png">data/gfx/weather/50d.png</file>
+    <file alias="50n.png">data/gfx/weather/50n.png</file>
   </qresource>
 </RCC>

@@ -29,6 +29,7 @@
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QTimer>
 
 class WeatherComm : public QNetworkAccessManager
 {
@@ -48,6 +49,7 @@ private slots:
   void getWeather();
   
 private:
+  QTimer weatherTimer;
   QString weatherIcon;
   double weatherTemp;
 };
