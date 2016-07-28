@@ -93,7 +93,7 @@ MainWindow::MainWindow()
     settings->setValue("weather_city", "Copenhagen");
   }
   if(!settings->contains("weather_interval")) {
-    settings->setValue("weather_interval", "30");
+    settings->setValue("weather_interval", "5");
   }
   if(!settings->contains("weather_key")) {
     settings->setValue("weather_key", "fe9fe6cf47c03d2640d5063fbfa053a2");

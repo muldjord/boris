@@ -89,6 +89,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, QWidget *
   createBehavMenu();
 
   alreadyEvading = false;
+  // Set initial stats with some randomization
   int health = 100;
   int energy = 50 + qrand() % 25;
   int hunger = (qrand() % 25) + 15;
