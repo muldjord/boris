@@ -1007,6 +1007,7 @@ void Boris::updateBoris(int newSize, bool alwaysWeather, bool statsEnable, bool 
 
 void Boris::setWeatherType(QString type, double temp)
 {
+
   curTemp = temp;
   for(int a = 0; a < weathers->length(); ++a) {
     if(weathers->at(a).title == type) {
@@ -1021,6 +1022,10 @@ void Boris::setWeatherType(QString type, double temp)
   curWeatherFrame = 0;
   weatherTimer.setInterval(0);
   weatherTimer.start();
+
+  if((type == "01d" || type == "02d") && temp > 18.0) {
+    changeBehaviour("Too cool for school", 10000);
+  }
 }
 
 void Boris::nextWeatherFrame()
