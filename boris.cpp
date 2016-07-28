@@ -1023,8 +1023,8 @@ void Boris::setWeatherType(QString type, double temp)
   weatherTimer.setInterval(0);
   weatherTimer.start();
 
-  if((type == "01d" || type == "02d") && temp > 18.0) {
-    changeBehaviour("Too cool for school", 10000);
+  if(!falling && !grabbed && (type == "01d" || type == "02d") && temp > 18.0) {
+    changeBehaviour("sunglasses", 10000);
   }
 }
 
