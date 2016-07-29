@@ -77,6 +77,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, QWidget *
 
   weatherSprite = this->scene()->addPixmap(QPixmap(32, 32));
   weatherSprite->setPos(0, 0 - 16);
+  weatherSprite->hide();
   
   curWeather = 0;
   curWeatherFrame = 0;
@@ -1022,6 +1023,9 @@ void Boris::setWeatherType(QString type, double temp)
       break;
     }
   }
+  curWeatherFrame = 0;
+  weatherTimer.setInterval(0);
+  weatherTimer.start();
 }
 
 void Boris::nextWeatherFrame()
