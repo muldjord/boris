@@ -1053,7 +1053,6 @@ void Boris::showWeather()
       behavQueue.append("_umbrella");
     }
   }
-  //settings->value("weather_interval", "30").toInt() * 60 * 1000
 }
 
 void Boris::hideWeather()
