@@ -24,6 +24,9 @@ Copyright 2016 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
+#### Version 1.9.1 (29th July 2016):
+* Limited the weather api call to once every 30 minutes. Weather now shown every 30th behaviour change instead.
+
 #### Version 1.9.0 (27th July 2016):
 * Added animated weather using the OpenWeatherMap API (http://www.openweathermap.org)
 
