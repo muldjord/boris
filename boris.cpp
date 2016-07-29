@@ -85,7 +85,8 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, QWidget *
   timeFactor = settings->value("time_factor", "1").toInt();
   grabbed = false;
   falling = false;
-
+  timeForWeather = 0;
+  
   createBehavMenu();
 
   alreadyEvading = false;
@@ -236,6 +237,13 @@ QString Boris::chooseFromCategory(QString category)
 
 void Boris::changeBehaviour(QString behav, int time)
 {
+  // Check if it is time to show the weather again
+  timeForWeather++;
+  if(timeForWeather > 30) {
+    timeForWeather = 0;
+    showWeather();
+  }
+
   // Check if Boris is dead... If so, don't do anything. :(
   if(behaviours->at(curBehav).file == "_drop_dead") {
     behavTimer.stop();
@@ -1007,29 +1015,16 @@ void Boris::updateBoris(int newSize, bool alwaysWeather, bool statsEnable, bool 
 
 void Boris::setWeatherType(QString type, double temp)
 {
-
   curTemp = temp;
   for(int a = 0; a < weathers->length(); ++a) {
-    if(weathers->at(a).title == type) {
+    if(weathers->at(a).file == type) {
       curWeather = a;
       break;
     }
   }
-  if(!settings->value("weather", "false").toBool()) {
-    weatherSprite->show();
-    QTimer::singleShot(60000, this, SLOT(hideWeather()));
-  }
   curWeatherFrame = 0;
   weatherTimer.setInterval(0);
   weatherTimer.start();
-
-  if(!falling && !grabbed) {
-    if((type == "01d" || type == "02d") && temp > 18.0) {
-      changeBehaviour("sunglasses", 20000);
-    } else if(type == "09d" || type == "09n" || type == "10d" || type == "10n") {
-      changeBehaviour("_umbrella", 20000);
-    }
-  }
 }
 
 void Boris::nextWeatherFrame()
@@ -1041,6 +1036,24 @@ void Boris::nextWeatherFrame()
   }
   weatherTimer.setInterval(weathers->at(curWeather).behaviour.at(curWeatherFrame).time);
   weatherTimer.start();
+}
+
+void Boris::showWeather()
+{
+  QString type = weathers->at(curWeather).file;
+  
+  if(!settings->value("weather", "false").toBool()) {
+    weatherSprite->show();
+    QTimer::singleShot(30000, this, SLOT(hideWeather()));
+  }
+  if(!falling && !grabbed) {
+    if((type == "01d" || type == "02d") && curTemp > 18.0) {
+      behavQueue.append("sunglasses");
+    } else if(type == "09d" || type == "09n" || type == "10d" || type == "10n") {
+      behavQueue.append("_umbrella");
+    }
+  }
+  //settings->value("weather_interval", "30").toInt() * 60 * 1000
 }
 
 void Boris::hideWeather()

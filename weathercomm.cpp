@@ -45,7 +45,7 @@ WeatherComm::WeatherComm()
   connect(this, SIGNAL(finished(QNetworkReply*)),
           this, SLOT(weatherReply(QNetworkReply*)));
 
-  weatherTimer.setInterval(settings->value("weather_interval", "30").toInt() * 60 * 1000);
+  weatherTimer.setInterval(1800000);
   weatherTimer.setSingleShot(true);
   connect(&weatherTimer, SIGNAL(timeout()), this, SLOT(getWeather()));
   // Timer is started after initial weather update

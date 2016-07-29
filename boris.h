@@ -132,6 +132,8 @@ private:
   int curWeather;
   int curWeatherFrame;
   double curTemp;
+  int timeForWeather;
+  void showWeather();
   
 };
 
