@@ -71,8 +71,19 @@ void WeatherComm::weatherReply(QNetworkReply *r)
   QByteArray rawData = r->readAll();
   r->close();
   qDebug("Parsing weather:\n");
-  weatherIcon = rawData.mid(rawData.indexOf("icon\":\"") + 7, 3);
+
+  if(settings->contains("weather_force_type")) {
+    weatherIcon = settings->value("weather_force_type", "09d").toString();
+  } else {
+    weatherIcon = rawData.mid(rawData.indexOf("icon\":\"") + 7, 3);
+  }
+
+  if(settings->contains("weather_force_temp")) {
+    weatherTemp = settings->value("weather_force_temp", "20.").toDouble();
+  } else {
   weatherTemp = rawData.mid(rawData.indexOf("temp\":") + 6, rawData.indexOf(",\"pressure") - (rawData.indexOf("temp\":") + 6)).toDouble() - 273.15;
+  }
+  
   //qDebug("%s\n", rawData.data());
   qDebug("Icon: %s\n", weatherIcon.toStdString().c_str());
   qDebug("Temp: %f\n", weatherTemp);

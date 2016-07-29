@@ -144,6 +144,7 @@ void MainWindow::addBoris(int clones)
     borises.append(new Boris(behaviours, weathers, this));
     connect(earthquakeAction, SIGNAL(triggered()), borises.last(), SLOT(earthquake()));
     connect(teleportAction, SIGNAL(triggered()), borises.last(), SLOT(teleport()));
+    connect(weatherAction, SIGNAL(triggered()), borises.last(), SLOT(showWeather()));
     borises.last()->show();
     borises.last()->earthquake();
   }
