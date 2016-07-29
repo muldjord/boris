@@ -146,6 +146,7 @@ Hvis dine venner / kollegaer er misundelige og vil have deres egen Boris, så be
         <location filename="about.cpp" line="68"/>
         <source>Programming: Lars Muldjord
 Graphics: Lars Muldjord
+Sound: Lars Muldjord
 
 Boris was programmed using the Qt framework (http://www.qt.io) and C++.
 
@@ -173,9 +174,10 @@ http://www.muldjord.com/boris
 
 It&apos;s FREE and OPEN SOURCE (GPLv3), so there&apos;s absolutely no strings attached, just download away. You can also download the full source code in there if you like.
 
-Copyright 2015 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the &apos;License&apos; tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.</oldsource>
+Copyright 2016 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the &apos;License&apos; tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.</oldsource>
         <translation>Programmering: Lars Muldjord
 Grafik: Lars Muldjord
+Lyd: Lars Muldjord
 
 Boris er programmeret i Qt frameworket (http://www.qt.io) og C++.
 
@@ -260,22 +262,22 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
 <context>
     <name>Boris</name>
     <message>
-        <location filename="boris.cpp" line="164"/>
+        <location filename="boris.cpp" line="163"/>
         <source>Behaviours</source>
         <translation>Opførsler</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="165"/>
+        <location filename="boris.cpp" line="164"/>
         <source>Health</source>
         <translation>Helbred</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="179"/>
+        <location filename="boris.cpp" line="178"/>
         <source>Movement</source>
         <translation>Bevægelse</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="167"/>
+        <location filename="boris.cpp" line="166"/>
         <source>Energy</source>
         <translation>Energi</translation>
     </message>
@@ -284,27 +286,27 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
         <translation type="vanished">Sult</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="169"/>
+        <location filename="boris.cpp" line="168"/>
         <source>Food</source>
         <translation>Mad</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="171"/>
+        <location filename="boris.cpp" line="170"/>
         <source>Toilet</source>
         <translation>Toilet</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="175"/>
+        <location filename="boris.cpp" line="174"/>
         <source>Social</source>
         <translation>Social</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="177"/>
+        <location filename="boris.cpp" line="176"/>
         <source>Fun</source>
         <translation>Sjov</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="173"/>
+        <location filename="boris.cpp" line="172"/>
         <source>Hygiene</source>
         <translation>Hygiejne</translation>
     </message>
@@ -320,28 +322,28 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
         <translation type="obsolete">&amp;Bring frem</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="167"/>
+        <location filename="mainwindow.cpp" line="170"/>
         <source>&amp;Config / about...</source>
         <translation>&amp;Konfigurér / om...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="171"/>
+        <location filename="mainwindow.cpp" line="174"/>
         <source>&amp;Earthquake!!!</source>
         <oldsource>&amp;Earthquake</oldsource>
         <translation>&amp;Jordskælv!!!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="172"/>
+        <location filename="mainwindow.cpp" line="175"/>
         <source>&amp;Beam me up, Scotty!</source>
         <translation>&amp;Beam me up, Scotty!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="174"/>
+        <location filename="mainwindow.cpp" line="177"/>
         <source>Updating weather...</source>
         <translation>Opdaterer vejr...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="269"/>
+        <location filename="mainwindow.cpp" line="273"/>
         <source> degrees Celsius</source>
         <translation> grader Celsius</translation>
     </message>
@@ -362,7 +364,7 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
         <translation type="vanished">Gå mod højre</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="176"/>
+        <location filename="mainwindow.cpp" line="179"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>

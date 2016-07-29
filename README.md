@@ -3,6 +3,7 @@ Boris desktop screenmate written entirely in Qt
 
 * Programming: Lars Muldjord
 * Graphics: Lars Muldjord
+* Sound: Lars Muldjord
 * Website: http://www.muldjord.com/boris
 
 Boris was programmed using the Qt framework (http://www.qt.io) and C++.
