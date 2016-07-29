@@ -1027,11 +1027,11 @@ void Boris::setWeatherType(QString type, double temp)
 void Boris::nextWeatherFrame()
 {
   weatherSprite->setPixmap(weathers->at(curWeather).behaviour.at(curWeatherFrame).sprite);
+  weatherTimer.setInterval(weathers->at(curWeather).behaviour.at(curWeatherFrame).time);
   curWeatherFrame++;
   if(curWeatherFrame >= weathers->at(curWeather).behaviour.length()) {
     curWeatherFrame = 0;
   }
-  weatherTimer.setInterval(weathers->at(curWeather).behaviour.at(curWeatherFrame).time);
   weatherTimer.start();
 }
 
