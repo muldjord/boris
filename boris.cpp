@@ -1022,9 +1022,6 @@ void Boris::setWeatherType(QString type, double temp)
       break;
     }
   }
-  curWeatherFrame = 0;
-  weatherTimer.setInterval(0);
-  weatherTimer.start();
 }
 
 void Boris::nextWeatherFrame()
@@ -1040,6 +1037,10 @@ void Boris::nextWeatherFrame()
 
 void Boris::showWeather()
 {
+  curWeatherFrame = 0;
+  weatherTimer.setInterval(0);
+  weatherTimer.start();
+
   QString type = weathers->at(curWeather).file;
   
   if(!settings->value("weather", "false").toBool()) {
