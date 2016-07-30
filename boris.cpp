@@ -240,9 +240,10 @@ void Boris::changeBehaviour(QString behav, int time)
 {
   // Check if it is time to show the weather again
   timeForWeather++;
-  if(timeForWeather > 30) {
+  if(timeForWeather >= 30) {
     timeForWeather = 0;
     showWeather();
+    return;
   }
 
   // Check if Boris is dead... If so, don't do anything. :(
@@ -1046,16 +1047,18 @@ void Boris::showWeather()
   weatherTimer.start();
 
   QString type = weathers->at(curWeather).file;
-  
+
   if(!settings->value("weather", "false").toBool()) {
     weatherSprite->show();
     QTimer::singleShot(30000, this, SLOT(hideWeather()));
   }
   if(!falling && !grabbed) {
-    if((type == "01d" || type == "02d") && curTemp > 18.0) {
+    if((type == "01d" || type == "02d") && curTemp > 15.0) {
       behavQueue.append("sunglasses");
     } else if(type == "09d" || type == "09n" || type == "10d" || type == "10n") {
       behavQueue.append("_umbrella");
+    } else if(type == "11d" || type == "11n") {
+      changeBehaviour("_lightning");
     }
   }
 }
