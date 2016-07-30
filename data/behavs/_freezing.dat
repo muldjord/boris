@@ -1,0 +1,8 @@
+title=Freezing
+health=-1
+energy=-5
+fun=-5
+hygiene=5
+#Frames
+0;50;0;0;0;0;
+1;50;0;0;0;0;

@@ -1059,6 +1059,8 @@ void Boris::showWeather()
       behavQueue.append("_umbrella");
     } else if(type == "11d" || type == "11n") {
       changeBehaviour("_lightning");
+    } else if(type == "13d" || type == "13n") {
+      behavQueue.append("_freezing");
     }
   }
 }
