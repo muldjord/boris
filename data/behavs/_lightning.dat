@@ -3,7 +3,7 @@ health=-40
 fun=-20
 oneShot
 #Frames
-0;30;0;0;0;0;
+0;30;0;0;0;0;data/sfx/lightning.wav;
 1;30;0;0;0;0;
 0;30;0;0;0;0;
 1;30;0;0;0;0;
