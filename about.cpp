@@ -43,7 +43,7 @@ extern QSettings *settings;
 
 About::About(QWidget *parent) : QDialog(parent)
 {
-  setFixedSize(450, 600);
+  setFixedSize(900, 450);
   setWindowIcon(QIcon(":icon.png"));
   setWindowTitle("Boris v"VERSION);
 
@@ -107,7 +107,7 @@ About::About(QWidget *parent) : QDialog(parent)
   tabWidget->addTab(authorScroll, tr("Author"));
   tabWidget->addTab(licenseScroll, tr("License"));
   
-  QPushButton *okButton = new QPushButton(tr("Ok"));
+  QPushButton *okButton = new QPushButton(tr("Close and save"));
   connect(okButton, SIGNAL(clicked()), this, SLOT(saveAll()));
 
   QLabel *sizeLabel = new QLabel(tr("Boris size in pixels (32-256 or 0 for random):"));
@@ -126,15 +126,23 @@ About::About(QWidget *parent) : QDialog(parent)
     clonesLineEdit->setText(settings->value("clones").toString());
   }
 
-  alwaysWeather = new QCheckBox(tr("Always show weather"));
+  alwaysWeather = new QCheckBox(tr("Show weather all the time"));
   if(settings->value("weather") == "true") {
     alwaysWeather->setCheckState(Qt::Checked);
   }
 
-  QLabel *weatherLabel = new QLabel(tr("Show weather for city:"));
+  QLabel *weatherLabel = new QLabel(tr("Show weather for city (mouse over for help):"));
   weatherLineEdit = new QLineEdit();
+  weatherLineEdit->setToolTip(tr("Try typing in a nearby city. If it doesn't work, go to openweathermap.org and search for a city until you find one that exists.<br/>Then type that in exactly as it is shown on their website."));
   if(settings->contains("weather_city")) {
     weatherLineEdit->setText(settings->value("weather_city").toString());
+  }
+
+  QLabel *weatherKeyLabel = new QLabel(tr("OpenWeatherMap key (mouse over for help):"));
+  weatherKeyLineEdit = new QLineEdit();
+  weatherKeyLineEdit->setToolTip(tr("The weather functionality needs an API key to function. The default one should work.<br/>In case it doesn't, get a new one for free at openweathermap.org/appid"));
+  if(settings->contains("weather_key")) {
+    weatherKeyLineEdit->setText(settings->value("weather_key").toString());
   }
 
   showStats = new QCheckBox(tr("Always show vitality stats"));
@@ -163,33 +171,38 @@ About::About(QWidget *parent) : QDialog(parent)
     volumeSlider->setValue(settings->value("volume").toInt());
   }
   
+  showWelcome = new QCheckBox(tr("Always show this dialog on startup"));
+  if(settings->value("show_welcome") == "true") {
+    showWelcome->setCheckState(Qt::Checked);
+  }
+
   QVBoxLayout *configLayout = new QVBoxLayout();
+  configLayout->addWidget(showWelcome);
   configLayout->addWidget(sizeLabel);
   configLayout->addWidget(sizeLineEdit);
   configLayout->addWidget(clonesLabel);
   configLayout->addWidget(clonesLineEdit);
-  configLayout->addWidget(alwaysWeather);
-  configLayout->addWidget(weatherLabel);
-  configLayout->addWidget(weatherLineEdit);
   configLayout->addWidget(showStats);
   configLayout->addWidget(independenceLabel);
   configLayout->addWidget(independenceSlider);
   configLayout->addWidget(enableSound);
   configLayout->addWidget(volumeLabel);
   configLayout->addWidget(volumeSlider);
+  configLayout->addWidget(alwaysWeather);
+  configLayout->addWidget(weatherLabel);
+  configLayout->addWidget(weatherLineEdit);
+  configLayout->addWidget(weatherKeyLabel);
+  configLayout->addWidget(weatherKeyLineEdit);
   
-  showWelcome = new QCheckBox(tr("Show this on startup"));
-  if(settings->value("show_welcome") == "true") {
-    showWelcome->setCheckState(Qt::Checked);
-  }
+  QVBoxLayout *infoLayout = new QVBoxLayout;
+  infoLayout->addWidget(tabWidget);
+  infoLayout->addWidget(okButton);
 
-  QVBoxLayout *layout = new QVBoxLayout;
-  layout->addWidget(tabWidget);
-  layout->addWidget(showWelcome);
+  QHBoxLayout *layout = new QHBoxLayout;
   layout->addLayout(configLayout);
-  layout->addWidget(okButton);
+  layout->addLayout(infoLayout);
+  
   setLayout(layout);
-
 }
 
 About::~About()
@@ -229,6 +242,8 @@ void About::saveAll()
   }
 
   settings->setValue("weather_city", weatherLineEdit->text());
+
+  settings->setValue("weather_key", weatherKeyLineEdit->text());
   
   if(showStats->isChecked()) {
     settings->setValue("stats", "true");

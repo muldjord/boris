@@ -207,9 +207,8 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
         <translation>Licens</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="110"/>
         <source>Ok</source>
-        <translation>Ok</translation>
+        <translation type="vanished">Ok</translation>
     </message>
     <message>
         <location filename="about.cpp" line="113"/>
@@ -225,59 +224,85 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
     </message>
     <message>
         <location filename="about.cpp" line="129"/>
-        <source>Always show weather</source>
-        <translation>Vis altid vejret</translation>
+        <source>Show weather all the time</source>
+        <oldsource>Always show weather</oldsource>
+        <translation>Vis vejret hele tiden</translation>
     </message>
     <message>
         <location filename="about.cpp" line="134"/>
-        <source>Show weather for city:</source>
-        <translation>Vis vejr for By:</translation>
+        <source>Show weather for city (mouse over for help):</source>
+        <oldsource>Show weather for city:</oldsource>
+        <translation>Vis vejr for by (hold musen over for hjælp):</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="145"/>
+        <location filename="about.cpp" line="136"/>
+        <source>Try typing in a nearby city. If it doesn&apos;t work, go to openweathermap.org and search for a city until you find one that exists.&lt;br/&gt;Then type that in exactly as it is shown on their website.</source>
+        <translation>Prøv at indtaste en nærliggende by. Hvis ikke det virker, så gå ind på openweathermap.org og søg på en by indtil du finder en der eksisterer.&lt;br/&gt;Indtast derefter bynavnet præcist som det er vist på hjemmesiden.</translation>
+    </message>
+    <message>
+        <location filename="about.cpp" line="141"/>
+        <source>OpenWeatherMap key (mouse over for help):</source>
+        <translation>OpenWeatherMap nøgle (hold musen over for hjælp):</translation>
+    </message>
+    <message>
+        <location filename="about.cpp" line="143"/>
+        <source>The weather functionality needs an API key to function. The default one should work.&lt;br/&gt;In case it doesn&apos;t, get a new one for free at openweathermap.org/appid</source>
+        <translation>Vejr funktionaliteten skal bruge en API nøgle for at fungere. Standard nøglen burde fungere.&lt;br/&gt;I tilfælde af at den ikke gør, kan du få en nye på openweathermap.org/appid</translation>
+    </message>
+    <message>
+        <location filename="about.cpp" line="153"/>
         <source>Independence:</source>
         <translation>Selvstændighed:</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="153"/>
+        <location filename="about.cpp" line="161"/>
         <source>Enable sound</source>
         <translation>Aktivér lyd</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="140"/>
+        <location filename="about.cpp" line="174"/>
+        <source>Always show this dialog on startup</source>
+        <translation>Vis altid denne dialog ved start</translation>
+    </message>
+    <message>
+        <location filename="about.cpp" line="148"/>
         <source>Always show vitality stats</source>
         <translation>Vis altid Boris&apos; helbred</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="158"/>
+        <location filename="about.cpp" line="110"/>
+        <source>Close and save</source>
+        <translation>Luk og gem</translation>
+    </message>
+    <message>
+        <location filename="about.cpp" line="166"/>
         <source>Sound volume:</source>
         <translation>Lyd niveau:</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="181"/>
         <source>Show this on startup</source>
-        <translation>Vis dette vindue ved startup</translation>
+        <translation type="vanished">Vis dette vindue ved startup</translation>
     </message>
 </context>
 <context>
     <name>Boris</name>
     <message>
-        <location filename="boris.cpp" line="163"/>
+        <location filename="boris.cpp" line="165"/>
         <source>Behaviours</source>
         <translation>Opførsler</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="164"/>
+        <location filename="boris.cpp" line="166"/>
         <source>Health</source>
         <translation>Helbred</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="178"/>
+        <location filename="boris.cpp" line="180"/>
         <source>Movement</source>
         <translation>Bevægelse</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="166"/>
+        <location filename="boris.cpp" line="168"/>
         <source>Energy</source>
         <translation>Energi</translation>
     </message>
@@ -286,27 +311,27 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
         <translation type="vanished">Sult</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="168"/>
+        <location filename="boris.cpp" line="170"/>
         <source>Food</source>
         <translation>Mad</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="170"/>
+        <location filename="boris.cpp" line="172"/>
         <source>Toilet</source>
         <translation>Toilet</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="174"/>
+        <location filename="boris.cpp" line="176"/>
         <source>Social</source>
         <translation>Social</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="176"/>
+        <location filename="boris.cpp" line="178"/>
         <source>Fun</source>
         <translation>Sjov</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="172"/>
+        <location filename="boris.cpp" line="174"/>
         <source>Hygiene</source>
         <translation>Hygiejne</translation>
     </message>
@@ -322,28 +347,28 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
         <translation type="obsolete">&amp;Bring frem</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="170"/>
+        <location filename="mainwindow.cpp" line="168"/>
         <source>&amp;Config / about...</source>
         <translation>&amp;Konfigurér / om...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="174"/>
+        <location filename="mainwindow.cpp" line="172"/>
         <source>&amp;Earthquake!!!</source>
         <oldsource>&amp;Earthquake</oldsource>
         <translation>&amp;Jordskælv!!!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="175"/>
+        <location filename="mainwindow.cpp" line="173"/>
         <source>&amp;Beam me up, Scotty!</source>
         <translation>&amp;Beam me up, Scotty!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="177"/>
+        <location filename="mainwindow.cpp" line="175"/>
         <source>Updating weather...</source>
         <translation>Opdaterer vejr...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="273"/>
+        <location filename="mainwindow.cpp" line="271"/>
         <source> degrees Celsius</source>
         <translation> grader Celsius</translation>
     </message>
@@ -364,7 +389,7 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
         <translation type="vanished">Gå mod højre</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="179"/>
+        <location filename="mainwindow.cpp" line="177"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>

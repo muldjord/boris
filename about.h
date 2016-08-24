@@ -46,6 +46,7 @@ private:
   QLineEdit *clonesLineEdit;
   QLineEdit *sizeLineEdit;
   QLineEdit *weatherLineEdit;
+  QLineEdit *weatherKeyLineEdit;
   QCheckBox *alwaysWeather;
   QCheckBox *showStats;
   QCheckBox *enableSound;
