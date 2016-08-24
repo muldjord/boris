@@ -70,22 +70,23 @@ void WeatherComm::weatherReply(QNetworkReply *r)
   r->close();
   qDebug("Parsing weather:\n");
 
-  if(rawData->contains("Error")) {
-  }
-
-  if(!rawData->contains("Error")) {
+  if(!rawData.contains("Error")) {
     weatherIcon = rawData.mid(rawData.indexOf("icon\":\"") + 7, 3);
     weatherTemp = rawData.mid(rawData.indexOf("temp\":") + 6, rawData.indexOf(",\"pressure") - (rawData.indexOf("temp\":") + 6)).toDouble() - 273.15;
+  } else {
+    weatherIcon = "11d";
+    weatherTemp = 66.6;
   }
   
+  // Overrule weather if forced from config.ini
   if(settings->contains("weather_force_type")) {
-    weatherIcon = settings->value("weather_force_type", "09d").toString();
+    weatherIcon = settings->value("weather_force_type", "11d").toString();
   }
   if(settings->contains("weather_force_temp")) {
     weatherTemp = settings->value("weather_force_temp", "20.0").toDouble();
   }
 
-  qDebug("%s\n", rawData.data());
+  //qDebug("%s\n", rawData.data());
   qDebug("Icon: %s\n", weatherIcon.toStdString().c_str());
   qDebug("Temp: %f\n", weatherTemp);
   emit weatherUpdated();

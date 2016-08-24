@@ -40,13 +40,14 @@ public:
   QString getIcon();
   double getTemp();
 
+public slots:
+  void getWeather();
+  
 signals:
   void weatherUpdated();
 
 private slots:
   void weatherReply(QNetworkReply *r);
-  //void weatherReply();
-  void getWeather();
   
 private:
   QTimer weatherTimer;

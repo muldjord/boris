@@ -227,6 +227,8 @@ void MainWindow::aboutBox()
     }
     clones = settings->value("clones", "2").toInt();
   }
+
+  weatherComm->getWeather();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)
@@ -268,6 +270,10 @@ void MainWindow::updateWeather()
   for(int a = 0; a < borises.length(); ++a) {
     borises.at(a)->setWeatherType(weatherComm->getIcon(), temp);
   }
-  weatherAction->setText(QString::number(temp) + tr(" degrees Celsius"));
+  if(temp != 66.6) {
+    weatherAction->setText(QString::number(temp) + tr(" degrees Celsius"));
+  } else {
+    weatherAction->setText(tr("Couldn't find city"));
+  }
   weatherAction->setIcon(QIcon(":" + weatherComm->getIcon() + ".png"));
 }
