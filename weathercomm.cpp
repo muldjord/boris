@@ -45,7 +45,7 @@ WeatherComm::WeatherComm()
   connect(this, SIGNAL(finished(QNetworkReply*)),
           this, SLOT(weatherReply(QNetworkReply*)));
 
-  weatherTimer.setInterval(1800000);
+  weatherTimer.setInterval(3600000);
   weatherTimer.setSingleShot(true);
   connect(&weatherTimer, SIGNAL(timeout()), this, SLOT(getWeather()));
   // Timer is started after initial weather update
@@ -64,27 +64,28 @@ void WeatherComm::getWeather()
   //weatherReply();
 }
    
-// More info: http://openweathermap.org/weather-conditions
 void WeatherComm::weatherReply(QNetworkReply *r)
 {
-  //QByteArray rawData = "{\"coord\":{\"lon\":10.21,\"lat\":56.16},\"weather\":[{\"id\":804,\"main\":\"Clouds\",\"description\":\"overcast clouds\",\"icon\":\"04n\"}],\"base\":\"cmc stations\",\"main\":{\"temp\":286.364,\"pressure\":1028.65,\"humidity\":67,\"temp_min\":286.364,\"temp_max\":286.364,\"sea_level\":1032.6,\"grnd_level\":1028.65},\"wind\":{\"speed\":5.62,\"deg\":207.502},\"clouds\":{\"all\":88},\"dt\":1462215751,\"sys\":{\"message\":0.0027,\"country\":\"DK\",\"sunrise\":1462159790,\"sunset\":1462215813},\"id\":2624652,\"name\":\"Arhus\",\"cod\":200}";
   QByteArray rawData = r->readAll();
   r->close();
   qDebug("Parsing weather:\n");
 
-  if(settings->contains("weather_force_type")) {
-    weatherIcon = settings->value("weather_force_type", "09d").toString();
-  } else {
-    weatherIcon = rawData.mid(rawData.indexOf("icon\":\"") + 7, 3);
+  if(rawData->contains("Error")) {
   }
 
-  if(settings->contains("weather_force_temp")) {
-    weatherTemp = settings->value("weather_force_temp", "20.").toDouble();
-  } else {
-  weatherTemp = rawData.mid(rawData.indexOf("temp\":") + 6, rawData.indexOf(",\"pressure") - (rawData.indexOf("temp\":") + 6)).toDouble() - 273.15;
+  if(!rawData->contains("Error")) {
+    weatherIcon = rawData.mid(rawData.indexOf("icon\":\"") + 7, 3);
+    weatherTemp = rawData.mid(rawData.indexOf("temp\":") + 6, rawData.indexOf(",\"pressure") - (rawData.indexOf("temp\":") + 6)).toDouble() - 273.15;
   }
   
-  //qDebug("%s\n", rawData.data());
+  if(settings->contains("weather_force_type")) {
+    weatherIcon = settings->value("weather_force_type", "09d").toString();
+  }
+  if(settings->contains("weather_force_temp")) {
+    weatherTemp = settings->value("weather_force_temp", "20.0").toDouble();
+  }
+
+  qDebug("%s\n", rawData.data());
   qDebug("Icon: %s\n", weatherIcon.toStdString().c_str());
   qDebug("Temp: %f\n", weatherTemp);
   emit weatherUpdated();
