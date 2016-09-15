@@ -537,7 +537,7 @@ void Boris::handlePhysics()
     double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
     if(hypotenuse < borisSize * 3) {
       if(!alreadyEvading) {
-        if(fabs(mouseHVel) > 10.0 || fabs(mouseVVel) > 10.0) {
+        if(fabs(mouseHVel) > 20.0 || fabs(mouseVVel) > 20.0) {
           double fleeAngle = atan2((this->pos().y() + (borisSize / 2.0)) - p.y(),
                                    p.x() - (this->pos().x() + (borisSize / 2.0))
                                    ) * 180.0 / 3.1415927;
