@@ -1,5 +1,5 @@
 # Boris
-Boris desktop screenmate written entirely in Qt
+Desktop screenmate written entirely in Qt. Boris will keep you company while you work. He has a bit of a prankster personality and needs to be cared for in order to stay alive. Move your mouse over him to check on his health stats. Visualizes weather from OpenWeatherMap which affects the behaviour of Boris while he roams your desktop. Let's hope there's not a thunderstorm coming up...!
 
 * Programming: Lars Muldjord
 * Graphics: Lars Muldjord
