@@ -855,7 +855,7 @@ void Boris::processVision()
 
 void Boris::processAi(QString &behav, int &time)
 {
-  if(behav == "" && time == 0 && qrand() % 10 >= 5 && behaviours->at(curBehav).file.contains("casual_walk_")) {
+  if(behav == "" && time == 0 && qrand() % 10 >= 3 && behaviours->at(curBehav).file.contains("casual_walk_")) {
     time = qrand() % 1500 + 500;
     if(behaviours->at(curBehav).file == "casual_walk_up") {
       if(qrand() % 2) {
