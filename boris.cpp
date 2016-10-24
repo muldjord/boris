@@ -563,7 +563,7 @@ void Boris::handlePhysics()
           } else if(fleeAngle >= 292.5 && fleeAngle < 337.5) {
             changeBehaviour("_flee_left_up", (qrand() % 2000) + 1000);
           }
-        } else if(stats->getFun() > 40 && qrand() % 100 >= 75) {
+        } else if(stats->getFun() > 10 && qrand() % 100 >= 50) {
           changeBehaviour(chooseFromCategory("Social"));
         }
       }
