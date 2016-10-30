@@ -15,7 +15,8 @@ HEADERS += mainwindow.h \
            behaviour.h \
            stats.h \
            loader.h \
-           weathercomm.h
+           weathercomm.h \
+           chatter.h
 
 SOURCES += mainwindow.cpp \
            about.cpp \
@@ -23,7 +24,8 @@ SOURCES += mainwindow.cpp \
            main.cpp \
            stats.cpp \
            loader.cpp \
-           weathercomm.cpp
+           weathercomm.cpp \
+           chatter.cpp
 
 RESOURCES += boris.qrc
 TRANSLATIONS = boris_da_DK.ts

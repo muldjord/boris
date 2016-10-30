@@ -29,6 +29,7 @@
 
 #include "behaviour.h"
 #include "stats.h"
+#include "chatter.h"
 
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
@@ -117,6 +118,7 @@ private:
   QPoint oldCursor;
   void sanityCheck();
   Stats *stats;
+  Chatter *chatter;
   bool showStats;
   QList<QString> behavQueue;
   int healthQueue;

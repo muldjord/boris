@@ -7,6 +7,8 @@
     <file alias="icon_quit.png">icons/icon_quit.png</file>
     <file alias="mouse_hover.png">icons/mouse_hover.png</file>
     <file alias="mouse_grab.png">icons/mouse_grab.png</file>
+    <file alias="bubble.png">data/gfx/bubble.png</file>
+    <file alias="bubble_tip.png">data/gfx/bubble_tip.png</file>
     <file alias="stats.png">data/gfx/stats.png</file>
     <file alias="flash_icon.png">data/gfx/flash_icon.png</file>
     <file alias="bruises.png">data/gfx/bruises.png</file>

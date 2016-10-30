@@ -112,6 +112,8 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, QWidget *
     showStats = true;
   }
 
+  chatter = new Chatter();
+  
   staticBehavs = 0;
   // Figure out how many static behaviours there are
   for(int i = 0; i < behaviours->length(); ++i) {
@@ -156,6 +158,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, QWidget *
 Boris::~Boris()
 {
   delete stats;
+  delete chatter;
   delete bMenu;
 }
 
@@ -291,6 +294,12 @@ void Boris::changeBehaviour(QString behav, int time)
         curBehav = a;
       }
     }
+  }
+
+  // Check for chatter
+  chatter->hide();
+  if(behaviours->at(curBehav).file == "chatter") {
+    time = chatter->initChatter(this->pos().x() + (borisSize / 2), this->pos().y() + (borisSize / 2) - 60);
   }
 
   if(time == 0) {
@@ -855,6 +864,10 @@ void Boris::processVision()
 
 void Boris::processAi(QString &behav, int &time)
 {
+  // You might wonder why I check behav == "" and time == 0 in all the following if sentences.
+  // The reason is that they might change throughout the function, and thus makes sense to
+  // make sure an AI decision hasn't already been made.
+
   if(behav == "" && time == 0 && qrand() % 10 >= 3 && behaviours->at(curBehav).file.contains("casual_walk_")) {
     time = qrand() % 1500 + 500;
     if(behaviours->at(curBehav).file == "casual_walk_up") {

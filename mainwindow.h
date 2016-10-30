@@ -76,6 +76,7 @@ private:
   QTimer collisTimer;
   QString weatherIcon;
   double weatherTemp;
+  void loadChatter();
   
 };
 

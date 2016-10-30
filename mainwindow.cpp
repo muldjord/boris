@@ -100,7 +100,7 @@ MainWindow::MainWindow()
     About about(this);
     about.exec();
   }
-
+  
   behaviours = new QList<Behaviour>;
   weathers = new QList<Behaviour>;
   
