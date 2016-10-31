@@ -65,7 +65,11 @@ void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QStri
 
 void loadChatter()
 {
-  QFile chatFile(settings->value("chat_file", "chatter.dat").toString());
+  if(!settings->contains("chat_file")) {
+    settings->setValue("chat_file", "data/chatter.dat");
+  }
+
+  QFile chatFile(settings->value("chat_file", "data/chatter.dat").toString());
   chatLines = new QList<QPair<QString, QString> >;
   if(chatFile.open(QIODevice::ReadOnly)) {
     do {
@@ -99,6 +103,6 @@ int main(int argc, char *argv[])
   loadChatter();
   
   MainWindow window;
-  //window.show();
+
   return app.exec();
 }

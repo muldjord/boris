@@ -43,7 +43,7 @@ extern QSettings *settings;
 
 About::About(QWidget *parent) : QDialog(parent)
 {
-  setFixedSize(900, 450);
+  setFixedSize(900, 470);
   setWindowIcon(QIcon(":icon.png"));
   setWindowTitle("Boris v"VERSION);
 
@@ -158,6 +158,11 @@ About::About(QWidget *parent) : QDialog(parent)
     independenceSlider->setValue(settings->value("independence").toInt());
   }
 
+  enableChatter = new QCheckBox(tr("Enable Boris speech bubbles"));
+  if(settings->value("chatter") == "true") {
+    enableChatter->setCheckState(Qt::Checked);
+  }
+
   enableSound = new QCheckBox(tr("Enable sound"));
   if(settings->value("sound") == "true") {
     enableSound->setCheckState(Qt::Checked);
@@ -182,6 +187,7 @@ About::About(QWidget *parent) : QDialog(parent)
   configLayout->addWidget(sizeLineEdit);
   configLayout->addWidget(clonesLabel);
   configLayout->addWidget(clonesLineEdit);
+  configLayout->addWidget(enableChatter);
   configLayout->addWidget(showStats);
   configLayout->addWidget(independenceLabel);
   configLayout->addWidget(independenceSlider);

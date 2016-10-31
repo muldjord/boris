@@ -38,7 +38,7 @@
 extern QSettings *settings;
 extern QList<QPair<QString, QString> > *chatLines;
 
-Chatter::Chatter()
+Chatter::Chatter(QWidget *parent) : QWidget(parent)
 {
   //setMinimumHeight(60);
   setAttribute(Qt::WA_TranslucentBackground);
@@ -68,15 +68,18 @@ Chatter::~Chatter()
 {
 }
 
-int Chatter::initChatter(int x, int y)
+QPair<QString, int> Chatter::initChatter(int x, int y)
 {
   int chosenLine = qrand() % chatLines->size();
+  QString chatType = chatLines->at(chosenLine).first;
+  qDebug("Chat type is: %s\n", chatType.toStdString().c_str());
   chatterLabel->setText(chatLines->at(chosenLine).second);
   show();
-  move(x - (width() / 2), y - height() + 100);
-  bubbleTip->move(width() / 2 + 32, height() - 49);
+  move(x - (width() / 2), y - 10);
+  bubbleTip->move(width() / 2 + 32, height() - 25);
   bubbleTip->raise();
-  int duration = chatterLabel->text().length() * 100;
+  int duration = 2000 + (chatterLabel->text().length() * 110);
+  qDebug("Duration is: %d\n", duration);
   QTimer::singleShot(duration, this, SLOT(hide()));
-  return duration;
+  return QPair<QString, int>(chatType, duration);
 }

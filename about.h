@@ -50,6 +50,7 @@ private:
   QCheckBox *alwaysWeather;
   QCheckBox *showStats;
   QCheckBox *enableSound;
+  QCheckBox *enableChatter;
   QCheckBox *showWelcome;
   QSlider *independenceSlider;
   QSlider *volumeSlider;

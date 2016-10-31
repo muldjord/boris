@@ -28,17 +28,17 @@
 #ifndef _CHATTER_H
 #define _CHATTER_H
 
-#include <QFrame>
+#include <QWidget>
 #include <QLabel>
 
-class Chatter : public QFrame
+class Chatter : public QWidget
 {
   Q_OBJECT;
 
 public:
-  Chatter();
+  Chatter(QWidget *parent);
   ~Chatter();
-  int initChatter(int x, int y);
+  QPair<QString, int> initChatter(int x, int y);
 
 private:
   QLabel *chatterLabel;

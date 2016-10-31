@@ -71,6 +71,9 @@ MainWindow::MainWindow()
   if(!settings->contains("stats")) {
     settings->setValue("stats", "false");
   }
+  if(!settings->contains("chatter")) {
+    settings->setValue("chatter", "true");
+  }
   if(!settings->contains("sound")) {
     settings->setValue("sound", "true");
   }

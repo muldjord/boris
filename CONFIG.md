@@ -16,5 +16,7 @@ When Boris is run for the first time, a default config.ini file will be created 
 * weather_path (string): The directory containing the weather types and animations.
 * weather_force_type (string): Force this type of weather. Check http://openweathermap.org/weather-conditions for more info. An example of a type could be '11d' for thunderstorm (try this one, it's pretty funny seeing Boris act on lightning).
 * weather_force_temp (decimal): Force the temperatue. Note that this is in Celsius.
+* chat_file (string): Set the input file for speech bubble data
+* chatter (true/false): Set whether Boris will occasianally speak to you using speech bubbles
 
 Note that if you ever end up with a faulty config, just delete it. A default one will then be created when you summon Boris the next time.

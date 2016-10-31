@@ -112,7 +112,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, QWidget *
     showStats = true;
   }
 
-  chatter = new Chatter();
+  chatter = new Chatter(this);
   
   staticBehavs = 0;
   // Figure out how many static behaviours there are
@@ -297,9 +297,13 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   // Check for chatter
-  chatter->hide();
   if(behaviours->at(curBehav).file == "chatter") {
-    time = chatter->initChatter(this->pos().x() + (borisSize / 2), this->pos().y() + (borisSize / 2) - 60);
+    QPair<QString, int> selectedChatter = chatter->initChatter(this->pos().x() + (borisSize / 2), this->pos().y() + (borisSize / 2) - 60);
+    // Override chatter behaviour with actual chatter behaviour type
+    changeBehaviour("_" + selectedChatter.first, selectedChatter.second);
+    return;
+  } else {
+    //chatter->hide();
   }
 
   if(time == 0) {
