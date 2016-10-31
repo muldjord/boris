@@ -40,7 +40,6 @@ extern QList<QPair<QString, QString> > *chatLines;
 
 Chatter::Chatter(QWidget *parent) : QWidget(parent)
 {
-  //setMinimumHeight(60);
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
   setStyleSheet("border-image: url(:bubble.png) 12 12 24 12;"
@@ -72,14 +71,12 @@ QPair<QString, int> Chatter::initChatter(int x, int y)
 {
   int chosenLine = qrand() % chatLines->size();
   QString chatType = chatLines->at(chosenLine).first;
-  qDebug("Chat type is: %s\n", chatType.toStdString().c_str());
-  chatterLabel->setText(chatLines->at(chosenLine).second);
+  chatterLabel->setText(chatLines->at(chosenLine).second.trimmed());
   show();
   move(x - (width() / 2), y - 10);
-  bubbleTip->move(width() / 2 + 32, height() - 25);
+  bubbleTip->move(width() / 2 + 20, height() - 25);
   bubbleTip->raise();
   int duration = 2000 + (chatterLabel->text().length() * 110);
-  qDebug("Duration is: %d\n", duration);
   QTimer::singleShot(duration, this, SLOT(hide()));
   return QPair<QString, int>(chatType, duration);
 }
