@@ -298,12 +298,10 @@ void Boris::changeBehaviour(QString behav, int time)
 
   // Check for chatter
   if(behaviours->at(curBehav).file == "chatter") {
-    QPair<QString, int> selectedChatter = chatter->initChatter(this->pos().x() + (borisSize / 2), this->pos().y() + (borisSize / 2) - 60);
+    QPair<QString, int> selectedChatter = chatter->initChatter(this->pos().x(), this->pos().y(), borisSize);
     // Override chatter behaviour with actual chatter behaviour type
     changeBehaviour("_" + selectedChatter.first, selectedChatter.second);
     return;
-  } else {
-    //chatter->hide();
   }
 
   if(time == 0) {

@@ -38,7 +38,7 @@ class Chatter : public QWidget
 public:
   Chatter(QWidget *parent);
   ~Chatter();
-  QPair<QString, int> initChatter(int x, int y);
+  QPair<QString, int> initChatter(int x, int y, int borisSize);
 
 private:
   QLabel *chatterLabel;
