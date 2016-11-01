@@ -300,7 +300,7 @@ void Boris::changeBehaviour(QString behav, int time)
   if(behaviours->at(curBehav).file == "chatter") {
     QPair<QString, int> selectedChatter = chatter->initChatter(this->pos().x(), this->pos().y(), borisSize);
     for(int a = 0; a < behaviours->size(); ++a) {
-      if(behaviours->at(a).file == QString("_" + selectedChatter.first)) {
+      if(behaviours->at(a).file == selectedChatter.first) {
         curBehav = a;
       }
     }
