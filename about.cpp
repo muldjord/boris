@@ -45,7 +45,7 @@ About::About(QWidget *parent) : QDialog(parent)
 {
   setFixedSize(900, 470);
   setWindowIcon(QIcon(":icon.png"));
-  setWindowTitle("Boris v"VERSION);
+  setWindowTitle("Boris v" VERSION);
 
   move(QApplication::desktop()->width() / 2 - 225, QApplication::desktop()->height() / 2 - 250);
   // About tab
@@ -263,6 +263,12 @@ void About::saveAll()
     settings->setValue("sound", "true");
   } else {
     settings->setValue("sound", "false");
+  }
+
+  if(enableChatter->isChecked()) {
+    settings->setValue("chatter", "true");
+  } else {
+    settings->setValue("chatter", "false");
   }
 
   settings->setValue("volume", volumeSlider->value());

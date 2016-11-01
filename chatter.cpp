@@ -72,11 +72,15 @@ QPair<QString, int> Chatter::initChatter(int x, int y, int borisSize)
   int chosenLine = qrand() % chatLines->size();
   QString chatType = chatLines->at(chosenLine).first;
   chatterLabel->setText(chatLines->at(chosenLine).second.trimmed());
-  show();
-  move((x + (borisSize / 4 * 3)) - (width() / 2), y + (borisSize / 4 * 3) - height());
-  bubbleTip->move(width() / 2, height() - 25);
-  bubbleTip->raise();
   int duration = 2000 + (chatterLabel->text().length() * 110);
-  QTimer::singleShot(duration, this, SLOT(hide()));
+
+  if(settings->value("chatter", "true").toBool() == true) {
+    show();
+    move((x + (borisSize / 4 * 3)) - (width() / 2), y + (borisSize / 4 * 3) - height());
+    bubbleTip->move(width() / 2, height() - 25);
+    bubbleTip->raise();
+    QTimer::singleShot(duration, this, SLOT(hide()));
+  }
+
   return QPair<QString, int>(chatType, duration);
 }
