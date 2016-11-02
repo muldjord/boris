@@ -76,7 +76,7 @@ QPair<QString, int> Chatter::initChatter(int x, int y, int borisSize)
 
   if(settings->value("chatter", "true").toBool() == true) {
     show();
-    move((x + (borisSize / 4 * 3)) - (width() / 2), y + (borisSize / 4 * 3) - height());
+    move((x + (borisSize / 8 * 7)) - (width() / 2), y + (borisSize / 10 * 9) - height());
     bubbleTip->move(width() / 2, height() - 25);
     bubbleTip->raise();
     QTimer::singleShot(duration, this, SLOT(hide()));
