@@ -24,6 +24,9 @@ Copyright 2016 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
+#### Version 1.9.3 (05th November 2016):
+* Added speech bubbles. Edit the text in data/chatter.dat. Read CHATTER.md for more info.
+
 #### Version 1.9.2 (24th August 2016):
 * Limited the weather api call to once every hour. Added OpenWeatherMap API key lineedit to config.
 
