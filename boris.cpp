@@ -296,6 +296,8 @@ void Boris::changeBehaviour(QString behav, int time)
     }
   }
 
+  // Hide speech bubble in case Boris was grabbed or otherwise stopped in the middle of speaking
+  chatter->hide();
   // Check for chatter
   if(behaviours->at(curBehav).file == "chatter") {
     QPair<QString, int> selectedChatter = chatter->initChatter(this->pos().x(), this->pos().y(), borisSize);
