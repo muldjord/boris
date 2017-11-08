@@ -36,9 +36,8 @@
 //#define DEBUG
 
 extern QSettings *settings;
-extern QList<QPair<QString, QString> > *chatLines;
 
-Chatter::Chatter(QWidget *parent) : QWidget(parent)
+Chatter::Chatter(QList<QPair<QString, QString> > *chatLines, QWidget *parent) : QWidget(parent)
 {
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
@@ -48,6 +47,8 @@ Chatter::Chatter(QWidget *parent) : QWidget(parent)
                 "border-right: 12px transparent;"
                 "border-left: 12px transparent;");
 
+  this->chatLines = chatLines;
+  
   chatterLabel = new QLabel;
   bubbleTip = new QLabel(this);
   bubbleTip->setPixmap(QPixmap(":bubble_tip.png"));
@@ -70,8 +71,13 @@ Chatter::~Chatter()
 QPair<QString, int> Chatter::initChatter(int x, int y, int borisSize)
 {
   int chosenLine = qrand() % chatLines->size();
-  QString chatType = chatLines->at(chosenLine).first;
-  chatterLabel->setText(chatLines->at(chosenLine).second.trimmed());
+  QString chatType = "_complain";
+  if(!chatLines->isEmpty()) {
+    chatType = chatLines->at(chosenLine).first;
+    chatterLabel->setText(chatLines->at(chosenLine).second.trimmed());
+  } else {
+    chatterLabel->setText("I have nothing to say...");
+  }
   int duration = 2000 + (chatterLabel->text().length() * 110);
 
   if(settings->value("chatter", "true").toBool() == true) {
