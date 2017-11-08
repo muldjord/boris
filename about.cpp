@@ -43,7 +43,7 @@ extern QSettings *settings;
 
 About::About(QWidget *parent) : QDialog(parent)
 {
-  setFixedSize(900, 470);
+  setFixedSize(900, 520);
   setWindowIcon(QIcon(":icon.png"));
   setWindowTitle("Boris v" VERSION);
 
@@ -145,6 +145,13 @@ About::About(QWidget *parent) : QDialog(parent)
     weatherKeyLineEdit->setText(settings->value("weather_key").toString());
   }
 
+  QLabel *feedUrlLabel = new QLabel(tr("RSS feed url:"));
+  feedUrlLineEdit = new QLineEdit();
+  feedUrlLineEdit->setToolTip(tr("Type in any RSS feed url. Boris will sometimes update you on a title from this feed"));
+  if(settings->contains("feed_url")) {
+    feedUrlLineEdit->setText(settings->value("feed_url").toString());
+  }
+
   showStats = new QCheckBox(tr("Always show vitality stats"));
   if(settings->value("stats") == "true") {
     showStats->setCheckState(Qt::Checked);
@@ -199,6 +206,8 @@ About::About(QWidget *parent) : QDialog(parent)
   configLayout->addWidget(weatherLineEdit);
   configLayout->addWidget(weatherKeyLabel);
   configLayout->addWidget(weatherKeyLineEdit);
+  configLayout->addWidget(feedUrlLabel);
+  configLayout->addWidget(feedUrlLineEdit);
   
   QVBoxLayout *infoLayout = new QVBoxLayout;
   infoLayout->addWidget(tabWidget);
@@ -250,7 +259,9 @@ void About::saveAll()
   settings->setValue("weather_city", weatherLineEdit->text());
 
   settings->setValue("weather_key", weatherKeyLineEdit->text());
-  
+
+  settings->setValue("feed_url", feedUrlLineEdit->text());
+
   if(showStats->isChecked()) {
     settings->setValue("stats", "true");
   } else {
