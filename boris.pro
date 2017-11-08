@@ -3,7 +3,7 @@ TARGET = Boris
 DEPENDPATH += .
 INCLUDEPATH += .
 #CONFIG += console debug
-QT += widgets multimedia
+QT += widgets multimedia xml
 
 include(./VERSION)
 DEFINES+=VERSION=\\\"$$VERSION\\\"
@@ -15,7 +15,7 @@ HEADERS += mainwindow.h \
            behaviour.h \
            stats.h \
            loader.h \
-           weathercomm.h \
+           netcomm.h \
            chatter.h
 
 SOURCES += mainwindow.cpp \
@@ -24,7 +24,7 @@ SOURCES += mainwindow.cpp \
            main.cpp \
            stats.cpp \
            loader.cpp \
-           weathercomm.cpp \
+           netcomm.cpp \
            chatter.cpp
 
 RESOURCES += boris.qrc
