@@ -35,7 +35,6 @@
 #include "mainwindow.h"
 
 QSettings *settings;
-QList<QPair<QString, QString> > *chatLines;
 
 void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QString &msg)
 {
@@ -63,26 +62,6 @@ void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QStri
   printf("%s", txt.toStdString().c_str());
 }
 
-void loadChatter()
-{
-  if(!settings->contains("chat_file")) {
-    settings->setValue("chat_file", "data/chatter.dat");
-  }
-
-  QFile chatFile(settings->value("chat_file", "data/chatter.dat").toString());
-  chatLines = new QList<QPair<QString, QString> >;
-  if(chatFile.open(QIODevice::ReadOnly)) {
-    do {
-      QStringList snippets = QString(chatFile.readLine()).split(";");
-      QPair<QString, QString> chatLine;
-      chatLine.first = snippets.at(0);
-      chatLine.second = snippets.at(1);
-      chatLines->append(chatLine);
-    } while(chatFile.canReadLine());
-  }
-  chatFile.close();
-}
-
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
@@ -100,8 +79,6 @@ int main(int argc, char *argv[])
   QSettings s("config.ini", QSettings::IniFormat);
   settings = &s;
 
-  loadChatter();
-  
   MainWindow window;
 
   return app.exec();
