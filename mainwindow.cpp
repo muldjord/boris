@@ -106,14 +106,15 @@ MainWindow::MainWindow()
   
   behaviours = new QList<Behaviour>;
   weathers = new QList<Behaviour>;
+  chatLines = new QList<QPair<QString, QString> >;
   
-  if(Loader::loadBehaviours(settings->value("behavs_path", "data/behavs").toString(), behaviours, this)) {
+  if(Loader::loadBehaviours(settings->value("behavs_path", "data/behavs").toString(), behaviours)) {
     qDebug("Behaviours loaded ok... :)\n");
   } else {
     qDebug("Error when loading some behaviours, please check your png and dat files\n");
   }
   
-  if(Loader::loadBehaviours(settings->value("weather_path", "data/weather").toString(), weathers, this)) {
+  if(Loader::loadBehaviours(settings->value("weather_path", "data/weather").toString(), weathers)) {
     qDebug("Weather types loaded ok... :)\n");
   } else {
     qDebug("Error when loading some weather types, please check your png and dat files\n");
@@ -123,9 +124,10 @@ MainWindow::MainWindow()
   createTrayIcon();
   trayIcon->show();
 
-  weatherComm = new WeatherComm();
-  connect(weatherComm, SIGNAL(weatherUpdated()), this, SLOT(updateWeather()));
-  
+  netComm = new NetComm();
+  connect(netComm, SIGNAL(weatherUpdated()), this, SLOT(updateWeather()));
+  connect(netComm, SIGNAL(feedUpdated()), this, SLOT(updateChatLines()));
+
   clones = settings->value("clones", "4").toInt();
   qDebug("Spawning %d clone(s)\n", clones);
   addBoris(settings->value("clones", "4").toInt());
@@ -139,19 +141,21 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow()
 {
   delete trayIcon;
+  delete behaviours;
+  delete weathers;
+  delete chatLines;
 }
 
 void MainWindow::addBoris(int clones)
 {
   for(int a = 0; a < clones; ++a) {
-    borises.append(new Boris(behaviours, weathers, this));
+    borises.append(new Boris(behaviours, weathers, chatLines, this));
     connect(earthquakeAction, SIGNAL(triggered()), borises.last(), SLOT(earthquake()));
     connect(teleportAction, SIGNAL(triggered()), borises.last(), SLOT(teleport()));
     connect(weatherAction, SIGNAL(triggered()), borises.last(), SLOT(showWeather()));
     borises.last()->show();
     borises.last()->earthquake();
   }
-  updateWeather();
 }
 
 void MainWindow::removeBoris(int clones)
@@ -231,7 +235,7 @@ void MainWindow::aboutBox()
     clones = settings->value("clones", "2").toInt();
   }
 
-  weatherComm->getWeather();
+  netComm->updateAll();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)
@@ -269,14 +273,42 @@ void MainWindow::killAll()
 
 void MainWindow::updateWeather()
 {
-  double temp = weatherComm->getTemp();
+  double temp = netComm->getTemp();
   for(int a = 0; a < borises.length(); ++a) {
-    borises.at(a)->setWeatherType(weatherComm->getIcon(), temp);
+    borises.at(a)->setWeatherType(netComm->getIcon(), temp);
   }
   if(temp != 66.6) {
     weatherAction->setText(QString::number(temp) + tr(" degrees Celsius"));
   } else {
     weatherAction->setText(tr("Couldn't find city"));
   }
-  weatherAction->setIcon(QIcon(":" + weatherComm->getIcon() + ".png"));
+  weatherAction->setIcon(QIcon(":" + netComm->getIcon() + ".png"));
+}
+
+
+void MainWindow::updateChatLines()
+{
+  chatLines->clear();
+  if(!settings->contains("chat_file")) {
+    settings->setValue("chat_file", "data/chatter.dat");
+  }
+
+  QFile chatFile(settings->value("chat_file", "data/chatter.dat").toString());
+  if(chatFile.open(QIODevice::ReadOnly)) {
+    do {
+      QStringList snippets = QString(chatFile.readLine()).split(";");
+      QPair<QString, QString> chatLine;
+      chatLine.first = snippets.at(0);
+      chatLine.second = snippets.at(1);
+      chatLines->append(chatLine);
+    } while(chatFile.canReadLine());
+  }
+  chatFile.close();
+
+  foreach(QString feedLine, netComm->getFeedLines()) {
+    QPair<QString, QString> chatLine;
+    chatLine.first = "_whisper";
+    chatLine.second = feedLine;
+    chatLines->append(chatLine);
+  }
 }

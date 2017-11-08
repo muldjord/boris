@@ -29,7 +29,7 @@
 
 #include "boris.h"
 #include "behaviour.h"
-#include "weathercomm.h"
+#include "netcomm.h"
 
 #include <QWidget>
 #include <QSystemTrayIcon>
@@ -52,9 +52,10 @@ private slots:
   void killAll();
   //void weatherReply(QNetworkReply *r);
   void updateWeather();
+  void updateChatLines();
   
 private:
-  WeatherComm *weatherComm;
+  NetComm *netComm;
   bool loadBehaviours();
   QList<QString> extractSnippets(QString line);
   QString *aboutText;
@@ -70,6 +71,7 @@ private:
   QList<Boris*> borises;
   QList<Behaviour> *behaviours;
   QList<Behaviour> *weathers;
+  QList<QPair<QString, QString> > *chatLines;
   int clones;
   void addBoris(int clones);
   void removeBoris(int clones);
