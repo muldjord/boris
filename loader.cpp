@@ -40,7 +40,7 @@
 
 extern QSettings *settings;
 
-bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours, QWidget *parent)
+bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours)
 {
   QDir d(dataDir,
          "*.png",
@@ -141,7 +141,7 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours, QWidg
         f.hide = snippets.at(4).toInt();
         f.show = snippets.at(5).toInt();
         if(snippets.length() == 7) {
-          f.soundFx = new QSoundEffect(parent);
+          f.soundFx = new QSoundEffect();
           f.soundFx->setSource(QUrl::fromLocalFile(snippets.at(6)));
           f.soundFx->setVolume(volume);
 #ifdef DEBUG
