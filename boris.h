@@ -46,11 +46,13 @@ class Boris : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, QWidget *parent);
+  Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers,
+        QList<QPair<QString, QString> > *chatLines, QWidget *parent);
   ~Boris();
   QTimer behavTimer;
   QList<Behaviour> *behaviours;
   QList<Behaviour> *weathers;
+  QList<QPair<QString, QString> > *chatLines;
   void updateBoris(int newSize, bool alwaysWeather, bool statsEnable, bool soundEnable, int newIndependence);
   int borisSize;
   void collide(Boris *b);

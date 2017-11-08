@@ -41,10 +41,12 @@
 
 extern QSettings *settings;
 
-Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, QWidget *parent) : QGraphicsView(parent)
+Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers,
+             QList<QPair<QString, QString> > *chatLines, QWidget *parent) : QGraphicsView(parent)
 {
   this->behaviours = behaviours;
   this->weathers = weathers;
+  this->chatLines = chatLines;
 
   vVel = 0.0;
   hVel = 0.0;
@@ -112,7 +114,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, QWidget *
     showStats = true;
   }
 
-  chatter = new Chatter(this);
+  chatter = new Chatter(chatLines, this);
   
   staticBehavs = 0;
   // Figure out how many static behaviours there are
