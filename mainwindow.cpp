@@ -89,6 +89,9 @@ MainWindow::MainWindow()
   if(!settings->contains("weather_path")) {
     settings->setValue("weather_path", "data/weathers");
   }
+  if(!settings->contains("feed_url")) {
+    settings->setValue("feed_url", "http://rss.slashdot.org/Slashdot/slashdotMain");
+  }
   if(!settings->contains("weather")) {
     settings->setValue("weather", "false");
   }
