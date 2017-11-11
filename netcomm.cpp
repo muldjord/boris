@@ -37,9 +37,6 @@
 
 //#define DEBUG
 
-// How to get weather
-// http://api.openweathermap.org/data/2.5/weather?q=Aarhus&appid=fe9fe6cf47c03d2640d5063fbfa053a2
-
 extern QSettings *settings;
 
 NetComm::NetComm()
@@ -60,7 +57,7 @@ NetComm::~NetComm()
 
 void NetComm::updateAll()
 {
-  weatherRequest.setUrl(QUrl("http://api.openweathermap.org/data/2.5/weather?q=" + settings->value("weather_city", "Copenhagen").toString() + "&appid=" + settings->value("weather_key", "fe9fe6cf47c03d2640d5063fbfa053a2").toString()));
+  weatherRequest.setUrl(QUrl("http://api.openweathermap.org/data/2.5/weather?q=" + settings->value("weather_city", "Copenhagen").toString() + "&mode=xml&units=metric&appid=" + settings->value("weather_key", "fe9fe6cf47c03d2640d5063fbfa053a2").toString()));
   feedRequest.setUrl(QUrl(settings->value("feed_url", "http://rss.slashdot.org/Slashdot/slashdotMain").toString()));
 
   get(feedRequest);
@@ -69,17 +66,16 @@ void NetComm::updateAll()
    
 void NetComm::netReply(QNetworkReply *r)
 {
-  QByteArray rawData = r->readAll();
+  QDomDocument doc;
+  doc.setContent(r->readAll());
   r->close();
   if(r->request() == weatherRequest) {
-    qInfo("Parsing weather:\n");
+    qInfo("Parsing weather:\n%s\n", doc.toString().toStdString().c_str());
 
-    if(!rawData.contains("Error")) {
-      weatherIcon = rawData.mid(rawData.indexOf("icon\":\"") + 7, 3);
-      weatherTemp = rawData.mid(rawData.indexOf("temp\":") + 6, rawData.indexOf(",\"pressure") - (rawData.indexOf("temp\":") + 6)).toDouble() - 273.15;
-    } else {
+    weatherIcon = doc.elementsByTagName("weather").at(0).toElement().attribute("icon");
+    weatherTemp = doc.elementsByTagName("temperature").at(0).toElement().attribute("value").toDouble();
+    if(weatherIcon == "") {
       weatherIcon = "11d";
-      weatherTemp = 66.6;
     }
     
     // Overrule weather if forced from config.ini
@@ -98,8 +94,6 @@ void NetComm::netReply(QNetworkReply *r)
   if(r->request() == feedRequest) {
     feedLines.clear();
     qInfo("Updating feed:\n");
-    QDomDocument doc;
-    doc.setContent(rawData, false);
     QDomNodeList titles = doc.elementsByTagName("item");
     for(int a = 0; a < titles.length(); ++a) {
       QString feedLine = titles.at(a).firstChildElement("title").text();
