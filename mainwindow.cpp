@@ -302,7 +302,7 @@ void MainWindow::updateChatLines()
       QStringList snippets = QString(chatFile.readLine()).split(";");
       ChatLine chatLine;
       chatLine.type = snippets.at(0);
-      chatLine.text = snippets.at(1);
+      chatLine.text = snippets.at(1).trimmed();
       chatLines->append(chatLine);
     } while(chatFile.canReadLine());
   }
