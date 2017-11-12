@@ -1076,13 +1076,17 @@ void Boris::showWeather()
   }
   if(!falling && !grabbed) {
     if((type == "01d" || type == "02d") && curTemp > 15.0) {
-      behavQueue.append("sunglasses");
+      changeBehaviour("sunglasses");
     } else if(type == "09d" || type == "09n" || type == "10d" || type == "10n") {
-      behavQueue.append("_umbrella");
+      changeBehaviour("_umbrella");
     } else if(type == "11d" || type == "11n") {
       changeBehaviour("_lightning");
     } else if(type == "13d" || type == "13n") {
-      behavQueue.append("_freezing");
+      changeBehaviour("_freezing");
+    } else if(type == "01n" || type == "02n") {
+      changeBehaviour("_energy"); // Yawn for weathers that have a moon
+    } else if(type == "04d" || type == "04n") {
+      changeBehaviour("_fun"); // Depressed from clouds
     }
   }
 }
