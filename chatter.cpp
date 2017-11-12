@@ -94,7 +94,7 @@ QPair<QString, int> Chatter::initChatter(int x, int y, int borisSize)
 
 void Chatter::mousePressEvent(QMouseEvent *event)
 {
-  if(event->button() == Qt::LeftButton) {
+  if(event->button() == Qt::LeftButton && chatLines->at(currentLine).url.isValid()) {
     QDesktopServices::openUrl(chatLines->at(currentLine).url);
   }
   event->ignore();
