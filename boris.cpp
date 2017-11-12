@@ -42,7 +42,7 @@
 extern QSettings *settings;
 
 Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers,
-             QList<QPair<QString, QString> > *chatLines, QWidget *parent) : QGraphicsView(parent)
+             QList<QPair<QString, QPair<QString, QUrl> > > *chatLines, QWidget *parent) : QGraphicsView(parent)
 {
   this->behaviours = behaviours;
   this->weathers = weathers;

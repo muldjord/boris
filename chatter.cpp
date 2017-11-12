@@ -37,7 +37,7 @@
 
 extern QSettings *settings;
 
-Chatter::Chatter(QList<QPair<QString, QString> > *chatLines, QWidget *parent) : QWidget(parent)
+Chatter::Chatter(QList<QPair<QString, QPair<QString, QUrl> > > *chatLines, QWidget *parent) : QWidget(parent)
 {
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
@@ -74,7 +74,7 @@ QPair<QString, int> Chatter::initChatter(int x, int y, int borisSize)
   QString chatType = "_complain";
   if(!chatLines->isEmpty()) {
     chatType = chatLines->at(chosenLine).first;
-    chatterLabel->setText(chatLines->at(chosenLine).second.trimmed());
+    chatterLabel->setText(chatLines->at(chosenLine).second.first.trimmed());
   } else {
     chatterLabel->setText("I have nothing to say...");
   }

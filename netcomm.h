@@ -30,6 +30,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QTimer>
+#include <QUrl>
 
 class NetComm : public QNetworkAccessManager
 {
@@ -39,7 +40,7 @@ public:
   ~NetComm();
   QString getIcon();
   double getTemp();
-  QList<QString> getFeedLines();
+  QList<QPair<QString, QUrl> > getFeedLines();
 
 public slots:
   void updateAll();
@@ -55,7 +56,7 @@ private:
   QTimer netTimer;
   QString weatherIcon;
   double weatherTemp;
-  QList<QString> feedLines;
+  QList<QPair<QString, QUrl> > feedLines;
   QNetworkRequest weatherRequest;
   QNetworkRequest feedRequest;
 };

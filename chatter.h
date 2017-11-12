@@ -36,14 +36,14 @@ class Chatter : public QWidget
   Q_OBJECT;
 
 public:
-  Chatter(QList<QPair<QString, QString> > *chatLines, QWidget *parent);
+  Chatter(QList<QPair<QString, QPair<QString, QUrl> > > *chatLines, QWidget *parent);
   ~Chatter();
   QPair<QString, int> initChatter(int x, int y, int borisSize);
 
 private:
   QLabel *chatterLabel;
   QLabel *bubbleTip;
-  QList<QPair<QString, QString> > *chatLines;
+  QList<QPair<QString, QPair<QString, QUrl> > > *chatLines;
 };
 
 #endif // _CHATTER_H

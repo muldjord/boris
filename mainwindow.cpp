@@ -109,7 +109,7 @@ MainWindow::MainWindow()
   
   behaviours = new QList<Behaviour>;
   weathers = new QList<Behaviour>;
-  chatLines = new QList<QPair<QString, QString> >;
+  chatLines = new QList<QPair<QString, QPair<QString, QUrl> > >;
   
   if(Loader::loadBehaviours(settings->value("behavs_path", "data/behavs").toString(), behaviours)) {
     qDebug("Behaviours loaded ok... :)\n");
@@ -300,18 +300,19 @@ void MainWindow::updateChatLines()
   if(chatFile.open(QIODevice::ReadOnly)) {
     do {
       QStringList snippets = QString(chatFile.readLine()).split(";");
-      QPair<QString, QString> chatLine;
+      QPair<QString, QPair<QString, QUrl> > chatLine;
       chatLine.first = snippets.at(0);
-      chatLine.second = snippets.at(1);
+      chatLine.second.first = snippets.at(1);
       chatLines->append(chatLine);
     } while(chatFile.canReadLine());
   }
   chatFile.close();
 
-  foreach(QString feedLine, netComm->getFeedLines()) {
-    QPair<QString, QString> chatLine;
+  for(int a = 0; a < netComm->getFeedLines().size(); ++a) {
+    QPair<QString, QPair<QString, QUrl> > chatLine;
     chatLine.first = "_whisper";
-    chatLine.second = feedLine;
+    chatLine.second.first = netComm->getFeedLines().at(a).first;
+    chatLine.second.second = netComm->getFeedLines().at(a).second;
     chatLines->append(chatLine);
   }
 }
