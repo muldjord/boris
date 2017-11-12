@@ -32,12 +32,13 @@
 #include <QHBoxLayout>
 #include <QTimer>
 #include <QFile>
+#include <QDesktopServices>
 
 //#define DEBUG
 
 extern QSettings *settings;
 
-Chatter::Chatter(QList<QPair<QString, QPair<QString, QUrl> > > *chatLines, QWidget *parent) : QWidget(parent)
+Chatter::Chatter(QList<ChatLine> *chatLines, QWidget *parent) : QWidget(parent)
 {
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
@@ -70,11 +71,11 @@ Chatter::~Chatter()
 
 QPair<QString, int> Chatter::initChatter(int x, int y, int borisSize)
 {
-  int chosenLine = qrand() % chatLines->size();
+  currentLine = qrand() % chatLines->size();
   QString chatType = "_complain";
   if(!chatLines->isEmpty()) {
-    chatType = chatLines->at(chosenLine).first;
-    chatterLabel->setText(chatLines->at(chosenLine).second.first.trimmed());
+    chatType = chatLines->at(currentLine).type;
+    chatterLabel->setText(chatLines->at(currentLine).text);
   } else {
     chatterLabel->setText("I have nothing to say...");
   }
@@ -89,4 +90,12 @@ QPair<QString, int> Chatter::initChatter(int x, int y, int borisSize)
   }
 
   return QPair<QString, int>(chatType, duration);
+}
+
+void Chatter::mousePressEvent(QMouseEvent *event)
+{
+  if(event->button() == Qt::LeftButton) {
+    QDesktopServices::openUrl(chatLines->at(currentLine).url);
+  }
+  event->ignore();
 }

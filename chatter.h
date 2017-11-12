@@ -28,22 +28,29 @@
 #ifndef _CHATTER_H
 #define _CHATTER_H
 
+#include "chatline.h"
+
 #include <QWidget>
 #include <QLabel>
+#include <QMouseEvent>
 
 class Chatter : public QWidget
 {
   Q_OBJECT;
 
 public:
-  Chatter(QList<QPair<QString, QPair<QString, QUrl> > > *chatLines, QWidget *parent);
+  Chatter(QList<ChatLine> *chatLines, QWidget *parent);
   ~Chatter();
   QPair<QString, int> initChatter(int x, int y, int borisSize);
 
+protected:
+  void mousePressEvent(QMouseEvent *event);
+  
 private:
   QLabel *chatterLabel;
   QLabel *bubbleTip;
-  QList<QPair<QString, QPair<QString, QUrl> > > *chatLines;
+  QList<ChatLine> *chatLines;
+  int currentLine = 0;
 };
 
 #endif // _CHATTER_H

@@ -71,7 +71,7 @@ private:
   QList<Boris*> borises;
   QList<Behaviour> *behaviours;
   QList<Behaviour> *weathers;
-  QList<QPair<QString, QPair<QString, QUrl> > > *chatLines;
+  QList<ChatLine> *chatLines;
   int clones;
   void addBoris(int clones);
   void removeBoris(int clones);

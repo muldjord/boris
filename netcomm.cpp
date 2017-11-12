@@ -92,15 +92,16 @@ void NetComm::netReply(QNetworkReply *r)
     emit weatherUpdated();
   } 
   if(r->request() == feedRequest) {
-    feedLines.clear();
+    chatLines.clear();
     qInfo("Updating feed:\n");
     QDomNodeList titles = doc.elementsByTagName("item");
     for(int a = 0; a < titles.length(); ++a) {
-      QPair<QString, QUrl> feedPair;
-      feedPair.first = titles.at(a).firstChildElement("title").text();
-      feedPair.second = QUrl(titles.at(a).firstChildElement("link").text());
-      qInfo("'%s'\n", feedPair.first.toStdString().c_str());
-      feedLines.append(feedPair);
+      ChatLine feedLine;
+      feedLine.type = "_whisper";
+      feedLine.text = titles.at(a).firstChildElement("title").text().trimmed();
+      feedLine.url = QUrl(titles.at(a).firstChildElement("link").text());
+      qInfo("'%s'\n", feedLine.text.toStdString().c_str());
+      chatLines.append(feedLine);
     }
     emit feedUpdated();
   }
@@ -118,7 +119,7 @@ QString NetComm::getIcon()
   return weatherIcon;
 }
 
-QList<QPair<QString, QUrl> > NetComm::getFeedLines()
+QList<ChatLine> NetComm::getFeedLines()
 {
-  return feedLines;
+  return chatLines;
 }

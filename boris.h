@@ -30,6 +30,7 @@
 #include "behaviour.h"
 #include "stats.h"
 #include "chatter.h"
+#include "chatline.h"
 
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
@@ -47,12 +48,12 @@ class Boris : public QGraphicsView
   Q_OBJECT;
 public:
   Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers,
-        QList<QPair<QString, QPair<QString, QUrl> > > *chatLines, QWidget *parent);
+        QList<ChatLine> *chatLines, QWidget *parent);
   ~Boris();
   QTimer behavTimer;
   QList<Behaviour> *behaviours;
   QList<Behaviour> *weathers;
-  QList<QPair<QString, QPair<QString, QUrl> > > *chatLines;
+  QList<ChatLine> *chatLines;
   void updateBoris(int newSize, bool alwaysWeather, bool statsEnable, bool soundEnable, int newIndependence);
   int borisSize;
   void collide(Boris *b);
