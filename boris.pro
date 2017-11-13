@@ -17,7 +17,8 @@ HEADERS += mainwindow.h \
            loader.h \
            netcomm.h \
            chatter.h \
-           chatline.h
+           chatline.h \
+           weather.h
 
 SOURCES += mainwindow.cpp \
            about.cpp \
