@@ -66,7 +66,7 @@ public:
 public slots:
   void earthquake();
   void teleport();
-  void showWeather(QString &behav);
+  void triggerWeather();
   void changeBehaviour(QString behav = "", int time = 0);
   
 protected:
@@ -88,6 +88,7 @@ private slots:
 private:
   bool falling;
   bool grabbed;
+  void showWeather(QString &behav);
   void showBoris();
   void hideBoris();
   void createBehavMenu();
