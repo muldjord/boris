@@ -5,7 +5,8 @@
     <name>About</name>
     <message>
         <location filename="about.cpp" line="53"/>
-        <source>Boris bids you welcome! He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye out for him!
+        <source>&lt;strong&gt;Boris bids you welcome!&lt;/strong&gt;&lt;br/&gt;He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye out for him!&lt;br/&gt;&lt;br/&gt;&lt;strong&gt;Functions:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;You can throw Boris around your desktop by left-clicking him. Don&apos;t throw him too much though, or you&apos;ll bruise him...&lt;/li&gt;&lt;li&gt;Right-clicking Boris brings up a menu where you can select what you want Boris to do. Each activity is added to a queue and performed in the order you select them.&lt;/li&gt;&lt;li&gt;Right-click the tray icon to either quit, cause an earthquake, teleport or open this config/about box.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Vitality description:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;The &apos;Zz&apos; icon signifies Boris&apos; energy level. Tell him to relax to give him more energy.&lt;/li&gt;&lt;li&gt;The &apos;knife and fork&apos; icon shows how hungry Boris is. Tell him to eat to remove his hunger.&lt;/li&gt;&lt;li&gt;The &apos;toilet&apos; icon is an indicator of Boris&apos; need to go to the toilet. Tell him to weewee to make him feel better.&lt;/li&gt;&lt;li&gt;The &apos;speech bubble&apos; icon shows Boris&apos; need for social interaction. Move you mouse over him to interact with him. Boris will also socialize with other Boris clones when he meets them.&lt;/li&gt;&lt;li&gt;The &apos;smiley&apos; icon indicates if Boris is in a good mood. If he&apos;s sad, tell him to do something fun.&lt;/li&gt;&lt;li&gt;If Boris is getting dirty, tell him to take a shower.&lt;/li&gt;&lt;/ul&gt;&lt;br/&gt;If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit http://www.muldjord.com/boris and download it. You can also download the full source code (GPLv3) in there if you like.</source>
+        <oldsource>Boris bids you welcome! He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye out for him!
 
 Functions:
 - You can throw Boris around your desktop by left-clicking him. Don&apos;t throw him too much though, or you&apos;ll bruise him...
@@ -20,88 +21,16 @@ Vitality description:
 - The &apos;smiley&apos; icon indicates if Boris is in a good mood. If he&apos;s sad, tell him to do something fun.
 - If Boris is getting dirty, tell him to take a shower.
 
-If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit http://www.muldjord.com/boris and download it. You can also download the full source code in there if you like. This software is COMPLETELY FREE and OPEN SOURCE (GPLv3).</source>
-        <oldsource>Boris bids you welcome! He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye out for him!
-
-Functions:
-- You can throw Boris around your desktop by left-clicking him. Don&apos;t throw him too much though, or you&apos;ll bruise him...
-- Right-clicking Boris brings up a menu where you can select what you want Boris to do. Each activity is added to a queue and performed in the order you select them.
-- Right-click the tray icon to either quit, cause an earthquake, teleport or open this config/about box.
-
-Vitality description:
-- The &apos;Zz&apos; icon signifies Boris&apos; energy level. Tell him to relax to give him more energy.
-- The &apos;knife and fork&apos; icon shows how hungry Boris is. Tell him to eat to remove his hunger.
-- The &apos;toilet&apos; icon is an indicator of Boris&apos; need to go to the toilet. Tell him to weewee to make him feel better.
-- The &apos;speech bubble&apos; icon shows Boris&apos; need for social interaction. Move you mouse over him to interact with him. Boris will socialize with other Boris clones when he meets them.
-- The &apos;smiley&apos; icon indicates if Boris is in a good mood. If he&apos;s sad, tell him to do something fun.
-- If Boris is getting dirty, tell him to take a shower.
-
 If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit http://www.muldjord.com/boris and download it. You can also download the full source code in there if you like. This software is COMPLETELY FREE and OPEN SOURCE (GPLv3).</oldsource>
-        <translation>Boris byder dig velkommen! Han er her for at underholde dig gennem alle årets årstider. Han er lidt af en baryler, så hold godt øje med ham!
-
-Funktioner:
-- Du kan smide Boris rundt på skrivebordet ved at venstre-klikke. Men pas på! Hvis du smider ham for meget, får han blå mærker.
-- Højreklik på Boris frembringer en menu hvor du kan vælge hvad han skal lave. Hver aktivitet sættes i kø, hvorefter de afvikles i den rækkefølge de er tilføjet.
-- Højreklik tray ikonet for at quitte, forårsage et jordskælv, teleportere eller vise dette vindue.
-
-Helbreds beskrivelse:
-- &apos;Zz&apos; ikonet viser Boris&apos; energi niveau. Bed ham tage en lur for at gøre ham frisk igen.
-- &apos;Kniv og gaffel&apos; ikonet viser hvor sulten Boris er. Bed ham om at spise for at fjerne hans sult.
-- &apos;Toilet&apos; ikonet er en indikator for Boris&apos; behov for et toilet besøg. Bed ham besøge det lille hus for lette trykket.
-- &apos;Tale boble&apos; ikonet viser Boris&apos; behov for socialt samvær. Flyt musen henover ham for at intereagere med ham. Boris vil også socialisere med andre Boris kloner når han møder dem.
-- &apos;Smiley&apos; ikonet indikerer om Boris har det sjovt. Hvis han er ked af det, så bed ham lave noget der gør ham glad.
-- Hvis Boris er blevet beskidt, så bed ham tage et bad.
-
-Hvis dine venner / kollegaer er misundelige og vil have deres egen Boris, så bed dem besøge http://www.muldjord.com/boris. Her kan de hente deres helt egen version af Boris kvit og frit. Du kan også hente den fulde kildekode derinde. Koden er GPLv3.</translation>
+        <translation>&lt;strong&gt;Boris byder dig velkommen!&lt;/strong&gt;&lt;br/&gt;Han er her for at underholde dig gennem alle årets årstider. Han er lidt af en baryler, så hold godt øje med ham!&lt;br/&gt;&lt;br/&gt;&lt;strong&gt;Funktioner:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;Du kan smide Boris rundt på skrivebordet ved at venstre-klikke. Men pas på! Hvis du smider ham for meget, får han blå mærker (eller det der er værre).&lt;/li&gt;&lt;li&gt;Højreklik på Boris frembringer en menu hvor du kan vælge hvad han skal lave. Hver aktivitet sættes i kø, hvorefter de afvikles i den rækkefølge de er tilføjet.&lt;/li&gt;&lt;li&gt;Højreklik tray ikonet for at quitte, forårsage et jordskælv, teleportere eller vise dette vindue.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Helbreds beskrivelse:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;&apos;Zz&apos; ikonet viser Boris&apos; energi niveau. Bed ham tage en lur for at gøre ham frisk igen.&lt;/li&gt;&lt;li&gt;&apos;Kniv og gaffel&apos; ikonet viser hvor sulten Boris er. Bed ham om at spise for at fjerne hans sult.&lt;/li&gt;&lt;li&gt;&apos;Toilet&apos; ikonet er en indikator for Boris&apos; behov for et toilet besøg. Bed ham besøge det lille hus for lette trykket.&lt;/li&gt;&lt;li&gt;&apos;Tale boble&apos; ikonet viser Boris&apos; behov for socialt samvær. Flyt musen henover ham for at intereagere med ham. Boris vil også socialisere med andre Boris kloner når han møder dem.&lt;/li&gt;&lt;li&gt;&apos;Smiley&apos; ikonet indikerer om Boris har det sjovt. Hvis han er ked af det, så bed ham lave noget der gør ham glad.&lt;/li&gt;&lt;li&gt;Hvis Boris er blevet beskidt, så bed ham tage et bad.&lt;/li&gt;&lt;/ul&gt;&lt;br/&gt;Hvis dine venner / kollegaer er misundelige og vil have deres egen Boris, så bed dem besøge http://www.muldjord.com/boris. Her kan de hente deres helt egen version af Boris kvit og frit. Du kan også hente den fulde kildekode derinde. Koden er GPLv3.</translation>
     </message>
     <message>
         <location filename="about.cpp" line="68"/>
-        <source>Programming: Lars Muldjord
-Graphics: Lars Muldjord
-Sound: Lars Muldjord
+        <source>&lt;strong&gt;Programming:&lt;/strong&gt; Lars Muldjord&lt;br/&gt;&lt;strong&gt;Graphics:&lt;/strong&gt; Lars Muldjord&lt;br/&gt;&lt;strong&gt;Sound:&lt;/strong&gt; Lars Muldjord&lt;br/&gt;&lt;br/&gt;Boris was programmed using the Qt framework (http://www.qt.io) and C++.&lt;br/&gt;&lt;br/&gt;Bug reports, suggestions and / or comments can be emailed to me at: muldjordlars@gmail.com.&lt;br/&gt;&lt;br/&gt;If your friends / colleagues would like to get their own Boris, tell them to visit:&lt;br/&gt;&lt;br/&gt;http://www.muldjord.com/boris&lt;br/&gt;&lt;br/&gt;It&apos;s FREE and OPEN SOURCE (GPLv3), no strings attached (check the source code if in doubt), just download away. You can also download the full source code in there if you like.&lt;br/&gt;&lt;br/&gt;Copyright 2017 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the &apos;License&apos; tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.</source>
+        <oldsource>&lt;strong&gt;Programming:&lt;/strong&gt; Lars Muldjord&lt;br/&gt;&lt;strong&gt;Graphics:&lt;/strong&gt; Lars Muldjord&lt;br/&gt;&lt;strong&gt;Sound:&lt;/strong&gt; Lars Muldjord&lt;br/&gt;&lt;br/&gt;Boris was programmed using the Qt framework (http://www.qt.io) and C++.&lt;br/&gt;&lt;br/&gt;Bug reports, suggestions and / or comments can be emailed to me at: muldjordlars@gmail.com.&lt;br/&gt;&lt;br/&gt;If your friends / colleagues would like to get their own Boris, tell them to visit:
 
-Boris was programmed using the Qt framework (http://www.qt.io) and C++.
-
-Bug reports, suggestions and / or comments can be emailed to me at:
-muldjordlars@gmail.com.
-
-If your friends / colleagues would like to get their own Boris, tell them to visit:
-
-http://www.muldjord.com/boris
-
-It&apos;s FREE and OPEN SOURCE (GPLv3), so there&apos;s absolutely no strings attached, just download away. You can also download the full source code in there if you like.
-
-Copyright 2016 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the &apos;License&apos; tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.</source>
-        <oldsource>Programming: Lars Muldjord
-Graphics: Lars Muldjord
-
-Boris was programmed using the Qt framework (http://www.qt.io) and C++.
-
-Bug reports, suggestions and / or comments can be emailed to me at:
-muldjordlars@gmail.com.
-
-If your friends / colleagues would like to get their own Boris, tell them to visit:
-
-http://www.muldjord.com/boris
-
-It&apos;s FREE and OPEN SOURCE (GPLv3), so there&apos;s absolutely no strings attached, just download away. You can also download the full source code in there if you like.
-
-Copyright 2016 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the &apos;License&apos; tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.</oldsource>
-        <translation>Programmering: Lars Muldjord
-Grafik: Lars Muldjord
-Lyd: Lars Muldjord
-
-Boris er programmeret i Qt frameworket (http://www.qt.io) og C++.
-
-Fejl rapportering og forslag kan mailes til mig på:
-muldjordlars@gmail.com
-
-Hvis dine venner eller kollegaer vil have deres egen Boris, så bed dem besøge:
-http://www.muldjord.com/boris
-
-Boris er gratis og open source (GPLv3). Kildekoden kan ligeledes hentes fra hjemmesiden.
-
-Copyright 2016 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the &apos;License&apos; tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.</translation>
+http://www.muldjord.com/boris&lt;br/&gt;&lt;br/&gt;It&apos;s FREE and OPEN SOURCE (GPLv3), no strings attached (check the source code if in doubt), just download away. You can also download the full source code in there if you like.&lt;br/&gt;&lt;br/&gt;Copyright 2017 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the &apos;License&apos; tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.</oldsource>
+        <translation>&lt;strong&gt;Programmering:&lt;/strong&gt; Lars Muldjord&lt;br/&gt;&lt;strong&gt;Grafik:&lt;/strong&gt; Lars Muldjord&lt;br/&gt;&lt;strong&gt;Lyd:&lt;/strong&gt; Lars Muldjord&lt;br/&gt;&lt;br/&gt;Boris er programmeret i Qt frameworket (http://www.qt.io) og C++.&lt;br/&gt;&lt;br/&gt;Fejl rapportering og forslag kan mailes på: muldjordlars@gmail.com&lt;br/&gt;&lt;br/&gt;Hvis dine venner eller kollegaer vil have deres egen Boris, så bed dem besøge:&lt;br/&gt;&lt;br/&gt;http://www.muldjord.com/boris&lt;br/&gt;&lt;br/&gt;Boris er gratis og open source (GPLv3). Kildekoden kan ligeledes hentes fra hjemmesiden.&lt;br/&gt;&lt;br/&gt;Copyright 2017 Lars Muldjord. Dette software er frigivet under GNU General Public License. Husk at læse licensen i &apos;licens&apos; tabben, eller besøg http://www.gnu.org/licenses/gpl-3.0.html.</translation>
     </message>
     <message>
         <location filename="about.cpp" line="106"/>
@@ -254,38 +183,38 @@ Copyright 2016 Lars Muldjord. This software is distributed under the terms of th
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.cpp" line="175"/>
+        <location filename="mainwindow.cpp" line="178"/>
         <source>&amp;Config / about...</source>
         <translation>&amp;Konfigurér / om...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="179"/>
+        <location filename="mainwindow.cpp" line="182"/>
         <source>&amp;Earthquake!!!</source>
         <oldsource>&amp;Earthquake</oldsource>
         <translation>&amp;Jordskælv!!!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="180"/>
+        <location filename="mainwindow.cpp" line="183"/>
         <source>&amp;Beam me up, Scotty!</source>
         <translation>&amp;Beam me up, Scotty!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="182"/>
+        <location filename="mainwindow.cpp" line="185"/>
         <source>Updating weather...</source>
         <translation>Opdaterer vejr...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="281"/>
+        <location filename="mainwindow.cpp" line="284"/>
         <source> degrees Celsius</source>
         <translation> grader Celsius</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="283"/>
+        <location filename="mainwindow.cpp" line="286"/>
         <source>Couldn&apos;t find city</source>
         <translation>Kunne ikke finde by</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="184"/>
+        <location filename="mainwindow.cpp" line="187"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>
