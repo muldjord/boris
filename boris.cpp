@@ -244,14 +244,6 @@ QString Boris::chooseFromCategory(QString category)
 
 void Boris::changeBehaviour(QString behav, int time)
 {
-  // Check if it is time to show the weather again
-  timeForWeather++;
-  if(timeForWeather >= 30) {
-    timeForWeather = 0;
-    showWeather();
-    return;
-  }
-
   // Check if Boris is dead... If so, don't do anything. :(
   if(behaviours->at(curBehav).file == "_drop_dead") {
     behavTimer.stop();
@@ -892,6 +884,13 @@ void Boris::processAi(QString &behav, int &time)
   // The reason is that they might change throughout the function, and thus makes sense to
   // make sure an AI decision hasn't already been made.
 
+  // Check if it is time to show the weather again
+  timeForWeather++;
+  if(timeForWeather >= 30) {
+    timeForWeather = 0;
+    showWeather(behav);
+  }
+
   if(behav == "" && time == 0 && qrand() % 10 >= 3 && behaviours->at(curBehav).file.contains("casual_walk_")) {
     time = qrand() % 1500 + 500;
     if(behaviours->at(curBehav).file == "casual_walk_up") {
@@ -1063,7 +1062,7 @@ void Boris::nextWeatherFrame()
   weatherTimer.start();
 }
 
-void Boris::showWeather()
+void Boris::showWeather(QString &behav)
 {
   for(int a = 0; a < weathers->length(); ++a) {
     if(weathers->at(a).file == weather->icon) {
@@ -1081,17 +1080,17 @@ void Boris::showWeather()
   }
   if(!falling && !grabbed) {
     if((weather->icon == "01d" || weather->icon == "02d") && weather->temp > 15.0) {
-      changeBehaviour("sunglasses");
+      behavQueue.append("sunglasses");
     } else if(weather->icon == "09d" || weather->icon == "09n" || weather->icon == "10d" || weather->icon == "10n") {
-      changeBehaviour("_umbrella");
+      behavQueue.append("_umbrella");
     } else if(weather->icon == "11d" || weather->icon == "11n") {
-      changeBehaviour("_lightning");
+      behav = "_lightning";
     } else if(weather->icon == "13d" || weather->icon == "13n") {
-      changeBehaviour("_freezing");
+      behavQueue.append("_freezing");
     } else if(weather->icon == "01n" || weather->icon == "02n") {
-      changeBehaviour("_energy"); // Yawn for weathers that have a moon
+      behavQueue.append("_energy"); // Yawn for weathers that have a moon
     } else if(weather->icon == "04d" || weather->icon == "04n") {
-      changeBehaviour("_fun"); // Depressed from clouds
+      behavQueue.append("_fun"); // Depressed from clouds
     }
   }
 }
