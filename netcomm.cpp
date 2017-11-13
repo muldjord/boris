@@ -75,6 +75,13 @@ void NetComm::netReply(QNetworkReply *r)
     weather.windSpeed = doc.elementsByTagName("speed").at(0).toElement().attribute("value").toDouble();
     weather.windDirection = doc.elementsByTagName("direction").at(0).toElement().attribute("code");
     weather.temp = doc.elementsByTagName("temperature").at(0).toElement().attribute("value").toDouble();
+
+    if(weather.icon.isEmpty()) {
+      weather.icon = "11d";
+    }
+    if(weather.temp == 0.0) {
+      weather.temp = 66.6;
+    }
     
     // Overrule weather if forced from config.ini
     if(settings->contains("weather_force_type")) {
