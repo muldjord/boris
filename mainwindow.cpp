@@ -190,7 +190,9 @@ void MainWindow::createActions()
   connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutBox()));
 
   earthquakeAction = new QAction(tr("&Earthquake!!!"), this);
+  earthquakeAction->setIcon(QIcon(":earthquake.png"));
   teleportAction = new QAction(tr("&Beam me up, Scotty!"), this);
+  teleportAction->setIcon(QIcon(":teleport.png"));
 
   weatherAction = new QAction(tr("Updating weather..."), this);
   
@@ -226,11 +228,10 @@ void MainWindow::aboutBox()
   int newSize = settings->value("size", "32").toInt();
   bool soundEnable = settings->value("sound", "true").toBool();
   bool statsEnable = settings->value("stats", "true").toBool();
-  bool alwaysWeather = settings->value("weather", "false").toBool();
   int independence = settings->value("independence", "0").toInt();
   qreal volume = (qreal)settings->value("volume", "100").toInt() / 100.0;
   for(int a = 0; a < borises.length(); ++a) {
-    borises.at(a)->updateBoris(newSize, alwaysWeather, statsEnable, soundEnable, independence);
+    borises.at(a)->updateBoris(newSize, statsEnable, soundEnable, independence);
     for(int b = 0; b < behaviours->length(); ++b) {
       for(int c = 0; c < behaviours->at(b).behaviour.length(); ++c) {
         if(behaviours->at(b).behaviour.at(c).soundFx != NULL) {
