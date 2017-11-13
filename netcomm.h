@@ -28,11 +28,11 @@
 #define _NETCOMM_H
 
 #include "chatline.h"
+#include "weather.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QTimer>
-#include <QUrl>
 
 class NetComm : public QNetworkAccessManager
 {
@@ -40,8 +40,7 @@ class NetComm : public QNetworkAccessManager
 public:
   NetComm();
   ~NetComm();
-  QString getIcon();
-  double getTemp();
+  Weather getWeather();
   QList<ChatLine> getFeedLines();
 
 public slots:
@@ -56,8 +55,7 @@ private slots:
   
 private:
   QTimer netTimer;
-  QString weatherIcon;
-  double weatherTemp;
+  Weather weather;
   QList<ChatLine> chatLines;
   QNetworkRequest weatherRequest;
   QNetworkRequest feedRequest;

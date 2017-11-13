@@ -41,12 +41,11 @@ extern QSettings *settings;
 
 NetComm::NetComm()
 {
-  connect(this, SIGNAL(finished(QNetworkReply*)),
-          this, SLOT(netReply(QNetworkReply*)));
+  connect(this, &NetComm::finished, this, &NetComm::netReply);
 
   netTimer.setInterval(3600000);
   netTimer.setSingleShot(true);
-  connect(&netTimer, SIGNAL(timeout()), this, SLOT(updateAll()));
+  connect(&netTimer, &QTimer::timeout, this, &NetComm::updateAll);
 
   QTimer::singleShot(0, this, SLOT(updateAll()));
 }
@@ -72,23 +71,29 @@ void NetComm::netReply(QNetworkReply *r)
   if(r->request() == weatherRequest) {
     qInfo("Parsing weather:\n%s\n", doc.toString().toStdString().c_str());
 
-    weatherIcon = doc.elementsByTagName("weather").at(0).toElement().attribute("icon");
-    weatherTemp = doc.elementsByTagName("temperature").at(0).toElement().attribute("value").toDouble();
-    if(weatherIcon == "") {
-      weatherIcon = "11d";
-    }
+    weather.icon = doc.elementsByTagName("weather").at(0).toElement().attribute("icon");
+    weather.windSpeed = doc.elementsByTagName("speed").at(0).toElement().attribute("value").toDouble();
+    weather.windDirection = doc.elementsByTagName("direction").at(0).toElement().attribute("code");
+    weather.temp = doc.elementsByTagName("temperature").at(0).toElement().attribute("value").toDouble();
     
     // Overrule weather if forced from config.ini
     if(settings->contains("weather_force_type")) {
-      weatherIcon = settings->value("weather_force_type", "11d").toString();
+      weather.icon = settings->value("weather_force_type", "11d").toString();
     }
     if(settings->contains("weather_force_temp")) {
-      weatherTemp = settings->value("weather_force_temp", "20.0").toDouble();
+      weather.temp = settings->value("weather_force_temp", "20.0").toDouble();
+    }
+    if(settings->contains("weather_force_wind_speed")) {
+      weather.windSpeed = settings->value("weather_force_wind_speed", "0.0").toDouble();
+    }
+    if(settings->contains("weather_force_wind_direction")) {
+      weather.windDirection = settings->value("weather_force_wind_direction", "E").toDouble();
     }
     
     //qDebug("%s\n", rawData.data());
-    qInfo("Icon: %s\n", weatherIcon.toStdString().c_str());
-    qInfo("Temp: %f\n", weatherTemp);
+    qInfo("Icon: %s\n", weather.icon.toStdString().c_str());
+    qInfo("Temp: %f\n", weather.temp);
+    qInfo("Wind: %fm/s from %s\n", weather.windSpeed, weather.windDirection.toStdString().c_str());
     emit weatherUpdated();
   } 
   if(r->request() == feedRequest) {
@@ -109,14 +114,9 @@ void NetComm::netReply(QNetworkReply *r)
   r->deleteLater();
 }
 
-double NetComm::getTemp()
+Weather NetComm::getWeather()
 {
-  return weatherTemp;
-}
-
-QString NetComm::getIcon()
-{
-  return weatherIcon;
+  return weather;
 }
 
 QList<ChatLine> NetComm::getFeedLines()
