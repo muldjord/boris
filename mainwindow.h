@@ -30,6 +30,7 @@
 #include "boris.h"
 #include "behaviour.h"
 #include "netcomm.h"
+#include "weather.h"
 
 #include <QWidget>
 #include <QSystemTrayIcon>
@@ -72,12 +73,11 @@ private:
   QList<Behaviour> *behaviours;
   QList<Behaviour> *weathers;
   QList<ChatLine> *chatLines;
+  Weather *weather;
   int clones;
   void addBoris(int clones);
   void removeBoris(int clones);
   QTimer collisTimer;
-  QString weatherIcon;
-  double weatherTemp;
   void loadChatter();
   
 };

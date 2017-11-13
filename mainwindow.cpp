@@ -109,6 +109,7 @@ MainWindow::MainWindow()
   
   behaviours = new QList<Behaviour>;
   weathers = new QList<Behaviour>;
+  weather = new Weather;
   chatLines = new QList<ChatLine>;
   
   if(Loader::loadBehaviours(settings->value("behavs_path", "data/behavs").toString(), behaviours)) {
@@ -144,6 +145,15 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow()
 {
   delete trayIcon;
+  // Stop all sounds before exiting, to avoid Pulseaudio crash on Linux
+  for(int a = 0; a < behaviours->length(); ++a) {
+    for(int b = 0; b < behaviours->at(a).behaviour.length(); ++b) {
+      if(behaviours->at(a).behaviour.at(b).soundFx != NULL &&
+         behaviours->at(a).behaviour.at(b).soundFx->isPlaying()) {
+        behaviours->at(a).behaviour.at(b).soundFx->stop();
+      }
+    }
+  }
   delete behaviours;
   delete weathers;
   delete chatLines;
@@ -152,7 +162,7 @@ MainWindow::~MainWindow()
 void MainWindow::addBoris(int clones)
 {
   for(int a = 0; a < clones; ++a) {
-    borises.append(new Boris(behaviours, weathers, chatLines, this));
+    borises.append(new Boris(behaviours, weathers, weather, chatLines, this));
     connect(earthquakeAction, SIGNAL(triggered()), borises.last(), SLOT(earthquake()));
     connect(teleportAction, SIGNAL(triggered()), borises.last(), SLOT(teleport()));
     connect(weatherAction, SIGNAL(triggered()), borises.last(), SLOT(showWeather()));
@@ -276,16 +286,13 @@ void MainWindow::killAll()
 
 void MainWindow::updateWeather()
 {
-  double temp = netComm->getTemp();
-  for(int a = 0; a < borises.length(); ++a) {
-    borises.at(a)->setWeatherType(netComm->getIcon(), temp);
-  }
-  if(temp != 66.6) {
-    weatherAction->setText(QString::number(temp) + tr(" degrees Celsius"));
+  *weather = netComm->getWeather();
+  if(weather->temp != 66.6) {
+    weatherAction->setText(QString::number(weather->temp) + tr(" degrees Celsius"));
   } else {
     weatherAction->setText(tr("Couldn't find city"));
   }
-  weatherAction->setIcon(QIcon(":" + netComm->getIcon() + ".png"));
+  weatherAction->setIcon(QIcon(":" + weather->icon + ".png"));
 }
 
 
