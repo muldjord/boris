@@ -27,10 +27,12 @@ Copyright 2017 Lars Muldjord. This program is distributed under the terms of the
 
 #### Version 1.9.5 (unreleased):
 * Added RSS feed support
-* Refactored a bunch of data type code. Still shitty, but better than before.
 * Added wind support. Boris will now be blown around the desktop in strong winds.
+* Refactored a bunch of data type code. Still shitty, but better than before.
 * Fixed a nasty sound bug that made Pulseaudio crash when exiting Boris under Linux.
 * Fixed looping animation bug when showing weather.
+* Code updated with Qt5 style signal/slots.
+* Added icons for 'teleport' and 'earthquake' in tray menu.
 
 #### Version 1.9.4 (07th November 2016):
 * Added complain behaviour, and added sound to all chatter behaviours.
