@@ -41,13 +41,14 @@
 
 extern QSettings *settings;
 
-Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers,
+Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *weather,
              QList<ChatLine> *chatLines, QWidget *parent) : QGraphicsView(parent)
 {
   this->behaviours = behaviours;
   this->weathers = weathers;
   this->chatLines = chatLines;
-
+  this->weather = weather;
+  
   vVel = 0.0;
   hVel = 0.0;
   mouseVVel = 0.0;
@@ -409,13 +410,27 @@ void Boris::moveBoris(int dX, int dY)
   if(dX == 666) { // If dX == 666 we are meant to move Boris randomly
     dX = qrand() % maxX - this->pos().x();
   } else {
-    // Multiply delta by the factor or Boris' current size
+    // Adjust delta from wind speed
+    if(weather->windDirection.indexOf("W") != -1) {
+      dX -= (int)(weather->windSpeed / 10.0);
+    }
+    if(weather->windDirection.indexOf("E") != -1) {
+      dX += (int)(weather->windSpeed / 10.0);
+    }
+    // Multiply delta by the factor of Boris' current size
     dX *= ceil((double)borisSize / 32.0);
   }
   if(dY == 666) { // If dX == 666 we are meant to move Boris randomly
     dY = qrand() % maxY - this->pos().y();
   } else {
-    // Multiply delta by the factor or Boris' current size
+    // Adjust delta from wind speed
+    if(weather->windDirection.indexOf("N") != -1) {
+      dY -= (int)(weather->windSpeed / 10.0);
+    }
+    if(weather->windDirection.indexOf("S") != -1) {
+      dY += (int)(weather->windSpeed / 10.0);
+    }
+    // Multiply delta by the factor of Boris' current size
     dY *= ceil((double)borisSize / 32.0);
   }
 
@@ -1037,20 +1052,6 @@ void Boris::updateBoris(int newSize, bool alwaysWeather, bool statsEnable, bool 
   showStats = statsEnable;
 }
 
-void Boris::setWeatherType(QString type, double temp)
-{
-  curTemp = temp;
-  for(int a = 0; a < weathers->length(); ++a) {
-    if(weathers->at(a).file == type) {
-      curWeather = a;
-      break;
-    }
-  }
-  curWeatherFrame = 0;
-  weatherTimer.setInterval(0);
-  weatherTimer.start();
-}
-
 void Boris::nextWeatherFrame()
 {
   weatherSprite->setPixmap(weathers->at(curWeather).behaviour.at(curWeatherFrame).sprite);
@@ -1064,28 +1065,32 @@ void Boris::nextWeatherFrame()
 
 void Boris::showWeather()
 {
+  for(int a = 0; a < weathers->length(); ++a) {
+    if(weathers->at(a).file == weather->icon) {
+      curWeather = a;
+      break;
+    }
+  }
   curWeatherFrame = 0;
   weatherTimer.setInterval(0);
   weatherTimer.start();
-
-  QString type = weathers->at(curWeather).file;
 
   if(!settings->value("weather", "false").toBool()) {
     weatherSprite->show();
     QTimer::singleShot(30000, this, SLOT(hideWeather()));
   }
   if(!falling && !grabbed) {
-    if((type == "01d" || type == "02d") && curTemp > 15.0) {
+    if((weather->icon == "01d" || weather->icon == "02d") && weather->temp > 15.0) {
       changeBehaviour("sunglasses");
-    } else if(type == "09d" || type == "09n" || type == "10d" || type == "10n") {
+    } else if(weather->icon == "09d" || weather->icon == "09n" || weather->icon == "10d" || weather->icon == "10n") {
       changeBehaviour("_umbrella");
-    } else if(type == "11d" || type == "11n") {
+    } else if(weather->icon == "11d" || weather->icon == "11n") {
       changeBehaviour("_lightning");
-    } else if(type == "13d" || type == "13n") {
+    } else if(weather->icon == "13d" || weather->icon == "13n") {
       changeBehaviour("_freezing");
-    } else if(type == "01n" || type == "02n") {
+    } else if(weather->icon == "01n" || weather->icon == "02n") {
       changeBehaviour("_energy"); // Yawn for weathers that have a moon
-    } else if(type == "04d" || type == "04n") {
+    } else if(weather->icon == "04d" || weather->icon == "04n") {
       changeBehaviour("_fun"); // Depressed from clouds
     }
   }

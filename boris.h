@@ -31,6 +31,7 @@
 #include "stats.h"
 #include "chatter.h"
 #include "chatline.h"
+#include "weather.h"
 
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
@@ -47,20 +48,20 @@ class Boris : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers,
+  Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *weather,
         QList<ChatLine> *chatLines, QWidget *parent);
   ~Boris();
   QTimer behavTimer;
   QList<Behaviour> *behaviours;
   QList<Behaviour> *weathers;
   QList<ChatLine> *chatLines;
+  Weather *weather;
   void updateBoris(int newSize, bool alwaysWeather, bool statsEnable, bool soundEnable, int newIndependence);
   int borisSize;
   void collide(Boris *b);
   Boris *boris;
   int getHygiene();
   void moveBoris(int dX, int dY);
-  void setWeatherType(QString type, double temp);
                                 
 public slots:
   void earthquake();
@@ -137,7 +138,6 @@ private:
   int timeFactor;
   int curWeather;
   int curWeatherFrame;
-  double curTemp;
   int timeForWeather;
   
 };
