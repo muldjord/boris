@@ -66,7 +66,7 @@ public:
 public slots:
   void earthquake();
   void teleport();
-  void showWeather();
+  void showWeather(QString &behav);
   void changeBehaviour(QString behav = "", int time = 0);
   
 protected:
