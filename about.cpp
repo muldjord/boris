@@ -126,11 +126,6 @@ About::About(QWidget *parent) : QDialog(parent)
     clonesLineEdit->setText(settings->value("clones").toString());
   }
 
-  alwaysWeather = new QCheckBox(tr("Show weather all the time"));
-  if(settings->value("weather") == "true") {
-    alwaysWeather->setCheckState(Qt::Checked);
-  }
-
   QLabel *weatherLabel = new QLabel(tr("Show weather for city (mouse over for help):"));
   weatherLineEdit = new QLineEdit();
   weatherLineEdit->setToolTip(tr("Try typing in a nearby city. If it doesn't work, go to openweathermap.org and search for a city until you find one that exists.<br/>Then type that in exactly as it is shown on their website."));
@@ -201,7 +196,6 @@ About::About(QWidget *parent) : QDialog(parent)
   configLayout->addWidget(enableSound);
   configLayout->addWidget(volumeLabel);
   configLayout->addWidget(volumeSlider);
-  configLayout->addWidget(alwaysWeather);
   configLayout->addWidget(weatherLabel);
   configLayout->addWidget(weatherLineEdit);
   configLayout->addWidget(weatherKeyLabel);
@@ -249,12 +243,6 @@ void About::saveAll()
     clonesLineEdit->setText("100");
   }
   settings->setValue("clones", clonesLineEdit->text());
-
-  if(alwaysWeather->isChecked()) {
-    settings->setValue("weather", "true");
-  } else {
-    settings->setValue("weather", "false");
-  }
 
   settings->setValue("weather_city", weatherLineEdit->text());
 

@@ -125,34 +125,33 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
     }
   }
 
-  connect(&behavTimer, SIGNAL(timeout()), this, SLOT(changeBehaviour()));
+  connect(&behavTimer, &QTimer::timeout, this, &Boris::nextBehaviour);
   behavTimer.setInterval((qrand() % 8000) + 1000);
   behavTimer.start();
 
   physicsTimer.setInterval(30);
-  connect(&physicsTimer, SIGNAL(timeout()), this, SLOT(handlePhysics()));
+  connect(&physicsTimer, &QTimer::timeout, this, &Boris::handlePhysics);
   physicsTimer.start();
 
   animTimer.setInterval(0);
   animTimer.setSingleShot(true);
-  connect(&animTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
+  connect(&animTimer, &QTimer::timeout, this, &Boris::nextFrame);
   animTimer.start();
 
   weatherTimer.setSingleShot(true);
-  connect(&weatherTimer, SIGNAL(timeout()), this, SLOT(nextWeatherFrame()));
+  connect(&weatherTimer, &QTimer::timeout, this, &Boris::nextWeatherFrame);
   
   statTimer.setInterval(60000 / timeFactor);
-  connect(&statTimer, SIGNAL(timeout()), this, SLOT(statProgress()));
+  connect(&statTimer, &QTimer::timeout, this, &Boris::statProgress);
   statTimer.start();
 
   statQueueTimer.setInterval(200 / timeFactor);
-  connect(&statQueueTimer, SIGNAL(timeout()), this, SLOT(statQueueProgress()));
+  connect(&statQueueTimer, &QTimer::timeout, this, &Boris::statQueueProgress);
   statQueueTimer.start();
   
   setCursor(QCursor(QPixmap(":mouse_hover.png")));
 
   updateBoris(settings->value("size", 32).toInt(),
-              settings->value("weather", "false").toBool(),
               settings->value("stats", "false").toBool(),
               settings->value("sound", "true").toBool(),
               settings->value("independence", "60").toInt());
@@ -240,6 +239,11 @@ QString Boris::chooseFromCategory(QString category)
     }
   }
   return behaviours->at(chosen).file;
+}
+
+void Boris::nextBehaviour()
+{
+  changeBehaviour();
 }
 
 void Boris::changeBehaviour(QString behav, int time)
@@ -1015,7 +1019,7 @@ void Boris::processAi(QString &behav, int &time)
   }
 }
 
-void Boris::updateBoris(int newSize, bool alwaysWeather, bool statsEnable, bool soundEnable, int newIndependence)
+void Boris::updateBoris(int newSize, bool statsEnable, bool soundEnable, int newIndependence)
 {
   // Reset Boris pointer
   boris = NULL;
@@ -1034,13 +1038,6 @@ void Boris::updateBoris(int newSize, bool alwaysWeather, bool statsEnable, bool 
 
   // Enable or disable sound
   soundEnabled = soundEnable;
-
-  // Show or hide stats
-  if(alwaysWeather) {
-    weatherSprite->show();
-  } else {
-    weatherSprite->hide();
-  }
 
   // Show or hide stats
   if(statsEnable) {
@@ -1080,10 +1077,9 @@ void Boris::showWeather(QString &behav)
   weatherTimer.setInterval(0);
   weatherTimer.start();
 
-  if(!settings->value("weather", "false").toBool()) {
-    weatherSprite->show();
-    QTimer::singleShot(30000, this, SLOT(hideWeather()));
-  }
+  weatherSprite->show();
+  QTimer::singleShot(30000, this, SLOT(hideWeather()));
+  
   if(!falling && !grabbed) {
     if((weather->icon == "01d" || weather->icon == "02d") && weather->temp > 15.0) {
       behavQueue.append("sunglasses");

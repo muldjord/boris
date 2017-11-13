@@ -56,18 +56,19 @@ public:
   QList<Behaviour> *weathers;
   QList<ChatLine> *chatLines;
   Weather *weather;
-  void updateBoris(int newSize, bool alwaysWeather, bool statsEnable, bool soundEnable, int newIndependence);
+  void updateBoris(int newSize, bool statsEnable, bool soundEnable, int newIndependence);
   int borisSize;
   void collide(Boris *b);
   Boris *boris;
   int getHygiene();
   void moveBoris(int dX, int dY);
+  void changeBehaviour(QString behav = "", int time = 0);
                                 
 public slots:
   void earthquake();
   void teleport();
   void triggerWeather();
-  void changeBehaviour(QString behav = "", int time = 0);
+  void nextBehaviour();
   
 protected:
   void mouseMoveEvent(QMouseEvent* event);
