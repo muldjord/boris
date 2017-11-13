@@ -11,11 +11,12 @@ Boris was programmed using the Qt framework (http://www.qt.io) and C++.
 Bug reports, suggestions and / or comments can be emailed to me at:
 muldjordlars@gmail.com.
 
-Copyright 2016 Lars Muldjord. This program is distributed under the terms of the GNU General Public License. Be sure to read the license in COPYING.TXT or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.
+Copyright 2017 Lars Muldjord. This program is distributed under the terms of the GNU General Public License. Be sure to read the license in COPYING.TXT or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.
 
 ## Building from source (Linux)
 ### Requirements
 * Qt 5 dev libs including multimedia package
+* For Ubuntu and other Debian derivatives running "sudo apt-get install qt5-default qtmultimedia5-dev" should be enough. If not, please let me know.
 
 ### Build commands
 * qmake
@@ -23,6 +24,13 @@ Copyright 2016 Lars Muldjord. This program is distributed under the terms of the
 * ./Boris
 
 ## Release notes
+
+#### Version 1.9.5 (unreleased):
+* Added RSS feed support
+* Refactored a bunch of data type code. Still shitty, but better than before.
+* Added wind support. Boris will now be blown around the desktop in strong winds.
+* Fixed a nasty sound bug that made Pulseaudio crash when exiting Boris under Linux.
+* Fixed looping animation bug when showing weather.
 
 #### Version 1.9.4 (07th November 2016):
 * Added complain behaviour, and added sound to all chatter behaviours.
