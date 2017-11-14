@@ -28,6 +28,7 @@ Copyright 2017 Lars Muldjord. This program is distributed under the terms of the
 #### Version 1.9.5 (unreleased):
 * Added RSS feed support
 * Added wind support. Boris will now be blown around the desktop in strong winds.
+* Made it so Boris much more often just relaxes or walks around.
 * Refactored a bunch of data type code. Still shitty, but better than before.
 * Fixed a nasty sound bug that made Pulseaudio crash when exiting Boris under Linux.
 * Fixed looping animation bug when showing weather.
