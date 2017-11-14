@@ -925,7 +925,7 @@ void Boris::processAi(QString &behav, int &time)
 
   // Check if it is time to show the weather again
   timeForWeather++;
-  if(timeForWeather >= 30 || timeForWeather == 666) {
+  if(timeForWeather >= 50 || timeForWeather == 666) {
     timeForWeather = 0;
     showWeather(behav);
   }
