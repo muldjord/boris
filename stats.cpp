@@ -188,10 +188,18 @@ void Stats::updateStats()
 {
   QColor energyColor((5.1 * (energy - 100) * -1 > 255 ? 255 : round(5.1 * (energy - 100) * -1)),
                      (5.1 * energy > 255 ? 255 : round(5.1 * energy)), 0);
+  QColor hungerColor((5.1 * (hunger - 100) * -1 > 255 ? 255 : round(5.1 * (hunger - 100) * -1)),
+                     (5.1 * hunger > 255 ? 255 : round(5.1 * hunger)), 0);
+  /*
   QColor hungerColor((5.1 * hunger > 255 ? 255 : round(5.1 * hunger)),
                      (5.1 * (hunger - 100) * -1 > 255 ? 255 : round(5.1 * (hunger - 100) * -1)), 0);
+  */
+  QColor bladderColor((5.1 * (bladder - 100) * -1 > 255 ? 255 : round(5.1 * (bladder - 100) * -1)),
+                     (5.1 * bladder > 255 ? 255 : round(5.1 * bladder)), 0);
+  /*
   QColor bladderColor((5.1 * bladder > 255 ? 255 : round(5.1 * bladder)),
                      (5.1 * (bladder - 100) * -1 > 255 ? 255 : round(5.1 * (bladder - 100) * -1)), 0);
+  */
   QColor socialColor((5.1 * (social - 100) * -1 > 255 ? 255 : round(5.1 * (social - 100) * -1)),
                      (5.1 * social > 255 ? 255 : round(5.1 * social)), 0);
   QColor funColor((5.1 * (fun - 100) * -1 > 255 ? 255 : round(5.1 * (fun - 100) * -1)),
