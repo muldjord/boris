@@ -25,7 +25,7 @@ Copyright 2017 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
-#### Version 1.9.5 (unreleased):
+#### Version 2.0.0 (unreleased):
 * Added RSS feed support
 * Added wind support. Boris will now be blown around the desktop in strong winds.
 * Made it so Boris much more often just relaxes or walks around.
