@@ -97,8 +97,8 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   // Set initial stats with some randomization
   int health = 100;
   int energy = 50 + qrand() % 25;
-  int hunger = (qrand() % 25) + 15;
-  int bladder = (qrand() % 25) + 15;
+  int hunger = 50 + qrand() % 25;
+  int bladder = 50 + qrand() % 25;
   int hygiene = 100;
   int social = 50 + qrand() % 25;
   int fun = 50 + qrand() % 25;
@@ -241,6 +241,24 @@ QString Boris::chooseFromCategory(QString category)
   return behaviours->at(chosen).file;
 }
 
+int Boris::chooseThatContains(QString value)
+{
+  QList<QString> b;
+  for(int i = 0; i < behaviours->length(); ++i) {
+    if(behaviours->at(i).file.contains(value)) {
+      b.append(behaviours->at(i).file);
+    }
+  }
+  int chosen = qrand() % b.length();
+  for(int i = 0; i < behaviours->length(); ++i) {
+    if(behaviours->at(i).file == b.at(chosen)) {
+      chosen = i;
+      break;
+    }
+  }
+  return chosen;
+}
+
 void Boris::nextBehaviour()
 {
   changeBehaviour();
@@ -282,10 +300,22 @@ void Boris::changeBehaviour(QString behav, int time)
   }
   
   // Pick random behaviour except sleep, weewee and patch_up
-  do {
-    curBehav = (qrand() % (behaviours->size() - staticBehavs)) + staticBehavs;
-  } while(behaviours->at(curBehav).file == "weewee" || behaviours->at(curBehav).file == "sleep" || behaviours->at(curBehav).file == "patch_up");
-  // If a specific behaviour is requested, use that instead of the random one
+  // Bias towards behavs that contain 'stand' or 'casual_walk' in the filename to make Boris
+  // less erratic.
+  if(qrand() % 10 >= 3) {
+    if(qrand() % 2) {
+      curBehav = chooseThatContains("stand");
+    } else {
+      curBehav = chooseThatContains("casual_walk");
+    }
+  } else {
+    do {
+      curBehav = (qrand() % (behaviours->size() - staticBehavs)) + staticBehavs;
+    } while(behaviours->at(curBehav).file == "weewee" ||
+            behaviours->at(curBehav).file == "sleep" ||
+            behaviours->at(curBehav).file == "patch_up");
+  }
+  // If a specific behaviour is requested, use that
   if(behav != "") {
     //behav = "_health"; // Use this to test behaviours
     for(int a = 0; a < behaviours->size(); ++a) {
@@ -294,7 +324,7 @@ void Boris::changeBehaviour(QString behav, int time)
       }
     }
   }
-
+  
   // Hide speech bubble in case Boris was grabbed or otherwise stopped in the middle of speaking
   chatter->hide();
   // Check for chatter
@@ -309,10 +339,14 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   if(time == 0) {
-    behavTimer.setInterval(((qrand() % 7000) + 5000) / timeFactor);
-  } else {
-    behavTimer.setInterval(time / timeFactor);
+    if(behaviours->at(curBehav).file.contains("casual_walk")) {
+      time = qrand() % 2000 + 500;
+    } else {
+      time = qrand() % 7000 + 5000;
+    }
   }
+  behavTimer.setInterval(time / timeFactor);
+
 #ifdef DEBUG
   qDebug("Changing to behaviour '%d' titled '%s' for %d ms\n",
          curBehav, behaviours->at(curBehav).file.toStdString().c_str(),
@@ -397,7 +431,7 @@ void Boris::nextFrame()
 void Boris::moveBoris(int dX, int dY)
 {
   sanityCheck();
-
+  
   int minX = 0;
   int maxX = QApplication::desktop()->width() - borisSize;
   int minY = 0 - (borisSize / 2);
@@ -455,6 +489,7 @@ void Boris::moveBoris(int dX, int dY)
       changeBehaviour();
     }
   }
+  //processVision();
 }
 
 void Boris::handleBehaviourChange(QAction* a) {
@@ -624,10 +659,10 @@ void Boris::teleport()
 void Boris::statProgress()
 {
   stats->deltaEnergy(- qrand() % 4);
-  stats->deltaHunger(qrand() % 4);
+  stats->deltaHunger(- qrand() % 4);
   stats->deltaSocial(- qrand() % 4);
   stats->deltaHygiene(- qrand() % 2);
-  stats->deltaFun(- qrand() % 20);
+  stats->deltaFun(- qrand() % 10);
   // Nothing needed for 'health' and 'bladder'
 }
 
@@ -659,7 +694,7 @@ void Boris::sanityCheck()
 
   // Check if Boris is dying or is already dead
   if(behaviours->at(curBehav).file != "_drop_dead") {
-    if(stats->getHealth() <= 2 || stats->getEnergy() + stats->getSocial() + stats->getFun() + ((stats->getHunger() - 100) *-1) < 50) {
+    if(stats->getHealth() <= 2 || stats->getEnergy() + stats->getSocial() + stats->getFun() + stats->getHunger() < 50) {
       qDebug("Boris has died... RIP!\n");
       statQueueTimer.stop();
       dirt->setOpacity(0.0);
@@ -689,19 +724,19 @@ void Boris::statQueueProgress()
   }
   if(hungerQueue > 0) {
     hungerQueue--;
-    stats->deltaHunger(1);
+    stats->deltaHunger(-1);
   }
   if(hungerQueue < 0) {
     hungerQueue++;
-    stats->deltaHunger(-1);
+    stats->deltaHunger(1);
   }
   if(bladderQueue > 0) {
     bladderQueue--;
-    stats->deltaBladder(1);
+    stats->deltaBladder(-1);
   }
   if(bladderQueue < 0) {
     bladderQueue += 2;
-    stats->deltaBladder(-2);
+    stats->deltaBladder(2);
   }
   if(socialQueue > 0) {
     socialQueue--;
@@ -728,7 +763,7 @@ void Boris::statQueueProgress()
     stats->deltaHygiene(-1);
   }
 
-  dirt->setOpacity(0.35 - ((qreal)stats->getHygiene()) * 0.01);
+  dirt->setOpacity(0.50 - ((qreal)stats->getHygiene()) * 0.01);
   bruises->setOpacity(0.75 - ((qreal)stats->getHealth()) * 0.01);
   stats->updateStats();
 }
@@ -895,8 +930,78 @@ void Boris::processAi(QString &behav, int &time)
     showWeather(behav);
   }
 
-  if(behav == "" && time == 0 && qrand() % 10 >= 3 && behaviours->at(curBehav).file.contains("casual_walk_")) {
-    time = qrand() % 1500 + 500;
+  // Stat check
+  if(behav == "" && time == 0) {
+    if(stats->getFun() <= 50) {
+      if(qrand() % (100 - stats->getFun()) > independence) {
+        stats->flashStat("fun");
+        behav = "_fun";
+      } else if(stats->getFun() <= 15) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Fun");
+        }
+      }
+    }
+    if(stats->getEnergy() <= 50) {
+      if(qrand() % (100 - stats->getEnergy()) > independence) {
+        stats->flashStat("energy");
+        behav = "_energy";
+      } else if(stats->getEnergy() <= 15) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Energy");
+        }
+      }
+    }
+    if(stats->getHunger() <= 50) {
+      if(qrand() % (100 - stats->getHunger()) > independence) {
+        stats->flashStat("hunger");
+        behav = "_hunger";
+      } else if(stats->getHunger() <= 15) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Hunger");
+        }
+      }
+    }
+    if(stats->getBladder() <= 50) {
+      if(qrand() % (100 - stats->getBladder()) > independence) {
+        stats->flashStat("bladder");
+        behav = "_bladder";
+      } else if(stats->getBladder() <= 15) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Bladder");
+        }
+      }
+    }
+    if(stats->getSocial() <= 50) {
+      if(qrand() % (100 - stats->getSocial()) > independence) {
+        stats->flashStat("social");
+        behav = "_social";
+      } else if(stats->getSocial() <= 15) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Social");
+        }
+      }
+    }
+    if(stats->getHygiene() <= 50) {
+      if(qrand() % (100 - stats->getHygiene()) > independence) {
+        stats->flashStat("none");
+        behav = "_hygiene";
+      } else if(stats->getHygiene() <= 15) {
+        if(qrand() % 100 < independence) {
+          behav = chooseFromCategory("Hygiene");
+        }
+      }
+    }
+    if(stats->getHealth() <= 50) {
+      if(qrand() % (150 - stats->getHealth()) > independence) {
+        stats->flashStat("none");
+        behav = "_health";
+      }
+    }
+  }
+
+  if(behav == "" && time == 0 && qrand() % 20 >= 3 && behaviours->at(curBehav).file.contains("casual_walk")) {
+    time = qrand() % 2000 + 500;
     if(behaviours->at(curBehav).file == "casual_walk_up") {
       if(qrand() % 2) {
         behav = "casual_walk_left_up";
@@ -944,76 +1049,6 @@ void Boris::processAi(QString &behav, int &time)
         behav = "casual_walk_left";
       } else {
         behav = "casual_walk_up";
-      }
-    }
-  }
-
-  // Stat check
-  if(behav == "" && time == 0) {
-    if(stats->getEnergy() <= 50) {
-      if(qrand() % (100 - stats->getEnergy()) > independence) {
-        stats->flashStat("energy");
-        behav = "_energy";
-      } else if(stats->getEnergy() <= 10) {
-        if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Energy");
-        }
-      }
-    }
-    if(stats->getHunger() >= 50) {
-      if(qrand() % stats->getHunger() > independence) {
-        stats->flashStat("hunger");
-        behav = "_hunger";
-      } else if(stats->getHunger() >= 90) {
-        if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Hunger");
-        }
-      }
-    }
-    if(stats->getBladder() >= 50) {
-      if(qrand() % stats->getBladder() > independence) {
-        stats->flashStat("bladder");
-        behav = "_bladder";
-      } else if(stats->getBladder() >= 90) {
-        if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Bladder");
-        }
-      }
-    }
-    if(stats->getSocial() <= 50) {
-      if(qrand() % (100 - stats->getSocial()) > independence) {
-        stats->flashStat("social");
-        behav = "_social";
-      } else if(stats->getSocial() <= 10) {
-        if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Social");
-        }
-      }
-    }
-    if(stats->getFun() <= 50) {
-      if(qrand() % (100 - stats->getFun()) > independence) {
-        stats->flashStat("fun");
-        behav = "_fun";
-      } else if(stats->getFun() <= 10) {
-        if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Fun");
-        }
-      }
-    }
-    if(stats->getHygiene() <= 50) {
-      if(qrand() % (100 - stats->getHygiene()) > independence) {
-        stats->flashStat("none");
-        behav = "_hygiene";
-      } else if(stats->getHygiene() <= 10) {
-        if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Hygiene");
-        }
-      }
-    }
-    if(stats->getHealth() <= 50) {
-      if(qrand() % (150 - stats->getHealth()) > independence) {
-        stats->flashStat("none");
-        behav = "_health";
       }
     }
   }

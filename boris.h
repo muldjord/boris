@@ -135,6 +135,7 @@ private:
   int funQueue;
   int hygieneQueue;
   QString chooseFromCategory(QString category);
+  int chooseThatContains(QString value);
   void processVision();
   void processAi(QString &behav, int &time);
   int timeFactor;
