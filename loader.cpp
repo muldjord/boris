@@ -201,9 +201,9 @@ void Loader::setClothesColor(QImage &image)
       image.setColor(9, QColor(0, 121, 221).rgb());
       image.setColor(10, QColor(0, 155, 255).rgb());
     } else if(QDate::currentDate().month() == 9 || QDate::currentDate().month() == 10 || QDate::currentDate().month() == 11) { // Autumn outfit
-      image.setColor(8, QColor(148, 81, 0).rgb());
-      image.setColor(9, QColor(176, 97, 0).rgb());
-      image.setColor(10, QColor(217, 119, 0).rgb());
+      image.setColor(8, QColor(105, 47, 0).rgb());
+      image.setColor(9, QColor(148, 67, 0).rgb());
+      image.setColor(10, QColor(203, 91, 0).rgb());
     }
   }
 }
