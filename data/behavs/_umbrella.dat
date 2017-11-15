@@ -1,6 +1,6 @@
 title=Umbrella
-energy=0
-fun=-20
-hygiene=-5
+fun=-25
+hygiene=5
+bladder=2
 #Frames
 0;5000;0;0;0;0;

@@ -1,8 +1,8 @@
 title=Spin the yoyo
 category=Fun
-energy=5
-fun=25
-social=-1
+energy=-1
+fun=10
+hunger=2
 oneShot
 #Frames
 0;75;0;0;0;0;

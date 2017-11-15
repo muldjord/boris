@@ -1,5 +1,5 @@
-energy=-2
-fun=-5
+energy=-5
+fun=-10
 #Frames
 0;75;0;0;0;0;data/sfx/falling.wav;
 1;75;0;0;0;0;

@@ -1,10 +1,8 @@
 title=Eat a sallad
 category=Hunger
-health=5
-energy=3
+energy=5
 hunger=-40
-bladder=20
-social=-1
+bladder=10
 hygiene=-4
 fun=-10
 #Frames

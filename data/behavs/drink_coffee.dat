@@ -1,8 +1,8 @@
 title=Drink coffee
 category=Energy
-energy=50
-hunger=10
-bladder=80
+energy=20
+hunger=15
+bladder=60
 social=-1
 hygiene=-4
 oneShot

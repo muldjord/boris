@@ -1,6 +1,6 @@
 energy=-5
-social=5
-fun=-2
+social=-5
+fun=-10
 #Frames
 0;50;0;-2;0;0;data/sfx/flee1.wav;
 1;50;0;-2;0;0;

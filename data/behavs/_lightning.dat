@@ -1,6 +1,8 @@
 title=Zap!
 health=-40
-fun=-20
+energy=-10
+fun=-40
+bladder=20
 oneShot
 #Frames
 0;30;0;0;0;0;data/sfx/lightning.wav;

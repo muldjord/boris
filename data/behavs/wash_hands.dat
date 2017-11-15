@@ -1,6 +1,7 @@
 title=Wash hands
 category=Hygiene
 hygiene=50
+fun=-3
 oneShot
 doNotDisturb
 #Frames

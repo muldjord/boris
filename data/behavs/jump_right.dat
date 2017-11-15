@@ -3,7 +3,6 @@ category=Movement
 energy=-1
 fun=1
 hunger=2
-social=-1
 oneShot
 #Frames
 0;75;0;0;0;0;

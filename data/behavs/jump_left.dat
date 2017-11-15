@@ -2,8 +2,7 @@ title=Jump to the left
 category=Movement
 energy=-2
 fun=1
-hunger=2
-social=-1
+hunger=1
 oneShot
 #Frames
 0;75;0;0;0;0;

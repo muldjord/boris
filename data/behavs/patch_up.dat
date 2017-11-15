@@ -1,6 +1,8 @@
 title=Patch up
 category=Health
 health=100
+fun=-5
+hygiene=-5
 oneShot
 #Frames
 0;75;0;0;0;0;data/sfx/bandage.wav;

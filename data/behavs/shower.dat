@@ -1,6 +1,8 @@
 title=Shower
 category=Hygiene
 hygiene=100
+social=-5
+fun=3
 oneShot
 doNotDisturb
 #Frames

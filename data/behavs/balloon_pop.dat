@@ -1,9 +1,10 @@
 title=Inflate a balloon
 category=Fun
-energy=-4
+energy=-5
 fun=20
-hunger=1
-social=-1
+hunger=5
+hygiene=-8
+health=-1
 oneShot
 #Frames
 0;75;0;0;0;0;

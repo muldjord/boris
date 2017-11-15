@@ -1,6 +1,7 @@
 title=Snicker
 fun=15
-social=12
+social=15
+bladder=2
 #Frames
 0;100;0;0;0;0;data/sfx/joking1.wav;
 1;100;0;0;0;0;

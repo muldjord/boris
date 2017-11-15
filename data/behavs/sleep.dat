@@ -1,8 +1,10 @@
 title=Take a nap
 category=Energy
+health=10
 energy=100
-bladder=10
-hygiene=-10
+bladder=30
+hunger=30
+hygiene=-20
 oneShot
 doNotDisturb
 #Frames
