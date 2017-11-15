@@ -17,13 +17,18 @@ sprite;time;deltax;deltay;hide;show;soundfx(optional);
 
 flags, one flag per line, available flags are:
        title=string: The title used by the behaviour when right-clicking Boris
+
        category=string: The stat category for this behaviour:
-                        (Energy, Hunger, Bladder, Social, Fun)
+                        (Energy, Hunger, Bladder, Hygiene, Social, Fun)
+
+       health=int: The amount of health this behaviour will increase or decrease stats
        energy=int: The amount of energy this behaviour will increase or decrease stats
        hunger=int: The amount of hunger this behaviour will increase or decrease stats
        bladder=int: The amount of bladder this behaviour will increase or decrease stats
        social=int: The amount of social this behaviour will increase or decrease stats
        fun=int: The amount of fun this behaviour will increase or decrease stats
+       hygiene=int: The amount of filth this behaviour will increase or decrease stats
+
        oneShot: This behaviour will be played from start to finish and then
                 switch to a new behaviour.
        doNotDisturb: If this exists, Boris will not be disturbed by the mouse while this
