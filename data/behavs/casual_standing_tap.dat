@@ -2,7 +2,6 @@ title=Stand, relax and tap your foot
 category=Energy
 energy=5
 social=-1
-hunger=1
 #Frames
 0;75;0;0;0;0;data/sfx/foot_tap.wav;
 1;75;0;0;0;0;

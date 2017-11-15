@@ -3,7 +3,6 @@ category=Energy
 energy=5
 fun=2
 social=-1
-hunger=1
 #Frames
 0;100;0;0;0;0;data/sfx/whistle.wav;
 1;100;0;0;0;0;

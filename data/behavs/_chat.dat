@@ -1,7 +1,6 @@
 title=Chat
 fun=5
 social=12
-hunger=2
 #Frames
 0;100;0;0;0;0;data/sfx/chat1.wav;
 1;100;0;0;0;0;
