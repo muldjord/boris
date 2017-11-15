@@ -658,11 +658,11 @@ void Boris::teleport()
 
 void Boris::statProgress()
 {
-  stats->deltaEnergy(- qrand() % 4);
+  stats->deltaEnergy(- qrand() % 2);
   stats->deltaHunger(- qrand() % 4);
-  stats->deltaSocial(- qrand() % 4);
+  stats->deltaSocial(- qrand() % 2);
   stats->deltaHygiene(- qrand() % 2);
-  stats->deltaFun(- qrand() % 10);
+  stats->deltaFun(- qrand() % 6);
   // Nothing needed for 'health' and 'bladder'
 }
 
