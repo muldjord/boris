@@ -442,10 +442,10 @@ void Boris::moveBoris(int dX, int dY)
   } else {
     // Adjust delta from wind speed
     if(weather->windDirection.indexOf("W") != -1) {
-      dX -= (int)(weather->windSpeed / 10.0);
+      dX -= (int)(weather->windSpeed / 20.0);
     }
     if(weather->windDirection.indexOf("E") != -1) {
-      dX += (int)(weather->windSpeed / 10.0);
+      dX += (int)(weather->windSpeed / 20.0);
     }
     // Multiply delta by the factor of Boris' current size
     dX *= ceil((double)borisSize / 32.0);
@@ -455,10 +455,10 @@ void Boris::moveBoris(int dX, int dY)
   } else {
     // Adjust delta from wind speed
     if(weather->windDirection.indexOf("N") != -1) {
-      dY -= (int)(weather->windSpeed / 10.0);
+      dY -= (int)(weather->windSpeed / 20.0);
     }
     if(weather->windDirection.indexOf("S") != -1) {
-      dY += (int)(weather->windSpeed / 10.0);
+      dY += (int)(weather->windSpeed / 20.0);
     }
     // Multiply delta by the factor of Boris' current size
     dY *= ceil((double)borisSize / 32.0);
