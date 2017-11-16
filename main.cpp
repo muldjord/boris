@@ -31,6 +31,8 @@
 #include <QSettings>
 #include <QDir>
 #include <QDateTime>
+#include <QFileInfo>
+#include <QHostInfo>
 
 #include "mainwindow.h"
 
@@ -76,7 +78,12 @@ int main(int argc, char *argv[])
 
   QDir::setCurrent(QApplication::applicationDirPath());
 
-  QSettings s("config.ini", QSettings::IniFormat);
+  QString iniFile = "config.ini";
+  if(QFileInfo::exists("config_" + QHostInfo::localHostName().toLower() + ".ini")) {
+    iniFile = "config_" + QHostInfo::localHostName().toLower() + ".ini";
+  }
+
+  QSettings s(iniFile, QSettings::IniFormat);
   settings = &s;
 
   MainWindow window;
