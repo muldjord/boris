@@ -31,6 +31,7 @@
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
+#include <QFile>
 #include <QTimer>
 
 class Stats : public QGraphicsView
@@ -56,6 +57,9 @@ public:
   void deltaHygiene(int value);
   void updateStats();
   
+private slots:
+  void logStats();
+
 private:
   bool flasherEnabled;
   QImage image;
@@ -74,6 +78,9 @@ private:
   int social;
   int fun;
   int hygiene;
+
+  QFile statLog;
+  QTimer statTimer;
   
 };
 

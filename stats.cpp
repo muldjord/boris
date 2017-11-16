@@ -66,10 +66,31 @@ Stats::Stats(int health, int energy, int hunger, int bladder, int social, int fu
   flashIcon->setVisible(false);
   
   flasherEnabled = false;
+
+  statLog.setFileName("stats.csv");
+  statLog.open(QIODevice::WriteOnly);
+  statLog.write("health;energy;hunger;bladder;hygiene;social;fun\n");
+  statTimer.setInterval(1000);
+  statTimer.setSingleShot(false);
+  connect(&statTimer, &QTimer::timeout, this, &Stats::logStats);
+  statTimer.start();
 }
 
 Stats::~Stats()
 {
+  statLog.close();
+}
+
+void Stats::logStats()
+{
+  qInfo("Logging stats\n");
+  statLog.write(QByteArray::number(health) + ";" +
+                QByteArray::number(energy) + ";" +
+                QByteArray::number(hunger) + ";" +
+                QByteArray::number(bladder) + ";" +
+                QByteArray::number(hygiene) + ";" +
+                QByteArray::number(social) + ";" +
+                QByteArray::number(fun) + "\n");
 }
 
 int Stats::getHealth()

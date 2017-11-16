@@ -658,11 +658,11 @@ void Boris::teleport()
 
 void Boris::statProgress()
 {
-  stats->deltaEnergy(- qrand() % 2);
+  stats->deltaEnergy(- qrand() % 1);
   stats->deltaHunger(- qrand() % 4);
-  stats->deltaSocial(- qrand() % 2);
+  stats->deltaSocial(- qrand() % 4);
   stats->deltaHygiene(- qrand() % 2);
-  stats->deltaFun(- qrand() % 6);
+  stats->deltaFun(- qrand() % 8);
   // Nothing needed for 'health' and 'bladder'
 }
 
@@ -964,8 +964,13 @@ void Boris::processAi(QString &behav, int &time)
     }
     if(stats->getBladder() <= 50) {
       if(qrand() % (100 - stats->getBladder()) > independence) {
-        stats->flashStat("bladder");
-        behav = "_bladder";
+        // Make Boris shit his pants if it's too late to get to the loo...
+        if(stats->getBladder() <= 0) {
+          behav = "_too_late";
+        } else {
+          stats->flashStat("bladder");
+          behav = "_bladder";
+        }
       } else if(stats->getBladder() <= 15) {
         if(qrand() % 100 < independence) {
           behav = chooseFromCategory("Bladder");
