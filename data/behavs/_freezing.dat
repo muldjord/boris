@@ -1,7 +1,7 @@
 title=Freezing
 health=-20
 energy=-10
-fun=-10
+fun=-15
 hygiene=5
 #Frames
 0;50;0;0;0;0;data/sfx/freeze.wav;
