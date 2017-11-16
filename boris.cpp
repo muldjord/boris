@@ -964,7 +964,7 @@ void Boris::processAi(QString &behav, int &time)
     }
     if(stats->getBladder() <= 50) {
       if(qrand() % (100 - stats->getBladder()) > independence) {
-        // Make Boris shit his pants if it's too late to get to the loo...
+        // Make Boris s*** his pants if it's too late to get to the loo...
         if(stats->getBladder() <= 0) {
           behav = "_too_late";
         } else {
