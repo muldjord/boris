@@ -792,50 +792,51 @@ void Boris::collide(Boris *b)
       approachAngle -= 360;
     }
     
+    int fleeThres = 22;
     if((approachAngle >= 0.0 && approachAngle < 22.5) || (approachAngle >= 337.5 && approachAngle < 360.0)) {
-      if(boris->getHygiene() >= 15) {
+      if(boris->getHygiene() >= fleeThres) {
         changeBehaviour("_casual_wave_right");
       } else {
         changeBehaviour("_flee_left", (qrand() % 2000) + 1500);
       }
     } else if(approachAngle >= 22.5 && approachAngle < 67.5) {
-      if(boris->getHygiene() >= 15) {
+      if(boris->getHygiene() >= fleeThres) {
         changeBehaviour("_casual_wave_right_up");
       } else {
         changeBehaviour("_flee_left_down", (qrand() % 2000) + 1500);
       }
     } else if(approachAngle >= 67.5 && approachAngle < 112.5) {
-      if(boris->getHygiene() >= 15) {
+      if(boris->getHygiene() >= fleeThres) {
         changeBehaviour("_casual_wave_up");
       } else {
         changeBehaviour("_flee_down", (qrand() % 2000) + 1500);
       }
     } else if(approachAngle >= 112.5 && approachAngle < 157.5) {
-      if(boris->getHygiene() >= 15) {
+      if(boris->getHygiene() >= fleeThres) {
         changeBehaviour("_casual_wave_left_up");
       } else {
         changeBehaviour("_flee_right_down", (qrand() % 2000) + 1500);
       }
     } else if(approachAngle >= 157.5 && approachAngle < 202.5) {
-      if(boris->getHygiene() >= 15) {
+      if(boris->getHygiene() >= fleeThres) {
         changeBehaviour("_casual_wave_left");
       } else {
         changeBehaviour("_flee_right", (qrand() % 2000) + 1500);
       }
     } else if(approachAngle >= 202.5 && approachAngle < 247.5) {
-      if(boris->getHygiene() >= 15) {
+      if(boris->getHygiene() >= fleeThres) {
         changeBehaviour("_casual_wave_left_down");
       } else {
         changeBehaviour("_flee_right_up", (qrand() % 2000) + 1500);
       }
     } else if(approachAngle >= 247.5 && approachAngle < 292.5) {
-      if(boris->getHygiene() >= 15) {
+      if(boris->getHygiene() >= fleeThres) {
         changeBehaviour("_casual_wave_down");
       } else {
         changeBehaviour("_flee_up", (qrand() % 2000) + 1500);
       }
     } else if(approachAngle >= 292.5 && approachAngle < 337.5) {
-      if(boris->getHygiene() >= 15) {
+      if(boris->getHygiene() >= fleeThres) {
         changeBehaviour("_casual_wave_right_down");
       } else {
         changeBehaviour("_flee_left_up", (qrand() % 2000) + 1500);
