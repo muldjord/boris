@@ -467,7 +467,7 @@ void Boris::moveBoris(int dX, int dY)
   // Always move Boris, even outside borders. sanitycheck() will rectify later.
   move(this->pos().x() + dX, this->pos().y() + dY);
   stats->move(this->pos().x() + (borisSize / 2) - (stats->width() / 2),
-              this->pos().y() - stats->height());
+              this->pos().y() - stats->height() + (borisSize / 3));
   if(stats->pos().y() < 0) {
     stats->move(this->pos().x() + (borisSize / 2) - (stats->width() / 2),
                 this->pos().y() + borisSize + borisSize / 3);
