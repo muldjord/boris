@@ -763,7 +763,7 @@ void Boris::statQueueProgress()
     stats->deltaHygiene(-1);
   }
 
-  dirt->setOpacity(0.50 - ((qreal)stats->getHygiene()) * 0.01);
+  dirt->setOpacity(0.75 - ((qreal)stats->getHygiene()) * 0.01);
   bruises->setOpacity(0.75 - ((qreal)stats->getHealth()) * 0.01);
   stats->updateStats();
 }
