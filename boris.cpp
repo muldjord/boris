@@ -763,7 +763,7 @@ void Boris::statQueueProgress()
     stats->deltaHygiene(-1);
   }
 
-  dirt->setOpacity(0.75 - ((qreal)stats->getHygiene()) * 0.01);
+  dirt->setOpacity(0.50 - ((qreal)stats->getHygiene()) * 0.01);
   bruises->setOpacity(0.75 - ((qreal)stats->getHealth()) * 0.01);
   stats->updateStats();
 }
@@ -1127,7 +1127,7 @@ void Boris::showWeather(QString &behav)
     } else if(weather->icon == "02d" && weather->temp >= 15) {
       behavQueue.append("sunglasses");
     } else if(weather->icon == "09d" || weather->icon == "09n" ||
-             weather->icon == "10d" || weather->icon == "10n") {
+              weather->icon == "10d" || weather->icon == "10n") {
       behavQueue.append("_umbrella");
     } else if(weather->icon == "11d" || weather->icon == "11n") {
       behav = "_lightning";
