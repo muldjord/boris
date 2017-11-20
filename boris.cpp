@@ -1122,9 +1122,12 @@ void Boris::showWeather(QString &behav)
   QTimer::singleShot(30000, this, SLOT(hideWeather()));
   
   if(!falling && !grabbed) {
-    if((weather->icon == "01d" || weather->icon == "02d") && weather->temp > 15.0) {
+    if(weather->icon == "01d") {
       behavQueue.append("sunglasses");
-    } else if(weather->icon == "09d" || weather->icon == "09n" || weather->icon == "10d" || weather->icon == "10n") {
+    } else if(weather->icon == "02d" && weather->temp >= 15) {
+      behavQueue.append("sunglasses");
+    } else if(weather->icon == "09d" || weather->icon == "09n" ||
+             weather->icon == "10d" || weather->icon == "10n") {
       behavQueue.append("_umbrella");
     } else if(weather->icon == "11d" || weather->icon == "11n") {
       behav = "_lightning";
