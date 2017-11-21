@@ -129,8 +129,8 @@ MainWindow::MainWindow()
   trayIcon->show();
 
   netComm = new NetComm();
-  connect(netComm, SIGNAL(weatherUpdated()), this, SLOT(updateWeather()));
-  connect(netComm, SIGNAL(feedUpdated()), this, SLOT(updateChatLines()));
+  connect(netComm, &NetComm::weatherUpdated, this, &MainWindow::updateWeather);
+  connect(netComm, &NetComm::feedUpdated, this, &MainWindow::updateChatLines);
 
   clones = settings->value("clones", "4").toInt();
   qDebug("Spawning %d clone(s)\n", clones);
@@ -138,7 +138,7 @@ MainWindow::MainWindow()
 
   collisTimer.setInterval(1000);
   collisTimer.setSingleShot(true);
-  connect(&collisTimer, SIGNAL(timeout()), this, SLOT(checkCollisions()));
+  connect(&collisTimer, &QTimer::timeout, this, &MainWindow::checkCollisions);
   collisTimer.start();
 }
 
@@ -163,9 +163,9 @@ void MainWindow::addBoris(int clones)
 {
   for(int a = 0; a < clones; ++a) {
     borises.append(new Boris(behaviours, weathers, weather, chatLines, this));
-    connect(earthquakeAction, SIGNAL(triggered()), borises.last(), SLOT(earthquake()));
-    connect(teleportAction, SIGNAL(triggered()), borises.last(), SLOT(teleport()));
-    connect(weatherAction, SIGNAL(triggered()), borises.last(), SLOT(triggerWeather()));
+    connect(earthquakeAction, &QAction::triggered, borises.last(), &Boris::earthquake);
+    connect(teleportAction, &QAction::triggered, borises.last(), &Boris::teleport);
+    connect(weatherAction, &QAction::triggered, borises.last(), &Boris::triggerWeather);
     borises.last()->show();
     borises.last()->earthquake();
   }
@@ -187,7 +187,7 @@ void MainWindow::createActions()
 {
   aboutAction = new QAction(tr("&Config / about..."), this);
   aboutAction->setIcon(QIcon(":icon_about.png"));
-  connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutBox()));
+  connect(aboutAction, &QAction::triggered, this, &MainWindow::aboutBox);
 
   earthquakeAction = new QAction(tr("&Earthquake!!!"), this);
   earthquakeAction->setIcon(QIcon(":earthquake.png"));
@@ -198,7 +198,7 @@ void MainWindow::createActions()
   
   quitAction = new QAction(tr("&Quit"), this);
   quitAction->setIcon(QIcon(":icon_quit.png"));
-  connect(quitAction, SIGNAL(triggered()), this, SLOT(killAll()));
+  connect(quitAction, &QAction::triggered, this, &MainWindow::killAll);
 }
 
 void MainWindow::createTrayIcon()

@@ -108,7 +108,7 @@ About::About(QWidget *parent) : QDialog(parent)
   tabWidget->addTab(licenseScroll, tr("License"));
   
   QPushButton *okButton = new QPushButton(tr("Close and save"));
-  connect(okButton, SIGNAL(clicked()), this, SLOT(saveAll()));
+  connect(okButton, &QPushButton::clicked, this, &About::saveAll);
 
   QLabel *sizeLabel = new QLabel(tr("Boris size in pixels (32-256 or 0 for random):"));
   sizeLineEdit = new QLineEdit();

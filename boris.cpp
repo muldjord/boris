@@ -184,14 +184,14 @@ void Boris::createBehavMenu()
   funMenu->setIcon(QIcon(":fun.png"));
   QMenu *movementMenu = new QMenu(tr("Movement"), bMenu);
   movementMenu->setIcon(QIcon(":movement.png"));
-  connect(healthMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
-  connect(energyMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
-  connect(hungerMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
-  connect(bladderMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
-  connect(hygieneMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
-  connect(socialMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
-  connect(funMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
-  connect(movementMenu, SIGNAL(triggered(QAction*)), this, SLOT(handleBehaviourChange(QAction*)));
+  connect(healthMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
+  connect(energyMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
+  connect(hungerMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
+  connect(bladderMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
+  connect(hygieneMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
+  connect(socialMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
+  connect(funMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
+  connect(movementMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   for(int i = 0; i < behaviours->length(); ++i) {
     if(behaviours->at(i).file.left(1) != "_") {
       if(behaviours->at(i).category == "Movement") {
