@@ -1,8 +1,7 @@
 health=-15
 energy=-5
-fun=-10
-social=-5
-hygiende=-10
+fun=-5
+hygiene=-5
 oneShot
 doNotDisturb
 #Frames
