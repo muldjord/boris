@@ -29,6 +29,10 @@ Copyright 2017 Lars Muldjord. This program is distributed under the terms of the
 * Added RSS feed support
 * Added wind support. Boris will now be blown around the desktop in strong winds.
 * Made it so Boris much more often just relaxes or walks around.
+* Boris now has a chance of, erm, having an accident if 'bladder' reaches 0.
+* Boris can now go to the toilet.
+* Boris now sometimes spins the yoyo.
+* Boris can now wash his hands.
 * Refactored a bunch of data type code. Still shitty, but better than before.
 * Fixed a nasty sound bug that made Pulseaudio crash when exiting Boris under Linux.
 * Fixed looping animation bug when showing weather.
