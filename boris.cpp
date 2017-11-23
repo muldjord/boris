@@ -299,6 +299,13 @@ void Boris::changeBehaviour(QString behav, int time)
     processAi(behav, time);
   }
   
+  // Reset current frame for next behaviour,
+  // but only if previous and next behaviour is/was not a walk behaviour
+  // (To avoid animation stuttering when changing direction)
+  if(!behav.contains("casual_walk") && !behaviours->at(curBehav).file.contains("casual_walk")) {
+    curFrame = 0;
+  }
+  
   // Pick random behaviour except sleep, weewee and patch_up
   // Bias towards behavs that contain 'stand' or 'casual_walk' in the filename to make Boris
   // less erratic.
@@ -315,6 +322,7 @@ void Boris::changeBehaviour(QString behav, int time)
             behaviours->at(curBehav).file == "sleep" ||
             behaviours->at(curBehav).file == "patch_up");
   }
+
   // If a specific behaviour is requested, use that
   if(behav != "") {
     //behav = "_health"; // Use this to test behaviours
@@ -362,7 +370,7 @@ void Boris::changeBehaviour(QString behav, int time)
   funQueue = behaviours->at(curBehav).fun;
   hygieneQueue = behaviours->at(curBehav).hygiene;
   
-  curFrame = 0;
+  //curFrame = 0;
   if(behaviours->at(curBehav).oneShot) {
 #ifdef DEBUG
     qDebug("Behaviour is oneShot, ignoring timeout\n");
