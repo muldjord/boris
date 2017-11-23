@@ -79,7 +79,7 @@ QPair<QString, int> Chatter::initChatter(int x, int y, int borisSize)
   } else {
     chatterLabel->setText("I have nothing to say...");
   }
-  int duration = 2000 + (chatterLabel->text().length() * 110);
+  int duration = 2000 + (chatterLabel->text().length() * 120);
 
   if(settings->value("chatter", "true").toBool() == true) {
     show();
