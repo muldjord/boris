@@ -113,15 +113,15 @@ MainWindow::MainWindow()
   chatLines = new QList<ChatLine>;
   
   if(Loader::loadBehaviours(settings->value("behavs_path", "data/behavs").toString(), behaviours)) {
-    qDebug("Behaviours loaded ok... :)\n");
+    qInfo("Behaviours loaded ok... :)\n");
   } else {
-    qDebug("Error when loading some behaviours, please check your png and dat files\n");
+    qInfo("Error when loading some behaviours, please check your png and dat files\n");
   }
   
   if(Loader::loadBehaviours(settings->value("weather_path", "data/weather").toString(), weathers)) {
-    qDebug("Weather types loaded ok... :)\n");
+    qInfo("Weather types loaded ok... :)\n");
   } else {
-    qDebug("Error when loading some weather types, please check your png and dat files\n");
+    qInfo("Error when loading some weather types, please check your png and dat files\n");
   }
 
   createActions();
@@ -133,7 +133,7 @@ MainWindow::MainWindow()
   connect(netComm, &NetComm::feedUpdated, this, &MainWindow::updateChatLines);
 
   clones = settings->value("clones", "4").toInt();
-  qDebug("Spawning %d clone(s)\n", clones);
+  qInfo("Spawning %d clone(s)\n", clones);
   addBoris(settings->value("clones", "4").toInt());
 
   collisTimer.setInterval(1000);

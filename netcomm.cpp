@@ -97,7 +97,7 @@ void NetComm::netReply(QNetworkReply *r)
       weather.windDirection = settings->value("weather_force_wind_direction", "E").toDouble();
     }
     
-    //qDebug("%s\n", rawData.data());
+    //qInfo("%s\n", rawData.data());
     qInfo("Icon: %s\n", weather.icon.toStdString().c_str());
     qInfo("Temp: %f\n", weather.temp);
     qInfo("Wind: %fm/s from %s\n", weather.windSpeed, weather.windDirection.toStdString().c_str());

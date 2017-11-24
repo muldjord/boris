@@ -299,13 +299,6 @@ void Boris::changeBehaviour(QString behav, int time)
     processAi(behav, time);
   }
   
-  // Reset current frame for next behaviour,
-  // but only if previous and next behaviour is/was not a walk behaviour
-  // (To avoid animation stuttering when changing direction)
-  if(!behav.contains("casual_walk") && !behaviours->at(curBehav).file.contains("casual_walk")) {
-    curFrame = 0;
-  }
-  
   // Pick random behaviour except sleep, weewee and patch_up
   // Bias towards behavs that contain 'stand' or 'casual_walk' in the filename to make Boris
   // less erratic.
@@ -356,7 +349,7 @@ void Boris::changeBehaviour(QString behav, int time)
   behavTimer.setInterval(time / timeFactor);
 
 #ifdef DEBUG
-  qDebug("Changing to behaviour '%d' titled '%s' for %d ms\n",
+  qInfo("Changing to behaviour '%d' titled '%s' for %d ms\n",
          curBehav, behaviours->at(curBehav).file.toStdString().c_str(),
          behavTimer.interval());
 #endif
@@ -370,10 +363,10 @@ void Boris::changeBehaviour(QString behav, int time)
   funQueue = behaviours->at(curBehav).fun;
   hygieneQueue = behaviours->at(curBehav).hygiene;
   
-  //curFrame = 0;
+  curFrame = 0;
   if(behaviours->at(curBehav).oneShot) {
 #ifdef DEBUG
-    qDebug("Behaviour is oneShot, ignoring timeout\n");
+    qInfo("Behaviour is oneShot, ignoring timeout\n");
 #endif
     behavTimer.stop();
   } else {
@@ -420,14 +413,14 @@ void Boris::nextFrame()
 
   if(behaviours->at(curBehav).behaviour.at(curFrame).show) {
 #ifdef DEBUG
-    qDebug("Telling Boris to show himself...\n");
+    qInfo("Telling Boris to show himself...\n");
 #endif
     emit showBoris();
   }
 
   if(behaviours->at(curBehav).behaviour.at(curFrame).hide) {
 #ifdef DEBUG
-    qDebug("Telling Boris to hide...\n");
+    qInfo("Telling Boris to hide...\n");
 #endif
     emit hideBoris();
   }
@@ -595,7 +588,7 @@ void Boris::handlePhysics()
   mouseHVel = (QCursor::pos().x() - oldCursor.x()) / 4.0;
   mouseVVel = (QCursor::pos().y() - oldCursor.y()) / 4.0;
 #ifdef DEBUG
-  qDebug("mouseHVel is %f\n", mouseHVel);("mouseVVel is %f\n", mouseVVel);
+  qInfo("mouseHVel is %f\n", mouseHVel);("mouseVVel is %f\n", mouseVVel);
 #endif
   oldCursor = QCursor::pos();
 
@@ -703,7 +696,7 @@ void Boris::sanityCheck()
   // Check if Boris is dying or is already dead
   if(behaviours->at(curBehav).file != "_drop_dead") {
     if(stats->getHealth() <= 2 || stats->getEnergy() + stats->getSocial() + stats->getFun() + stats->getHunger() < 35) {
-      qDebug("Boris has died... RIP!\n");
+      qInfo("Boris has died... RIP!\n");
       statQueueTimer.stop();
       dirt->setOpacity(0.0);
       bruises->setOpacity(0.0);

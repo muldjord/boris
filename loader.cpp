@@ -78,7 +78,7 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours)
       b.file = info.completeBaseName();
       b.title = info.completeBaseName();
       b.category = "";
-      qDebug("Adding behaviour: %s\n", b.title.toStdString().c_str());
+      qInfo("Adding behaviour: %s\n", b.title.toStdString().c_str());
 
       QTextStream in(&dat);
       QString line = in.readLine();
@@ -119,7 +119,7 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours)
         line = in.readLine();
       }
 #ifdef DEBUG
-      qDebug("Health: %d\nEnergy: %d\nHunger: %d\nBladder: %d\nSocial: %d\nFun: %d\nHygiene: %d\n", b.health, b.energy, b.hunger, b.bladder, b.social, b.fun, b.hygiene);
+      qInfo("Health: %d\nEnergy: %d\nHunger: %d\nBladder: %d\nSocial: %d\nFun: %d\nHygiene: %d\n", b.health, b.energy, b.hunger, b.bladder, b.social, b.fun, b.hygiene);
 #endif
       line = in.readLine();
       qreal volume = (qreal)settings->value("volume", "100").toInt() / 100.0;
@@ -145,7 +145,7 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours)
           f.soundFx->setSource(QUrl::fromLocalFile(snippets.at(6)));
           f.soundFx->setVolume(volume);
 #ifdef DEBUG
-          qDebug("Added sound FX '%s'\n", snippets.at(6).toStdString().c_str());
+          qInfo("Added sound FX '%s'\n", snippets.at(6).toStdString().c_str());
 #endif
         } else {
           f.soundFx = NULL;
@@ -158,7 +158,7 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours)
       dat.close();
       behaviours->append(b);
     } else {
-      qDebug("Error in behaviour: %s\n", info.fileName().toStdString().c_str());
+      qInfo("Error in behaviour: %s\n", info.fileName().toStdString().c_str());
       return false;
     }
   }
