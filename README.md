@@ -27,6 +27,7 @@ Copyright 2017 Lars Muldjord. This program is distributed under the terms of the
 
 #### Version 2.0.1 (unreleased):
 * Added 'casual_standing_looking' behaviour
+* Added 'casual_standing_hatpull' behaviour
 * Updated directional walk behaviours
 * Fixed somewhat glitchy stat flasher
 * Balanced a lot of behaviours and main stat deltas
