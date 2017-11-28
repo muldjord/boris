@@ -275,7 +275,7 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   // Stop stat flashing
-  stats->flashStat("none");
+  //stats->flashStat("none");
 
   // Check if already colliding with other Boris
   if(boris != NULL) {
@@ -659,11 +659,12 @@ void Boris::teleport()
 
 void Boris::statProgress()
 {
-  stats->deltaEnergy(- qrand() % 1);
+  // Energy disabled since it is mainly controlled by walking behavs.
+  //stats->deltaEnergy(- qrand() % 1);
   stats->deltaHunger(- qrand() % 4);
   stats->deltaSocial(- qrand() % 4);
   stats->deltaHygiene(- qrand() % 2);
-  stats->deltaFun(- qrand() % 8);
+  stats->deltaFun(- qrand() % 6);
   // Nothing needed for 'health' and 'bladder'
 }
 
@@ -991,7 +992,6 @@ void Boris::processAi(QString &behav, int &time)
     }
     if(stats->getHygiene() <= 50) {
       if(qrand() % (100 - stats->getHygiene()) > independence) {
-        stats->flashStat("none");
         behav = "_hygiene";
       } else if(stats->getHygiene() <= 15) {
         if(qrand() % 100 < independence) {
@@ -1001,7 +1001,6 @@ void Boris::processAi(QString &behav, int &time)
     }
     if(stats->getHealth() <= 50) {
       if(qrand() % (150 - stats->getHealth()) > independence) {
-        stats->flashStat("none");
         behav = "_health";
       }
     }
