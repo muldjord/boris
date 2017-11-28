@@ -1,6 +1,6 @@
 title=Stand, relax and whistle
 fun=1
-social=-2
+social=-1
 #Frames
 0;100;0;0;0;0;data/sfx/whistle.wav;
 1;100;0;0;0;0;
