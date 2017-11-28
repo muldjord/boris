@@ -25,7 +25,13 @@ Copyright 2017 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
-#### Version 2.0.0 (unreleased):
+#### Version 2.0.1 (unreleased):
+* Added 'casual_standing_looking' behaviour
+* Updated directional walk behaviours
+* Fixed somewhat glitchy stat flasher
+* Balanced a lot of behaviours and main stat deltas
+
+#### Version 2.0.0 (24th November 2017):
 * Added RSS feed support
 * Added wind support. Boris will now be blown around the desktop in strong winds.
 * Made it so Boris much more often just relaxes or walks around.
