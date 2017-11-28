@@ -67,11 +67,11 @@ Stats::Stats(int health, int energy, int hunger, int bladder, int social, int fu
   
   flashes = 0;
   
-  if(settings->value("stats_enabled", "false").toBool()) {
+  if(settings->value("stat_logging", "false").toBool()) {
     statLog.setFileName("stats_" + QUuid::createUuid().toString().replace("{", "").replace("}", "") + ".csv");
     if(statLog.open(QIODevice::WriteOnly)) {
       statLog.write("health;energy;hunger;bladder;hygiene;social;fun\n");
-      statTimer.setInterval(5000);
+      statTimer.setInterval(30000);
       statTimer.setSingleShot(false);
       connect(&statTimer, &QTimer::timeout, this, &Stats::logStats);
       statTimer.start();
