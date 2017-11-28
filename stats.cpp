@@ -30,7 +30,7 @@
 
 #include <stdio.h>
 #include <QSettings>
-#include <QPainter>
+#include <QUuid>
 
 //#define DEBUG
 
@@ -65,24 +65,27 @@ Stats::Stats(int health, int energy, int hunger, int bladder, int social, int fu
   flashIcon = scene->addPixmap(QPixmap(":flash_icon.png"));
   flashIcon->setVisible(false);
   
-  flasherEnabled = false;
-
-  /*
-  statLog.setFileName("stats.csv");
-  statLog.open(QIODevice::WriteOnly);
-  statLog.write("health;energy;hunger;bladder;hygiene;social;fun\n");
-  statTimer.setInterval(1000);
-  statTimer.setSingleShot(false);
-  connect(&statTimer, &QTimer::timeout, this, &Stats::logStats);
-  statTimer.start();
-  */
+  flashes = 0;
+  
+  if(settings->value("stats_enabled", "false").toBool()) {
+    statLog.setFileName("stats_" + QUuid::createUuid().toString().replace("{", "").replace("}", "") + ".csv");
+    if(statLog.open(QIODevice::WriteOnly)) {
+      statLog.write("health;energy;hunger;bladder;hygiene;social;fun\n");
+      statTimer.setInterval(5000);
+      statTimer.setSingleShot(false);
+      connect(&statTimer, &QTimer::timeout, this, &Stats::logStats);
+      statTimer.start();
+    }
+  }
 }
 
 Stats::~Stats()
 {
-  //statLog.close();
+  if(statLog.isOpen()) {
+    statLog.close();
+  }
 }
-/*
+
 void Stats::logStats()
 {
   qInfo("Logging stats\n");
@@ -94,7 +97,7 @@ void Stats::logStats()
                 QByteArray::number(social) + ";" +
                 QByteArray::number(fun) + "\n");
 }
-*/
+
 int Stats::getHealth()
 {
   return health;
@@ -245,29 +248,27 @@ void Stats::updateStats()
   socialBar->setRect(17, 55, 0.6 * social, 1);
   funBar->setRect(17, 71, 0.6 * fun, 1);
 
-  if(flasherEnabled) {
+  if(flashes > 0) {
     flashIcon->setVisible(!flashIcon->isVisible());
+    flashes--;
+  } else {
+    flashIcon->setVisible(false);
   }
 }
 
 void Stats::flashStat(QString stat)
 {
-  if(stat == "none") {
-    flasherEnabled = false;
-    flashIcon->setVisible(false);
-  } else {
-    if(stat == "energy") {
-      flashIcon->setPos(7, 0);
-    } else if(stat == "hunger") {
-      flashIcon->setPos(7, 16);
-    } else if(stat == "bladder") {
-      flashIcon->setPos(7, 32);
-    } else if(stat == "social") {
-      flashIcon->setPos(7, 48);
-    } else if(stat == "fun") {
-      flashIcon->setPos(7, 64);
-    }
-    flasherEnabled = true;
-    flashIcon->setVisible(true);
+  if(stat == "energy") {
+    flashIcon->setPos(7, 0);
+  } else if(stat == "hunger") {
+    flashIcon->setPos(7, 16);
+  } else if(stat == "bladder") {
+    flashIcon->setPos(7, 32);
+  } else if(stat == "social") {
+    flashIcon->setPos(7, 48);
+  } else if(stat == "fun") {
+    flashIcon->setPos(7, 64);
   }
+  flashes = 15;
+  flashIcon->setVisible(true);
 }
