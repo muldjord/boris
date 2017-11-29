@@ -54,6 +54,8 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   mouseVVel = 0.0;
   mouseHVel = 0.0;
 
+  isAlive = true;
+  
   int borisX = settings->value("boris_x", QApplication::desktop()->width() / 2).toInt();
   int borisY = settings->value("boris_y", QApplication::desktop()->height() / 2).toInt();
   if(borisY > QApplication::desktop()->height() - height()) {
@@ -266,16 +268,10 @@ void Boris::nextBehaviour()
 
 void Boris::changeBehaviour(QString behav, int time)
 {
-  // Check if Boris is dead... If so, don't do anything. :(
-  if(behaviours->at(curBehav).file == "_drop_dead") {
-    behavTimer.stop();
-    statTimer.stop();
-    // RIP
+  // If Boris has died, just return
+  if(!isAlive) {
     return;
   }
-
-  // Stop stat flashing
-  //stats->flashStat("none");
 
   // Check if already colliding with other Boris
   if(boris != NULL) {
@@ -380,7 +376,7 @@ void Boris::nextFrame()
   sanityCheck();
   
   if(curFrame >= behaviours->at(curBehav).behaviour.length()) {
-    if(behaviours->at(curBehav).file == "_drop_dead") {
+    if(!isAlive) {
       return;
     }
     curFrame = 0;
@@ -695,15 +691,23 @@ void Boris::sanityCheck()
   }
 
   // Check if Boris is dying or is already dead
-  if(behaviours->at(curBehav).file != "_drop_dead") {
-    if(stats->getHealth() <= 2 || stats->getEnergy() + stats->getSocial() + stats->getFun() + stats->getHunger() < 35) {
-      qInfo("Boris has died... RIP!\n");
-      statQueueTimer.stop();
-      dirt->setOpacity(0.0);
-      bruises->setOpacity(0.0);
-      changeBehaviour("_drop_dead");
+  if(isAlive) {
+    if(stats->getHealth() <= 2 || (stats->getEnergy() + stats->getSocial() + stats->getFun() + stats->getHunger()) < 35) {
+      killBoris();
     }
   }
+}
+
+void Boris::killBoris()
+{
+  qInfo("Boris has died... RIP!\n");
+  statQueueTimer.stop();
+  dirt->setOpacity(0.0);
+  bruises->setOpacity(0.0);
+  changeBehaviour("_drop_dead");
+  behavTimer.stop();
+  statTimer.stop();
+  isAlive = false;
 }
 
 void Boris::statQueueProgress()

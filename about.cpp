@@ -189,7 +189,6 @@ About::About(QWidget *parent) : QDialog(parent)
   configLayout->addWidget(sizeLineEdit);
   configLayout->addWidget(clonesLabel);
   configLayout->addWidget(clonesLineEdit);
-  configLayout->addWidget(enableChatter);
   configLayout->addWidget(showStats);
   configLayout->addWidget(independenceLabel);
   configLayout->addWidget(independenceSlider);
@@ -200,6 +199,7 @@ About::About(QWidget *parent) : QDialog(parent)
   configLayout->addWidget(weatherLineEdit);
   configLayout->addWidget(weatherKeyLabel);
   configLayout->addWidget(weatherKeyLineEdit);
+  configLayout->addWidget(enableChatter);
   configLayout->addWidget(feedUrlLabel);
   configLayout->addWidget(feedUrlLineEdit);
   

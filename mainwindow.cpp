@@ -92,9 +92,6 @@ MainWindow::MainWindow()
   if(!settings->contains("feed_url")) {
     settings->setValue("feed_url", "http://rss.slashdot.org/Slashdot/slashdotMain");
   }
-  if(!settings->contains("weather")) {
-    settings->setValue("weather", "false");
-  }
   if(!settings->contains("weather_city")) {
     settings->setValue("weather_city", "Copenhagen");
   }

@@ -142,6 +142,10 @@ private:
   int curWeather;
   int curWeatherFrame;
   int timeForWeather;
+
+  bool isAlive;
+
+  void killBoris();
   
 };
 
