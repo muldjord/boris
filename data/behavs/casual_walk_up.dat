@@ -1,4 +1,5 @@
 title=Walk north
+category=Walk
 energy=-1
 #Frames
 0;75;0;0;0;0;
