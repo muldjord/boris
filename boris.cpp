@@ -317,7 +317,7 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   // If a specific behaviour is requested, use that
-  if(behav != "") {
+  if(!behav.isEmpty()) {
     //behav = "_health"; // Use this to test behaviours
     for(int a = 0; a < behaviours->size(); ++a) {
       if(behaviours->at(a).file == behav) {
