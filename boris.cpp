@@ -938,34 +938,32 @@ void Boris::processAi(QString &behav, int &time)
   }
 
   // Stat check
+  QList<QString> potentials;
   if(behav == "" && time == 0) {
     if(stats->getFun() <= 50) {
       if(qrand() % (100 - stats->getFun()) > independence) {
-        stats->flashStat("fun");
-        behav = "_fun";
+        potentials.append("_fun");
       } else if(stats->getFun() <= 15) {
         if(qrand() % 100 < independence) {
-          behav = getFileFromCategory("Fun");
+          potentials.append(getFileFromCategory("Fun"));
         }
       }
     }
     if(stats->getEnergy() <= 50) {
       if(qrand() % (100 - stats->getEnergy()) > independence) {
-        stats->flashStat("energy");
-        behav = "_energy";
+        potentials.append("_energy");
       } else if(stats->getEnergy() <= 15) {
         if(qrand() % 100 < independence) {
-          behav = getFileFromCategory("Energy");
+          potentials.append(getFileFromCategory("Energy"));
         }
       }
     }
     if(stats->getHunger() <= 50) {
       if(qrand() % (100 - stats->getHunger()) > independence) {
-        stats->flashStat("hunger");
-        behav = "_hunger";
+        potentials.append("_hunger");
       } else if(stats->getHunger() <= 15) {
         if(qrand() % 100 < independence) {
-          behav = getFileFromCategory("Hunger");
+          potentials.append(getFileFromCategory("Hunger"));
         }
       }
     }
@@ -973,40 +971,56 @@ void Boris::processAi(QString &behav, int &time)
       if(qrand() % (100 - stats->getBladder()) > independence) {
         // Make Boris s*** his pants if it's too late to get to the loo...
         if(stats->getBladder() <= 0) {
-          behav = "_too_late";
+          potentials.append("_too_late");
         } else {
-          stats->flashStat("bladder");
-          behav = "_bladder";
+          //stats->flashStat("bladder");
+          potentials.append("_bladder");
         }
       } else if(stats->getBladder() <= 15) {
         if(qrand() % 100 < independence) {
-          behav = getFileFromCategory("Bladder");
+          potentials.append(getFileFromCategory("Bladder"));
         }
       }
     }
     if(stats->getSocial() <= 50) {
       if(qrand() % (100 - stats->getSocial()) > independence) {
-        stats->flashStat("social");
-        behav = "_social";
+        potentials.append("_social");
       } else if(stats->getSocial() <= 15) {
         if(qrand() % 100 < independence) {
-          behav = getFileFromCategory("Social");
+          potentials.append(getFileFromCategory("Social"));
         }
       }
     }
     if(stats->getHygiene() <= 50) {
       if(qrand() % (100 - stats->getHygiene()) > independence) {
-        behav = "_hygiene";
+        potentials.append("_hygiene");
       } else if(stats->getHygiene() <= 15) {
         if(qrand() % 100 < independence) {
-          behav = getFileFromCategory("Hygiene");
+          potentials.append(getFileFromCategory("Hygiene"));
         }
       }
     }
     if(stats->getHealth() <= 50) {
       if(qrand() % (150 - stats->getHealth()) > independence) {
-        behav = "_health";
+        potentials.append("_health");
       }
+    }
+  }
+
+  // Now choose one from the potentials
+  if(!potentials.isEmpty()) {
+    behav = potentials.at(qrand() % potentials.size());
+    // Flash stat if appropriate
+    if(behav == "_fun") {
+      stats->flashStat("fun");
+    } else if(behav == "_energy") {
+      stats->flashStat("energy");
+    } else if(behav == "_hunger") {
+      stats->flashStat("hunger");
+    } else if(behav == "_bladder") {
+      stats->flashStat("bladder");
+    } else if(behav == "_social") {
+      stats->flashStat("social");
     }
   }
 
