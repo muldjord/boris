@@ -223,7 +223,7 @@ void Boris::createBehavMenu()
   bMenu->addMenu(movementMenu);
 }
 
-QString Boris::chooseFromCategory(QString category)
+QString Boris::getFileFromCategory(QString category)
 {
   QList<QString> b;
   for(int i = 0; i < behaviours->length(); ++i) {
@@ -241,11 +241,11 @@ QString Boris::chooseFromCategory(QString category)
   return behaviours->at(chosen).file;
 }
 
-int Boris::chooseThatContains(QString value)
+int Boris::getIdxFromCategory(QString category)
 {
   QList<QString> b;
   for(int i = 0; i < behaviours->length(); ++i) {
-    if(behaviours->at(i).file.contains(value)) {
+    if(behaviours->at(i).category == category) {
       b.append(behaviours->at(i).file);
     }
   }
@@ -304,9 +304,9 @@ void Boris::changeBehaviour(QString behav, int time)
   // less erratic.
   if(qrand() % 10 >= 3) {
     if(qrand() % 2) {
-      curBehav = chooseThatContains("stand");
+      curBehav = getIdxFromCategory("Idle");
     } else {
-      curBehav = chooseThatContains("casual_walk");
+      curBehav = getIdxFromCategory("Walk");
     }
   } else {
     do {
@@ -629,7 +629,7 @@ void Boris::handlePhysics()
             changeBehaviour("_flee_left_up", (qrand() % 2000) + 1000);
           }
         } else if(stats->getFun() > 10 && qrand() % 100 >= 50) {
-          changeBehaviour(chooseFromCategory("Social"));
+          changeBehaviour(getFileFromCategory("Social"));
         }
       }
       alreadyEvading = true;
@@ -941,7 +941,7 @@ void Boris::processAi(QString &behav, int &time)
         behav = "_fun";
       } else if(stats->getFun() <= 15) {
         if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Fun");
+          behav = getFileFromCategory("Fun");
         }
       }
     }
@@ -951,7 +951,7 @@ void Boris::processAi(QString &behav, int &time)
         behav = "_energy";
       } else if(stats->getEnergy() <= 15) {
         if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Energy");
+          behav = getFileFromCategory("Energy");
         }
       }
     }
@@ -961,7 +961,7 @@ void Boris::processAi(QString &behav, int &time)
         behav = "_hunger";
       } else if(stats->getHunger() <= 15) {
         if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Hunger");
+          behav = getFileFromCategory("Hunger");
         }
       }
     }
@@ -976,7 +976,7 @@ void Boris::processAi(QString &behav, int &time)
         }
       } else if(stats->getBladder() <= 15) {
         if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Bladder");
+          behav = getFileFromCategory("Bladder");
         }
       }
     }
@@ -986,7 +986,7 @@ void Boris::processAi(QString &behav, int &time)
         behav = "_social";
       } else if(stats->getSocial() <= 15) {
         if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Social");
+          behav = getFileFromCategory("Social");
         }
       }
     }
@@ -995,7 +995,7 @@ void Boris::processAi(QString &behav, int &time)
         behav = "_hygiene";
       } else if(stats->getHygiene() <= 15) {
         if(qrand() % 100 < independence) {
-          behav = chooseFromCategory("Hygiene");
+          behav = getFileFromCategory("Hygiene");
         }
       }
     }

@@ -134,8 +134,8 @@ private:
   int socialQueue;
   int funQueue;
   int hygieneQueue;
-  QString chooseFromCategory(QString category);
-  int chooseThatContains(QString value);
+  QString getFileFromCategory(QString category);
+  int getIdxFromCategory(QString category);
   void processVision();
   void processAi(QString &behav, int &time);
   int timeFactor;
