@@ -69,7 +69,8 @@ void NetComm::netReply(QNetworkReply *r)
   doc.setContent(r->readAll());
   r->close();
   if(r->request() == weatherRequest) {
-    qInfo("Parsing weather:\n%s\n", doc.toString().toStdString().c_str());
+    qInfo("Updating weather:\n");
+    qDebug("%s\n", doc.toString().toStdString().c_str());
 
     weather.icon = doc.elementsByTagName("weather").at(0).toElement().attribute("icon");
     weather.windSpeed = doc.elementsByTagName("speed").at(0).toElement().attribute("value").toDouble();
@@ -106,6 +107,7 @@ void NetComm::netReply(QNetworkReply *r)
   if(r->request() == feedRequest) {
     chatLines.clear();
     qInfo("Updating feed:\n");
+    qDebug("%s\n", doc.toString().toStdString().c_str());
     QDomNodeList titles = doc.elementsByTagName("item");
     for(int a = 0; a < titles.length(); ++a) {
       ChatLine feedLine;
