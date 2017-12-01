@@ -295,9 +295,8 @@ void Boris::changeBehaviour(QString behav, int time)
     processAi(behav, time);
   }
   
-  // Pick random behaviour except sleep, weewee and patch_up
-  // Bias towards behavs that contain 'stand' or 'casual_walk' in the filename to make Boris
-  // less erratic.
+  // Pick random behaviour but rule out certain behavs such as weewee and sleep
+  // Bias towards behavs from 'Idle' and 'Walk' categories to make Boris less erratic
   if(qrand() % 10 >= 3) {
     if(qrand() % 2) {
       curBehav = getIdxFromCategory("Idle");
@@ -308,7 +307,10 @@ void Boris::changeBehaviour(QString behav, int time)
     do {
       curBehav = (qrand() % (behaviours->size() - staticBehavs)) + staticBehavs;
     } while(behaviours->at(curBehav).file == "weewee" ||
+            behaviours->at(curBehav).file == "toilet_visit" ||
             behaviours->at(curBehav).file == "sleep" ||
+            behaviours->at(curBehav).file == "shower" ||
+            behaviours->at(curBehav).file == "wash_hands" ||
             behaviours->at(curBehav).file == "patch_up");
   }
 
