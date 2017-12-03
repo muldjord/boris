@@ -92,6 +92,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   grabbed = false;
   falling = false;
   timeForWeather = 0;
+  tooLateForLoo = 0;
   
   createBehavMenu();
 
@@ -939,9 +940,18 @@ void Boris::processAi(QString &behav, int &time)
     showWeather(behav);
   }
 
-  // Stat check
-  QList<QString> potentials;
+  // Check if Boris has put off the toilet visit for too long. If so, make him s**t his pants :(
+  if(behav == "" && time == 0 && stats->getBladder() <= 0) {
+    tooLateForLoo++;
+    if(tooLateForLoo >= 6) {
+      tooLateForLoo = 0;
+      behav = "_too_late";
+    }
+  }
+  
   if(behav == "" && time == 0) {
+    // Stat check
+    QList<QString> potentials;
     if(stats->getFun() <= 50) {
       if(qrand() % (100 - stats->getFun()) > independence) {
         potentials.append("_fun");
@@ -971,12 +981,7 @@ void Boris::processAi(QString &behav, int &time)
     }
     if(stats->getBladder() <= 50) {
       if(qrand() % (100 - stats->getBladder()) > independence) {
-        // Make Boris s*** his pants if it's too late to get to the loo...
-        if(stats->getBladder() <= 0 && !(qrand() % 4)) {
-          potentials.append("_too_late");
-        } else {
-          potentials.append("_bladder");
-        }
+        potentials.append("_bladder");
       } else if(stats->getBladder() <= 15) {
         if(qrand() % 100 < independence) {
           potentials.append(getFileFromCategory("Bladder"));
@@ -1006,22 +1011,21 @@ void Boris::processAi(QString &behav, int &time)
         potentials.append("_health");
       }
     }
-  }
-
-  // Now choose one from the potentials
-  if(!potentials.isEmpty()) {
-    behav = potentials.at(qrand() % potentials.size());
-    // Flash stat if appropriate
-    if(behav == "_fun") {
-      stats->flashStat("fun");
-    } else if(behav == "_energy") {
-      stats->flashStat("energy");
-    } else if(behav == "_hunger") {
-      stats->flashStat("hunger");
-    } else if(behav == "_bladder") {
-      stats->flashStat("bladder");
-    } else if(behav == "_social") {
-      stats->flashStat("social");
+    // Now choose one from the potentials
+    if(!potentials.isEmpty()) {
+      behav = potentials.at(qrand() % potentials.size());
+      // Flash stat if appropriate
+      if(behav == "_fun") {
+        stats->flashStat("fun");
+      } else if(behav == "_energy") {
+        stats->flashStat("energy");
+      } else if(behav == "_hunger") {
+        stats->flashStat("hunger");
+      } else if(behav == "_bladder") {
+        stats->flashStat("bladder");
+      } else if(behav == "_social") {
+        stats->flashStat("social");
+      }
     }
   }
 
