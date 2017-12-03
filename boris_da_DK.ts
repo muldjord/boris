@@ -91,29 +91,45 @@ http://www.muldjord.com/boris&lt;br/&gt;&lt;br/&gt;It&apos;s FREE and OPEN SOURC
         <translation>Indtast en vilkårlig RSS feed adresse. Boris vil nogen gange fortælle dig en titel fra dette feed</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="155"/>
+        <location filename="about.cpp" line="152"/>
+        <source>Always show</source>
+        <translation>Vis altid</translation>
+    </message>
+    <message>
+        <location filename="about.cpp" line="153"/>
+        <source>Only show on notifications</source>
+        <translation>Vis kun ved notifikationer</translation>
+    </message>
+    <message>
+        <location filename="about.cpp" line="154"/>
+        <source>Only show on mouse over</source>
+        <translation>Vis kun når musen holdes over</translation>
+    </message>
+    <message>
+        <location filename="about.cpp" line="157"/>
         <source>Independence:</source>
         <translation>Selvstændighed:</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="163"/>
+        <location filename="about.cpp" line="165"/>
         <source>Enable Boris speech bubbles</source>
         <translation>Tillad Boris talebobler</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="168"/>
+        <location filename="about.cpp" line="170"/>
         <source>Enable sound</source>
         <translation>Aktivér lyd</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="181"/>
+        <location filename="about.cpp" line="183"/>
         <source>Always show this dialog on startup</source>
         <translation>Vis altid denne dialog ved start</translation>
     </message>
     <message>
         <location filename="about.cpp" line="150"/>
-        <source>Always show vitality stats</source>
-        <translation>Vis altid Boris&apos; helbred</translation>
+        <source>Vitality stats:</source>
+        <oldsource>Always show vitality stats</oldsource>
+        <translation>Boris&apos; helbred:</translation>
     </message>
     <message>
         <location filename="about.cpp" line="110"/>
@@ -121,7 +137,7 @@ http://www.muldjord.com/boris&lt;br/&gt;&lt;br/&gt;It&apos;s FREE and OPEN SOURC
         <translation>Luk og gem</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="173"/>
+        <location filename="about.cpp" line="175"/>
         <source>Sound volume:</source>
         <translation>Lyd niveau:</translation>
     </message>
@@ -129,47 +145,47 @@ http://www.muldjord.com/boris&lt;br/&gt;&lt;br/&gt;It&apos;s FREE and OPEN SOURC
 <context>
     <name>Boris</name>
     <message>
-        <location filename="boris.cpp" line="172"/>
+        <location filename="boris.cpp" line="173"/>
         <source>Behaviours</source>
         <translation>Opførsler</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="173"/>
+        <location filename="boris.cpp" line="174"/>
         <source>Health</source>
         <translation>Helbred</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="187"/>
+        <location filename="boris.cpp" line="188"/>
         <source>Movement</source>
         <translation>Bevægelse</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="175"/>
+        <location filename="boris.cpp" line="176"/>
         <source>Energy</source>
         <translation>Energi</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="177"/>
+        <location filename="boris.cpp" line="178"/>
         <source>Food</source>
         <translation>Mad</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="179"/>
+        <location filename="boris.cpp" line="180"/>
         <source>Toilet</source>
         <translation>Toilet</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="183"/>
+        <location filename="boris.cpp" line="184"/>
         <source>Social</source>
         <translation>Social</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="185"/>
+        <location filename="boris.cpp" line="186"/>
         <source>Fun</source>
         <translation>Sjov</translation>
     </message>
     <message>
-        <location filename="boris.cpp" line="181"/>
+        <location filename="boris.cpp" line="182"/>
         <source>Hygiene</source>
         <translation>Hygiejne</translation>
     </message>
