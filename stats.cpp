@@ -253,6 +253,9 @@ void Stats::updateStats()
     flashes--;
   } else {
     flashIcon->setVisible(false);
+    if(settings->value("stats") == "notifications") {
+      this->hide();
+    }
   }
 }
 
@@ -271,4 +274,7 @@ void Stats::flashStat(QString stat)
   }
   flashes = 15;
   flashIcon->setVisible(true);
+  if(settings->value("stats") == "notifications") {
+    this->show();
+  }
 }
