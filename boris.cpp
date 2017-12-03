@@ -54,8 +54,6 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   mouseVVel = 0.0;
   mouseHVel = 0.0;
 
-  isAlive = true;
-  
   int borisX = settings->value("boris_x", QApplication::desktop()->width() / 2).toInt();
   int borisY = settings->value("boris_y", QApplication::desktop()->height() / 2).toInt();
   if(borisY > QApplication::desktop()->height() - height()) {
@@ -91,12 +89,13 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   timeFactor = settings->value("time_factor", "1").toInt();
   grabbed = false;
   falling = false;
+  isAlive = true;
+  alreadyEvading = false;
   timeForWeather = 0;
   tooLateForLoo = 0;
   
   createBehavMenu();
 
-  alreadyEvading = false;
   // Set initial stats with some randomization
   int health = 100;
   int energy = 50 + qrand() % 25;
@@ -113,9 +112,12 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   funQueue = 0;
   hygieneQueue = 0;
   stats = new Stats(health, energy, hunger, bladder, social, fun, hygiene, this);
-  if(settings->value("stats", "true").toBool()) {
+  if(settings->value("stats") == "always") {
     stats->show();
     showStats = true;
+  } else {
+    stats->hide();
+    showStats = false;
   }
 
   chatter = new Chatter(chatLines, this);
@@ -155,7 +157,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   setCursor(QCursor(QPixmap(":mouse_hover.png")));
 
   updateBoris(settings->value("size", 32).toInt(),
-              settings->value("stats", "false").toBool(),
+              settings->value("stats") == "always",
               settings->value("sound", "true").toBool(),
               settings->value("independence", "60").toInt());
 }
@@ -513,17 +515,20 @@ void Boris::hideBoris()
 void Boris::enterEvent(QEvent *event)
 {
   event->accept();
+  // Always ensure stats are shown when mouse is entering
   if(!showStats) {
     stats->show();
   }
+  stats->underMouse = true;
 }
 
 void Boris::leaveEvent(QEvent *event)
 {
   event->accept();
   if(!showStats) {
-    stats->hide();
+    stats->hide(); 
   }
+  stats->underMouse = false;
 }
 
 void Boris::mousePressEvent(QMouseEvent* event)
@@ -1083,7 +1088,7 @@ void Boris::processAi(QString &behav, int &time)
   }
 }
 
-void Boris::updateBoris(int newSize, bool statsEnable, bool soundEnable, int newIndependence)
+void Boris::updateBoris(int newSize, bool showStats, bool soundEnable, int newIndependence)
 {
   // Reset Boris pointer
   boris = NULL;
@@ -1104,12 +1109,12 @@ void Boris::updateBoris(int newSize, bool statsEnable, bool soundEnable, int new
   soundEnabled = soundEnable;
 
   // Show or hide stats
-  if(statsEnable) {
+  if(showStats) {
     stats->show();
   } else {
     stats->hide();
   }
-  showStats = statsEnable;
+  this->showStats = showStats;
 }
 
 void Boris::nextWeatherFrame()

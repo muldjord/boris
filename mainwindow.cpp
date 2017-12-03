@@ -224,11 +224,11 @@ void MainWindow::aboutBox()
   about.exec();
   int newSize = settings->value("size", "32").toInt();
   bool soundEnable = settings->value("sound", "true").toBool();
-  bool statsEnable = settings->value("stats") == "always";
+  bool showStats = settings->value("stats") == "always";
   int independence = settings->value("independence", "0").toInt();
   qreal volume = (qreal)settings->value("volume", "100").toInt() / 100.0;
   for(int a = 0; a < borises.length(); ++a) {
-    borises.at(a)->updateBoris(newSize, statsEnable, soundEnable, independence);
+    borises.at(a)->updateBoris(newSize, showStats, soundEnable, independence);
     for(int b = 0; b < behaviours->length(); ++b) {
       for(int c = 0; c < behaviours->at(b).behaviour.length(); ++c) {
         if(behaviours->at(b).behaviour.at(c).soundFx != NULL) {

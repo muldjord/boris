@@ -66,6 +66,7 @@ Stats::Stats(int health, int energy, int hunger, int bladder, int social, int fu
   flashIcon->setVisible(false);
   
   flashes = 0;
+  underMouse = false;
   
   if(settings->value("stat_logging", "false").toBool()) {
     statLog.setFileName("stats_" + QUuid::createUuid().toString().replace("{", "").replace("}", "") + ".csv");
@@ -253,7 +254,7 @@ void Stats::updateStats()
     flashes--;
   } else {
     flashIcon->setVisible(false);
-    if(settings->value("stats") == "notifications") {
+    if(settings->value("stats") == "notifications" && !underMouse) {
       this->hide();
     }
   }

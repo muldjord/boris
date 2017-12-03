@@ -56,7 +56,8 @@ public:
   void deltaFun(int value);
   void deltaHygiene(int value);
   void updateStats();
-  
+  bool underMouse;
+                    
 private slots:
   void logStats();
 
