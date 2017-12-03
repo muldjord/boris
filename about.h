@@ -31,6 +31,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QSlider>
+#include <QComboBox>
 
 class About : public QDialog
 {
@@ -48,7 +49,8 @@ private:
   QLineEdit *weatherLineEdit;
   QLineEdit *weatherKeyLineEdit;
   QLineEdit *feedUrlLineEdit;
-  QCheckBox *showStats;
+  QComboBox *statsComboBox;
+  //QCheckBox *showStats;
   QCheckBox *enableSound;
   QCheckBox *enableChatter;
   QCheckBox *showWelcome;

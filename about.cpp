@@ -147,10 +147,12 @@ About::About(QWidget *parent) : QDialog(parent)
     feedUrlLineEdit->setText(settings->value("feed_url").toString());
   }
 
-  showStats = new QCheckBox(tr("Always show vitality stats"));
-  if(settings->value("stats") == "true") {
-    showStats->setCheckState(Qt::Checked);
-  }
+  QLabel *statsLabel = new QLabel(tr("Vitality stats:"));
+  statsComboBox = new QComboBox();
+  statsComboBox->addItem(tr("Always show"), "always");
+  statsComboBox->addItem(tr("Only show on notifications"), "notifications");
+  statsComboBox->addItem(tr("Only show on mouse over"), "never");
+  statsComboBox->setCurrentIndex(statsComboBox->findData(settings->value("stats", "never")));
 
   QLabel *independenceLabel = new QLabel(tr("Independence:"));
   independenceSlider = new QSlider(Qt::Horizontal);
@@ -189,7 +191,8 @@ About::About(QWidget *parent) : QDialog(parent)
   configLayout->addWidget(sizeLineEdit);
   configLayout->addWidget(clonesLabel);
   configLayout->addWidget(clonesLineEdit);
-  configLayout->addWidget(showStats);
+  configLayout->addWidget(statsLabel);
+  configLayout->addWidget(statsComboBox);
   configLayout->addWidget(independenceLabel);
   configLayout->addWidget(independenceSlider);
   configLayout->addWidget(enableSound);
@@ -250,11 +253,7 @@ void About::saveAll()
 
   settings->setValue("feed_url", feedUrlLineEdit->text());
 
-  if(showStats->isChecked()) {
-    settings->setValue("stats", "true");
-  } else {
-    settings->setValue("stats", "false");
-  }
+  settings->setValue("stats", statsComboBox->currentData().toString());
 
   settings->setValue("independence", independenceSlider->value());
 
