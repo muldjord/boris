@@ -69,7 +69,7 @@ MainWindow::MainWindow()
     settings->setValue("independence", "70");
   }
   if(!settings->contains("stats")) {
-    settings->setValue("stats", "false");
+    settings->setValue("stats", "never");
   }
   if(!settings->contains("chatter")) {
     settings->setValue("chatter", "true");
@@ -224,7 +224,7 @@ void MainWindow::aboutBox()
   about.exec();
   int newSize = settings->value("size", "32").toInt();
   bool soundEnable = settings->value("sound", "true").toBool();
-  bool statsEnable = settings->value("stats", "true").toBool();
+  bool statsEnable = settings->value("stats") == "always";
   int independence = settings->value("independence", "0").toInt();
   qreal volume = (qreal)settings->value("volume", "100").toInt() / 100.0;
   for(int a = 0; a < borises.length(); ++a) {
