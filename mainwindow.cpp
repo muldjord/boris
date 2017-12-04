@@ -70,6 +70,10 @@ MainWindow::MainWindow()
   }
   if(!settings->contains("stats")) {
     settings->setValue("stats", "never");
+  } else if(settings->value("stats") == "true") {
+    settings->setValue("stats", "always");
+  } else if(settings->value("stats") == "false") {
+    settings->setValue("stats", "never");
   }
   if(!settings->contains("chatter")) {
     settings->setValue("chatter", "true");
