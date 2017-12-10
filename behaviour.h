@@ -55,6 +55,7 @@ struct Behaviour
   int hygiene;
   bool oneShot;
   bool doNotDisturb;
+  bool allowFlip;
   QList<Frame> behaviour;
 };
 

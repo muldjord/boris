@@ -90,6 +90,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   grabbed = false;
   falling = false;
   isAlive = true;
+  flipFrames = false;
   alreadyEvading = false;
   timeForWeather = 0;
   tooLateForLoo = 0;
@@ -365,6 +366,11 @@ void Boris::changeBehaviour(QString behav, int time)
   hygieneQueue = behaviours->at(curBehav).hygiene;
   
   curFrame = 0;
+  if(behaviours->at(curBehav).allowFlip && qrand() %2) {
+    flipFrames = true;
+  } else {
+    flipFrames = false;
+  }
   if(behaviours->at(curBehav).oneShot) {
 #ifdef DEBUG
     qInfo("Behaviour is oneShot, ignoring timeout\n");
@@ -390,17 +396,24 @@ void Boris::nextFrame()
       changeBehaviour();
     }
   }
-  sprite->setPixmap(behaviours->at(curBehav).behaviour.at(curFrame).sprite);
 
   QBitmap mask = behaviours->at(curBehav).behaviour.at(curFrame).sprite.createMaskFromColor(QColor(0, 0, 0, 0));
 
   QPixmap dirtPixmap(origDirt);
   dirtPixmap.setMask(mask);
-  dirt->setPixmap(dirtPixmap);
 
   QPixmap bruisesPixmap(origBruises);
   bruisesPixmap.setMask(mask);
-  bruises->setPixmap(bruisesPixmap);
+
+  if(flipFrames) {
+    sprite->setPixmap(QPixmap::fromImage(behaviours->at(curBehav).behaviour.at(curFrame).sprite.toImage().mirrored(true, false)));
+    dirt->setPixmap(QPixmap::fromImage(dirtPixmap.toImage().mirrored(true, false)));
+    bruises->setPixmap(QPixmap::fromImage(bruisesPixmap.toImage().mirrored(true, false)));
+  } else {
+    sprite->setPixmap(behaviours->at(curBehav).behaviour.at(curFrame).sprite);
+    dirt->setPixmap(dirtPixmap);
+    bruises->setPixmap(bruisesPixmap);
+  }
 
   if(soundEnabled && behaviours->at(curBehav).behaviour.at(curFrame).soundFx != NULL) {
     behaviours->at(curBehav).behaviour.at(curFrame).soundFx->play();
@@ -408,7 +421,7 @@ void Boris::nextFrame()
   animTimer.setInterval(behaviours->at(curBehav).behaviour.at(curFrame).time / timeFactor);
 
   if(behaviours->at(curBehav).behaviour.at(curFrame).dx != 0 || behaviours->at(curBehav).behaviour.at(curFrame).dy != 0) {
-    moveBoris(behaviours->at(curBehav).behaviour.at(curFrame).dx,
+    moveBoris(behaviours->at(curBehav).behaviour.at(curFrame).dx * (flipFrames?-1:1),
               behaviours->at(curBehav).behaviour.at(curFrame).dy);
 }
 

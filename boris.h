@@ -144,6 +144,7 @@ private:
   int timeForWeather;
 
   bool isAlive;
+  bool flipFrames;
   int tooLateForLoo;
 
   void killBoris();

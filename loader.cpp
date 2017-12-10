@@ -68,6 +68,7 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours)
       Behaviour b;
       b.oneShot = false;
       b.doNotDisturb = false;
+      b.allowFlip = false;
       b.health = 0;
       b.energy = 0;
       b.hunger = 0;
@@ -88,6 +89,9 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours)
         }
         if(line == "doNotDisturb") {
           b.doNotDisturb = true;
+        }
+        if(line == "allowFlip") {
+          b.allowFlip = true;
         }
         if(line.contains("title")) {
           b.title = line.mid(6,line.length());
