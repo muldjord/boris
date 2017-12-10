@@ -9,13 +9,13 @@ The png files are a vertical set of sprites using 32x32 pixels. The color format
 ## DAT description files
 The format of the dat files is as follows:
 
----- file start, this line not included ----
-flags
-#Frames
-sprite;time;deltax;deltay;hide;show;soundfx(optional);
+---- file start, this line not included ----\
+Descriptiors and flags\
+#Frames\
+sprite;time;deltax;deltay;hide;show;soundfx(optional);\
 ---- file end, this line not included ----
 
-### Flags
+### Descriptors and flags
 Flags, one flag per line, available flags are:
 * title=string: The title used by the behaviour when right-clicking Boris
 * category=string: The stat category for this behaviour:
