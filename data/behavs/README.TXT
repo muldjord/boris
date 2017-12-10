@@ -33,6 +33,8 @@ flags, one flag per line, available flags are:
                 switch to a new behaviour.
        doNotDisturb: If this exists, Boris will not be disturbed by the mouse while this
        		     behaviour is in progress.
+       allowFlip: If this line exists there is a 50% chance the behaviour will be
+       		   mirrored horizontally.
 
 The line "#Frames" MUST be there, so the software knows when the frame
 descriptions begin and the flag section ends.
