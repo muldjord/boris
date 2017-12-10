@@ -3,6 +3,7 @@ category=Social
 fun=10
 social=22
 oneShot
+allowFlip
 #Frames
 0;75;0;0;0;0;
 1;75;0;0;0;0;

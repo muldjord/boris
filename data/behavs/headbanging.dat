@@ -5,6 +5,7 @@ fun=20
 hunger=4
 hygiene=-10
 social=3
+allowFlip
 #Frames
 0;75;0;0;0;0;data/sfx/headbang.wav;
 1;75;0;0;0;0;

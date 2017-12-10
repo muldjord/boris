@@ -2,6 +2,7 @@ title=Stand and look around
 category=Idle
 social=-1
 fun=-1
+allowFlip
 #Frames
 0;75;0;0;0;0;
 1;75;0;0;0;0;

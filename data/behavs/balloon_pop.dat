@@ -6,6 +6,7 @@ hunger=5
 hygiene=-8
 health=-1
 oneShot
+allowFlip
 #Frames
 0;75;0;0;0;0;
 1;75;0;0;0;0;

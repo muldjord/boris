@@ -5,6 +5,7 @@ fun=25
 hunger=5
 hygiene=-5
 oneShot
+allowFlip
 #Frames
 0;65;0;0;0;0;
 1;65;0;0;0;0;

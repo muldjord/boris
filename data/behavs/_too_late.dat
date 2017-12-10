@@ -5,6 +5,7 @@ hygiene=-100
 bladder=-50
 oneShot
 doNotDisturb
+allowFlip
 #Frames
 0;75;0;0;0;0;data/sfx/too_late.wav;
 1;75;0;0;0;0;

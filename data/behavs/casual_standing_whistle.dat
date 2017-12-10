@@ -2,6 +2,7 @@ title=Stand, relax and whistle
 category=Idle
 fun=1
 social=-2
+allowFlip
 #Frames
 0;100;0;0;0;0;data/sfx/whistle.wav;
 1;100;0;0;0;0;

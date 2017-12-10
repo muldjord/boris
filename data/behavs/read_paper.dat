@@ -4,6 +4,7 @@ energy=10
 fun=5
 hygiene=-2
 oneShot
+allowFlip
 #Frames
 0;75;0;0;0;0;
 1;75;0;0;0;0;

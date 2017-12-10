@@ -5,6 +5,7 @@ hunger=-40
 bladder=10
 hygiene=-4
 fun=-10
+allowFlip
 #Frames
 0;75;0;0;0;0;
 1;75;0;0;0;0;

@@ -4,6 +4,7 @@ energy=-10
 fun=-40
 bladder=20
 oneShot
+allowFlip
 #Frames
 0;30;0;0;0;0;data/sfx/lightning.wav;
 1;30;0;0;0;0;

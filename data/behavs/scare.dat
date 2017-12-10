@@ -5,6 +5,7 @@ fun=5
 social=25
 hunger=1
 oneShot
+allowFlip
 #Frames
 0;30;0;0;0;0;
 1;50;0;0;0;0;

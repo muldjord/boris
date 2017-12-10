@@ -4,6 +4,7 @@ health=100
 fun=-5
 hygiene=-5
 oneShot
+allowFlip
 #Frames
 0;75;0;0;0;0;data/sfx/bandage.wav;
 1;75;0;0;0;0;
