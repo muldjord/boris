@@ -25,6 +25,9 @@ Copyright 2017 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
+#### Version 2.0.2 (unreleased):
+* Added 'allowFlip' flag to behaviours giving those a 50% of being flipped horizontally
+
 #### Version 2.0.1 (4th December 2017):
 * Added 'casual_standing_looking' behaviour
 * Added 'casual_standing_hatpull' behaviour
