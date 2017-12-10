@@ -19,7 +19,7 @@ sprite;time;deltax;deltay;hide;show;soundfx(optional);
 Flags, one flag per line, available flags are:
 * title=string: The title used by the behaviour when right-clicking Boris
 * category=string: The stat category for this behaviour:
-* * (Energy, Hunger, Bladder, Hygiene, Social, Fun)
+  * Energy, Hunger, Bladder, Hygiene, Social, Fun, Idle (category used for Boris' various idle behaviours which have a higher bias when Boris is just minding his own business)
 * health=int: The amount of health this behaviour will increase or decrease stats
 * energy=int: The amount of energy this behaviour will increase or decrease stats
 * hunger=int: The amount of hunger this behaviour will increase or decrease stats
