@@ -2,6 +2,7 @@ title=Pull suspenders
 category=Idle
 social=-1
 fun=-1
+oneShot
 allowFlip
 #Frames
 0;75;0;0;0;0;
