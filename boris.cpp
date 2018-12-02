@@ -360,14 +360,14 @@ void Boris::changeBehaviour(QString behav, int time)
 #endif
 
   // Applying behaviour stats to Boris
-  hyperQueue = behaviours->at(curBehav).hyper;
-  healthQueue = behaviours->at(curBehav).health;
-  energyQueue = behaviours->at(curBehav).energy;
-  hungerQueue = behaviours->at(curBehav).hunger;
-  bladderQueue = behaviours->at(curBehav).bladder;
-  socialQueue = behaviours->at(curBehav).social;
-  funQueue = behaviours->at(curBehav).fun;
-  hygieneQueue = behaviours->at(curBehav).hygiene;
+  hyperQueue += behaviours->at(curBehav).hyper;
+  healthQueue += behaviours->at(curBehav).health;
+  energyQueue += behaviours->at(curBehav).energy;
+  hungerQueue += behaviours->at(curBehav).hunger;
+  bladderQueue += behaviours->at(curBehav).bladder;
+  socialQueue += behaviours->at(curBehav).social;
+  funQueue += behaviours->at(curBehav).fun;
+  hygieneQueue += behaviours->at(curBehav).hygiene;
   
   curFrame = 0;
   if(behaviours->at(curBehav).allowFlip && qrand() %2) {
@@ -685,11 +685,11 @@ void Boris::statProgress()
 {
   // Energy disabled since it is mainly controlled by walking behavs.
   //stats->deltaEnergy(- qrand() % 1);
-  stats->deltaHyper(- qrand() % 25);
-  stats->deltaHunger(- qrand() % 4);
-  stats->deltaSocial(- qrand() % 4);
-  stats->deltaHygiene(- qrand() % 2);
-  stats->deltaFun(- qrand() % 6);
+  hyperQueue -= qrand() % 25;
+  hungerQueue -= qrand() % 4;
+  socialQueue -= qrand() % 4;
+  hygieneQueue -= qrand() % 2;
+  funQueue -= qrand() % 6;
   // Nothing needed for 'health' and 'bladder'
 }
 
@@ -741,6 +741,40 @@ void Boris::killBoris()
 
 void Boris::statQueueProgress()
 {
+  if(hyperQueue > 100)
+    hyperQueue = 100;
+  if(healthQueue > 100)
+    healthQueue = 100;
+  if(energyQueue > 100)
+    energyQueue = 100;
+  if(hungerQueue > 100)
+    hungerQueue = 100;
+  if(bladderQueue > 100)
+    bladderQueue = 100;
+  if(socialQueue > 100)
+    socialQueue = 100;
+  if(funQueue > 100)
+    funQueue = 100;
+  if(hygieneQueue > 100)
+    hygieneQueue = 100;
+
+  if(hyperQueue < -100)
+    hyperQueue = -100;
+  if(healthQueue < -100)
+    healthQueue = -100;
+  if(energyQueue < -100)
+    energyQueue = -100;
+  if(hungerQueue < -100)
+    hungerQueue = -100;
+  if(bladderQueue < -100)
+    bladderQueue = -100;
+  if(socialQueue < -100)
+    socialQueue = -100;
+  if(funQueue < -100)
+    funQueue = -100;
+  if(hygieneQueue < -100)
+    hygieneQueue = -100;
+
   if(hyperQueue > 0) {
     hyperQueue--;
     stats->deltaHyper(1);
