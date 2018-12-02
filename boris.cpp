@@ -98,6 +98,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   createBehavMenu();
 
   // Set initial stats with some randomization
+  int hyper = 0;
   int health = 100;
   int energy = 50 + qrand() % 25;
   int hunger = 50 + qrand() % 25;
@@ -105,6 +106,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   int hygiene = 100;
   int social = 50 + qrand() % 25;
   int fun = 50 + qrand() % 25;
+  hyperQueue = 0;
   healthQueue = 0;
   energyQueue = 0;
   hungerQueue = 0;
@@ -112,7 +114,7 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   socialQueue = 0;
   funQueue = 0;
   hygieneQueue = 0;
-  stats = new Stats(health, energy, hunger, bladder, social, fun, hygiene, this);
+  stats = new Stats(hyper, health, energy, hunger, bladder, social, fun, hygiene, this);
   if(settings->value("stats") == "always") {
     stats->show();
     showStats = true;
@@ -348,6 +350,7 @@ void Boris::changeBehaviour(QString behav, int time)
       time = qrand() % 7000 + 5000;
     }
   }
+  time = time - ((double)time / 100.0 * stats->getHyper());
   behavTimer.setInterval(time / timeFactor);
 
 #ifdef DEBUG
@@ -357,6 +360,7 @@ void Boris::changeBehaviour(QString behav, int time)
 #endif
 
   // Applying behaviour stats to Boris
+  hyperQueue = behaviours->at(curBehav).hyper;
   healthQueue = behaviours->at(curBehav).health;
   energyQueue = behaviours->at(curBehav).energy;
   hungerQueue = behaviours->at(curBehav).hunger;
@@ -418,7 +422,10 @@ void Boris::nextFrame()
   if(soundEnabled && behaviours->at(curBehav).behaviour.at(curFrame).soundFx != NULL) {
     behaviours->at(curBehav).behaviour.at(curFrame).soundFx->play();
   }
-  animTimer.setInterval(behaviours->at(curBehav).behaviour.at(curFrame).time / timeFactor);
+  int frameTime = behaviours->at(curBehav).behaviour.at(curFrame).time;
+  animTimer.setInterval(frameTime - ((double)frameTime / 100.0 * stats->getHyper()) / timeFactor);
+  if(animTimer.interval() <= 5)
+    animTimer.setInterval(5);
 
   if(behaviours->at(curBehav).behaviour.at(curFrame).dx != 0 || behaviours->at(curBehav).behaviour.at(curFrame).dy != 0) {
     moveBoris(behaviours->at(curBehav).behaviour.at(curFrame).dx * (flipFrames?-1:1),
@@ -555,7 +562,7 @@ void Boris::mousePressEvent(QMouseEvent* event)
     }
     setCursor(QCursor(QPixmap(":mouse_grab.png")));
     grabbed = true;
-    changeBehaviour("_grabbed", 100000);
+    changeBehaviour("_grabbed", 1000000);
     mMoving = true;
     this->move(event->globalPos().x() - (float)borisSize / 32.0 * 17.0, 
                event->globalPos().y() - (float)borisSize / 32.0 * 16.0);
@@ -583,7 +590,7 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
     mMoving = false;
     settings->setValue("boris_x", this->pos().x());
     settings->setValue("boris_y", this->pos().y());
-    changeBehaviour("_falling", 20000);
+    changeBehaviour("_falling", 200000);
     falling = true;
     hVel = mouseHVel;
     vVel = mouseVVel;
@@ -659,7 +666,7 @@ void Boris::handlePhysics()
 void Boris::earthquake()
 {
   if(!falling && !grabbed) {
-    changeBehaviour("_falling", 20000);
+    changeBehaviour("_falling", 200000);
     falling = true;
     vVel = ((qrand() % 10) * -1) - 5;
     hVel = qrand() % 20 - 11;
@@ -678,6 +685,7 @@ void Boris::statProgress()
 {
   // Energy disabled since it is mainly controlled by walking behavs.
   //stats->deltaEnergy(- qrand() % 1);
+  stats->deltaHyper(- qrand() % 25);
   stats->deltaHunger(- qrand() % 4);
   stats->deltaSocial(- qrand() % 4);
   stats->deltaHygiene(- qrand() % 2);
@@ -733,6 +741,14 @@ void Boris::killBoris()
 
 void Boris::statQueueProgress()
 {
+  if(hyperQueue > 0) {
+    hyperQueue--;
+    stats->deltaHyper(1);
+  }
+  if(hyperQueue < 0) {
+    hyperQueue++;
+    stats->deltaHyper(-1);
+  }
   if(healthQueue > 0) {
     healthQueue -= 2;
     stats->deltaHealth(2);

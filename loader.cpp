@@ -69,6 +69,7 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours)
       b.oneShot = false;
       b.doNotDisturb = false;
       b.allowFlip = false;
+      b.hyper = 0;
       b.health = 0;
       b.energy = 0;
       b.hunger = 0;
@@ -99,6 +100,9 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours)
         if(line.contains("category")) {
           b.category = line.mid(9,line.length());
         }
+        if(line.contains("hyper")) {
+          b.hyper = line.mid(6,line.length()).toInt();
+        }
         if(line.contains("health")) {
           b.health = line.mid(7,line.length()).toInt();
         }
@@ -123,7 +127,7 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours)
         line = in.readLine();
       }
 #ifdef DEBUG
-      qInfo("Health: %d\nEnergy: %d\nHunger: %d\nBladder: %d\nSocial: %d\nFun: %d\nHygiene: %d\n", b.health, b.energy, b.hunger, b.bladder, b.social, b.fun, b.hygiene);
+      qInfo("Hyper: %d\n, Health: %d\nEnergy: %d\nHunger: %d\nBladder: %d\nSocial: %d\nFun: %d\nHygiene: %d\n", b.hyper, b.health, b.energy, b.hunger, b.bladder, b.social, b.fun, b.hygiene);
 #endif
       line = in.readLine();
       qreal volume = (qreal)settings->value("volume", "100").toInt() / 100.0;

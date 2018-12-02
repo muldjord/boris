@@ -46,6 +46,7 @@ struct Behaviour
   QString file;
   QString title;
   QString category;
+  int hyper;
   int health;
   int energy;
   int hunger;

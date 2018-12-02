@@ -38,9 +38,10 @@ class Stats : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Stats(int health, int energy, int hunger, int bladder, int social, int fun, int hygiene, QWidget *parent);
+  Stats(int hyper, int health, int energy, int hunger, int bladder, int social, int fun, int hygiene, QWidget *parent);
   ~Stats();
   void flashStat(QString stat = "none");
+  int getHyper();
   int getHealth();
   int getEnergy();
   int getHunger();
@@ -48,6 +49,7 @@ public:
   int getSocial();
   int getFun();
   int getHygiene();
+  void deltaHyper(int value);
   void deltaHealth(int value);
   void deltaEnergy(int value);
   void deltaHunger(int value);
@@ -72,6 +74,7 @@ private:
   QGraphicsRectItem *funBar;
   QGraphicsPixmapItem *flashIcon;
   bool visibility;
+  int hyper;
   int health;
   int energy;
   int hunger;

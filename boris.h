@@ -127,6 +127,7 @@ private:
   Chatter *chatter;
   bool showStats;
   QList<QString> behavQueue;
+  int hyperQueue;
   int healthQueue;
   int energyQueue;
   int hungerQueue;

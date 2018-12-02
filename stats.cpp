@@ -36,8 +36,9 @@
 
 extern QSettings *settings;
 
-Stats::Stats(int health, int energy, int hunger, int bladder, int social, int fun, int hygiene, QWidget *parent) : QGraphicsView(parent)
+Stats::Stats(int hyper, int health, int energy, int hunger, int bladder, int social, int fun, int hygiene, QWidget *parent) : QGraphicsView(parent)
 {
+  this->hyper = hyper;
   this->health = health;
   this->energy = energy;
   this->hunger = hunger;
@@ -71,7 +72,7 @@ Stats::Stats(int health, int energy, int hunger, int bladder, int social, int fu
   if(settings->value("stat_logging", "false").toBool()) {
     statLog.setFileName("stats_" + QUuid::createUuid().toString().replace("{", "").replace("}", "") + ".csv");
     if(statLog.open(QIODevice::WriteOnly)) {
-      statLog.write("health;energy;hunger;bladder;hygiene;social;fun\n");
+      statLog.write("hyper;health;energy;hunger;bladder;hygiene;social;fun\n");
       statTimer.setInterval(30000);
       statTimer.setSingleShot(false);
       connect(&statTimer, &QTimer::timeout, this, &Stats::logStats);
@@ -90,13 +91,19 @@ Stats::~Stats()
 void Stats::logStats()
 {
   qInfo("Logging stats\n");
-  statLog.write(QByteArray::number(health) + ";" +
+  statLog.write(QByteArray::number(hyper) + ";" +
+                QByteArray::number(health) + ";" +
                 QByteArray::number(energy) + ";" +
                 QByteArray::number(hunger) + ";" +
                 QByteArray::number(bladder) + ";" +
                 QByteArray::number(hygiene) + ";" +
                 QByteArray::number(social) + ";" +
                 QByteArray::number(fun) + "\n");
+}
+
+int Stats::getHyper()
+{
+  return hyper;
 }
 
 int Stats::getHealth()
@@ -132,6 +139,17 @@ int Stats::getFun()
 int Stats::getHygiene()
 {
   return hygiene;
+}
+
+void Stats::deltaHyper(int value)
+{
+  if(hyper + value > 100) {
+    hyper = 100;
+  } else if(hyper + value < 0) {
+    hyper = 0;
+  } else {
+    hyper += value;
+  }
 }
 
 void Stats::deltaHealth(int value)
