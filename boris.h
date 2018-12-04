@@ -118,6 +118,7 @@ private:
   
   double vVel;
   double hVel;
+  double sinVal = 0.0;
   double mouseVVel;
   double mouseHVel;
   int alt;

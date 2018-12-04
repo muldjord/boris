@@ -38,6 +38,7 @@
 #include "boris.h"
 
 #define STATTIMER 200
+#define PI 3.1415927
 //#define DEBUG
 
 extern QSettings *settings;
@@ -486,7 +487,7 @@ void Boris::moveBoris(int dX, int dY)
   if(this->pos().x() > maxX || this->pos().x() < minX ||
      this->pos().y() > maxY || this->pos().y() < minY) {
     if(falling) {
-      stats->deltaHealth(-5); // It hurts to hit the borders
+      healthQueue -= 5; // It hurts to hit the borders
       // Physics velocity when hitting borders
       if(this->pos().x() + dX > maxX || this->pos().x() + dX < minX) {
         hVel *= -0.4;
@@ -588,15 +589,16 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
 
 void Boris::handlePhysics()
 {
-  // Adjust delta from wind speed
-  /*
+  if(!grabbed && weatherSprite->isVisible()) {
+    sinVal += 0.1 - ((double)(qrand() % 1000) / 10000.0);
+    if(sinVal > 2 * PI)
+      sinVal = 0;
     if(weather->windDirection.indexOf("W") != -1) {
-    dX -= (int)(weather->windSpeed / 20.0);
+      moveBoris((-(sin(sinVal) + 1.0) * weather->windSpeed * 0.1), 0);
+    } else if(weather->windDirection.indexOf("E") != -1) {
+      moveBoris((sin(sinVal) + 1.0) * weather->windSpeed * 0.1, 0);
     }
-    if(weather->windDirection.indexOf("E") != -1) {
-    dX += (int)(weather->windSpeed / 20.0);
-    }
-  */
+  }
   
   if(falling && !grabbed) {
     moveBoris(hVel, vVel);
@@ -1205,13 +1207,9 @@ void Boris::triggerWeather()
 
 void Boris::showWeather(QString &behav)
 {
-  if(weather->windDirection.indexOf("W") != -1 &&
-     weather->windSpeed > 10.0) {
-    hVel = weather->windSpeed;
-  } else if(weather->windDirection.indexOf("E") != -1 &&
-            weather->windSpeed > 10.0) {
-    hVel = -weather->windSpeed;
-  }
+  // Reset sine wave for wind
+  sinVal = 0.0;
+  
   for(int a = 0; a < weathers->length(); ++a) {
     if(weathers->at(a).file == weather->icon) {
       curWeather = a;
