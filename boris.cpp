@@ -37,6 +37,7 @@
 
 #include "boris.h"
 
+#define STATTIMER 200
 //#define DEBUG
 
 extern QSettings *settings;
@@ -153,7 +154,8 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   connect(&statTimer, &QTimer::timeout, this, &Boris::statProgress);
   statTimer.start();
 
-  statQueueTimer.setInterval(200 / timeFactor);
+  statQueueTimer.setInterval(STATTIMER / timeFactor);
+  statQueueTimer.setSingleShot(true);
   connect(&statQueueTimer, &QTimer::timeout, this, &Boris::statQueueProgress);
   statQueueTimer.start();
   
@@ -741,6 +743,12 @@ void Boris::killBoris()
 
 void Boris::statQueueProgress()
 {
+  // Adjust timer interval to match how hyper Boris is
+  int interval = STATTIMER;
+  statQueueTimer.setInterval(interval - ((double)interval / 100.0 * stats->getHyper()));
+  if(statQueueTimer.interval() < 5)
+    statQueueTimer.setInterval(5);
+
   if(hyperQueue > 100)
     hyperQueue = 100;
   if(healthQueue > 100)
@@ -843,6 +851,8 @@ void Boris::statQueueProgress()
   dirt->setOpacity(0.50 - ((qreal)stats->getHygiene()) * 0.01);
   bruises->setOpacity(0.75 - ((qreal)stats->getHealth()) * 0.01);
   stats->updateStats();
+
+  statQueueTimer.start();
 }
 
 // Used by 'other Boris' to determine whether to flee or greet
