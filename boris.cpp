@@ -464,26 +464,12 @@ void Boris::moveBoris(int dX, int dY)
   if(dX == 666) { // If dX == 666 we are meant to move Boris randomly
     dX = qrand() % maxX - this->pos().x();
   } else {
-    // Adjust delta from wind speed
-    if(weather->windDirection.indexOf("W") != -1) {
-      dX -= (int)(weather->windSpeed / 20.0);
-    }
-    if(weather->windDirection.indexOf("E") != -1) {
-      dX += (int)(weather->windSpeed / 20.0);
-    }
     // Multiply delta by the factor of Boris' current size
     dX *= ceil((double)borisSize / 32.0);
   }
   if(dY == 666) { // If dX == 666 we are meant to move Boris randomly
     dY = qrand() % maxY - this->pos().y();
   } else {
-    // Adjust delta from wind speed
-    if(weather->windDirection.indexOf("N") != -1) {
-      dY -= (int)(weather->windSpeed / 20.0);
-    }
-    if(weather->windDirection.indexOf("S") != -1) {
-      dY += (int)(weather->windSpeed / 20.0);
-    }
     // Multiply delta by the factor of Boris' current size
     dY *= ceil((double)borisSize / 32.0);
   }
@@ -602,6 +588,16 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
 
 void Boris::handlePhysics()
 {
+  // Adjust delta from wind speed
+  /*
+    if(weather->windDirection.indexOf("W") != -1) {
+    dX -= (int)(weather->windSpeed / 20.0);
+    }
+    if(weather->windDirection.indexOf("E") != -1) {
+    dX += (int)(weather->windSpeed / 20.0);
+    }
+  */
+  
   if(falling && !grabbed) {
     moveBoris(hVel, vVel);
     vVel += 0.5;
@@ -1209,6 +1205,13 @@ void Boris::triggerWeather()
 
 void Boris::showWeather(QString &behav)
 {
+  if(weather->windDirection.indexOf("W") != -1 &&
+     weather->windSpeed > 10.0) {
+    hVel = weather->windSpeed;
+  } else if(weather->windDirection.indexOf("E") != -1 &&
+            weather->windSpeed > 10.0) {
+    hVel = -weather->windSpeed;
+  }
   for(int a = 0; a < weathers->length(); ++a) {
     if(weathers->at(a).file == weather->icon) {
       curWeather = a;
