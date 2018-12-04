@@ -95,7 +95,7 @@ void NetComm::netReply(QNetworkReply *r)
       weather.windSpeed = settings->value("weather_force_wind_speed", "0.0").toDouble();
     }
     if(settings->contains("weather_force_wind_direction")) {
-      weather.windDirection = settings->value("weather_force_wind_direction", "E").toDouble();
+      weather.windDirection = settings->value("weather_force_wind_direction", "E").toString();
     }
     
     //qInfo("%s\n", rawData.data());
