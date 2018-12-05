@@ -68,6 +68,9 @@ MainWindow::MainWindow()
   if(!settings->contains("independence")) {
     settings->setValue("independence", "70");
   }
+  if(!settings->contains("iddqd")) {
+    settings->setValue("iddqd", "false");
+  }
   if(!settings->contains("stats")) {
     settings->setValue("stats", "never");
   } else if(settings->value("stats") == "true") {
