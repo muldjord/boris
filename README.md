@@ -27,10 +27,11 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 
 #### Version 2.0.3 (Unreleased):
 * Boris now gets hyper when drinking coffee
+* Boris now sometimes uses his umbrella when falling
 * Extreme winds (> 10 m/s) now moves Boris when showing weather
 * Boris now moves to opposite side when reaching x border
 * Added iddqd "secret" menu
-* Removed 'time_factor' config
+* Removed "time_factor" config
 
 #### Version 2.0.2 (4th December 2018):
 * Added 'allowFlip' flag to behaviours giving those a 50% of being flipped horizontally
