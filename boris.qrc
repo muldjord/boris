@@ -16,6 +16,7 @@
     <file alias="bruises.png">data/gfx/bruises.png</file>
     <file alias="dirt.png">data/gfx/dirt.png</file>
     <file alias="movement.png">data/gfx/movement.png</file>
+    <file alias="secret.png">data/gfx/secret.png</file>
     <file alias="health.png">data/gfx/health.png</file>
     <file alias="energy.png">data/gfx/energy.png</file>
     <file alias="hunger.png">data/gfx/hunger.png</file>
