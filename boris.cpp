@@ -614,7 +614,7 @@ void Boris::handlePhysics()
     moveBoris(hVel, vVel);
     vVel += 0.5;
     if(behaviours->at(curBehav).file != "_umbrella") {
-      if(vVel > 10 && qrand() % 100 <= 4) {
+      if(vVel > 10 && qrand() % 100 <= 7) {
         changeBehaviour("_umbrella");
       }
     } else {
