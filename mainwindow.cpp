@@ -90,9 +90,6 @@ MainWindow::MainWindow()
   if(!settings->contains("lemmy_mode")) {
     settings->setValue("lemmy_mode", "false");
   }
-  if(!settings->contains("time_factor")) {
-    settings->setValue("time_factor", "1");
-  }
   if(!settings->contains("weather_path")) {
     settings->setValue("weather_path", "data/weathers");
   }

@@ -88,7 +88,6 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   curWeatherFrame = 0;
   curFrame = 0;
   curBehav = 0;
-  timeFactor = settings->value("time_factor", "1").toInt();
   grabbed = false;
   falling = false;
   isAlive = true;
@@ -151,11 +150,11 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   weatherTimer.setSingleShot(true);
   connect(&weatherTimer, &QTimer::timeout, this, &Boris::nextWeatherFrame);
   
-  statTimer.setInterval(60000 / timeFactor);
+  statTimer.setInterval(60000);
   connect(&statTimer, &QTimer::timeout, this, &Boris::statProgress);
   statTimer.start();
 
-  statQueueTimer.setInterval(STATTIMER / timeFactor);
+  statQueueTimer.setInterval(STATTIMER);
   statQueueTimer.setSingleShot(true);
   connect(&statQueueTimer, &QTimer::timeout, this, &Boris::statQueueProgress);
   statQueueTimer.start();
@@ -364,7 +363,7 @@ void Boris::changeBehaviour(QString behav, int time)
     }
   }
   time = time - ((double)time / 100.0 * stats->getHyper());
-  behavTimer.setInterval(time / timeFactor);
+  behavTimer.setInterval(time);
 
 #ifdef DEBUG
   qInfo("Changing to behaviour '%d' titled '%s' for %d ms\n",
@@ -436,7 +435,7 @@ void Boris::nextFrame()
     behaviours->at(curBehav).behaviour.at(curFrame).soundFx->play();
   }
   int frameTime = behaviours->at(curBehav).behaviour.at(curFrame).time;
-  animTimer.setInterval(frameTime - ((double)frameTime / 100.0 * stats->getHyper()) / timeFactor);
+  animTimer.setInterval(frameTime - ((double)frameTime / 100.0 * stats->getHyper()));
   if(animTimer.interval() <= 5)
     animTimer.setInterval(5);
 
