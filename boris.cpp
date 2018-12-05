@@ -195,6 +195,8 @@ void Boris::createBehavMenu()
   funMenu->setIcon(QIcon(":fun.png"));
   QMenu *movementMenu = new QMenu(tr("Movement"), bMenu);
   movementMenu->setIcon(QIcon(":movement.png"));
+  QMenu *iddqdMenu = new QMenu(tr("Iddqd"), bMenu);
+  iddqdMenu->setIcon(QIcon(":iddqd.png"));
   connect(healthMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   connect(energyMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   connect(hungerMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
@@ -203,6 +205,7 @@ void Boris::createBehavMenu()
   connect(socialMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   connect(funMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   connect(movementMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
+  connect(iddqdMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   for(int i = 0; i < behaviours->length(); ++i) {
     if(behaviours->at(i).file.left(1) != "_") {
       if(behaviours->at(i).category == "Movement") {
@@ -221,7 +224,11 @@ void Boris::createBehavMenu()
         hygieneMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
       } else if(behaviours->at(i).category == "Health") {
         healthMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
+      } else {
+        iddqdMenu->addAction(QIcon(":iddqd.png"), behaviours->at(i).title);
       }
+    } else {
+      iddqdMenu->addAction(QIcon(":iddqd.png"), behaviours->at(i).title);
     }
   }
   bMenu->addMenu(healthMenu);
@@ -232,6 +239,9 @@ void Boris::createBehavMenu()
   bMenu->addMenu(socialMenu);
   bMenu->addMenu(funMenu);
   bMenu->addMenu(movementMenu);
+  if(settings->value("iddqd", "false").toBool()) {
+    bMenu->addMenu(iddqdMenu);
+  }
 }
 
 QString Boris::getFileFromCategory(QString category)
