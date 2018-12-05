@@ -597,6 +597,8 @@ void Boris::handlePhysics()
     } else if(weather->windDirection.indexOf("E") != -1) {
       moveBoris(round((sin(sinVal) + 0.25) * weather->windSpeed * 0.1), 0);
     }
+    if(chatter->isVisible())
+      chatter->moveChatter(this->pos().x(), this->pos().y(), borisSize);
   }
   
   if(falling && !grabbed) {

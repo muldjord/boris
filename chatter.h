@@ -41,8 +41,9 @@ class Chatter : public QWidget
 public:
   Chatter(QList<ChatLine> *chatLines, QWidget *parent);
   ~Chatter();
-  QPair<QString, int> initChatter(int x, int y, int borisSize);
-
+  QPair<QString, int> initChatter(const int x, const int y, const int &borisSize);
+  void moveChatter(const int x, const int y, const int &borisSize);
+  
 protected:
   void mousePressEvent(QMouseEvent *event);
   

@@ -69,7 +69,7 @@ Chatter::~Chatter()
 {
 }
 
-QPair<QString, int> Chatter::initChatter(int x, int y, int borisSize)
+QPair<QString, int> Chatter::initChatter(const int x, const int y, const int &borisSize)
 {
   currentLine = qrand() % chatLines->size();
   QString chatType = "_complain";
@@ -90,6 +90,12 @@ QPair<QString, int> Chatter::initChatter(int x, int y, int borisSize)
   }
 
   return QPair<QString, int>(chatType, duration);
+}
+
+void Chatter::moveChatter(const int x, const int y, const int &borisSize)
+{
+  move((x + (borisSize / 8 * 7)) - (width() / 2), y + (borisSize / 10 * 9) - height());
+  bubbleTip->move(width() / 2, height() - 27);
 }
 
 void Chatter::mousePressEvent(QMouseEvent *event)
