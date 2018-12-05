@@ -484,8 +484,7 @@ void Boris::moveBoris(int dX, int dY)
                 this->pos().y() + borisSize + borisSize / 3);
   }
   // if Boris is outside borders
-  if(this->pos().x() > maxX || this->pos().x() < minX ||
-     this->pos().y() > maxY || this->pos().y() < minY) {
+  if(this->pos().y() > maxY || this->pos().y() < minY) {
     if(falling) {
       healthQueue -= 5; // It hurts to hit the borders
       // Physics velocity when hitting borders
@@ -590,13 +589,13 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
 void Boris::handlePhysics()
 {
   if(!grabbed && weatherSprite->isVisible()) {
-    sinVal += 0.1 - ((double)(qrand() % 1000) / 10000.0);
-    if(sinVal > 2 * PI)
-      sinVal = 0;
+    sinVal += (double)(qrand() % 2000) / 20000.0;
+    if(sinVal > PI)
+      sinVal = 0.0;
     if(weather->windDirection.indexOf("W") != -1) {
-      moveBoris((-(sin(sinVal) + 1.0) * weather->windSpeed * 0.1), 0);
+      moveBoris(round((-(sin(sinVal) + 0.25) * weather->windSpeed * 0.1)), 0);
     } else if(weather->windDirection.indexOf("E") != -1) {
-      moveBoris((sin(sinVal) + 1.0) * weather->windSpeed * 0.1, 0);
+      moveBoris(round((sin(sinVal) + 0.25) * weather->windSpeed * 0.1), 0);
     }
   }
   
@@ -695,8 +694,8 @@ void Boris::statProgress()
 
 void Boris::sanityCheck()
 {
-  int minX = 0;
-  int maxX = QApplication::desktop()->width() - borisSize;
+  int minX = - borisSize;
+  int maxX = QApplication::desktop()->width();
   int minY = 0 - (borisSize / 2);
   int maxY = QApplication::desktop()->height() - height();
 
@@ -708,10 +707,10 @@ void Boris::sanityCheck()
     move(this->pos().x(), maxY);
   }
   if(this->pos().x() > maxX) {
-    move(maxX, this->pos().y());
+    move(minX, this->pos().y());
   }
   if(this->pos().x() < minX) {
-    move(minX, this->pos().y());
+    move(maxX, this->pos().y());
   }
 
   // Make sure Boris altitude is not outside bottom boundary
