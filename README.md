@@ -11,7 +11,7 @@ Boris was programmed using the Qt framework (http://www.qt.io) and C++.
 Bug reports, suggestions and / or comments can be emailed to me at:
 muldjordlars@gmail.com.
 
-Copyright 2017 Lars Muldjord. This program is distributed under the terms of the GNU General Public License. Be sure to read the license in COPYING.TXT or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.
+Copyright 2018 Lars Muldjord. This program is distributed under the terms of the GNU General Public License. Be sure to read the license in COPYING.TXT or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.
 
 ## Building from source (Linux)
 ### Requirements
@@ -30,6 +30,7 @@ Copyright 2017 Lars Muldjord. This program is distributed under the terms of the
 * Extreme winds (> 10 m/s) now moves Boris when showing weather
 * Boris now moves to opposite side when reaching x border
 * Added iddqd "secret" menu
+* Removed 'time_factor' config
 
 #### Version 2.0.2 (4th December 2018):
 * Added 'allowFlip' flag to behaviours giving those a 50% of being flipped horizontally
