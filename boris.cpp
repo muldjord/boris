@@ -613,10 +613,26 @@ void Boris::handlePhysics()
   if(falling && !grabbed) {
     moveBoris(hVel, vVel);
     vVel += 0.5;
+    if(behaviours->at(curBehav).file != "_umbrella") {
+      if(vVel > 10 && qrand() % 100 <= 4) {
+        changeBehaviour("_umbrella");
+      }
+    } else {
+      if(vVel > 2) {
+        vVel -= 1.0;
+      } else {
+        vVel = 2;
+      }
+      hVel *= 0.9;
+    }
     if(this->pos().y() >= alt) {
       move(this->pos().x(), alt);
       if(vVel < 5.0) {
-        changeBehaviour("_landing");
+        if(behaviours->at(curBehav).file != "_umbrella") {
+          changeBehaviour("_landing");
+        } else {
+          changeBehaviour("_complain");
+        }
         falling = false;
       } else {
         hVel *= 0.5;
@@ -684,7 +700,7 @@ void Boris::earthquake()
   if(!falling && !grabbed) {
     changeBehaviour("_falling", 200000);
     falling = true;
-    vVel = ((qrand() % 10) * -1) - 5;
+    vVel = ((qrand() % 15) * -1) - 5;
     hVel = qrand() % 20 - 11;
     alt = this->pos().y();
   }
