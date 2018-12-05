@@ -25,7 +25,7 @@ Copyright 2017 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
-#### Version 2.0.3 (Unreleased):
+#### Version 2.0.3 (5th December 2018):
 * Boris now gets hyper when drinking coffee
 * Extreme winds (> 10 m/s) now moves Boris when showing weather
 * Boris now moves to opposite side when reaching x border
