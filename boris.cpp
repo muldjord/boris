@@ -593,7 +593,7 @@ void Boris::handlePhysics()
     if(sinVal > PI)
       sinVal = 0.0;
     if(weather->windDirection.indexOf("W") != -1) {
-      moveBoris(round((-(sin(sinVal) + 0.25) * weather->windSpeed * 0.1)), 0);
+      moveBoris(round(-(sin(sinVal) + 0.25) * weather->windSpeed * 0.1), 0);
     } else if(weather->windDirection.indexOf("E") != -1) {
       moveBoris(round((sin(sinVal) + 0.25) * weather->windSpeed * 0.1), 0);
     }
@@ -604,10 +604,15 @@ void Boris::handlePhysics()
   if(falling && !grabbed) {
     moveBoris(hVel, vVel);
     vVel += 0.5;
-    if(this->pos().y() < alt) {
-    } else {
-      changeBehaviour("_landing");
-      falling = false;
+    if(this->pos().y() >= alt) {
+      move(this->pos().x(), alt);
+      if(vVel < 5.0) {
+        changeBehaviour("_landing");
+        falling = false;
+      } else {
+        hVel *= 0.8;
+        vVel = (vVel * 0.5) * -1;
+      }
     }
   }
   mouseHVel = (QCursor::pos().x() - oldCursor.x()) / 4.0;
