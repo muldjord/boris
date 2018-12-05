@@ -610,7 +610,7 @@ void Boris::handlePhysics()
         changeBehaviour("_landing");
         falling = false;
       } else {
-        hVel *= 0.3;
+        hVel *= 0.5;
         vVel = (vVel * 0.5) * -1;
         changeBehaviour("_bounce");
       }
