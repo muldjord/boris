@@ -28,6 +28,7 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 #### Version 2.0.3 (Unreleased):
 * Boris now gets hyper when drinking coffee
 * Boris now sometimes uses his umbrella when falling
+* Boris will now bounce when hitting the ground at high velocity
 * Extreme winds (> 10 m/s) now moves Boris when showing weather
 * Boris now moves to opposite side when reaching x border
 * Added iddqd "secret" menu
