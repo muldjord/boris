@@ -32,6 +32,7 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 * Boris now moves to opposite side when reaching x border
 * Added iddqd "secret" menu
 * Removed "time_factor" config
+* Added wind data to tray menu
 
 #### Version 2.0.2 (4th December 2018):
 * Added 'allowFlip' flag to behaviours giving those a 50% of being flipped horizontally
