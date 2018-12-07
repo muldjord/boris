@@ -290,7 +290,7 @@ void MainWindow::updateWeather()
 {
   *weather = netComm->getWeather();
   if(weather->temp != 66.6) {
-    weatherAction->setText(QString::number(weather->temp) + tr(" degrees Celsius"));
+    weatherAction->setText(QString::number(weather->temp) + "°C, " + QString::number(weather->windSpeed) + "m/s " + weather->windDirection);
   } else {
     weatherAction->setText(tr("Couldn't find city"));
   }
