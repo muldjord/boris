@@ -272,6 +272,7 @@ void MainWindow::checkCollisions()
       if(hypotenuse < 128) {
         borises.at(a)->collide(borises.at(b));
         borises.at(b)->collide(borises.at(a));
+        break;
       }
     }
   }
