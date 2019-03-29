@@ -316,7 +316,7 @@ void Boris::changeBehaviour(QString behav, int time)
   // Pick random behaviour but rule out certain behavs such as weewee and sleep
   // Bias towards behavs from 'Idle' and 'Walk' categories to make Boris less erratic
   if(qrand() % 10 >= 3) {
-    if(qrand() % 2) {
+    if(qrand() % 75 >= stats->getEnergy()) {
       curBehav = getIdxFromCategory("Idle");
     } else {
       curBehav = getIdxFromCategory("Walk");
@@ -601,9 +601,9 @@ void Boris::handlePhysics()
     sinVal += (double)(qrand() % 2000) / 20000.0;
     if(sinVal > PI)
       sinVal = 0.0;
-    if(weather->windDirection.indexOf("W") != -1) {
+    if(weather->windDirection.contains("W")) {
       moveBoris(round(-(sin(sinVal) + 0.25) * weather->windSpeed * 0.1), 0);
-    } else if(weather->windDirection.indexOf("E") != -1) {
+    } else if(weather->windDirection.contains("E")) {
       moveBoris(round((sin(sinVal) + 0.25) * weather->windSpeed * 0.1), 0);
     }
     if(chatter->isVisible())
@@ -1057,7 +1057,7 @@ void Boris::processAi(QString &behav, int &time)
     }
   }
   
-  if(behav == "" && time == 0) {
+  if(behav == "" && time == 0 && qrand() % 2) {
     // Stat check
     QList<QString> potentials;
     if(stats->getFun() <= 50) {
@@ -1136,8 +1136,8 @@ void Boris::processAi(QString &behav, int &time)
       }
     }
   }
-
-  if(behav == "" && time == 0 && qrand() % 20 >= 3 && behaviours->at(curBehav).file.contains("casual_walk")) {
+  if(behav == "" && time == 0 &&
+     qrand() % 20 >= 3 && behaviours->at(curBehav).file.contains("casual_walk")) {
     time = qrand() % 2000 + 500;
     if(behaviours->at(curBehav).file == "casual_walk_up") {
       if(qrand() % 2) {
