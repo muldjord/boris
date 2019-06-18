@@ -63,7 +63,8 @@ public:
   int getHygiene();
   void moveBoris(int dX, int dY);
   void changeBehaviour(QString behav = "", int time = 0);
-                                
+  int getCurBehav();
+                                                        
 public slots:
   void earthquake();
   void teleport();
@@ -85,6 +86,7 @@ private slots:
   void nextFrame();
   void nextWeatherFrame();
   void hideWeather();
+  void readyForFriend();
   
 private:
   bool falling;

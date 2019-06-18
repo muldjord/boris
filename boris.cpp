@@ -291,17 +291,6 @@ void Boris::changeBehaviour(QString behav, int time)
     return;
   }
 
-  // Check if already colliding with other Boris
-  if(boris != NULL) {
-    int xB = boris->pos().x();
-    int yB = boris->pos().y();
-    double hypotenuse = sqrt((yB - this->pos().y()) * (yB - this->pos().y()) + (xB - this->pos().x()) * (xB - this->pos().x()));
-    if(hypotenuse > 128) {
-      // Reset Boris pointer to make Boris wave at a new Boris again
-      boris = NULL;
-    }
-  }
-
   // Check if there are behaviours in queue, these are prioritized
   if(behav == "" && behavQueue.length() != 0) {
     behav = behavQueue.first();
@@ -613,9 +602,9 @@ void Boris::handlePhysics()
   if(falling && !grabbed) {
     moveBoris(hVel, vVel);
     vVel += 0.5;
-    if(behaviours->at(curBehav).file != "_umbrella") {
+    if(behaviours->at(curBehav).file != "_parachute_deploy") {
       if(vVel > 10 && qrand() % 100 <= 7) {
-        changeBehaviour("_umbrella");
+        changeBehaviour("_parachute_deploy");
       }
     } else {
       if(vVel > 2) {
@@ -628,7 +617,7 @@ void Boris::handlePhysics()
     if(this->pos().y() >= alt) {
       move(this->pos().x(), alt);
       if(vVel < 5.0) {
-        if(behaviours->at(curBehav).file != "_umbrella") {
+        if(behaviours->at(curBehav).file != "_parachute_deploy") {
           changeBehaviour("_landing");
         } else {
           changeBehaviour("_complain");
@@ -910,6 +899,12 @@ void Boris::collide(Boris *b)
     }
     
     int fleeThres = 22;
+
+    /*
+      } else if(behaviours->at(boris->getCurBehav).category == "Fun") {
+        changeBehaviour(getFileFromCategory("Fun"));
+    */
+
     if((approachAngle >= 0.0 && approachAngle < 22.5) || (approachAngle >= 337.5 && approachAngle < 360.0)) {
       if(boris->getHygiene() >= fleeThres) {
         changeBehaviour("_casual_wave_right");
@@ -958,7 +953,8 @@ void Boris::collide(Boris *b)
       } else {
         changeBehaviour("_flee_left_up", (qrand() % 2000) + 1500);
       }
-    }      
+    }
+    QTimer::singleShot(qrand() % 10000 + 2000, this, &Boris::readyForFriend);
   }
 }
 
@@ -1278,4 +1274,14 @@ void Boris::showWeather(QString &behav)
 void Boris::hideWeather()
 {
   weatherSprite->hide();
+}
+
+int Boris::getCurBehav()
+{
+  return curBehav;
+}
+
+void Boris::readyForFriend()
+{
+  boris = NULL;
 }
