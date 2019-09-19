@@ -2,7 +2,7 @@ TEMPLATE = app
 TARGET = Boris
 DEPENDPATH += .
 INCLUDEPATH += .
-#CONFIG += console debug
+CONFIG += console debug
 QT += widgets multimedia xml
 
 include(./VERSION)
@@ -23,6 +23,7 @@ HEADERS += mainwindow.h \
 SOURCES += mainwindow.cpp \
            about.cpp \
            boris.cpp \
+           behaviour.cpp \
            main.cpp \
            stats.cpp \
            loader.cpp \

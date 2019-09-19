@@ -28,16 +28,19 @@
 #define _LOADER_H
 
 #include "behaviour.h"
+#include "mainwindow.h"
 
-class Loader
+#include <QObject>
+
+class Loader: public QObject
 {
-public:
-  static bool loadBehaviours(QString dataDir, QList<Behaviour> *behaviours);
-  static void setClothesColor(QImage &image);
-
-private:
-  static QList<QString> extractSnippets(QString line);
+  Q_OBJECT;
   
+public:
+  static bool loadBehaviours(QString dataDir, QList<Behaviour> &behaviours,
+                             const QMap<QString, QSoundEffect *> &soundFxs);
+  static bool loadSoundFxs(QString dataDir, QMap<QString, QSoundEffect *> &soundFxs);
+  static void setClothesColor(QImage &image);
 };
 
 #endif // _LOADER_H

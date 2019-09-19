@@ -36,6 +36,8 @@
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QTimer>
+#include <QLinkedList>
+#include <QSoundEffect>
 
 class MainWindow : public QWidget
 {
@@ -54,7 +56,7 @@ private slots:
   //void weatherReply(QNetworkReply *r);
   void updateWeather();
   void updateChatLines();
-  
+
 private:
   NetComm *netComm;
   bool loadBehaviours();
@@ -69,10 +71,11 @@ private:
   QAction *quitAction;
   QSystemTrayIcon *trayIcon;
   QMenu *trayIconMenu;
-  QList<Boris*> borises;
-  QList<Behaviour> *behaviours;
-  QList<Behaviour> *weathers;
-  QList<ChatLine> *chatLines;
+  QLinkedList<Boris*> borises;
+  QList<Behaviour> behaviours;
+  QList<Behaviour> weathers;
+  QList<ChatLine> chatLines;
+  QMap<QString, QSoundEffect *> soundFxs;
   Weather *weather;
   int clones;
   void addBoris(int clones);

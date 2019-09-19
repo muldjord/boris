@@ -35,20 +35,22 @@
 #include <QDir>
 #include <QTextStream>
 #include <QDesktopWidget>
+#include <QSoundEffect>
 
 //#define DEBUG
 
 extern QSettings *settings;
 
-bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours)
+bool Loader::loadBehaviours(QString dataDir,
+                            QList<Behaviour> &behaviours,
+                            const QMap<QString, QSoundEffect *> &soundFxs)
 {
   QDir d(dataDir,
          "*.png",
          QDir::Name,
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
   QFileInfoList infoList = d.entryInfoList();
-  QFileInfo info;
-  foreach(info, infoList) {
+  for(const auto &info: infoList) {
     QFile dat(info.absoluteFilePath().
               left(info.absoluteFilePath().length() - 4) + ".dat");
     if(dat.open(QIODevice::ReadOnly)) {
@@ -130,10 +132,9 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours)
       qInfo("Hyper: %d\n, Health: %d\nEnergy: %d\nHunger: %d\nBladder: %d\nSocial: %d\nFun: %d\nHygiene: %d\n", b.hyper, b.health, b.energy, b.hunger, b.bladder, b.social, b.fun, b.hygiene);
 #endif
       line = in.readLine();
-      qreal volume = (qreal)settings->value("volume", "100").toInt() / 100.0;
       while (!line.isNull()) {
         Frame f;
-        QList<QString> snippets = extractSnippets(line);
+        QList<QString> snippets = line.split(";", QString::KeepEmptyParts);
         f.sprite = sprites.at(snippets.at(0).toInt());
         f.time = snippets.at(1).toInt();
         if(snippets.at(2) == "rand") {
@@ -148,23 +149,21 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours)
         }
         f.hide = snippets.at(4).toInt();
         f.show = snippets.at(5).toInt();
-        if(snippets.length() == 7) {
-          f.soundFx = new QSoundEffect();
-          f.soundFx->setSource(QUrl::fromLocalFile(snippets.at(6)));
-          f.soundFx->setVolume(volume);
+        if(snippets.length() >= 7) {
+          if(soundFxs.contains(snippets.at(6))) {
+            f.soundFx = soundFxs[snippets.at(6)];
 #ifdef DEBUG
-          qInfo("Added sound FX '%s'\n", snippets.at(6).toStdString().c_str());
+            qInfo("Added sound FX '%s'\n", snippets.at(6).toStdString().c_str());
 #endif
-        } else {
-          f.soundFx = NULL;
+          }
         }
-        b.behaviour.append(f);
+        b.frames.append(f);
 
         // Read next line and go again!
         line = in.readLine();
       }
       dat.close();
-      behaviours->append(b);
+      behaviours.append(b);
     } else {
       qInfo("Error in behaviour: %s\n", info.fileName().toStdString().c_str());
       return false;
@@ -173,19 +172,22 @@ bool Loader::loadBehaviours(QString dataDir, QList<Behaviour> *behaviours)
   return true;
 }
 
-QList<QString> Loader::extractSnippets(QString line)
+bool Loader::loadSoundFxs(QString dataDir, QMap<QString, QSoundEffect *> &soundFxs)
 {
-  QList<QString> snippets;
-  QString temp;
-  for(int a = 0; a < line.length(); ++a) {
-    if(line.at(a) != ';') {
-      temp.append(line.at(a));
-    } else {
-      snippets.append(temp);
-      temp = "";
-    }
+  QDir d(dataDir,
+         "*.wav",
+         QDir::Name,
+         QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
+  QFileInfoList infoList = d.entryInfoList();
+  double volume = settings->value("volume", "100").toDouble() / 100.0;
+  for(const auto &info: infoList) {
+    qInfo("Added sound: %s\n", info.fileName().toStdString().c_str());
+    QSoundEffect *soundFx = new QSoundEffect();
+    soundFx->setSource(QUrl::fromLocalFile(info.absoluteFilePath()));
+    soundFx->setVolume(volume);
+    soundFxs[dataDir + (dataDir.right(1) == "/"?"":"/") + info.fileName()] = soundFx;
   }
-  return snippets;
+  return true;
 }
 
 void Loader::setClothesColor(QImage &image)

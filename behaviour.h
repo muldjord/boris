@@ -1,9 +1,9 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /***************************************************************************
- *            behaviour.h
+ *            behaviour.cpp
  *
- *  Tue Nov 26 16:56:00 CEST 2013
- *  Copyright 2013 Lars Muldjord
+ *  Thu Sep 19 16:56:00 CEST 2019
+ *  Copyright 2019 Lars Muldjord
  *  muldjordlars@gmail.com
  ****************************************************************************/
 
@@ -27,22 +27,35 @@
 #ifndef _BEHAVIOUR_H
 #define _BEHAVIOUR_H
 
+#include <QObject>
 #include <QPixmap>
 #include <QSoundEffect>
 
-struct Frame
+class Frame: public QObject
 {
+  Q_OBJECT;
+
+public:
+  Frame(const Frame &frame);
+  void operator=(const Frame &frame);
+  Frame();
   QPixmap sprite;
   int time;
   int dx;
   int dy;
   bool hide;
   bool show;
-  QSoundEffect *soundFx;
+  QSoundEffect *soundFx = nullptr;
 };
 
-struct Behaviour
+class Behaviour: public QObject
 {
+  Q_OBJECT;
+
+public:
+  Behaviour(const Behaviour &behaviour);
+  void operator=(const Behaviour &behaviour);
+  Behaviour();
   QString file;
   QString title;
   QString category;
@@ -57,7 +70,7 @@ struct Behaviour
   bool oneShot;
   bool doNotDisturb;
   bool allowFlip;
-  QList<Frame> behaviour;
+  QList<Frame> frames;
 };
 
 #endif

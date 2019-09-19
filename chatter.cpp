@@ -38,7 +38,7 @@
 
 extern QSettings *settings;
 
-Chatter::Chatter(QList<ChatLine> *chatLines, QWidget *parent) : QWidget(parent)
+Chatter::Chatter(QList<ChatLine> &chatLines, QWidget *parent) : QWidget(parent)
 {
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
@@ -71,11 +71,11 @@ Chatter::~Chatter()
 
 QPair<QString, int> Chatter::initChatter(const int x, const int y, const int &borisSize)
 {
-  currentLine = qrand() % chatLines->size();
+  currentLine = qrand() % chatLines.count();
   QString chatType = "_complain";
-  if(!chatLines->isEmpty()) {
-    chatType = chatLines->at(currentLine).type;
-    chatterLabel->setText(chatLines->at(currentLine).text);
+  if(!chatLines.isEmpty()) {
+    chatType = chatLines.at(currentLine).type;
+    chatterLabel->setText(chatLines.at(currentLine).text);
   } else {
     chatterLabel->setText("I have nothing to say...");
   }
@@ -86,7 +86,7 @@ QPair<QString, int> Chatter::initChatter(const int x, const int y, const int &bo
     move((x + (borisSize / 8 * 7)) - (width() / 2), y + (borisSize / 10 * 9) - height());
     bubbleTip->move(width() / 2, height() - 27);
     bubbleTip->raise();
-    QTimer::singleShot(duration, this, SLOT(hide()));
+    QTimer::singleShot(duration, this, &Chatter::hide);
   }
 
   return QPair<QString, int>(chatType, duration);
@@ -100,8 +100,8 @@ void Chatter::moveChatter(const int x, const int y, const int &borisSize)
 
 void Chatter::mousePressEvent(QMouseEvent *event)
 {
-  if(event->button() == Qt::LeftButton && chatLines->at(currentLine).url.isValid()) {
-    QDesktopServices::openUrl(chatLines->at(currentLine).url);
+  if(event->button() == Qt::LeftButton && chatLines.at(currentLine).url.isValid()) {
+    QDesktopServices::openUrl(chatLines.at(currentLine).url);
   }
   event->ignore();
 }

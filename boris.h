@@ -48,8 +48,8 @@ class Boris : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *weather,
-        QList<ChatLine> *chatLines, QWidget *parent);
+  Boris(QList<Behaviour> &behaviours, QList<Behaviour> &weathers, Weather *weather,
+        QList<ChatLine> &chatLines, QWidget *parent);
   ~Boris();
   QTimer behavTimer;
   QList<Behaviour> *behaviours;

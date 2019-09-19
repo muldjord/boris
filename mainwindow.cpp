@@ -108,18 +108,24 @@ MainWindow::MainWindow()
     about.exec();
   }
   
-  behaviours = new QList<Behaviour>;
-  weathers = new QList<Behaviour>;
   weather = new Weather;
-  chatLines = new QList<ChatLine>;
   
-  if(Loader::loadBehaviours(settings->value("behavs_path", "data/behavs").toString(), behaviours)) {
+  if(Loader::loadSoundFxs(settings->value("sounds_path", "data/sfx").toString(),
+                          soundFxs)) {
+    qInfo("Sounds loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading some sounds, please check your wav files\n");
+  }
+
+  if(Loader::loadBehaviours(settings->value("behavs_path", "data/behavs").toString(),
+                            behaviours, soundFxs)) {
     qInfo("Behaviours loaded ok... :)\n");
   } else {
     qInfo("Error when loading some behaviours, please check your png and dat files\n");
   }
   
-  if(Loader::loadBehaviours(settings->value("weather_path", "data/weather").toString(), weathers)) {
+  if(Loader::loadBehaviours(settings->value("weather_path", "data/weather").toString(),
+                            weathers, soundFxs)) {
     qInfo("Weather types loaded ok... :)\n");
   } else {
     qInfo("Error when loading some weather types, please check your png and dat files\n");
@@ -146,24 +152,12 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow()
 {
   delete trayIcon;
-  // Stop all sounds before exiting, to avoid Pulseaudio crash on Linux
-  for(int a = 0; a < behaviours->length(); ++a) {
-    for(int b = 0; b < behaviours->at(a).behaviour.length(); ++b) {
-      if(behaviours->at(a).behaviour.at(b).soundFx != NULL &&
-         behaviours->at(a).behaviour.at(b).soundFx->isPlaying()) {
-        behaviours->at(a).behaviour.at(b).soundFx->stop();
-      }
-    }
-  }
-  delete behaviours;
-  delete weathers;
-  delete chatLines;
 }
 
 void MainWindow::addBoris(int clones)
 {
   for(int a = 0; a < clones; ++a) {
-    borises.append(new Boris(behaviours, weathers, weather, chatLines, this));
+    borises << new Boris(behaviours, weathers, weather, chatLines, this);
     connect(earthquakeAction, &QAction::triggered, borises.last(), &Boris::earthquake);
     connect(teleportAction, &QAction::triggered, borises.last(), &Boris::teleport);
     connect(weatherAction, &QAction::triggered, borises.last(), &Boris::triggerWeather);
@@ -175,12 +169,11 @@ void MainWindow::addBoris(int clones)
 void MainWindow::removeBoris(int clones)
 {
   // Reset all Boris collide pointers within all existing clones to prevent crash
-  for(int a = 0; a < borises.length(); ++a) {
-    borises.at(a)->boris = NULL;
+  for(const auto &boris: borises) {
+    boris->boris = nullptr;
   }
-  for(int a = 0; a < clones; ++a) {
-    delete borises.last();
-    borises.removeLast();
+  while(borises.count() > clones) {
+    delete borises.takeLast();
   }
 }
 
@@ -231,14 +224,10 @@ void MainWindow::aboutBox()
   bool showStats = settings->value("stats") == "always";
   int independence = settings->value("independence", "0").toInt();
   qreal volume = (qreal)settings->value("volume", "100").toInt() / 100.0;
-  for(int a = 0; a < borises.length(); ++a) {
-    borises.at(a)->updateBoris(newSize, showStats, soundEnable, independence);
-    for(int b = 0; b < behaviours->length(); ++b) {
-      for(int c = 0; c < behaviours->at(b).behaviour.length(); ++c) {
-        if(behaviours->at(b).behaviour.at(c).soundFx != NULL) {
-          behaviours->at(b).behaviour.at(c).soundFx->setVolume(volume);
-        }
-      }
+  for(auto &boris: borises) {
+    boris->updateBoris(newSize, showStats, soundEnable, independence);
+    for(const auto &key: soundFxs.keys()) {
+      soundFxs[key]->setVolume(volume);
     }
   }
   if(settings->value("clones", "2").toInt() != clones) {
@@ -262,16 +251,16 @@ void MainWindow::mousePressEvent(QMouseEvent* event)
 
 void MainWindow::checkCollisions()
 {
-  for(int a = 0; a < borises.length(); ++a) {
-    for(int b = 0; b < borises.length(); ++b) {
-      if(b != a) {
-        int xA = borises.at(a)->pos().x();
-        int yA = borises.at(a)->pos().y();
-        int xB = borises.at(b)->pos().x();
-        int yB = borises.at(b)->pos().y();
+  for(auto &borisA: borises) {
+    for(auto &borisB: borises) {
+      if(borisA != borisB) {
+        int xA = borisA->pos().x();
+        int yA = borisA->pos().y();
+        int xB = borisB->pos().x();
+        int yB = borisB->pos().y();
         double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
         if(hypotenuse < 128) {
-          borises.at(a)->collide(borises.at(b));
+          borisA->collide(borisB);
           break;
         }
       }
@@ -283,8 +272,8 @@ void MainWindow::checkCollisions()
 void MainWindow::killAll()
 {
   QTimer::singleShot(2000, qApp, SLOT(quit()));
-  for(int a = 0; a < borises.length(); ++a) {
-    borises.at(a)->changeBehaviour("casual_wave");
+  for(auto &boris: borises) {
+    boris->changeBehaviour("casual_wave");
   }
 }
 
@@ -302,7 +291,7 @@ void MainWindow::updateWeather()
 
 void MainWindow::updateChatLines()
 {
-  chatLines->clear();
+  chatLines.clear();
   if(!settings->contains("chat_file")) {
     settings->setValue("chat_file", "data/chatter.dat");
   }
@@ -314,10 +303,10 @@ void MainWindow::updateChatLines()
       ChatLine chatLine;
       chatLine.type = snippets.at(0);
       chatLine.text = snippets.at(1).trimmed();
-      chatLines->append(chatLine);
+      chatLines.append(chatLine);
     } while(chatFile.canReadLine());
   }
   chatFile.close();
 
-  chatLines->append(netComm->getFeedLines());
+  chatLines.append(netComm->getFeedLines());
 }

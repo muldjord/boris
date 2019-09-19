@@ -43,12 +43,13 @@
 
 extern QSettings *settings;
 
-Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *weather,
-             QList<ChatLine> *chatLines, QWidget *parent) : QGraphicsView(parent)
+Boris::Boris(QList<Behaviour> &behaviours, QList<Behaviour> &weathers, Weather *weather,
+             QList<ChatLine> &chatLines, QWidget *parent)
+  : QGraphicsView(parent)
 {
-  this->behaviours = behaviours;
-  this->weathers = weathers;
-  this->chatLines = chatLines;
+  this->behaviours = &behaviours;
+  this->weathers = &weathers;
+  this->chatLines = &chatLines;
   this->weather = weather;
   
   vVel = 0.0;
@@ -128,8 +129,8 @@ Boris::Boris(QList<Behaviour> *behaviours, QList<Behaviour> *weathers, Weather *
   
   staticBehavs = 0;
   // Figure out how many static behaviours there are
-  for(int i = 0; i < behaviours->length(); ++i) {
-    if(behaviours->at(i).file.left(1) == "_") {
+  for(const auto &behaviour: behaviours) {
+    if(behaviour.file.left(1) == "_") {
       staticBehavs++;
     }
   }
@@ -391,7 +392,7 @@ void Boris::nextFrame()
 {
   sanityCheck();
   
-  if(curFrame >= behaviours->at(curBehav).behaviour.length()) {
+  if(curFrame >= behaviours->at(curBehav).frames.count()) {
     if(!isAlive) {
       return;
     }
@@ -402,7 +403,7 @@ void Boris::nextFrame()
     }
   }
 
-  QBitmap mask = behaviours->at(curBehav).behaviour.at(curFrame).sprite.createMaskFromColor(QColor(0, 0, 0, 0));
+  QBitmap mask = behaviours->at(curBehav).frames.at(curFrame).sprite.createMaskFromColor(QColor(0, 0, 0, 0));
 
   QPixmap dirtPixmap(origDirt);
   dirtPixmap.setMask(mask);
@@ -411,36 +412,38 @@ void Boris::nextFrame()
   bruisesPixmap.setMask(mask);
 
   if(flipFrames) {
-    sprite->setPixmap(QPixmap::fromImage(behaviours->at(curBehav).behaviour.at(curFrame).sprite.toImage().mirrored(true, false)));
+    sprite->setPixmap(QPixmap::fromImage(behaviours->at(curBehav).frames.at(curFrame).sprite.toImage().mirrored(true, false)));
     dirt->setPixmap(QPixmap::fromImage(dirtPixmap.toImage().mirrored(true, false)));
     bruises->setPixmap(QPixmap::fromImage(bruisesPixmap.toImage().mirrored(true, false)));
   } else {
-    sprite->setPixmap(behaviours->at(curBehav).behaviour.at(curFrame).sprite);
+    sprite->setPixmap(behaviours->at(curBehav).frames.at(curFrame).sprite);
     dirt->setPixmap(dirtPixmap);
     bruises->setPixmap(bruisesPixmap);
   }
 
-  if(soundEnabled && behaviours->at(curBehav).behaviour.at(curFrame).soundFx != NULL) {
-    behaviours->at(curBehav).behaviour.at(curFrame).soundFx->play();
+  if(soundEnabled &&
+     behaviours->at(curBehav).frames.at(curFrame).soundFx != nullptr &&
+     behaviours->at(curBehav).frames.at(curFrame).soundFx->status() == QSoundEffect::Ready) {
+    behaviours->at(curBehav).frames.at(curFrame).soundFx->play();
   }
-  int frameTime = behaviours->at(curBehav).behaviour.at(curFrame).time;
+  int frameTime = behaviours->at(curBehav).frames.at(curFrame).time;
   animTimer.setInterval(frameTime - ((double)frameTime / 100.0 * stats->getHyper()));
   if(animTimer.interval() <= 5)
     animTimer.setInterval(5);
 
-  if(behaviours->at(curBehav).behaviour.at(curFrame).dx != 0 || behaviours->at(curBehav).behaviour.at(curFrame).dy != 0) {
-    moveBoris(behaviours->at(curBehav).behaviour.at(curFrame).dx * (flipFrames?-1:1),
-              behaviours->at(curBehav).behaviour.at(curFrame).dy);
+  if(behaviours->at(curBehav).frames.at(curFrame).dx != 0 || behaviours->at(curBehav).frames.at(curFrame).dy != 0) {
+    moveBoris(behaviours->at(curBehav).frames.at(curFrame).dx * (flipFrames?-1:1),
+              behaviours->at(curBehav).frames.at(curFrame).dy);
 }
 
-  if(behaviours->at(curBehav).behaviour.at(curFrame).show) {
+  if(behaviours->at(curBehav).frames.at(curFrame).show) {
 #ifdef DEBUG
     qInfo("Telling Boris to show himself...\n");
 #endif
     emit showBoris();
   }
 
-  if(behaviours->at(curBehav).behaviour.at(curFrame).hide) {
+  if(behaviours->at(curBehav).frames.at(curFrame).hide) {
 #ifdef DEBUG
     qInfo("Telling Boris to hide...\n");
 #endif
@@ -888,7 +891,7 @@ void Boris::collide(Boris *b)
     setFocus();
   }
   
-  if(!falling && !grabbed && !behaviours->at(curBehav).doNotDisturb && boris == NULL) {
+  if(!falling && !grabbed && !behaviours->at(curBehav).doNotDisturb && boris == nullptr) {
     boris = b;
     
     double approachAngle = atan2(this->pos().y() - boris->pos().y(), boris->pos().x() - this->pos().x()) * 180.0 / 3.1415927;
@@ -1190,7 +1193,7 @@ void Boris::processAi(QString &behav, int &time)
 void Boris::updateBoris(int newSize, bool showStats, bool soundEnable, int newIndependence)
 {
   // Reset Boris pointer
-  boris = NULL;
+  boris = nullptr;
 
   // Set new size
   borisSize = newSize;
@@ -1218,10 +1221,10 @@ void Boris::updateBoris(int newSize, bool showStats, bool soundEnable, int newIn
 
 void Boris::nextWeatherFrame()
 {
-  weatherSprite->setPixmap(weathers->at(curWeather).behaviour.at(curWeatherFrame).sprite);
-  weatherTimer.setInterval(weathers->at(curWeather).behaviour.at(curWeatherFrame).time);
+  weatherSprite->setPixmap(weathers->at(curWeather).frames.at(curWeatherFrame).sprite);
+  weatherTimer.setInterval(weathers->at(curWeather).frames.at(curWeatherFrame).time);
   curWeatherFrame++;
-  if(curWeatherFrame >= weathers->at(curWeather).behaviour.length()) {
+  if(curWeatherFrame >= weathers->at(curWeather).frames.length()) {
     curWeatherFrame = 0;
   }
   weatherTimer.start();
@@ -1283,5 +1286,5 @@ int Boris::getCurBehav()
 
 void Boris::readyForFriend()
 {
-  boris = NULL;
+  boris = nullptr;
 }
