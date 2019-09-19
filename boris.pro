@@ -2,7 +2,7 @@ TEMPLATE = app
 TARGET = Boris
 DEPENDPATH += .
 INCLUDEPATH += .
-CONFIG += console debug
+#CONFIG += console debug
 QT += widgets multimedia xml
 
 include(./VERSION)
