@@ -42,16 +42,14 @@
 //#define DEBUG
 
 extern QSettings *settings;
+extern QList<Behaviour> behaviours;
+extern QList<Behaviour> weathers;
+extern QList<ChatLine> chatLines;
+extern Weather weather;
 
-Boris::Boris(QList<Behaviour> &behaviours, QList<Behaviour> &weathers, Weather *weather,
-             QList<ChatLine> &chatLines, QWidget *parent)
+Boris::Boris(QWidget *parent)
   : QGraphicsView(parent)
 {
-  this->behaviours = &behaviours;
-  this->weathers = &weathers;
-  this->chatLines = &chatLines;
-  this->weather = weather;
-  
   vVel = 0.0;
   hVel = 0.0;
   mouseVVel = 0.0;
@@ -125,7 +123,7 @@ Boris::Boris(QList<Behaviour> &behaviours, QList<Behaviour> &weathers, Weather *
     showStats = false;
   }
 
-  chatter = new Chatter(chatLines, this);
+  chatter = new Chatter(this);
   
   staticBehavs = 0;
   // Figure out how many static behaviours there are
@@ -206,29 +204,29 @@ void Boris::createBehavMenu()
   connect(funMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   connect(movementMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   connect(iddqdMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
-  for(int i = 0; i < behaviours->length(); ++i) {
-    if(behaviours->at(i).file.left(1) != "_") {
-      if(behaviours->at(i).category == "Movement") {
-        movementMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
-      } else if(behaviours->at(i).category == "Energy") {
-        energyMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
-      } else if(behaviours->at(i).category == "Hunger") {
-        hungerMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
-      } else if(behaviours->at(i).category == "Bladder") {
-        bladderMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
-      } else if(behaviours->at(i).category == "Social") {
-        socialMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
-      } else if(behaviours->at(i).category == "Fun") {
-        funMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
-      } else if(behaviours->at(i).category == "Hygiene") {
-        hygieneMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
-      } else if(behaviours->at(i).category == "Health") {
-        healthMenu->addAction(QIcon(":" + behaviours->at(i).category.toLower() + ".png"), behaviours->at(i).title);
+  for(int i = 0; i < behaviours.length(); ++i) {
+    if(behaviours.at(i).file.left(1) != "_") {
+      if(behaviours.at(i).category == "Movement") {
+        movementMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
+      } else if(behaviours.at(i).category == "Energy") {
+        energyMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
+      } else if(behaviours.at(i).category == "Hunger") {
+        hungerMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
+      } else if(behaviours.at(i).category == "Bladder") {
+        bladderMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
+      } else if(behaviours.at(i).category == "Social") {
+        socialMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
+      } else if(behaviours.at(i).category == "Fun") {
+        funMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
+      } else if(behaviours.at(i).category == "Hygiene") {
+        hygieneMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
+      } else if(behaviours.at(i).category == "Health") {
+        healthMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
       } else {
-        iddqdMenu->addAction(QIcon(":iddqd.png"), behaviours->at(i).title);
+        iddqdMenu->addAction(QIcon(":iddqd.png"), behaviours.at(i).title);
       }
     } else {
-      iddqdMenu->addAction(QIcon(":iddqd.png"), behaviours->at(i).title);
+      iddqdMenu->addAction(QIcon(":iddqd.png"), behaviours.at(i).title);
     }
   }
   bMenu->addMenu(healthMenu);
@@ -247,32 +245,32 @@ void Boris::createBehavMenu()
 QString Boris::getFileFromCategory(QString category)
 {
   QList<QString> b;
-  for(int i = 0; i < behaviours->length(); ++i) {
-    if(behaviours->at(i).category == category) {
-      b.append(behaviours->at(i).file);
+  for(int i = 0; i < behaviours.length(); ++i) {
+    if(behaviours.at(i).category == category) {
+      b.append(behaviours.at(i).file);
     }
   }
   int chosen = qrand() % b.length();
-  for(int i = 0; i < behaviours->length(); ++i) {
-    if(behaviours->at(i).file == b.at(chosen)) {
+  for(int i = 0; i < behaviours.length(); ++i) {
+    if(behaviours.at(i).file == b.at(chosen)) {
       chosen = i;
       break;
     }
   }
-  return behaviours->at(chosen).file;
+  return behaviours.at(chosen).file;
 }
 
 int Boris::getIdxFromCategory(QString category)
 {
   QList<QString> b;
-  for(int i = 0; i < behaviours->length(); ++i) {
-    if(behaviours->at(i).category == category) {
-      b.append(behaviours->at(i).file);
+  for(int i = 0; i < behaviours.length(); ++i) {
+    if(behaviours.at(i).category == category) {
+      b.append(behaviours.at(i).file);
     }
   }
   int chosen = qrand() % b.length();
-  for(int i = 0; i < behaviours->length(); ++i) {
-    if(behaviours->at(i).file == b.at(chosen)) {
+  for(int i = 0; i < behaviours.length(); ++i) {
+    if(behaviours.at(i).file == b.at(chosen)) {
       chosen = i;
       break;
     }
@@ -313,20 +311,20 @@ void Boris::changeBehaviour(QString behav, int time)
     }
   } else {
     do {
-      curBehav = (qrand() % (behaviours->size() - staticBehavs)) + staticBehavs;
-    } while(behaviours->at(curBehav).file == "weewee" ||
-            behaviours->at(curBehav).file == "toilet_visit" ||
-            behaviours->at(curBehav).file == "sleep" ||
-            behaviours->at(curBehav).file == "shower" ||
-            behaviours->at(curBehav).file == "wash_hands" ||
-            behaviours->at(curBehav).file == "patch_up");
+      curBehav = (qrand() % (behaviours.size() - staticBehavs)) + staticBehavs;
+    } while(behaviours.at(curBehav).file == "weewee" ||
+            behaviours.at(curBehav).file == "toilet_visit" ||
+            behaviours.at(curBehav).file == "sleep" ||
+            behaviours.at(curBehav).file == "shower" ||
+            behaviours.at(curBehav).file == "wash_hands" ||
+            behaviours.at(curBehav).file == "patch_up");
   }
 
   // If a specific behaviour is requested, use that
   if(!behav.isEmpty()) {
     //behav = "_health"; // Use this to test behaviours
-    for(int a = 0; a < behaviours->size(); ++a) {
-      if(behaviours->at(a).file == behav) {
+    for(int a = 0; a < behaviours.size(); ++a) {
+      if(behaviours.at(a).file == behav) {
         curBehav = a;
       }
     }
@@ -335,10 +333,10 @@ void Boris::changeBehaviour(QString behav, int time)
   // Hide speech bubble in case Boris was grabbed or otherwise stopped in the middle of speaking
   chatter->hide();
   // Check for chatter
-  if(behaviours->at(curBehav).file == "chatter") {
+  if(behaviours.at(curBehav).file == "chatter") {
     QPair<QString, int> selectedChatter = chatter->initChatter(this->pos().x(), this->pos().y(), borisSize);
-    for(int a = 0; a < behaviours->size(); ++a) {
-      if(behaviours->at(a).file == selectedChatter.first) {
+    for(int a = 0; a < behaviours.size(); ++a) {
+      if(behaviours.at(a).file == selectedChatter.first) {
         curBehav = a;
       }
     }
@@ -346,7 +344,7 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   if(time == 0) {
-    if(behaviours->at(curBehav).file.contains("casual_walk")) {
+    if(behaviours.at(curBehav).file.contains("casual_walk")) {
       time = qrand() % 2000 + 500;
     } else {
       time = qrand() % 7000 + 5000;
@@ -357,27 +355,27 @@ void Boris::changeBehaviour(QString behav, int time)
 
 #ifdef DEBUG
   qInfo("Changing to behaviour '%d' titled '%s' for %d ms\n",
-         curBehav, behaviours->at(curBehav).file.toStdString().c_str(),
+         curBehav, behaviours.at(curBehav).file.toStdString().c_str(),
          behavTimer.interval());
 #endif
 
   // Applying behaviour stats to Boris
-  hyperQueue += behaviours->at(curBehav).hyper;
-  healthQueue += behaviours->at(curBehav).health;
-  energyQueue += behaviours->at(curBehav).energy;
-  hungerQueue += behaviours->at(curBehav).hunger;
-  bladderQueue += behaviours->at(curBehav).bladder;
-  socialQueue += behaviours->at(curBehav).social;
-  funQueue += behaviours->at(curBehav).fun;
-  hygieneQueue += behaviours->at(curBehav).hygiene;
+  hyperQueue += behaviours.at(curBehav).hyper;
+  healthQueue += behaviours.at(curBehav).health;
+  energyQueue += behaviours.at(curBehav).energy;
+  hungerQueue += behaviours.at(curBehav).hunger;
+  bladderQueue += behaviours.at(curBehav).bladder;
+  socialQueue += behaviours.at(curBehav).social;
+  funQueue += behaviours.at(curBehav).fun;
+  hygieneQueue += behaviours.at(curBehav).hygiene;
   
   curFrame = 0;
-  if(behaviours->at(curBehav).allowFlip && qrand() %2) {
+  if(behaviours.at(curBehav).allowFlip && qrand() %2) {
     flipFrames = true;
   } else {
     flipFrames = false;
   }
-  if(behaviours->at(curBehav).oneShot) {
+  if(behaviours.at(curBehav).oneShot) {
 #ifdef DEBUG
     qInfo("Behaviour is oneShot, ignoring timeout\n");
 #endif
@@ -392,7 +390,7 @@ void Boris::nextFrame()
 {
   sanityCheck();
   
-  if(curFrame >= behaviours->at(curBehav).frames.count()) {
+  if(curFrame >= behaviours.at(curBehav).frames.count()) {
     if(!isAlive) {
       return;
     }
@@ -403,7 +401,7 @@ void Boris::nextFrame()
     }
   }
 
-  QBitmap mask = behaviours->at(curBehav).frames.at(curFrame).sprite.createMaskFromColor(QColor(0, 0, 0, 0));
+  QBitmap mask = behaviours.at(curBehav).frames.at(curFrame).sprite.createMaskFromColor(QColor(0, 0, 0, 0));
 
   QPixmap dirtPixmap(origDirt);
   dirtPixmap.setMask(mask);
@@ -412,38 +410,38 @@ void Boris::nextFrame()
   bruisesPixmap.setMask(mask);
 
   if(flipFrames) {
-    sprite->setPixmap(QPixmap::fromImage(behaviours->at(curBehav).frames.at(curFrame).sprite.toImage().mirrored(true, false)));
+    sprite->setPixmap(QPixmap::fromImage(behaviours.at(curBehav).frames.at(curFrame).sprite.toImage().mirrored(true, false)));
     dirt->setPixmap(QPixmap::fromImage(dirtPixmap.toImage().mirrored(true, false)));
     bruises->setPixmap(QPixmap::fromImage(bruisesPixmap.toImage().mirrored(true, false)));
   } else {
-    sprite->setPixmap(behaviours->at(curBehav).frames.at(curFrame).sprite);
+    sprite->setPixmap(behaviours.at(curBehav).frames.at(curFrame).sprite);
     dirt->setPixmap(dirtPixmap);
     bruises->setPixmap(bruisesPixmap);
   }
 
   if(soundEnabled &&
-     behaviours->at(curBehav).frames.at(curFrame).soundFx != nullptr &&
-     behaviours->at(curBehav).frames.at(curFrame).soundFx->status() == QSoundEffect::Ready) {
-    behaviours->at(curBehav).frames.at(curFrame).soundFx->play();
+     behaviours.at(curBehav).frames.at(curFrame).soundFx != nullptr &&
+     behaviours.at(curBehav).frames.at(curFrame).soundFx->status() == QSoundEffect::Ready) {
+    behaviours.at(curBehav).frames.at(curFrame).soundFx->play();
   }
-  int frameTime = behaviours->at(curBehav).frames.at(curFrame).time;
+  int frameTime = behaviours.at(curBehav).frames.at(curFrame).time;
   animTimer.setInterval(frameTime - ((double)frameTime / 100.0 * stats->getHyper()));
   if(animTimer.interval() <= 5)
     animTimer.setInterval(5);
 
-  if(behaviours->at(curBehav).frames.at(curFrame).dx != 0 || behaviours->at(curBehav).frames.at(curFrame).dy != 0) {
-    moveBoris(behaviours->at(curBehav).frames.at(curFrame).dx * (flipFrames?-1:1),
-              behaviours->at(curBehav).frames.at(curFrame).dy);
+  if(behaviours.at(curBehav).frames.at(curFrame).dx != 0 || behaviours.at(curBehav).frames.at(curFrame).dy != 0) {
+    moveBoris(behaviours.at(curBehav).frames.at(curFrame).dx * (flipFrames?-1:1),
+              behaviours.at(curBehav).frames.at(curFrame).dy);
 }
 
-  if(behaviours->at(curBehav).frames.at(curFrame).show) {
+  if(behaviours.at(curBehav).frames.at(curFrame).show) {
 #ifdef DEBUG
     qInfo("Telling Boris to show himself...\n");
 #endif
     emit showBoris();
   }
 
-  if(behaviours->at(curBehav).frames.at(curFrame).hide) {
+  if(behaviours.at(curBehav).frames.at(curFrame).hide) {
 #ifdef DEBUG
     qInfo("Telling Boris to hide...\n");
 #endif
@@ -504,9 +502,9 @@ void Boris::moveBoris(int dX, int dY)
 }
 
 void Boris::handleBehaviourChange(QAction* a) {
-  for(int i = 0; i < behaviours->length(); ++i) {
-    if(behaviours->at(i).title == a->text()) {
-      behavQueue.append(behaviours->at(i).file);
+  for(int i = 0; i < behaviours.length(); ++i) {
+    if(behaviours.at(i).title == a->text()) {
+      behavQueue.append(behaviours.at(i).file);
     }
   }
 }
@@ -546,7 +544,7 @@ void Boris::mousePressEvent(QMouseEvent* event)
     bMenu->exec(QCursor::pos());
   }
   if(event->button() == Qt::LeftButton) {
-    if(behaviours->at(curBehav).file == "sleep" && stats->getEnergy() < 100) {
+    if(behaviours.at(curBehav).file == "sleep" && stats->getEnergy() < 100) {
       stats->deltaEnergy(-100);
     }
     setCursor(QCursor(QPixmap(":mouse_grab.png")));
@@ -593,10 +591,10 @@ void Boris::handlePhysics()
     sinVal += (double)(qrand() % 2000) / 20000.0;
     if(sinVal > PI)
       sinVal = 0.0;
-    if(weather->windDirection.contains("W")) {
-      moveBoris(round(-(sin(sinVal) + 0.25) * weather->windSpeed * 0.1), 0);
-    } else if(weather->windDirection.contains("E")) {
-      moveBoris(round((sin(sinVal) + 0.25) * weather->windSpeed * 0.1), 0);
+    if(weather.windDirection.contains("W")) {
+      moveBoris(round(-(sin(sinVal) + 0.25) * weather.windSpeed * 0.1), 0);
+    } else if(weather.windDirection.contains("E")) {
+      moveBoris(round((sin(sinVal) + 0.25) * weather.windSpeed * 0.1), 0);
     }
     if(chatter->isVisible())
       chatter->moveChatter(this->pos().x(), this->pos().y(), borisSize);
@@ -605,7 +603,7 @@ void Boris::handlePhysics()
   if(falling && !grabbed) {
     moveBoris(hVel, vVel);
     vVel += 0.5;
-    if(behaviours->at(curBehav).file != "_parachute_deploy") {
+    if(behaviours.at(curBehav).file != "_parachute_deploy") {
       if(vVel > 10 && qrand() % 100 <= 7) {
         changeBehaviour("_parachute_deploy");
       }
@@ -620,7 +618,7 @@ void Boris::handlePhysics()
     if(this->pos().y() >= alt) {
       move(this->pos().x(), alt);
       if(vVel < 5.0) {
-        if(behaviours->at(curBehav).file != "_parachute_deploy") {
+        if(behaviours.at(curBehav).file != "_parachute_deploy") {
           changeBehaviour("_landing");
         } else {
           changeBehaviour("_complain");
@@ -641,7 +639,7 @@ void Boris::handlePhysics()
   oldCursor = QCursor::pos();
 
   if(!falling && !grabbed &&
-     !behaviours->at(curBehav).doNotDisturb) {
+     !behaviours.at(curBehav).doNotDisturb) {
     QPoint p = QCursor::pos();
     int xA = p.x();
     int yA = p.y();
@@ -891,7 +889,7 @@ void Boris::collide(Boris *b)
     setFocus();
   }
   
-  if(!falling && !grabbed && !behaviours->at(curBehav).doNotDisturb && boris == nullptr) {
+  if(!falling && !grabbed && !behaviours.at(curBehav).doNotDisturb && boris == nullptr) {
     boris = b;
     
     double approachAngle = atan2(this->pos().y() - boris->pos().y(), boris->pos().x() - this->pos().x()) * 180.0 / 3.1415927;
@@ -904,7 +902,7 @@ void Boris::collide(Boris *b)
     int fleeThres = 22;
 
     /*
-      } else if(behaviours->at(boris->getCurBehav).category == "Fun") {
+      } else if(behaviours.at(boris->getCurBehav).category == "Fun") {
         changeBehaviour(getFileFromCategory("Fun"));
     */
 
@@ -1136,51 +1134,51 @@ void Boris::processAi(QString &behav, int &time)
     }
   }
   if(behav == "" && time == 0 &&
-     qrand() % 20 >= 3 && behaviours->at(curBehav).file.contains("casual_walk")) {
+     qrand() % 20 >= 3 && behaviours.at(curBehav).file.contains("casual_walk")) {
     time = qrand() % 2000 + 500;
-    if(behaviours->at(curBehav).file == "casual_walk_up") {
+    if(behaviours.at(curBehav).file == "casual_walk_up") {
       if(qrand() % 2) {
         behav = "casual_walk_left_up";
       } else {
         behav = "casual_walk_right_up";
       }
-    } else if(behaviours->at(curBehav).file == "casual_walk_right_up") {
+    } else if(behaviours.at(curBehav).file == "casual_walk_right_up") {
       if(qrand() % 2) {
         behav = "casual_walk_up";
       } else {
         behav = "casual_walk_right";
       }
-    } else if(behaviours->at(curBehav).file == "casual_walk_right") {
+    } else if(behaviours.at(curBehav).file == "casual_walk_right") {
       if(qrand() % 2) {
         behav = "casual_walk_right_up";
       } else {
         behav = "casual_walk_right_down";
       }
-    } else if(behaviours->at(curBehav).file == "casual_walk_right_down") {
+    } else if(behaviours.at(curBehav).file == "casual_walk_right_down") {
       if(qrand() % 2) {
         behav = "casual_walk_right";
       } else {
         behav = "casual_walk_down";
       }
-    } else if(behaviours->at(curBehav).file == "casual_walk_down") {
+    } else if(behaviours.at(curBehav).file == "casual_walk_down") {
       if(qrand() % 2) {
         behav = "casual_walk_right_down";
       } else {
         behav = "casual_walk_left_down";
       }
-    } else if(behaviours->at(curBehav).file == "casual_walk_left_down") {
+    } else if(behaviours.at(curBehav).file == "casual_walk_left_down") {
       if(qrand() % 2) {
         behav = "casual_walk_down";
       } else {
         behav = "casual_walk_left";
       }
-    } else if(behaviours->at(curBehav).file == "casual_walk_left") {
+    } else if(behaviours.at(curBehav).file == "casual_walk_left") {
       if(qrand() % 2) {
         behav = "casual_walk_left_down";
       } else {
         behav = "casual_walk_left_up";
       }
-    } else if(behaviours->at(curBehav).file == "casual_walk_left_up") {
+    } else if(behaviours.at(curBehav).file == "casual_walk_left_up") {
       if(qrand() % 2) {
         behav = "casual_walk_left";
       } else {
@@ -1221,10 +1219,10 @@ void Boris::updateBoris(int newSize, bool showStats, bool soundEnable, int newIn
 
 void Boris::nextWeatherFrame()
 {
-  weatherSprite->setPixmap(weathers->at(curWeather).frames.at(curWeatherFrame).sprite);
-  weatherTimer.setInterval(weathers->at(curWeather).frames.at(curWeatherFrame).time);
+  weatherSprite->setPixmap(weathers.at(curWeather).frames.at(curWeatherFrame).sprite);
+  weatherTimer.setInterval(weathers.at(curWeather).frames.at(curWeatherFrame).time);
   curWeatherFrame++;
-  if(curWeatherFrame >= weathers->at(curWeather).frames.length()) {
+  if(curWeatherFrame >= weathers.at(curWeather).frames.length()) {
     curWeatherFrame = 0;
   }
   weatherTimer.start();
@@ -1241,8 +1239,8 @@ void Boris::showWeather(QString &behav)
   // Reset sine wave for wind
   sinVal = 0.0;
   
-  for(int a = 0; a < weathers->length(); ++a) {
-    if(weathers->at(a).file == weather->icon) {
+  for(int a = 0; a < weathers.count(); ++a) {
+    if(weathers.at(a).file == weather.icon) {
       curWeather = a;
       break;
     }
@@ -1255,20 +1253,20 @@ void Boris::showWeather(QString &behav)
   QTimer::singleShot(30000, this, SLOT(hideWeather()));
   
   if(!falling && !grabbed) {
-    if(weather->icon == "01d") {
+    if(weather.icon == "01d") {
       behavQueue.append("sunglasses");
-    } else if(weather->icon == "02d" && weather->temp >= 15) {
+    } else if(weather.icon == "02d" && weather.temp >= 15) {
       behavQueue.append("sunglasses");
-    } else if(weather->icon == "09d" || weather->icon == "09n" ||
-              weather->icon == "10d" || weather->icon == "10n") {
+    } else if(weather.icon == "09d" || weather.icon == "09n" ||
+              weather.icon == "10d" || weather.icon == "10n") {
       behavQueue.append("_umbrella");
-    } else if(weather->icon == "11d" || weather->icon == "11n") {
+    } else if(weather.icon == "11d" || weather.icon == "11n") {
       behav = "_lightning";
-    } else if(weather->icon == "13d" || weather->icon == "13n") {
+    } else if(weather.icon == "13d" || weather.icon == "13n") {
       behavQueue.append("_freezing");
-    } else if(weather->icon == "01n" || weather->icon == "02n") {
+    } else if(weather.icon == "01n" || weather.icon == "02n") {
       behavQueue.append("_energy"); // Yawn for weathers that have a moon
-    } else if(weather->icon == "04d" || weather->icon == "04n") {
+    } else if(weather.icon == "04d" || weather.icon == "04n") {
       behavQueue.append("_fun"); // Depressed from clouds
     }
   }

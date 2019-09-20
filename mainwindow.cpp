@@ -41,6 +41,10 @@
 //#define DEBUG
 
 extern QSettings *settings;
+QList<Behaviour> behaviours;
+QList<Behaviour> weathers;
+QList<ChatLine> chatLines;
+Weather weather;
 
 MainWindow::MainWindow()
 {
@@ -108,8 +112,6 @@ MainWindow::MainWindow()
     about.exec();
   }
   
-  weather = new Weather;
-  
   if(Loader::loadSoundFxs(settings->value("sounds_path", "data/sfx").toString(),
                           soundFxs)) {
     qInfo("Sounds loaded ok... :)\n");
@@ -141,7 +143,7 @@ MainWindow::MainWindow()
 
   clones = settings->value("clones", "4").toInt();
   qInfo("Spawning %d clone(s)\n", clones);
-  addBoris(settings->value("clones", "4").toInt());
+  addBoris(clones);
 
   collisTimer.setInterval(1000);
   collisTimer.setSingleShot(true);
@@ -156,8 +158,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::addBoris(int clones)
 {
-  for(int a = 0; a < clones; ++a) {
-    borises << new Boris(behaviours, weathers, weather, chatLines, this);
+  while(clones--) {
+    borises << new Boris(this);
     connect(earthquakeAction, &QAction::triggered, borises.last(), &Boris::earthquake);
     connect(teleportAction, &QAction::triggered, borises.last(), &Boris::teleport);
     connect(weatherAction, &QAction::triggered, borises.last(), &Boris::triggerWeather);
@@ -172,7 +174,7 @@ void MainWindow::removeBoris(int clones)
   for(const auto &boris: borises) {
     boris->boris = nullptr;
   }
-  while(borises.count() > clones) {
+  while(clones--) {
     delete borises.takeLast();
   }
 }
@@ -279,13 +281,13 @@ void MainWindow::killAll()
 
 void MainWindow::updateWeather()
 {
-  *weather = netComm->getWeather();
-  if(weather->temp != 66.6) {
-    weatherAction->setText(QString::number(weather->temp) + "°C, " + QString::number(weather->windSpeed) + "m/s " + weather->windDirection);
+  weather = netComm->getWeather();
+  if(weather.temp != 66.6) {
+    weatherAction->setText(QString::number(weather.temp) + "°C, " + QString::number(weather.windSpeed) + "m/s " + weather.windDirection);
   } else {
     weatherAction->setText(tr("Couldn't find city"));
   }
-  weatherAction->setIcon(QIcon(":" + weather->icon + ".png"));
+  weatherAction->setIcon(QIcon(":" + weather.icon + ".png"));
 }
 
 

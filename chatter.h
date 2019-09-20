@@ -39,7 +39,7 @@ class Chatter : public QWidget
   Q_OBJECT;
 
 public:
-  Chatter(QList<ChatLine> &chatLines, QWidget *parent);
+  Chatter(QWidget *parent);
   ~Chatter();
   QPair<QString, int> initChatter(const int x, const int y, const int &borisSize);
   void moveChatter(const int x, const int y, const int &borisSize);
@@ -50,7 +50,6 @@ protected:
 private:
   QLabel *chatterLabel;
   QLabel *bubbleTip;
-  QList<ChatLine> chatLines;
   int currentLine = 0;
 };
 

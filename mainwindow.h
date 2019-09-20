@@ -72,11 +72,7 @@ private:
   QSystemTrayIcon *trayIcon;
   QMenu *trayIconMenu;
   QLinkedList<Boris*> borises;
-  QList<Behaviour> behaviours;
-  QList<Behaviour> weathers;
-  QList<ChatLine> chatLines;
   QMap<QString, QSoundEffect *> soundFxs;
-  Weather *weather;
   int clones;
   void addBoris(int clones);
   void removeBoris(int clones);

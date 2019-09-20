@@ -42,20 +42,13 @@
 #include <QKeyEvent>
 #include <QMenu>
 
-class Vision;
-
 class Boris : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Boris(QList<Behaviour> &behaviours, QList<Behaviour> &weathers, Weather *weather,
-        QList<ChatLine> &chatLines, QWidget *parent);
+  Boris(QWidget *parent);
   ~Boris();
   QTimer behavTimer;
-  QList<Behaviour> *behaviours;
-  QList<Behaviour> *weathers;
-  QList<ChatLine> *chatLines;
-  Weather *weather;
   void updateBoris(int newSize, bool statsEnable, bool soundEnable, int newIndependence);
   int borisSize;
   void collide(Boris *b);
