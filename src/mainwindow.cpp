@@ -211,8 +211,8 @@ MainWindow::MainWindow()
   settings.clones = iniSettings.value("clones").toInt();
   addBoris((settings.clones == 0?qrand() % 99 + 1:settings.clones));
 
-  // Set one audio channel per Boris
-  Mix_AllocateChannels(borises.count());
+  // Set new audio channels
+  Mix_AllocateChannels(borises.count() * 2); // Allocate plenty to allow overlapping sounds
 
   collisTimer.setInterval(100);
   collisTimer.setSingleShot(true);
@@ -309,7 +309,7 @@ void MainWindow::aboutBox()
   }
   
   // Set new audio channels
-  Mix_AllocateChannels(borises.count());
+  Mix_AllocateChannels(borises.count() * 2); // Allocate plenty to allow overlapping sounds
   
   netComm->updateAll();
 }
