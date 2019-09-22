@@ -28,15 +28,12 @@
 #include <QApplication>
 #include <QTranslator>
 #include <QLocale>
-#include <QSettings>
 #include <QDir>
 #include <QDateTime>
 #include <QFileInfo>
 #include <QHostInfo>
 
 #include "mainwindow.h"
-
-QSettings *settings;
 
 void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QString &msg)
 {
@@ -77,14 +74,6 @@ int main(int argc, char *argv[])
   app.installTranslator(&translator);
 
   QDir::setCurrent(QApplication::applicationDirPath());
-
-  QString iniFile = "config.ini";
-  if(QFileInfo::exists("config_" + QHostInfo::localHostName().toLower() + ".ini")) {
-    iniFile = "config_" + QHostInfo::localHostName().toLower() + ".ini";
-  }
-
-  QSettings s(iniFile, QSettings::IniFormat);
-  settings = &s;
 
   MainWindow window;
 

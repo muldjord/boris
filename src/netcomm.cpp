@@ -26,18 +26,16 @@
  */
 
 #include "netcomm.h"
+#include "settings.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QTimer>
-#include <QSettings>
 #include <QFile>
 #include <QDomDocument>
 
-//#define DEBUG
-
-extern QSettings *settings;
+extern Settings settings;
 
 NetComm::NetComm()
 {
@@ -56,11 +54,12 @@ NetComm::~NetComm()
 
 void NetComm::updateAll()
 {
-  weatherRequest.setUrl(QUrl("http://api.openweathermap.org/data/2.5/weather?q=" + settings->value("weather_city", "Copenhagen").toString() + "&mode=xml&units=metric&appid=" + settings->value("weather_key", "fe9fe6cf47c03d2640d5063fbfa053a2").toString()));
-  feedRequest.setUrl(QUrl(settings->value("feed_url", "http://rss.slashdot.org/Slashdot/slashdotMain").toString()));
-
+  if(!settings.forceConfigWeather) {
+    weatherRequest.setUrl(QUrl("http://api.openweathermap.org/data/2.5/weather?q=" + settings.city + "&mode=xml&units=metric&appid=" + settings.key));
+    get(weatherRequest);
+  }
+  feedRequest.setUrl(QUrl(settings.feedUrl));
   get(feedRequest);
-  get(weatherRequest);
 }
    
 void NetComm::netReply(QNetworkReply *r)
@@ -72,40 +71,27 @@ void NetComm::netReply(QNetworkReply *r)
     qInfo("Updating weather:\n");
     qDebug("%s\n", doc.toString().toStdString().c_str());
 
-    weather.icon = doc.elementsByTagName("weather").at(0).toElement().attribute("icon");
-    weather.windSpeed = doc.elementsByTagName("speed").at(0).toElement().attribute("value").toDouble();
-    weather.windDirection = doc.elementsByTagName("direction").at(0).toElement().attribute("code");
-    weather.temp = doc.elementsByTagName("temperature").at(0).toElement().attribute("value").toDouble();
+    settings.weatherType = doc.elementsByTagName("weather").at(0).toElement().attribute("icon");
+    settings.windSpeed = doc.elementsByTagName("speed").at(0).toElement().attribute("value").toDouble();
+    settings.windDirection = doc.elementsByTagName("direction").at(0).toElement().attribute("code");
+    settings.temperature = doc.elementsByTagName("temperature").at(0).toElement().attribute("value").toDouble();
 
-    if(weather.icon.isEmpty()) {
-      weather.icon = "11d";
+    if(settings.weatherType.isEmpty()) {
+      settings.weatherType = "11d";
     }
-    if(weather.temp == 0.0) {
-      weather.temp = 66.6;
-    }
-    
-    // Overrule weather if forced from config.ini
-    if(settings->contains("weather_force_type")) {
-      weather.icon = settings->value("weather_force_type", "11d").toString();
-    }
-    if(settings->contains("weather_force_temp")) {
-      weather.temp = settings->value("weather_force_temp", "20.0").toDouble();
-    }
-    if(settings->contains("weather_force_wind_speed")) {
-      weather.windSpeed = settings->value("weather_force_wind_speed", "0.0").toDouble();
-    }
-    if(settings->contains("weather_force_wind_direction")) {
-      weather.windDirection = settings->value("weather_force_wind_direction", "E").toString();
+    if(settings.temperature == 0.0) {
+      settings.temperature = -42;
     }
     
     //qInfo("%s\n", rawData.data());
-    qInfo("Icon: %s\n", weather.icon.toStdString().c_str());
-    qInfo("Temp: %f\n", weather.temp);
-    qInfo("Wind: %fm/s from %s\n", weather.windSpeed, weather.windDirection.toStdString().c_str());
+    qInfo("Icon: %s\n", settings.weatherType.toStdString().c_str());
+    qInfo("Temp: %f\n", settings.temperature);
+    qInfo("Wind: %fm/s from %s\n", settings.windSpeed, settings.windDirection.toStdString().c_str());
+
     emit weatherUpdated();
   } 
   if(r->request() == feedRequest) {
-    chatLines.clear();
+    settings.chatLines.clear();
     qInfo("Updating feed:\n");
     qDebug("%s\n", doc.toString().toStdString().c_str());
     QDomNodeList titles = doc.elementsByTagName("item");
@@ -115,20 +101,21 @@ void NetComm::netReply(QNetworkReply *r)
       feedLine.text = titles.at(a).firstChildElement("title").text().trimmed();
       feedLine.url = QUrl(titles.at(a).firstChildElement("link").text());
       qInfo("'%s'\n", feedLine.text.toStdString().c_str());
-      chatLines.append(feedLine);
+      settings.chatLines.append(feedLine);
     }
-    emit feedUpdated();
+
+    QFile chatFile(settings.chatFile);
+    if(chatFile.open(QIODevice::ReadOnly)) {
+      do {
+        QList<QString> snippets = QString(chatFile.readLine()).split(";");
+        ChatLine chatLine;
+        chatLine.type = snippets.at(0);
+        chatLine.text = snippets.at(1).simplified();
+        settings.chatLines.append(chatLine);
+      } while(chatFile.canReadLine());
+    }
+    chatFile.close();
   }
   netTimer.start();
   r->deleteLater();
-}
-
-Weather NetComm::getWeather()
-{
-  return weather;
-}
-
-QList<ChatLine> NetComm::getFeedLines()
-{
-  return chatLines;
 }

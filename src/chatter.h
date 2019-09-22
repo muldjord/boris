@@ -1,9 +1,9 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /***************************************************************************
- *            weather.h
+ *            chatter.h
  *
- *  Tue Nov 26 16:56:00 CEST 2013
- *  Copyright 2013 Lars Muldjord
+ *  Thu Oct 27 18:47:00 CEST 2016
+ *  Copyright 2016 Lars Muldjord
  *  muldjordlars@gmail.com
  ****************************************************************************/
 
@@ -24,17 +24,31 @@
  *  along with Boris; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
-#ifndef _WEATHER_H
-#define _WEATHER_H
 
-#include <QString>
+#ifndef _CHATTER_H
+#define _CHATTER_H
 
-struct Weather
+#include <QWidget>
+#include <QLabel>
+#include <QMouseEvent>
+
+class Chatter : public QWidget
 {
-  QString icon = "11d";
-  double temp = 66.6;
-  QString windDirection = "N";
-  double windSpeed = 0.0;
+  Q_OBJECT;
+
+public:
+  Chatter(QWidget *parent);
+  ~Chatter();
+  QPair<QString, int> initChatter(const int x, const int y, const int &borisSize);
+  void moveChatter(const int x, const int y, const int &borisSize);
+  
+protected:
+  void mousePressEvent(QMouseEvent *event);
+  
+private:
+  QLabel *chatterLabel;
+  QLabel *bubbleTip;
+  int currentLine = 0;
 };
 
-#endif
+#endif // _CHATTER_H

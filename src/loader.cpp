@@ -26,20 +26,18 @@
  */
 
 #include "loader.h"
+#include "settings.h"
 
 #include <stdio.h>
 #include <math.h>
 #include <QApplication>
 #include <QTime>
-#include <QSettings>
 #include <QDir>
 #include <QTextStream>
 #include <QDesktopWidget>
 #include <QSoundEffect>
 
-//#define DEBUG
-
-extern QSettings *settings;
+extern Settings settings;
 
 bool Loader::loadBehaviours(QString dataDir,
                             QList<Behaviour> &behaviours,
@@ -179,12 +177,11 @@ bool Loader::loadSoundFxs(QString dataDir, QMap<QString, QSoundEffect *> &soundF
          QDir::Name,
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
   QFileInfoList infoList = d.entryInfoList();
-  double volume = settings->value("volume", "100").toDouble() / 100.0;
   for(const auto &info: infoList) {
     qInfo("Added sound: %s\n", info.fileName().toStdString().c_str());
     QSoundEffect *soundFx = new QSoundEffect();
     soundFx->setSource(QUrl::fromLocalFile(info.absoluteFilePath()));
-    soundFx->setVolume(volume);
+    soundFx->setVolume(settings.volume);
     soundFxs[dataDir + (dataDir.right(1) == "/"?"":"/") + info.fileName()] = soundFx;
   }
   return true;
@@ -192,7 +189,7 @@ bool Loader::loadSoundFxs(QString dataDir, QMap<QString, QSoundEffect *> &soundF
 
 void Loader::setClothesColor(QImage &image)
 {
-  if(settings->value("lemmy_mode", "true").toBool()) {
+  if(settings.lemmyMode) {
     image.setColor(1, QColor(255, 0, 0).rgb());
     image.setColor(8, QColor(0, 0, 0).rgb());
     image.setColor(9, QColor(20, 20, 20).rgb());

@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /***************************************************************************
- *            netcomm.h
+ *            mainwindow.h
  *
  *  Tue Nov 26 16:56:00 CEST 2013
  *  Copyright 2013 Lars Muldjord
@@ -24,41 +24,58 @@
  *  along with Boris; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
-#ifndef _NETCOMM_H
-#define _NETCOMM_H
+#ifndef _MAINWINDOW_H
+#define _MAINWINDOW_H
 
-#include "chatline.h"
-#include "weather.h"
+#include "boris.h"
+#include "behaviour.h"
+#include "netcomm.h"
 
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
+#include <QWidget>
+#include <QSystemTrayIcon>
+#include <QMenu>
 #include <QTimer>
+#include <QLinkedList>
+#include <QSoundEffect>
 
-class NetComm : public QNetworkAccessManager
+class MainWindow : public QWidget
 {
   Q_OBJECT;
 public:
-  NetComm();
-  ~NetComm();
-  Weather getWeather();
-  QList<ChatLine> getFeedLines();
+  MainWindow();
+  ~MainWindow();
 
-public slots:
-  void updateAll();
-  
-signals:
-  void weatherUpdated();
-  void feedUpdated();
+protected:
+  void mousePressEvent(QMouseEvent* event);
 
 private slots:
-  void netReply(QNetworkReply *r);
-  
+  void aboutBox();
+  void checkCollisions();
+  void killAll();
+  //void weatherReply(QNetworkReply *r);
+  void updateWeather();
+
 private:
-  QTimer netTimer;
-  Weather weather;
-  QList<ChatLine> chatLines;
-  QNetworkRequest weatherRequest;
-  QNetworkRequest feedRequest;
+  NetComm *netComm;
+  bool loadBehaviours();
+  QList<QString> extractSnippets(QString line);
+  QString *aboutText;
+  void createTrayIcon();
+  void createActions();
+  QAction *aboutAction;
+  QAction *earthquakeAction;
+  QAction *teleportAction;
+  QAction *weatherAction;
+  QAction *quitAction;
+  QSystemTrayIcon *trayIcon;
+  QMenu *trayIconMenu;
+  QLinkedList<Boris*> borises;
+  QMap<QString, QSoundEffect *> soundFxs;
+  void addBoris(int clones);
+  void removeBoris(int clones);
+  QTimer collisTimer;
+  void loadChatter();
+  
 };
 
-#endif // _NETCOMM_H
+#endif // _MAINWINDOW_H

@@ -9,26 +9,24 @@ include(./VERSION)
 DEFINES+=VERSION=\\\"$$VERSION\\\"
 
 # Input
-HEADERS += mainwindow.h \
-           about.h \
-           boris.h \
-           behaviour.h \
-           stats.h \
-           loader.h \
-           netcomm.h \
-           chatter.h \
-           chatline.h \
-           weather.h
+HEADERS += src/mainwindow.h \
+           src/about.h \
+           src/boris.h \
+           src/behaviour.h \
+           src/stats.h \
+           src/loader.h \
+           src/netcomm.h \
+           src/chatter.h
 
-SOURCES += mainwindow.cpp \
-           about.cpp \
-           boris.cpp \
-           behaviour.cpp \
-           main.cpp \
-           stats.cpp \
-           loader.cpp \
-           netcomm.cpp \
-           chatter.cpp
+SOURCES += src/mainwindow.cpp \
+           src/about.cpp \
+           src/boris.cpp \
+           src/behaviour.cpp \
+           src/main.cpp \
+           src/stats.cpp \
+           src/loader.cpp \
+           src/netcomm.cpp \
+           src/chatter.cpp
 
 RESOURCES += boris.qrc
 TRANSLATIONS = boris_da_DK.ts

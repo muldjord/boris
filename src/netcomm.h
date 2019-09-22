@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /***************************************************************************
- *            mainwindow.h
+ *            netcomm.h
  *
  *  Tue Nov 26 16:56:00 CEST 2013
  *  Copyright 2013 Lars Muldjord
@@ -24,61 +24,34 @@
  *  along with Boris; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
-#ifndef _MAINWINDOW_H
-#define _MAINWINDOW_H
+#ifndef _NETCOMM_H
+#define _NETCOMM_H
 
-#include "boris.h"
-#include "behaviour.h"
-#include "netcomm.h"
-#include "weather.h"
-
-#include <QWidget>
-#include <QSystemTrayIcon>
-#include <QMenu>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QTimer>
-#include <QLinkedList>
-#include <QSoundEffect>
 
-class MainWindow : public QWidget
+class NetComm : public QNetworkAccessManager
 {
   Q_OBJECT;
 public:
-  MainWindow();
-  ~MainWindow();
+  NetComm();
+  ~NetComm();
 
-protected:
-  void mousePressEvent(QMouseEvent* event);
+public slots:
+  void updateAll();
+  
+signals:
+  void weatherUpdated();
+  void feedUpdated();
 
 private slots:
-  void aboutBox();
-  void checkCollisions();
-  void killAll();
-  //void weatherReply(QNetworkReply *r);
-  void updateWeather();
-  void updateChatLines();
-
-private:
-  NetComm *netComm;
-  bool loadBehaviours();
-  QList<QString> extractSnippets(QString line);
-  QString *aboutText;
-  void createTrayIcon();
-  void createActions();
-  QAction *aboutAction;
-  QAction *earthquakeAction;
-  QAction *teleportAction;
-  QAction *weatherAction;
-  QAction *quitAction;
-  QSystemTrayIcon *trayIcon;
-  QMenu *trayIconMenu;
-  QLinkedList<Boris*> borises;
-  QMap<QString, QSoundEffect *> soundFxs;
-  int clones;
-  void addBoris(int clones);
-  void removeBoris(int clones);
-  QTimer collisTimer;
-  void loadChatter();
+  void netReply(QNetworkReply *r);
   
+private:
+  QTimer netTimer;
+  QNetworkRequest weatherRequest;
+  QNetworkRequest feedRequest;
 };
 
-#endif // _MAINWINDOW_H
+#endif // _NETCOMM_H

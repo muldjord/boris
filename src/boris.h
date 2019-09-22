@@ -30,13 +30,10 @@
 #include "behaviour.h"
 #include "stats.h"
 #include "chatter.h"
-#include "chatline.h"
-#include "weather.h"
 
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QTimer>
-#include <QSoundEffect>
 #include <QAction>
 #include <QMouseEvent>
 #include <QKeyEvent>
@@ -49,14 +46,14 @@ public:
   Boris(QWidget *parent);
   ~Boris();
   QTimer behavTimer;
-  void updateBoris(int newSize, bool statsEnable, bool soundEnable, int newIndependence);
-  int borisSize;
+  void updateBoris();
   void collide(Boris *b);
-  Boris *boris;
+  Boris *borisFriend;
   int getHygiene();
   void moveBoris(int dX, int dY);
   void changeBehaviour(QString behav = "", int time = 0);
   int getCurBehav();
+  int size = 64;
                                                         
 public slots:
   void earthquake();
@@ -92,7 +89,6 @@ private:
   int independence;
   
   QMenu* bMenu;
-  bool soundEnabled;
   int curFrame;
   int curBehav;
   QTimer animTimer;
@@ -121,7 +117,6 @@ private:
   void sanityCheck();
   Stats *stats;
   Chatter *chatter;
-  bool showStats;
   QList<QString> behavQueue;
   int hyperQueue;
   int healthQueue;

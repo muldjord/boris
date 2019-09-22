@@ -25,10 +25,10 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
 #include "about.h"
+#include "settings.h"
 
 #include <stdio.h>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QLabel>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -37,9 +37,11 @@
 #include <QScrollArea>
 #include <QFile>
 #include <QIntValidator>
+#include <QHostInfo>
 #include <QSettings>
+#include <QFileInfo>
 
-extern QSettings *settings;
+extern Settings settings;
 
 About::About(QWidget *parent) : QDialog(parent)
 {
@@ -47,7 +49,6 @@ About::About(QWidget *parent) : QDialog(parent)
   setWindowIcon(QIcon(":icon.png"));
   setWindowTitle("Boris v" VERSION);
 
-  move(QApplication::desktop()->width() / 2 - 225, QApplication::desktop()->height() / 2 - 250);
   // About tab
   QWidget *aboutWidget = new QWidget;
   QLabel *aboutText = new QLabel(tr("<strong>Boris bids you welcome!</strong><br/>He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye out for him!<br/><br/>"
@@ -112,63 +113,52 @@ About::About(QWidget *parent) : QDialog(parent)
 
   QLabel *sizeLabel = new QLabel(tr("Boris size in pixels (32-256 or 0 for random):"));
   sizeLineEdit = new QLineEdit();
-  QIntValidator *sizeValidator = new QIntValidator(32,256);
+  QIntValidator *sizeValidator = new QIntValidator(0, 256, this);
   sizeLineEdit->setValidator(sizeValidator);
-  if(settings->contains("size")) {
-    sizeLineEdit->setText(settings->value("size").toString());
-  }
+  sizeLineEdit->setText(QString::number(settings.size));
 
-  QLabel *clonesLabel = new QLabel(tr("Boris clones (1-100):"));
+  QLabel *clonesLabel = new QLabel(tr("Boris clones (1-100 or 0 for random):"));
   clonesLineEdit = new QLineEdit();
-  QIntValidator *clonesValidator = new QIntValidator(1,100);
+  QIntValidator *clonesValidator = new QIntValidator(0, 100, this);
   clonesLineEdit->setValidator(clonesValidator);
-  if(settings->contains("clones")) {
-    clonesLineEdit->setText(settings->value("clones").toString());
-  }
+  clonesLineEdit->setText(QString::number(settings.clones));
 
   QLabel *weatherLabel = new QLabel(tr("Show weather for city (mouse over for help):"));
   weatherLineEdit = new QLineEdit();
   weatherLineEdit->setToolTip(tr("Try typing in a nearby city. If it doesn't work, go to openweathermap.org and search for a city until you find one that exists.<br/>Then type that in exactly as it is shown on their website."));
-  if(settings->contains("weather_city")) {
-    weatherLineEdit->setText(settings->value("weather_city").toString());
-  }
+  weatherLineEdit->setText(settings.city);
 
   QLabel *weatherKeyLabel = new QLabel(tr("OpenWeatherMap key (mouse over for help):"));
   weatherKeyLineEdit = new QLineEdit();
   weatherKeyLineEdit->setToolTip(tr("The weather functionality needs an API key to function. The default one should work.<br/>In case it doesn't, get a new one for free at openweathermap.org/appid"));
-  if(settings->contains("weather_key")) {
-    weatherKeyLineEdit->setText(settings->value("weather_key").toString());
-  }
+  weatherKeyLineEdit->setText(settings.key);
 
   QLabel *feedUrlLabel = new QLabel(tr("RSS feed url:"));
   feedUrlLineEdit = new QLineEdit();
   feedUrlLineEdit->setToolTip(tr("Type in any RSS feed url. Boris will sometimes update you on a title from this feed"));
-  if(settings->contains("feed_url")) {
-    feedUrlLineEdit->setText(settings->value("feed_url").toString());
-  }
+  feedUrlLineEdit->setText(settings.feedUrl);
 
   QLabel *statsLabel = new QLabel(tr("Vitality stats:"));
   statsComboBox = new QComboBox();
-  statsComboBox->addItem(tr("Always show"), "always");
-  statsComboBox->addItem(tr("Only show on notifications"), "notifications");
-  statsComboBox->addItem(tr("Only show on mouse over"), "never");
-  statsComboBox->setCurrentIndex(statsComboBox->findData(settings->value("stats", "never")));
+  statsComboBox->addItem(tr("Always show"), STATS_ALWAYS);
+  statsComboBox->addItem(tr("Show on critical levels"), STATS_CRITICAL);
+  statsComboBox->addItem(tr("Show on mouse over"), STATS_MOUSEOVER);
+  statsComboBox->addItem(tr("Never show"), STATS_NEVER);
+  statsComboBox->setCurrentIndex(statsComboBox->findData(settings.stats));
 
   QLabel *independenceLabel = new QLabel(tr("Independence:"));
   independenceSlider = new QSlider(Qt::Horizontal);
   independenceSlider->setMinimum(0);
   independenceSlider->setMaximum(100);
-  if(settings->contains("independence")) {
-    independenceSlider->setValue(settings->value("independence").toInt());
-  }
+  independenceSlider->setValue(settings.independence);
 
   enableChatter = new QCheckBox(tr("Enable Boris speech bubbles"));
-  if(settings->value("chatter") == "true") {
+  if(settings.chatter) {
     enableChatter->setCheckState(Qt::Checked);
   }
 
   enableSound = new QCheckBox(tr("Enable sound"));
-  if(settings->value("sound") == "true") {
+  if(settings.sound) {
     enableSound->setCheckState(Qt::Checked);
   }
 
@@ -176,12 +166,10 @@ About::About(QWidget *parent) : QDialog(parent)
   volumeSlider = new QSlider(Qt::Horizontal);
   volumeSlider->setMinimum(0);
   volumeSlider->setMaximum(100);
-  if(settings->contains("volume")) {
-    volumeSlider->setValue(settings->value("volume").toInt());
-  }
+  volumeSlider->setValue(settings.volume * 100);
   
   showWelcome = new QCheckBox(tr("Always show this dialog on startup"));
-  if(settings->value("show_welcome") == "true") {
+  if(settings.showWelcome) {
     showWelcome->setCheckState(Qt::Checked);
   }
 
@@ -224,11 +212,10 @@ About::~About()
 void About::saveAll()
 {
   if(showWelcome->isChecked()) {
-    settings->setValue("show_welcome", "true");
+    settings.showWelcome = true;
   } else {
-    settings->setValue("show_welcome", "false");
+    settings.showWelcome = false;
   }
-
   if(sizeLineEdit->text().toInt() != 0) {
     if(sizeLineEdit->text().toInt() < 32) {
       sizeLineEdit->setText("32");
@@ -236,40 +223,65 @@ void About::saveAll()
     if(sizeLineEdit->text().toInt() > 256) {
       sizeLineEdit->setText("256");
     }
+    settings.size = sizeLineEdit->text().toInt();
+  } else {
+    settings.size = 0;
   }
-  settings->setValue("size", sizeLineEdit->text());
-
-  if(clonesLineEdit->text().toInt() < 1) {
-    clonesLineEdit->setText("1");
+  if(clonesLineEdit->text().toInt() != 0) {
+    if(clonesLineEdit->text().toInt() < 1) {
+      clonesLineEdit->setText("1");
+    }
+    if(clonesLineEdit->text().toInt() > 100) {
+      clonesLineEdit->setText("100");
+    }
+    settings.clones = clonesLineEdit->text().toInt();
+  } else {
+    settings.clones = 0;
   }
-  if(clonesLineEdit->text().toInt() > 100) {
-    clonesLineEdit->setText("100");
-  }
-  settings->setValue("clones", clonesLineEdit->text());
-
-  settings->setValue("weather_city", weatherLineEdit->text());
-
-  settings->setValue("weather_key", weatherKeyLineEdit->text());
-
-  settings->setValue("feed_url", feedUrlLineEdit->text());
-
-  settings->setValue("stats", statsComboBox->currentData().toString());
-
-  settings->setValue("independence", independenceSlider->value());
-
+  settings.city = weatherLineEdit->text();
+  settings.key = weatherKeyLineEdit->text();
+  settings.feedUrl = feedUrlLineEdit->text();
+  settings.stats = statsComboBox->currentData().toInt();
+  settings.independence = independenceSlider->value();
   if(enableSound->isChecked()) {
-    settings->setValue("sound", "true");
+    settings.sound = true;
   } else {
-    settings->setValue("sound", "false");
+    settings.sound = false;
   }
-
+  settings.volume = volumeSlider->value() / 100.0;
   if(enableChatter->isChecked()) {
-    settings->setValue("chatter", "true");
+    settings.chatter = true;
   } else {
-    settings->setValue("chatter", "false");
+    settings.chatter = false;
+  }
+  
+  // Save relevants config to ini also
+  QString iniFile = "config.ini";
+  if(QFileInfo::exists("config_" + QHostInfo::localHostName().toLower() + ".ini")) {
+    iniFile = "config_" + QHostInfo::localHostName().toLower() + ".ini";
+  }
+  QSettings iniSettings(iniFile, QSettings::IniFormat);
+  iniSettings.setValue("show_welcome", settings.showWelcome);
+  iniSettings.setValue("boris_x", settings.borisX);
+  iniSettings.setValue("boris_y", settings.borisY);
+  iniSettings.setValue("clones", settings.clones);
+  iniSettings.setValue("size", settings.size);
+  iniSettings.setValue("independence", settings.independence);
+  iniSettings.setValue("chatter", settings.chatter);
+  iniSettings.setValue("sound", settings.sound);
+  iniSettings.setValue("volume", settings.volume * 100);
+  iniSettings.setValue("feed_url", settings.feedUrl);
+  iniSettings.setValue("weather_city", settings.city);
+  iniSettings.setValue("weather_key", settings.key);
+  if(settings.stats == STATS_ALWAYS) {
+    iniSettings.setValue("stats", "always");
+  } else if(settings.stats == STATS_CRITICAL) {
+    iniSettings.setValue("stats", "critical");
+  } else if(settings.stats == STATS_MOUSEOVER) {
+    iniSettings.setValue("stats", "mouseover");
+  } else if(settings.stats == STATS_NEVER) {
+    iniSettings.setValue("stats", "never");
   }
 
-  settings->setValue("volume", volumeSlider->value());
-  
   accept();
 }

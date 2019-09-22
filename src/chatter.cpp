@@ -26,18 +26,15 @@
  */
 
 #include "chatter.h"
+#include "settings.h"
 
 #include <stdio.h>
-#include <QSettings>
 #include <QHBoxLayout>
 #include <QTimer>
 #include <QFile>
 #include <QDesktopServices>
 
-//#define DEBUG
-
-extern QSettings *settings;
-extern QList<ChatLine> chatLines;
+extern Settings settings;
 
 Chatter::Chatter(QWidget *parent) : QWidget(parent)
 {
@@ -71,16 +68,16 @@ Chatter::~Chatter()
 QPair<QString, int> Chatter::initChatter(const int x, const int y, const int &borisSize)
 {
   QString chatType = "_complain";
-  if(chatLines.isEmpty()) {
+  if(settings.chatLines.isEmpty()) {
     chatterLabel->setText("I'm speechless...");
   } else {
-    currentLine = qrand() % chatLines.count();
-    chatType = chatLines.at(currentLine).type;
-    chatterLabel->setText(chatLines.at(currentLine).text);
+    currentLine = qrand() % settings.chatLines.count();
+    chatType = settings.chatLines.at(currentLine).type;
+    chatterLabel->setText(settings.chatLines.at(currentLine).text);
   }
   int duration = 2000 + (chatterLabel->text().length() * 120);
 
-  if(settings->value("chatter", "true").toBool() == true) {
+  if(settings.chatter) {
     show();
     move((x + (borisSize / 8 * 7)) - (width() / 2), y + (borisSize / 10 * 9) - height());
     bubbleTip->move(width() / 2, height() - 27);
@@ -99,8 +96,8 @@ void Chatter::moveChatter(const int x, const int y, const int &borisSize)
 
 void Chatter::mousePressEvent(QMouseEvent *event)
 {
-  if(event->button() == Qt::LeftButton && chatLines.at(currentLine).url.isValid()) {
-    QDesktopServices::openUrl(chatLines.at(currentLine).url);
+  if(event->button() == Qt::LeftButton && settings.chatLines.at(currentLine).url.isValid()) {
+    QDesktopServices::openUrl(settings.chatLines.at(currentLine).url);
   }
   event->ignore();
 }

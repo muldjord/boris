@@ -25,27 +25,24 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
 
+#include "boris.h"
+#include "settings.h"
+
 #include <stdio.h>
 #include <math.h>
 #include <QTimer>
 #include <QDir>
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QSettings>
 #include <QBitmap>
 #include <QScreen>
 
-#include "boris.h"
+constexpr int STATTIMER = 200;
+constexpr double PI = 3.1415927;
 
-#define STATTIMER 200
-#define PI 3.1415927
-//#define DEBUG
-
-extern QSettings *settings;
 extern QList<Behaviour> behaviours;
 extern QList<Behaviour> weathers;
-extern QList<ChatLine> chatLines;
-extern Weather weather;
+extern Settings settings;
 
 Boris::Boris(QWidget *parent)
   : QGraphicsView(parent)
@@ -55,8 +52,8 @@ Boris::Boris(QWidget *parent)
   mouseVVel = 0.0;
   mouseHVel = 0.0;
 
-  int borisX = settings->value("boris_x", QApplication::desktop()->width() / 2).toInt();
-  int borisY = settings->value("boris_y", QApplication::desktop()->height() / 2).toInt();
+  int borisX = settings.borisX;
+  int borisY = settings.borisY;
   if(borisY > QApplication::desktop()->height() - height()) {
     borisY = QApplication::desktop()->height() - height();
   }
@@ -115,14 +112,6 @@ Boris::Boris(QWidget *parent)
   funQueue = 0;
   hygieneQueue = 0;
   stats = new Stats(hyper, health, energy, hunger, bladder, social, fun, hygiene, this);
-  if(settings->value("stats") == "always") {
-    stats->show();
-    showStats = true;
-  } else {
-    stats->hide();
-    showStats = false;
-  }
-
   chatter = new Chatter(this);
   
   staticBehavs = 0;
@@ -160,10 +149,7 @@ Boris::Boris(QWidget *parent)
   
   setCursor(QCursor(QPixmap(":mouse_hover.png")));
 
-  updateBoris(settings->value("size", 32).toInt(),
-              settings->value("stats") == "always",
-              settings->value("sound", "true").toBool(),
-              settings->value("independence", "60").toInt());
+  updateBoris();
 }
 
 Boris::~Boris()
@@ -237,7 +223,7 @@ void Boris::createBehavMenu()
   bMenu->addMenu(socialMenu);
   bMenu->addMenu(funMenu);
   bMenu->addMenu(movementMenu);
-  if(settings->value("iddqd", "false").toBool()) {
+  if(settings.iddqd) {
     bMenu->addMenu(iddqdMenu);
   }
 }
@@ -334,7 +320,7 @@ void Boris::changeBehaviour(QString behav, int time)
   chatter->hide();
   // Check for chatter
   if(behaviours.at(curBehav).file == "chatter") {
-    QPair<QString, int> selectedChatter = chatter->initChatter(this->pos().x(), this->pos().y(), borisSize);
+    QPair<QString, int> selectedChatter = chatter->initChatter(this->pos().x(), this->pos().y(), size);
     for(int a = 0; a < behaviours.size(); ++a) {
       if(behaviours.at(a).file == selectedChatter.first) {
         curBehav = a;
@@ -419,7 +405,7 @@ void Boris::nextFrame()
     bruises->setPixmap(bruisesPixmap);
   }
 
-  if(soundEnabled &&
+  if(settings.sound &&
      behaviours.at(curBehav).frames.at(curFrame).soundFx != nullptr &&
      behaviours.at(curBehav).frames.at(curFrame).soundFx->status() == QSoundEffect::Ready) {
     behaviours.at(curBehav).frames.at(curFrame).soundFx->play();
@@ -457,30 +443,30 @@ void Boris::moveBoris(int dX, int dY)
   sanityCheck();
   
   int minX = 0;
-  int maxX = QApplication::desktop()->width() - borisSize;
-  int minY = 0 - (borisSize / 2);
+  int maxX = QApplication::desktop()->width() - size;
+  int minY = 0 - (size / 2);
   int maxY = QApplication::desktop()->height() - height();
 
   if(dX == 666) { // If dX == 666 we are meant to move Boris randomly
     dX = qrand() % maxX - this->pos().x();
   } else {
     // Multiply delta by the factor of Boris' current size
-    dX *= ceil((double)borisSize / 32.0);
+    dX *= ceil((double)size / 32.0);
   }
   if(dY == 666) { // If dX == 666 we are meant to move Boris randomly
     dY = qrand() % maxY - this->pos().y();
   } else {
     // Multiply delta by the factor of Boris' current size
-    dY *= ceil((double)borisSize / 32.0);
+    dY *= ceil((double)size / 32.0);
   }
 
   // Always move Boris, even outside borders. sanitycheck() will rectify later.
   move(this->pos().x() + dX, this->pos().y() + dY);
-  stats->move(this->pos().x() + (borisSize / 2) - (stats->width() / 2),
-              this->pos().y() - stats->height() + (borisSize / 3));
+  stats->move(this->pos().x() + (size / 2) - (stats->width() / 2),
+              this->pos().y() - stats->height() + (size / 3));
   if(stats->pos().y() < 0) {
-    stats->move(this->pos().x() + (borisSize / 2) - (stats->width() / 2),
-                this->pos().y() + borisSize + borisSize / 3);
+    stats->move(this->pos().x() + (size / 2) - (stats->width() / 2),
+                this->pos().y() + size + size / 3);
   }
   // if Boris is outside borders
   if(this->pos().y() > maxY || this->pos().y() < minY) {
@@ -522,8 +508,7 @@ void Boris::hideBoris()
 void Boris::enterEvent(QEvent *event)
 {
   event->accept();
-  // Always ensure stats are shown when mouse is entering
-  if(!showStats) {
+  if(settings.stats == STATS_MOUSEOVER) {
     stats->show();
   }
   stats->underMouse = true;
@@ -532,7 +517,7 @@ void Boris::enterEvent(QEvent *event)
 void Boris::leaveEvent(QEvent *event)
 {
   event->accept();
-  if(!showStats) {
+  if(settings.stats == STATS_MOUSEOVER) {
     stats->hide(); 
   }
   stats->underMouse = false;
@@ -551,8 +536,8 @@ void Boris::mousePressEvent(QMouseEvent* event)
     grabbed = true;
     changeBehaviour("_grabbed", 1000000);
     mMoving = true;
-    this->move(event->globalPos().x() - (float)borisSize / 32.0 * 17.0, 
-               event->globalPos().y() - (float)borisSize / 32.0 * 16.0);
+    this->move(event->globalPos().x() - (float)size / 32.0 * 17.0, 
+               event->globalPos().y() - (float)size / 32.0 * 16.0);
     oldCursor = QCursor::pos();
   }
 }
@@ -560,11 +545,11 @@ void Boris::mousePressEvent(QMouseEvent* event)
 void Boris::mouseMoveEvent(QMouseEvent* event)
 {
   if(event->buttons().testFlag(Qt::LeftButton) && mMoving) {
-    this->move(event->globalPos().x() - (float)borisSize / 32.0 * 17.0, 
-               event->globalPos().y() - (float)borisSize / 32.0 * 16.0);
-    stats->move(this->pos().x() + (borisSize / 2) - (stats->width() / 2), this->pos().y() - stats->height());
+    this->move(event->globalPos().x() - (float)size / 32.0 * 17.0, 
+               event->globalPos().y() - (float)size / 32.0 * 16.0);
+    stats->move(this->pos().x() + (size / 2) - (stats->width() / 2), this->pos().y() - stats->height());
     if(stats->pos().y() < 0) {
-      stats->move(this->pos().x() + (borisSize / 2) - (stats->width() / 2), this->pos().y() + borisSize + borisSize / 3);
+      stats->move(this->pos().x() + (size / 2) - (stats->width() / 2), this->pos().y() + size + size / 3);
     }
   }
 }
@@ -575,8 +560,8 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
     setCursor(QCursor(QPixmap(":mouse_hover.png")));
     grabbed = false;
     mMoving = false;
-    settings->setValue("boris_x", this->pos().x());
-    settings->setValue("boris_y", this->pos().y());
+    settings.borisX = this->pos().x();
+    settings.borisY = this->pos().y();
     changeBehaviour("_falling", 200000);
     falling = true;
     hVel = mouseHVel;
@@ -591,13 +576,13 @@ void Boris::handlePhysics()
     sinVal += (double)(qrand() % 2000) / 20000.0;
     if(sinVal > PI)
       sinVal = 0.0;
-    if(weather.windDirection.contains("W")) {
-      moveBoris(round(-(sin(sinVal) + 0.25) * weather.windSpeed * 0.1), 0);
-    } else if(weather.windDirection.contains("E")) {
-      moveBoris(round((sin(sinVal) + 0.25) * weather.windSpeed * 0.1), 0);
+    if(settings.windDirection.contains("W")) {
+      moveBoris(round(-(sin(sinVal) + 0.25) * settings.windSpeed * 0.1), 0);
+    } else if(settings.windDirection.contains("E")) {
+      moveBoris(round((sin(sinVal) + 0.25) * settings.windSpeed * 0.1), 0);
     }
     if(chatter->isVisible())
-      chatter->moveChatter(this->pos().x(), this->pos().y(), borisSize);
+      chatter->moveChatter(this->pos().x(), this->pos().y(), size);
   }
   
   if(falling && !grabbed) {
@@ -643,14 +628,14 @@ void Boris::handlePhysics()
     QPoint p = QCursor::pos();
     int xA = p.x();
     int yA = p.y();
-    int xB = this->pos().x() + (borisSize / 2);
-    int yB = this->pos().y() + (borisSize / 2);
+    int xB = this->pos().x() + (size / 2);
+    int yB = this->pos().y() + (size / 2);
     double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
-    if(hypotenuse < borisSize * 3) {
+    if(hypotenuse < size * 3) {
       if(!alreadyEvading) {
         if(fabs(mouseHVel) > 20.0 || fabs(mouseVVel) > 20.0) {
-          double fleeAngle = atan2((this->pos().y() + (borisSize / 2.0)) - p.y(),
-                                   p.x() - (this->pos().x() + (borisSize / 2.0))
+          double fleeAngle = atan2((this->pos().y() + (size / 2.0)) - p.y(),
+                                   p.x() - (this->pos().x() + (size / 2.0))
                                    ) * 180.0 / 3.1415927;
           if (fleeAngle < 0) {
             fleeAngle += 360;
@@ -717,9 +702,9 @@ void Boris::statProgress()
 
 void Boris::sanityCheck()
 {
-  int minX = - borisSize;
+  int minX = - size;
   int maxX = QApplication::desktop()->width();
-  int minY = 0 - (borisSize / 2);
+  int minY = 0 - (size / 2);
   int maxY = QApplication::desktop()->height() - height();
 
   // Make sure Boris is not located outside boundaries
@@ -889,80 +874,81 @@ void Boris::collide(Boris *b)
     setFocus();
   }
   
-  if(!falling && !grabbed && !behaviours.at(curBehav).doNotDisturb && boris == nullptr) {
-    boris = b;
-    
-    double approachAngle = atan2(this->pos().y() - boris->pos().y(), boris->pos().x() - this->pos().x()) * 180.0 / 3.1415927;
-    if (approachAngle < 0) {
-      approachAngle += 360;
-    } else if (approachAngle > 360) {
-      approachAngle -= 360;
-    }
-    
-    int fleeThres = 22;
-
-    /*
-      } else if(behaviours.at(boris->getCurBehav).category == "Fun") {
-        changeBehaviour(getFileFromCategory("Fun"));
-    */
-
-    if((approachAngle >= 0.0 && approachAngle < 22.5) || (approachAngle >= 337.5 && approachAngle < 360.0)) {
-      if(boris->getHygiene() >= fleeThres) {
-        changeBehaviour("_casual_wave_right");
-      } else {
-        changeBehaviour("_flee_left", (qrand() % 2000) + 1500);
-      }
-    } else if(approachAngle >= 22.5 && approachAngle < 67.5) {
-      if(boris->getHygiene() >= fleeThres) {
-        changeBehaviour("_casual_wave_right_up");
-      } else {
-        changeBehaviour("_flee_left_down", (qrand() % 2000) + 1500);
-      }
-    } else if(approachAngle >= 67.5 && approachAngle < 112.5) {
-      if(boris->getHygiene() >= fleeThres) {
-        changeBehaviour("_casual_wave_up");
-      } else {
-        changeBehaviour("_flee_down", (qrand() % 2000) + 1500);
-      }
-    } else if(approachAngle >= 112.5 && approachAngle < 157.5) {
-      if(boris->getHygiene() >= fleeThres) {
-        changeBehaviour("_casual_wave_left_up");
-      } else {
-        changeBehaviour("_flee_right_down", (qrand() % 2000) + 1500);
-      }
-    } else if(approachAngle >= 157.5 && approachAngle < 202.5) {
-      if(boris->getHygiene() >= fleeThres) {
-        changeBehaviour("_casual_wave_left");
-      } else {
-        changeBehaviour("_flee_right", (qrand() % 2000) + 1500);
-      }
-    } else if(approachAngle >= 202.5 && approachAngle < 247.5) {
-      if(boris->getHygiene() >= fleeThres) {
-        changeBehaviour("_casual_wave_left_down");
-      } else {
-        changeBehaviour("_flee_right_up", (qrand() % 2000) + 1500);
-      }
-    } else if(approachAngle >= 247.5 && approachAngle < 292.5) {
-      if(boris->getHygiene() >= fleeThres) {
-        changeBehaviour("_casual_wave_down");
-      } else {
-        changeBehaviour("_flee_up", (qrand() % 2000) + 1500);
-      }
-    } else if(approachAngle >= 292.5 && approachAngle < 337.5) {
-      if(boris->getHygiene() >= fleeThres) {
-        changeBehaviour("_casual_wave_right_down");
-      } else {
-        changeBehaviour("_flee_left_up", (qrand() % 2000) + 1500);
-      }
-    }
-    QTimer::singleShot(qrand() % 10000 + 2000, this, &Boris::readyForFriend);
+  if(falling || grabbed || behaviours.at(curBehav).doNotDisturb || borisFriend != nullptr) {
+    return;
   }
+  borisFriend = b;
+    
+  double approachAngle = atan2(this->pos().y() - borisFriend->pos().y(), borisFriend->pos().x() - this->pos().x()) * 180.0 / 3.1415927;
+  if (approachAngle < 0) {
+    approachAngle += 360;
+  } else if (approachAngle > 360) {
+    approachAngle -= 360;
+  }
+    
+  int fleeThres = 22;
+
+  /*
+    } else if(behaviours.at(borisFriend->getCurBehav).category == "Fun") {
+    changeBehaviour(getFileFromCategory("Fun"));
+  */
+
+  if((approachAngle >= 0.0 && approachAngle < 22.5) || (approachAngle >= 337.5 && approachAngle < 360.0)) {
+    if(borisFriend->getHygiene() >= fleeThres) {
+      changeBehaviour("_casual_wave_right");
+    } else {
+      changeBehaviour("_flee_left", (qrand() % 2000) + 1500);
+    }
+  } else if(approachAngle >= 22.5 && approachAngle < 67.5) {
+    if(borisFriend->getHygiene() >= fleeThres) {
+      changeBehaviour("_casual_wave_right_up");
+    } else {
+      changeBehaviour("_flee_left_down", (qrand() % 2000) + 1500);
+    }
+  } else if(approachAngle >= 67.5 && approachAngle < 112.5) {
+    if(borisFriend->getHygiene() >= fleeThres) {
+      changeBehaviour("_casual_wave_up");
+    } else {
+      changeBehaviour("_flee_down", (qrand() % 2000) + 1500);
+    }
+  } else if(approachAngle >= 112.5 && approachAngle < 157.5) {
+    if(borisFriend->getHygiene() >= fleeThres) {
+      changeBehaviour("_casual_wave_left_up");
+    } else {
+      changeBehaviour("_flee_right_down", (qrand() % 2000) + 1500);
+    }
+  } else if(approachAngle >= 157.5 && approachAngle < 202.5) {
+    if(borisFriend->getHygiene() >= fleeThres) {
+      changeBehaviour("_casual_wave_left");
+    } else {
+      changeBehaviour("_flee_right", (qrand() % 2000) + 1500);
+    }
+  } else if(approachAngle >= 202.5 && approachAngle < 247.5) {
+    if(borisFriend->getHygiene() >= fleeThres) {
+      changeBehaviour("_casual_wave_left_down");
+    } else {
+      changeBehaviour("_flee_right_up", (qrand() % 2000) + 1500);
+    }
+  } else if(approachAngle >= 247.5 && approachAngle < 292.5) {
+    if(borisFriend->getHygiene() >= fleeThres) {
+      changeBehaviour("_casual_wave_down");
+    } else {
+      changeBehaviour("_flee_up", (qrand() % 2000) + 1500);
+    }
+  } else if(approachAngle >= 292.5 && approachAngle < 337.5) {
+    if(borisFriend->getHygiene() >= fleeThres) {
+      changeBehaviour("_casual_wave_right_down");
+    } else {
+      changeBehaviour("_flee_left_up", (qrand() % 2000) + 1500);
+    }
+  }
+  QTimer::singleShot(qrand() % 7000 + 3000, this, &Boris::readyForFriend);
 }
 
 void Boris::processVision()
 {
   int border = 2;
-  QImage vision = QGuiApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId(), pos().x() - border, pos().y() - border, borisSize + border * 2, borisSize + border *2).toImage();
+  QImage vision = QGuiApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId(), pos().x() - border, pos().y() - border, size + border * 2, size + border *2).toImage();
 
   bool wallDetect;
   QRgb wallColor;
@@ -970,7 +956,7 @@ void Boris::processVision()
   // Check for wall to the west
   wallDetect = true;
   wallColor = vision.pixel(0, border);
-  for(int a = border; a < borisSize + border; ++a) {
+  for(int a = border; a < size + border; ++a) {
     if(vision.pixel(0, a) != wallColor ||
        vision.pixel(1, a) == wallColor) {
       wallDetect = false;
@@ -986,7 +972,7 @@ void Boris::processVision()
   // Check for wall to the east
   wallDetect = true;
   wallColor = vision.pixel(vision.width() - 1, border);
-  for(int a = border; a < borisSize + border; ++a) {
+  for(int a = border; a < size + border; ++a) {
     if(vision.pixel(vision.width() - 1, a) != wallColor ||
        vision.pixel(vision.width() - 2, a) == wallColor) {
       wallDetect = false;
@@ -1002,7 +988,7 @@ void Boris::processVision()
   // Check for wall to the north
   wallDetect = true;
   wallColor = vision.pixel(border, 0);
-  for(int a = border; a < borisSize + border; ++a) {
+  for(int a = border; a < size + border; ++a) {
     if(vision.pixel(a, 0) != wallColor ||
        vision.pixel(a, 1) == wallColor) {
       wallDetect = false;
@@ -1018,7 +1004,7 @@ void Boris::processVision()
   // Check for wall to the south
   wallDetect = true;
   wallColor = vision.pixel(border, vision.height() - 1);
-  for(int a = border; a < borisSize + border; ++a) {
+  for(int a = border; a < size + border; ++a) {
     if(vision.pixel(a, vision.height() - 1) != wallColor ||
        vision.pixel(a, vision.height() - 2) == wallColor) {
       wallDetect = false;
@@ -1188,33 +1174,32 @@ void Boris::processAi(QString &behav, int &time)
   }
 }
 
-void Boris::updateBoris(int newSize, bool showStats, bool soundEnable, int newIndependence)
+void Boris::updateBoris()
 {
   // Reset Boris pointer
-  boris = nullptr;
+  borisFriend = nullptr;
 
   // Set new size
-  borisSize = newSize;
-  if(borisSize == 0) {
-    borisSize = (qrand() % 65) + 32;
+  size = settings.size;
+  if(size == 0) {
+    size = (qrand() % (256 - 32)) + 32; // Make him at least 32
   }
   resetTransform();
-  setFixedSize(borisSize, borisSize + borisSize / 2.0);
-  scale((qreal)borisSize / 32.0, (qreal)borisSize / 32.0);
+  setFixedSize(size, size + size / 2.0);
+  scale((qreal)size / 32.0, (qreal)size / 32.0);
 
   // Set new independence value
-  independence = newIndependence;
-
-  // Enable or disable sound
-  soundEnabled = soundEnable;
+  independence = settings.independence;
+  if(independence == 0) {
+    independence = (qrand() % 99) + 1;
+  }
 
   // Show or hide stats
-  if(showStats) {
+  if(settings.stats) {
     stats->show();
   } else {
     stats->hide();
   }
-  this->showStats = showStats;
 }
 
 void Boris::nextWeatherFrame()
@@ -1240,7 +1225,7 @@ void Boris::showWeather(QString &behav)
   sinVal = 0.0;
   
   for(int a = 0; a < weathers.count(); ++a) {
-    if(weathers.at(a).file == weather.icon) {
+    if(weathers.at(a).file == settings.weatherType) {
       curWeather = a;
       break;
     }
@@ -1253,20 +1238,20 @@ void Boris::showWeather(QString &behav)
   QTimer::singleShot(30000, this, SLOT(hideWeather()));
   
   if(!falling && !grabbed) {
-    if(weather.icon == "01d") {
+    if(settings.weatherType == "01d") {
       behavQueue.append("sunglasses");
-    } else if(weather.icon == "02d" && weather.temp >= 15) {
+    } else if(settings.weatherType == "02d" && settings.temperature >= 15) {
       behavQueue.append("sunglasses");
-    } else if(weather.icon == "09d" || weather.icon == "09n" ||
-              weather.icon == "10d" || weather.icon == "10n") {
+    } else if(settings.weatherType == "09d" || settings.weatherType == "09n" ||
+              settings.weatherType == "10d" || settings.weatherType == "10n") {
       behavQueue.append("_umbrella");
-    } else if(weather.icon == "11d" || weather.icon == "11n") {
+    } else if(settings.weatherType == "11d" || settings.weatherType == "11n") {
       behav = "_lightning";
-    } else if(weather.icon == "13d" || weather.icon == "13n") {
+    } else if(settings.weatherType == "13d" || settings.weatherType == "13n") {
       behavQueue.append("_freezing");
-    } else if(weather.icon == "01n" || weather.icon == "02n") {
+    } else if(settings.weatherType == "01n" || settings.weatherType == "02n") {
       behavQueue.append("_energy"); // Yawn for weathers that have a moon
-    } else if(weather.icon == "04d" || weather.icon == "04n") {
+    } else if(settings.weatherType == "04d" || settings.weatherType == "04n") {
       behavQueue.append("_fun"); // Depressed from clouds
     }
   }
@@ -1284,5 +1269,5 @@ int Boris::getCurBehav()
 
 void Boris::readyForFriend()
 {
-  boris = nullptr;
+  borisFriend = nullptr;
 }
