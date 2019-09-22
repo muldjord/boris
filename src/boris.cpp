@@ -1195,7 +1195,7 @@ void Boris::updateBoris()
   }
 
   // Show or hide stats
-  if(settings.stats) {
+  if(settings.stats == STATS_ALWAYS) {
     stats->show();
   } else {
     stats->hide();

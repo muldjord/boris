@@ -74,16 +74,20 @@ MainWindow::MainWindow()
 
   // Force weather from ini
   if(iniSettings.contains("weather_force_type")) {
-    settings.weatherType = iniSettings.value("weather_force_type", "11d").toString();
+    settings.weatherType = iniSettings.value("weather_force_type").toString();
+    settings.forceWeatherType = true;
   }
   if(iniSettings.contains("weather_force_temp")) {
-    settings.temperature = iniSettings.value("weather_force_temp", "20.0").toDouble();
-  }
-  if(iniSettings.contains("weather_force_wind_speed")) {
-    settings.windSpeed = iniSettings.value("weather_force_wind_speed", "0.0").toDouble();
+    settings.temperature = iniSettings.value("weather_force_temp").toDouble();
+    settings.forceTemperature = true;
   }
   if(iniSettings.contains("weather_force_wind_direction")) {
-    settings.windDirection = iniSettings.value("weather_force_wind_direction", "E").toString();
+    settings.windDirection = iniSettings.value("weather_force_wind_direction").toString();
+    settings.forceWindDirection = true;
+  }
+  if(iniSettings.contains("weather_force_wind_speed")) {
+    settings.windSpeed = iniSettings.value("weather_force_wind_speed").toDouble();
+    settings.forceWindSpeed = true;
   }
   
   if(!iniSettings.contains("sounds_path")) {

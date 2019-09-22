@@ -36,6 +36,7 @@
 #include <QTextStream>
 #include <QDesktopWidget>
 #include <QSoundEffect>
+#include <QAudio>
 
 extern Settings settings;
 
@@ -181,7 +182,9 @@ bool Loader::loadSoundFxs(QString dataDir, QMap<QString, QSoundEffect *> &soundF
     qInfo("Added sound: %s\n", info.fileName().toStdString().c_str());
     QSoundEffect *soundFx = new QSoundEffect();
     soundFx->setSource(QUrl::fromLocalFile(info.absoluteFilePath()));
-    soundFx->setVolume(settings.volume);
+    soundFx->setVolume(QAudio::convertVolume(settings.volume,
+                                             QAudio::LogarithmicVolumeScale,
+                                             QAudio::LinearVolumeScale));
     soundFxs[dataDir + (dataDir.right(1) == "/"?"":"/") + info.fileName()] = soundFx;
   }
   return true;

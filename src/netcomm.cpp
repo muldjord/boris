@@ -54,10 +54,8 @@ NetComm::~NetComm()
 
 void NetComm::updateAll()
 {
-  if(!settings.forceConfigWeather) {
-    weatherRequest.setUrl(QUrl("http://api.openweathermap.org/data/2.5/weather?q=" + settings.city + "&mode=xml&units=metric&appid=" + settings.key));
-    get(weatherRequest);
-  }
+  weatherRequest.setUrl(QUrl("http://api.openweathermap.org/data/2.5/weather?q=" + settings.city + "&mode=xml&units=metric&appid=" + settings.key));
+  get(weatherRequest);
   feedRequest.setUrl(QUrl(settings.feedUrl));
   get(feedRequest);
 }
@@ -71,16 +69,27 @@ void NetComm::netReply(QNetworkReply *r)
     qInfo("Updating weather:\n");
     qDebug("%s\n", doc.toString().toStdString().c_str());
 
-    settings.weatherType = doc.elementsByTagName("weather").at(0).toElement().attribute("icon");
-    settings.windSpeed = doc.elementsByTagName("speed").at(0).toElement().attribute("value").toDouble();
-    settings.windDirection = doc.elementsByTagName("direction").at(0).toElement().attribute("code");
-    settings.temperature = doc.elementsByTagName("temperature").at(0).toElement().attribute("value").toDouble();
+    if(!settings.forceWeatherType) {
+      settings.weatherType = doc.elementsByTagName("weather").at(0).toElement().attribute("icon");
+    }
+    if(!settings.forceWindSpeed) {
+      settings.windSpeed = doc.elementsByTagName("speed").at(0).toElement().attribute("value").toDouble();
+    }
+    if(!settings.forceWindDirection) {
+      settings.windDirection = doc.elementsByTagName("direction").at(0).toElement().attribute("code");
+    }
+    if(!settings.forceTemperature) {
+      settings.temperature = doc.elementsByTagName("temperature").at(0).toElement().attribute("value").toDouble();
+    }
 
     if(settings.weatherType.isEmpty()) {
       settings.weatherType = "11d";
     }
     if(settings.temperature == 0.0) {
       settings.temperature = -42;
+    }
+    if(settings.windDirection.isEmpty()) {
+      settings.windDirection = "E";
     }
     
     //qInfo("%s\n", rawData.data());
@@ -89,8 +98,7 @@ void NetComm::netReply(QNetworkReply *r)
     qInfo("Wind: %fm/s from %s\n", settings.windSpeed, settings.windDirection.toStdString().c_str());
 
     emit weatherUpdated();
-  } 
-  if(r->request() == feedRequest) {
+  } else if(r->request() == feedRequest) {
     settings.chatLines.clear();
     qInfo("Updating feed:\n");
     qDebug("%s\n", doc.toString().toStdString().c_str());
