@@ -31,7 +31,8 @@
 #include "stats.h"
 #include "chatter.h"
 
-#include <SDL2/SDL_mixer.h>
+#include "SDL2/SDL_mixer.h"
+
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QTimer>

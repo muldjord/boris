@@ -30,7 +30,8 @@
 #include "behaviour.h"
 #include "mainwindow.h"
 
-#include <SDL2/SDL_mixer.h>
+#include "SDL2/SDL_mixer.h"
+
 #include <QObject>
 
 class Loader: public QObject
