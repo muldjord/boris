@@ -3,10 +3,12 @@ TARGET = Boris
 DEPENDPATH += .
 INCLUDEPATH += .
 #CONFIG += console debug
-QT += widgets multimedia xml
+QT += widgets xml network
 
 include(./VERSION)
 DEFINES+=VERSION=\\\"$$VERSION\\\"
+
+LIBS += -lSDL2 -lSDL2_mixer
 
 # Input
 HEADERS += src/mainwindow.h \

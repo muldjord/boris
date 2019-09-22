@@ -31,12 +31,13 @@
 #include "behaviour.h"
 #include "netcomm.h"
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include <QWidget>
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QTimer>
 #include <QLinkedList>
-#include <QSoundEffect>
 
 class MainWindow : public QWidget
 {
@@ -57,6 +58,7 @@ private slots:
 
 private:
   NetComm *netComm;
+  QMap<QString, Mix_Chunk *> soundFxs;
   bool loadBehaviours();
   QList<QString> extractSnippets(QString line);
   QString *aboutText;
@@ -70,12 +72,12 @@ private:
   QSystemTrayIcon *trayIcon;
   QMenu *trayIconMenu;
   QLinkedList<Boris*> borises;
-  QMap<QString, QSoundEffect *> soundFxs;
   void addBoris(int clones);
   void removeBoris(int clones);
   QTimer collisTimer;
   void loadChatter();
-  
+
+  bool initAudio();
 };
 
 #endif // _MAINWINDOW_H

@@ -406,9 +406,10 @@ void Boris::nextFrame()
   }
 
   if(settings.sound &&
-     behaviours.at(curBehav).frames.at(curFrame).soundFx != nullptr &&
-     behaviours.at(curBehav).frames.at(curFrame).soundFx->status() == QSoundEffect::Ready) {
-    behaviours.at(curBehav).frames.at(curFrame).soundFx->play();
+     behaviours.at(curBehav).frames.at(curFrame).soundFx != nullptr) {
+    // Play on first unreserved channel (-1)
+    // Only play once (0)
+    Mix_PlayChannel(-1, behaviours.at(curBehav).frames.at(curFrame).soundFx, 0);
   }
   int frameTime = behaviours.at(curBehav).frames.at(curFrame).time;
   animTimer.setInterval(frameTime - ((double)frameTime / 100.0 * stats->getHyper()));
@@ -508,7 +509,7 @@ void Boris::hideBoris()
 void Boris::enterEvent(QEvent *event)
 {
   event->accept();
-  if(settings.stats == STATS_MOUSEOVER) {
+  if(settings.stats == STATS_MOUSEOVER || settings.stats == STATS_CRITICAL) {
     stats->show();
   }
   stats->underMouse = true;
@@ -517,7 +518,7 @@ void Boris::enterEvent(QEvent *event)
 void Boris::leaveEvent(QEvent *event)
 {
   event->accept();
-  if(settings.stats == STATS_MOUSEOVER) {
+  if(settings.stats == STATS_MOUSEOVER || settings.stats == STATS_CRITICAL) {
     stats->hide(); 
   }
   stats->underMouse = false;
@@ -942,7 +943,7 @@ void Boris::collide(Boris *b)
       changeBehaviour("_flee_left_up", (qrand() % 2000) + 1500);
     }
   }
-  QTimer::singleShot(qrand() % 7000 + 3000, this, &Boris::readyForFriend);
+  QTimer::singleShot(qrand() % 7000 + 5000, this, &Boris::readyForFriend);
 }
 
 void Boris::processVision()

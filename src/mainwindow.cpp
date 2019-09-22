@@ -39,7 +39,6 @@
 #include <QTextStream>
 #include <QDesktopWidget>
 #include <QHostInfo>
-#include <QAudio>
 
 QList<Behaviour> behaviours;
 QList<Behaviour> weathers;
@@ -124,7 +123,7 @@ MainWindow::MainWindow()
 
   
   if(!iniSettings.contains("stats")) {
-    iniSettings.setValue("stats", "mouseover");
+    iniSettings.setValue("stats", "critical");
   }
   if(iniSettings.value("stats").toString() == "always") {
     settings.stats = STATS_ALWAYS;
@@ -180,8 +179,9 @@ MainWindow::MainWindow()
     about.exec();
   }
   
-  if(Loader::loadSoundFxs(iniSettings.value("sounds_path").toString(),
-                          soundFxs)) {
+  initAudio();
+
+  if(Loader::loadSoundFxs(iniSettings.value("sounds_path").toString(), soundFxs)) {
     qInfo("Sounds loaded ok... :)\n");
   } else {
     qInfo("Error when loading some sounds, please check your wav files\n");
@@ -211,7 +211,10 @@ MainWindow::MainWindow()
   settings.clones = iniSettings.value("clones").toInt();
   addBoris((settings.clones == 0?qrand() % 99 + 1:settings.clones));
 
-  collisTimer.setInterval(1000);
+  // Set one audio channel per Boris
+  Mix_AllocateChannels(borises.count());
+
+  collisTimer.setInterval(100);
   collisTimer.setSingleShot(true);
   connect(&collisTimer, &QTimer::timeout, this, &MainWindow::checkCollisions);
   collisTimer.start();
@@ -293,11 +296,7 @@ void MainWindow::aboutBox()
   about.exec();
   for(auto &boris: borises) {
     boris->updateBoris();
-    for(const auto &key: soundFxs.keys()) {
-      soundFxs[key]->setVolume(QAudio::convertVolume(settings.volume,
-                                                     QAudio::LogarithmicVolumeScale,
-                                                     QAudio::LinearVolumeScale));
-    }
+    Mix_Volume(-1, settings.volume * 128);
   }
   int newClones = settings.clones;
   if(newClones == 0) {
@@ -308,6 +307,9 @@ void MainWindow::aboutBox()
   } else if(borises.count() < newClones) {
     addBoris(newClones - borises.count());
   }
+  
+  // Set new audio channels
+  Mix_AllocateChannels(borises.count());
   
   netComm->updateAll();
 }
@@ -355,4 +357,18 @@ void MainWindow::updateWeather()
     weatherAction->setText(tr("Couldn't find city"));
   }
   weatherAction->setIcon(QIcon(":" + settings.weatherType + ".png"));
+}
+
+bool MainWindow::initAudio()
+{
+  // Set up the audio stream
+  int result = Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 512);
+  if(result < 0) {
+    fprintf(stderr, "Unable to open audio: %s\n", SDL_GetError());
+    exit(-1);
+  }
+
+  Mix_Volume(-1, settings.volume * 128);
+  
+  return true;
 }

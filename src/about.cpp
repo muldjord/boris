@@ -111,7 +111,7 @@ About::About(QWidget *parent) : QDialog(parent)
   QPushButton *okButton = new QPushButton(tr("Close and save"));
   connect(okButton, &QPushButton::clicked, this, &About::saveAll);
 
-  QLabel *sizeLabel = new QLabel(tr("Boris size in pixels (32-256 or 0 for random):"));
+  QLabel *sizeLabel = new QLabel(tr("Boris size in pixels (8-256 or 0 for random):"));
   sizeLineEdit = new QLineEdit();
   QIntValidator *sizeValidator = new QIntValidator(0, 256, this);
   sizeLineEdit->setValidator(sizeValidator);
@@ -141,8 +141,8 @@ About::About(QWidget *parent) : QDialog(parent)
   QLabel *statsLabel = new QLabel(tr("Vitality stats:"));
   statsComboBox = new QComboBox();
   statsComboBox->addItem(tr("Always show"), STATS_ALWAYS);
-  statsComboBox->addItem(tr("Show on critical levels"), STATS_CRITICAL);
-  statsComboBox->addItem(tr("Show on mouse over"), STATS_MOUSEOVER);
+  statsComboBox->addItem(tr("Show on critical levels and mouse over"), STATS_CRITICAL);
+  statsComboBox->addItem(tr("Show only on mouse over"), STATS_MOUSEOVER);
   statsComboBox->addItem(tr("Never show"), STATS_NEVER);
   statsComboBox->setCurrentIndex(statsComboBox->findData(settings.stats));
 
@@ -217,8 +217,8 @@ void About::saveAll()
     settings.showWelcome = false;
   }
   if(sizeLineEdit->text().toInt() != 0) {
-    if(sizeLineEdit->text().toInt() < 32) {
-      sizeLineEdit->setText("32");
+    if(sizeLineEdit->text().toInt() < 8) {
+      sizeLineEdit->setText("8");
     }
     if(sizeLineEdit->text().toInt() > 256) {
       sizeLineEdit->setText("256");

@@ -35,14 +35,31 @@
 #include <QDir>
 #include <QTextStream>
 #include <QDesktopWidget>
-#include <QSoundEffect>
-#include <QAudio>
 
 extern Settings settings;
 
+bool Loader::loadSoundFxs(const QString dataDir, QMap<QString, Mix_Chunk *> &soundFxs)
+{
+  QDir d(dataDir,
+         "*.wav",
+         QDir::Name,
+         QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
+  QFileInfoList infoList = d.entryInfoList();
+  for(const auto &info: infoList) {
+    Mix_Chunk *soundFx;
+    soundFx = Mix_LoadWAV(info.absoluteFilePath().toStdString().c_str());
+    if(soundFx == NULL) {
+      return false;
+    }
+    soundFxs[dataDir + (dataDir.right(1) == "/"?"":"/") + info.fileName()] = soundFx;
+    qInfo("Added sound: %s\n", info.fileName().toStdString().c_str());
+  }
+  return true;
+}
+
 bool Loader::loadBehaviours(QString dataDir,
                             QList<Behaviour> &behaviours,
-                            const QMap<QString, QSoundEffect *> &soundFxs)
+                            const QMap<QString, Mix_Chunk *> &soundFxs)
 {
   QDir d(dataDir,
          "*.png",
@@ -167,25 +184,6 @@ bool Loader::loadBehaviours(QString dataDir,
       qInfo("Error in behaviour: %s\n", info.fileName().toStdString().c_str());
       return false;
     }
-  }
-  return true;
-}
-
-bool Loader::loadSoundFxs(QString dataDir, QMap<QString, QSoundEffect *> &soundFxs)
-{
-  QDir d(dataDir,
-         "*.wav",
-         QDir::Name,
-         QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
-  QFileInfoList infoList = d.entryInfoList();
-  for(const auto &info: infoList) {
-    qInfo("Added sound: %s\n", info.fileName().toStdString().c_str());
-    QSoundEffect *soundFx = new QSoundEffect();
-    soundFx->setSource(QUrl::fromLocalFile(info.absoluteFilePath()));
-    soundFx->setVolume(QAudio::convertVolume(settings.volume,
-                                             QAudio::LogarithmicVolumeScale,
-                                             QAudio::LinearVolumeScale));
-    soundFxs[dataDir + (dataDir.right(1) == "/"?"":"/") + info.fileName()] = soundFx;
   }
   return true;
 }

@@ -51,7 +51,7 @@ struct Settings {
   int clones = 2;
   int size = 64;
   int independence = 75;
-  int stats = STATS_MOUSEOVER;
+  int stats = STATS_CRITICAL;
   bool sound = true;
   double volume = 0.5;
   bool chatter = true;

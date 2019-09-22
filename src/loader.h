@@ -30,6 +30,7 @@
 #include "behaviour.h"
 #include "mainwindow.h"
 
+#include <SDL2/SDL_mixer.h>
 #include <QObject>
 
 class Loader: public QObject
@@ -37,9 +38,9 @@ class Loader: public QObject
   Q_OBJECT;
   
 public:
+  static bool loadSoundFxs(const QString dataDir, QMap<QString, Mix_Chunk *> &soundFxs);
   static bool loadBehaviours(QString dataDir, QList<Behaviour> &behaviours,
-                             const QMap<QString, QSoundEffect *> &soundFxs);
-  static bool loadSoundFxs(QString dataDir, QMap<QString, QSoundEffect *> &soundFxs);
+                             const QMap<QString, Mix_Chunk *> &soundFxs);
   static void setClothesColor(QImage &image);
 };
 

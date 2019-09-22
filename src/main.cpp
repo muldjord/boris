@@ -25,6 +25,10 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
 
+#include "mainwindow.h"
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include <QApplication>
 #include <QTranslator>
 #include <QLocale>
@@ -32,8 +36,6 @@
 #include <QDateTime>
 #include <QFileInfo>
 #include <QHostInfo>
-
-#include "mainwindow.h"
 
 void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QString &msg)
 {
@@ -63,6 +65,8 @@ void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QStri
 
 int main(int argc, char *argv[])
 {
+  SDL_Init(SDL_INIT_AUDIO);
+  
   QApplication app(argc, argv);
   
   app.setQuitOnLastWindowClosed(false);
@@ -78,4 +82,6 @@ int main(int argc, char *argv[])
   MainWindow window;
 
   return app.exec();
+  Mix_CloseAudio();
+  SDL_Quit();
 }

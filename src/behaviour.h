@@ -27,9 +27,9 @@
 #ifndef _BEHAVIOUR_H
 #define _BEHAVIOUR_H
 
+#include <SDL2/SDL_mixer.h>
 #include <QObject>
 #include <QPixmap>
-#include <QSoundEffect>
 
 class Frame: public QObject
 {
@@ -45,7 +45,7 @@ public:
   int dy;
   bool hide;
   bool show;
-  QSoundEffect *soundFx = nullptr;
+  Mix_Chunk *soundFx = nullptr;
 };
 
 class Behaviour: public QObject
@@ -73,4 +73,4 @@ public:
   QList<Frame> frames;
 };
 
-#endif
+#endif // _BEHAVIOUR_H
