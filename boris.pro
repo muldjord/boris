@@ -1,14 +1,12 @@
 TEMPLATE = app
 TARGET = Boris
-#DEPENDPATH += .
-#INCLUDEPATH += .
-#CONFIG += console debug
 QT += widgets xml network
 
 include(./VERSION)
 DEFINES+=VERSION=\\\"$$VERSION\\\"
 
-#win32:LIBS += -L$$OUT_PWD/SDL2-2.0.10/x86_64-w64-mingw32/lib
+win32:INCLUDEPATH += $$OUT_PWD/SFML-2.5.1/include
+win32:LIBS += -L$$OUT_PWD/SFML-2.5.1/lib
 LIBS += -lsfml-audio
 
 # Input
