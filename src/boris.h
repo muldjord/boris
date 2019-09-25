@@ -34,6 +34,7 @@
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QTimer>
+#include <QTime>
 #include <QAction>
 #include <QMouseEvent>
 #include <QKeyEvent>
@@ -101,6 +102,7 @@ private:
   QTimer physicsTimer;
   QTimer statTimer;
   QTimer statQueueTimer;
+  QTime frameDelay;
   bool mMoving;
   QPoint mLastMousePosition;
   bool alreadyEvading;

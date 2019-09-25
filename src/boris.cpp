@@ -389,6 +389,8 @@ void Boris::nextFrame()
     }
   }
 
+  frameDelay.start();
+  
   QBitmap mask = behaviours.at(curBehav).frames.at(curFrame).sprite.createMaskFromColor(QColor(0, 0, 0, 0));
 
   QPixmap dirtPixmap(origDirt);
@@ -414,6 +416,7 @@ void Boris::nextFrame()
   }
   int frameTime = behaviours.at(curBehav).frames.at(curFrame).time;
   animTimer.setInterval(frameTime - ((double)frameTime / 100.0 * stats->getHyper()));
+  animTimer.setInterval(animTimer.interval() - frameDelay.elapsed());
   if(animTimer.interval() <= 5)
     animTimer.setInterval(5);
 
