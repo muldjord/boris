@@ -41,6 +41,7 @@ public:
   ~About();
 
 private slots:
+  void volumeChanged(int value);
   void saveAll();
 
 private:

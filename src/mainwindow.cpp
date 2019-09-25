@@ -186,7 +186,7 @@ MainWindow::MainWindow()
     about.exec();
   }
 
-  for(int a = 0; a < 32; ++a) {
+  for(int a = 0; a < 16; ++a) { // Create 16 audio channels in total
     sf::Sound soundChannel;
     soundChannel.setAttenuation(0.f);
     soundChannels.append(soundChannel);
@@ -312,7 +312,6 @@ void MainWindow::aboutBox()
   about.exec();
   for(auto &boris: borises) {
     boris->updateBoris();
-    sf::Listener::setGlobalVolume(settings.volume * 100.0);
   }
   int newClones = settings.clones;
   if(newClones == 0) {

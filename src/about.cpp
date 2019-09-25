@@ -27,6 +27,8 @@
 #include "about.h"
 #include "settings.h"
 
+#include "SFML/Audio.hpp"
+
 #include <stdio.h>
 #include <QApplication>
 #include <QLabel>
@@ -167,6 +169,7 @@ About::About(QWidget *parent) : QDialog(parent)
   volumeSlider->setMinimum(0);
   volumeSlider->setMaximum(100);
   volumeSlider->setValue(settings.volume * 100);
+  connect(volumeSlider, &QSlider::valueChanged, this, &About::volumeChanged);
   
   showWelcome = new QCheckBox(tr("Always show this dialog on startup"));
   if(settings.showWelcome) {
@@ -207,6 +210,11 @@ About::About(QWidget *parent) : QDialog(parent)
 
 About::~About()
 {
+}
+
+void About::volumeChanged(int value)
+{
+  sf::Listener::setGlobalVolume(value);
 }
 
 void About::saveAll()
