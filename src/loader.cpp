@@ -38,7 +38,7 @@
 
 extern Settings settings;
 
-bool Loader::loadSoundFxs(const QString dataDir, QMap<QString, Mix_Chunk *> &soundFxs)
+bool Loader::loadSoundFxs(const QString dataDir, QMap<QString, sf::SoundBuffer> &soundFxs)
 {
   QDir d(dataDir,
          "*.wav",
@@ -46,20 +46,18 @@ bool Loader::loadSoundFxs(const QString dataDir, QMap<QString, Mix_Chunk *> &sou
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
   QFileInfoList infoList = d.entryInfoList();
   for(const auto &info: infoList) {
-    Mix_Chunk *soundFx;
-    soundFx = Mix_LoadWAV(info.absoluteFilePath().toStdString().c_str());
-    if(soundFx == NULL) {
-      return false;
+    sf::SoundBuffer soundFx;
+    if(soundFx.loadFromFile(info.absoluteFilePath().toStdString())) {
+      soundFxs[dataDir + (dataDir.right(1) == "/"?"":"/") + info.fileName()] = soundFx;
+      qInfo("  Added sound: %s\n", info.fileName().toStdString().c_str());
     }
-    soundFxs[dataDir + (dataDir.right(1) == "/"?"":"/") + info.fileName()] = soundFx;
-    qInfo("Added sound: %s\n", info.fileName().toStdString().c_str());
   }
   return true;
 }
 
 bool Loader::loadBehaviours(QString dataDir,
                             QList<Behaviour> &behaviours,
-                            const QMap<QString, Mix_Chunk *> &soundFxs)
+                            QMap<QString, sf::SoundBuffer> &soundFxs)
 {
   QDir d(dataDir,
          "*.png",
@@ -98,7 +96,6 @@ bool Loader::loadBehaviours(QString dataDir,
       b.file = info.completeBaseName();
       b.title = info.completeBaseName();
       b.category = "";
-      qInfo("Adding behaviour: %s\n", b.title.toStdString().c_str());
 
       QTextStream in(&dat);
       QString line = in.readLine();
@@ -167,10 +164,7 @@ bool Loader::loadBehaviours(QString dataDir,
         f.show = snippets.at(5).toInt();
         if(snippets.length() >= 7) {
           if(soundFxs.contains(snippets.at(6))) {
-            f.soundFx = soundFxs[snippets.at(6)];
-#ifdef DEBUG
-            qInfo("Added sound FX '%s'\n", snippets.at(6).toStdString().c_str());
-#endif
+            f.soundBuffer = &soundFxs[snippets.at(6)];
           }
         }
         b.frames.append(f);
@@ -179,9 +173,10 @@ bool Loader::loadBehaviours(QString dataDir,
         line = in.readLine();
       }
       dat.close();
+      qInfo("  Added behaviour: %s\n", b.title.toStdString().c_str());
       behaviours.append(b);
     } else {
-      qInfo("Error in behaviour: %s\n", info.fileName().toStdString().c_str());
+      qInfo("  Error in behaviour: %s\n", info.fileName().toStdString().c_str());
       return false;
     }
   }

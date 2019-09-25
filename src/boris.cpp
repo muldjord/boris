@@ -28,6 +28,8 @@
 #include "boris.h"
 #include "settings.h"
 
+#include "SFML/Audio.hpp"
+
 #include <stdio.h>
 #include <math.h>
 #include <QTimer>
@@ -405,11 +407,10 @@ void Boris::nextFrame()
     bruises->setPixmap(bruisesPixmap);
   }
 
-  if(settings.sound &&
-     behaviours.at(curBehav).frames.at(curFrame).soundFx != nullptr) {
-    // Play on first unreserved channel (-1)
-    // Only play once (0)
-    Mix_PlayChannel(-1, behaviours.at(curBehav).frames.at(curFrame).soundFx, 0);
+  if(settings.sound && behaviours.at(curBehav).frames.at(curFrame).soundBuffer != nullptr) {
+    emit playSound(behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
+                   (float)this->pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
+                   stats->getHyper() / 60.0 + 1.0);
   }
   int frameTime = behaviours.at(curBehav).frames.at(curFrame).time;
   animTimer.setInterval(frameTime - ((double)frameTime / 100.0 * stats->getHyper()));

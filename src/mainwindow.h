@@ -24,15 +24,13 @@
  *  along with Boris; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
+
 #ifndef _MAINWINDOW_H
 #define _MAINWINDOW_H
 
 #include "boris.h"
 #include "behaviour.h"
 #include "netcomm.h"
-
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_mixer.h"
 
 #include <QWidget>
 #include <QSystemTrayIcon>
@@ -56,10 +54,14 @@ private slots:
   void killAll();
   //void weatherReply(QNetworkReply *r);
   void updateWeather();
+  void playSound(const sf::SoundBuffer *buffer,
+                 const float &panning,
+                 const float &pitch);
 
 private:
   NetComm *netComm;
-  QMap<QString, Mix_Chunk *> soundFxs;
+  QMap<QString, sf::SoundBuffer> soundFxs;
+  QList<sf::Sound> soundChannels;
   bool loadBehaviours();
   QList<QString> extractSnippets(QString line);
   QString *aboutText;
@@ -77,8 +79,7 @@ private:
   void removeBoris(int clones);
   QTimer collisTimer;
   void loadChatter();
-
-  bool initAudio();
+  sf::Sound *sound;
 };
 
 #endif // _MAINWINDOW_H

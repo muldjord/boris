@@ -70,6 +70,11 @@ protected:
   void enterEvent(QEvent *event);
   void leaveEvent(QEvent *event);
 
+signals:
+  void playSound(const sf::SoundBuffer *buffer,
+                 const float &panning,
+                 const float &pitch);
+
 private slots:
   void handleBehaviourChange(QAction* a);
   void handlePhysics();
@@ -132,7 +137,6 @@ private:
   int getIdxFromCategory(QString category);
   void processVision();
   void processAi(QString &behav, int &time);
-  int timeFactor;
   int curWeather;
   int curWeatherFrame;
   int timeForWeather;

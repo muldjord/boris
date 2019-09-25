@@ -35,7 +35,7 @@ Frame::Frame(const Frame &frame): QObject()
   this->dy = frame.dy;
   this->hide = frame.hide;
   this->show = frame.show;
-  this->soundFx = frame.soundFx;
+  this->soundBuffer = frame.soundBuffer;
 }
 
 void Frame::operator=(const Frame &frame)
@@ -46,7 +46,7 @@ void Frame::operator=(const Frame &frame)
   this->dy = frame.dy;
   this->hide = frame.hide;
   this->show = frame.show;
-  this->soundFx = frame.soundFx;
+  this->soundBuffer = frame.soundBuffer;
 }
 
 Frame::Frame()

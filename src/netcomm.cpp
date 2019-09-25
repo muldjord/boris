@@ -67,8 +67,6 @@ void NetComm::netReply(QNetworkReply *r)
   r->close();
   if(r->request() == weatherRequest) {
     qInfo("Updating weather:\n");
-    qDebug("%s\n", doc.toString().toStdString().c_str());
-
     if(!settings.forceWeatherType) {
       settings.weatherType = doc.elementsByTagName("weather").at(0).toElement().attribute("icon");
     }
@@ -93,22 +91,21 @@ void NetComm::netReply(QNetworkReply *r)
     }
     
     //qInfo("%s\n", rawData.data());
-    qInfo("Icon: %s\n", settings.weatherType.toStdString().c_str());
-    qInfo("Temp: %f\n", settings.temperature);
-    qInfo("Wind: %fm/s from %s\n", settings.windSpeed, settings.windDirection.toStdString().c_str());
+    qInfo("  Icon: %s\n", settings.weatherType.toStdString().c_str());
+    qInfo("  Temp: %f\n", settings.temperature);
+    qInfo("  Wind: %fm/s from %s\n", settings.windSpeed, settings.windDirection.toStdString().c_str());
 
     emit weatherUpdated();
   } else if(r->request() == feedRequest) {
     settings.chatLines.clear();
     qInfo("Updating feed:\n");
-    qDebug("%s\n", doc.toString().toStdString().c_str());
     QDomNodeList titles = doc.elementsByTagName("item");
     for(int a = 0; a < titles.length(); ++a) {
       ChatLine feedLine;
       feedLine.type = "_whisper";
       feedLine.text = titles.at(a).firstChildElement("title").text().trimmed();
       feedLine.url = QUrl(titles.at(a).firstChildElement("link").text());
-      qInfo("'%s'\n", feedLine.text.toStdString().c_str());
+      qInfo("  '%s'\n", feedLine.text.toStdString().c_str());
       settings.chatLines.append(feedLine);
     }
 

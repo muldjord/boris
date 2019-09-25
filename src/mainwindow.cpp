@@ -30,6 +30,8 @@
 #include "loader.h"
 #include "settings.h"
 
+#include "SFML/Audio.hpp"
+
 #include <stdio.h>
 #include <math.h>
 #include <QApplication>
@@ -103,6 +105,9 @@ MainWindow::MainWindow()
   }
   settings.borisY = iniSettings.value("boris_y").toInt();
 
+  // For use with sound panning in relation to Boris location
+  settings.desktopWidth = QApplication::desktop()->width();
+
   if(!iniSettings.contains("clones")) {
     iniSettings.setValue("clones", 2);
   }
@@ -154,10 +159,12 @@ MainWindow::MainWindow()
     iniSettings.setValue("volume", 50);
   }
   settings.volume = iniSettings.value("volume").toInt() / 100.0;
-
+  sf::Listener::setGlobalVolume(settings.volume * 100.0);
+  
   if(!iniSettings.contains("lemmy_mode")) {
     iniSettings.setValue("lemmy_mode", false);
   }
+  settings.lemmyMode = iniSettings.value("lemmy_mode").toBool();
 
   if(!iniSettings.contains("feed_url")) {
     iniSettings.setValue("feed_url", "http://rss.slashdot.org/Slashdot/slashdotMain");
@@ -178,8 +185,12 @@ MainWindow::MainWindow()
     About about(this);
     about.exec();
   }
-  
-  initAudio();
+
+  for(int a = 0; a < 32; ++a) {
+    sf::Sound soundChannel;
+    soundChannel.setAttenuation(0.f);
+    soundChannels.append(soundChannel);
+  }
 
   if(Loader::loadSoundFxs(iniSettings.value("sounds_path").toString(), soundFxs)) {
     qInfo("Sounds loaded ok... :)\n");
@@ -211,9 +222,6 @@ MainWindow::MainWindow()
   settings.clones = iniSettings.value("clones").toInt();
   addBoris((settings.clones == 0?qrand() % 99 + 1:settings.clones));
 
-  // Set new audio channels
-  Mix_AllocateChannels(borises.count() * 2); // Allocate plenty to allow overlapping sounds
-
   collisTimer.setInterval(100);
   collisTimer.setSingleShot(true);
   connect(&collisTimer, &QTimer::timeout, this, &MainWindow::checkCollisions);
@@ -222,6 +230,13 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
+  QString iniFile = "config.ini";
+  if(QFileInfo::exists("config_" + QHostInfo::localHostName().toLower() + ".ini")) {
+    iniFile = "config_" + QHostInfo::localHostName().toLower() + ".ini";
+  }
+  QSettings iniSettings(iniFile, QSettings::IniFormat);
+  iniSettings.setValue("boris_x", settings.borisX);
+  iniSettings.setValue("boris_y", settings.borisY);
   delete trayIcon;
   for(auto &boris: borises) {
     delete boris;
@@ -236,6 +251,7 @@ void MainWindow::addBoris(int clones)
     connect(earthquakeAction, &QAction::triggered, borises.last(), &Boris::earthquake);
     connect(teleportAction, &QAction::triggered, borises.last(), &Boris::teleport);
     connect(weatherAction, &QAction::triggered, borises.last(), &Boris::triggerWeather);
+    connect(borises.last(), &Boris::playSound, this, &MainWindow::playSound);
     borises.last()->show();
     borises.last()->earthquake();
   }
@@ -296,7 +312,7 @@ void MainWindow::aboutBox()
   about.exec();
   for(auto &boris: borises) {
     boris->updateBoris();
-    Mix_Volume(-1, settings.volume * 128);
+    sf::Listener::setGlobalVolume(settings.volume * 100.0);
   }
   int newClones = settings.clones;
   if(newClones == 0) {
@@ -307,9 +323,6 @@ void MainWindow::aboutBox()
   } else if(borises.count() < newClones) {
     addBoris(newClones - borises.count());
   }
-  
-  // Set new audio channels
-  Mix_AllocateChannels(borises.count() * 2); // Allocate plenty to allow overlapping sounds
   
   netComm->updateAll();
 }
@@ -359,16 +372,17 @@ void MainWindow::updateWeather()
   weatherAction->setIcon(QIcon(":" + settings.weatherType + ".png"));
 }
 
-bool MainWindow::initAudio()
+void MainWindow::playSound(const sf::SoundBuffer *buffer,
+                           const float &panning,
+                           const float &pitch)
 {
-  // Set up the audio stream
-  int result = Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 512);
-  if(result < 0) {
-    fprintf(stderr, "Unable to open audio: %s\n", SDL_GetError());
-    exit(-1);
+  for(auto &channel: soundChannels) {
+    if(channel.getStatus() == sf::SoundSource::Status::Stopped) {
+      channel.setBuffer(*buffer);
+      channel.setPosition(panning, 0.f, 2.f);
+      channel.setPitch(pitch);
+      channel.play();
+      break;
+    }
   }
-
-  Mix_Volume(-1, settings.volume * 128);
-  
-  return true;
 }

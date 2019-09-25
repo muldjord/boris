@@ -27,7 +27,7 @@
 #ifndef _BEHAVIOUR_H
 #define _BEHAVIOUR_H
 
-#include "SDL2/SDL_mixer.h"
+#include "SFML/Audio.hpp"
 
 #include <QObject>
 #include <QPixmap>
@@ -46,7 +46,7 @@ public:
   int dy;
   bool hide;
   bool show;
-  Mix_Chunk *soundFx = nullptr;
+  sf::SoundBuffer *soundBuffer = nullptr;
 };
 
 class Behaviour: public QObject

@@ -44,7 +44,8 @@ struct ChatLine
 struct Settings {
   bool showWelcome = true;
   bool statLogging = false;
-
+  int desktopWidth = 1920;
+  
   // Boris related
   int borisX = 64;
   int borisY = 64;
