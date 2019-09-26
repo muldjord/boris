@@ -48,6 +48,7 @@ extern Settings settings;
 About::About(QWidget *parent) : QDialog(parent)
 {
   setFixedSize(900, 520);
+  move((settings.desktopWidth / 2) - (width() / 2), 256);
   setWindowIcon(QIcon(":icon.png"));
   setWindowTitle("Boris v" VERSION);
 
