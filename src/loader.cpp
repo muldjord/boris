@@ -45,14 +45,18 @@ bool Loader::loadSoundFxs(const QString dataDir, QMap<QString, sf::SoundBuffer> 
          QDir::Name,
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
   QFileInfoList infoList = d.entryInfoList();
+  bool noErrors = true;
   for(const auto &info: infoList) {
     sf::SoundBuffer soundFx;
     if(soundFx.loadFromFile(info.absoluteFilePath().toStdString())) {
       soundFxs[dataDir + (dataDir.right(1) == "/"?"":"/") + info.fileName()] = soundFx;
       qInfo("  Added sound: %s\n", info.fileName().toStdString().c_str());
+    } else {
+      noErrors = false;
+      qWarning("  Error when loading sound: %s\n", info.fileName().toStdString().c_str());
     }
   }
-  return true;
+  return noErrors;
 }
 
 bool Loader::loadBehaviours(QString dataDir,
