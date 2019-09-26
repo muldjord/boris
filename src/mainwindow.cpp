@@ -181,11 +181,6 @@ MainWindow::MainWindow()
   }
   settings.key = iniSettings.value("weather_key").toString();
 
-  if(iniSettings.value("show_welcome").toBool()) {
-    About about(this);
-    about.exec();
-  }
-
   for(int a = 0; a < 16; ++a) { // Create 16 audio channels in total
     sf::Sound soundChannel;
     soundChannel.setAttenuation(0.f);
@@ -218,6 +213,11 @@ MainWindow::MainWindow()
 
   netComm = new NetComm();
   connect(netComm, &NetComm::weatherUpdated, this, &MainWindow::updateWeather);
+
+  if(iniSettings.value("show_welcome").toBool()) {
+    About about(this);
+    about.exec();
+  }
 
   settings.clones = iniSettings.value("clones").toInt();
   addBoris((settings.clones == 0?qrand() % 99 + 1:settings.clones));
