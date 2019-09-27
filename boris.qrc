@@ -15,6 +15,7 @@
     <file alias="flash_icon.png">data/gfx/flash_icon.png</file>
     <file alias="bruises.png">data/gfx/bruises.png</file>
     <file alias="dirt.png">data/gfx/dirt.png</file>
+    <file alias="shadow.png">data/gfx/shadow.png</file>
     <file alias="movement.png">data/gfx/movement.png</file>
     <file alias="iddqd.png">data/gfx/iddqd.png</file>
     <file alias="health.png">data/gfx/health.png</file>

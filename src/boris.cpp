@@ -69,13 +69,19 @@ Boris::Boris()
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   
   setScene(new QGraphicsScene);
-  sprite = this->scene()->addPixmap(QPixmap());
+  shadowSprite = this->scene()->addPixmap(QPixmap(":shadow.png"));
+  shadowSprite->setOpacity(0.25);
+
+  borisSprite = this->scene()->addPixmap(QPixmap());
+  borisSprite->setPos(0, -1);
+
   origDirt.load(":dirt.png");
-  dirt = this->scene()->addPixmap(origDirt);
-  dirt->setOpacity(0.0);
+  dirtSprite = this->scene()->addPixmap(origDirt);
+  dirtSprite->setOpacity(0.0);
+
   origBruises.load(":bruises.png");
-  bruises = this->scene()->addPixmap(origBruises);
-  bruises->setOpacity(0.0);
+  bruisesSprite = this->scene()->addPixmap(origBruises);
+  bruisesSprite->setOpacity(0.0);
 
   weatherSprite = this->scene()->addPixmap(QPixmap(32, 32));
   weatherSprite->setPos(0, 0 - 16);
@@ -373,6 +379,27 @@ void Boris::changeBehaviour(QString behav, int time)
   animTimer.setInterval(0);
 }
 
+QPixmap Boris::getShadow(const QPixmap &sprite, const bool &flip)
+{
+  QBitmap top =
+    sprite.copy(0, 0, 32, 16).createMaskFromColor(QColor(0, 0, 0, 0), Qt::MaskOutColor);
+  QBitmap bottom =
+    sprite.copy(0, 16, 32, 16).createMaskFromColor(QColor(0, 0, 0, 0), Qt::MaskOutColor);;
+  QPixmap shadow(32, 32);
+  shadow.fill(Qt::black);
+  /*
+  QPainter painter;
+  painter.begin(&shadow);
+  painter.drawImage(0, 16, top);
+  painter.drawImage(0, 16, bottom);
+  painter.end();
+  */
+  if(flip) {
+    //shadow.mirrored(true, false)
+  }
+  return shadow;
+}
+
 void Boris::nextFrame()
 {
   sanityCheck();
@@ -388,7 +415,7 @@ void Boris::nextFrame()
     }
   }
 
-  QBitmap mask = behaviours.at(curBehav).frames.at(curFrame).sprite.createMaskFromColor(QColor(0, 0, 0, 0));
+  QBitmap mask = behaviours.at(curBehav).frames.at(curFrame).sprite.mask();
 
   QPixmap dirtPixmap(origDirt);
   dirtPixmap.setMask(mask);
@@ -397,13 +424,15 @@ void Boris::nextFrame()
   bruisesPixmap.setMask(mask);
 
   if(flipFrames) {
-    sprite->setPixmap(QPixmap::fromImage(behaviours.at(curBehav).frames.at(curFrame).sprite.toImage().mirrored(true, false)));
-    dirt->setPixmap(QPixmap::fromImage(dirtPixmap.toImage().mirrored(true, false)));
-    bruises->setPixmap(QPixmap::fromImage(bruisesPixmap.toImage().mirrored(true, false)));
+    borisSprite->setPixmap(QPixmap::fromImage(behaviours.at(curBehav).frames.at(curFrame).sprite.toImage().mirrored(true, false)));
+    shadowSprite->setPixmap(getShadow(behaviours.at(curBehav).frames.at(curFrame).sprite, true));
+    dirtSprite->setPixmap(QPixmap::fromImage(dirtPixmap.toImage().mirrored(true, false)));
+    bruisesSprite->setPixmap(QPixmap::fromImage(bruisesPixmap.toImage().mirrored(true, false)));
   } else {
-    sprite->setPixmap(behaviours.at(curBehav).frames.at(curFrame).sprite);
-    dirt->setPixmap(dirtPixmap);
-    bruises->setPixmap(bruisesPixmap);
+    borisSprite->setPixmap(behaviours.at(curBehav).frames.at(curFrame).sprite);
+    shadowSprite->setPixmap(getShadow(behaviours.at(curBehav).frames.at(curFrame).sprite));
+    dirtSprite->setPixmap(dirtPixmap);
+    bruisesSprite->setPixmap(bruisesPixmap);
   }
 
   if(settings.sound && behaviours.at(curBehav).frames.at(curFrame).soundBuffer != nullptr) {
@@ -739,8 +768,8 @@ void Boris::killBoris()
 {
   qInfo("Boris has died... RIP!\n");
   statQueueTimer.stop();
-  dirt->setOpacity(0.0);
-  bruises->setOpacity(0.0);
+  dirtSprite->setOpacity(0.0);
+  bruisesSprite->setOpacity(0.0);
   changeBehaviour("_drop_dead");
   behavTimer.stop();
   statTimer.stop();
@@ -854,8 +883,8 @@ void Boris::statQueueProgress()
     stats->deltaHygiene(-1);
   }
 
-  dirt->setOpacity(0.50 - ((qreal)stats->getHygiene()) * 0.01);
-  bruises->setOpacity(0.75 - ((qreal)stats->getHealth()) * 0.01);
+  dirtSprite->setOpacity(0.50 - ((qreal)stats->getHygiene()) * 0.01);
+  bruisesSprite->setOpacity(0.75 - ((qreal)stats->getHealth()) * 0.01);
   stats->updateStats();
 
   statQueueTimer.start();

@@ -206,7 +206,8 @@ MainWindow::MainWindow()
   loadWidget->setLayout(layout);
   loadWidget->show();
   qApp->processEvents();
-  loadWidget->move((settings.desktopWidth / 2) - (loadWidget->width() / 2), 256);
+  loadWidget->move(settings.borisX - (loadWidget->width() / 2) + (settings.size / 2),
+                   settings.borisY);
 
   QTimer::singleShot(100, this, &MainWindow::loadAssets);
 }
