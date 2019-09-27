@@ -234,10 +234,20 @@ void MainWindow::loadAssets()
     soundChannels.append(soundChannel);
   }
 
-  int assetCount = Loader::getAssetCount();
-  qInfo("Loading %d assets, please wait...\n", assetCount);
+  int totalAssetsSize = 0;
 
-  progressBar->setMaximum(assetCount);
+  totalAssetsSize += Loader::getAssetsSize(QDir(settings.soundsPath, "*.wav", QDir::Name,
+                                                      QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
+  
+  totalAssetsSize += Loader::getAssetsSize(QDir(settings.behavsPath, "*.png", QDir::Name,
+                                       QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
+
+  totalAssetsSize += Loader::getAssetsSize(QDir(settings.weathersPath, "*.png", QDir::Name,
+                                       QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
+
+  qInfo("Loading %d kilobytes of assets, please wait...\n", totalAssetsSize / 1024);
+
+  progressBar->setMaximum(totalAssetsSize);
   
   if(Loader::loadSoundFxs(settings.soundsPath, soundFxs, progressBar)) {
     qInfo("Sounds loaded ok... :)\n");
