@@ -42,11 +42,11 @@ class Loader: public QObject
 public:
   static qint64 getAssetsSize(const QDir &dir);
   static bool loadSoundFxs(const QString &dataDir,
-                    QMap<QString, sf::SoundBuffer> &soundFxs,
-                    QProgressBar *progressBar);
+                           QMap<QString, sf::SoundBuffer> &soundFxs,
+                           QProgressBar *progressBar);
   static bool loadBehaviours(const QString &dataDir, QList<Behaviour> &behaviours,
-                      QMap<QString, sf::SoundBuffer> &soundFxs,
-                      QProgressBar *progressBar);
+                             QMap<QString, sf::SoundBuffer> &soundFxs,
+                             QProgressBar *progressBar);
   static void setClothesColor(QImage &image);
 };
 
