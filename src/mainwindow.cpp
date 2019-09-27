@@ -195,7 +195,6 @@ MainWindow::MainWindow()
   connect(netComm, &NetComm::weatherUpdated, this, &MainWindow::updateWeather);
 
   loadWidget = new QWidget;
-  loadWidget->move((settings.desktopWidth / 2) - (loadWidget->width() / 2), 256);
   loadWidget->setWindowIcon(QIcon(":icon.png"));
   loadWidget->setWindowTitle("Boris v" VERSION);
   QLabel *progressLabel = new QLabel(tr("Looking for Boris, please wait...\n"));
@@ -206,6 +205,8 @@ MainWindow::MainWindow()
 
   loadWidget->setLayout(layout);
   loadWidget->show();
+  qApp->processEvents();
+  loadWidget->move((settings.desktopWidth / 2) - (loadWidget->width() / 2), 256);
 
   QTimer::singleShot(100, this, &MainWindow::loadAssets);
 }
