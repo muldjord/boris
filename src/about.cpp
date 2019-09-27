@@ -45,7 +45,7 @@
 
 extern Settings settings;
 
-About::About(QWidget *parent) : QDialog(parent)
+About::About()
 {
   setFixedSize(900, 520);
   move((settings.desktopWidth / 2) - (width() / 2), 256);
@@ -89,7 +89,7 @@ About::About(QWidget *parent) : QDialog(parent)
     gplText = file.readAll();
     file.close();
   } else {
-    printf("ERROR: Couldn't find COPYING file at the designated location.\n");
+    qWarning("ERROR: Couldn't find COPYING file at the designated location.\n");
     gplText = "ERROR: File not found... This means that someone has been fiddling with the files of this software, and someone might be violating the terms of the GPL. Go to the following location to read the license: http://www.gnu.org/licenses/gpl-3.0.html";
   }
 

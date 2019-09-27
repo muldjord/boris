@@ -33,15 +33,20 @@
 #include "SFML/Audio.hpp"
 
 #include <QObject>
+#include <QProgressBar>
 
 class Loader: public QObject
 {
   Q_OBJECT;
   
 public:
-  static bool loadSoundFxs(const QString dataDir, QMap<QString, sf::SoundBuffer> &soundFxs);
-  static bool loadBehaviours(QString dataDir, QList<Behaviour> &behaviours,
-                             QMap<QString, sf::SoundBuffer> &soundFxs);
+  static int getAssetCount();
+  static bool loadSoundFxs(const QString &dataDir,
+                    QMap<QString, sf::SoundBuffer> &soundFxs,
+                    QProgressBar *progressBar);
+  static bool loadBehaviours(const QString &dataDir, QList<Behaviour> &behaviours,
+                      QMap<QString, sf::SoundBuffer> &soundFxs,
+                      QProgressBar *progressBar);
   static void setClothesColor(QImage &image);
 };
 

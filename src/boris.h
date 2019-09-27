@@ -43,7 +43,7 @@ class Boris : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Boris(QWidget *parent);
+  Boris();
   ~Boris();
   QTimer behavTimer;
   void updateBoris();

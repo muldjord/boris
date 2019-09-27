@@ -76,6 +76,6 @@ int main(int argc, char *argv[])
   QDir::setCurrent(QApplication::applicationDirPath());
 
   MainWindow window;
-
+  
   return app.exec();
 }

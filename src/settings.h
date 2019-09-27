@@ -46,6 +46,11 @@ struct Settings {
   bool statLogging = false;
   int desktopWidth = 1920;
   
+  // Asset folders
+  QString soundsPath = "data/sfx";
+  QString behavsPath = "data/behavs";
+  QString weathersPath = "data/weathers";
+
   // Boris related
   int borisX = 64;
   int borisY = 64;

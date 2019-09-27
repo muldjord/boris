@@ -32,13 +32,14 @@
 #include "behaviour.h"
 #include "netcomm.h"
 
-#include <QWidget>
+#include <QObject>
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QTimer>
 #include <QLinkedList>
+#include <QProgressBar>
 
-class MainWindow : public QWidget
+class MainWindow : public QObject
 {
   Q_OBJECT;
 public:
@@ -49,20 +50,21 @@ protected:
   void mousePressEvent(QMouseEvent* event);
 
 private slots:
+  void loadAssets();
   void aboutBox();
   void checkCollisions();
   void killAll();
-  //void weatherReply(QNetworkReply *r);
   void updateWeather();
   void playSound(const sf::SoundBuffer *buffer,
                  const float &panning,
                  const float &pitch);
 
 private:
+  QWidget *loadWidget;
+  QProgressBar *progressBar;
   NetComm *netComm;
   QMap<QString, sf::SoundBuffer> soundFxs;
   QList<sf::Sound> soundChannels;
-  bool loadBehaviours();
   QList<QString> extractSnippets(QString line);
   QString *aboutText;
   void createTrayIcon();
@@ -78,7 +80,6 @@ private:
   void addBoris(int clones);
   void removeBoris(int clones);
   QTimer collisTimer;
-  void loadChatter();
   sf::Sound *sound;
 };
 

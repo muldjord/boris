@@ -37,7 +37,7 @@ class About : public QDialog
 {
   Q_OBJECT;
 public:
-  About(QWidget *parent);
+  About();
   ~About();
 
 private slots:

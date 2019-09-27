@@ -41,6 +41,8 @@
 #include <QTextStream>
 #include <QDesktopWidget>
 #include <QHostInfo>
+#include <QLabel>
+#include <QVBoxLayout>
 
 QList<Behaviour> behaviours;
 QList<Behaviour> weathers;
@@ -65,13 +67,20 @@ MainWindow::MainWindow()
   }
   settings.statLogging = iniSettings.value("stat_logging").toBool();
 
+  if(!iniSettings.contains("sounds_path")) {
+    iniSettings.setValue("sounds_path", "data/sfx");
+  }
+  settings.soundsPath = iniSettings.value("sounds_path").toString();
+
   if(!iniSettings.contains("behavs_path")) {
     iniSettings.setValue("behavs_path", "data/behavs");
   }
+  settings.behavsPath = iniSettings.value("behavs_path").toString();
   
-  if(!iniSettings.contains("weather_path")) {
-    iniSettings.setValue("weather_path", "data/weathers");
+  if(!iniSettings.contains("weathers_path")) {
+    iniSettings.setValue("weathers_path", "data/weathers");
   }
+  settings.weathersPath = iniSettings.value("weathers_path").toString();
 
   // Force weather from ini
   if(iniSettings.contains("weather_force_type")) {
@@ -91,10 +100,6 @@ MainWindow::MainWindow()
     settings.forceWindSpeed = true;
   }
   
-  if(!iniSettings.contains("sounds_path")) {
-    iniSettings.setValue("sounds_path", "data/sfx");
-  }
-  
   if(!iniSettings.contains("boris_x")) {
     iniSettings.setValue("boris_x", QApplication::desktop()->width() / 2);
   }
@@ -111,6 +116,8 @@ MainWindow::MainWindow()
   if(!iniSettings.contains("clones")) {
     iniSettings.setValue("clones", 2);
   }
+  settings.clones = iniSettings.value("clones").toInt();
+    
   if(!iniSettings.contains("size")) {
     iniSettings.setValue("size", 64);
   }
@@ -125,7 +132,6 @@ MainWindow::MainWindow()
     iniSettings.setValue("iddqd", false);
   }
   settings.iddqd = iniSettings.value("iddqd").toBool();
-
   
   if(!iniSettings.contains("stats")) {
     iniSettings.setValue("stats", "critical");
@@ -181,32 +187,6 @@ MainWindow::MainWindow()
   }
   settings.key = iniSettings.value("weather_key").toString();
 
-  for(int a = 0; a < 16; ++a) { // Create 16 audio channels in total
-    sf::Sound soundChannel;
-    soundChannel.setAttenuation(0.f);
-    soundChannels.append(soundChannel);
-  }
-
-  if(Loader::loadSoundFxs(iniSettings.value("sounds_path").toString(), soundFxs)) {
-    qInfo("Sounds loaded ok... :)\n");
-  } else {
-    qInfo("Error when loading some sounds, please check your wav files\n");
-  }
-
-  if(Loader::loadBehaviours(iniSettings.value("behavs_path").toString(),
-                            behaviours, soundFxs)) {
-    qInfo("Behaviours loaded ok... :)\n");
-  } else {
-    qInfo("Error when loading some behaviours, please check your png and dat files\n");
-  }
-  
-  if(Loader::loadBehaviours(iniSettings.value("weather_path").toString(),
-                            weathers, soundFxs)) {
-    qInfo("Weather types loaded ok... :)\n");
-  } else {
-    qInfo("Error when loading some weather types, please check your png and dat files\n");
-  }
-
   createActions();
   createTrayIcon();
   trayIcon->show();
@@ -214,18 +194,20 @@ MainWindow::MainWindow()
   netComm = new NetComm();
   connect(netComm, &NetComm::weatherUpdated, this, &MainWindow::updateWeather);
 
-  if(iniSettings.value("show_welcome").toBool()) {
-    About about(this);
-    about.exec();
-  }
+  loadWidget = new QWidget;
+  loadWidget->move((settings.desktopWidth / 2) - (loadWidget->width() / 2), 256);
+  loadWidget->setWindowIcon(QIcon(":icon.png"));
+  loadWidget->setWindowTitle("Boris v" VERSION);
+  QLabel *progressLabel = new QLabel(tr("Looking for Boris, please wait...\n"));
+  progressBar = new QProgressBar;
+  QVBoxLayout *layout = new QVBoxLayout;
+  layout->addWidget(progressLabel);
+  layout->addWidget(progressBar);
 
-  settings.clones = iniSettings.value("clones").toInt();
-  addBoris((settings.clones == 0?qrand() % 99 + 1:settings.clones));
+  loadWidget->setLayout(layout);
+  loadWidget->show();
 
-  collisTimer.setInterval(100);
-  collisTimer.setSingleShot(true);
-  connect(&collisTimer, &QTimer::timeout, this, &MainWindow::checkCollisions);
-  collisTimer.start();
+  QTimer::singleShot(100, this, &MainWindow::loadAssets);
 }
 
 MainWindow::~MainWindow()
@@ -243,11 +225,60 @@ MainWindow::~MainWindow()
   }
 }
 
+void MainWindow::loadAssets()
+{
+  for(int a = 0; a < 16; ++a) { // Create 16 audio channels in total
+    sf::Sound soundChannel;
+    soundChannel.setAttenuation(0.f);
+    soundChannels.append(soundChannel);
+  }
+
+  int assetCount = Loader::getAssetCount();
+  qInfo("Loading %d assets, please wait...\n", assetCount);
+
+  progressBar->setMaximum(assetCount);
+  
+  if(Loader::loadSoundFxs(settings.soundsPath, soundFxs, progressBar)) {
+    qInfo("Sounds loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading some sounds, please check your wav files\n");
+  }
+
+  if(Loader::loadBehaviours(settings.behavsPath, behaviours, soundFxs, progressBar)) {
+    qInfo("Behaviours loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading some behaviours, please check your png and dat files\n");
+  }
+  
+  if(Loader::loadBehaviours(settings.weathersPath, weathers, soundFxs, progressBar)) {
+    qInfo("Weather types loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading some weather types, please check your png and dat files\n");
+  }
+
+  if(settings.showWelcome) {
+    About about;
+    about.exec();
+  }
+
+  addBoris((settings.clones == 0?qrand() % 99 + 1:settings.clones));
+
+  collisTimer.setInterval(100);
+  collisTimer.setSingleShot(true);
+  connect(&collisTimer, &QTimer::timeout, this, &MainWindow::checkCollisions);
+  collisTimer.start();
+
+  progressBar->setValue(progressBar->maximum());
+  
+  delete progressBar;
+  delete loadWidget;
+}
+
 void MainWindow::addBoris(int clones)
 {
   qInfo("Spawning %d clone(s)\n", clones);
   while(clones--) {
-    borises << new Boris(this);
+    borises << new Boris;
     connect(earthquakeAction, &QAction::triggered, borises.last(), &Boris::earthquake);
     connect(teleportAction, &QAction::triggered, borises.last(), &Boris::teleport);
     connect(weatherAction, &QAction::triggered, borises.last(), &Boris::triggerWeather);
@@ -288,15 +319,15 @@ void MainWindow::createActions()
 
 void MainWindow::createTrayIcon()
 {
-  trayIconMenu = new QMenu(this);
+  trayIcon = new QSystemTrayIcon;
+
+  trayIconMenu = new QMenu;
   trayIconMenu->addAction(aboutAction);
   trayIconMenu->addAction(earthquakeAction);
   trayIconMenu->addAction(teleportAction);
   trayIconMenu->addAction(weatherAction);
   trayIconMenu->addSeparator();
   trayIconMenu->addAction(quitAction);
-
-  trayIcon = new QSystemTrayIcon(this);
 
   QImage iconImage(":icon.png");
   Loader::setClothesColor(iconImage);
@@ -308,7 +339,7 @@ void MainWindow::createTrayIcon()
 
 void MainWindow::aboutBox()
 {
-  About about(this);
+  About about;
   about.exec();
   for(auto &boris: borises) {
     boris->updateBoris();

@@ -46,8 +46,7 @@ extern QList<Behaviour> behaviours;
 extern QList<Behaviour> weathers;
 extern Settings settings;
 
-Boris::Boris(QWidget *parent)
-  : QGraphicsView(parent)
+Boris::Boris()
 {
   vVel = 0.0;
   hVel = 0.0;

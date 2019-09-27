@@ -38,7 +38,28 @@
 
 extern Settings settings;
 
-bool Loader::loadSoundFxs(const QString dataDir, QMap<QString, sf::SoundBuffer> &soundFxs)
+int Loader::getAssetCount()
+{
+  int assetCount = 0;
+
+  QDir soundsDir(settings.soundsPath, "*.wav", QDir::Name,
+                 QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
+  assetCount += soundsDir.entryInfoList().count();
+
+  QDir behavsDir(settings.behavsPath, "*.png", QDir::Name,
+                 QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
+  assetCount += behavsDir.entryInfoList().count();
+
+  QDir weathersDir(settings.weathersPath, "*.png", QDir::Name,
+                   QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
+  assetCount += weathersDir.entryInfoList().count();
+
+  return assetCount;
+}
+
+bool Loader::loadSoundFxs(const QString &dataDir,
+                          QMap<QString, sf::SoundBuffer> &soundFxs,
+                          QProgressBar *progressBar)
 {
   QDir d(dataDir,
          "*.wav",
@@ -55,13 +76,15 @@ bool Loader::loadSoundFxs(const QString dataDir, QMap<QString, sf::SoundBuffer> 
       noErrors = false;
       qWarning("  Error when loading sound: %s\n", info.fileName().toStdString().c_str());
     }
+    progressBar->setValue(progressBar->value() + 1);
   }
   return noErrors;
 }
 
-bool Loader::loadBehaviours(QString dataDir,
+bool Loader::loadBehaviours(const QString &dataDir,
                             QList<Behaviour> &behaviours,
-                            QMap<QString, sf::SoundBuffer> &soundFxs)
+                            QMap<QString, sf::SoundBuffer> &soundFxs,
+                            QProgressBar *progressBar)
 {
   QDir d(dataDir,
          "*.png",
@@ -183,6 +206,7 @@ bool Loader::loadBehaviours(QString dataDir,
       qInfo("  Error in behaviour: %s\n", info.fileName().toStdString().c_str());
       return false;
     }
+    progressBar->setValue(progressBar->value() + 1);
   }
   return true;
 }
