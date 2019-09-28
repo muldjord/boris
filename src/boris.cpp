@@ -384,16 +384,22 @@ QPixmap Boris::getShadow(const QPixmap &sprite)
 {
   QImage image = sprite.toImage();
   int firstLeft = sprite.width();
+  int bottom = 0;
   for(int row = 0; row < sprite.height(); ++row) {
     QRgb *rowBits = (QRgb *)image.constScanLine(row);
     for(int col = 0; col < sprite.width(); ++col) {
-      if(qAlpha(rowBits[col]) != 0 && firstLeft > col) {
-        firstLeft = col;
-        break;
+      if(qAlpha(rowBits[col]) != 0) {
+        if(bottom < row) {
+          bottom = row;
+        }
+        if(firstLeft > col) {
+          firstLeft = col;
+          break;
+        }
       }
     }
   }
-  shadowSprite->setPos(firstLeft, 0);
+  shadowSprite->setPos(firstLeft, bottom + 1 - sprite.height());
   int firstRight = 0;
   for(int row = 0; row < sprite.height(); ++row) {
     QRgb *rowBits = (QRgb *)image.constScanLine(row);
