@@ -78,7 +78,7 @@ private slots:
   void handlePhysics();
   void statProgress();
   void statQueueProgress();
-  QPixmap getShadow(const QPixmap &sprite, const bool &flip = false);
+  QPixmap getShadow(const QPixmap &sprite);
   void nextFrame();
   void nextWeatherFrame();
   void hideWeather();
@@ -108,6 +108,7 @@ private:
 
   QGraphicsPixmapItem *borisSprite;
   QGraphicsPixmapItem *shadowSprite;
+  QPixmap origShadow;
   QGraphicsPixmapItem *dirtSprite;
   QPixmap origDirt;
   QGraphicsPixmapItem *bruisesSprite;

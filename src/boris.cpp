@@ -69,8 +69,9 @@ Boris::Boris()
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   
   setScene(new QGraphicsScene);
-  shadowSprite = this->scene()->addPixmap(QPixmap(":shadow.png"));
-  shadowSprite->setOpacity(0.25);
+  origShadow.load(":shadow.png");
+  shadowSprite = this->scene()->addPixmap(origShadow);
+  shadowSprite->setOpacity(0.35);
 
   borisSprite = this->scene()->addPixmap(QPixmap());
   borisSprite->setPos(0, -1);
@@ -379,25 +380,39 @@ void Boris::changeBehaviour(QString behav, int time)
   animTimer.setInterval(0);
 }
 
-QPixmap Boris::getShadow(const QPixmap &sprite, const bool &flip)
+QPixmap Boris::getShadow(const QPixmap &sprite)
 {
-  QBitmap top =
-    sprite.copy(0, 0, 32, 16).createMaskFromColor(QColor(0, 0, 0, 0), Qt::MaskOutColor);
-  QBitmap bottom =
-    sprite.copy(0, 16, 32, 16).createMaskFromColor(QColor(0, 0, 0, 0), Qt::MaskOutColor);;
-  QPixmap shadow(32, 32);
-  shadow.fill(Qt::black);
-  /*
-  QPainter painter;
-  painter.begin(&shadow);
-  painter.drawImage(0, 16, top);
-  painter.drawImage(0, 16, bottom);
-  painter.end();
-  */
-  if(flip) {
-    //shadow.mirrored(true, false)
+  QImage image = sprite.toImage();
+  int firstLeft = sprite.width();
+  for(int row = 0; row < sprite.height(); ++row) {
+    QRgb *rowBits = (QRgb *)image.constScanLine(row);
+    for(int col = 0; col < sprite.width(); ++col) {
+      if(qAlpha(rowBits[col]) != 0 && firstLeft > col) {
+        firstLeft = col;
+        break;
+      }
+    }
   }
-  return shadow;
+  shadowSprite->setPos(firstLeft, 0);
+  int firstRight = 0;
+  for(int row = 0; row < sprite.height(); ++row) {
+    QRgb *rowBits = (QRgb *)image.constScanLine(row);
+    for(int col = sprite.width() - 1; col >= 0; --col) {
+      if(qAlpha(rowBits[col]) != 0 && firstRight < col) {
+        firstRight = col;
+        break;
+      }
+    }
+  }
+  if(firstRight == 0) {
+    firstRight = sprite.width();
+  }
+  if(firstLeft == sprite.width()) {
+    firstLeft = 0;
+  }
+  int shadowWidth = firstRight - firstLeft;
+  QImage shadow = origShadow.toImage().scaled(shadowWidth, origShadow.height());
+  return QPixmap::fromImage(shadow);
 }
 
 void Boris::nextFrame()
@@ -423,9 +438,15 @@ void Boris::nextFrame()
   QPixmap bruisesPixmap(origBruises);
   bruisesPixmap.setMask(mask);
 
+  if(falling) {
+    shadowSprite->hide();
+  } else {
+    shadowSprite->show();
+  }
   if(flipFrames) {
-    borisSprite->setPixmap(QPixmap::fromImage(behaviours.at(curBehav).frames.at(curFrame).sprite.toImage().mirrored(true, false)));
-    shadowSprite->setPixmap(getShadow(behaviours.at(curBehav).frames.at(curFrame).sprite, true));
+    QImage flipped = behaviours.at(curBehav).frames.at(curFrame).sprite.toImage().mirrored(true, false);
+    borisSprite->setPixmap(QPixmap::fromImage(flipped));
+    shadowSprite->setPixmap(getShadow(QPixmap::fromImage(flipped)));
     dirtSprite->setPixmap(QPixmap::fromImage(dirtPixmap.toImage().mirrored(true, false)));
     bruisesSprite->setPixmap(QPixmap::fromImage(bruisesPixmap.toImage().mirrored(true, false)));
   } else {
