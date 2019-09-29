@@ -954,49 +954,81 @@ void Boris::collide(Boris *b)
 
   if((approachAngle >= 0.0 && approachAngle < 22.5) || (approachAngle >= 337.5 && approachAngle < 360.0)) {
     if(borisFriend->getHygiene() >= fleeThres) {
-      changeBehaviour("_casual_wave_right");
+      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
+        changeBehaviour("_sad_right");
+      } else {
+        changeBehaviour("_casual_wave_right");
+      }
     } else {
       changeBehaviour("_flee_left", (qrand() % 2000) + 1500);
     }
   } else if(approachAngle >= 22.5 && approachAngle < 67.5) {
     if(borisFriend->getHygiene() >= fleeThres) {
-      changeBehaviour("_casual_wave_right_up");
+      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
+        changeBehaviour("_sad_right");
+      } else {
+        changeBehaviour("_casual_wave_right_up");
+      }
     } else {
       changeBehaviour("_flee_left_down", (qrand() % 2000) + 1500);
     }
   } else if(approachAngle >= 67.5 && approachAngle < 112.5) {
     if(borisFriend->getHygiene() >= fleeThres) {
-      changeBehaviour("_casual_wave_up");
+      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
+        changeBehaviour("_sad_right");
+      } else {
+        changeBehaviour("_casual_wave_up");
+      }
     } else {
       changeBehaviour("_flee_down", (qrand() % 2000) + 1500);
     }
   } else if(approachAngle >= 112.5 && approachAngle < 157.5) {
     if(borisFriend->getHygiene() >= fleeThres) {
-      changeBehaviour("_casual_wave_left_up");
+      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
+        changeBehaviour("_sad_left");
+      } else {
+        changeBehaviour("_casual_wave_left_up");
+      }
     } else {
       changeBehaviour("_flee_right_down", (qrand() % 2000) + 1500);
     }
   } else if(approachAngle >= 157.5 && approachAngle < 202.5) {
     if(borisFriend->getHygiene() >= fleeThres) {
-      changeBehaviour("_casual_wave_left");
+      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
+        changeBehaviour("_sad_left");
+      } else {
+        changeBehaviour("_casual_wave_left");
+      }
     } else {
       changeBehaviour("_flee_right", (qrand() % 2000) + 1500);
     }
   } else if(approachAngle >= 202.5 && approachAngle < 247.5) {
     if(borisFriend->getHygiene() >= fleeThres) {
-      changeBehaviour("_casual_wave_left_down");
+      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
+        changeBehaviour("_sad_left");
+      } else {
+        changeBehaviour("_casual_wave_left_down");
+      }
     } else {
       changeBehaviour("_flee_right_up", (qrand() % 2000) + 1500);
     }
   } else if(approachAngle >= 247.5 && approachAngle < 292.5) {
     if(borisFriend->getHygiene() >= fleeThres) {
-      changeBehaviour("_casual_wave_down");
+      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
+        changeBehaviour("_sad_left");
+      } else {
+        changeBehaviour("_casual_wave_down");
+      }
     } else {
       changeBehaviour("_flee_up", (qrand() % 2000) + 1500);
     }
   } else if(approachAngle >= 292.5 && approachAngle < 337.5) {
     if(borisFriend->getHygiene() >= fleeThres) {
-      changeBehaviour("_casual_wave_right_down");
+      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
+        changeBehaviour("_sad_right");
+      } else {
+        changeBehaviour("_casual_wave_right_down");
+      }
     } else {
       changeBehaviour("_flee_left_up", (qrand() % 2000) + 1500);
     }
