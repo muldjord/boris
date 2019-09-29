@@ -964,6 +964,7 @@ void Boris::collide(Boris *b)
   } else if(angle >= 292.5 && angle < 337.5) {
     friendAt = Direction::SouthEast;
   }
+
   if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
     if(friendAt == Direction::South ||
        friendAt == Direction::SouthEast ||
