@@ -74,15 +74,17 @@ Boris::Boris()
   shadowSprite->setOpacity(0.35);
 
   borisSprite = this->scene()->addPixmap(QPixmap());
-  borisSprite->setPos(0, -1);
+  borisSprite->setPos(0, -1); // To make room for shadow
 
   origDirt.load(":dirt.png");
   dirtSprite = this->scene()->addPixmap(origDirt);
   dirtSprite->setOpacity(0.0);
+  dirtSprite->setPos(0, -1); // To make room for shadow
 
   origBruises.load(":bruises.png");
   bruisesSprite = this->scene()->addPixmap(origBruises);
   bruisesSprite->setOpacity(0.0);
+  bruisesSprite->setPos(0, -1); // To make room for shadow
 
   weatherSprite = this->scene()->addPixmap(QPixmap(32, 32));
   weatherSprite->setPos(0, 0 - 16);
