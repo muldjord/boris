@@ -695,7 +695,7 @@ void Boris::handlePhysics()
         if(fabs(mouseHVel) > 20.0 || fabs(mouseVVel) > 20.0) {
           double fleeAngle = atan2((this->pos().y() + (size / 2.0)) - p.y(),
                                    p.x() - (this->pos().x() + (size / 2.0))
-                                   ) * 180.0 / 3.1415927;
+                                   ) * 180.0 / PI;
           if (fleeAngle < 0) {
             fleeAngle += 360;
           } else if (fleeAngle > 360) {
@@ -933,104 +933,85 @@ void Boris::collide(Boris *b)
     setFocus();
   }
   
-  if(falling || grabbed || behaviours.at(curBehav).doNotDisturb || borisFriend != nullptr) {
+  if(borisFriend != nullptr || falling || grabbed || behaviours.at(curBehav).doNotDisturb) {
     return;
   }
   borisFriend = b;
     
-  double approachAngle = atan2(this->pos().y() - borisFriend->pos().y(), borisFriend->pos().x() - this->pos().x()) * 180.0 / 3.1415927;
-  if (approachAngle < 0) {
-    approachAngle += 360;
-  } else if (approachAngle > 360) {
-    approachAngle -= 360;
+  double angle = atan2(this->pos().y() - borisFriend->pos().y(),
+                       borisFriend->pos().x() - this->pos().x()) * 180 / 3.1415927;
+  if(angle < 0) {
+    angle += 360;
+  } else if(angle >= 360) {
+    angle -= 360;
   }
-    
-  int fleeThres = 22;
 
-  /*
-    } else if(behaviours.at(borisFriend->getCurBehav).category == "Fun") {
-    changeBehaviour(getFileFromCategory("Fun"));
-  */
+  int friendAt = Direction::None;
+  if((angle >= 0.0 && angle < 22.5) || (angle >= 337.5 && angle < 360.0)) {
+    friendAt = Direction::East;
+  } else if(angle >= 22.5 && angle < 67.5) {
+    friendAt = Direction::NorthEast;
+  } else if(angle >= 67.5 && angle < 112.5) {
+    friendAt = Direction::North;
+  } else if(angle >= 112.5 && angle < 157.5) {
+    friendAt = Direction::NorthWest;
+  } else if(angle >= 157.5 && angle < 202.5) {
+    friendAt = Direction::West;
+  } else if(angle >= 202.5 && angle < 247.5) {
+    friendAt = Direction::SouthWest;
+  } else if(angle >= 247.5 && angle < 292.5) {
+    friendAt = Direction::South;
+  } else if(angle >= 292.5 && angle < 337.5) {
+    friendAt = Direction::SouthEast;
+  }
 
-  if((approachAngle >= 0.0 && approachAngle < 22.5) || (approachAngle >= 337.5 && approachAngle < 360.0)) {
-    if(borisFriend->getHygiene() >= fleeThres) {
-      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
-        changeBehaviour("_sad_right");
-      } else {
-        changeBehaviour("_casual_wave_right");
-      }
-    } else {
+  if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
+    if(friendAt == Direction::South ||
+       friendAt == Direction::SouthEast ||
+       friendAt == Direction::East ||
+       friendAt == Direction::NorthEast) {
+      changeBehaviour("_sad_right");
+    } else if(friendAt == Direction::North ||
+       friendAt == Direction::NorthWest ||
+       friendAt == Direction::West ||
+       friendAt == Direction::SouthWest) {
+      changeBehaviour("_sad_left");
+    }
+  } else if(borisFriend->getHygiene() <= 22) {
+    if(friendAt == Direction::South) {
+      changeBehaviour("_flee_up", (qrand() % 2000) + 1500);
+    } else if(friendAt == Direction::SouthEast) {
+      changeBehaviour("_flee_left_up", (qrand() % 2000) + 1500);
+    } else if(friendAt == Direction::East) {
       changeBehaviour("_flee_left", (qrand() % 2000) + 1500);
-    }
-  } else if(approachAngle >= 22.5 && approachAngle < 67.5) {
-    if(borisFriend->getHygiene() >= fleeThres) {
-      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
-        changeBehaviour("_sad_right");
-      } else {
-        changeBehaviour("_casual_wave_right_up");
-      }
-    } else {
+    } else if(friendAt == Direction::NorthEast) {
       changeBehaviour("_flee_left_down", (qrand() % 2000) + 1500);
-    }
-  } else if(approachAngle >= 67.5 && approachAngle < 112.5) {
-    if(borisFriend->getHygiene() >= fleeThres) {
-      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
-        changeBehaviour("_sad_right");
-      } else {
-        changeBehaviour("_casual_wave_up");
-      }
-    } else {
+    } else if(friendAt == Direction::North) {
       changeBehaviour("_flee_down", (qrand() % 2000) + 1500);
-    }
-  } else if(approachAngle >= 112.5 && approachAngle < 157.5) {
-    if(borisFriend->getHygiene() >= fleeThres) {
-      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
-        changeBehaviour("_sad_left");
-      } else {
-        changeBehaviour("_casual_wave_left_up");
-      }
-    } else {
+    } else if(friendAt == Direction::NorthWest) {
       changeBehaviour("_flee_right_down", (qrand() % 2000) + 1500);
-    }
-  } else if(approachAngle >= 157.5 && approachAngle < 202.5) {
-    if(borisFriend->getHygiene() >= fleeThres) {
-      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
-        changeBehaviour("_sad_left");
-      } else {
-        changeBehaviour("_casual_wave_left");
-      }
-    } else {
+    } else if(friendAt == Direction::West) {
       changeBehaviour("_flee_right", (qrand() % 2000) + 1500);
-    }
-  } else if(approachAngle >= 202.5 && approachAngle < 247.5) {
-    if(borisFriend->getHygiene() >= fleeThres) {
-      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
-        changeBehaviour("_sad_left");
-      } else {
-        changeBehaviour("_casual_wave_left_down");
-      }
-    } else {
+    } else if(friendAt == Direction::SouthWest) {
       changeBehaviour("_flee_right_up", (qrand() % 2000) + 1500);
     }
-  } else if(approachAngle >= 247.5 && approachAngle < 292.5) {
-    if(borisFriend->getHygiene() >= fleeThres) {
-      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
-        changeBehaviour("_sad_left");
-      } else {
-        changeBehaviour("_casual_wave_down");
-      }
-    } else {
-      changeBehaviour("_flee_up", (qrand() % 2000) + 1500);
-    }
-  } else if(approachAngle >= 292.5 && approachAngle < 337.5) {
-    if(borisFriend->getHygiene() >= fleeThres) {
-      if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
-        changeBehaviour("_sad_right");
-      } else {
-        changeBehaviour("_casual_wave_right_down");
-      }
-    } else {
-      changeBehaviour("_flee_left_up", (qrand() % 2000) + 1500);
+  } else {
+    if(friendAt == Direction::South) {
+      changeBehaviour("_casual_wave_down", (qrand() % 2000) + 1500);
+    } else if(friendAt == Direction::SouthEast) {
+      changeBehaviour("_casual_wave_right_down", (qrand() % 2000) + 1500);
+    } else if(friendAt == Direction::East) {
+      changeBehaviour("_casual_wave_right", (qrand() % 2000) + 1500);
+    } else if(friendAt == Direction::NorthEast) {
+      changeBehaviour("_casual_wave_right_up", (qrand() % 2000) + 1500);
+    } else if(friendAt == Direction::North) {
+      changeBehaviour("_casual_wave_up", (qrand() % 2000) + 1500);
+    } else if(friendAt == Direction::NorthWest) {
+      changeBehaviour("_casual_wave_left_up", (qrand() % 2000) + 1500);
+    } else if(friendAt == Direction::West) {
+      changeBehaviour("_casual_wave_left", (qrand() % 2000) + 1500);
+    } else if(friendAt == Direction::SouthWest) {
+      changeBehaviour("_casual_wave_left_down", (qrand() % 2000) + 1500);
     }
   }
   QTimer::singleShot(qrand() % 7000 + 5000, this, &Boris::readyForFriend);

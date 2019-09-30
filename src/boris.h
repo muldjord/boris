@@ -39,6 +39,18 @@
 #include <QKeyEvent>
 #include <QMenu>
 
+namespace Direction {
+  constexpr int None = -1;
+  constexpr int East = 0;
+  constexpr int NorthEast = 45;
+  constexpr int North = 90;
+  constexpr int NorthWest = 135;
+  constexpr int West = 180;
+  constexpr int SouthWest = 225;
+  constexpr int South = 270;
+  constexpr int SouthEast = 315;
+};
+
 class Boris : public QGraphicsView
 {
   Q_OBJECT;
