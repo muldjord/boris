@@ -281,6 +281,9 @@ void Boris::nextBehaviour()
 
 void Boris::changeBehaviour(QString behav, int time)
 {
+  // Reset all script variables
+  scriptVars.clear();
+
   // If Boris has died, just return
   if(!isAlive) {
     return;
@@ -423,6 +426,37 @@ QPixmap Boris::getShadow(const QPixmap &sprite)
   return QPixmap::fromImage(shadow);
 }
 
+void Boris::runScript()
+{
+  for(const auto &instruction: behaviours.at(curBehav).frames.at(curFrame).script) {
+    QList<QString> parameters = instruction.split(" ", QString::KeepEmptyParts);
+    if(parameters.at(0) == "addVar") {
+      printf("Adding variable '%s' with value %d\n", parameters.at(1).toStdString().c_str(), parameters.at(2).toInt());
+      scriptVars[parameters.at(1)] = parameters.at(2).toInt();
+    } else if(parameters.at(0) == "if") {
+      printf("if ");
+      if(parameters.at(2) == "<") {
+        printf("%d < %d", scriptVars[parameters.at(1)], parameters.at(3).toInt());
+        if(scriptVars[parameters.at(1)] < parameters.at(3).toInt()) {
+          if(parameters.at(4) == "goto") {
+            printf(" goto %d\n", behaviours.at(curBehav).labels[parameters.at(5)]);
+            curFrame = behaviours.at(curBehav).labels[parameters.at(5)];
+            runScript();
+          }
+        }
+      }
+    } else if(parameters.at(0) == "var") {
+      printf("var ");
+      if(parameters.at(2) == "+=") {
+        scriptVars[parameters.at(1)] += parameters.at(3).toInt();
+        printf("%s += %d: %d\n", parameters.at(1).toStdString().c_str(),
+               parameters.at(3).toInt(),
+               scriptVars[parameters.at(1)]);
+      }
+    }
+  }
+}
+
 void Boris::nextFrame()
 {
   sanityCheck();
@@ -437,6 +471,8 @@ void Boris::nextFrame()
       changeBehaviour();
     }
   }
+
+  runScript();
 
   QBitmap mask = behaviours.at(curBehav).frames.at(curFrame).sprite.mask();
 
@@ -478,20 +514,6 @@ void Boris::nextFrame()
     moveBoris(behaviours.at(curBehav).frames.at(curFrame).dx * (flipFrames?-1:1),
               behaviours.at(curBehav).frames.at(curFrame).dy);
 }
-
-  if(behaviours.at(curBehav).frames.at(curFrame).show) {
-#ifdef DEBUG
-    qInfo("Telling Boris to show himself...\n");
-#endif
-    emit showBoris();
-  }
-
-  if(behaviours.at(curBehav).frames.at(curFrame).hide) {
-#ifdef DEBUG
-    qInfo("Telling Boris to hide...\n");
-#endif
-    emit hideBoris();
-  }
 
   curFrame++;
   animTimer.start();
@@ -552,16 +574,6 @@ void Boris::handleBehaviourChange(QAction* a) {
       behavQueue.append(behaviours.at(i).file);
     }
   }
-}
-
-void Boris::showBoris()
-{
-  show();
-}
-
-void Boris::hideBoris()
-{
-  hide();
 }
 
 void Boris::enterEvent(QEvent *event)

@@ -100,8 +100,7 @@ private:
   bool falling;
   bool grabbed;
   void showWeather(QString &behav);
-  void showBoris();
-  void hideBoris();
+  void runScript();
   void createBehavMenu();
   int staticBehavs;
   int independence;
@@ -159,6 +158,9 @@ private:
   int tooLateForLoo;
 
   void killBoris();
+
+  QMap<QString, int> scriptVars;
+  QList<QString> scriptInstructions;
   
 };
 

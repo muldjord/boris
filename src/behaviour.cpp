@@ -33,9 +33,8 @@ Frame::Frame(const Frame &frame): QObject()
   this->time = frame.time;
   this->dx = frame.dx;
   this->dy = frame.dy;
-  this->hide = frame.hide;
-  this->show = frame.show;
   this->soundBuffer = frame.soundBuffer;
+  this->script = frame.script;
 }
 
 void Frame::operator=(const Frame &frame)
@@ -44,9 +43,8 @@ void Frame::operator=(const Frame &frame)
   this->time = frame.time;
   this->dx = frame.dx;
   this->dy = frame.dy;
-  this->hide = frame.hide;
-  this->show = frame.show;
   this->soundBuffer = frame.soundBuffer;
+  this->script = frame.script;
 }
 
 Frame::Frame()
@@ -74,6 +72,7 @@ Behaviour::Behaviour(const Behaviour &behaviour) : QObject()
   this->doNotDisturb = behaviour.doNotDisturb;
   this->allowFlip = behaviour.allowFlip;
   this->frames = behaviour.frames;
+  this->labels = behaviour.labels;
 }
 
 void Behaviour::operator=(const Behaviour &behaviour)
@@ -93,4 +92,5 @@ void Behaviour::operator=(const Behaviour &behaviour)
   this->doNotDisturb = behaviour.doNotDisturb;
   this->allowFlip = behaviour.allowFlip;
   this->frames = behaviour.frames;
+  this->labels = behaviour.labels;
 }
