@@ -451,7 +451,7 @@ void Boris::runScript()
       printf("if ");
       bool cond = false;
       int compareTo = parameters.at(3).toInt();
-      if(compareTo == 0) { // Above conversion failed, meaning this is probably a var
+      if(!compareTo) { // Above conversion failed, meaning this is probably a var
         for(const auto &key: scriptVars.keys()) {
           if(parameters.at(3) == key) {
             compareTo = scriptVars[key];
