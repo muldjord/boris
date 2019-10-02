@@ -283,6 +283,15 @@ void Boris::changeBehaviour(QString behav, int time)
 {
   // Reset all script variables
   scriptVars.clear();
+  // Readd current stat variables for scripting use
+  scriptVars["energy"] = stats->getEnergy();
+  scriptVars["health"] = stats->getHealth();
+  scriptVars["hyper"] = stats->getHyper();
+  scriptVars["hunger"] = stats->getHunger();
+  scriptVars["bladder"] = stats->getBladder();
+  scriptVars["social"] = stats->getSocial();
+  scriptVars["fun"] = stats->getFun();
+  scriptVars["hygiene"] = stats->getHygiene();
 
   // If Boris has died, just return
   if(!isAlive) {
