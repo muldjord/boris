@@ -23,7 +23,7 @@ allowFlip
 29;75;0;0;;
 30;75;0;0;;
 31;75;0;0;;
-32;90;0;0;;var prehula = r3,if prehula = 1 goto prehula1,if prehula = 2 goto prehula2,if prehula = 3 goto prehula3
+32;90;0;0;;var prehula = @3,if prehula = 1 goto prehula1,if prehula = 2 goto prehula2,if prehula = 3 goto prehula3
 3;75;0;0;;label hula,var loop += 1
 4;75;0;0;;
 5;75;0;0;;
@@ -40,7 +40,7 @@ allowFlip
 16;90;0;0;;
 17;105;0;0;;
 18;125;0;0;;
-19;250;0;0;;var goagain = r100,if goagain < 25 goto stophula
+19;250;0;0;;var goagain = @100,if goagain < 25 goto stophula
 20;90;0;0;;
 21;75;0;0;;
 22;75;0;0;;
@@ -53,20 +53,20 @@ allowFlip
 29;75;0;0;;
 30;75;0;0;;
 31;75;0;0;;
-32;90;0;0;;var prehula = r3,if prehula = 1 goto prehula1,if prehula = 2 goto prehula2,if prehula = 3 goto prehula3
-33;1200;0;0;;label prehula1,var loop = 0,var loops = r8
+32;90;0;0;;var prehula = @3,if prehula = 1 goto prehula1,if prehula = 2 goto prehula2,if prehula = 3 goto prehula3
+33;1200;0;0;;label prehula1,var loop = 0,var loops = @8
 34;100;0;0;;
 35;500;0;0;;
 34;75;0;0;;
 36;75;0;0;;goto hula
-33;1500;0;0;;label prehula2,var loop = 0,var loops = r8
+33;1500;0;0;;label prehula2,var loop = 0,var loops = @8
 34;600;0;0;;
 33;400;0;0;;
 34;100;0;0;;
 35;600;0;0;;
 34;75;0;0;;
 36;75;0;0;;goto hula
-33;1200;0;0;;label prehula3,var loop = 0,var loops = r8
+33;1200;0;0;;label prehula3,var loop = 0,var loops = @8
 34;300;0;0;;
 33;450;0;0;;
 34;100;0;0;;
