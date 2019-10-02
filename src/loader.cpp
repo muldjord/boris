@@ -167,6 +167,9 @@ bool Loader::loadBehaviours(const QString &dataDir,
       int frames = 0;
       while(!dat.atEnd()) {
         QString line = QString(dat.readLine().trimmed());
+        if(line.isEmpty() || line.left(1) == "#") {
+          continue;
+        }
         Frame f;
         QList<QString> snippets = line.split(";", QString::KeepEmptyParts);
         f.sprite = sprites.at(snippets.at(0).toInt());
