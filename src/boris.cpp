@@ -476,21 +476,24 @@ void Boris::runScript()
       }
       if(cond) {
         if(parameters.at(4) == "goto") {
-          printf(" goto %d\n", behaviours.at(curBehav).labels[parameters.at(5)]);
+          printf(" goto %s at frame %d\n", parameters.at(5).toStdString().c_str(),
+                 behaviours.at(curBehav).labels[parameters.at(5)]);
           curFrame = behaviours.at(curBehav).labels[parameters.at(5)];
           return;
         }
       } else {
         if(parameters.at(parameters.count() - 3) == "else") {
           if(parameters.at(parameters.count() - 2) == "goto") {
-            printf(" else goto %d\n", behaviours.at(curBehav).labels[parameters.at(parameters.count() - 1)]);
+            printf(" else goto %s at frame %d\n", parameters.at(parameters.count() - 1).toStdString().c_str(),
+                   behaviours.at(curBehav).labels[parameters.at(parameters.count() - 1)]);
             curFrame = behaviours.at(curBehav).labels[parameters.at(parameters.count() - 1)];
             return;
           }
         }
       }
     } else if(parameters.at(0) == "goto") {
-      printf("goto %d\n", behaviours.at(curBehav).labels[parameters.at(1)]);
+      printf("goto %s at frame %d\n", parameters.at(1).toStdString().c_str(),
+             behaviours.at(curBehav).labels[parameters.at(1)]);
       curFrame = behaviours.at(curBehav).labels[parameters.at(1)];
       return;
     }
