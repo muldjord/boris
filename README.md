@@ -27,6 +27,8 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 ## Release notes
 
 #### Version 2.1.0 (In progress, unreleased):
+* Boris is now fully scriptable allowing for random outcomes of behaviours
+* Behaviours now allows comments inside frame area in .dat files
 * Boris now gets hyper when drinking coffee
 * Boris now sometimes uses his umbrella when falling
 * Boris will now bounce when hitting the ground at high velocity
