@@ -16,7 +16,8 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 ## Building from source (Linux)
 ### Requirements
 * Qt 5 dev libs including multimedia package
-* For Ubuntu and other Debian derivatives running "sudo apt-get install qt5-default qtmultimedia5-dev" should be enough. If not, please let me know.
+* SFML dev libs
+* For Ubuntu and other Debian derivatives running "sudo apt-get install qt5-default qtmultimedia5-dev libsfml-dev" should be enough. If not, please let me know.
 
 ### Build commands
 * qmake
@@ -25,7 +26,7 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
-#### Version 2.0.3 (Unreleased):
+#### Version 2.1.0 (In progress, unreleased):
 * Boris now gets hyper when drinking coffee
 * Boris now sometimes uses his umbrella when falling
 * Boris will now bounce when hitting the ground at high velocity
@@ -34,6 +35,13 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 * Added iddqd "secret" menu
 * Removed "time_factor" config
 * Added wind data to tray menu
+* Boris will now get sad when encountering a deceased friend
+* Added dynamic shadow based on the current Boris sprite size and location
+* Improved umbrella behaviour
+* Fixed missing pixels in gift wrapping sprite
+* Switched to SFML for sound
+* Added slight pitch randomness to all sounds
+* All sounds are now panned in stereo depending on Boris' location
 
 #### Version 2.0.2 (4th December 2018):
 * Added 'allowFlip' flag to behaviours giving those a 50% of being flipped horizontally

@@ -93,8 +93,13 @@ bool Loader::loadBehaviours(const QString &dataDir,
       QImage rawImage(info.absoluteFilePath());
       setClothesColor(rawImage);
       QPixmap t = QPixmap::fromImage(rawImage);
-      for (int i = 0; i < t.width() / 32; ++i) {
-        sprites.append(t.copy(32 * i, 0, 32, 32));
+      if(t.width() % 32 != 0) {
+        qInfo("  Sprite does not adhere to 32 pixel width per sprite, can't load...\n");
+        return false;
+      } else {
+        for (int i = 0; i < t.width() / 32; ++i) {
+          sprites.append(t.copy(32 * i, 0, 32, 32));
+        }
       }
 
       // Create behaviour container
@@ -114,9 +119,11 @@ bool Loader::loadBehaviours(const QString &dataDir,
       b.title = info.completeBaseName();
       b.category = "";
 
-      QTextStream in(&dat);
-      QString line = in.readLine();
-      while (line != "#Frames") {
+      while(!dat.atEnd()) {
+        QByteArray line = dat.readLine().trimmed();
+        if(line.contains("#Frames")) {
+          break;
+        }
         if(line == "oneShot") {
           b.oneShot = true;
         }
@@ -156,13 +163,10 @@ bool Loader::loadBehaviours(const QString &dataDir,
         if(line.contains("hygiene")) {
           b.hygiene = line.mid(8,line.length()).toInt();
         }
-        line = in.readLine();
       }
-#ifdef DEBUG
-      qInfo("Hyper: %d\n, Health: %d\nEnergy: %d\nHunger: %d\nBladder: %d\nSocial: %d\nFun: %d\nHygiene: %d\n", b.hyper, b.health, b.energy, b.hunger, b.bladder, b.social, b.fun, b.hygiene);
-#endif
-      line = in.readLine();
-      while (!line.isNull()) {
+      int frames = 0;
+      while(!dat.atEnd()) {
+        QString line = QString(dat.readLine().trimmed());
         Frame f;
         QList<QString> snippets = line.split(";", QString::KeepEmptyParts);
         f.sprite = sprites.at(snippets.at(0).toInt());
@@ -177,17 +181,24 @@ bool Loader::loadBehaviours(const QString &dataDir,
         } else {
           f.dy = snippets.at(3).toInt();
         }
-        f.hide = snippets.at(4).toInt();
-        f.show = snippets.at(5).toInt();
-        if(snippets.length() >= 7) {
-          if(soundFxs.contains(snippets.at(6))) {
-            f.soundBuffer = &soundFxs[snippets.at(6)];
+        if(!snippets.at(4).isEmpty()) {
+          if(soundFxs.contains(snippets.at(4))) {
+            f.soundBuffer = &soundFxs[snippets.at(4)];
+          }
+        }
+        if(!snippets.at(5).isEmpty()) {
+          QList<QString> instructions = snippets.at(5).split(",");
+          f.script = instructions;
+          for(auto &frameLabel: instructions) {
+            if(frameLabel.contains("label ")) {
+              frameLabel.replace("label ", "");
+              // Point this label to current frame
+              b.labels[frameLabel] = frames;
+            }
           }
         }
         b.frames.append(f);
-
-        // Read next line and go again!
-        line = in.readLine();
+        frames++;
       }
       dat.close();
       qInfo("  Added behaviour: %s\n", b.title.toStdString().c_str());

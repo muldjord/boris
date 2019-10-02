@@ -31,6 +31,7 @@
 
 #include <QObject>
 #include <QPixmap>
+#include <QMap>
 
 class Frame: public QObject
 {
@@ -44,9 +45,8 @@ public:
   int time;
   int dx;
   int dy;
-  bool hide;
-  bool show;
   sf::SoundBuffer *soundBuffer = nullptr;
+  QList<QString> script;
 };
 
 class Behaviour: public QObject
@@ -72,6 +72,7 @@ public:
   bool doNotDisturb;
   bool allowFlip;
   QList<Frame> frames;
+  QMap<QString, int> labels; // Used for scripts when goto'ing
 };
 
 #endif // _BEHAVIOUR_H
