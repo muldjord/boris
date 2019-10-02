@@ -433,7 +433,7 @@ void Boris::runScript()
     if(parameters.at(0) == "var") {
       printf("var ");
       if(parameters.at(2) == "=") {
-        if(parameters.at(3).left(1) == "r") {
+        if(parameters.at(3).left(1) == "@") {
           scriptVars[parameters.at(1)] = (qrand() % parameters.at(3).right(parameters.at(3).length() - 1).toInt()) + 1;
         } else {
           scriptVars[parameters.at(1)] = parameters.at(3).toInt();
@@ -446,10 +446,21 @@ void Boris::runScript()
         printf("%s += %d: %d\n", parameters.at(1).toStdString().c_str(),
                parameters.at(3).toInt(),
                scriptVars[parameters.at(1)]);
+      } else if(parameters.at(2) == "-=") {
+        scriptVars[parameters.at(1)] -= parameters.at(3).toInt();
+        printf("%s -= %d: %d\n", parameters.at(1).toStdString().c_str(),
+               parameters.at(3).toInt(),
+               scriptVars[parameters.at(1)]);
       }
     } else if(parameters.at(0) == "if") {
       printf("if ");
       bool cond = false;
+      int compareFrom = 0;
+      if(parameters.at(1).left(1) == "@") {
+        compareFrom = (qrand() % parameters.at(1).right(parameters.at(1).length() - 1).toInt()) + 1;
+      } else {
+        compareFrom = scriptVars[parameters.at(1)];
+      }
       int compareTo = parameters.at(3).toInt();
       if(!compareTo) { // Above conversion failed, meaning this is probably a var
         for(const auto &key: scriptVars.keys()) {
@@ -459,18 +470,18 @@ void Boris::runScript()
         }
       }
       if(parameters.at(2) == "<") {
-        printf("%d < %d", scriptVars[parameters.at(1)], compareTo);
-        if(scriptVars[parameters.at(1)] < compareTo) {
+        printf("%d < %d", compareFrom, compareTo);
+        if(compareFrom < compareTo) {
           cond = true;
         }
       } else if(parameters.at(2) == ">") {
-        printf("%d > %d", scriptVars[parameters.at(1)], compareTo);
-        if(scriptVars[parameters.at(1)] > compareTo) {
+        printf("%d > %d", compareFrom, compareTo);
+        if(compareFrom > compareTo) {
           cond = true;
         }
       } else if(parameters.at(2) == "=") {
-        printf("%d = %d", scriptVars[parameters.at(1)], compareTo);
-        if(scriptVars[parameters.at(1)] == compareTo) {
+        printf("%d = %d", compareFrom, compareTo);
+        if(compareFrom == compareTo) {
           cond = true;
         }
       }
@@ -489,6 +500,8 @@ void Boris::runScript()
             curFrame = behaviours.at(curBehav).labels[parameters.at(parameters.count() - 1)];
             return;
           }
+        } else {
+          printf("\n");
         }
       }
     } else if(parameters.at(0) == "goto") {
