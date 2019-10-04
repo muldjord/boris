@@ -17,15 +17,15 @@ doNotDisturb
 6;75;0;0;;
 7;75;0;0;;
 8;500;0;0;;
-9;1000;0;0;;
+9;1000;0;0;data/sfx/game_boot.wav;
 10;1000;0;0;;
-11;1000;0;0;;
-12;1000;0;0;;
-13;1000;0;0;;
-14;2000;0;0;;
+11;1000;0;0;data/sfx/countdown.wav;
+12;1000;0;0;data/sfx/countdown.wav;
+13;1000;0;0;data/sfx/countdown.wav;
+14;2000;0;0;data/sfx/go.wav;
 
 # Speed up
-15;475;0;0;;
+15;475;0;0;data/sfx/engine_up.wav;
 16;450;0;0;;
 17;400;0;0;;
 18;325;0;0;;
@@ -39,7 +39,7 @@ doNotDisturb
 20;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 
 # Main road
-15;75;0;0;;label s
+15;75;0;0;data/sfx/engine.wav;label s
 16;75;0;0;;
 17;75;0;0;;
 18;75;0;0;;
@@ -47,7 +47,7 @@ doNotDisturb
 20;75;0;0;;if @5 > 1 goto s,if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 
 # Overtaken left
-21;75;0;0;;label ll
+21;75;0;0;data/sfx/overtaken.wav;label ll
 22;75;0;0;;var place -= 1
 23;75;0;0;;var segs -= 1
 24;75;0;0;;
@@ -67,7 +67,7 @@ doNotDisturb
 38;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 
 # Overtake left
-39;75;0;0;;label wl
+39;75;0;0;data/sfx/overtake.wav;label wl
 40;75;0;0;;var place += 1
 41;75;0;0;;var segs -= 1
 42;75;0;0;;
@@ -87,7 +87,7 @@ doNotDisturb
 56;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 
 # Overtaken right
-57;75;0;0;;label lr
+57;75;0;0;data/sfx/overtaken.wav;label lr
 58;75;0;0;;var place -= 1
 59;75;0;0;;var segs -= 1
 60;75;0;0;;
@@ -107,7 +107,7 @@ doNotDisturb
 74;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 
 # Overtake right
-75;75;0;0;;label wr
+75;75;0;0;data/sfx/overtake.wav;label wr
 76;75;0;0;;var place += 1
 77;75;0;0;;var segs -= 1
 78;75;0;0;;
@@ -127,7 +127,7 @@ doNotDisturb
 92;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 
 # Right turn begin
-93;75;0;0;;label rtb
+93;75;0;0;data/sfx/engine_into_turn.wav;label rtb
 94;75;0;0;;var segs -= 1
 95;75;0;0;;
 96;75;0;0;;
@@ -135,7 +135,7 @@ doNotDisturb
 98;75;0;0;;
 
 # Right turn
-99;75;0;0;;label rt
+99;75;0;0;data/sfx/engine_turn.wav;label rt
 100;75;0;0;;
 101;75;0;0;;
 102;75;0;0;;
@@ -143,7 +143,7 @@ doNotDisturb
 104;75;0;0;;if @5 > 1 goto rt
 
 # Right turn end
-105;75;0;0;;
+105;75;0;0;data/sfx/engine_through_turn.wav;
 106;75;0;0;;
 107;75;0;0;;
 108;75;0;0;;
@@ -151,7 +151,7 @@ doNotDisturb
 110;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 
 # Left turn begin
-111;75;0;0;;label ltb
+111;75;0;0;data/sfx/engine_into_turn.wav;label ltb
 112;75;0;0;;var segs -= 1
 113;75;0;0;;
 114;75;0;0;;
@@ -159,7 +159,7 @@ doNotDisturb
 116;75;0;0;;
 
 # Left turn
-117;75;0;0;;label lt
+117;75;0;0;data/sfx/engine_turn.wav;label lt
 118;75;0;0;;
 119;75;0;0;;
 120;75;0;0;;
@@ -167,7 +167,7 @@ doNotDisturb
 122;75;0;0;;if @5 > 1 goto lt
 
 # Left turn end
-123;75;0;0;;
+123;75;0;0;data/sfx/engine_through_turn.wav;
 124;75;0;0;;
 125;75;0;0;;
 126;75;0;0;;
@@ -175,7 +175,7 @@ doNotDisturb
 128;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 
 # Tunnel
-129;75;0;0;;label t
+129;75;0;0;data/sfx/tunnel.wav;label t
 130;75;0;0;;var segs -= 1
 131;75;0;0;;
 132;75;0;0;;
@@ -189,7 +189,7 @@ doNotDisturb
 140;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 
 # Finish line
-141;75;0;0;;label f
+141;75;0;0;data/sfx/engine_out.wav;label f
 142;75;0;0;;
 143;75;0;0;;
 144;75;0;0;;
@@ -203,10 +203,10 @@ doNotDisturb
 152;2000;0;0;;if place > 0 goto win else goto loose
 
 # Win
-153;2500;0;0;;label win,goto end
+153;2500;0;0;data/sfx/race_win.wav;label win,goto end
 
 # Loose
-154;2500;0;0;;label loose,goto end
+154;2500;0;0;data/sfx/race_loose.wav;label loose,goto end
 
 # Get back up
 8;75;0;0;;label end
