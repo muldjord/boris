@@ -25,8 +25,8 @@ doNotDisturb
 14;2000;0;0;data/sfx/go.wav;
 
 # Speed up
-15;475;0;0;data/sfx/engine_up.wav;
-16;450;0;0;;
+15;475;0;0;;
+16;450;0;0;data/sfx/engine_up.wav;
 17;400;0;0;;
 18;325;0;0;;
 19;225;0;0;;
@@ -203,10 +203,12 @@ doNotDisturb
 152;2000;0;0;;if place > 0 goto win else goto loose
 
 # Win
-153;2500;0;0;data/sfx/race_win.wav;label win,goto end
+153;500;0;0;data/sfx/race_win.wav;label win,goto end
+153;2500;0;0;data/sfx/win2.wav;
 
 # Loose
-154;2500;0;0;data/sfx/race_loose.wav;label loose,goto end
+154;500;0;0;data/sfx/race_loose.wav;label loose,goto end
+154;2500;0;0;data/sfx/grumpy1.wav;
 
 # Get back up
 8;75;0;0;;label end
