@@ -66,106 +66,22 @@ doNotDisturb
 55;75;0;0;;goto bscore
 
 # Boris scores
-126;5;0;0;;label bscore
-126;5;0;0;;if cs = 0 goto csl0
-126;5;0;0;;if cs = 1 goto csl1
-126;5;0;0;;if cs = 2 goto csl2
-126;5;0;0;;if cs = 3 goto csl3
-126;5;0;0;;if cs = 4 goto csl4
-126;5;0;0;;if cs = 5 goto csl5
-126;5;0;0;;label csl0
-126;5;0;0;;if bs = 0 goto win00
-126;5;0;0;;if bs = 1 goto win10
-126;5;0;0;;if bs = 2 goto win20
-126;5;0;0;;if bs = 3 goto win30
-126;5;0;0;;if bs = 4 goto win40
-126;5;0;0;;if bs = 5 goto win50
-126;5;0;0;;label csl1
-126;5;0;0;;if bs = 0 goto win01
-126;5;0;0;;if bs = 1 goto win11
-126;5;0;0;;if bs = 2 goto win21
-126;5;0;0;;if bs = 3 goto win31
-126;5;0;0;;if bs = 4 goto win41
-126;5;0;0;;if bs = 5 goto win51
-126;5;0;0;;label csl2
-126;5;0;0;;if bs = 0 goto win02
-126;5;0;0;;if bs = 1 goto win12
-126;5;0;0;;if bs = 2 goto win22
-126;5;0;0;;if bs = 3 goto win32
-126;5;0;0;;if bs = 4 goto win42
-126;5;0;0;;if bs = 5 goto win52
-126;5;0;0;;label csl3
-126;5;0;0;;if bs = 0 goto win03
-126;5;0;0;;if bs = 1 goto win13
-126;5;0;0;;if bs = 2 goto win23
-126;5;0;0;;if bs = 3 goto win33
-126;5;0;0;;if bs = 4 goto win43
-126;5;0;0;;if bs = 5 goto win53
-126;5;0;0;;label csl4
-126;5;0;0;;if bs = 0 goto win04
-126;5;0;0;;if bs = 1 goto win14
-126;5;0;0;;if bs = 2 goto win24
-126;5;0;0;;if bs = 3 goto win34
-126;5;0;0;;if bs = 4 goto win44
-126;5;0;0;;if bs = 5 goto win54
-126;5;0;0;;label csl5
-126;5;0;0;;if bs = 0 goto win05
-126;5;0;0;;if bs = 1 goto win15
-126;5;0;0;;if bs = 2 goto win25
-126;5;0;0;;if bs = 3 goto win35
-126;5;0;0;;if bs = 4 goto win45
-126;5;0;0;;if bs = 5 goto win55
+126;5;0;0;;label bscore,if cs = 0 goto csl0,if cs = 1 goto csl1,if cs = 2 goto csl2,if cs = 3 goto csl3,if cs = 4 goto csl4,if cs = 5 goto csl5
+126;5;0;0;;label csl0,if bs = 0 goto win00,if bs = 1 goto win10,if bs = 2 goto win20,if bs = 3 goto win30,if bs = 4 goto win40,if bs = 5 goto win50,
+126;5;0;0;;label csl1,if bs = 0 goto win01,if bs = 1 goto win11,if bs = 2 goto win21,if bs = 3 goto win31,if bs = 4 goto win41,if bs = 5 goto win51
+126;5;0;0;;label csl2,if bs = 0 goto win02,if bs = 1 goto win12,if bs = 2 goto win22,if bs = 3 goto win32,if bs = 4 goto win42,if bs = 5 goto win52
+126;5;0;0;;label csl3,if bs = 0 goto win03,if bs = 1 goto win13,if bs = 2 goto win23,if bs = 3 goto win33,if bs = 4 goto win43,if bs = 5 goto win53
+126;5;0;0;;label csl4,if bs = 0 goto win04,if bs = 1 goto win14,if bs = 2 goto win24,if bs = 3 goto win34,if bs = 4 goto win44,if bs = 5 goto win54
+126;5;0;0;;label csl5,if bs = 0 goto win05,if bs = 1 goto win15,if bs = 2 goto win25,if bs = 3 goto win35,if bs = 4 goto win45,if bs = 5 goto win55
 
 # CPU scores
-126;5;0;0;;label cscore
-126;5;0;0;;if cs = 0 goto csw0
-126;5;0;0;;if cs = 1 goto csw1
-126;5;0;0;;if cs = 2 goto csw2
-126;5;0;0;;if cs = 3 goto csw3
-126;5;0;0;;if cs = 4 goto csw4
-126;5;0;0;;if cs = 5 goto csw5
-126;5;0;0;;label csw0
-126;5;0;0;;if bs = 0 goto loose00
-126;5;0;0;;if bs = 1 goto loose10
-126;5;0;0;;if bs = 2 goto loose20
-126;5;0;0;;if bs = 3 goto loose30
-126;5;0;0;;if bs = 4 goto loose40
-126;5;0;0;;if bs = 5 goto loose50
-126;5;0;0;;label csw1
-126;5;0;0;;if bs = 0 goto loose01
-126;5;0;0;;if bs = 1 goto loose11
-126;5;0;0;;if bs = 2 goto loose21
-126;5;0;0;;if bs = 3 goto loose31
-126;5;0;0;;if bs = 4 goto loose41
-126;5;0;0;;if bs = 5 goto loose51
-126;5;0;0;;label csw2
-126;5;0;0;;if bs = 0 goto loose02
-126;5;0;0;;if bs = 1 goto loose12
-126;5;0;0;;if bs = 2 goto loose22
-126;5;0;0;;if bs = 3 goto loose32
-126;5;0;0;;if bs = 4 goto loose42
-126;5;0;0;;if bs = 5 goto loose52
-126;5;0;0;;label csw3
-126;5;0;0;;if bs = 0 goto loose03
-126;5;0;0;;if bs = 1 goto loose13
-126;5;0;0;;if bs = 2 goto loose23
-126;5;0;0;;if bs = 3 goto loose33
-126;5;0;0;;if bs = 4 goto loose43
-126;5;0;0;;if bs = 5 goto loose53
-126;5;0;0;;label csw4
-126;5;0;0;;if bs = 0 goto loose04
-126;5;0;0;;if bs = 1 goto loose14
-126;5;0;0;;if bs = 2 goto loose24
-126;5;0;0;;if bs = 3 goto loose34
-126;5;0;0;;if bs = 4 goto loose44
-126;5;0;0;;if bs = 5 goto loose54
-126;5;0;0;;label csw5
-126;5;0;0;;if bs = 0 goto loose05
-126;5;0;0;;if bs = 1 goto loose15
-126;5;0;0;;if bs = 2 goto loose25
-126;5;0;0;;if bs = 3 goto loose35
-126;5;0;0;;if bs = 4 goto loose45
-126;5;0;0;;if bs = 5 goto loose55
+126;5;0;0;;label cscore,if cs = 0 goto csw0,if cs = 1 goto csw1,if cs = 2 goto csw2,if cs = 3 goto csw3,if cs = 4 goto csw4,if cs = 5 goto csw5
+126;5;0;0;;label csw0,if bs = 0 goto loose00,if bs = 1 goto loose10,if bs = 2 goto loose20,if bs = 3 goto loose30,if bs = 4 goto loose40,if bs = 5 goto loose50
+126;5;0;0;;label csw1,if bs = 0 goto loose01,if bs = 1 goto loose11,if bs = 2 goto loose21,if bs = 3 goto loose31,if bs = 4 goto loose41,if bs = 5 goto loose51
+126;5;0;0;;label csw2,if bs = 0 goto loose02,if bs = 1 goto loose12,if bs = 2 goto loose22,if bs = 3 goto loose32,if bs = 4 goto loose42,if bs = 5 goto loose52
+126;5;0;0;;label csw3,if bs = 0 goto loose03,if bs = 1 goto loose13,if bs = 2 goto loose23,if bs = 3 goto loose33,if bs = 4 goto loose43,if bs = 5 goto loose53
+126;5;0;0;;label csw4,if bs = 0 goto loose04,if bs = 1 goto loose14,if bs = 2 goto loose24,if bs = 3 goto loose34,if bs = 4 goto loose44,if bs = 5 goto loose54
+126;5;0;0;;label csw5,if bs = 0 goto loose05,if bs = 1 goto loose15,if bs = 2 goto loose25,if bs = 3 goto loose35,if bs = 4 goto loose45,if bs = 5 goto loose55
 
 # Show scores when loosing a round
 56;600;0;0;data/sfx/grumpy1.wav;label loose01,goto start

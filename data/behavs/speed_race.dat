@@ -9,7 +9,7 @@ oneShot
 doNotDisturb
 #Frames
 0;75;0;0;;var place = 0
-1;75;0;0;;var segs = 20,var segs += @10
+1;75;0;0;;var segs = 16,var segs += @8
 2;75;0;0;;
 3;75;0;0;;
 4;75;0;0;;
