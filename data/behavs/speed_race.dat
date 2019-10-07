@@ -1,0 +1,222 @@
+title=Play 'Speed Race'
+category=Fun
+energy=-3
+fun=30
+hunger=1
+social=-8
+hygiene=-3
+oneShot
+doNotDisturb
+#Frames
+0;75;0;0;;var place = 0
+1;75;0;0;;var segs = 16,var segs += @8
+2;75;0;0;;
+3;75;0;0;;
+4;75;0;0;;
+5;75;0;0;;
+6;75;0;0;;
+7;75;0;0;;
+8;500;0;0;;
+9;1000;0;0;data/sfx/game_boot.wav;
+10;1000;0;0;;
+11;1000;0;0;data/sfx/countdown.wav;
+12;1000;0;0;data/sfx/countdown.wav;
+13;1000;0;0;data/sfx/countdown.wav;
+14;2000;0;0;data/sfx/go.wav;
+
+# Speed up
+15;475;0;0;;
+16;450;0;0;data/sfx/engine_up.wav;
+17;400;0;0;;
+18;325;0;0;;
+19;225;0;0;;
+20;100;0;0;;
+15;75;0;0;;
+16;75;0;0;;
+17;75;0;0;;
+18;75;0;0;;
+19;75;0;0;;
+20;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+
+# Main road
+15;75;0;0;data/sfx/engine.wav;label s
+16;75;0;0;;
+17;75;0;0;;
+18;75;0;0;;
+19;75;0;0;;
+20;75;0;0;;if @5 > 1 goto s,if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+
+# Overtaken left
+21;75;0;0;data/sfx/overtaken.wav;label ll
+22;75;0;0;;var place -= 1
+23;75;0;0;;var segs -= 1
+24;75;0;0;;
+25;75;0;0;;
+26;75;0;0;;
+27;75;0;0;;
+28;75;0;0;;
+29;75;0;0;;
+30;75;0;0;;
+31;75;0;0;;
+32;75;0;0;;
+33;75;0;0;;
+34;75;0;0;;
+35;75;0;0;;
+36;75;0;0;;
+37;75;0;0;;
+38;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+
+# Overtake left
+39;75;0;0;data/sfx/overtake.wav;label wl
+40;75;0;0;;var place += 1
+41;75;0;0;;var segs -= 1
+42;75;0;0;;
+43;75;0;0;;
+44;75;0;0;;
+45;75;0;0;;
+46;75;0;0;;
+47;75;0;0;;
+48;75;0;0;;
+49;75;0;0;;
+50;75;0;0;;
+51;75;0;0;;
+52;75;0;0;;
+53;75;0;0;;
+54;75;0;0;;
+55;75;0;0;;
+56;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+
+# Overtaken right
+57;75;0;0;data/sfx/overtaken.wav;label lr
+58;75;0;0;;var place -= 1
+59;75;0;0;;var segs -= 1
+60;75;0;0;;
+61;75;0;0;;
+62;75;0;0;;
+63;75;0;0;;
+64;75;0;0;;
+65;75;0;0;;
+66;75;0;0;;
+67;75;0;0;;
+68;75;0;0;;
+69;75;0;0;;
+70;75;0;0;;
+71;75;0;0;;
+72;75;0;0;;
+73;75;0;0;;
+74;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+
+# Overtake right
+75;75;0;0;data/sfx/overtake.wav;label wr
+76;75;0;0;;var place += 1
+77;75;0;0;;var segs -= 1
+78;75;0;0;;
+79;75;0;0;;
+80;75;0;0;;
+81;75;0;0;;
+82;75;0;0;;
+83;75;0;0;;
+84;75;0;0;;
+85;75;0;0;;
+86;75;0;0;;
+87;75;0;0;;
+88;75;0;0;;
+89;75;0;0;;
+90;75;0;0;;
+91;75;0;0;;
+92;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+
+# Right turn begin
+93;75;0;0;data/sfx/engine_into_turn.wav;label rtb
+94;75;0;0;;var segs -= 1
+95;75;0;0;;
+96;75;0;0;;
+97;75;0;0;;
+98;75;0;0;;
+
+# Right turn
+99;75;0;0;data/sfx/engine_turn.wav;label rt
+100;75;0;0;;
+101;75;0;0;;
+102;75;0;0;;
+103;75;0;0;;
+104;75;0;0;;if @5 > 1 goto rt
+
+# Right turn end
+105;75;0;0;data/sfx/engine_through_turn.wav;
+106;75;0;0;;
+107;75;0;0;;
+108;75;0;0;;
+109;75;0;0;;
+110;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+
+# Left turn begin
+111;75;0;0;data/sfx/engine_into_turn.wav;label ltb
+112;75;0;0;;var segs -= 1
+113;75;0;0;;
+114;75;0;0;;
+115;75;0;0;;
+116;75;0;0;;
+
+# Left turn
+117;75;0;0;data/sfx/engine_turn.wav;label lt
+118;75;0;0;;
+119;75;0;0;;
+120;75;0;0;;
+121;75;0;0;;
+122;75;0;0;;if @5 > 1 goto lt
+
+# Left turn end
+123;75;0;0;data/sfx/engine_through_turn.wav;
+124;75;0;0;;
+125;75;0;0;;
+126;75;0;0;;
+127;75;0;0;;
+128;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+
+# Tunnel
+129;75;0;0;data/sfx/tunnel.wav;label t
+130;75;0;0;;var segs -= 1
+131;75;0;0;;
+132;75;0;0;;
+133;75;0;0;;
+134;75;0;0;;
+135;75;0;0;;
+136;75;0;0;;
+137;75;0;0;;
+138;75;0;0;;
+139;75;0;0;;
+140;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+
+# Finish line
+141;75;0;0;data/sfx/engine_out.wav;label f
+142;75;0;0;;
+143;75;0;0;;
+144;75;0;0;;
+145;75;0;0;;
+146;75;0;0;;
+147;75;0;0;;
+148;75;0;0;;
+149;75;0;0;;
+150;75;0;0;;
+151;75;0;0;;
+152;2000;0;0;;if place > 0 goto win else goto loose
+
+# Win
+153;500;0;0;data/sfx/race_win.wav;label win
+153;2500;0;0;data/sfx/win2.wav;goto end
+
+# Loose
+154;500;0;0;data/sfx/race_loose.wav;label loose
+154;2500;0;0;data/sfx/grumpy1.wav;goto end
+
+# Get back up
+8;75;0;0;;label end
+7;75;0;0;;
+6;75;0;0;;
+5;75;0;0;;
+4;75;0;0;;
+3;75;0;0;;
+2;75;0;0;;
+1;75;0;0;;
+0;75;0;0;;
