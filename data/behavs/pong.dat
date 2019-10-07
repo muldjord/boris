@@ -28,7 +28,7 @@ doNotDisturb
 17;75;0;0;;
 18;75;0;0;data/sfx/game_wall.wav;
 19;75;0;0;;
-20;75;0;0;data/sfx/game_paddle.wav;var chance = @2,if chance = 1 goto boriswin
+20;75;0;0;data/sfx/game_paddle.wav;if @2 = 1 goto boriswin
 21;75;0;0;;
 22;75;0;0;;
 23;75;0;0;;
