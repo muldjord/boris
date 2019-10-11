@@ -23,7 +23,7 @@ allowFlip
 29;75;0;0;;
 30;75;0;0;;
 31;75;0;0;;
-32;90;0;0;;label hulainit,var loop = 0,var loops = @8,var prehula = @3,if prehula = 1 goto prehula1,if prehula = 2 goto prehula2,if prehula = 3 goto prehula3
+32;90;0;0;;label hulainit,var loop = 0,var loops = 2,var loops += @6,var prehula = @3,if prehula = 1 goto prehula1,if prehula = 2 goto prehula2,if prehula = 3 goto prehula3
 
 33;1200;0;0;;label prehula1
 34;100;0;0;;
