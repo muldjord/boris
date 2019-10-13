@@ -1,9 +1,9 @@
 title=Hula hoop
-category=Idle
-fun=5
-hunger=1
-social=-2
-energy=-1
+category=Fun
+fun=20
+hunger=5
+energy=-5
+hygiene=-5
 oneShot
 allowFlip
 #Frames
