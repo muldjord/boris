@@ -68,9 +68,10 @@ public:
   int social;
   int fun;
   int hygiene;
-  bool oneShot;
-  bool doNotDisturb;
-  bool allowFlip;
+  bool oneShot = false;
+  bool doNotDisturb = false;
+  bool allowFlip = false;
+  bool pitchLock = false;
   QList<Frame> frames;
   QMap<QString, int> labels; // Used for scripts when goto'ing
 };

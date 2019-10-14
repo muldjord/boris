@@ -104,9 +104,6 @@ bool Loader::loadBehaviours(const QString &dataDir,
 
       // Create behaviour container
       Behaviour b;
-      b.oneShot = false;
-      b.doNotDisturb = false;
-      b.allowFlip = false;
       b.hyper = 0;
       b.health = 0;
       b.energy = 0;
@@ -132,6 +129,9 @@ bool Loader::loadBehaviours(const QString &dataDir,
         }
         if(line == "allowFlip") {
           b.allowFlip = true;
+        }
+        if(line == "pitchLock") {
+          b.pitchLock = true;
         }
         if(line.contains("title")) {
           b.title = line.mid(6,line.length());
