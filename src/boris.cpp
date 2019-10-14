@@ -536,7 +536,19 @@ void Boris::runScript()
         if(compareFrom > compareTo) {
           cond = true;
         }
+      } else if(parameters.at(2) == "<=") {
+        if(compareFrom <= compareTo) {
+          cond = true;
+        }
+      } else if(parameters.at(2) == ">=") {
+        if(compareFrom >= compareTo) {
+          cond = true;
+        }
       } else if(parameters.at(2) == "=") {
+        if(compareFrom == compareTo) {
+          cond = true;
+        }
+      } else if(parameters.at(2) == "==") {
         if(compareFrom == compareTo) {
           cond = true;
         }
