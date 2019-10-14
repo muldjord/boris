@@ -28,36 +28,38 @@ oneShot
 21;75;0;0;;
 22;75;0;0;;
 23;75;0;0;;var loops = 18
-24;75;0;0;;var rand = @4,if rand = 1 goto shortopen,if rand = 2 goto longopen,if rand = 3 goto shortclosed,if rand = 4 goto longclosed
+24;75;0;0;;var rand = @6,if rand = 1 goto open2,if rand = 2 goto open3,if rand = 3 goto closed2,if rand = 4 goto closed3
 
-25;500;0;0;;label shortopen
-26;500;0;0;;var loops -= 2
-25;500;0;0;;
-26;500;0;0;;if loops < 0 goto end,var rand = @4,if rand = 1 goto shortopen,if rand = 2 goto longopen,if rand = 3 goto shortclosed,if rand = 4 goto longclosed
+25;500;0;0;;label open1,var loops -= 1
+26;500;0;0;;if loops <= 0 goto end,var rand = @6,if rand = 1 goto open1,if rand = 2 goto open2,if rand = 3 goto open3,if rand = 4 goto closed1,if rand = 5 goto closed2,if rand = 6 goto closed3
 
-25;500;0;0;;label longopen
-26;500;0;0;;var loops -= 4
+25;500;0;0;;label open2,var loops -= 2
+26;500;0;0;;
 25;500;0;0;;
+26;500;0;0;;if loops <= 0 goto end,var rand = @6,if rand = 1 goto open1,if rand = 2 goto open2,if rand = 3 goto open3,if rand = 4 goto closed1,if rand = 5 goto closed2,if rand = 6 goto closed3
+
+25;500;0;0;;label open3,var loops -= 3
 26;500;0;0;;
 25;500;0;0;;
 28;50;0;0;;
 26;450;0;0;;
 25;500;0;0;;
-26;500;0;0;;if loops < 0 goto end,var rand = @4,if rand = 1 goto shortopen,if rand = 2 goto longopen,if rand = 3 goto shortclosed,if rand = 4 goto longclosed
+26;500;0;0;;if loops <= 0 goto end,var rand = @6,if rand = 1 goto open1,if rand = 2 goto open2,if rand = 3 goto open3,if rand = 4 goto closed1,if rand = 5 goto closed2,if rand = 6 goto closed3
 
-27;500;0;0;;label shortclosed
-28;500;0;0;;var loops -= 2
-27;500;0;0;;
-28;500;0;0;;if loops < 0 goto end,var rand = @4,if rand = 1 goto shortopen,if rand = 2 goto longopen,if rand = 3 goto shortclosed,if rand = 4 goto longclosed
+27;500;0;0;;label closed1,var loops -= 1
+28;500;0;0;;if loops <= 0 goto end,var rand = @6,if rand = 1 goto open1,if rand = 2 goto open2,if rand = 3 goto open3,if rand = 4 goto closed1,if rand = 5 goto closed2,if rand = 6 goto closed3
 
-27;500;0;0;;label longclosed
-28;500;0;0;;var loops -= 4
+27;500;0;0;;label closed2,var loops -= 2
+28;500;0;0;;
 27;500;0;0;;
+28;500;0;0;;if loops <= 0 goto end,var rand = @6,if rand = 1 goto open1,if rand = 2 goto open2,if rand = 3 goto open3,if rand = 4 goto closed1,if rand = 5 goto closed2,if rand = 6 goto closed3
+
+27;500;0;0;;label closed3,var loops -= 3
 28;500;0;0;;
 27;500;0;0;;
 28;500;0;0;;
 27;500;0;0;;
-28;500;0;0;;if loops < 0 goto end,var rand = @4,if rand = 1 goto shortopen,if rand = 2 goto longopen,if rand = 3 goto shortclosed,if rand = 4 goto longclosed
+28;500;0;0;;if loops <= 0 goto end,var rand = @6,if rand = 1 goto open1,if rand = 2 goto open2,if rand = 3 goto open3,if rand = 4 goto closed1,if rand = 5 goto closed2,if rand = 6 goto closed3
 
 24;75;0;0;;label end
 23;75;0;0;;
