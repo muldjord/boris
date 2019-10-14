@@ -639,9 +639,15 @@ void Boris::nextFrame()
   }
 
   if(settings.sound && behaviours.at(curBehav).frames.at(curFrame).soundBuffer != nullptr) {
-    emit playSound(behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
-                   (float)this->pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
-                   (stats->getHyper() / 60.0) + (0.95 + (qrand() % 100) / 1000.0));
+    if(behaviours.at(curBehav).pitchLock) {
+      emit playSound(behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
+                     (float)this->pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
+                     (stats->getHyper() / 60.0) + 1);
+    } else {
+      emit playSound(behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
+                     (float)this->pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
+                     (stats->getHyper() / 60.0) + (0.95 + (qrand() % 100) / 1000.0));
+    }
   }
   int frameTime = behaviours.at(curBehav).frames.at(curFrame).time;
   animTimer.setInterval(frameTime - ((double)frameTime / 100.0 * stats->getHyper()));
