@@ -3,6 +3,7 @@ category=Fun
 fun=15
 allowFlip
 oneShot
+pitchLock
 #Frames
 0;75;0;0;;
 1;75;0;0;;
@@ -27,8 +28,9 @@ oneShot
 20;75;0;0;;
 21;75;0;0;;
 22;75;0;0;;
-23;75;0;0;;var loops = 18
-24;75;0;0;;var rand = @6,if rand = 1 goto open2,if rand = 2 goto open3,if rand = 3 goto closed2,if rand = 4 goto closed3
+23;75;0;0;;var loops = 19,if @2 = 1 goto song1 else goto song2
+24;75;0;0;data/sfx/zamzara-charles_deenen.wav;label song1,var rand = @6,if rand = 1 goto open1,if rand = 2 goto open2,if rand = 3 goto open3,if rand = 4 goto closed1,if rand = 5 goto closed2,if rand = 6 goto closed3
+24;75;0;0;data/sfx/commando-rob_hubbard.wav;label song2,var rand = @6,if rand = 1 goto open1,if rand = 2 goto open2,if rand = 3 goto open3,if rand = 4 goto closed1,if rand = 5 goto closed2,if rand = 6 goto closed3
 
 25;500;0;0;;label open1,var loops -= 1
 26;500;0;0;;if loops <= 0 goto end,var rand = @6,if rand = 1 goto open1,if rand = 2 goto open2,if rand = 3 goto open3,if rand = 4 goto closed1,if rand = 5 goto closed2,if rand = 6 goto closed3
