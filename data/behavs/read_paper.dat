@@ -31,7 +31,7 @@ allowFlip
 24;75;0;0;;
 18;75;0;0;;
 16;75;0;0;;
-16;500;0;0;;label readagain,var skimmings -= 1,if @4 = 1 goto mumble else goto justread
+16;500;0;0;;label readagain,var skimmings -= 1,if @5 = 1 goto mumble else goto justread
 15;500;0;0;data/sfx/interested_mumble.wav;label mumble
 15;500;0;0;;label justread
 17;500;0;0;;

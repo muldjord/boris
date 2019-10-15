@@ -1,7 +1,8 @@
-title=Too cool for school
-category=Fun
-social=5
-fun=20
+title=Wear sunglasses
+category=Idle
+fun=2
+hunger=1
+social=-2
 oneShot
 allowFlip
 #Frames
@@ -20,21 +21,9 @@ allowFlip
 12;75;0;0;;
 13;75;0;0;;
 14;75;0;0;;
-15;500;0;0;;
-14;500;0;0;;
-15;500;0;0;;
-14;500;0;0;;
-15;500;0;0;;
-14;500;0;0;;
-15;500;0;0;;
-14;500;0;0;;
-15;500;0;0;;
-14;500;0;0;;
-15;500;0;0;;
-14;500;0;0;;
-15;500;0;0;;
-14;500;0;0;;label cool
-15;500;0;0;;if @6 > 1 goto cool
+15;500;0;0;;var headbobs = 7,var headbobs += @6
+14;500;0;0;;label cool,var headbobs -= 1
+15;500;0;0;;if headbobs >= 0 goto cool
 14;75;0;0;;
 13;75;0;0;;
 12;75;0;0;;
