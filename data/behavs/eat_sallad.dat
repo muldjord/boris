@@ -1,13 +1,12 @@
 title=Eat a sallad
 category=Hunger
 energy=5
-hunger=-40
 bladder=10
 hygiene=-4
 fun=-10
 allowFlip
 #Frames
-0;75;0;0;;
+0;75;0;0;;if hunger >= 100 break
 1;75;0;0;;
 2;75;0;0;;
 3;75;0;0;;
@@ -26,6 +25,6 @@ allowFlip
 16;75;0;0;;
 17;75;0;0;;
 14;75;0;0;;label munch
-15;75;0;0;;
+15;75;0;0;;stat hunger -= 2
 16;75;0;0;;
 17;75;0;0;;if @4 > 1 goto munch

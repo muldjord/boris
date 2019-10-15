@@ -1,6 +1,5 @@
 title=Go to the bathroom
 category=Bladder
-bladder=-100
 fun=-8
 social=-5
 hygiene=-80
@@ -38,7 +37,14 @@ doNotDisturb
 28;75;0;0;;
 29;75;0;0;;
 30;7000;0;0;;
-30;8000;0;0;data/sfx/poopy_time.wav;
+30;1000;0;0;data/sfx/poopy_time.wav;
+30;1000;0;0;;stat bladder -= 10
+30;1000;0;0;;
+30;1000;0;0;;stat bladder -= 15
+30;1000;0;0;;
+30;1000;0;0;;
+30;1000;0;0;;stat bladder -= 75
+30;1000;0;0;;
 29;75;0;0;data/sfx/door_open.wav;
 28;75;0;0;;
 31;75;0;0;;
