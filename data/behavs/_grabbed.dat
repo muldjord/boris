@@ -2,4 +2,11 @@ fun=-10
 social=5
 bladder=10
 #Frames
-0;100000;0;0;data/sfx/grabbed.wav;
+0;50;0;0;data/sfx/grabbed.wav;
+0;50;0;0;;label still,if xvel > 3 goto velp3,if xvel < -3 goto velm3,goto still
+1;50;0;0;;label velp3,if xvel > 6 goto velp6,if xvel < -6 goto velm6,goto still
+2;50;0;0;;label velm3,if xvel > 6 goto velp6,if xvel < -6 goto velm6,goto still
+3;50;0;0;;label velp6,if xvel > 9 goto velp9,if xvel < -9 goto velm9,goto still
+4;50;0;0;;label velm6,if xvel > 9 goto velp9,if xvel < -9 goto velm9,goto still
+5;50;0;0;;label velp9,if xvel > 9 goto velp9,if xvel < -9 goto velm9,goto still
+6;50;0;0;;label velm9,if xvel > 9 goto velp9,if xvel < -9 goto velm9,goto still
