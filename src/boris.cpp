@@ -48,11 +48,6 @@ extern Settings settings;
 
 Boris::Boris()
 {
-  vVel = 0.0;
-  hVel = 0.0;
-  mouseVVel = 0.0;
-  mouseHVel = 0.0;
-
   int borisX = settings.borisX;
   int borisY = settings.borisY;
   if(borisY > QApplication::desktop()->height() - height()) {
@@ -437,6 +432,8 @@ void Boris::runScript()
   scriptVars["social"] = stats->getSocial();
   scriptVars["fun"] = stats->getFun();
   scriptVars["hygiene"] = stats->getHygiene();
+  scriptVars["yvel"] = mouseVVel;
+  scriptVars["xvel"] = mouseHVel;
 
   for(const auto &instruction: behaviours.at(curBehav).frames.at(curFrame).script) {
     printf("CODE: '%s'\n", instruction.toStdString().c_str());

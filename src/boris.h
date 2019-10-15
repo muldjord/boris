@@ -126,11 +126,11 @@ private:
   QPixmap origBruises;
   QGraphicsPixmapItem *weatherSprite;
   
-  double vVel;
-  double hVel;
+  double vVel = 0.0;
+  double hVel = 0.0;
   double sinVal = 0.0;
-  double mouseVVel;
-  double mouseHVel;
+  double mouseVVel = 0.0;
+  double mouseHVel = 0.0;
   int alt;
   QPoint oldCursor;
   void sanityCheck();
