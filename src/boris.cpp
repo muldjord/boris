@@ -439,9 +439,9 @@ void Boris::runScript()
   scriptVars["hygiene"] = stats->getHygiene();
 
   for(const auto &instruction: behaviours.at(curBehav).frames.at(curFrame).script) {
+    printf("CODE: '%s'\n", instruction.toStdString().c_str());
     QList<QString> parameters = instruction.split(" ", QString::KeepEmptyParts);
     if(parameters.at(0) == "var" && parameters.count() == 4) {
-      printf("var ");
       bool isInt = false;
       int number = parameters.at(3).toInt(&isInt);;
       if(!isInt) {
@@ -458,12 +458,9 @@ void Boris::runScript()
       } else if(parameters.at(2) == "-=") {
         scriptVars[parameters.at(1)] -= number;
       }
-      printf("%s %s %s: %d\n", parameters.at(1).toStdString().c_str(),
-             parameters.at(2).toStdString().c_str(),
-             parameters.at(3).toStdString().c_str(),
+      printf("%s = %d\n", parameters.at(1).toStdString().c_str(),
              scriptVars[parameters.at(1)]);
     } else if(parameters.at(0) == "stat" && parameters.count() == 4) {
-      printf("stat ");
       bool isInt = false;
       int number = parameters.at(3).toInt(&isInt);;
       if(!isInt) {
@@ -497,17 +494,13 @@ void Boris::runScript()
         } else if(parameters.at(2) == "-=") {
           *stat -= number;
         }
-        printf("%s %s %s: %d\n", parameters.at(1).toStdString().c_str(),
-               parameters.at(2).toStdString().c_str(),
-               parameters.at(3).toStdString().c_str(),
-               *stat);
-      } else {
-        printf("%s %s %s, ERROR, Unknown stat\n", parameters.at(1).toStdString().c_str(),
+        printf("%s %s %s\n", parameters.at(1).toStdString().c_str(),
                parameters.at(2).toStdString().c_str(),
                parameters.at(3).toStdString().c_str());
+      } else {
+        printf("%s, ERROR: Unknown stat\n", parameters.at(1).toStdString().c_str());
       }
-    } else if(parameters.at(0) == "if" && parameters.count() >= 6) {
-      printf("if ");
+    } else if(parameters.at(0) == "if" && parameters.count() >= 5) {
       bool isInt = false;
       int compareFrom = parameters.at(1).toInt(&isInt);
       if(!isInt) {
@@ -526,7 +519,6 @@ void Boris::runScript()
           compareTo = scriptVars[parameters.at(3)];
         }
       }
-      printf("%d %s %d", compareFrom, parameters.at(2).toStdString().c_str(), compareTo);
       bool cond = false;
       if(parameters.at(2) == "<") {
         if(compareFrom < compareTo) {
@@ -553,44 +545,50 @@ void Boris::runScript()
           cond = true;
         }
       }
+      printf("%d %s %d, ", compareFrom, parameters.at(2).toStdString().c_str(), compareTo);
       if(cond) {
-        if(parameters.at(4) == "goto") {
+        if(parameters.at(4) == "goto" && parameters.count() >= 6) {
           if(behaviours.at(curBehav).labels.contains(parameters.at(5))) {
-            printf(" goto '%s' at frame %d\n", parameters.at(5).toStdString().c_str(), behaviours.at(curBehav).labels[parameters.at(5)]);
+            printf("Going to label '%s' at frame %d\n", parameters.at(5).toStdString().c_str(), behaviours.at(curBehav).labels[parameters.at(5)]);
             curFrame = behaviours.at(curBehav).labels[parameters.at(5)];
             return;
           } else {
-            printf(" goto '%s' at frame %d, ERROR: Unknown label\n", parameters.at(5).toStdString().c_str(), behaviours.at(curBehav).labels[parameters.at(5)]);
+            printf("Going to '%s', ERROR: Unknown label\n", parameters.at(5).toStdString().c_str());
           }
+        } else if(parameters.at(4) == "break") {
+          printf("Changing behaviour\n");
+          behavTimer.stop();
+          nextBehaviour();
+          return;
         }
       } else {
         if(parameters.count() == 9 && parameters.at(6) == "else") {
           if(parameters.at(7) == "goto") {
             if(behaviours.at(curBehav).labels.contains(parameters.at(8))) {
-              printf(" else goto '%s' at frame %d\n", parameters.at(8).toStdString().c_str(), behaviours.at(curBehav).labels[parameters.at(8)]);
+              printf("Condition not met, going to '%s' at frame %d\n", parameters.at(8).toStdString().c_str(), behaviours.at(curBehav).labels[parameters.at(8)]);
               curFrame = behaviours.at(curBehav).labels[parameters.at(8)];
               return;
             } else {
-              printf(" else goto '%s' at frame %d, ERROR: Unknown label\n", parameters.at(8).toStdString().c_str(), behaviours.at(curBehav).labels[parameters.at(8)]);
+              printf("Condition not met, going to '%s', ERROR: Unknown label\n", parameters.at(8).toStdString().c_str());
             }
           }
         } else {
-          printf(", condition not met\n");
+          printf("Condition not met\n");
         }
       }
     } else if(parameters.at(0) == "goto" && parameters.count() == 2) {
       if(behaviours.at(curBehav).labels.contains(parameters.at(1))) {
-        printf("goto '%s' at frame %d\n", parameters.at(1).toStdString().c_str(), behaviours.at(curBehav).labels[parameters.at(1)]);
+        printf("Going to '%s' at frame %d\n", parameters.at(1).toStdString().c_str(), behaviours.at(curBehav).labels[parameters.at(1)]);
         curFrame = behaviours.at(curBehav).labels[parameters.at(1)];
         return;
       } else {
-        printf("goto '%s' at frame %d, ERROR: Unknown label\n", parameters.at(1).toStdString().c_str(), behaviours.at(curBehav).labels[parameters.at(1)]);
+        printf("Going to '%s', ERROR: Unknown label\n", parameters.at(1).toStdString().c_str());
       }
     } else if(parameters.at(0) == "print" && parameters.count() == 2) {
       if(scriptVars.contains(parameters.at(1))) {
-        printf("print %s: %d\n", parameters.at(1).toStdString().c_str(), scriptVars[parameters.at(1)]);
+        printf("%s = %d\n", parameters.at(1).toStdString().c_str(), scriptVars[parameters.at(1)]);
       } else {
-        printf("print %s, ERROR: Unknown variable\n", parameters.at(1).toStdString().c_str());
+        printf("%s, ERROR: Unknown variable\n", parameters.at(1).toStdString().c_str());
       }
     }
   }
