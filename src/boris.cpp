@@ -26,6 +26,7 @@
  */
 
 #include "boris.h"
+#include "scripthandler.h"
 #include "settings.h"
 
 #include "SFML/Audio.hpp"
@@ -435,159 +436,9 @@ void Boris::runScript()
   scriptVars["yvel"] = mouseVVel;
   scriptVars["xvel"] = mouseHVel;
 
-  for(const auto &instruction: behaviours.at(curBehav).frames.at(curFrame).script) {
-    printf("CODE: '%s'\n", instruction.toStdString().c_str());
-    QList<QString> parameters = instruction.split(" ", QString::KeepEmptyParts);
-    if(parameters.at(0) == "var" && parameters.count() == 4) {
-      bool isInt = false;
-      int number = parameters.at(3).toInt(&isInt);;
-      if(!isInt) {
-        if(parameters.at(3).left(1) == "@") {
-          number = (qrand() % parameters.at(3).right(parameters.at(3).length() - 1).toInt()) + 1;
-        } else {
-          number = scriptVars[parameters.at(3)];
-        }
-      }
-      if(parameters.at(2) == "=") {
-        scriptVars[parameters.at(1)] = number;
-      } else if(parameters.at(2) == "+=") {
-        scriptVars[parameters.at(1)] += number;
-      } else if(parameters.at(2) == "-=") {
-        scriptVars[parameters.at(1)] -= number;
-      }
-      printf("%s = %d\n", parameters.at(1).toStdString().c_str(),
-             scriptVars[parameters.at(1)]);
-    } else if(parameters.at(0) == "stat" && parameters.count() == 4) {
-      bool isInt = false;
-      int number = parameters.at(3).toInt(&isInt);;
-      if(!isInt) {
-        if(parameters.at(3).left(1) == "@") {
-          number = (qrand() % parameters.at(3).right(parameters.at(3).length() - 1).toInt()) + 1;
-        } else {
-          number = scriptVars[parameters.at(3)];
-        }
-      }
-      int *stat = nullptr;
-      if(parameters.at(1) == "hyper") {
-        stat = &hyperQueue;
-      } else if(parameters.at(1) == "health") {
-        stat = &healthQueue;
-      } else if(parameters.at(1) == "energy") {
-        stat = &energyQueue;
-      } else if(parameters.at(1) == "hunger") {
-        stat = &hungerQueue;
-      } else if(parameters.at(1) == "bladder") {
-        stat = &bladderQueue;
-      } else if(parameters.at(1) == "social") {
-        stat = &socialQueue;
-      } else if(parameters.at(1) == "fun") {
-        stat = &funQueue;
-      } else if(parameters.at(1) == "hygiene") {
-        stat = &hygieneQueue;
-      }
-      if(stat != nullptr) {
-        if(parameters.at(2) == "+=") {
-          *stat += number;
-        } else if(parameters.at(2) == "-=") {
-          *stat -= number;
-        }
-        printf("%s %s %s\n", parameters.at(1).toStdString().c_str(),
-               parameters.at(2).toStdString().c_str(),
-               parameters.at(3).toStdString().c_str());
-      } else {
-        printf("%s, ERROR: Unknown stat\n", parameters.at(1).toStdString().c_str());
-      }
-    } else if(parameters.at(0) == "if" && parameters.count() >= 5) {
-      bool isInt = false;
-      int compareFrom = parameters.at(1).toInt(&isInt);
-      if(!isInt) {
-        if(parameters.at(1).left(1) == "@") {
-          compareFrom = (qrand() % parameters.at(1).right(parameters.at(1).length() - 1).toInt()) + 1;
-        } else {
-          compareFrom = scriptVars[parameters.at(1)];
-        }
-      }
-      isInt = false;
-      int compareTo = parameters.at(3).toInt(&isInt);
-      if(!isInt) {
-        if(parameters.at(3).left(1) == "@") {
-          compareTo = (qrand() % parameters.at(3).right(parameters.at(3).length() - 1).toInt()) + 1;
-        } else {
-          compareTo = scriptVars[parameters.at(3)];
-        }
-      }
-      bool cond = false;
-      if(parameters.at(2) == "<") {
-        if(compareFrom < compareTo) {
-          cond = true;
-        }
-      } else if(parameters.at(2) == ">") {
-        if(compareFrom > compareTo) {
-          cond = true;
-        }
-      } else if(parameters.at(2) == "<=") {
-        if(compareFrom <= compareTo) {
-          cond = true;
-        }
-      } else if(parameters.at(2) == ">=") {
-        if(compareFrom >= compareTo) {
-          cond = true;
-        }
-      } else if(parameters.at(2) == "=") {
-        if(compareFrom == compareTo) {
-          cond = true;
-        }
-      } else if(parameters.at(2) == "==") {
-        if(compareFrom == compareTo) {
-          cond = true;
-        }
-      }
-      printf("%d %s %d, ", compareFrom, parameters.at(2).toStdString().c_str(), compareTo);
-      if(cond) {
-        if(parameters.at(4) == "goto" && parameters.count() >= 6) {
-          if(behaviours.at(curBehav).labels.contains(parameters.at(5))) {
-            printf("Going to label '%s' at frame %d\n", parameters.at(5).toStdString().c_str(), behaviours.at(curBehav).labels[parameters.at(5)]);
-            curFrame = behaviours.at(curBehav).labels[parameters.at(5)];
-            return;
-          } else {
-            printf("Going to '%s', ERROR: Unknown label\n", parameters.at(5).toStdString().c_str());
-          }
-        } else if(parameters.at(4) == "break") {
-          printf("Changing behaviour\n");
-          behavTimer.stop();
-          nextBehaviour();
-          return;
-        }
-      } else {
-        if(parameters.count() == 9 && parameters.at(6) == "else") {
-          if(parameters.at(7) == "goto") {
-            if(behaviours.at(curBehav).labels.contains(parameters.at(8))) {
-              printf("Condition not met, going to '%s' at frame %d\n", parameters.at(8).toStdString().c_str(), behaviours.at(curBehav).labels[parameters.at(8)]);
-              curFrame = behaviours.at(curBehav).labels[parameters.at(8)];
-              return;
-            } else {
-              printf("Condition not met, going to '%s', ERROR: Unknown label\n", parameters.at(8).toStdString().c_str());
-            }
-          }
-        } else {
-          printf("Condition not met\n");
-        }
-      }
-    } else if(parameters.at(0) == "goto" && parameters.count() == 2) {
-      if(behaviours.at(curBehav).labels.contains(parameters.at(1))) {
-        printf("Going to '%s' at frame %d\n", parameters.at(1).toStdString().c_str(), behaviours.at(curBehav).labels[parameters.at(1)]);
-        curFrame = behaviours.at(curBehav).labels[parameters.at(1)];
-        return;
-      } else {
-        printf("Going to '%s', ERROR: Unknown label\n", parameters.at(1).toStdString().c_str());
-      }
-    } else if(parameters.at(0) == "print" && parameters.count() == 2) {
-      if(scriptVars.contains(parameters.at(1))) {
-        printf("%s = %d\n", parameters.at(1).toStdString().c_str(), scriptVars[parameters.at(1)]);
-      } else {
-        printf("%s, ERROR: Unknown variable\n", parameters.at(1).toStdString().c_str());
-      }
-    }
+  ScriptHandler scriptHandler(this);
+  if(scriptHandler.runScript(behaviours.at(curBehav).frames.at(curFrame).script)) {
+    return;
   }
   curFrame++;
 }

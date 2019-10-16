@@ -66,6 +66,17 @@ public:
   void changeBehaviour(QString behav = "", int time = 0);
   int getCurBehav();
   int size = 64;
+  QMap<QString, int> scriptVars;
+  int hyperQueue;
+  int healthQueue;
+  int energyQueue;
+  int hungerQueue;
+  int bladderQueue;
+  int socialQueue;
+  int funQueue;
+  int hygieneQueue;
+  int curFrame;
+  int curBehav;
                                                         
 public slots:
   void earthquake();
@@ -106,8 +117,6 @@ private:
   int independence;
   
   QMenu* bMenu;
-  int curFrame;
-  int curBehav;
   QTimer animTimer;
   QTimer weatherTimer;
   QTimer physicsTimer;
@@ -137,14 +146,6 @@ private:
   Stats *stats;
   Chatter *chatter;
   QList<QString> behavQueue;
-  int hyperQueue;
-  int healthQueue;
-  int energyQueue;
-  int hungerQueue;
-  int bladderQueue;
-  int socialQueue;
-  int funQueue;
-  int hygieneQueue;
   QString getFileFromCategory(QString category);
   int getIdxFromCategory(QString category);
   void processVision();
@@ -159,7 +160,6 @@ private:
 
   void killBoris();
 
-  QMap<QString, int> scriptVars;
   QList<QString> scriptInstructions;
   
 };
