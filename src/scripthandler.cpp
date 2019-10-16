@@ -36,162 +36,70 @@ ScriptHandler::ScriptHandler(Boris *boris)
   this->boris = boris;
 }
 
-bool ScriptHandler::runScript(QList<QString> script)
+bool ScriptHandler::runScript(const QList<QString> &script)
 {
   for(const auto &instruction: script) {
     printf("CODE: '%s'\n", instruction.toStdString().c_str());
     QList<QString> parameters = instruction.split(" ", QString::KeepEmptyParts);
-    if(parameters.at(0) == "var") {
-      handleVar(parameters.mid(0));
-    } else if(parameters.at(0) == "stat") {
-      handleStat(parameters.mid(0));
-    } else if(parameters.at(0) == "if") {
-      if(handleIf(parameters.mid(0))) {
-        return true;
-      }
-    } else if(parameters.at(0) == "goto") {
-      if(handleGoto(parameters.mid(0))) {
-        return true;
-      }
-    } else if(parameters.at(0) == "print") {
-      handlePrint(parameters.mid(0));
+    if(runCommand(parameters)) {
+      return true;
     }
   }
   return false;
 }
 
-bool ScriptHandler::handleIf(QList<QString> parameters)
+bool ScriptHandler::runCommand(QList<QString> &parameters)
 {
-  int idx = 1;
-  if(handleCondition(parameters.mid(idx), idx)) {
-    if(parameters.at(idx) == "goto") {
-      if(handleGoto(parameters.mid(idx))) {
-        return true;
-      }
-    } else if(parameters.at(idx) == "break") {
-      handleBreak();
+  if(parameters.first() == "var") {
+    handleVar(parameters);
+  } else if(parameters.first() == "stat") {
+    handleStat(parameters);
+  } else if(parameters.first() == "if") {
+    if(handleIf(parameters)) {
+      return true;
+    }
+  } else if(parameters.first() == "goto") {
+    if(handleGoto(parameters)) {
+      return true;
+    }
+  } else if(parameters.first() == "print") {
+    handlePrint(parameters);
+  } else if(parameters.first() == "break") {
+    handleBreak();
+    return true;
+  }
+  return false;
+}
+
+bool ScriptHandler::handleIf(QList<QString> &parameters)
+{
+  parameters.removeFirst(); // Remove 'if'
+
+  if(handleCondition(parameters)) {
+    if(runCommand(parameters)) {
+      return true;
+    }
+  } else if(parameters.contains("else")) {
+    while(parameters.takeFirst() != "else") {
+    }
+    if(runCommand(parameters)) {
       return true;
     }
   } else {
-    if(parameters.count() >= idx + 2 && parameters.at(idx + 1) == "else") {
-      if(parameters.at(idx + 2) == "goto") {
-        if(handleGoto(parameters.mid(idx + 2))) {
-          return true;
-        }
-      } else if(parameters.at(idx + 2) == "if") {
-        if(handleIf(parameters.mid(idx + 2))) {
-          return true;
-        }
-      }
-    } else {
-      printf("Condition(s) not met\n");
-    }
+    printf("Condition(s) not met\n");
   }
   return false;
 }
 
-bool ScriptHandler::handleGoto(QList<QString> parameters)
-{
-  if(behaviours.at(boris->curBehav).labels.contains(parameters.at(1))) {
-    printf("Going to label '%s' at frame %d\n", parameters.at(1).toStdString().c_str(), behaviours.at(boris->curBehav).labels[parameters.at(1)]);
-    boris->curFrame = behaviours.at(boris->curBehav).labels[parameters.at(1)];
-    return true;
-  } else {
-    printf("Going to '%s', ERROR: Unknown label\n", parameters.at(1).toStdString().c_str());
-  }
-  return false;
-}
-
-void ScriptHandler::handleVar(QList<QString> parameters)
+bool ScriptHandler::handleCondition(QList<QString> &parameters)
 {
   bool isInt = false;
-  int number = parameters.at(3).toInt(&isInt);;
+  int compareFrom = parameters.first().toInt(&isInt);
   if(!isInt) {
-    if(parameters.at(3).left(1) == "@") {
-      number = (qrand() % parameters.at(3).right(parameters.at(3).length() - 1).toInt()) + 1;
+    if(parameters.first().left(1) == "@") {
+      compareFrom = (qrand() % parameters.first().right(parameters.first().length() - 1).toInt()) + 1;
     } else {
-      number = boris->scriptVars[parameters.at(3)];
-    }
-  }
-  if(parameters.at(2) == "=") {
-    boris->scriptVars[parameters.at(1)] = number;
-  } else if(parameters.at(2) == "+=") {
-    boris->scriptVars[parameters.at(1)] += number;
-  } else if(parameters.at(2) == "-=") {
-    boris->scriptVars[parameters.at(1)] -= number;
-  }
-  printf("%s = %d\n", parameters.at(1).toStdString().c_str(), boris->scriptVars[parameters.at(1)]);
-}
-
-void ScriptHandler::handleStat(QList<QString> parameters)
-{
-  bool isInt = false;
-  int number = parameters.at(3).toInt(&isInt);;
-  if(!isInt) {
-    if(parameters.at(3).left(1) == "@") {
-      number = (qrand() % parameters.at(3).right(parameters.at(3).length() - 1).toInt()) + 1;
-    } else {
-      number = boris->scriptVars[parameters.at(3)];
-    }
-  }
-  int *stat = nullptr;
-  if(parameters.at(1) == "hyper") {
-    stat = &boris->hyperQueue;
-  } else if(parameters.at(1) == "health") {
-    stat = &boris->healthQueue;
-  } else if(parameters.at(1) == "energy") {
-    stat = &boris->energyQueue;
-  } else if(parameters.at(1) == "hunger") {
-    stat = &boris->hungerQueue;
-  } else if(parameters.at(1) == "bladder") {
-    stat = &boris->bladderQueue;
-  } else if(parameters.at(1) == "social") {
-    stat = &boris->socialQueue;
-  } else if(parameters.at(1) == "fun") {
-    stat = &boris->funQueue;
-  } else if(parameters.at(1) == "hygiene") {
-    stat = &boris->hygieneQueue;
-  }
-  if(stat != nullptr) {
-    if(parameters.at(2) == "+=") {
-      *stat += number;
-    } else if(parameters.at(2) == "-=") {
-      *stat -= number;
-    }
-    printf("%s %s %s\n", parameters.at(1).toStdString().c_str(),
-           parameters.at(2).toStdString().c_str(),
-           parameters.at(3).toStdString().c_str());
-  } else {
-    printf("%s, ERROR: Unknown stat\n", parameters.at(1).toStdString().c_str());
-  }
-}
-
-void ScriptHandler::handleBreak()
-{
-  printf("Changing behaviour\n");
-  boris->behavTimer.stop();
-  boris->nextBehaviour();
-}
-
-void ScriptHandler::handlePrint(QList<QString> parameters)
-{
-  if(boris->scriptVars.contains(parameters.at(1))) {
-    printf("%s = %d\n", parameters.at(1).toStdString().c_str(), boris->scriptVars[parameters.at(1)]);
-  } else {
-    printf("%s, ERROR: Unknown variable\n", parameters.at(1).toStdString().c_str());
-  }
-}
-
-bool ScriptHandler::handleCondition(QList<QString> parameters, int &idx)
-{
-  idx += 3; // Move index past this condition
-  bool isInt = false;
-  int compareFrom = parameters.at(0).toInt(&isInt);
-  if(!isInt) {
-    if(parameters.at(0).left(1) == "@") {
-      compareFrom = (qrand() % parameters.at(0).right(parameters.at(0).length() - 1).toInt()) + 1;
-    } else {
-      compareFrom = boris->scriptVars[parameters.at(0)];
+      compareFrom = boris->scriptVars[parameters.first()];
     }
   }
   isInt = false;
@@ -203,7 +111,6 @@ bool ScriptHandler::handleCondition(QList<QString> parameters, int &idx)
       compareTo = boris->scriptVars[parameters.at(2)];
     }
   }
-  printf("%d %s %d ", compareFrom, parameters.at(1).toStdString().c_str(), compareTo);
 
   bool cond = false;
   if(parameters.at(1) == "<") {
@@ -231,22 +138,141 @@ bool ScriptHandler::handleCondition(QList<QString> parameters, int &idx)
       cond = true;
     }
   }
-  if(parameters.count() >= 5) {
-    if(parameters.at(3) == "or") {
-      printf("or ");
-      idx++;
-      if(handleCondition(parameters.mid(4), idx)) {
+
+  printf("%d %s %d", compareFrom, parameters.at(1).toStdString().c_str(), compareTo);
+
+  parameters.removeFirst();
+  parameters.removeFirst();
+  parameters.removeFirst();
+
+  if(parameters.count() >= 2) {
+    if(parameters.first() == "or") {
+      printf(" or ");
+      parameters.removeFirst();
+      if(handleCondition(parameters)) {
         cond = true;
       } else {
         cond = false;
       }
-    } else if(parameters.at(3) == "and" && cond) {
-      printf("and ");
-      idx++;
-      if(!handleCondition(parameters.mid(4), idx)) {
+    } else if(parameters.first() == "and" && cond) {
+      printf(" and ");
+      parameters.removeFirst();
+      if(!handleCondition(parameters)) {
         cond = false;
       }
+    } else {
+      printf(", ");
     }
   }
   return cond;
+}
+
+bool ScriptHandler::handleGoto(QList<QString> &parameters)
+{
+  parameters.removeFirst(); // Remove 'goto'
+
+  if(behaviours.at(boris->curBehav).labels.contains(parameters.first())) {
+    printf("Going to label '%s' at frame %d\n", parameters.first().toStdString().c_str(), behaviours.at(boris->curBehav).labels[parameters.first()]);
+    boris->curFrame = behaviours.at(boris->curBehav).labels[parameters.first()];
+    parameters.removeFirst();
+    return true;
+  } else {
+    printf("Going to '%s', ERROR: Unknown label\n", parameters.first().toStdString().c_str());
+  }
+  parameters.removeFirst();
+  return false;
+}
+
+void ScriptHandler::handleVar(QList<QString> &parameters)
+{
+  parameters.removeFirst(); // Remove 'var'
+
+  bool isInt = false;
+  int number = parameters.at(2).toInt(&isInt);;
+  if(!isInt) {
+    if(parameters.at(2).left(1) == "@") {
+      number = (qrand() % parameters.at(2).right(parameters.at(2).length() - 1).toInt()) + 1;
+    } else {
+      number = boris->scriptVars[parameters.at(2)];
+    }
+  }
+  if(parameters.at(1) == "=") {
+    boris->scriptVars[parameters.first()] = number;
+  } else if(parameters.at(1) == "+=") {
+    boris->scriptVars[parameters.first()] += number;
+  } else if(parameters.at(1) == "-=") {
+    boris->scriptVars[parameters.first()] -= number;
+  }
+
+  printf("%s = %d\n", parameters.first().toStdString().c_str(), boris->scriptVars[parameters.first()]);
+  parameters.removeFirst();
+  parameters.removeFirst();
+  parameters.removeFirst();
+}
+
+void ScriptHandler::handleStat(QList<QString> &parameters)
+{
+  parameters.removeFirst(); // Remove 'stat'
+
+  bool isInt = false;
+  int number = parameters.at(2).toInt(&isInt);;
+  if(!isInt) {
+    if(parameters.at(2).left(1) == "@") {
+      number = (qrand() % parameters.at(2).right(parameters.at(2).length() - 1).toInt()) + 1;
+    } else {
+      number = boris->scriptVars[parameters.at(2)];
+    }
+  }
+  int *stat = nullptr;
+  if(parameters.first() == "hyper") {
+    stat = &boris->hyperQueue;
+  } else if(parameters.first() == "health") {
+    stat = &boris->healthQueue;
+  } else if(parameters.first() == "energy") {
+    stat = &boris->energyQueue;
+  } else if(parameters.first() == "hunger") {
+    stat = &boris->hungerQueue;
+  } else if(parameters.first() == "bladder") {
+    stat = &boris->bladderQueue;
+  } else if(parameters.first() == "social") {
+    stat = &boris->socialQueue;
+  } else if(parameters.first() == "fun") {
+    stat = &boris->funQueue;
+  } else if(parameters.first() == "hygiene") {
+    stat = &boris->hygieneQueue;
+  }
+  if(stat != nullptr) {
+    if(parameters.at(1) == "+=") {
+      *stat += number;
+    } else if(parameters.at(1) == "-=") {
+      *stat -= number;
+    }
+    printf("%s %s %s\n", parameters.first().toStdString().c_str(),
+           parameters.at(1).toStdString().c_str(),
+           parameters.at(2).toStdString().c_str());
+  } else {
+    printf("%s, ERROR: Unknown stat\n", parameters.first().toStdString().c_str());
+  }
+
+  parameters.removeFirst();
+  parameters.removeFirst();
+  parameters.removeFirst();
+}
+
+void ScriptHandler::handleBreak()
+{
+  printf("Changing behaviour\n");
+  boris->behavTimer.stop();
+  boris->nextBehaviour();
+}
+
+void ScriptHandler::handlePrint(QList<QString> &parameters)
+{
+  parameters.removeFirst(); // Remove 'print'
+
+  if(boris->scriptVars.contains(parameters.first())) {
+    printf("%s = %d\n", parameters.first().toStdString().c_str(), boris->scriptVars[parameters.first()]);
+  } else {
+    printf("%s, ERROR: Unknown variable\n", parameters.first().toStdString().c_str());
+  }
 }

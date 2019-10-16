@@ -37,18 +37,21 @@ class ScriptHandler : public QObject
 
 public:
   ScriptHandler(Boris *boris);
-  bool runScript(QList<QString> script);
+  bool runScript(const QList<QString> &script);
 
 private:
   Boris *boris = nullptr;
 
+  // Main command parser
+  bool runCommand(QList<QString> &parameters);
+
   // Command handlers
-  bool handleIf(QList<QString> parameters);
-  bool handleCondition(QList<QString> parameters, int &idx);
-  bool handleGoto(QList<QString> parameters);
-  void handleVar(QList<QString> parameters);
-  void handleStat(QList<QString> parameters);
-  void handlePrint(QList<QString> parameters);
+  bool handleIf(QList<QString> &parameters);
+  bool handleCondition(QList<QString> &parameters);
+  bool handleGoto(QList<QString> &parameters);
+  void handleVar(QList<QString> &parameters);
+  void handleStat(QList<QString> &parameters);
+  void handlePrint(QList<QString> &parameters);
   void handleBreak();
   
 };
