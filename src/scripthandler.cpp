@@ -87,6 +87,8 @@ bool ScriptHandler::handleIf(QList<QString> &parameters)
     if(runCommand(parameters)) {
       return true;
     }
+  } else {
+    printf("Condition not met\n");
   }
   return false;
 }
