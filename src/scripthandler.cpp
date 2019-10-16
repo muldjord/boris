@@ -75,7 +75,9 @@ bool ScriptHandler::handleIf(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'if'
 
-  if(handleCondition(parameters)) {
+  bool cond = false;
+  handleConditions(parameters, cond, true);
+  if(cond) {
     if(runCommand(parameters)) {
       return true;
     }
@@ -85,13 +87,11 @@ bool ScriptHandler::handleIf(QList<QString> &parameters)
     if(runCommand(parameters)) {
       return true;
     }
-  } else {
-    printf("Condition(s) not met\n");
   }
   return false;
 }
 
-bool ScriptHandler::handleCondition(QList<QString> &parameters)
+void ScriptHandler::handleConditions(QList<QString> &parameters, bool &cond, const bool &compare)
 {
   bool isInt = false;
   int compareFrom = parameters.first().toInt(&isInt);
@@ -111,31 +111,33 @@ bool ScriptHandler::handleCondition(QList<QString> &parameters)
       compareTo = boris->scriptVars[parameters.at(2)];
     }
   }
-
-  bool cond = false;
-  if(parameters.at(1) == "<") {
-    if(compareFrom < compareTo) {
-      cond = true;
-    }
-  } else if(parameters.at(1) == ">") {
-    if(compareFrom > compareTo) {
-      cond = true;
-    }
-  } else if(parameters.at(1) == "<=") {
-    if(compareFrom <= compareTo) {
-      cond = true;
-    }
-  } else if(parameters.at(1) == ">=") {
-    if(compareFrom >= compareTo) {
-      cond = true;
-    }
-  } else if(parameters.at(1) == "=") {
-    if(compareFrom == compareTo) {
-      cond = true;
-    }
-  } else if(parameters.at(1) == "==") {
-    if(compareFrom == compareTo) {
-      cond = true;
+  
+  if(compare) {
+    cond = false;
+    if(parameters.at(1) == "<") {
+      if(compareFrom < compareTo) {
+        cond = true;
+      }
+    } else if(parameters.at(1) == ">") {
+      if(compareFrom > compareTo) {
+        cond = true;
+      }
+    } else if(parameters.at(1) == "<=") {
+      if(compareFrom <= compareTo) {
+        cond = true;
+      }
+    } else if(parameters.at(1) == ">=") {
+      if(compareFrom >= compareTo) {
+        cond = true;
+      }
+    } else if(parameters.at(1) == "=") {
+      if(compareFrom == compareTo) {
+        cond = true;
+      }
+    } else if(parameters.at(1) == "==") {
+      if(compareFrom == compareTo) {
+        cond = true;
+      }
     }
   }
 
@@ -145,26 +147,21 @@ bool ScriptHandler::handleCondition(QList<QString> &parameters)
   parameters.removeFirst();
   parameters.removeFirst();
 
-  if(parameters.count() >= 2) {
+  if(parameters.count() >= 1) {
     if(parameters.first() == "or") {
       printf(" or ");
       parameters.removeFirst();
-      if(handleCondition(parameters)) {
-        cond = true;
-      } else {
-        cond = false;
-      }
+      handleConditions(parameters, cond, !cond);
+      return;
     } else if(parameters.first() == "and" && cond) {
       printf(" and ");
       parameters.removeFirst();
-      if(!handleCondition(parameters)) {
-        cond = false;
-      }
+      handleConditions(parameters, cond, true);
+      return;
     } else {
       printf(", ");
     }
   }
-  return cond;
 }
 
 bool ScriptHandler::handleGoto(QList<QString> &parameters)
