@@ -1,19 +1,17 @@
 title=Drink coffee
 category=Energy
-hyper=20
-energy=20
 hunger=15
-bladder=60
 social=-1
 hygiene=-4
 oneShot
 allowFlip
 #Frames
-0;500;0;0;;
-1;125;0;0;;
+0;500;0;0;;var drinks = 2,var drinks += @2,var rand = @3,if rand = 1 goto drink1 else if rand = 2 goto drink2 else if rand = 3 goto drink3
+0;500;0;0;;label drink1
+1;125;0;0;;var drinks -= 1
 2;125;0;0;;
 3;125;0;0;;
-4;1000;0;0;data/sfx/drink.wav;
+4;1000;0;0;data/sfx/drink.wav;stat hyper += 6,stat energy += 6,stat bladder += 15
 3;125;0;0;;
 2;125;0;0;;
 1;125;0;0;;
@@ -28,12 +26,12 @@ allowFlip
 7;30;0;0;;
 8;30;0;0;;
 7;30;0;0;;
-8;500;0;0;;
-0;500;0;0;;
-1;125;0;0;;
+8;500;0;0;;if drinks <= 0 break,var rand = @3,if rand = 1 goto drink1 else if rand = 2 goto drink2 else if rand = 3 goto drink3
+0;500;0;0;;label drink2
+1;125;0;0;;var drinks -= 1
 2;125;0;0;;
 3;125;0;0;;
-4;1000;0;0;data/sfx/drink.wav;
+4;1000;0;0;data/sfx/drink.wav;stat hyper += 6,stat energy += 6,stat bladder += 15
 3;125;0;0;;
 2;125;0;0;;
 1;125;0;0;;
@@ -51,12 +49,12 @@ allowFlip
 8;500;0;0;;
 7;30;0;0;;
 8;30;0;0;;
-7;30;0;0;;
-0;500;0;0;;
-1;125;0;0;;
+7;30;0;0;;if drinks <= 0 break,var rand = @3,if rand = 1 goto drink1 else if rand = 2 goto drink2 else if rand = 3 goto drink3
+0;500;0;0;;label drink3
+1;125;0;0;;var drinks -= 1
 2;125;0;0;;
 3;125;0;0;;
-4;1000;0;0;data/sfx/drink.wav;
+4;1000;0;0;data/sfx/drink.wav;stat hyper += 6,stat energy += 6,stat bladder += 15
 3;125;0;0;;
 2;125;0;0;;
 1;125;0;0;;
@@ -73,4 +71,4 @@ allowFlip
 7;30;0;0;;
 8;30;0;0;;
 7;30;0;0;;
-8;500;0;0;;
+8;500;0;0;;if drinks <= 0 break,var rand = @3,if rand = 1 goto drink1 else if rand = 2 goto drink2 else if rand = 3 goto drink3
