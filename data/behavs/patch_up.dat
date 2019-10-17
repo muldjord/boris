@@ -1,10 +1,9 @@
 title=Patch up
 category=Health
-health=100
 fun=-5
-hygiene=-5
 oneShot
 allowFlip
+doNotDisturb
 #Frames
 0;75;0;0;data/sfx/bandage.wav;
 1;75;0;0;;
@@ -36,12 +35,12 @@ allowFlip
 27;75;0;0;;
 28;75;0;0;;
 29;75;0;0;;
-30;1200;0;0;;
-31;75;0;0;;
+30;1200;0;0;;label heal
+31;75;0;0;;stat health += 5,stat hygiene -= 1
 30;75;0;0;;
 31;75;0;0;;
 30;2000;0;0;;
-31;75;0;0;;
+31;75;0;0;;if health < 98 goto heal
 32;75;0;0;data/sfx/break_bandage.wav;
 33;200;0;0;;
 32;150;0;0;;
