@@ -1,0 +1,114 @@
+title=Play piano
+category=Fun
+energy=-3
+fun=22
+hunger=1
+social=-8
+hygiene=-3
+oneShot
+doNotDisturb
+pitchLock
+#Frames
+0;75;0;0;;var notes = 64,var notes += @32
+1;75;0;0;;
+2;75;0;0;;
+3;75;0;0;;
+4;75;0;0;;
+5;75;0;0;;
+6;75;0;0;;
+7;75;0;0;;
+8;75;0;0;;
+9;75;0;0;;
+10;75;0;0;;
+11;75;0;0;;
+12;75;0;0;;
+13;500;0;0;;label pause,var rand = @15,if rand = 1 goto c1 else if rand = 2 goto d1 else if rand = 3 goto e1 else if rand = 4 goto f1 else if rand = 5 goto g1 else if rand = 6 goto a1 else if rand = 7 goto b1 else if rand = 8 goto c2 else if rand = 9 goto d2 else if rand = 10 goto e2 else if rand = 11 goto f2 else if rand = 12 goto g2 else if rand = 13 goto a2 else if rand = 14 goto b2 else if rand = 15 goto c3
+
+# c1
+20;75;0;0;data/sfx/piano_c1.wav;label c1,var notes -= 1,if @4 = 1 goto sc1
+21;150;0;0;;
+21;75;0;0;;label sc1,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @2,if rand = 1 goto c1 else if rand = 2 goto d1
+
+# d1
+20;75;0;0;data/sfx/piano_d1.wav;label d1,var notes -= 1,if @4 = 1 goto sd1
+21;150;0;0;;
+21;75;0;0;;label sd1,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @3,if rand = 1 goto c1 else if rand = 2 goto d1 else if rand = 3 goto e1
+
+# e1
+22;75;0;0;data/sfx/piano_e1.wav;label e1,var notes -= 1,if @4 = 1 goto se1
+23;150;0;0;;
+23;75;0;0;;label se1,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @3,if rand = 1 goto d1 else if rand = 2 goto e1 else if rand = 3 goto f1
+
+# f1
+22;75;0;0;data/sfx/piano_f1.wav;label f1,var notes -= 1,if @4 = 1 goto sf1
+23;150;0;0;;
+23;75;0;0;;label sf1,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @3,if rand = 1 goto e1 else if rand = 2 goto f1 else if rand = 3 goto g1
+
+# g1
+24;75;0;0;data/sfx/piano_g1.wav;label g1,var notes -= 1,if @4 = 1 goto sg1
+25;150;0;0;;
+25;75;0;0;;label sg1,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @3,if rand = 1 goto f1 else if rand = 2 goto g1 else if rand = 3 goto a1
+
+# a1
+24;75;0;0;data/sfx/piano_a1.wav;label a1,var notes -= 1,if @4 = 1 goto sa1
+25;150;0;0;;
+25;75;0;0;;label sa1,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @3,if rand = 1 goto g1 else if rand = 2 goto a1 else if rand = 3 goto b1
+
+# b1
+24;75;0;0;data/sfx/piano_b1.wav;label b1,var notes -= 1,if @4 = 1 goto sb1
+25;150;0;0;;
+25;75;0;0;;label sb1,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @3,if rand = 1 goto a1 else if rand = 2 goto b1 else if rand = 3 goto c2
+
+# c2
+14;75;0;0;data/sfx/piano_c2.wav;label c2,var notes -= 1,if @4 = 1 goto sc2
+15;150;0;0;;
+15;75;0;0;;label sc2,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @3,if rand = 1 goto b1 else if rand = 2 goto c2 else if rand = 3 goto d2
+
+# d2
+14;75;0;0;data/sfx/piano_d2.wav;label d2,var notes -= 1,if @4 = 1 goto sd2
+15;150;0;0;;
+15;75;0;0;;label sd2,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @3,if rand = 1 goto c2 else if rand = 2 goto d2 else if rand = 3 goto e2
+
+# e2
+14;75;0;0;data/sfx/piano_e2.wav;label e2,var notes -= 1,if @4 = 1 goto se2
+15;150;0;0;;
+15;75;0;0;;label se2,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @3,if rand = 1 goto d2 else if rand = 2 goto e2 else if rand = 3 goto f2
+
+# f2
+14;75;0;0;data/sfx/piano_f2.wav;label f2,var notes -= 1,if @4 = 1 goto sf2
+15;150;0;0;;
+15;75;0;0;;label sf2,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @3,if rand = 1 goto e2 else if rand = 2 goto f2 else if rand = 3 goto g2
+
+# g2
+16;75;0;0;data/sfx/piano_g2.wav;label g2,var notes -= 1,if @4 = 1 goto sg2
+17;150;0;0;;
+17;75;0;0;;label sg2,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @3,if rand = 1 goto f2 else if rand = 2 goto g2 else if rand = 3 goto a2
+
+# a2
+16;75;0;0;data/sfx/piano_a2.wav;label a2,var notes -= 1,if @4 = 1 goto sa2
+17;150;0;0;;
+17;75;0;0;;label sa2,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @3,if rand = 1 goto g2 else if rand = 2 goto a2 else if rand = 3 goto b2
+
+# b2
+18;75;0;0;data/sfx/piano_b2.wav;label b2,var notes -= 1,if @4 = 1 goto sb2
+19;150;0;0;;
+19;75;0;0;;label sb2,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @3,if rand = 1 goto a2 else if rand = 2 goto b2 else if rand = 3 goto c3
+
+# c3
+18;75;0;0;data/sfx/piano_c3.wav;label c3,var notes -= 1,if @4 = 1 goto sc3
+19;150;0;0;;
+19;75;0;0;;label sc3,if notes <= 0 goto end,if @8 = 1 goto pause,var rand = @2,if rand = 1 goto b2 else if rand = 2 goto c3
+
+12;75;0;0;;label end
+11;75;0;0;;
+10;75;0;0;;
+9;75;0;0;;
+8;75;0;0;;
+7;75;0;0;;
+6;75;0;0;;
+5;75;0;0;;
+4;75;0;0;;
+3;75;0;0;;
+2;75;0;0;;
+1;75;0;0;;
+0;75;0;0;;
