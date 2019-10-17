@@ -1,13 +1,11 @@
 title=Hula hoop
 category=Fun
-fun=20
 hunger=5
-energy=-5
 hygiene=-5
 oneShot
 allowFlip
 #Frames
-0;75;0;0;;
+0;75;0;0;;var loops = 1,var loops += @5
 1;75;0;0;;
 2;75;0;0;;
 19;75;0;0;;
@@ -23,7 +21,7 @@ allowFlip
 29;75;0;0;;
 30;75;0;0;;
 31;75;0;0;;
-32;90;0;0;;label hulainit,var loop = 0,var loops = 2,var loops += @6,var prehula = @3,if prehula = 1 goto prehula1,if prehula = 2 goto prehula2,if prehula = 3 goto prehula3
+32;90;0;0;;label hulainit,stat energy -= 1,var hulas = 2,var hulas += @7,var prehula = @3,if prehula = 1 goto prehula1,if prehula = 2 goto prehula2,if prehula = 3 goto prehula3
 
 33;1200;0;0;;label prehula1
 34;100;0;0;;
@@ -46,13 +44,13 @@ allowFlip
 36;75;0;0;;goto firsthula
 
 3;75;0;0;;label hula
-4;75;0;0;;label firsthula,var loop += 1
-5;75;0;0;;
+4;75;0;0;;label firsthula,var hulas -= 1
+5;75;0;0;;stat fun += 2
 6;75;0;0;;
 7;75;0;0;;
 8;75;0;0;;
 9;75;0;0;;
-10;75;0;0;;if loop < loops goto hula
+10;75;0;0;;if hulas > 0 goto hula
 11;75;0;0;;
 12;75;0;0;;
 13;75;0;0;;
@@ -60,8 +58,8 @@ allowFlip
 15;75;0;0;;
 16;90;0;0;;
 17;105;0;0;;
-18;125;0;0;;
-19;250;0;0;;if @4 < 2 goto stophula
+18;125;0;0;;var loops -= 1
+19;250;0;0;;if loops <= 0 goto stophula
 20;90;0;0;;
 21;75;0;0;;
 22;75;0;0;;
