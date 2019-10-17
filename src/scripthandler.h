@@ -47,7 +47,7 @@ private:
 
   // Command handlers
   bool handleIf(QList<QString> &parameters);
-  void handleConditions(QList<QString> &parameters, bool &cond, const bool &compare);
+  void handleConditions(QList<QString> &parameters, bool &cond, bool &compare);
   bool handleGoto(QList<QString> &parameters);
   void handleVar(QList<QString> &parameters);
   void handleStat(QList<QString> &parameters);

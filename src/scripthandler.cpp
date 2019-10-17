@@ -76,7 +76,8 @@ bool ScriptHandler::handleIf(QList<QString> &parameters)
   parameters.removeFirst(); // Remove 'if'
 
   bool cond = false;
-  handleConditions(parameters, cond, true);
+  bool compare = true;
+  handleConditions(parameters, cond, compare);
   if(cond) {
     if(runCommand(parameters)) {
       return true;
@@ -93,7 +94,7 @@ bool ScriptHandler::handleIf(QList<QString> &parameters)
   return false;
 }
 
-void ScriptHandler::handleConditions(QList<QString> &parameters, bool &cond, const bool &compare)
+void ScriptHandler::handleConditions(QList<QString> &parameters, bool &cond, bool &compare)
 {
   bool isInt = false;
   int compareFrom = parameters.first().toInt(&isInt);
@@ -153,12 +154,18 @@ void ScriptHandler::handleConditions(QList<QString> &parameters, bool &cond, con
     if(parameters.first() == "or") {
       printf(" or ");
       parameters.removeFirst();
-      handleConditions(parameters, cond, !cond);
+      if(cond) {
+        compare = false;
+      }
+      handleConditions(parameters, cond, compare);
       return;
-    } else if(parameters.first() == "and" && cond) {
+    } else if(parameters.first() == "and") {
       printf(" and ");
       parameters.removeFirst();
-      handleConditions(parameters, cond, true);
+      if(!cond) {
+        compare = false;
+      }
+      handleConditions(parameters, cond, compare);
       return;
     } else {
       printf(", ");
@@ -201,6 +208,10 @@ void ScriptHandler::handleVar(QList<QString> &parameters)
     boris->scriptVars[parameters.first()] += number;
   } else if(parameters.at(1) == "-=") {
     boris->scriptVars[parameters.first()] -= number;
+  } else if(parameters.at(1) == "*=") {
+    boris->scriptVars[parameters.first()] *= number;
+  } else if(parameters.at(1) == "/=") {
+    boris->scriptVars[parameters.first()] /= number;
   }
 
   printf("%s = %d\n", parameters.first().toStdString().c_str(), boris->scriptVars[parameters.first()]);
