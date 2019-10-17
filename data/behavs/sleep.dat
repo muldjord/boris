@@ -1,11 +1,6 @@
 title=Take a nap
 category=Energy
 hyper=-100
-health=10
-energy=100
-bladder=30
-hunger=30
-hygiene=-20
 oneShot
 doNotDisturb
 #Frames
@@ -24,13 +19,13 @@ doNotDisturb
 12;75;0;0;;
 11;75;0;0;;
 12;75;0;0;;
-11;2500;0;0;;var cycles = @12,var cycles += 16
+11;2500;0;0;;
 13;150;0;0;data/sfx/snore1.wav;label slumber
 14;150;0;0;;var cycles -= 1
-15;200;0;0;;
-16;300;0;0;;
-17;1000;0;0;;
-18;900;0;0;;
+15;200;0;0;;stat energy += 3
+16;300;0;0;;stat health += 1
+17;1000;0;0;;stat bladder += 2
+18;900;0;0;;stat hygiene -= 3
 19;250;0;0;;
 20;175;0;0;;
 21;175;0;0;;
@@ -43,7 +38,7 @@ doNotDisturb
 28;175;0;0;;
 29;175;0;0;;
 13;150;0;0;data/sfx/snore2.wav;
-14;150;0;0;;
+14;150;0;0;;stat energy += 3
 15;200;0;0;;
 16;300;0;0;;
 17;1000;0;0;;
@@ -58,7 +53,7 @@ doNotDisturb
 26;175;0;0;;
 27;175;0;0;;
 28;175;0;0;;
-29;175;0;0;;if cycles > 0 goto slumber
+29;175;0;0;;if energy < 98 goto slumber
 12;75;0;0;;
 11;1000;0;0;;
 12;75;0;0;;
