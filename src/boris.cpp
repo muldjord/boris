@@ -39,6 +39,7 @@
 #include <QDesktopWidget>
 #include <QBitmap>
 #include <QScreen>
+#include <QTime>
 
 constexpr int STATTIMER = 200;
 constexpr double PI = 3.1415927;
@@ -144,7 +145,7 @@ Boris::Boris()
   weatherTimer.setSingleShot(true);
   connect(&weatherTimer, &QTimer::timeout, this, &Boris::nextWeatherFrame);
   
-  statTimer.setInterval(60000);
+  statTimer.setInterval(30000);
   connect(&statTimer, &QTimer::timeout, this, &Boris::statProgress);
   statTimer.start();
 
@@ -751,13 +752,24 @@ void Boris::teleport()
 
 void Boris::statProgress()
 {
-  // Energy disabled since it is mainly controlled by walking behavs.
-  //stats->deltaEnergy(- qrand() % 1);
-  hyperQueue -= qrand() % 25;
-  hungerQueue -= qrand() % 4;
-  socialQueue -= qrand() % 4;
-  hygieneQueue -= qrand() % 2;
-  funQueue -= qrand() % 6;
+  // If it's late decrease energy to make Boris tired
+  // Other than that energy decreases are mainly controlled by walking behavs
+  if(QTime::currentTime().hour() >= 21 && QTime::currentTime().hour() < 23) {
+    energyQueue -= 1;
+  } else if(QTime::currentTime().hour() >= 23) {
+    energyQueue -= 3;
+  } else if(QTime::currentTime().hour() >= 0 && QTime::currentTime().hour() < 3) {
+    energyQueue -= 4;
+  } else if(QTime::currentTime().hour() >= 3 && QTime::currentTime().hour() < 6) {
+    energyQueue -= 5;
+  } else if(QTime::currentTime().hour() >= 6 && QTime::currentTime().hour() < 8) {
+    energyQueue -= 1;
+  }
+  hyperQueue -= qrand() % 7;
+  hungerQueue -= qrand() % 2;
+  socialQueue -= qrand() % 2;
+  hygieneQueue -= qrand() % 1;
+  funQueue -= qrand() % 3;
   // Nothing needed for 'health' and 'bladder'
 }
 
