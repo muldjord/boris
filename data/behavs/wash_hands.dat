@@ -26,7 +26,7 @@ allowFlip
 18;100;0;0;;
 19;100;0;0;;
 20;100;0;0;;
-21;50;0;0;;
+21;50;0;0;;if hygiene >= 98 goto end
 10;50;0;0;data/sfx/wash_hands.wav;label wash
 11;75;0;0;;stat hygiene += 10
 12;100;0;0;;
@@ -50,8 +50,8 @@ allowFlip
 18;75;0;0;;
 19;100;0;0;;
 20;100;0;0;;
-21;75;0;0;;if hygiene < 95 goto wash
-9;100;0;0;data/sfx/wash_hands_end.wav;
+21;75;0;0;;if hygiene < 98 goto wash
+9;100;0;0;data/sfx/wash_hands_end.wav;label end
 8;250;0;0;;
 7;250;0;0;;
 6;100;0;0;;
