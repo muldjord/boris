@@ -1338,7 +1338,7 @@ void Boris::showWeather(QString &behav)
     } else if(settings.weatherType == "01n" || settings.weatherType == "02n") {
       behavQueue.append("_energy"); // Yawn for weathers that have a moon
     } else if(settings.weatherType == "04d" || settings.weatherType == "04n") {
-      behavQueue.append("_fun"); // Depressed from clouds
+      behavQueue.append("_cloudy");
     }
   }
 }
