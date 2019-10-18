@@ -510,7 +510,7 @@ void Boris::nextFrame()
   animTimer.start();
 }
 
-void Boris::moveBoris(int dX, int dY)
+void Boris::moveBoris(int dX, int dY, const bool &vision)
 {
   sanityCheck();
   
@@ -556,7 +556,9 @@ void Boris::moveBoris(int dX, int dY)
       changeBehaviour();
     }
   }
-  //processVision();
+  if(vision && settings.vision && !falling && !grabbed) {
+    processVision();
+  }
 }
 
 void Boris::handleBehaviourChange(QAction* a) {
@@ -1033,74 +1035,86 @@ void Boris::collide(Boris *b)
 
 void Boris::processVision()
 {
-  int border = 2;
-  QImage vision = QGuiApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId(), pos().x() - border, pos().y() - border, size + border * 2, size + border *2).toImage();
-
-  bool wallDetect;
-  QRgb wallColor;
-
-  // Check for wall to the west
-  wallDetect = true;
-  wallColor = vision.pixel(0, border);
-  for(int a = border; a < size + border; ++a) {
-    if(vision.pixel(0, a) != wallColor ||
-       vision.pixel(1, a) == wallColor) {
-      wallDetect = false;
-      break;
+  int border = 4;
+  int contrast = 15;
+  QImage vision = QGuiApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId(), pos().x() - border, pos().y() - border, size + border * 2, size + border * 2).toImage();
+  
+  QRgb *bits = (QRgb *)vision.bits();
+  { // Check for wall to the west
+    int top = border * vision.width();
+    int spread = size / 5;
+    int wallDetect = 0;
+    for(int smp = 0; smp < 5; ++smp) {
+      printf("CONTRAST: %d\n", abs(qGray(bits[top + (smp * spread * vision.width())]) -
+                                   qGray(bits[top + (smp * spread * vision.width()) + border - 1])));
+      if(abs(qGray(bits[top + (smp * spread * vision.width())]) -
+             qGray(bits[top + (smp * spread * vision.width()) + border - 1])) > contrast) {
+        printf("MAYBE A WALL!\n");
+        wallDetect++;
+      }
+    }
+    if(wallDetect >= 3) {
+      moveBoris(2, 0, false);
+      changeBehaviour();
+      return;
     }
   }
-  if(wallDetect) {
-    moveBoris(1, 0);
-    changeBehaviour();
-    return;
-  }
-
-  // Check for wall to the east
-  wallDetect = true;
-  wallColor = vision.pixel(vision.width() - 1, border);
-  for(int a = border; a < size + border; ++a) {
-    if(vision.pixel(vision.width() - 1, a) != wallColor ||
-       vision.pixel(vision.width() - 2, a) == wallColor) {
-      wallDetect = false;
-      break;
+  { // Check for wall to the east
+    int top = border * vision.width() + vision.width() - border;
+    int spread = size / 5;
+    int wallDetect = 0;
+    for(int smp = 0; smp < 5; ++smp) {
+      printf("CONTRAST: %d\n", abs(qGray(bits[top + (smp * spread * vision.width())]) -
+                                   qGray(bits[top + (smp * spread * vision.width()) + border - 1])));
+      if(abs(qGray(bits[top + (smp * spread * vision.width())]) -
+             qGray(bits[top + (smp * spread * vision.width()) + border - 1])) > contrast) {
+        printf("MAYBE A WALL!\n");
+        wallDetect++;
+      }
+    }
+    if(wallDetect >= 3) {
+      moveBoris(-2, 0, false);
+      changeBehaviour();
+      return;
     }
   }
-  if(wallDetect) {
-    moveBoris(-1, 0);
-    changeBehaviour();
-    return;
-  }
-
-  // Check for wall to the north
-  wallDetect = true;
-  wallColor = vision.pixel(border, 0);
-  for(int a = border; a < size + border; ++a) {
-    if(vision.pixel(a, 0) != wallColor ||
-       vision.pixel(a, 1) == wallColor) {
-      wallDetect = false;
-      break;
+  { // Check for wall to the north
+    int top = 0 + border;
+    int spread = size / 5;
+    int wallDetect = 0;
+    for(int smp = 0; smp < 5; ++smp) {
+      if(abs(qGray(bits[top + (smp * spread)]) -
+             qGray(bits[top + (smp * spread) + ((border - 1) * vision.width())])) > contrast) {
+        printf("MAYBE A WALL!\n");
+        wallDetect++;
+      }
+    }
+    if(wallDetect >= 3) {
+      moveBoris(2, 0, false);
+      changeBehaviour();
+      return;
     }
   }
-  if(wallDetect) {
-    moveBoris(0, 1);
-    changeBehaviour();
-    return;
-  }
-
-  // Check for wall to the south
-  wallDetect = true;
-  wallColor = vision.pixel(border, vision.height() - 1);
-  for(int a = border; a < size + border; ++a) {
-    if(vision.pixel(a, vision.height() - 1) != wallColor ||
-       vision.pixel(a, vision.height() - 2) == wallColor) {
-      wallDetect = false;
-      break;
+  { // Check for wall to the south
+    int top = ((size + border) * vision.width()) + border;
+    int spread = size / 5;
+    int wallDetect = 0;
+    for(int smp = 0; smp < 5; ++smp) {
+      if(abs(qGray(bits[top + (smp * spread)]) -
+             qGray(bits[top + (smp * spread) + ((border - 1) * vision.width())])) > contrast) {
+        printf("MAYBE A WALL!\n");
+        wallDetect++;
+      }
+      //bits[top + (smp * spread)] = qRgb(255, 0, 0);
+      //bits[qGray(bits[top + (smp * spread) + ((border - 1) * vision.width())])] = qRgb(255, 0, 0);
     }
-  }
-  if(wallDetect) {
-    moveBoris(0, -1);
-    changeBehaviour();
-    return;
+    //vision.save("blah.png");
+    //exit(0);
+    if(wallDetect >= 3) {
+      moveBoris(2, 0, false);
+      changeBehaviour();
+      return;
+    }
   }
 }
 
