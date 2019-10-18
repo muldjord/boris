@@ -1,7 +1,6 @@
 title=Play piano
 category=Fun
 energy=-3
-fun=22
 hunger=1
 social=-8
 hygiene=-3
@@ -22,7 +21,7 @@ pitchLock
 10;75;0;0;;
 11;75;0;0;;
 12;75;0;0;;
-13;500;0;0;;label pause,var notes = 8,var notes += @8,var quicks = 2,var quicks += @4,var rand = @15,if rand = 1 goto c1 else if rand = 2 goto d1 else if rand = 3 goto e1 else if rand = 4 goto f1 else if rand = 5 goto g1 else if rand = 6 goto a1 else if rand = 7 goto b1 else if rand = 8 goto c2 else if rand = 9 goto d2 else if rand = 10 goto e2 else if rand = 11 goto f2 else if rand = 12 goto g2 else if rand = 13 goto a2 else if rand = 14 goto b2 else if rand = 15 goto c3
+13;500;0;0;;label pause,stat fun += 3,var notes = 8,var notes += @8,var quicks = 2,var quicks += @4,var rand = @15,if rand = 1 goto c1 else if rand = 2 goto d1 else if rand = 3 goto e1 else if rand = 4 goto f1 else if rand = 5 goto g1 else if rand = 6 goto a1 else if rand = 7 goto b1 else if rand = 8 goto c2 else if rand = 9 goto d2 else if rand = 10 goto e2 else if rand = 11 goto f2 else if rand = 12 goto g2 else if rand = 13 goto a2 else if rand = 14 goto b2 else if rand = 15 goto c3
 
 # c1
 20;75;0;0;data/sfx/piano_c1.wav;label c1,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sc1
