@@ -1,7 +1,7 @@
 title=Play 'Speed Race'
 category=Fun
 energy=-3
-fun=30
+fun=25
 hunger=1
 social=-8
 hygiene=-3
@@ -51,7 +51,7 @@ pitchLock
 21;75;0;0;data/sfx/overtaken.wav;label ll
 22;75;0;0;;var place -= 1
 23;75;0;0;;var segs -= 1
-24;75;0;0;;
+24;75;0;0;;stat fun -= 2
 25;75;0;0;;
 26;75;0;0;;
 27;75;0;0;;
@@ -71,7 +71,7 @@ pitchLock
 39;75;0;0;data/sfx/overtake.wav;label wl
 40;75;0;0;;var place += 1
 41;75;0;0;;var segs -= 1
-42;75;0;0;;
+42;75;0;0;;stat fun += 2
 43;75;0;0;;
 44;75;0;0;;
 45;75;0;0;;
@@ -91,7 +91,7 @@ pitchLock
 57;75;0;0;data/sfx/overtaken.wav;label lr
 58;75;0;0;;var place -= 1
 59;75;0;0;;var segs -= 1
-60;75;0;0;;
+60;75;0;0;;stat fun -= 2
 61;75;0;0;;
 62;75;0;0;;
 63;75;0;0;;
@@ -111,7 +111,7 @@ pitchLock
 75;75;0;0;data/sfx/overtake.wav;label wr
 76;75;0;0;;var place += 1
 77;75;0;0;;var segs -= 1
-78;75;0;0;;
+78;75;0;0;;stat fun += 2
 79;75;0;0;;
 80;75;0;0;;
 81;75;0;0;;
