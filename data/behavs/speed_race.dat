@@ -1,7 +1,6 @@
 title=Play 'Speed Race'
 category=Fun
 energy=-3
-fun=25
 hunger=1
 social=-8
 hygiene=-3
@@ -28,7 +27,7 @@ pitchLock
 # Speed up
 15;475;0;0;;
 16;450;0;0;data/sfx/engine_up.wav;
-17;400;0;0;;
+17;400;0;0;;stat fun += 2
 18;325;0;0;;
 19;225;0;0;;
 20;100;0;0;;
@@ -51,7 +50,7 @@ pitchLock
 21;75;0;0;data/sfx/overtaken.wav;label ll
 22;75;0;0;;var place -= 1
 23;75;0;0;;var segs -= 1
-24;75;0;0;;stat fun -= 2
+24;75;0;0;;stat fun -= 1
 25;75;0;0;;
 26;75;0;0;;
 27;75;0;0;;
@@ -91,7 +90,7 @@ pitchLock
 57;75;0;0;data/sfx/overtaken.wav;label lr
 58;75;0;0;;var place -= 1
 59;75;0;0;;var segs -= 1
-60;75;0;0;;stat fun -= 2
+60;75;0;0;;stat fun -= 1
 61;75;0;0;;
 62;75;0;0;;
 63;75;0;0;;
@@ -130,7 +129,7 @@ pitchLock
 # Right turn begin
 93;75;0;0;data/sfx/engine_into_turn.wav;label rtb
 94;75;0;0;;var segs -= 1
-95;75;0;0;;
+95;75;0;0;;stat fun += 2
 96;75;0;0;;
 97;75;0;0;;
 98;75;0;0;;
@@ -145,7 +144,7 @@ pitchLock
 
 # Right turn end
 105;75;0;0;data/sfx/engine_through_turn.wav;
-106;75;0;0;;
+106;75;0;0;;stat fun += 1
 107;75;0;0;;
 108;75;0;0;;
 109;75;0;0;;
@@ -154,7 +153,7 @@ pitchLock
 # Left turn begin
 111;75;0;0;data/sfx/engine_into_turn.wav;label ltb
 112;75;0;0;;var segs -= 1
-113;75;0;0;;
+113;75;0;0;;stat fun += 2
 114;75;0;0;;
 115;75;0;0;;
 116;75;0;0;;
@@ -169,7 +168,7 @@ pitchLock
 
 # Left turn end
 123;75;0;0;data/sfx/engine_through_turn.wav;
-124;75;0;0;;
+124;75;0;0;;stat fun += 1
 125;75;0;0;;
 126;75;0;0;;
 127;75;0;0;;
@@ -178,7 +177,7 @@ pitchLock
 # Tunnel
 129;75;0;0;data/sfx/tunnel.wav;label t
 130;75;0;0;;var segs -= 1
-131;75;0;0;;
+131;75;0;0;;stat fun += 2
 132;75;0;0;;
 133;75;0;0;;
 134;75;0;0;;
@@ -204,11 +203,11 @@ pitchLock
 152;2000;0;0;;if place > 0 goto win else goto loose
 
 # Win
-153;500;0;0;data/sfx/race_win.wav;label win
+153;500;0;0;data/sfx/race_win.wav;label win,stat fun += 3
 153;2500;0;0;data/sfx/win2.wav;goto end
 
 # Loose
-154;500;0;0;data/sfx/race_loose.wav;label loose
+154;500;0;0;data/sfx/race_loose.wav;label loose,stat fun -= 3
 154;2500;0;0;data/sfx/grumpy1.wav;goto end
 
 # Get back up

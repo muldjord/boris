@@ -1,7 +1,6 @@
 title=Play 'Pong'
 category=Fun
 energy=-3
-fun=30
 hunger=1
 social=-8
 hygiene=-3
@@ -66,22 +65,10 @@ doNotDisturb
 55;75;0;0;;goto bscore
 
 # Boris scores
-126;5;0;0;;label bscore,if cs = 0 goto csl0 else if cs = 1 goto csl1 else if cs = 2 goto csl2 else if cs = 3 goto csl3 else if cs = 4 goto csl4 else if cs = 5 goto csl5
-126;5;0;0;;label csl0,if bs = 0 goto win00 else if bs = 1 goto win10 else if bs = 2 goto win20 else if bs = 3 goto win30 else if bs = 4 goto win40 else if bs = 5 goto win50,
-126;5;0;0;;label csl1,if bs = 0 goto win01 else if bs = 1 goto win11 else if bs = 2 goto win21 else if bs = 3 goto win31 else if bs = 4 goto win41 else if bs = 5 goto win51
-126;5;0;0;;label csl2,if bs = 0 goto win02 else if bs = 1 goto win12 else if bs = 2 goto win22 else if bs = 3 goto win32 else if bs = 4 goto win42 else if bs = 5 goto win52
-126;5;0;0;;label csl3,if bs = 0 goto win03 else if bs = 1 goto win13 else if bs = 2 goto win23 else if bs = 3 goto win33 else if bs = 4 goto win43 else if bs = 5 goto win53
-126;5;0;0;;label csl4,if bs = 0 goto win04 else if bs = 1 goto win14 else if bs = 2 goto win24 else if bs = 3 goto win34 else if bs = 4 goto win44 else if bs = 5 goto win54
-126;5;0;0;;label csl5,if bs = 0 goto win05 else if bs = 1 goto win15 else if bs = 2 goto win25 else if bs = 3 goto win35 else if bs = 4 goto win45 else if bs = 5 goto win55
+126;5;0;0;;label bscore,stat fun += 6,if bs = 1 and cs = 0 goto win10 else if bs = 1 and cs = 1 goto win11 else if bs = 1 and cs = 2 goto win12 else if bs = 1 and cs = 3 goto win13 else if bs = 1 and cs = 4 goto win14 else if bs = 1 and cs = 5 goto win15 else if bs = 2 and cs = 0 goto win20 else if bs = 2 and cs = 1 goto win21 else if bs = 2 and cs = 2 goto win22 else if bs = 2 and cs = 3 goto win23 else if bs = 2 and cs = 4 goto win24 else if bs = 2 and cs = 5 goto win25 else if bs = 3 and cs = 0 goto win30 else if bs = 3 and cs = 1 goto win31 else if bs = 3 and cs = 2 goto win32 else if bs = 3 and cs = 3 goto win33 else if bs = 3 and cs = 4 goto win34 else if bs = 3 and cs = 5 goto win35 else if bs = 4 and cs = 0 goto win40 else if bs = 4 and cs = 1 goto win41 else if bs = 4 and cs = 2 goto win42 else if bs = 4 and cs = 3 goto win43 else if bs = 4 and cs = 4 goto win44 else if bs = 4 and cs = 5 goto win45 else if bs = 5 and cs = 0 goto win50 else if bs = 5 and cs = 1 goto win51 else if bs = 5 and cs = 2 goto win52 else if bs = 5 and cs = 3 goto win53 else if bs = 5 and cs = 4 goto win54
 
 # CPU scores
-126;5;0;0;;label cscore,if cs = 0 goto csw0 else if cs = 1 goto csw1 else if cs = 2 goto csw2 else if cs = 3 goto csw3 else if cs = 4 goto csw4 else if cs = 5 goto csw5
-126;5;0;0;;label csw0,if bs = 1 goto loose10 else if bs = 2 goto loose20 else if bs = 3 goto loose30 else if bs = 4 goto loose40 else if bs = 5 goto loose50
-126;5;0;0;;label csw1,if bs = 0 goto loose01 else if bs = 1 goto loose11 else if bs = 2 goto loose21 else if bs = 3 goto loose31 else if bs = 4 goto loose41 else if bs = 5 goto loose51
-126;5;0;0;;label csw2,if bs = 0 goto loose02 else if bs = 1 goto loose12 else if bs = 2 goto loose22 else if bs = 3 goto loose32 else if bs = 4 goto loose42 else if bs = 5 goto loose52
-126;5;0;0;;label csw3,if bs = 0 goto loose03 else if bs = 1 goto loose13 else if bs = 2 goto loose23 else if bs = 3 goto loose33 else if bs = 4 goto loose43 else if bs = 5 goto loose53
-126;5;0;0;;label csw4,if bs = 0 goto loose04 else if bs = 1 goto loose14 else if bs = 2 goto loose24 else if bs = 3 goto loose34 else if bs = 4 goto loose44 else if bs = 5 goto loose54
-126;5;0;0;;label csw5,if bs = 0 goto loose05 else if bs = 1 goto loose15 else if bs = 2 goto loose25 else if bs = 3 goto loose35 else if bs = 4 goto loose45 else if bs = 5 goto loose55
+126;5;0;0;;label cscore,stat fun -= 2,if bs = 0 and cs = 1 goto loose01 else if bs = 0 and cs = 2 goto loose02 else if bs = 0 and cs = 3 goto loose03 else if bs = 0 and cs = 4 goto loose04 else if bs = 0 and cs = 5 goto loose05 else if bs = 1 and cs = 1 goto loose11 else if bs = 1 and cs = 2 goto loose12 else if bs = 1 and cs = 3 goto loose13 else if bs = 1 and cs = 4 goto loose14 else if bs = 1 and cs = 5 goto loose15 else if bs = 2 and cs = 1 goto loose21 else if bs = 2 and cs = 2 goto loose22 else if bs = 2 and cs = 3 goto loose23 else if bs = 2 and cs = 4 goto loose24 else if bs = 2 and cs = 5 goto loose25 else if bs = 3 and cs = 1 goto loose31 else if bs = 3 and cs = 2 goto loose32 else if bs = 3 and cs = 3 goto loose33 else if bs = 3 and cs = 4 goto loose34 else if bs = 3 and cs = 5 goto loose35 else if bs = 4 and cs = 1 goto loose41 else if bs = 4 and cs = 2 goto loose42 else if bs = 4 and cs = 3 goto loose43 else if bs = 4 and cs = 4 goto loose44 else if bs = 4 and cs = 5 goto loose45
 
 # Show scores when loosing a round
 56;600;0;0;data/sfx/grumpy1.wav;label loose01,goto start
