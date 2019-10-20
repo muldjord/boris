@@ -21,21 +21,21 @@ doNotDisturb
 
 # Choose next path
 # From 10
-82;75;0;0;data/sfx/game_paddle.wav;label from10,var rand = @4,if rand = 1 goto 10up else if rand = 2 goto 10straight else if rand = 3 goto 10down else if rand = 4 goto 10to3
+82;75;0;0;data/sfx/game_paddle.wav;label from10,var rand = @5,if rand = 1 goto 10up else if rand = 2 goto 10straight else if rand = 3 goto 10down else if rand = 4 goto 10to3 else if rand = 5 goto 10win
 # From 9
-83;75;0;0;data/sfx/game_paddle.wav;label from9,var rand = @5,if rand = 1 goto 9up else if rand = 2 goto 9straight else if rand = 3 goto 9down else if rand = 4 goto 9to2 else if rand = 5 goto 9to4
+83;75;0;0;data/sfx/game_paddle.wav;label from9,var rand = @6,if rand = 1 goto 9up else if rand = 2 goto 9straight else if rand = 3 goto 9down else if rand = 4 goto 9to2 else if rand = 5 goto 9to4 else if rand = 6 goto 9win
 # From 8
-84;75;0;0;data/sfx/game_paddle.wav;label from8,var rand = @4,if rand = 1 goto 8up else if rand = 2 goto 8straight else if rand = 3 goto 8down else if rand = 4 goto 8to3
+84;75;0;0;data/sfx/game_paddle.wav;label from8,var rand = @5,if rand = 1 goto 8up else if rand = 2 goto 8straight else if rand = 3 goto 8down else if rand = 4 goto 8to3 else if rand = 5 goto 8win
 # From 2
-85;75;0;0;data/sfx/game_paddle.wav;label from2,var rand = @4,if rand = 1 goto 2up else if rand = 2 goto 2straight else if rand = 3 goto 2down else if rand = 4 goto 2to9
+85;75;0;0;data/sfx/game_paddle.wav;label from2,var rand = @5,if rand = 1 goto 2up else if rand = 2 goto 2straight else if rand = 3 goto 2down else if rand = 4 goto 2to9 else if rand = 5 goto 2loose
 # From 3
-86;75;0;0;data/sfx/game_paddle.wav;label from3,var rand = @5,if rand = 1 goto 3up else if rand = 2 goto 3straight else if rand = 3 goto 3down else if rand = 4 goto 3to10 else if rand = 5 goto 3to8
+86;75;0;0;data/sfx/game_paddle.wav;label from3,var rand = @6,if rand = 1 goto 3up else if rand = 2 goto 3straight else if rand = 3 goto 3down else if rand = 4 goto 3to10 else if rand = 5 goto 3to8 else if rand = 6 goto 3loose
 # From 4
-87;75;0;0;data/sfx/game_paddle.wav;label from4,var rand = @4,if rand = 1 goto 4up else if rand = 2 goto 4straight else if rand = 3 goto 4down else if rand = 4 goto 4to9
+87;75;0;0;data/sfx/game_paddle.wav;label from4,var rand = @5,if rand = 1 goto 4up else if rand = 2 goto 4straight else if rand = 3 goto 4down else if rand = 4 goto 4to9 else if rand = 5 goto 4loose
 
 # 10 up
 88;75;0;0;;label 10up
-89;75;0;0;data/sfx/game_wall.wav;if @4 = 1 goto 11win
+89;75;0;0;data/sfx/game_wall.wav;if @5 = 1 goto 11win
 90;75;0;0;;
 91;75;0;0;;
 92;75;0;0;;
@@ -71,7 +71,7 @@ doNotDisturb
 107;75;0;0;;
 108;75;0;0;;
 109;75;0;0;;
-110;75;0;0;data/sfx/game_wall.wav;label startright,if @4 = 1 goto 12win
+110;75;0;0;data/sfx/game_wall.wav;label startright,if @5 = 1 goto 12win
 111;75;0;0;;
 112;75;0;0;;
 113;75;0;0;;
@@ -93,7 +93,7 @@ doNotDisturb
 122;75;0;0;;
 121;75;0;0;;
 120;75;0;0;;
-119;75;0;0;data/sfx/game_wall.wav;if @4 = 1 goto 6win
+119;75;0;0;data/sfx/game_wall.wav;if @5 = 1 goto 6win
 118;75;0;0;;
 117;75;0;0;;
 116;75;0;0;;
@@ -123,7 +123,7 @@ doNotDisturb
 
 # 8 down
 141;75;0;0;;label 8down
-140;75;0;0;data/sfx/game_wall.wav;if @4 = 1 goto 7win
+140;75;0;0;data/sfx/game_wall.wav;if @5 = 1 goto 7win
 139;75;0;0;;
 138;75;0;0;;
 137;75;0;0;;
@@ -134,7 +134,7 @@ doNotDisturb
 
 # 2 up
 132;75;0;0;;label 2up
-131;75;0;0;data/sfx/game_wall.wav;if @4 = 1 goto 1loose
+131;75;0;0;data/sfx/game_wall.wav;if @5 = 1 goto 1loose
 130;75;0;0;;
 129;75;0;0;;
 128;75;0;0;;
@@ -170,7 +170,7 @@ doNotDisturb
 113;75;0;0;;
 112;75;0;0;;
 111;75;0;0;;
-110;75;0;0;data/sfx/game_wall.wav;label startleft,if @4 = 1 goto 12loose
+110;75;0;0;data/sfx/game_wall.wav;label startleft,if @5 = 1 goto 12loose
 109;75;0;0;;
 108;75;0;0;;
 107;75;0;0;;
@@ -192,7 +192,7 @@ doNotDisturb
 116;75;0;0;;
 117;75;0;0;;
 118;75;0;0;;
-119;75;0;0;data/sfx/game_wall.wav;if @4 = 1 goto 6loose
+119;75;0;0;data/sfx/game_wall.wav;if @5 = 1 goto 6loose
 120;75;0;0;;
 121;75;0;0;;
 122;75;0;0;;
@@ -222,7 +222,7 @@ doNotDisturb
   
 # 4 down
 97;75;0;0;;label 4down
-98;75;0;0;data/sfx/game_wall.wav;if @4 = 1 goto 5loose
+98;75;0;0;data/sfx/game_wall.wav;if @5 = 1 goto 5loose
 99;75;0;0;;
 100;75;0;0;;
 101;75;0;0;;
@@ -402,6 +402,89 @@ doNotDisturb
 235;75;0;0;;
 236;75;0;0;;
 237;75;0;0;;goto cscore
+
+# 10 win
+276;75;0;0;;label 10win
+277;75;0;0;;
+278;75;0;0;;
+279;75;0;0;;
+280;75;0;0;;
+281;75;0;0;;
+282;75;0;0;;
+283;75;0;0;;
+284;75;0;0;;
+285;75;0;0;;
+286;75;0;0;;
+287;75;0;0;;goto bscore
+
+# 9 win
+288;75;0;0;;label 9win
+289;75;0;0;;
+290;75;0;0;;
+291;75;0;0;;
+292;75;0;0;;
+293;75;0;0;;
+294;75;0;0;;
+295;75;0;0;;
+296;75;0;0;;
+297;75;0;0;;
+298;75;0;0;;goto bscore
+
+# 8 win
+299;75;0;0;;label 8win
+300;75;0;0;;
+301;75;0;0;;
+302;75;0;0;;
+303;75;0;0;;
+304;75;0;0;;
+305;75;0;0;;
+306;75;0;0;;
+307;75;0;0;;
+308;75;0;0;;
+309;75;0;0;;
+310;75;0;0;;goto bscore
+
+# 2 loose
+311;75;0;0;;label 2loose
+312;75;0;0;;
+313;75;0;0;;
+314;75;0;0;;
+315;75;0;0;;
+316;75;0;0;;
+317;75;0;0;;
+318;75;0;0;;
+319;75;0;0;;
+320;75;0;0;;
+321;75;0;0;;
+322;75;0;0;;goto cscore
+
+# 3 loose
+323;75;0;0;;label 3loose
+324;75;0;0;;
+325;75;0;0;;
+326;75;0;0;;
+327;75;0;0;;
+328;75;0;0;;
+329;75;0;0;;
+330;75;0;0;;
+331;75;0;0;;
+332;75;0;0;;
+333;75;0;0;;
+334;75;0;0;;goto cscore
+
+# 4 loose
+335;75;0;0;;label 4loose
+336;75;0;0;;
+337;75;0;0;;
+338;75;0;0;;
+339;75;0;0;;
+340;75;0;0;;
+341;75;0;0;;
+342;75;0;0;;
+343;75;0;0;;
+344;75;0;0;;
+345;75;0;0;;
+346;75;0;0;;goto cscore
 
 # Boris scores
 80;5;0;0;;label bscore,var bs += 1,stat fun += 6,if bs = 1 and cs = 0 goto win10 else if bs = 1 and cs = 1 goto win11 else if bs = 1 and cs = 2 goto win12 else if bs = 1 and cs = 3 goto win13 else if bs = 1 and cs = 4 goto win14 else if bs = 1 and cs = 5 goto win15 else if bs = 2 and cs = 0 goto win20 else if bs = 2 and cs = 1 goto win21 else if bs = 2 and cs = 2 goto win22 else if bs = 2 and cs = 3 goto win23 else if bs = 2 and cs = 4 goto win24 else if bs = 2 and cs = 5 goto win25 else if bs = 3 and cs = 0 goto win30 else if bs = 3 and cs = 1 goto win31 else if bs = 3 and cs = 2 goto win32 else if bs = 3 and cs = 3 goto win33 else if bs = 3 and cs = 4 goto win34 else if bs = 3 and cs = 5 goto win35 else if bs = 4 and cs = 0 goto win40 else if bs = 4 and cs = 1 goto win41 else if bs = 4 and cs = 2 goto win42 else if bs = 4 and cs = 3 goto win43 else if bs = 4 and cs = 4 goto win44 else if bs = 4 and cs = 5 goto win45 else if bs = 5 and cs = 0 goto win50 else if bs = 5 and cs = 1 goto win51 else if bs = 5 and cs = 2 goto win52 else if bs = 5 and cs = 3 goto win53 else if bs = 5 and cs = 4 goto win54
