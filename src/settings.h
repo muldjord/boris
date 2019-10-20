@@ -45,6 +45,9 @@ struct Settings {
   bool showWelcome = true;
   bool statLogging = false;
   int desktopWidth = 1920;
+
+  // If set to true the vision processing will take place, wall detection and such
+  bool vision = false;
   
   // Asset folders
   QString soundsPath = "data/sfx";
