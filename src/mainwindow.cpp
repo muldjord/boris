@@ -113,6 +113,11 @@ MainWindow::MainWindow()
   // For use with sound panning in relation to Boris location
   settings.desktopWidth = QApplication::desktop()->width();
 
+  if(!iniSettings.contains("vision")) {
+    iniSettings.setValue("vision", false);
+  }
+  settings.vision = iniSettings.value("vision").toBool();
+
   if(!iniSettings.contains("clones")) {
     iniSettings.setValue("clones", 2);
   }
