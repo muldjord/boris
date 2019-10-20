@@ -21,21 +21,21 @@ doNotDisturb
 
 # Choose next path
 # From 10
-82;75;0;0;data/sfx/game_wall.wav;label from10,var rand = @3,if rand = 1 goto 10up else if rand = 2 goto 10straight else if rand = 3 goto 10down
+82;75;0;0;data/sfx/game_paddle.wav;label from10,var rand = @4,if rand = 1 goto 10up else if rand = 2 goto 10straight else if rand = 3 goto 10down else if rand = 4 goto 10to3
 # From 9
-83;75;0;0;data/sfx/game_wall.wav;label from9,var rand = @3,if rand = 1 goto 9up else if rand = 2 goto 9straight else if rand = 3 goto 9down
+83;75;0;0;data/sfx/game_paddle.wav;label from9,var rand = @5,if rand = 1 goto 9up else if rand = 2 goto 9straight else if rand = 3 goto 9down else if rand = 4 goto 9to2 else if rand = 5 goto 9to4
 # From 8
-84;75;0;0;data/sfx/game_wall.wav;label from8,var rand = @3,if rand = 1 goto 8up else if rand = 2 goto 8straight else if rand = 3 goto 8down
+84;75;0;0;data/sfx/game_paddle.wav;label from8,var rand = @4,if rand = 1 goto 8up else if rand = 2 goto 8straight else if rand = 3 goto 8down else if rand = 4 goto 8to3
 # From 2
-85;75;0;0;data/sfx/game_wall.wav;label from2,var rand = @3,if rand = 1 goto 2up else if rand = 2 goto 2straight else if rand = 3 goto 2down
+85;75;0;0;data/sfx/game_paddle.wav;label from2,var rand = @4,if rand = 1 goto 2up else if rand = 2 goto 2straight else if rand = 3 goto 2down else if rand = 4 goto 2to9
 # From 3
-86;75;0;0;data/sfx/game_wall.wav;label from3,var rand = @3,if rand = 1 goto 3up else if rand = 2 goto 3straight else if rand = 3 goto 3down
+86;75;0;0;data/sfx/game_paddle.wav;label from3,var rand = @5,if rand = 1 goto 3up else if rand = 2 goto 3straight else if rand = 3 goto 3down else if rand = 4 goto 3to10 else if rand = 5 goto 3to8
 # From 4
-87;75;0;0;data/sfx/game_wall.wav;label from4,var rand = @3,if rand = 1 goto 4up else if rand = 2 goto 4straight else if rand = 3 goto 4down
+87;75;0;0;data/sfx/game_paddle.wav;label from4,var rand = @4,if rand = 1 goto 4up else if rand = 2 goto 4straight else if rand = 3 goto 4down else if rand = 4 goto 4to9
 
 # 10 up
 88;75;0;0;;label 10up
-89;75;0;0;;if @5 = 1 goto 11win
+89;75;0;0;data/sfx/game_wall.wav;if @4 = 1 goto 11win
 90;75;0;0;;
 91;75;0;0;;
 92;75;0;0;;
@@ -63,7 +63,7 @@ doNotDisturb
 101;75;0;0;;
 100;75;0;0;;
 99;75;0;0;;
-98;75;0;0;;
+98;75;0;0;data/sfx/game_wall.wav;
 97;75;0;0;;goto from4
 
 # 9 up
@@ -71,7 +71,7 @@ doNotDisturb
 107;75;0;0;;
 108;75;0;0;;
 109;75;0;0;;
-110;75;0;0;;label startright,if @5 = 1 goto 12win
+110;75;0;0;data/sfx/game_wall.wav;label startright,if @4 = 1 goto 12win
 111;75;0;0;;
 112;75;0;0;;
 113;75;0;0;;
@@ -93,7 +93,7 @@ doNotDisturb
 122;75;0;0;;
 121;75;0;0;;
 120;75;0;0;;
-119;75;0;0;;if @5 = 1 goto 6win
+119;75;0;0;data/sfx/game_wall.wav;if @4 = 1 goto 6win
 118;75;0;0;;
 117;75;0;0;;
 116;75;0;0;;
@@ -107,7 +107,7 @@ doNotDisturb
 128;75;0;0;;
 129;75;0;0;;
 130;75;0;0;;
-131;75;0;0;;
+131;75;0;0;data/sfx/game_wall.wav;
 132;75;0;0;;goto from2
 
 # 8 straight
@@ -123,7 +123,7 @@ doNotDisturb
 
 # 8 down
 141;75;0;0;;label 8down
-140;75;0;0;;if @5 = 1 goto 7win
+140;75;0;0;data/sfx/game_wall.wav;if @4 = 1 goto 7win
 139;75;0;0;;
 138;75;0;0;;
 137;75;0;0;;
@@ -134,7 +134,7 @@ doNotDisturb
 
 # 2 up
 132;75;0;0;;label 2up
-131;75;0;0;;if @5 = 1 goto 1loose
+131;75;0;0;data/sfx/game_wall.wav;if @4 = 1 goto 1loose
 130;75;0;0;;
 129;75;0;0;;
 128;75;0;0;;
@@ -162,7 +162,7 @@ doNotDisturb
 137;75;0;0;;
 138;75;0;0;;
 139;75;0;0;;
-140;75;0;0;;
+140;75;0;0;data/sfx/game_wall.wav;
 141;75;0;0;;goto from8
 
 # 3 up
@@ -170,7 +170,7 @@ doNotDisturb
 113;75;0;0;;
 112;75;0;0;;
 111;75;0;0;;
-110;75;0;0;;label startleft,if @5 = 1 goto 12loose
+110;75;0;0;data/sfx/game_wall.wav;label startleft,if @4 = 1 goto 12loose
 109;75;0;0;;
 108;75;0;0;;
 107;75;0;0;;
@@ -192,7 +192,7 @@ doNotDisturb
 116;75;0;0;;
 117;75;0;0;;
 118;75;0;0;;
-119;75;0;0;;if @5 = 1 goto 6loose
+119;75;0;0;data/sfx/game_wall.wav;if @4 = 1 goto 6loose
 120;75;0;0;;
 121;75;0;0;;
 122;75;0;0;;
@@ -206,7 +206,7 @@ doNotDisturb
 92;75;0;0;;
 91;75;0;0;;
 90;75;0;0;;
-89;75;0;0;;
+89;75;0;0;data/sfx/game_wall.wav;
 88;75;0;0;;goto from10
 
 # 4 straight
@@ -222,7 +222,7 @@ doNotDisturb
   
 # 4 down
 97;75;0;0;;label 4down
-98;75;0;0;;if @5 = 1 goto 5loose
+98;75;0;0;data/sfx/game_wall.wav;if @4 = 1 goto 5loose
 99;75;0;0;;
 100;75;0;0;;
 101;75;0;0;;
@@ -230,6 +230,94 @@ doNotDisturb
 103;75;0;0;;
 104;75;0;0;;
 105;75;0;0;;goto from10
+
+# 10 to 3
+239;75;0;0;;label 10to3
+240;75;0;0;;
+241;75;0;0;;
+242;75;0;0;;
+243;75;0;0;;
+244;75;0;0;;
+245;75;0;0;;
+246;75;0;0;;
+247;75;0;0;;goto from3
+
+# 9 to 2
+248;75;0;0;;label 9to2
+249;75;0;0;;
+250;75;0;0;;
+251;75;0;0;;
+252;75;0;0;;
+253;75;0;0;;
+254;75;0;0;;
+255;75;0;0;;
+256;75;0;0;;goto from2
+
+# 9 to 4
+257;75;0;0;;label 9to4
+258;75;0;0;;
+259;75;0;0;;
+260;75;0;0;;
+261;75;0;0;;
+262;75;0;0;;
+263;75;0;0;;
+264;75;0;0;;
+265;75;0;0;;goto from4
+
+# 8 to 3
+266;75;0;0;;label 8to3
+267;75;0;0;;
+268;75;0;0;;
+269;75;0;0;;
+270;75;0;0;;
+271;75;0;0;;
+272;75;0;0;;
+273;75;0;0;;
+274;75;0;0;;goto from3
+
+# 3 to 10
+247;75;0;0;;label 3to10
+246;75;0;0;;
+245;75;0;0;;
+244;75;0;0;;
+243;75;0;0;;
+242;75;0;0;;
+241;75;0;0;;
+240;75;0;0;;
+239;75;0;0;;goto from10
+
+# 2 to 9
+256;75;0;0;;label 2to9
+255;75;0;0;;
+254;75;0;0;;
+253;75;0;0;;
+252;75;0;0;;
+251;75;0;0;;
+250;75;0;0;;
+249;75;0;0;;
+248;75;0;0;;goto from9
+
+# 4 to 9
+265;75;0;0;;label 4to9
+264;75;0;0;;
+263;75;0;0;;
+262;75;0;0;;
+261;75;0;0;;
+260;75;0;0;;
+259;75;0;0;;
+258;75;0;0;;
+257;75;0;0;;goto from9
+
+# 3 to 8
+274;75;0;0;;label 3to8
+273;75;0;0;;
+272;75;0;0;;
+271;75;0;0;;
+270;75;0;0;;
+269;75;0;0;;
+268;75;0;0;;
+267;75;0;0;;
+266;75;0;0;;goto from8
 
 # 11 win
 170;75;0;0;;label 11win
