@@ -739,7 +739,7 @@ void Boris::earthquake()
   if(!falling && !grabbed) {
     changeBehaviour("_falling", 200000);
     falling = true;
-    vVel = ((qrand() % 15) * -1) - 5;
+    vVel = ((qrand() % 12) * -1) - 5;
     hVel = qrand() % 20 - 11;
     alt = this->pos().y();
   }

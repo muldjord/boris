@@ -62,7 +62,7 @@ public:
   void collide(Boris *b);
   Boris *borisFriend;
   int getHygiene();
-  void moveBoris(int dX, int dY);
+  void moveBoris(int dX, int dY, const bool &vision = true);
   void changeBehaviour(QString behav = "", int time = 0);
   int getCurBehav();
   int size = 64;
