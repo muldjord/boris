@@ -26,7 +26,7 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
-#### Version 2.1.0 (In progress, unreleased):
+#### Version 2.5.0 (In progress, unreleased):
 * Boris is now fully scriptable allowing for random outcomes of behaviours
 * Behaviours now allows comments inside frame area in .dat files
 * Boris now gets hyper when drinking coffee
@@ -39,11 +39,12 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 * Added wind data to tray menu
 * Boris will now get sad when encountering a deceased friend
 * Added dynamic shadow based on the current Boris sprite size and location
-* Improved umbrella behaviour
-* Fixed missing pixels in gift wrapping sprite
 * Switched to SFML for sound
 * Added slight pitch randomness to all sounds
 * All sounds are now panned in stereo depending on Boris' location
+* Improved many behaviours
+* Added scripting to many existing behaviours for more random outcome
+* Added a bunch of new dynamic behaviours
 
 #### Version 2.0.2 (4th December 2018):
 * Added 'allowFlip' flag to behaviours giving those a 50% of being flipped horizontally
