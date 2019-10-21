@@ -1033,7 +1033,7 @@ void Boris::collide(Boris *b)
       changeBehaviour("_casual_wave_left_down", (qrand() % 2000) + 1500);
     }
   }
-  QTimer::singleShot(qrand() % 7000 + 5000, this, &Boris::readyForFriend);
+  QTimer::singleShot((qrand() % 5000) + 15000, this, &Boris::readyForFriend);
 }
 
 void Boris::processVision()
@@ -1288,7 +1288,7 @@ void Boris::updateBoris()
     size = (qrand() % (256 - 32)) + 32; // Make him at least 32
   }
   resetTransform();
-  setFixedSize(size, size + size / 2.0);
+  setFixedSize(size, size + ((qreal)size / 2.0));
   scale((qreal)size / 32.0, (qreal)size / 32.0);
 
   // Set new independence value
