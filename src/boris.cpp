@@ -501,16 +501,18 @@ void Boris::nextFrame()
   if(animTimer.interval() <= 5)
     animTimer.setInterval(5);
 
-  if(behaviours.at(curBehav).frames.at(curFrame).dx != 0 || behaviours.at(curBehav).frames.at(curFrame).dy != 0) {
-    moveBoris(behaviours.at(curBehav).frames.at(curFrame).dx * (flipFrames?-1:1),
-              behaviours.at(curBehav).frames.at(curFrame).dy);
-}
+  if(behaviours.at(curBehav).frames.at(curFrame).dx != 0 ||
+     behaviours.at(curBehav).frames.at(curFrame).dy != 0) {
+    moveBoris(behaviours.at(curBehav).frames.at(curFrame).dx,
+              behaviours.at(curBehav).frames.at(curFrame).dy,
+              flipFrames);
+  }
 
   runScript();
   animTimer.start();
 }
 
-void Boris::moveBoris(int dX, int dY, const bool &vision)
+void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
 {
   sanityCheck();
   
@@ -519,23 +521,24 @@ void Boris::moveBoris(int dX, int dY, const bool &vision)
   int minY = 0 - (size / 2);
   int maxY = QApplication::desktop()->height() - height();
 
-  if(dX == 666) { // If dX == 666 we are meant to move Boris randomly
-    dX = qrand() % maxX - this->pos().x();
+  if(dX == 666) {
+    dX = qrand() % maxX;
   } else {
-    // Multiply delta by the factor of Boris' current size
-    dX *= ceil((double)size / 32.0);
+    if(flipped) {
+      dX *= -1;
+    }
+    dX = this->pos().x() + (dX * ceil((double)size / 32.0));
   }
-  if(dY == 666) { // If dX == 666 we are meant to move Boris randomly
-    dY = qrand() % maxY - this->pos().y();
+  if(dY == 666) {
+    dY = qrand() % maxY;
   } else {
-    // Multiply delta by the factor of Boris' current size
-    dY *= ceil((double)size / 32.0);
+    dY = this->pos().y() + (dY * ceil((double)size / 32.0));
   }
-
-  // Always move Boris, even outside borders. sanitycheck() will rectify later.
-  move(this->pos().x() + dX, this->pos().y() + dY);
+  
+  move(dX, dY);
   stats->move(this->pos().x() + (size / 2) - (stats->width() / 2),
               this->pos().y() - stats->height() + (size / 3));
+  // Move stats below Boris when he's at the top of the screen
   if(stats->pos().y() < 0) {
     stats->move(this->pos().x() + (size / 2) - (stats->width() / 2),
                 this->pos().y() + size + size / 3);
