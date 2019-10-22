@@ -28,6 +28,8 @@
 #ifndef _CHATTER_H
 #define _CHATTER_H
 
+#include "settings.h"
+
 #include <QWidget>
 #include <QLabel>
 #include <QMouseEvent>
@@ -37,7 +39,7 @@ class Chatter : public QWidget
   Q_OBJECT;
 
 public:
-  Chatter(QWidget *parent);
+  Chatter(Settings *settings, QWidget *parent);
   ~Chatter();
   QPair<QString, int> initChatter(const int x, const int y, const int &borisSize);
   void moveChatter(const int x, const int y, const int &borisSize);
@@ -46,6 +48,8 @@ protected:
   void mousePressEvent(QMouseEvent *event);
   
 private:
+  Settings *settings;
+
   QLabel *chatterLabel;
   QLabel *bubbleTip;
   int currentLine = 0;

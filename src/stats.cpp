@@ -26,16 +26,15 @@
  */
 
 #include "stats.h"
-#include "settings.h"
 
 #include <stdio.h>
 #include <math.h>
 #include <QUuid>
 
-extern Settings settings;
-
-Stats::Stats(int hyper, int health, int energy, int hunger, int bladder, int social, int fun, int hygiene, QWidget *parent) : QGraphicsView(parent)
+Stats::Stats(Settings *settings, int hyper, int health, int energy, int hunger, int bladder, int social, int fun, int hygiene, QWidget *parent) : QGraphicsView(parent)
 {
+  this->settings = settings;
+
   this->hyper = hyper;
   this->health = health;
   this->energy = energy;
@@ -67,7 +66,7 @@ Stats::Stats(int hyper, int health, int energy, int hunger, int bladder, int soc
   flashes = 0;
   underMouse = false;
   
-  if(settings.statLogging) {
+  if(settings->statLogging) {
     statLog.setFileName("stats_" + QUuid::createUuid().toString().replace("{", "").replace("}", "") + ".csv");
     if(statLog.open(QIODevice::WriteOnly)) {
       statLog.write("hyper;health;energy;hunger;bladder;hygiene;social;fun\n");
@@ -270,7 +269,7 @@ void Stats::updateStats()
     flashes--;
   } else {
     flashIcon->setVisible(false);
-    if(settings.stats == STATS_CRITICAL && !underMouse) {
+    if(settings->stats == STATS_CRITICAL && !underMouse) {
       this->hide();
     }
   }
@@ -291,7 +290,7 @@ void Stats::flashStat(QString stat)
   }
   flashes = 15;
   flashIcon->setVisible(true);
-  if(settings.stats == STATS_CRITICAL) {
+  if(settings->stats == STATS_CRITICAL) {
     this->show();
   }
 }

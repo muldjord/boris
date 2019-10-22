@@ -26,7 +26,6 @@
  */
 
 #include "loader.h"
-#include "settings.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -35,8 +34,6 @@
 #include <QDir>
 #include <QTextStream>
 #include <QDesktopWidget>
-
-extern Settings settings;
 
 qint64 Loader::getAssetsSize(const QDir &dir)
 {
@@ -71,7 +68,8 @@ bool Loader::loadSoundFxs(const QString &dataDir,
   return noErrors;
 }
 
-bool Loader::loadBehaviours(const QString &dataDir,
+bool Loader::loadBehaviours(const Settings &settings,
+                            const QString &dataDir,
                             QList<Behaviour> &behaviours,
                             QMap<QString, sf::SoundBuffer> &soundFxs,
                             QProgressBar *progressBar)
@@ -91,7 +89,7 @@ bool Loader::loadBehaviours(const QString &dataDir,
       // Set seasonal color of Boris outfit
       // Default outfit is christmas, so no change for month 12
       QImage rawImage(info.absoluteFilePath());
-      setClothesColor(rawImage);
+      setClothesColor(settings, rawImage);
       QPixmap t = QPixmap::fromImage(rawImage);
       if(t.width() % 32 != 0) {
         qInfo("  Sprite does not adhere to 32 pixel width per sprite, can't load...\n");
@@ -215,7 +213,7 @@ bool Loader::loadBehaviours(const QString &dataDir,
   return true;
 }
 
-void Loader::setClothesColor(QImage &image)
+void Loader::setClothesColor(const Settings &settings, QImage &image)
 {
   if(settings.lemmyMode) {
     image.setColor(1, QColor(255, 0, 0).rgb());

@@ -28,7 +28,6 @@
 #include "mainwindow.h"
 #include "about.h"
 #include "loader.h"
-#include "settings.h"
 
 #include "SFML/Audio.hpp"
 
@@ -46,7 +45,6 @@
 
 QList<Behaviour> behaviours;
 QList<Behaviour> weathers;
-Settings settings;
 
 MainWindow::MainWindow()
 {
@@ -196,7 +194,7 @@ MainWindow::MainWindow()
   createTrayIcon();
   trayIcon->show();
 
-  netComm = new NetComm();
+  netComm = new NetComm(&settings);
   connect(netComm, &NetComm::weatherUpdated, this, &MainWindow::updateWeather);
 
   loadWidget = new QWidget;
@@ -261,20 +259,20 @@ void MainWindow::loadAssets()
     qInfo("Error when loading some sounds, please check your wav files\n");
   }
 
-  if(Loader::loadBehaviours(settings.behavsPath, behaviours, soundFxs, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.behavsPath, behaviours, soundFxs, progressBar)) {
     qInfo("Behaviours loaded ok... :)\n");
   } else {
     qInfo("Error when loading some behaviours, please check your png and dat files\n");
   }
   
-  if(Loader::loadBehaviours(settings.weathersPath, weathers, soundFxs, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.weathersPath, weathers, soundFxs, progressBar)) {
     qInfo("Weather types loaded ok... :)\n");
   } else {
     qInfo("Error when loading some weather types, please check your png and dat files\n");
   }
 
   if(settings.showWelcome) {
-    About about;
+    About about(&settings);
     about.exec();
   }
 
@@ -295,7 +293,8 @@ void MainWindow::addBoris(int clones)
 {
   qInfo("Spawning %d clone(s)\n", clones);
   while(clones--) {
-    borises << new Boris;
+    borises << new Boris(&settings);
+    connect(this, &MainWindow::updateBoris, borises.last(), &Boris::updateBoris);
     connect(earthquakeAction, &QAction::triggered, borises.last(), &Boris::earthquake);
     connect(teleportAction, &QAction::triggered, borises.last(), &Boris::teleport);
     connect(weatherAction, &QAction::triggered, borises.last(), &Boris::triggerWeather);
@@ -347,7 +346,7 @@ void MainWindow::createTrayIcon()
   trayIconMenu->addAction(quitAction);
 
   QImage iconImage(":icon.png");
-  Loader::setClothesColor(iconImage);
+  Loader::setClothesColor(settings, iconImage);
   QIcon icon(QPixmap::fromImage(iconImage));
   trayIcon->setToolTip("Boris");
   trayIcon->setIcon(icon);
@@ -356,11 +355,10 @@ void MainWindow::createTrayIcon()
 
 void MainWindow::aboutBox()
 {
-  About about;
+  About about(&settings);
   about.exec();
-  for(auto &boris: borises) {
-    boris->updateBoris();
-  }
+  emit updateBoris();
+
   int newClones = settings.clones;
   if(newClones == 0) {
     newClones = (qrand() % 99) + 1;

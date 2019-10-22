@@ -26,7 +26,6 @@
  */
 
 #include "chatter.h"
-#include "settings.h"
 
 #include <stdio.h>
 #include <QHBoxLayout>
@@ -34,10 +33,10 @@
 #include <QFile>
 #include <QDesktopServices>
 
-extern Settings settings;
-
-Chatter::Chatter(QWidget *parent) : QWidget(parent)
+Chatter::Chatter(Settings *settings, QWidget *parent) : QWidget(parent)
 {
+  this->settings = settings;
+
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
   setStyleSheet("border-image: url(:bubble.png) 12 12 24 12;"
@@ -68,16 +67,16 @@ Chatter::~Chatter()
 QPair<QString, int> Chatter::initChatter(const int x, const int y, const int &borisSize)
 {
   QString chatType = "_complain";
-  if(settings.chatLines.isEmpty()) {
+  if(settings->chatLines.isEmpty()) {
     chatterLabel->setText("I'm speechless...");
   } else {
-    currentLine = qrand() % settings.chatLines.count();
-    chatType = settings.chatLines.at(currentLine).type;
-    chatterLabel->setText(settings.chatLines.at(currentLine).text);
+    currentLine = qrand() % settings->chatLines.count();
+    chatType = settings->chatLines.at(currentLine).type;
+    chatterLabel->setText(settings->chatLines.at(currentLine).text);
   }
   int duration = 2000 + (chatterLabel->text().length() * 120);
 
-  if(settings.chatter) {
+  if(settings->chatter) {
     show();
     move((x + (borisSize / 8 * 7)) - (width() / 2), y + (borisSize / 10 * 9) - height());
     bubbleTip->move(width() / 2, height() - 27);
@@ -96,8 +95,8 @@ void Chatter::moveChatter(const int x, const int y, const int &borisSize)
 
 void Chatter::mousePressEvent(QMouseEvent *event)
 {
-  if(event->button() == Qt::LeftButton && settings.chatLines.at(currentLine).url.isValid()) {
-    QDesktopServices::openUrl(settings.chatLines.at(currentLine).url);
+  if(event->button() == Qt::LeftButton && settings->chatLines.at(currentLine).url.isValid()) {
+    QDesktopServices::openUrl(settings->chatLines.at(currentLine).url);
   }
   event->ignore();
 }

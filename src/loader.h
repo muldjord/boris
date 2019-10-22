@@ -44,10 +44,12 @@ public:
   static bool loadSoundFxs(const QString &dataDir,
                            QMap<QString, sf::SoundBuffer> &soundFxs,
                            QProgressBar *progressBar);
-  static bool loadBehaviours(const QString &dataDir, QList<Behaviour> &behaviours,
+  static bool loadBehaviours(const Settings &settings,
+                             const QString &dataDir,
+                             QList<Behaviour> &behaviours,
                              QMap<QString, sf::SoundBuffer> &soundFxs,
                              QProgressBar *progressBar);
-  static void setClothesColor(QImage &image);
+  static void setClothesColor(const Settings &settings, QImage &image);
 };
 
 #endif // _LOADER_H

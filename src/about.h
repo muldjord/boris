@@ -27,6 +27,8 @@
 #ifndef _ABOUT_H
 #define _ABOUT_H
 
+#include "settings.h"
+
 #include <QDialog>
 #include <QLineEdit>
 #include <QCheckBox>
@@ -37,7 +39,7 @@ class About : public QDialog
 {
   Q_OBJECT;
 public:
-  About();
+  About(Settings *settings);
   ~About();
 
 private slots:
@@ -45,6 +47,8 @@ private slots:
   void saveAll();
 
 private:
+  Settings *settings;
+  
   QLineEdit *clonesLineEdit;
   QLineEdit *sizeLineEdit;
   QLineEdit *weatherLineEdit;

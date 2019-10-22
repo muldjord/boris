@@ -28,6 +28,8 @@
 #ifndef _STATS_H
 #define _STATS_H
 
+#include "settings.h"
+
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
@@ -38,7 +40,7 @@ class Stats : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Stats(int hyper, int health, int energy, int hunger, int bladder, int social, int fun, int hygiene, QWidget *parent);
+  Stats(Settings *settings, int hyper, int health, int energy, int hunger, int bladder, int social, int fun, int hygiene, QWidget *parent);
   ~Stats();
   void flashStat(QString stat = "none");
   int getHyper();
@@ -64,6 +66,8 @@ private slots:
   void logStats();
 
 private:
+  Settings *settings;
+
   int flashes;
   QImage image;
   QGraphicsPixmapItem *sprite;
