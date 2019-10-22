@@ -1287,9 +1287,10 @@ void Boris::updateBoris()
   if(size == 0) {
     size = (qrand() % (256 - 32)) + 32; // Make him at least 32
   }
+  setFixedSize(size, size + (size / 2.0));
+  resetMatrix();
   resetTransform();
-  setFixedSize(size, size + ((qreal)size / 2.0));
-  scale((qreal)size / 32.0, (qreal)size / 32.0);
+  scale(size / 32.0, size / 32.0);
 
   // Set new independence value
   independence = settings->independence;
