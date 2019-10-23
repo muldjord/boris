@@ -27,6 +27,8 @@
 #ifndef _NETCOMM_H
 #define _NETCOMM_H
 
+#include "settings.h"
+
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QTimer>
@@ -35,7 +37,7 @@ class NetComm : public QNetworkAccessManager
 {
   Q_OBJECT;
 public:
-  NetComm();
+  NetComm(Settings *settings);
   ~NetComm();
 
 public slots:
@@ -49,6 +51,8 @@ private slots:
   void netReply(QNetworkReply *r);
   
 private:
+  Settings *settings;
+  
   QTimer netTimer;
   QNetworkRequest weatherRequest;
   QNetworkRequest feedRequest;

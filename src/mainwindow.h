@@ -31,6 +31,7 @@
 #include "boris.h"
 #include "behaviour.h"
 #include "netcomm.h"
+#include "settings.h"
 
 #include <QObject>
 #include <QSystemTrayIcon>
@@ -59,7 +60,11 @@ private slots:
                  const float &panning,
                  const float &pitch);
 
+signals:
+  void updateBoris();
+
 private:
+  Settings settings;
   QWidget *loadWidget;
   QProgressBar *progressBar;
   NetComm *netComm;

@@ -36,7 +36,7 @@ doNotDisturb
 28;75;0;0;;
 29;75;0;0;;
 30;1200;0;0;;label heal
-31;75;0;0;;stat health += 5,stat hygiene -= 1
+31;75;0;0;;stat health += 10,stat hygiene -= 1
 30;75;0;0;;
 31;75;0;0;;
 30;2000;0;0;;

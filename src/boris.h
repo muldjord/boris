@@ -30,6 +30,7 @@
 #include "behaviour.h"
 #include "stats.h"
 #include "chatter.h"
+#include "settings.h"
 
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
@@ -55,14 +56,13 @@ class Boris : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Boris();
+  Boris(Settings *settings);
   ~Boris();
   QTimer behavTimer;
-  void updateBoris();
   void collide(Boris *b);
   Boris *borisFriend;
   int getHygiene();
-  void moveBoris(int dX, int dY, const bool &vision = true);
+  void moveBoris(int dX, int dY, const bool &flipped = false, const bool &vision = true);
   void changeBehaviour(QString behav = "", int time = 0);
   int getCurBehav();
   int size = 64;
@@ -83,6 +83,7 @@ public slots:
   void teleport();
   void triggerWeather();
   void nextBehaviour();
+  void updateBoris();
   
 protected:
   void mouseMoveEvent(QMouseEvent* event);
@@ -108,6 +109,8 @@ private slots:
   void readyForFriend();
   
 private:
+  Settings *settings;
+
   bool falling;
   bool grabbed;
   void showWeather(QString &behav);
