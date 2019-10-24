@@ -1,6 +1,7 @@
 fun=-10
 social=5
 bladder=10
+oneShot
 #Frames
 0;50;0;0;data/sfx/grabbed.wav;
 0;50;0;0;;label still,if xvel > -3 and xvel < 3 goto still,if xvel <= -3 and xvel > -6 goto velm3,if xvel <= -6 and xvel > -9 goto velm6,if xvel <= -9 goto velm9,if xvel >= 3 and xvel < 6 goto velp3,if xvel >= 6 and xvel < 9 goto velp6,if xvel >= 9 goto velp9
