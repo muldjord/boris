@@ -17,8 +17,8 @@ The line `#Frames` must be there so the software knows when the frame definition
 
 ### Options and flags
 Options or flags, one per line of any of the following:
-* title=<STRING>: The title used by the behaviour when right-clicking Boris
-* category=<STRING>: The category this behaviour is categorically categorized into:
+* title=&lt;STRING&gt;: The title used by the behaviour when right-clicking Boris
+* category=&lt;STRING&gt;: The category this behaviour is categorically categorized into:
   * Health: Used for behaviours that heal Boris. He will not choose these on his own
   * Energy: Boris will choose from this category when he is low on energy / sleepy
   * Hunger: Boris will choose from this category when he is hungry
@@ -28,14 +28,14 @@ Options or flags, one per line of any of the following:
   * Fun: Boris will choose from this category when he is feeling depressed
   * Movement: These are only used entirely at random when Boris is feeling well and satisfied
   * Idle: When Boris is feeling well and satisfied he will often choose from this category when idling about
-* health=<INTEGER>: The amount of Boris' health this behaviour will increase or decrease when starting the behaviour
-* energy=<INTEGER>: The amount of Boris' energy this behaviour will increase or decrease when starting the behaviour
-* hyper=<INTEGER>: The amount of Boris' hyperactivity level this behaviour will increase or decrease when starting the behaviour
-* hunger=<INTEGER>: The amount of Boris' hunger this behaviour will increase or decrease when starting the behaviour
-* bladder=<INTEGER>: The amount of Boris' need for a toilet this behaviour will increase or decrease when starting the behaviour
-* social=<INTEGER>: The amount of Boris' social needs this behaviour will increase or decrease when starting the behaviour
-* fun=<INTEGER>: The amount of Boris' fun level this behaviour will increase or decrease when starting the behaviour
-* hygiene=<INTEGER>: The amount of Boris' filth level this behaviour will increase or decrease when starting the behaviour
+* health=&lt;INTEGER&gt;: The amount of Boris' health this behaviour will increase or decrease when starting the behaviour
+* energy=&lt;INTEGER&gt;: The amount of Boris' energy this behaviour will increase or decrease when starting the behaviour
+* hyper=&lt;INTEGER&gt;: The amount of Boris' hyperactivity level this behaviour will increase or decrease when starting the behaviour
+* hunger=&lt;INTEGER&gt;: The amount of Boris' hunger this behaviour will increase or decrease when starting the behaviour
+* bladder=&lt;INTEGER&gt;: The amount of Boris' need for a toilet this behaviour will increase or decrease when starting the behaviour
+* social=&lt;INTEGER&gt;: The amount of Boris' social needs this behaviour will increase or decrease when starting the behaviour
+* fun=&lt;INTEGER&gt;: The amount of Boris' fun level this behaviour will increase or decrease when starting the behaviour
+* hygiene=&lt;INTEGER&gt;: The amount of Boris' filth level this behaviour will increase or decrease when starting the behaviour
 * oneShot: This behaviour will be played from start to finish and then switch to a new behaviour
 * doNotDisturb: If this exists, Boris will not be disturbed by the mouse or other Borises while this behaviour is in progress
 * allowFlip: If this line exists there is a 50% chance the behaviour will be mirrored horizontally
