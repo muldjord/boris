@@ -71,22 +71,25 @@ Boris::Boris(Settings *settings)
   shadowSprite->setOpacity(0.35);
 
   borisSprite = this->scene()->addPixmap(QPixmap());
-  borisSprite->setPos(0, -1); // To make room for shadow
+  borisSprite->setPos(0, 15); // To make room for shadow
 
   origDirt.load(":dirt.png");
   dirtSprite = this->scene()->addPixmap(origDirt);
   dirtSprite->setOpacity(0.0);
-  dirtSprite->setPos(0, -1); // To make room for shadow
+  dirtSprite->setPos(0, 15); // To make room for shadow
 
   origBruises.load(":bruises.png");
   bruisesSprite = this->scene()->addPixmap(origBruises);
   bruisesSprite->setOpacity(0.0);
-  bruisesSprite->setPos(0, -1); // To make room for shadow
+  bruisesSprite->setPos(0, 15); // To make room for shadow
 
   weatherSprite = this->scene()->addPixmap(QPixmap(32, 32));
-  weatherSprite->setPos(0, 0 - 16);
+  weatherSprite->setPos(0, 0);
   weatherSprite->hide();
   
+  // Set the scene size for correct scaling when changing Boris' size through updateBoris()
+  scene()->setSceneRect(0.0, 0.0, size, size + (size / 2.0));
+
   curWeather = 0;
   curWeatherFrame = 0;
   curFrame = 0;
@@ -401,7 +404,7 @@ QPixmap Boris::getShadow(const QPixmap &sprite)
       }
     }
   }
-  shadowSprite->setPos(firstLeft, bottom + 1 - sprite.height());
+  shadowSprite->setPos(firstLeft, bottom - 15);
   int firstRight = 0;
   for(int row = 0; row < sprite.height(); ++row) {
     QRgb *rowBits = (QRgb *)image.constScanLine(row);
@@ -468,7 +471,9 @@ void Boris::nextFrame()
   bruisesPixmap.setMask(mask);
 
   if(falling) {
-    shadowSprite->hide();
+    if(shadowSprite->isVisible()) {
+      shadowSprite->hide();
+    }
   } else {
     shadowSprite->show();
   }
@@ -597,11 +602,12 @@ void Boris::mousePressEvent(QMouseEvent* event)
   }
   if(event->button() == Qt::LeftButton) {
     if(behaviours.at(curBehav).file == "sleep" && stats->getEnergy() < 100) {
-      stats->deltaEnergy(-100);
+      energyQueue -= 50;
+      funQueue -= 25;
     }
     setCursor(QCursor(QPixmap(":mouse_grab.png")));
     grabbed = true;
-    changeBehaviour("_grabbed", 1000000);
+    changeBehaviour("_grabbed");
     mMoving = true;
     this->move(event->globalPos().x() - (float)size / 32.0 * 17.0, 
                event->globalPos().y() - (float)size / 32.0 * 16.0);
@@ -629,7 +635,7 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
     mMoving = false;
     settings->borisX = this->pos().x();
     settings->borisY = this->pos().y();
-    changeBehaviour("_falling", 200000);
+    changeBehaviour("_falling");
     falling = true;
     hVel = mouseHVel;
     vVel = mouseVVel;
@@ -1290,6 +1296,7 @@ void Boris::updateBoris()
   setFixedSize(size, size + (size / 2.0));
   resetMatrix();
   resetTransform();
+  //fitInView(0.0, 0.0, size, size + (size / 2.0), Qt::IgnoreAspectRatio);
   scale(size / 32.0, size / 32.0);
 
   // Set new independence value
