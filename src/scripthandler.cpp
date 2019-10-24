@@ -79,10 +79,13 @@ bool ScriptHandler::handleIf(QList<QString> &parameters)
   bool compare = true;
   handleConditions(parameters, cond, compare);
   if(cond) {
+    if(parameters.first() == "then") {
+      parameters.removeFirst();
+    }
     if(runCommand(parameters)) {
       return true;
     }
-  } else if(parameters.contains("else")) {
+  } else if(parameters.contains("else") && parameters.first() != "then") {
     while(parameters.takeFirst() != "else") {
     }
     if(runCommand(parameters)) {
