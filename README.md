@@ -45,6 +45,7 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 * Improved many behaviours
 * Added scripting to many existing behaviours for more random outcome
 * Added a bunch of new dynamic behaviours
+* Added drawing routines to scripting language
 
 #### Version 2.0.2 (4th December 2018):
 * Added 'allowFlip' flag to behaviours giving those a 50% of being flipped horizontally
