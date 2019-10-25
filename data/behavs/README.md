@@ -51,7 +51,31 @@ Each frame in a behaviour must be contained on a single line under the `#Frames`
 * script: The script that will be run at the end of showing the frame. This is optional. Scripting language is detailed below
 
 ### Scripting language definition
-Boris can be scripted quite heavily to allow for some fun and interesting behaviour outcomes. The rudimentary language allows for the following commands to be used:
+Boris can be scripted quite heavily to allow for some fun and interesting behaviour outcomes. A frame can have as many lines of script added to it as needed. Comma (`,`) is used to seperate each line from the next. Multiline scripts are possible - just end a line with a comma and the following line will be seen as part of the same frame script. The last line of a script must NOT end with a comma.
+
+This:
+```
+10;75;0;0;;label this,
+var a = @6,
+if a = 1 goto that
+11;75;0;0;;break
+12;75;0;0;;label that
+```
+Is the same as this:
+```
+10;75;0;0;;label this,var a = @6,if a = 1 goto that
+11;75;0;0;;break
+12;75;0;0;;label that
+```
+The following won't work as intended because of the stray comma after `goto that`:
+```
+10;75;0;0;;label this,
+var a = @6,
+if a = 1 goto that,
+11;75;0;0;;break
+12;75;0;0;;label that
+```
+The rudimentary language allows for the following commands to be used:
 
 #### Commands
 
