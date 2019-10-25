@@ -66,6 +66,9 @@ Boris::Boris(Settings *settings)
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   
   setScene(new QGraphicsScene);
+  // Set the scene size for correct scaling when changing Boris' size through updateBoris()
+  scene()->setSceneRect(0.0, 0.0, 32, 48);
+
   origShadow.load(":shadow.png");
   shadowSprite = this->scene()->addPixmap(origShadow);
   shadowSprite->setOpacity(0.35);
@@ -87,9 +90,6 @@ Boris::Boris(Settings *settings)
   weatherSprite->setPos(0, 0);
   weatherSprite->hide();
   
-  // Set the scene size for correct scaling when changing Boris' size through updateBoris()
-  scene()->setSceneRect(0.0, 0.0, size, size + (size / 2.0));
-
   curWeather = 0;
   curWeatherFrame = 0;
   curFrame = 0;
@@ -441,7 +441,13 @@ void Boris::runScript()
   scriptVars["xvel"] = mouseHVel;
 
   ScriptHandler scriptHandler(this);
-  if(scriptHandler.runScript(behaviours.at(curBehav).frames.at(curFrame).script)) {
+  int stop = 0; // Will be true if a goto or break is run
+  scriptHandler.runScript(behaviours.at(curBehav).frames.at(curFrame).script, stop);
+  if(stop == 1) {
+    return;
+  } else if(stop == 2) {
+    behavTimer.stop();
+    nextBehaviour();
     return;
   }
   curFrame++;
@@ -1294,10 +1300,11 @@ void Boris::updateBoris()
     size = (qrand() % (256 - 32)) + 32; // Make him at least 32
   }
   setFixedSize(size, size + (size / 2.0));
-  resetMatrix();
   resetTransform();
-  //fitInView(0.0, 0.0, size, size + (size / 2.0), Qt::IgnoreAspectRatio);
   scale(size / 32.0, size / 32.0);
+
+  // The following should be used in a reimplementation of resizeEvent
+  //fitInView(QRectF(0.0, 0.0, 32.0, 48.0), Qt::IgnoreAspectRatio);
 
   // Set new independence value
   independence = settings->independence;
