@@ -24,147 +24,234 @@ pitchLock
 13;75;0;0;;label choosechord,var chord = @6,if chord = 1 goto c-chord else if chord = 2 goto d-chord else if chord = 3 goto e-chord else if chord = 4 goto f-chord else if chord = 5 goto g-chord else if chord = 6 goto a-chord
 
 # C chord
-20;150;0;0;data/sfx/piano_c-chord.wav;label c-chord,stat fun += 3,var notes = 2,var notes += @6,var quicks = 1,var quicks += @3,var rand = @15,if rand = 1 goto c2 else if rand = 2 goto d2 else if rand = 3 goto e2 else if rand = 4 goto f2 else if rand = 5 goto g2 else if rand = 6 goto a2 else if rand = 7 goto b2 else if rand = 8 goto c3 else if rand = 9 goto d3 else if rand = 10 goto e3 else if rand = 11 goto f3 else if rand = 12 goto g3 else if rand = 13 goto a3 else if rand = 14 goto b3 else if rand = 15 goto c4
+20;150;0;0;data/sfx/piano_c-chord.wav;label c-chord,stat fun += 3,var notes = 1,var notes += @4,var quicks = 1,var quicks += @2,var rand = @15,if rand = 1 goto c2 else if rand = 2 goto d2 else if rand = 3 goto e2 else if rand = 4 goto f2 else if rand = 5 goto g2 else if rand = 6 goto a2 else if rand = 7 goto b2 else if rand = 8 goto c3 else if rand = 9 goto d3 else if rand = 10 goto e3 else if rand = 11 goto f3 else if rand = 12 goto g3 else if rand = 13 goto a3 else if rand = 14 goto b3 else if rand = 15 goto c4
 
 # D chord
-20;150;0;0;data/sfx/piano_d-chord.wav;label d-chord,stat fun += 3,var notes = 2,var notes += @6,var quicks = 1,var quicks += @3,var rand = @14,if rand = 1 goto cis2 else if rand = 2 goto d2 else if rand = 3 goto e2 else if rand = 4 goto fis2 else if rand = 5 goto g2 else if rand = 6 goto a2 else if rand = 7 goto b2 else if rand = 8 goto cis3 else if rand = 9 goto d3 else if rand = 10 goto e3 else if rand = 11 goto fis3 else if rand = 12 goto g3 else if rand = 13 goto a3 else if rand = 14 goto b3
+20;150;0;0;data/sfx/piano_d-chord.wav;label d-chord,stat fun += 3,var notes = 1,var notes += @4,var quicks = 1,var quicks += @2,var rand = @14,if rand = 1 goto cis2 else if rand = 2 goto d2 else if rand = 3 goto e2 else if rand = 4 goto fis2 else if rand = 5 goto g2 else if rand = 6 goto a2 else if rand = 7 goto b2 else if rand = 8 goto cis3 else if rand = 9 goto d3 else if rand = 10 goto e3 else if rand = 11 goto fis3 else if rand = 12 goto g3 else if rand = 13 goto a3 else if rand = 14 goto b3
 
 # E chord
-22;150;0;0;data/sfx/piano_e-chord.wav;label e-chord,stat fun += 3,var notes = 2,var notes += @6,var quicks = 1,var quicks += @3,var rand = @14,if rand = 1 goto cis2 else if rand = 2 goto dis2 else if rand = 3 goto e2 else if rand = 4 goto fis2 else if rand = 5 goto gis2 else if rand = 6 goto a2 else if rand = 7 goto b2 else if rand = 8 goto cis3 else if rand = 9 goto dis3 else if rand = 10 goto e3 else if rand = 11 goto fis3 else if rand = 12 goto gis3 else if rand = 13 goto a3 else if rand = 14 goto b3
+22;150;0;0;data/sfx/piano_e-chord.wav;label e-chord,stat fun += 3,var notes = 1,var notes += @4,var quicks = 1,var quicks += @2,var rand = @14,if rand = 1 goto cis2 else if rand = 2 goto dis2 else if rand = 3 goto e2 else if rand = 4 goto fis2 else if rand = 5 goto gis2 else if rand = 6 goto a2 else if rand = 7 goto b2 else if rand = 8 goto cis3 else if rand = 9 goto dis3 else if rand = 10 goto e3 else if rand = 11 goto fis3 else if rand = 12 goto gis3 else if rand = 13 goto a3 else if rand = 14 goto b3
 
 # F chord
-22;150;0;0;data/sfx/piano_f-chord.wav;label f-chord,stat fun += 3,var notes = 2,var notes += @6,var quicks = 1,var quicks += @3,var rand = @15,if rand = 1 goto c2 else if rand = 2 goto d2 else if rand = 3 goto e2 else if rand = 4 goto f2 else if rand = 5 goto g2 else if rand = 6 goto a2 else if rand = 7 goto as2 else if rand = 8 goto c3 else if rand = 9 goto d3 else if rand = 10 goto e3 else if rand = 11 goto f3 else if rand = 12 goto g3 else if rand = 13 goto a3 else if rand = 14 goto as3 else if rand = 15 goto c4
+22;150;0;0;data/sfx/piano_f-chord.wav;label f-chord,stat fun += 3,var notes = 1,var notes += @4,var quicks = 1,var quicks += @2,var rand = @15,if rand = 1 goto c2 else if rand = 2 goto d2 else if rand = 3 goto e2 else if rand = 4 goto f2 else if rand = 5 goto g2 else if rand = 6 goto a2 else if rand = 7 goto as2 else if rand = 8 goto c3 else if rand = 9 goto d3 else if rand = 10 goto e3 else if rand = 11 goto f3 else if rand = 12 goto g3 else if rand = 13 goto a3 else if rand = 14 goto as3 else if rand = 15 goto c4
 
 # G chord
-24;150;0;0;data/sfx/piano_g-chord.wav;label g-chord,stat fun += 3,var notes = 2,var notes += @6,var quicks = 1,var quicks += @3,var rand = @15,if rand = 1 goto c2 else if rand = 2 goto d2 else if rand = 3 goto e2 else if rand = 4 goto fis2 else if rand = 5 goto g2 else if rand = 6 goto a2 else if rand = 7 goto b2 else if rand = 8 goto c3 else if rand = 9 goto d3 else if rand = 10 goto e3 else if rand = 11 goto fis3 else if rand = 12 goto g3 else if rand = 13 goto a3 else if rand = 14 goto b3 else if rand = 15 goto c4
+24;150;0;0;data/sfx/piano_g-chord.wav;label g-chord,stat fun += 3,var notes = 1,var notes += @4,var quicks = 1,var quicks += @2,var rand = @15,if rand = 1 goto c2 else if rand = 2 goto d2 else if rand = 3 goto e2 else if rand = 4 goto fis2 else if rand = 5 goto g2 else if rand = 6 goto a2 else if rand = 7 goto b2 else if rand = 8 goto c3 else if rand = 9 goto d3 else if rand = 10 goto e3 else if rand = 11 goto fis3 else if rand = 12 goto g3 else if rand = 13 goto a3 else if rand = 14 goto b3 else if rand = 15 goto c4
 
 # A chord
-24;150;0;0;data/sfx/piano_a-chord.wav;label a-chord,stat fun += 3,var notes = 2,var notes += @6,var quicks = 1,var quicks += @3,var rand = @14,if rand = 1 goto cis2 else if rand = 2 goto d2 else if rand = 3 goto e2 else if rand = 4 goto fis2 else if rand = 5 goto gis2 else if rand = 6 goto a2 else if rand = 7 goto b2 else if rand = 8 goto cis3 else if rand = 9 goto d3 else if rand = 10 goto e3 else if rand = 11 goto fis3 else if rand = 12 goto gis3 else if rand = 13 goto a3 else if rand = 14 goto b3
+24;150;0;0;data/sfx/piano_a-chord.wav;label a-chord,stat fun += 3,var notes = 1,var notes += @4,var quicks = 1,var quicks += @2,var rand = @14,if rand = 1 goto cis2 else if rand = 2 goto d2 else if rand = 3 goto e2 else if rand = 4 goto fis2 else if rand = 5 goto gis2 else if rand = 6 goto a2 else if rand = 7 goto b2 else if rand = 8 goto cis3 else if rand = 9 goto d3 else if rand = 10 goto e3 else if rand = 11 goto fis3 else if rand = 12 goto gis3 else if rand = 13 goto a3 else if rand = 14 goto b3
 
 # c2
 14;75;0;0;data/sfx/piano_c2.wav;label c2,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sc2
 15;150;0;0;;
-15;75;0;0;;label sc2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto c4 else if rand = 2 goto c2 else if rand = 3 goto d2,if chord = 4 then if rand = 1 goto c4 else if rand = 2 goto c2 else if rand = 3 goto d2,if chord = 5 then if rand = 1 goto c4 else if rand = 2 goto c2 else if rand = 3 goto d2
+15;75;0;0;;label sc2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto c4 else if rand = 2 goto c2 else if rand = 3 goto d2,
+if chord = 4 then if rand = 1 goto c4 else if rand = 2 goto c2 else if rand = 3 goto d2,
+if chord = 5 then if rand = 1 goto c4 else if rand = 2 goto c2 else if rand = 3 goto d2
 
 # cis2
 14;75;0;0;data/sfx/piano_cis2.wav;label cis2,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto scis2
 15;150;0;0;;
-15;75;0;0;;label scis2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 2 then if rand = 1 goto b3 else if rand = 2 goto cis2 else if rand = 3 goto d2,if chord = 3 then if rand = 1 goto b3 else if rand = cis2 goto x else if rand = 3 goto dis2,if chord = 6 then if rand = 1 goto b3 else if rand = cis2 goto x else if rand = 3 goto d2
+15;75;0;0;;label scis2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 2 then if rand = 1 goto b3 else if rand = 2 goto cis2 else if rand = 3 goto d2,
+if chord = 3 then if rand = 1 goto b3 else if rand = cis2 goto x else if rand = 3 goto dis2,
+if chord = 6 then if rand = 1 goto b3 else if rand = cis2 goto x else if rand = 3 goto d2
 
 # d2
 14;75;0;0;data/sfx/piano_d2.wav;label d2,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sd2
 15;150;0;0;;
-15;75;0;0;;label sd2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto c2 else if rand = 2 goto d2 else if rand = 3 goto e2,if chord = 2 then if rand = 1 goto cis2 else if rand = 2 goto d2 else if rand = 3 goto e2,if chord = 4 then if rand = 1 goto c2 else if rand = 2 goto d2 else if rand = 3 goto e2,if chord = 5 then if rand = 1 goto c2 else if rand = 2 goto d2 else if rand = 3 goto e2,if chord = 6 then if rand = 1 goto cis2 else if rand = 2 goto d2 else if rand = 3 goto e2
+15;75;0;0;;label sd2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto c2 else if rand = 2 goto d2 else if rand = 3 goto e2,
+if chord = 2 then if rand = 1 goto cis2 else if rand = 2 goto d2 else if rand = 3 goto e2,
+if chord = 4 then if rand = 1 goto c2 else if rand = 2 goto d2 else if rand = 3 goto e2,
+if chord = 5 then if rand = 1 goto c2 else if rand = 2 goto d2 else if rand = 3 goto e2,
+if chord = 6 then if rand = 1 goto cis2 else if rand = 2 goto d2 else if rand = 3 goto e2
 
 # dis2
 14;75;0;0;data/sfx/piano_dis2.wav;label dis2,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sdis2
 15;150;0;0;;
-15;75;0;0;;label sdis2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 3 then if rand = 1 goto cis2 else if rand = 2 goto dis2 else if rand = 3 goto e2
+15;75;0;0;;label sdis2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 3 then if rand = 1 goto cis2 else if rand = 2 goto dis2 else if rand = 3 goto e2
 
 # e2
 14;75;0;0;data/sfx/piano_e2.wav;label e2,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto se2
 15;150;0;0;;
-15;75;0;0;;label se2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto d2 else if rand = 2 goto e2 else if rand = 3 goto f2,if chord = 2 then if rand = 1 goto d2 else if rand = 2 goto e2 else if rand = 3 goto fis2,if chord = 3 then if rand = 1 goto dis2 else if rand = 2 goto e2 else if rand = 3 goto fis2,if chord = 4 then if rand = 1 goto d2 else if rand = 2 goto e2 else if rand = 3 goto f2,if chord = 5 then if rand = 1 goto d2 else if rand = 2 goto e2 else if rand = 3 goto fis2,if chord = 6 then if rand = 1 goto d2 else if rand = 2 goto e2 else if rand = 3 goto fis2
+15;75;0;0;;label se2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto d2 else if rand = 2 goto e2 else if rand = 3 goto f2,
+if chord = 2 then if rand = 1 goto d2 else if rand = 2 goto e2 else if rand = 3 goto fis2,
+if chord = 3 then if rand = 1 goto dis2 else if rand = 2 goto e2 else if rand = 3 goto fis2,
+if chord = 4 then if rand = 1 goto d2 else if rand = 2 goto e2 else if rand = 3 goto f2,
+if chord = 5 then if rand = 1 goto d2 else if rand = 2 goto e2 else if rand = 3 goto fis2,
+if chord = 6 then if rand = 1 goto d2 else if rand = 2 goto e2 else if rand = 3 goto fis2
 
 # f2
 14;75;0;0;data/sfx/piano_f2.wav;label f2,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sf2
 15;150;0;0;;
-15;75;0;0;;label sf2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto e2 else if rand = 2 goto f2 else if rand = 3 goto g2,if chord = 4 then if rand = 1 goto e2 else if rand = 2 goto f2 else if rand = 3 goto g2
+15;75;0;0;;label sf2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto e2 else if rand = 2 goto f2 else if rand = 3 goto g2,
+if chord = 4 then if rand = 1 goto e2 else if rand = 2 goto f2 else if rand = 3 goto g2
 
 # fis2
 14;75;0;0;data/sfx/piano_fis2.wav;label fis2,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sfis2
 15;150;0;0;;
-15;75;0;0;;label sfis2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 2 then if rand = 1 goto e2 else if rand = 2 goto fis2 else if rand = 3 goto g2,if chord = 3 then if rand = 1 goto e2 else if rand = 2 goto fis2 else if rand = 3 goto gis2,if chord = 5 then if rand = 1 goto e2 else if rand = 2 goto fis2 else if rand = 3 goto g2,if chord = 6 then if rand = 1 goto e2 else if rand = 2 goto fis2 else if rand = 3 goto gis2
+15;75;0;0;;label sfis2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 2 then if rand = 1 goto e2 else if rand = 2 goto fis2 else if rand = 3 goto g2,
+if chord = 3 then if rand = 1 goto e2 else if rand = 2 goto fis2 else if rand = 3 goto gis2,
+if chord = 5 then if rand = 1 goto e2 else if rand = 2 goto fis2 else if rand = 3 goto g2,
+if chord = 6 then if rand = 1 goto e2 else if rand = 2 goto fis2 else if rand = 3 goto gis2
 
 # g2
 14;75;0;0;data/sfx/piano_g2.wav;label g2,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sg2
 15;150;0;0;;
-15;75;0;0;;label sg2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto f2 else if rand = 2 goto g2 else if rand = 3 goto a2,if chord = 2 then if rand = 1 goto fis2 else if rand = 2 goto g2 else if rand = 3 goto a2,if chord = 4 then if rand = 1 goto f2 else if rand = 2 goto g2 else if rand = 3 goto a2,if chord = 5 then if rand = 1 goto fis2 else if rand = 2 goto g2 else if rand = 3 goto a2
+15;75;0;0;;label sg2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto f2 else if rand = 2 goto g2 else if rand = 3 goto a2,
+if chord = 2 then if rand = 1 goto fis2 else if rand = 2 goto g2 else if rand = 3 goto a2,
+if chord = 4 then if rand = 1 goto f2 else if rand = 2 goto g2 else if rand = 3 goto a2,
+if chord = 5 then if rand = 1 goto fis2 else if rand = 2 goto g2 else if rand = 3 goto a2
 
 # gis2
 14;75;0;0;data/sfx/piano_gis2.wav;label gis2,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sgis2
 15;150;0;0;;
-15;75;0;0;;label sgis2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 3 then if rand = 1 goto fis2 else if rand = 2 goto gis2 else if rand = 3 goto a2,if chord = 6 then if rand = 1 goto fis2 else if rand = 2 goto gis2 else if rand = 3 goto a2
+15;75;0;0;;label sgis2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 3 then if rand = 1 goto fis2 else if rand = 2 goto gis2 else if rand = 3 goto a2,
+if chord = 6 then if rand = 1 goto fis2 else if rand = 2 goto gis2 else if rand = 3 goto a2
 
 # a2
 16;75;0;0;data/sfx/piano_a2.wav;label a2,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sa2
 17;150;0;0;;
-17;75;0;0;;label sa2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto g2 else if rand = 2 goto a2 else if rand = 3 goto b2,if chord = 2 then if rand = 1 goto g2 else if rand = 2 goto a2 else if rand = 3 goto b2,if chord = 3 then if rand = 1 goto gis2 else if rand = 2 goto a2 else if rand = 3 goto b2,if chord = 4 then if rand = 1 goto g2 else if rand = 2 goto a2 else if rand = 3 goto as2,if chord = 5 then if rand = 1 goto g2 else if rand = 2 goto a2 else if rand = 3 goto b2,if chord = 6 then if rand = 1 goto gis2 else if rand = 2 goto a2 else if rand = 3 goto b2
+17;75;0;0;;label sa2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto g2 else if rand = 2 goto a2 else if rand = 3 goto b2,
+if chord = 2 then if rand = 1 goto g2 else if rand = 2 goto a2 else if rand = 3 goto b2,
+if chord = 3 then if rand = 1 goto gis2 else if rand = 2 goto a2 else if rand = 3 goto b2,
+if chord = 4 then if rand = 1 goto g2 else if rand = 2 goto a2 else if rand = 3 goto as2,
+if chord = 5 then if rand = 1 goto g2 else if rand = 2 goto a2 else if rand = 3 goto b2,
+if chord = 6 then if rand = 1 goto gis2 else if rand = 2 goto a2 else if rand = 3 goto b2
 
 # as2
 14;75;0;0;data/sfx/piano_as2.wav;label as2,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sas2
 15;150;0;0;;
-15;75;0;0;;label sas2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 4 then if rand = 1 goto a2 else if rand = 2 goto as2 else if rand = 3 goto c3
+15;75;0;0;;label sas2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 4 then if rand = 1 goto a2 else if rand = 2 goto as2 else if rand = 3 goto c3
 
 # b2
 16;75;0;0;data/sfx/piano_b2.wav;label b2,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sb2
 17;150;0;0;;
-17;75;0;0;;label sb2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto a2 else if rand = 2 goto b2 else if rand = 3 goto c3,if chord = 2 then if rand = 1 goto a2 else if rand = 2 goto b2 else if rand = 3 goto cis3,if chord = 3 then if rand = 1 goto a2 else if rand = 2 goto b2 else if rand = 3 goto cis3,if chord = 5 then if rand = 1 goto a2 else if rand = 2 goto b2 else if rand = 3 goto c3,if chord = 6 then if rand = 1 goto a2 else if rand = 2 goto b2 else if rand = 3 goto cis3
+17;75;0;0;;label sb2,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto a2 else if rand = 2 goto b2 else if rand = 3 goto c3,
+if chord = 2 then if rand = 1 goto a2 else if rand = 2 goto b2 else if rand = 3 goto cis3,
+if chord = 3 then if rand = 1 goto a2 else if rand = 2 goto b2 else if rand = 3 goto cis3,
+if chord = 5 then if rand = 1 goto a2 else if rand = 2 goto b2 else if rand = 3 goto c3,
+if chord = 6 then if rand = 1 goto a2 else if rand = 2 goto b2 else if rand = 3 goto cis3
 
 # c3
 16;75;0;0;data/sfx/piano_c3.wav;label c3,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sc3
 17;150;0;0;;
-17;75;0;0;;label sc3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto b2 else if rand = 2 goto c3 else if rand = 3 goto d3,if chord = 4 then if rand = 1 goto as2 else if rand = 2 goto c3 else if rand = 3 goto d3,if chord = 5 then if rand = 1 goto b2 else if rand = 2 goto c3 else if rand = 3 goto d3
+17;75;0;0;;label sc3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto b2 else if rand = 2 goto c3 else if rand = 3 goto d3,
+if chord = 4 then if rand = 1 goto as2 else if rand = 2 goto c3 else if rand = 3 goto d3,
+if chord = 5 then if rand = 1 goto b2 else if rand = 2 goto c3 else if rand = 3 goto d3
 
 # cis3
 14;75;0;0;data/sfx/piano_cis3.wav;label cis3,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto scis3
 15;150;0;0;;
-15;75;0;0;;label scis3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 2 then if rand = 1 goto b2 else if rand = 2 goto cis3 else if rand = 3 goto d3,if chord = 3 then if rand = 1 goto b2 else if rand = 2 goto cis3 else if rand = 3 goto dis3,if chord = 6 then if rand = 1 goto b2 else if rand = 2 goto cis3 else if rand = 3 goto d3
+15;75;0;0;;label scis3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 2 then if rand = 1 goto b2 else if rand = 2 goto cis3 else if rand = 3 goto d3,
+if chord = 3 then if rand = 1 goto b2 else if rand = 2 goto cis3 else if rand = 3 goto dis3,
+if chord = 6 then if rand = 1 goto b2 else if rand = 2 goto cis3 else if rand = 3 goto d3
 
 # d3
 16;75;0;0;data/sfx/piano_d3.wav;label d3,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sd3
 17;150;0;0;;
-17;75;0;0;;label sd3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto c3 else if rand = 2 goto d3 else if rand = 3 goto e3,if chord = 2 then if rand = 1 goto cis3 else if rand = 2 goto d3 else if rand = 3 goto e3,if chord = 4 then if rand = 1 goto c3 else if rand = 2 goto d3 else if rand = 3 goto e3,if chord = 5 then if rand = 1 goto c3 else if rand = 2 goto d3 else if rand = 3 goto e3,if chord = 6 then if rand = 1 goto cis3 else if rand = 2 goto d3 else if rand = 3 goto e3
+17;75;0;0;;label sd3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto c3 else if rand = 2 goto d3 else if rand = 3 goto e3,
+if chord = 2 then if rand = 1 goto cis3 else if rand = 2 goto d3 else if rand = 3 goto e3,
+if chord = 4 then if rand = 1 goto c3 else if rand = 2 goto d3 else if rand = 3 goto e3,
+if chord = 5 then if rand = 1 goto c3 else if rand = 2 goto d3 else if rand = 3 goto e3,
+if chord = 6 then if rand = 1 goto cis3 else if rand = 2 goto d3 else if rand = 3 goto e3
 
 # dis3
 14;75;0;0;data/sfx/piano_dis3.wav;label dis3,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sdis3
 15;150;0;0;;
-15;75;0;0;;label sdis3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 3 then if rand = 1 goto cis3 else if rand = 2 goto dis3 else if rand = 3 goto e3
+15;75;0;0;;label sdis3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 3 then if rand = 1 goto cis3 else if rand = 2 goto dis3 else if rand = 3 goto e3
 
 # e3
 16;75;0;0;data/sfx/piano_e3.wav;label e3,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto se3
 17;150;0;0;;
-17;75;0;0;;label se3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto d3 else if rand = 2 goto e3 else if rand = 3 goto f3,if chord = 2 then if rand = 1 goto d3 else if rand = 2 goto e3 else if rand = 3 goto fis3,if chord = 3 then if rand = 1 goto dis3 else if rand = 2 goto e3 else if rand = 3 goto fis3,if chord = 4 then if rand = 1 goto d3 else if rand = 2 goto e3 else if rand = 3 goto f3,if chord = 5 then if rand = 1 goto d3 else if rand = 2 goto e3 else if rand = 3 goto fis3,if chord = 6 then if rand = 1 goto d3 else if rand = 2 goto e3 else if rand = 3 goto fis3
+17;75;0;0;;label se3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto d3 else if rand = 2 goto e3 else if rand = 3 goto f3,
+if chord = 2 then if rand = 1 goto d3 else if rand = 2 goto e3 else if rand = 3 goto fis3,
+if chord = 3 then if rand = 1 goto dis3 else if rand = 2 goto e3 else if rand = 3 goto fis3,
+if chord = 4 then if rand = 1 goto d3 else if rand = 2 goto e3 else if rand = 3 goto f3,
+if chord = 5 then if rand = 1 goto d3 else if rand = 2 goto e3 else if rand = 3 goto fis3,
+if chord = 6 then if rand = 1 goto d3 else if rand = 2 goto e3 else if rand = 3 goto fis3
 
 # f3
 18;75;0;0;data/sfx/piano_f3.wav;label f3,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sf3
 19;150;0;0;;
-19;75;0;0;;label sf3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto e3 else if rand = 2 goto f3 else if rand = 3 goto g3,if chord = 4 then if rand = 1 goto e3 else if rand = 2 goto f3 else if rand = 3 goto g3
+19;75;0;0;;label sf3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto e3 else if rand = 2 goto f3 else if rand = 3 goto g3,
+if chord = 4 then if rand = 1 goto e3 else if rand = 2 goto f3 else if rand = 3 goto g3
 
 # fis3
 14;75;0;0;data/sfx/piano_fis3.wav;label fis3,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sfis3
 15;150;0;0;;
-15;75;0;0;;label sfis3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 2 then if rand = 1 goto e3 else if rand = 2 goto fis3 else if rand = 3 goto g3,if chord = 3 then if rand = 1 goto e3 else if rand = 2 goto fis3 else if rand = 3 goto gis3,if chord = 5 then if rand = 1 goto e3 else if rand = 2 goto fis3 else if rand = 3 goto g3,if chord = 6 then if rand = 1 goto e3 else if rand = 2 goto fis3 else if rand = 3 goto gis3
+15;75;0;0;;label sfis3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 2 then if rand = 1 goto e3 else if rand = 2 goto fis3 else if rand = 3 goto g3,
+if chord = 3 then if rand = 1 goto e3 else if rand = 2 goto fis3 else if rand = 3 goto gis3,
+if chord = 5 then if rand = 1 goto e3 else if rand = 2 goto fis3 else if rand = 3 goto g3,
+if chord = 6 then if rand = 1 goto e3 else if rand = 2 goto fis3 else if rand = 3 goto gis3
 
 # g3
 18;75;0;0;data/sfx/piano_g3.wav;label g3,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sg3
 19;150;0;0;;
-19;75;0;0;;label sg3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto f3 else if rand = 2 goto g3 else if rand = 3 goto a3,if chord = 2 then if rand = 1 goto fis3 else if rand = 2 goto g3 else if rand = 3 goto a3,if chord = 4 then if rand = 1 goto f3 else if rand = 2 goto g3 else if rand = 3 goto a3,if chord = 5 then if rand = 1 goto fis3 else if rand = 2 goto g3 else if rand = 3 goto a3
+19;75;0;0;;label sg3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto f3 else if rand = 2 goto g3 else if rand = 3 goto a3,
+if chord = 2 then if rand = 1 goto fis3 else if rand = 2 goto g3 else if rand = 3 goto a3,
+if chord = 4 then if rand = 1 goto f3 else if rand = 2 goto g3 else if rand = 3 goto a3,
+if chord = 5 then if rand = 1 goto fis3 else if rand = 2 goto g3 else if rand = 3 goto a3
 
 # gis3
 14;75;0;0;data/sfx/piano_gis3.wav;label gis3,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sgis3
 15;150;0;0;;
-15;75;0;0;;label sgis3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 3 then if rand = 1 goto fis3 else if rand = 2 goto gis3 else if rand = 3 goto a3,if chord = 6 then if rand = 1 goto fis3 else if rand = 2 goto gis3 else if rand = 3 goto a3
+15;75;0;0;;label sgis3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 3 then if rand = 1 goto fis3 else if rand = 2 goto gis3 else if rand = 3 goto a3,
+if chord = 6 then if rand = 1 goto fis3 else if rand = 2 goto gis3 else if rand = 3 goto a3
 
 # a3
 18;75;0;0;data/sfx/piano_a3.wav;label a3,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sa3
 19;150;0;0;;
-19;75;0;0;;label sa3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto g3 else if rand = 2 goto a3 else if rand = 3 goto b3,if chord = 2 then if rand = 1 goto g3 else if rand = 2 goto a3 else if rand = 3 goto b3,if chord = 3 then if rand = 1 goto gis3 else if rand = 2 goto a3 else if rand = 3 goto b3,if chord = 4 then if rand = 1 goto g3 else if rand = 2 goto a3 else if rand = 3 goto as3,if chord = 5 then if rand = 1 goto g3 else if rand = 2 goto a3 else if rand = 3 goto b3,if chord = 6 then if rand = 1 goto gis3 else if rand = 2 goto a3 else if rand = 3 goto b3
+19;75;0;0;;label sa3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto g3 else if rand = 2 goto a3 else if rand = 3 goto b3,
+if chord = 2 then if rand = 1 goto g3 else if rand = 2 goto a3 else if rand = 3 goto b3,
+if chord = 3 then if rand = 1 goto gis3 else if rand = 2 goto a3 else if rand = 3 goto b3,
+if chord = 4 then if rand = 1 goto g3 else if rand = 2 goto a3 else if rand = 3 goto as3,
+if chord = 5 then if rand = 1 goto g3 else if rand = 2 goto a3 else if rand = 3 goto b3,
+if chord = 6 then if rand = 1 goto gis3 else if rand = 2 goto a3 else if rand = 3 goto b3
 
 # as3
 14;75;0;0;data/sfx/piano_as3.wav;label as3,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sas3
 15;150;0;0;;
-15;75;0;0;;label sas3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 4 then if rand = 1 goto a3 else if rand = 2 goto as3 else if rand = 3 goto c4
+15;75;0;0;;label sas3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 4 then if rand = 1 goto a3 else if rand = 2 goto as3 else if rand = 3 goto c4
 
 # b3
 18;75;0;0;data/sfx/piano_b3.wav;label b3,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sb3
 19;150;0;0;;
-19;75;0;0;;label sb3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto a3 else if rand = 2 goto b3 else if rand = 3 goto c4,if chord = 2 then if rand = 1 goto a3 else if rand = 2 goto b3 else if rand = 3 goto cis2,if chord = 3 then if rand = 1 goto a3 else if rand = 2 goto b3 else if rand = 3 goto cis2,if chord = 5 then if rand = 1 goto a3 else if rand = 2 goto b3 else if rand = 3 goto c4,if chord = 6 then if rand = 1 goto a3 else if rand = 2 goto b3 else if rand = 3 goto cis2
+19;75;0;0;;label sb3,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto a3 else if rand = 2 goto b3 else if rand = 3 goto c4,
+if chord = 2 then if rand = 1 goto a3 else if rand = 2 goto b3 else if rand = 3 goto cis2,
+if chord = 3 then if rand = 1 goto a3 else if rand = 2 goto b3 else if rand = 3 goto cis2,
+if chord = 5 then if rand = 1 goto a3 else if rand = 2 goto b3 else if rand = 3 goto c4,
+if chord = 6 then if rand = 1 goto a3 else if rand = 2 goto b3 else if rand = 3 goto cis2
 
 # c4
 18;75;0;0;data/sfx/piano_c4.wav;label c4,var song -= 1,var notes -= 1,var quicks -= 1,if @6 = 1 or quicks >= 0 goto sc4
 19;150;0;0;;
-19;75;0;0;;label sc4,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,if chord = 1 then if rand = 1 goto b3 else if rand = 2 goto c4 else if rand = 3 goto c2,if chord = 4 then if rand = 1 goto as3 else if rand = 2 goto c4 else if rand = 3 goto c2,if chord = 5 then if rand = 1 goto b3 else if rand = 2 goto c4 else if rand = 3 goto c2
+19;75;0;0;;label sc4,if song <= 0 goto judge,if notes <= 0 goto choosechord,var rand = @3,
+if chord = 1 then if rand = 1 goto b3 else if rand = 2 goto c4 else if rand = 3 goto c2,
+if chord = 4 then if rand = 1 goto as3 else if rand = 2 goto c4 else if rand = 3 goto c2,
+if chord = 5 then if rand = 1 goto b3 else if rand = 2 goto c4 else if rand = 3 goto c2
 
 12;75;0;0;;label judge,if @2 = 1 goto good else goto bad
 11;1000;0;0;data/sfx/win2.wav;label good,goto end
