@@ -188,13 +188,17 @@ bool Loader::loadBehaviours(const Settings &settings,
           }
         }
         if(!snippets.at(5).isEmpty()) {
-          QList<QString> instructions = snippets.at(5).split(",");
+          QString script = snippets.at(5);
+          while(script.right(1) == ",") {
+            script.append(QString(dat.readLine().trimmed()));
+          }
+          QList<QString> instructions = script.simplified().split(",");
           f.script = instructions;
-          for(auto &frameLabel: instructions) {
-            if(frameLabel.contains("label ")) {
-              frameLabel.replace("label ", "");
+          for(const auto &instruction: instructions) {
+            if(instruction.split(" ").count() == 2 &&
+               instruction.split(" ").first() == "label") {
               // Point this label to current frame
-              b.labels[frameLabel] = frames;
+              b.labels[instruction.split(" ").at(1)] = frames;
             }
           }
         }
