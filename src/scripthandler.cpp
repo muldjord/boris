@@ -2,8 +2,8 @@
 /***************************************************************************
  *            scripthandler.cpp
  *
- *  Tue Nov 26 16:56:00 CEST 2013
- *  Copyright 2013 Lars Muldjord
+ *  Fri Oct 11 20:00:00 CEST 2019
+ *  Copyright 2019 Lars Muldjord
  *  muldjordlars@gmail.com
  ****************************************************************************/
 
@@ -36,68 +36,61 @@ ScriptHandler::ScriptHandler(Boris *boris)
   this->boris = boris;
 }
 
-bool ScriptHandler::runScript(const QList<QString> &script)
+void ScriptHandler::runScript(const QList<QString> &script, int &stop)
 {
   for(const auto &instruction: script) {
     printf("CODE: '%s'\n", instruction.toStdString().c_str());
     QList<QString> parameters = instruction.split(" ", QString::KeepEmptyParts);
-    if(runCommand(parameters)) {
-      return true;
+    runCommand(parameters, stop);
+    if(stop) {
+      break;
     }
   }
-  return false;
 }
 
-bool ScriptHandler::runCommand(QList<QString> &parameters)
+void ScriptHandler::runCommand(QList<QString> &parameters, int &stop)
 {
+  if(stop) {
+    return;
+  }
   if(parameters.first() == "var") {
     handleVar(parameters);
   } else if(parameters.first() == "stat") {
     handleStat(parameters);
   } else if(parameters.first() == "if") {
-    if(handleIf(parameters)) {
-      return true;
-    }
+    handleIf(parameters, stop);
   } else if(parameters.first() == "goto") {
-    if(handleGoto(parameters)) {
-      return true;
-    }
+    handleGoto(parameters, stop);
   } else if(parameters.first() == "print") {
     handlePrint(parameters);
   } else if(parameters.first() == "break") {
-    handleBreak();
-    return true;
+    handleBreak(stop);
   }
-  return false;
 }
 
-bool ScriptHandler::handleIf(QList<QString> &parameters)
+void ScriptHandler::handleIf(QList<QString> &parameters, int &stop)
 {
   parameters.removeFirst(); // Remove 'if'
 
-  bool cond = false;
+  bool isTrue = false;
   bool compare = true;
-  handleConditions(parameters, cond, compare);
-  if(cond) {
+  handleCondition(parameters, isTrue, compare);
+  if(isTrue) {
     if(parameters.first() == "then") {
       parameters.removeFirst();
     }
-    if(runCommand(parameters)) {
-      return true;
-    }
-  } else if(parameters.contains("else") && parameters.first() != "then") {
+    runCommand(parameters, stop);
+  } else if(parameters.contains("else") &&
+            parameters.first() != "then") {
     while(parameters.takeFirst() != "else") {
     }
-    if(runCommand(parameters)) {
-      return true;
-    }
+    runCommand(parameters, stop);
   } else {
     printf("Condition not met\n");
   }
-  return false;
 }
 
-void ScriptHandler::handleConditions(QList<QString> &parameters, bool &cond, bool &compare)
+void ScriptHandler::handleCondition(QList<QString> &parameters, bool &isTrue, bool &compare)
 {
   bool isInt = false;
   int compareFrom = parameters.first().toInt(&isInt);
@@ -119,30 +112,30 @@ void ScriptHandler::handleConditions(QList<QString> &parameters, bool &cond, boo
   }
   
   if(compare) {
-    cond = false;
+    isTrue = false;
     if(parameters.at(1) == "<") {
       if(compareFrom < compareTo) {
-        cond = true;
+        isTrue = true;
       }
     } else if(parameters.at(1) == ">") {
       if(compareFrom > compareTo) {
-        cond = true;
+        isTrue = true;
       }
     } else if(parameters.at(1) == "<=") {
       if(compareFrom <= compareTo) {
-        cond = true;
+        isTrue = true;
       }
     } else if(parameters.at(1) == ">=") {
       if(compareFrom >= compareTo) {
-        cond = true;
+        isTrue = true;
       }
     } else if(parameters.at(1) == "=") {
       if(compareFrom == compareTo) {
-        cond = true;
+        isTrue = true;
       }
     } else if(parameters.at(1) == "==") {
       if(compareFrom == compareTo) {
-        cond = true;
+        isTrue = true;
       }
     }
   }
@@ -157,18 +150,18 @@ void ScriptHandler::handleConditions(QList<QString> &parameters, bool &cond, boo
     if(parameters.first() == "or") {
       printf(" or ");
       parameters.removeFirst();
-      if(cond) {
+      if(isTrue) {
         compare = false;
       }
-      handleConditions(parameters, cond, compare);
+      handleCondition(parameters, isTrue, compare);
       return;
     } else if(parameters.first() == "and") {
       printf(" and ");
       parameters.removeFirst();
-      if(!cond) {
+      if(!isTrue) {
         compare = false;
       }
-      handleConditions(parameters, cond, compare);
+      handleCondition(parameters, isTrue, compare);
       return;
     } else {
       printf(", ");
@@ -176,20 +169,17 @@ void ScriptHandler::handleConditions(QList<QString> &parameters, bool &cond, boo
   }
 }
 
-bool ScriptHandler::handleGoto(QList<QString> &parameters)
+void ScriptHandler::handleGoto(QList<QString> &parameters, int &stop)
 {
   parameters.removeFirst(); // Remove 'goto'
 
   if(behaviours.at(boris->curBehav).labels.contains(parameters.first())) {
     printf("Going to label '%s' at frame %d\n", parameters.first().toStdString().c_str(), behaviours.at(boris->curBehav).labels[parameters.first()]);
     boris->curFrame = behaviours.at(boris->curBehav).labels[parameters.first()];
-    parameters.removeFirst();
-    return true;
   } else {
     printf("Going to '%s', ERROR: Unknown label\n", parameters.first().toStdString().c_str());
   }
-  parameters.removeFirst();
-  return false;
+  stop = 1; // Will end the script execution for this frame
 }
 
 void ScriptHandler::handleVar(QList<QString> &parameters)
@@ -272,11 +262,10 @@ void ScriptHandler::handleStat(QList<QString> &parameters)
   parameters.removeFirst();
 }
 
-void ScriptHandler::handleBreak()
+void ScriptHandler::handleBreak(int &stop)
 {
   printf("Changing behaviour\n");
-  boris->behavTimer.stop();
-  boris->nextBehaviour();
+  stop = 2; // Will tell the Boris class to change behaviour
 }
 
 void ScriptHandler::handlePrint(QList<QString> &parameters)

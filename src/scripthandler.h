@@ -2,8 +2,8 @@
 /***************************************************************************
  *            scripthandler.h
  *
- *  Tue Nov 26 16:56:00 CEST 2013
- *  Copyright 2013 Lars Muldjord
+ *  Fri Oct 11 20:00:00 CEST 2019
+ *  Copyright 2019 Lars Muldjord
  *  muldjordlars@gmail.com
  ****************************************************************************/
 
@@ -37,22 +37,22 @@ class ScriptHandler : public QObject
 
 public:
   ScriptHandler(Boris *boris);
-  bool runScript(const QList<QString> &script);
+  void runScript(const QList<QString> &script, int &stop);
 
 private:
   Boris *boris = nullptr;
 
   // Main command parser
-  bool runCommand(QList<QString> &parameters);
+  void runCommand(QList<QString> &parameters, int &stop);
 
   // Command handlers
-  bool handleIf(QList<QString> &parameters);
-  void handleConditions(QList<QString> &parameters, bool &cond, bool &compare);
-  bool handleGoto(QList<QString> &parameters);
+  void handleIf(QList<QString> &parameters, int &stop);
+  void handleCondition(QList<QString> &parameters, bool &isTrue, bool &compare);
+  void handleGoto(QList<QString> &parameters, int &stop);
   void handleVar(QList<QString> &parameters);
   void handleStat(QList<QString> &parameters);
   void handlePrint(QList<QString> &parameters);
-  void handleBreak();
+  void handleBreak(int &stop);
   
 };
 
