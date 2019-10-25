@@ -188,7 +188,8 @@ bool Loader::loadBehaviours(const Settings &settings,
           }
         }
         if(!snippets.at(5).isEmpty()) {
-          QString script = snippets.at(5);
+          QString script = snippets.at(5).simplified();
+          script.replace(", ", ",");
           while(script.right(1) == ",") {
             script.append(QString(dat.readLine().trimmed()));
           }
