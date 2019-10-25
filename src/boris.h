@@ -129,9 +129,10 @@ private:
   QPoint mLastMousePosition;
   bool alreadyEvading;
 
-  QGraphicsPixmapItem *borisSprite;
   QGraphicsPixmapItem *shadowSprite;
   QPixmap origShadow;
+  QGraphicsPixmapItem *borisSprite;
+  QGraphicsPixmapItem *scriptSprite;
   QGraphicsPixmapItem *dirtSprite;
   QPixmap origDirt;
   QGraphicsPixmapItem *bruisesSprite;

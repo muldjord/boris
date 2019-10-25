@@ -76,6 +76,9 @@ Boris::Boris(Settings *settings)
   borisSprite = this->scene()->addPixmap(QPixmap());
   borisSprite->setPos(0, 15); // To make room for shadow
 
+  scriptSprite = this->scene()->addPixmap(QPixmap());
+  scriptSprite->setPos(0, 15); // To make room for shadow
+
   origDirt.load(":dirt.png");
   dirtSprite = this->scene()->addPixmap(origDirt);
   dirtSprite->setOpacity(0.0);
@@ -86,7 +89,7 @@ Boris::Boris(Settings *settings)
   bruisesSprite->setOpacity(0.0);
   bruisesSprite->setPos(0, 15); // To make room for shadow
 
-  weatherSprite = this->scene()->addPixmap(QPixmap(32, 32));
+  weatherSprite = this->scene()->addPixmap(QPixmap());
   weatherSprite->setPos(0, 0);
   weatherSprite->hide();
   
@@ -440,9 +443,15 @@ void Boris::runScript()
   scriptVars["yvel"] = mouseVVel;
   scriptVars["xvel"] = mouseHVel;
 
-  ScriptHandler scriptHandler(this);
+  QImage image(32, 32, QImage::Format_ARGB32_Premultiplied);
+  image.fill(Qt::transparent);
+
+  ScriptHandler scriptHandler(&image, this);
   int stop = 0; // Will be true if a goto or break is run
   scriptHandler.runScript(behaviours.at(curBehav).frames.at(curFrame).script, stop);
+
+  scriptSprite->setPixmap(QPixmap::fromImage(image));
+
   if(stop == 1) {
     return;
   } else if(stop == 2) {
