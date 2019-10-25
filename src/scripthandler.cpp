@@ -31,9 +31,10 @@
 
 extern QList<Behaviour> behaviours;
 
-ScriptHandler::ScriptHandler(Boris *boris)
+ScriptHandler::ScriptHandler(QImage *image, Boris *boris)
 {
   this->boris = boris;
+  this->image = image;
 }
 
 void ScriptHandler::runScript(const QList<QString> &script, int &stop)
@@ -63,6 +64,8 @@ void ScriptHandler::runCommand(QList<QString> &parameters, int &stop)
     handleGoto(parameters, stop);
   } else if(parameters.first() == "print") {
     handlePrint(parameters);
+  } else if(parameters.first() == "draw") {
+    handleDraw(parameters);
   } else if(parameters.first() == "break") {
     handleBreak(stop);
   }
@@ -262,12 +265,6 @@ void ScriptHandler::handleStat(QList<QString> &parameters)
   parameters.removeFirst();
 }
 
-void ScriptHandler::handleBreak(int &stop)
-{
-  printf("Changing behaviour\n");
-  stop = 2; // Will tell the Boris class to change behaviour
-}
-
 void ScriptHandler::handlePrint(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'print'
@@ -277,4 +274,52 @@ void ScriptHandler::handlePrint(QList<QString> &parameters)
   } else {
     printf("%s, ERROR: Unknown variable\n", parameters.first().toStdString().c_str());
   }
+}
+
+void ScriptHandler::handleDraw(QList<QString> &parameters)
+{
+  parameters.removeFirst(); // Remove 'draw'
+
+  if(parameters.count() >= 1) {
+    QPainter painter;
+    Qt::GlobalColor color = Qt::transparent;
+    if(parameters.first() == "black") {
+      color = Qt::black;
+    } else if(parameters.first() == "white") {
+      color = Qt::white;
+    }
+    painter.begin(image);
+    painter.setRenderHint(QPainter::Antialiasing, false);
+    painter.setRenderHint(QPainter::TextAntialiasing, false);
+    painter.setPen(QPen(QColor(color)));
+    parameters.removeFirst(); // Remove drawing color
+    
+    if(parameters.count() >= 1) {
+      if(parameters.first() == "line") {
+        parameters.removeFirst(); // Remove 'line'
+        if(parameters.count() >= 2) {
+          painter.drawLine(parameters.at(0).toInt(), parameters.at(1).toInt(),
+                           parameters.at(2).toInt(), parameters.at(3).toInt());
+          parameters.removeFirst(); // Remove x1
+          parameters.removeFirst(); // Remove y1
+          parameters.removeFirst(); // Remove x2
+          parameters.removeFirst(); // Remove y2
+        }        
+      } else if(parameters.first() == "pixel") {
+        parameters.removeFirst(); // Remove 'pixel'
+        if(parameters.count() >= 2) {
+          painter.drawPoint(parameters.at(0).toInt(), parameters.at(1).toInt());
+          parameters.removeFirst(); // Remove x
+          parameters.removeFirst(); // Remove y
+        }
+      }
+    }
+    painter.end();
+  }
+}
+
+void ScriptHandler::handleBreak(int &stop)
+{
+  printf("Changing behaviour\n");
+  stop = 2; // Will tell the Boris class to change behaviour
 }

@@ -36,12 +36,13 @@ class ScriptHandler : public QObject
   Q_OBJECT;
 
 public:
-  ScriptHandler(Boris *boris);
+  ScriptHandler(QImage *image, Boris *boris);
   void runScript(const QList<QString> &script, int &stop);
 
 private:
   Boris *boris = nullptr;
-
+  QImage *image = nullptr;
+  
   // Main command parser
   void runCommand(QList<QString> &parameters, int &stop);
 
@@ -52,6 +53,7 @@ private:
   void handleVar(QList<QString> &parameters);
   void handleStat(QList<QString> &parameters);
   void handlePrint(QList<QString> &parameters);
+  void handleDraw(QList<QString> &parameters);
   void handleBreak(int &stop);
   
 };
