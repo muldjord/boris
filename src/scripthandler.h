@@ -60,7 +60,7 @@ private:
   void condition(QList<QString> &parameters, bool &isTrue, bool &compare);
   void drawText(QPainter &painter, const Qt::GlobalColor &color,
                 const int &x, const int &y, const QString &text);
-  int getValue(const QString &value);
+  int getValue(QList<QString> &parameters);
   
 };
 

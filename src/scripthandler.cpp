@@ -97,43 +97,41 @@ void ScriptHandler::handleIf(QList<QString> &parameters, int &stop)
 
 void ScriptHandler::condition(QList<QString> &parameters, bool &isTrue, bool &compare)
 {
-  int compareFrom = getValue(parameters.first());
-  int compareTo = getValue(parameters.at(2));
+  int compareFrom = getValue(parameters);
+  QString op = parameters.first();
+  parameters.removeFirst(); // Remove operator
+  int compareTo = getValue(parameters);
   
   if(compare) {
     isTrue = false;
-    if(parameters.at(1) == "<") {
+    if(op == "<") {
       if(compareFrom < compareTo) {
         isTrue = true;
       }
-    } else if(parameters.at(1) == ">") {
+    } else if(op == ">") {
       if(compareFrom > compareTo) {
         isTrue = true;
       }
-    } else if(parameters.at(1) == "<=") {
+    } else if(op == "<=") {
       if(compareFrom <= compareTo) {
         isTrue = true;
       }
-    } else if(parameters.at(1) == ">=") {
+    } else if(op == ">=") {
       if(compareFrom >= compareTo) {
         isTrue = true;
       }
-    } else if(parameters.at(1) == "=") {
+    } else if(op == "=") {
       if(compareFrom == compareTo) {
         isTrue = true;
       }
-    } else if(parameters.at(1) == "==") {
+    } else if(op == "==") {
       if(compareFrom == compareTo) {
         isTrue = true;
       }
     }
   }
 
-  printf("%d %s %d", compareFrom, parameters.at(1).toStdString().c_str(), compareTo);
-
-  parameters.removeFirst();
-  parameters.removeFirst();
-  parameters.removeFirst();
+  printf("%d %s %d", compareFrom, op.toStdString().c_str(), compareTo);
 
   if(parameters.count() >= 1) {
     if(parameters.first() == "or") {
@@ -175,66 +173,66 @@ void ScriptHandler::handleVar(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'var'
 
-  int number = getValue(parameters.at(2));
+  QString variable = parameters.first();
+  parameters.removeFirst(); // Remove variable
+  QString op = parameters.first();
+  parameters.removeFirst(); // Remove operator
+  int number = getValue(parameters);
 
-  if(parameters.at(1) == "=") {
-    boris->scriptVars[parameters.first()] = number;
-  } else if(parameters.at(1) == "+=") {
-    boris->scriptVars[parameters.first()] += number;
-  } else if(parameters.at(1) == "-=") {
-    boris->scriptVars[parameters.first()] -= number;
-  } else if(parameters.at(1) == "*=") {
-    boris->scriptVars[parameters.first()] *= number;
-  } else if(parameters.at(1) == "/=") {
-    boris->scriptVars[parameters.first()] /= number;
+  if(op == "=") {
+    boris->scriptVars[variable] = number;
+  } else if(op == "+=") {
+    boris->scriptVars[variable] += number;
+  } else if(op == "-=") {
+    boris->scriptVars[variable] -= number;
+  } else if(op == "*=") {
+    boris->scriptVars[variable] *= number;
+  } else if(op == "/=") {
+    boris->scriptVars[variable] /= number;
   }
 
-  printf("%s = %d\n", parameters.first().toStdString().c_str(), boris->scriptVars[parameters.first()]);
-  parameters.removeFirst();
-  parameters.removeFirst();
-  parameters.removeFirst();
+  printf("%s = %d\n", variable.toStdString().c_str(), boris->scriptVars[variable]);
 }
 
 void ScriptHandler::handleStat(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'stat'
 
-  int number = getValue(parameters.at(2));
+  QString statType = parameters.first();
+  parameters.removeFirst(); // Remove stat type
+  QString op = parameters.first();
+  parameters.removeFirst(); // Remove operator
+  int number = getValue(parameters);
 
   int *stat = nullptr;
-  if(parameters.first() == "hyper") {
+  if(statType == "hyper") {
     stat = &boris->hyperQueue;
-  } else if(parameters.first() == "health") {
+  } else if(statType == "health") {
     stat = &boris->healthQueue;
-  } else if(parameters.first() == "energy") {
+  } else if(statType == "energy") {
     stat = &boris->energyQueue;
-  } else if(parameters.first() == "hunger") {
+  } else if(statType == "hunger") {
     stat = &boris->hungerQueue;
-  } else if(parameters.first() == "bladder") {
+  } else if(statType == "bladder") {
     stat = &boris->bladderQueue;
-  } else if(parameters.first() == "social") {
+  } else if(statType == "social") {
     stat = &boris->socialQueue;
-  } else if(parameters.first() == "fun") {
+  } else if(statType == "fun") {
     stat = &boris->funQueue;
-  } else if(parameters.first() == "hygiene") {
+  } else if(statType == "hygiene") {
     stat = &boris->hygieneQueue;
   }
   if(stat != nullptr) {
-    if(parameters.at(1) == "+=") {
+    if(op == "+=") {
       *stat += number;
-    } else if(parameters.at(1) == "-=") {
+    } else if(op == "-=") {
       *stat -= number;
     }
-    printf("%s %s %s\n", parameters.first().toStdString().c_str(),
-           parameters.at(1).toStdString().c_str(),
-           parameters.at(2).toStdString().c_str());
+    printf("%s %s %d\n", statType.toStdString().c_str(),
+           op.toStdString().c_str(), number);
   } else {
-    printf("%s, ERROR: Unknown stat\n", parameters.first().toStdString().c_str());
+    printf("%s, ERROR: Unknown stat\n", statType.toStdString().c_str());
   }
-
-  parameters.removeFirst();
-  parameters.removeFirst();
-  parameters.removeFirst();
 }
 
 void ScriptHandler::handlePrint(QList<QString> &parameters)
@@ -320,83 +318,64 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
       if(parameters.first() == "line") {
         parameters.removeFirst(); // Remove 'line'
         if(parameters.count() >= 4) {
-          int x1 = getValue(parameters.at(0));
-          int y1 = getValue(parameters.at(1));
-          int x2 = getValue(parameters.at(2));
-          int y2 = getValue(parameters.at(3));
+          int x1 = getValue(parameters);
+          int y1 = getValue(parameters);
+          int x2 = getValue(parameters);
+          int y2 = getValue(parameters);
           printf("Drawing %s line from %d,%d to %d,%d\n", colorString.toStdString().c_str(),
                  x1, y1, x2, y2);
           painter.drawLine(x1, y1, x2, y2);
-          parameters.removeFirst(); // Remove x1
-          parameters.removeFirst(); // Remove y1
-          parameters.removeFirst(); // Remove x2
-          parameters.removeFirst(); // Remove y2
         }        
       } else if(parameters.first() == "pixel") {
         parameters.removeFirst(); // Remove 'pixel'
         if(parameters.count() >= 2) {
-          int x = getValue(parameters.at(0));
-          int y = getValue(parameters.at(1));
+          int x = getValue(parameters);
+          int y = getValue(parameters);
           printf("Drawing %s pixel at %d,%d\n", colorString.toStdString().c_str(), x, y);
           painter.drawPoint(x, y);
-          parameters.removeFirst(); // Remove x
-          parameters.removeFirst(); // Remove y
         }
       } else if(parameters.first() == "ellipse") {
         parameters.removeFirst(); // Remove 'ellipse'
         if(parameters.count() >= 4) {
           painter.setBrush(QBrush(color, Qt::SolidPattern));
-          int x = getValue(parameters.at(0));
-          int y = getValue(parameters.at(1));
-          int w = getValue(parameters.at(2));
-          int h = getValue(parameters.at(3));
+          int x = getValue(parameters);
+          int y = getValue(parameters);
+          int w = getValue(parameters);
+          int h = getValue(parameters);
           printf("Drawing %s ellipse at %d,%d with a width of %d and a height of %d\n", colorString.toStdString().c_str(), x, y, w, h);
           painter.drawEllipse(x, y, w, h);
-          parameters.removeFirst(); // Remove x
-          parameters.removeFirst(); // Remove y
-          parameters.removeFirst(); // Remove width
-          parameters.removeFirst(); // Remove height
         }
       } else if(parameters.first() == "rectangle") {
         parameters.removeFirst(); // Remove 'rectangle'
         if(parameters.count() >= 4) {
           painter.setBrush(QBrush(color, Qt::SolidPattern));
-          int x = getValue(parameters.at(0));
-          int y = getValue(parameters.at(1));
-          int w = getValue(parameters.at(2));
-          int h = getValue(parameters.at(3));
+          int x = getValue(parameters);
+          int y = getValue(parameters);
+          int w = getValue(parameters);
+          int h = getValue(parameters);
           printf("Drawing %s rectangle at %d,%d with a width of %d and a height of %d\n", colorString.toStdString().c_str(), x, y, w, h);
           painter.drawRect(x, y, w, h);
-          parameters.removeFirst(); // Remove x
-          parameters.removeFirst(); // Remove y
-          parameters.removeFirst(); // Remove width
-          parameters.removeFirst(); // Remove height
         }
       } else if(parameters.first() == "text") {
         parameters.removeFirst(); // Remove 'text'
         if(parameters.count() >= 3) {
-          int x = getValue(parameters.at(0));
-          int y = getValue(parameters.at(1));
-          QString text = parameters.at(2);
+          int x = getValue(parameters);
+          int y = getValue(parameters);
+          QString text = parameters.first();
+          parameters.removeFirst(); // Remove string
           printf("Drawing %s text '%s' at %d,%d\n", colorString.toStdString().c_str(),
                  text.toStdString().c_str(), x, y);
           drawText(painter, color, x, y, text);
-          parameters.removeFirst(); // Remove x
-          parameters.removeFirst(); // Remove y
-          parameters.removeFirst(); // Remove string
         }
       } else if(parameters.first() == "value") {
         parameters.removeFirst(); // Remove 'value'
         if(parameters.count() >= 3) {
-          int x = getValue(parameters.at(0));
-          int y = getValue(parameters.at(1));
-          int value = getValue(parameters.at(2));
+          int x = getValue(parameters);
+          int y = getValue(parameters);
+          int value = getValue(parameters);
           printf("Drawing %s value %d at %d,%d\n", colorString.toStdString().c_str(),
                  value, x, y);
           drawText(painter, color, x, y, QString::number(value));
-          parameters.removeFirst(); // Remove x
-          parameters.removeFirst(); // Remove y
-          parameters.removeFirst(); // Remove string
         }
       }
     }
@@ -429,16 +408,29 @@ void ScriptHandler::handleBreak(int &stop)
   stop = 2; // Will tell the Boris class to change behaviour
 }
 
-int ScriptHandler::getValue(const QString &value)
+int ScriptHandler::getValue(QList<QString> &parameters)
 {
   bool isInt = false;
-  int result = value.toInt(&isInt);
+  int result = parameters.first().toInt(&isInt);
   if(!isInt) {
-    if(value.left(1) == "@") {
-      result = (qrand() % value.right(value.length() - 1).toInt()) + 1;
+    if(parameters.first().left(1) == "@") {
+      result = (qrand() % parameters.first().right(parameters.first().length() - 1).toInt()) + 1;
     } else {
-      result = boris->scriptVars[value];
+      result = boris->scriptVars[parameters.first()];
     }
   }
+
+  parameters.removeFirst(); // Remove value
+
+  if(parameters.count() >= 2) {
+    if(parameters.first() == "+") {
+      parameters.removeFirst(); // Remove '+'
+      result += getValue(parameters);
+    } else if(parameters.first() == "-") {
+      parameters.removeFirst(); // Remove '-'
+      result -= getValue(parameters);
+    }
+  }
+
   return result;
 }
