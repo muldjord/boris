@@ -17,311 +17,222 @@ doNotDisturb
 7;75;0;0;;
 8;75;0;0;;
 9;2000;0;0;data/sfx/game_boot.wav;if @2 = 1 goto startright else goto startleft
-80;75;0;0;;label nextround,if @2 = 1 goto startright else goto startleft
+12;75;0;0;;label nextround,if @2 = 1 goto startright else goto startleft
 
 # Choose next path
 # From 10
-82;75;0;0;data/sfx/game_paddle.wav;label from10,var rand = @5,if rand = 1 goto 10up else if rand = 2 goto 10straight else if rand = 3 goto 10down else if rand = 4 goto 10to3 else if rand = 5 goto 10win
+14;75;0;0;data/sfx/game_paddle.wav;label from10,var rand = @5,if rand = 1 goto 10up else if rand = 2 goto 10straight else if rand = 3 goto 10down else if rand = 4 goto 10to3 else if rand = 5 goto 10win
 # From 9
-83;75;0;0;data/sfx/game_paddle.wav;label from9,var rand = @6,if rand = 1 goto 9up else if rand = 2 goto 9straight else if rand = 3 goto 9down else if rand = 4 goto 9to2 else if rand = 5 goto 9to4 else if rand = 6 goto 9win
+15;75;0;0;data/sfx/game_paddle.wav;label from9,var rand = @6,if rand = 1 goto 9up else if rand = 2 goto 9straight else if rand = 3 goto 9down else if rand = 4 goto 9to2 else if rand = 5 goto 9to4 else if rand = 6 goto 9win
 # From 8
-84;75;0;0;data/sfx/game_paddle.wav;label from8,var rand = @5,if rand = 1 goto 8up else if rand = 2 goto 8straight else if rand = 3 goto 8down else if rand = 4 goto 8to3 else if rand = 5 goto 8win
+16;75;0;0;data/sfx/game_paddle.wav;label from8,var rand = @5,if rand = 1 goto 8up else if rand = 2 goto 8straight else if rand = 3 goto 8down else if rand = 4 goto 8to3 else if rand = 5 goto 8win
 # From 2
-85;75;0;0;data/sfx/game_paddle.wav;label from2,var rand = @5,if rand = 1 goto 2up else if rand = 2 goto 2straight else if rand = 3 goto 2down else if rand = 4 goto 2to9 else if rand = 5 goto 2loose
+17;75;0;0;data/sfx/game_paddle.wav;label from2,var rand = @5,if rand = 1 goto 2up else if rand = 2 goto 2straight else if rand = 3 goto 2down else if rand = 4 goto 2to9 else if rand = 5 goto 2loose
 # From 3
-86;75;0;0;data/sfx/game_paddle.wav;label from3,var rand = @6,if rand = 1 goto 3up else if rand = 2 goto 3straight else if rand = 3 goto 3down else if rand = 4 goto 3to10 else if rand = 5 goto 3to8 else if rand = 6 goto 3loose
+18;75;0;0;data/sfx/game_paddle.wav;label from3,var rand = @6,if rand = 1 goto 3up else if rand = 2 goto 3straight else if rand = 3 goto 3down else if rand = 4 goto 3to10 else if rand = 5 goto 3to8 else if rand = 6 goto 3loose
 # From 4
-87;75;0;0;data/sfx/game_paddle.wav;label from4,var rand = @5,if rand = 1 goto 4up else if rand = 2 goto 4straight else if rand = 3 goto 4down else if rand = 4 goto 4to9 else if rand = 5 goto 4loose
+19;75;0;0;data/sfx/game_paddle.wav;label from4,var rand = @5,if rand = 1 goto 4up else if rand = 2 goto 4straight else if rand = 3 goto 4down else if rand = 4 goto 4to9 else if rand = 5 goto 4loose
 
 # 10 up
-88;75;0;0;;label 10up
-89;75;0;0;data/sfx/game_wall.wav;if @10 = 1 goto 11win
-90;75;0;0;;
-91;75;0;0;;
-92;75;0;0;;
-93;75;0;0;;
-94;75;0;0;;
-95;75;0;0;;
-96;75;0;0;;goto from4
+20;75;0;0;;label 10up
+21;75;0;0;data/sfx/game_wall.wav;if @10 = 1 goto 11win
+22;75;0;0;;
+23;75;0;0;;
+24;75;0;0;;
+25;75;0;0;;
+26;75;0;0;;
+27;75;0;0;;
+28;75;0;0;;goto from4
 
 # 10 straight
-142;75;0;0;;label 10straight
-143;75;0;0;;
-144;75;0;0;;
-145;75;0;0;;
-146;75;0;0;;
-147;75;0;0;;
-148;75;0;0;;
-149;75;0;0;;
-150;75;0;0;;goto from2
+74;75;0;0;;label 10straight
+75;75;0;0;;
+76;75;0;0;;
+77;75;0;0;;
+78;75;0;0;;
+79;75;0;0;;
+80;75;0;0;;
+81;75;0;0;;
+82;75;0;0;;goto from2
 
 # 10 down
-105;75;0;0;;label 10down
-104;75;0;0;;
-103;75;0;0;;
-102;75;0;0;;
-101;75;0;0;;
-100;75;0;0;;
-99;75;0;0;;
-98;75;0;0;data/sfx/game_wall.wav;
-97;75;0;0;;goto from4
+37;75;0;0;;label 10down
+36;75;0;0;;
+35;75;0;0;;
+34;75;0;0;;
+33;75;0;0;;
+32;75;0;0;;
+31;75;0;0;;
+30;75;0;0;data/sfx/game_wall.wav;
+29;75;0;0;;goto from4
 
 # 9 up
-106;75;0;0;;label 9up
-107;75;0;0;;
-108;75;0;0;;
-109;75;0;0;;
-110;75;0;0;data/sfx/game_wall.wav;label startright,if @10 = 1 goto 12win
-111;75;0;0;;
-112;75;0;0;;
-113;75;0;0;;
-114;75;0;0;;goto from3
+38;75;0;0;;label 9up
+39;75;0;0;;
+40;75;0;0;;
+41;75;0;0;;
+42;75;0;0;data/sfx/game_wall.wav;label startright,if @10 = 1 goto 12win
+43;75;0;0;;
+44;75;0;0;;
+45;75;0;0;;
+46;75;0;0;;goto from3
 
 # 9 straight
-151;75;0;0;;label 9straight
-152;75;0;0;;
-153;75;0;0;;
-154;75;0;0;;
-155;75;0;0;;
-156;75;0;0;;
-157;75;0;0;;
-158;75;0;0;;
-159;75;0;0;;goto from3
+83;75;0;0;;label 9straight
+84;75;0;0;;
+85;75;0;0;;
+86;75;0;0;;
+87;75;0;0;;
+88;75;0;0;;
+89;75;0;0;;
+90;75;0;0;;
+91;75;0;0;;goto from3
 
 # 9 down
-123;75;0;0;;label 9down
-122;75;0;0;;
-121;75;0;0;;
-120;75;0;0;;
-119;75;0;0;data/sfx/game_wall.wav;if @10 = 1 goto 6win
-118;75;0;0;;
-117;75;0;0;;
-116;75;0;0;;
-115;75;0;0;;goto from3
+55;75;0;0;;label 9down
+54;75;0;0;;
+53;75;0;0;;
+52;75;0;0;;
+51;75;0;0;data/sfx/game_wall.wav;if @10 = 1 goto 6win
+50;75;0;0;;
+49;75;0;0;;
+48;75;0;0;;
+47;75;0;0;;goto from3
 
 # 8 up
-124;75;0;0;;label 8up
-125;75;0;0;;
-126;75;0;0;;
-127;75;0;0;;
-128;75;0;0;;
-129;75;0;0;;
-130;75;0;0;;
-131;75;0;0;data/sfx/game_wall.wav;
-132;75;0;0;;goto from2
+56;75;0;0;;label 8up
+57;75;0;0;;
+58;75;0;0;;
+59;75;0;0;;
+60;75;0;0;;
+61;75;0;0;;
+62;75;0;0;;
+63;75;0;0;data/sfx/game_wall.wav;
+64;75;0;0;;goto from2
 
 # 8 straight
-160;75;0;0;;label 8straight
-161;75;0;0;;
-162;75;0;0;;
-163;75;0;0;;
-164;75;0;0;;
-165;75;0;0;;
-166;75;0;0;;
-167;75;0;0;;
-168;75;0;0;;goto from4
+92;75;0;0;;label 8straight
+93;75;0;0;;
+94;75;0;0;;
+95;75;0;0;;
+96;75;0;0;;
+97;75;0;0;;
+98;75;0;0;;
+99;75;0;0;;
+100;75;0;0;;goto from4
 
 # 8 down
-141;75;0;0;;label 8down
-140;75;0;0;data/sfx/game_wall.wav;if @10 = 1 goto 7win
-139;75;0;0;;
-138;75;0;0;;
-137;75;0;0;;
-136;75;0;0;;
-135;75;0;0;;
-134;75;0;0;;
-133;75;0;0;;goto from2
+73;75;0;0;;label 8down
+72;75;0;0;data/sfx/game_wall.wav;if @10 = 1 goto 7win
+71;75;0;0;;
+70;75;0;0;;
+69;75;0;0;;
+68;75;0;0;;
+67;75;0;0;;
+66;75;0;0;;
+65;75;0;0;;goto from2
 
 # 2 up
-132;75;0;0;;label 2up
-131;75;0;0;data/sfx/game_wall.wav;if @10 = 1 goto 1loose
-130;75;0;0;;
-129;75;0;0;;
-128;75;0;0;;
-127;75;0;0;;
-126;75;0;0;;
-125;75;0;0;;
-124;75;0;0;;goto from8
+64;75;0;0;;label 2up
+63;75;0;0;data/sfx/game_wall.wav;if @10 = 1 goto 1loose
+62;75;0;0;;
+61;75;0;0;;
+60;75;0;0;;
+59;75;0;0;;
+58;75;0;0;;
+57;75;0;0;;
+56;75;0;0;;goto from8
 
 # 2 straight
-150;75;0;0;;label 2straight
-149;75;0;0;;
-148;75;0;0;;
-147;75;0;0;;
-146;75;0;0;;
-145;75;0;0;;
-144;75;0;0;;
-143;75;0;0;;
-142;75;0;0;;goto from10
+82;75;0;0;;label 2straight
+81;75;0;0;;
+80;75;0;0;;
+79;75;0;0;;
+78;75;0;0;;
+77;75;0;0;;
+76;75;0;0;;
+75;75;0;0;;
+74;75;0;0;;goto from10
 
 # 2 down
-133;75;0;0;;label 2down
-134;75;0;0;;
-135;75;0;0;;
-136;75;0;0;;
-137;75;0;0;;
-138;75;0;0;;
-139;75;0;0;;
-140;75;0;0;data/sfx/game_wall.wav;
-141;75;0;0;;goto from8
+65;75;0;0;;label 2down
+66;75;0;0;;
+67;75;0;0;;
+68;75;0;0;;
+69;75;0;0;;
+70;75;0;0;;
+71;75;0;0;;
+72;75;0;0;data/sfx/game_wall.wav;
+73;75;0;0;;goto from8
 
 # 3 up
-114;75;0;0;;label 3up
-113;75;0;0;;
-112;75;0;0;;
-111;75;0;0;;
-110;75;0;0;data/sfx/game_wall.wav;label startleft,if @10 = 1 goto 12loose
-109;75;0;0;;
-108;75;0;0;;
-107;75;0;0;;
-106;75;0;0;;goto from9
+46;75;0;0;;label 3up
+45;75;0;0;;
+44;75;0;0;;
+43;75;0;0;;
+42;75;0;0;data/sfx/game_wall.wav;label startleft,if @10 = 1 goto 12loose
+41;75;0;0;;
+40;75;0;0;;
+39;75;0;0;;
+38;75;0;0;;goto from9
 
 # 3 straight
-159;75;0;0;;label 3straight
-158;75;0;0;;
-157;75;0;0;;
-156;75;0;0;;
-155;75;0;0;;
-154;75;0;0;;
-153;75;0;0;;
-152;75;0;0;;
-151;75;0;0;;goto from9
+91;75;0;0;;label 3straight
+90;75;0;0;;
+89;75;0;0;;
+88;75;0;0;;
+87;75;0;0;;
+86;75;0;0;;
+85;75;0;0;;
+84;75;0;0;;
+83;75;0;0;;goto from9
 
 # 3 down
-115;75;0;0;;label 3down
-116;75;0;0;;
-117;75;0;0;;
-118;75;0;0;;
-119;75;0;0;data/sfx/game_wall.wav;if @10 = 1 goto 6loose
-120;75;0;0;;
-121;75;0;0;;
-122;75;0;0;;
-123;75;0;0;;goto from9
+47;75;0;0;;label 3down
+48;75;0;0;;
+49;75;0;0;;
+50;75;0;0;;
+51;75;0;0;data/sfx/game_wall.wav;if @10 = 1 goto 6loose
+52;75;0;0;;
+53;75;0;0;;
+54;75;0;0;;
+55;75;0;0;;goto from9
 
 # 4 up
-96;75;0;0;;label 4up
+28;75;0;0;;label 4up
+27;75;0;0;;
+26;75;0;0;;
+25;75;0;0;;
+24;75;0;0;;
+23;75;0;0;;
+22;75;0;0;;
+21;75;0;0;data/sfx/game_wall.wav;
+20;75;0;0;;goto from10
+
+# 4 straight
+100;75;0;0;;label 4straight
+99;75;0;0;;
+98;75;0;0;;
+97;75;0;0;;
+96;75;0;0;;
 95;75;0;0;;
 94;75;0;0;;
 93;75;0;0;;
-92;75;0;0;;
-91;75;0;0;;
-90;75;0;0;;
-89;75;0;0;data/sfx/game_wall.wav;
-88;75;0;0;;goto from10
-
-# 4 straight
-168;75;0;0;;label 4straight
-167;75;0;0;;
-166;75;0;0;;
-165;75;0;0;;
-164;75;0;0;;
-163;75;0;0;;
-162;75;0;0;;
-161;75;0;0;;
-160;75;0;0;;goto from8
+92;75;0;0;;goto from8
   
 # 4 down
-97;75;0;0;;label 4down
-98;75;0;0;data/sfx/game_wall.wav;if @10 = 1 goto 5loose
-99;75;0;0;;
-100;75;0;0;;
-101;75;0;0;;
-102;75;0;0;;
-103;75;0;0;;
-104;75;0;0;;
-105;75;0;0;;goto from10
+29;75;0;0;;label 4down
+30;75;0;0;data/sfx/game_wall.wav;if @10 = 1 goto 5loose
+31;75;0;0;;
+32;75;0;0;;
+33;75;0;0;;
+34;75;0;0;;
+35;75;0;0;;
+36;75;0;0;;
+37;75;0;0;;goto from10
 
 # 10 to 3
-239;75;0;0;;label 10to3
-240;75;0;0;;
-241;75;0;0;;
-242;75;0;0;;
-243;75;0;0;;
-244;75;0;0;;
-245;75;0;0;;
-246;75;0;0;;
-247;75;0;0;;goto from3
-
-# 9 to 2
-248;75;0;0;;label 9to2
-249;75;0;0;;
-250;75;0;0;;
-251;75;0;0;;
-252;75;0;0;;
-253;75;0;0;;
-254;75;0;0;;
-255;75;0;0;;
-256;75;0;0;;goto from2
-
-# 9 to 4
-257;75;0;0;;label 9to4
-258;75;0;0;;
-259;75;0;0;;
-260;75;0;0;;
-261;75;0;0;;
-262;75;0;0;;
-263;75;0;0;;
-264;75;0;0;;
-265;75;0;0;;goto from4
-
-# 8 to 3
-266;75;0;0;;label 8to3
-267;75;0;0;;
-268;75;0;0;;
-269;75;0;0;;
-270;75;0;0;;
-271;75;0;0;;
-272;75;0;0;;
-273;75;0;0;;
-274;75;0;0;;goto from3
-
-# 3 to 10
-247;75;0;0;;label 3to10
-246;75;0;0;;
-245;75;0;0;;
-244;75;0;0;;
-243;75;0;0;;
-242;75;0;0;;
-241;75;0;0;;
-240;75;0;0;;
-239;75;0;0;;goto from10
-
-# 2 to 9
-256;75;0;0;;label 2to9
-255;75;0;0;;
-254;75;0;0;;
-253;75;0;0;;
-252;75;0;0;;
-251;75;0;0;;
-250;75;0;0;;
-249;75;0;0;;
-248;75;0;0;;goto from9
-
-# 4 to 9
-265;75;0;0;;label 4to9
-264;75;0;0;;
-263;75;0;0;;
-262;75;0;0;;
-261;75;0;0;;
-260;75;0;0;;
-259;75;0;0;;
-258;75;0;0;;
-257;75;0;0;;goto from9
-
-# 3 to 8
-274;75;0;0;;label 3to8
-273;75;0;0;;
-272;75;0;0;;
-271;75;0;0;;
-270;75;0;0;;
-269;75;0;0;;
-268;75;0;0;;
-267;75;0;0;;
-266;75;0;0;;goto from8
-
-# 11 win
-170;75;0;0;;label 11win
-171;75;0;0;;
+171;75;0;0;;label 10to3
 172;75;0;0;;
 173;75;0;0;;
 174;75;0;0;;
@@ -329,10 +240,10 @@ doNotDisturb
 176;75;0;0;;
 177;75;0;0;;
 178;75;0;0;;
-179;75;0;0;;goto bscore
+179;75;0;0;;goto from3
 
-# 5 loose
-180;75;0;0;;label 5loose
+# 9 to 2
+180;75;0;0;;label 9to2
 181;75;0;0;;
 182;75;0;0;;
 183;75;0;0;;
@@ -340,53 +251,178 @@ doNotDisturb
 185;75;0;0;;
 186;75;0;0;;
 187;75;0;0;;
-188;75;0;0;;
-189;75;0;0;;goto cscore
+188;75;0;0;;goto from2
 
-# 12 win
-190;75;0;0;;label 12win
+# 9 to 4
+189;75;0;0;;label 9to4
+190;75;0;0;;
 191;75;0;0;;
 192;75;0;0;;
 193;75;0;0;;
 194;75;0;0;;
 195;75;0;0;;
-196;75;0;0;;goto bscore
+196;75;0;0;;
+197;75;0;0;;goto from4
 
-# 6 loose
-197;75;0;0;;label 6loose
-198;75;0;0;;
+# 8 to 3
+198;75;0;0;;label 8to3
 199;75;0;0;;
 200;75;0;0;;
 201;75;0;0;;
 202;75;0;0;;
-203;75;0;0;;goto cscore
+203;75;0;0;;
+204;75;0;0;;
+205;75;0;0;;
+206;75;0;0;;goto from3
+
+# 3 to 10
+179;75;0;0;;label 3to10
+178;75;0;0;;
+177;75;0;0;;
+176;75;0;0;;
+175;75;0;0;;
+174;75;0;0;;
+173;75;0;0;;
+172;75;0;0;;
+171;75;0;0;;goto from10
+
+# 2 to 9
+188;75;0;0;;label 2to9
+187;75;0;0;;
+186;75;0;0;;
+185;75;0;0;;
+184;75;0;0;;
+183;75;0;0;;
+182;75;0;0;;
+181;75;0;0;;
+180;75;0;0;;goto from9
+
+# 4 to 9
+197;75;0;0;;label 4to9
+196;75;0;0;;
+195;75;0;0;;
+194;75;0;0;;
+193;75;0;0;;
+192;75;0;0;;
+191;75;0;0;;
+190;75;0;0;;
+189;75;0;0;;goto from9
+
+# 3 to 8
+206;75;0;0;;label 3to8
+205;75;0;0;;
+204;75;0;0;;
+203;75;0;0;;
+202;75;0;0;;
+201;75;0;0;;
+200;75;0;0;;
+199;75;0;0;;
+198;75;0;0;;goto from8
+
+# 11 win
+102;75;0;0;;label 11win
+103;75;0;0;;
+104;75;0;0;;
+105;75;0;0;;
+106;75;0;0;;
+107;75;0;0;;
+108;75;0;0;;
+109;75;0;0;;
+110;75;0;0;;
+111;75;0;0;;goto bscore
+
+# 5 loose
+112;75;0;0;;label 5loose
+113;75;0;0;;
+114;75;0;0;;
+115;75;0;0;;
+116;75;0;0;;
+117;75;0;0;;
+118;75;0;0;;
+119;75;0;0;;
+120;75;0;0;;
+121;75;0;0;;goto cscore
+
+# 12 win
+122;75;0;0;;label 12win
+123;75;0;0;;
+124;75;0;0;;
+125;75;0;0;;
+126;75;0;0;;
+127;75;0;0;;
+128;75;0;0;;goto bscore
+
+# 6 loose
+129;75;0;0;;label 6loose
+130;75;0;0;;
+131;75;0;0;;
+132;75;0;0;;
+133;75;0;0;;
+134;75;0;0;;
+135;75;0;0;;goto cscore
 
 # 7 win
-204;75;0;0;;label 7win
-205;75;0;0;;
-206;75;0;0;;
-207;75;0;0;;
-208;75;0;0;;
+136;75;0;0;;label 7win
+137;75;0;0;;
+138;75;0;0;;
+139;75;0;0;;
+140;75;0;0;;
+141;75;0;0;;
+142;75;0;0;;
+143;75;0;0;;
+144;75;0;0;;
+145;75;0;0;;goto bscore
+
+# 1 loose
+146;75;0;0;;label 1loose
+147;75;0;0;;
+148;75;0;0;;
+149;75;0;0;;
+150;75;0;0;;
+151;75;0;0;;
+152;75;0;0;;
+153;75;0;0;;
+154;75;0;0;;
+155;75;0;0;;goto cscore
+
+# 6 win
+156;75;0;0;;label 6win
+157;75;0;0;;
+158;75;0;0;;
+159;75;0;0;;
+160;75;0;0;;
+161;75;0;0;;
+162;75;0;0;;goto bscore
+
+# 12 loose
+163;75;0;0;;label 12loose
+164;75;0;0;;
+165;75;0;0;;
+166;75;0;0;;
+167;75;0;0;;
+168;75;0;0;;
+169;75;0;0;;goto cscore
+
+# 10 win
+208;75;0;0;;label 10win
 209;75;0;0;;
 210;75;0;0;;
 211;75;0;0;;
 212;75;0;0;;
-213;75;0;0;;goto bscore
-
-# 1 loose
-214;75;0;0;;label 1loose
+213;75;0;0;;
+214;75;0;0;;
 215;75;0;0;;
 216;75;0;0;;
 217;75;0;0;;
 218;75;0;0;;
-219;75;0;0;;
-220;75;0;0;;
+219;75;0;0;;goto bscore
+
+# 9 win
+220;75;0;0;;label 9win
 221;75;0;0;;
 222;75;0;0;;
-223;75;0;0;;goto cscore
-
-# 6 win
-224;75;0;0;;label 6win
+223;75;0;0;;
+224;75;0;0;;
 225;75;0;0;;
 226;75;0;0;;
 227;75;0;0;;
@@ -394,119 +430,83 @@ doNotDisturb
 229;75;0;0;;
 230;75;0;0;;goto bscore
 
-# 12 loose
-231;75;0;0;;label 12loose
+# 8 win
+231;75;0;0;;label 8win
 232;75;0;0;;
 233;75;0;0;;
 234;75;0;0;;
 235;75;0;0;;
 236;75;0;0;;
-237;75;0;0;;goto cscore
-
-# 10 win
-276;75;0;0;;label 10win
-277;75;0;0;;
-278;75;0;0;;
-279;75;0;0;;
-280;75;0;0;;
-281;75;0;0;;
-282;75;0;0;;
-283;75;0;0;;
-284;75;0;0;;
-285;75;0;0;;
-286;75;0;0;;
-287;75;0;0;;goto bscore
-
-# 9 win
-288;75;0;0;;label 9win
-289;75;0;0;;
-290;75;0;0;;
-291;75;0;0;;
-292;75;0;0;;
-293;75;0;0;;
-294;75;0;0;;
-295;75;0;0;;
-296;75;0;0;;
-297;75;0;0;;
-298;75;0;0;;goto bscore
-
-# 8 win
-299;75;0;0;;label 8win
-300;75;0;0;;
-301;75;0;0;;
-302;75;0;0;;
-303;75;0;0;;
-304;75;0;0;;
-305;75;0;0;;
-306;75;0;0;;
-307;75;0;0;;
-308;75;0;0;;
-309;75;0;0;;
-310;75;0;0;;goto bscore
+237;75;0;0;;
+238;75;0;0;;
+239;75;0;0;;
+240;75;0;0;;
+241;75;0;0;;
+242;75;0;0;;goto bscore
 
 # 2 loose
-311;75;0;0;;label 2loose
-312;75;0;0;;
-313;75;0;0;;
-314;75;0;0;;
-315;75;0;0;;
-316;75;0;0;;
-317;75;0;0;;
-318;75;0;0;;
-319;75;0;0;;
-320;75;0;0;;
-321;75;0;0;;
-322;75;0;0;;goto cscore
+243;75;0;0;;label 2loose
+244;75;0;0;;
+245;75;0;0;;
+246;75;0;0;;
+247;75;0;0;;
+248;75;0;0;;
+249;75;0;0;;
+250;75;0;0;;
+251;75;0;0;;
+252;75;0;0;;
+253;75;0;0;;
+254;75;0;0;;goto cscore
 
 # 3 loose
-323;75;0;0;;label 3loose
-324;75;0;0;;
-325;75;0;0;;
-326;75;0;0;;
-327;75;0;0;;
-328;75;0;0;;
-329;75;0;0;;
-330;75;0;0;;
-331;75;0;0;;
-332;75;0;0;;
-333;75;0;0;;
-334;75;0;0;;goto cscore
+255;75;0;0;;label 3loose
+256;75;0;0;;
+257;75;0;0;;
+258;75;0;0;;
+259;75;0;0;;
+260;75;0;0;;
+261;75;0;0;;
+262;75;0;0;;
+263;75;0;0;;
+264;75;0;0;;
+265;75;0;0;;
+266;75;0;0;;goto cscore
 
 # 4 loose
-335;75;0;0;;label 4loose
-336;75;0;0;;
-337;75;0;0;;
-338;75;0;0;;
-339;75;0;0;;
-340;75;0;0;;
-341;75;0;0;;
-342;75;0;0;;
-343;75;0;0;;
-344;75;0;0;;
-345;75;0;0;;
-346;75;0;0;;goto cscore
+267;75;0;0;;label 4loose
+268;75;0;0;;
+269;75;0;0;;
+270;75;0;0;;
+271;75;0;0;;
+272;75;0;0;;
+273;75;0;0;;
+274;75;0;0;;
+275;75;0;0;;
+276;75;0;0;;
+277;75;0;0;;
+278;75;0;0;;goto cscore
 
 # Boris scores
-80;75;0;0;data/sfx/win1.wav;label bscore,var bs += 1,stat fun += 6,draw green value 19 5 bs,draw red value 25 6 cs
-80;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
-80;75;0;0;;draw green value 19 5 bs,draw red value 25 6 cs
-80;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
-80;75;0;0;;draw green value 19 5 bs,draw red value 25 6 cs
-80;400;0;0;;draw green value 19 6 bs,draw red value 25 6 cs,if bs >= 5 goto gamewin,if cs >= 5 goto gameloose,goto nextround
+12;75;0;0;data/sfx/win1.wav;label bscore,var bs += 1,stat fun += 6,draw green value 19 5 bs,draw red value 25 6 cs
+12;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
+12;75;0;0;;draw green value 19 5 bs,draw red value 25 6 cs
+12;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
+12;75;0;0;;draw green value 19 5 bs,draw red value 25 6 cs
+12;400;0;0;;draw green value 19 6 bs,draw red value 25 6 cs,if bs >= 5 goto gamewin,if cs >= 5 goto gameloose,goto nextround
 
 # CPU scores
-80;75;0;0;data/sfx/grumpy1.wav;label cscore,var cs += 1,stat fun -= 2,draw green value 19 6 bs,draw red value 25 5 cs
-80;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
-80;75;0;0;;draw green value 19 6 bs,draw red value 25 5 cs
-80;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
-80;75;0;0;;draw green value 19 6 bs,draw red value 25 5 cs
-80;400;0;0;;draw green value 19 6 bs,draw red value 25 6 cs,if bs >= 5 goto gamewin,if cs >= 5 goto gameloose,goto nextround
+12;75;0;0;data/sfx/grumpy1.wav;label cscore,var cs += 1,stat fun -= 2,draw green value 19 6 bs,draw red value 25 5 cs
+12;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
+12;75;0;0;;draw green value 19 6 bs,draw red value 25 5 cs
+12;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
+12;75;0;0;;draw green value 19 6 bs,draw red value 25 5 cs
+12;400;0;0;;draw green value 19 6 bs,draw red value 25 6 cs,if bs >= 5 goto gamewin,if cs >= 5 goto gameloose,goto nextround
 
 # Win screen
-78;3000;0;0;data/sfx/game_win.wav;label gamewin,goto end
+10;3000;0;0;data/sfx/game_win.wav;label gamewin,goto end
 
 # Game over screen
-79;3000;0;0;data/sfx/game_loose.wav;label gameloose
+11;3000;0;0;data/sfx/game_loose.wav;label gameloose
 
 7;75;0;0;;label end
 6;75;0;0;;
