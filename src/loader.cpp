@@ -218,6 +218,35 @@ bool Loader::loadBehaviours(const Settings &settings,
   return true;
 }
 
+bool Loader::loadFont(QMap<QChar, QImage> &pfont)
+{
+  QImage fontSheet(":pfont.png");
+  if(!fontSheet.isNull()) {
+    QList<QChar> fontChars({'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ', '.', ',', ':', ';', '!', '?', '\"', '\'', '_', '+', '-', '*', '/', '<', '>', '='});
+    int w = fontSheet.width();
+    int h = fontSheet.height();
+    int x1 = 0;
+    int x2 = 0;
+    // Load all characters from png sprite sheet
+    for(const auto &fontChar: fontChars) {
+      // Look for first purple non-char pixel
+      while(x2 < w && fontSheet.pixelIndex(x2, 0) != 2) {
+        x2++;
+      }
+      pfont[fontChar] = fontSheet.copy(x1, 0, x2 - x1, h);
+      pfont[fontChar].save(QString(fontChar) + ".png");
+      // Move past purple non-char area to where next char begins
+      while(x2 < w && fontSheet.pixelIndex(x2, 0) == 2) {
+        x2++;
+      }
+      x1 = x2;
+    }
+  } else {
+    return false;
+  }
+  return true;
+}
+
 void Loader::setClothesColor(const Settings &settings, QImage &image)
 {
   if(settings.lemmyMode) {

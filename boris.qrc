@@ -9,6 +9,7 @@
     <file alias="mouse_grab.png">icons/mouse_grab.png</file>
     <file alias="earthquake.png">icons/earthquake.png</file>
     <file alias="teleport.png">icons/teleport.png</file>
+    <file alias="pfont.png">data/gfx/pfont.png</file>
     <file alias="bubble.png">data/gfx/bubble.png</file>
     <file alias="bubble_tip.png">data/gfx/bubble_tip.png</file>
     <file alias="stats.png">data/gfx/stats.png</file>

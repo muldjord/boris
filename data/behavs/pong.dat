@@ -487,72 +487,20 @@ doNotDisturb
 346;75;0;0;;goto cscore
 
 # Boris scores
-80;5;0;0;;label bscore,var bs += 1,stat fun += 6,if bs = 1 and cs = 0 goto win10 else if bs = 1 and cs = 1 goto win11 else if bs = 1 and cs = 2 goto win12 else if bs = 1 and cs = 3 goto win13 else if bs = 1 and cs = 4 goto win14 else if bs = 1 and cs = 5 goto win15 else if bs = 2 and cs = 0 goto win20 else if bs = 2 and cs = 1 goto win21 else if bs = 2 and cs = 2 goto win22 else if bs = 2 and cs = 3 goto win23 else if bs = 2 and cs = 4 goto win24 else if bs = 2 and cs = 5 goto win25 else if bs = 3 and cs = 0 goto win30 else if bs = 3 and cs = 1 goto win31 else if bs = 3 and cs = 2 goto win32 else if bs = 3 and cs = 3 goto win33 else if bs = 3 and cs = 4 goto win34 else if bs = 3 and cs = 5 goto win35 else if bs = 4 and cs = 0 goto win40 else if bs = 4 and cs = 1 goto win41 else if bs = 4 and cs = 2 goto win42 else if bs = 4 and cs = 3 goto win43 else if bs = 4 and cs = 4 goto win44 else if bs = 4 and cs = 5 goto win45 else if bs = 5 and cs = 0 goto win50 else if bs = 5 and cs = 1 goto win51 else if bs = 5 and cs = 2 goto win52 else if bs = 5 and cs = 3 goto win53 else if bs = 5 and cs = 4 goto win54
+80;75;0;0;data/sfx/win1.wav;label bscore,var bs += 1,stat fun += 6,draw green value 19 5 bs,draw red value 25 6 cs
+80;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
+80;75;0;0;;draw green value 19 5 bs,draw red value 25 6 cs
+80;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
+80;75;0;0;;draw green value 19 5 bs,draw red value 25 6 cs
+80;400;0;0;;draw green value 19 6 bs,draw red value 25 6 cs,if bs >= 5 goto gamewin,if cs >= 5 goto gameloose,goto nextround
 
 # CPU scores
-80;5;0;0;;label cscore,var cs += 1,stat fun -= 2,if bs = 0 and cs = 1 goto loose01 else if bs = 0 and cs = 2 goto loose02 else if bs = 0 and cs = 3 goto loose03 else if bs = 0 and cs = 4 goto loose04 else if bs = 0 and cs = 5 goto loose05 else if bs = 1 and cs = 1 goto loose11 else if bs = 1 and cs = 2 goto loose12 else if bs = 1 and cs = 3 goto loose13 else if bs = 1 and cs = 4 goto loose14 else if bs = 1 and cs = 5 goto loose15 else if bs = 2 and cs = 1 goto loose21 else if bs = 2 and cs = 2 goto loose22 else if bs = 2 and cs = 3 goto loose23 else if bs = 2 and cs = 4 goto loose24 else if bs = 2 and cs = 5 goto loose25 else if bs = 3 and cs = 1 goto loose31 else if bs = 3 and cs = 2 goto loose32 else if bs = 3 and cs = 3 goto loose33 else if bs = 3 and cs = 4 goto loose34 else if bs = 3 and cs = 5 goto loose35 else if bs = 4 and cs = 1 goto loose41 else if bs = 4 and cs = 2 goto loose42 else if bs = 4 and cs = 3 goto loose43 else if bs = 4 and cs = 4 goto loose44 else if bs = 4 and cs = 5 goto loose45
-
-# Show scores when loosing a round
-10;600;0;0;data/sfx/grumpy1.wav;label loose01,goto nextround
-11;600;0;0;data/sfx/grumpy2.wav;label loose02,goto nextround
-12;600;0;0;data/sfx/grumpy1.wav;label loose03,goto nextround
-13;600;0;0;data/sfx/grumpy2.wav;label loose04,goto nextround
-14;600;0;0;data/sfx/grumpy1.wav;label loose05,goto gameloose
-15;600;0;0;data/sfx/grumpy2.wav;label loose10,goto nextround
-16;600;0;0;data/sfx/grumpy2.wav;label loose11,goto nextround
-17;600;0;0;data/sfx/grumpy1.wav;label loose12,goto nextround
-18;600;0;0;data/sfx/grumpy2.wav;label loose13,goto nextround
-19;600;0;0;data/sfx/grumpy1.wav;label loose14,goto nextround
-20;600;0;0;data/sfx/grumpy1.wav;label loose15,goto gameloose
-21;600;0;0;data/sfx/grumpy1.wav;label loose20,goto nextround
-22;600;0;0;data/sfx/grumpy2.wav;label loose21,goto nextround
-23;600;0;0;data/sfx/grumpy2.wav;label loose22,goto nextround
-24;600;0;0;data/sfx/grumpy1.wav;label loose23,goto nextround
-25;600;0;0;data/sfx/grumpy2.wav;label loose24,goto nextround
-26;600;0;0;data/sfx/grumpy2.wav;label loose25,goto gameloose
-27;600;0;0;data/sfx/grumpy1.wav;label loose30,goto nextround
-28;600;0;0;data/sfx/grumpy1.wav;label loose31,goto nextround
-29;600;0;0;data/sfx/grumpy2.wav;label loose32,goto nextround
-30;600;0;0;data/sfx/grumpy1.wav;label loose33,goto nextround
-31;600;0;0;data/sfx/grumpy1.wav;label loose34,goto nextround
-32;600;0;0;data/sfx/grumpy2.wav;label loose35,goto gameloose
-33;600;0;0;data/sfx/grumpy2.wav;label loose40,goto nextround
-34;600;0;0;data/sfx/grumpy1.wav;label loose41,goto nextround
-35;600;0;0;data/sfx/grumpy2.wav;label loose42,goto nextround
-36;600;0;0;data/sfx/grumpy1.wav;label loose43,goto nextround
-37;600;0;0;data/sfx/grumpy2.wav;label loose44,goto nextround
-38;600;0;0;data/sfx/grumpy1.wav;label loose45,goto gameloose
-
-# Show scores when winning a round
-44;600;0;0;data/sfx/win1.wav;label win01,goto nextround
-45;600;0;0;data/sfx/win2.wav;label win02,goto nextround
-46;600;0;0;data/sfx/win1.wav;label win03,goto nextround
-47;600;0;0;data/sfx/win2.wav;label win04,goto nextround
-49;600;0;0;data/sfx/win1.wav;label win10,goto nextround
-50;600;0;0;data/sfx/win1.wav;label win11,goto nextround
-51;600;0;0;data/sfx/win2.wav;label win12,goto nextround
-52;600;0;0;data/sfx/win2.wav;label win13,goto nextround
-53;600;0;0;data/sfx/win1.wav;label win14,goto nextround
-55;600;0;0;data/sfx/win1.wav;label win20,goto nextround
-56;600;0;0;data/sfx/win2.wav;label win21,goto nextround
-57;600;0;0;data/sfx/win2.wav;label win22,goto nextround
-58;600;0;0;data/sfx/win1.wav;label win23,goto nextround
-59;600;0;0;data/sfx/win1.wav;label win24,goto nextround
-61;600;0;0;data/sfx/win2.wav;label win30,goto nextround
-62;600;0;0;data/sfx/win1.wav;label win31,goto nextround
-63;600;0;0;data/sfx/win1.wav;label win32,goto nextround
-64;600;0;0;data/sfx/win2.wav;label win33,goto nextround
-65;600;0;0;data/sfx/win2.wav;label win34,goto nextround
-67;600;0;0;data/sfx/win2.wav;label win40,goto nextround
-68;600;0;0;data/sfx/win2.wav;label win41,goto nextround
-69;600;0;0;data/sfx/win1.wav;label win42,goto nextround
-70;600;0;0;data/sfx/win2.wav;label win43,goto nextround
-71;600;0;0;data/sfx/win1.wav;label win44,goto nextround
-73;600;0;0;data/sfx/win1.wav;label win50,goto gamewin
-74;600;0;0;data/sfx/win2.wav;label win51,goto gamewin
-75;600;0;0;data/sfx/win2.wav;label win52,goto gamewin
-76;600;0;0;data/sfx/win1.wav;label win53,goto gamewin
-77;600;0;0;data/sfx/win1.wav;label win54,goto gamewin
+80;75;0;0;data/sfx/grumpy1.wav;label cscore,var cs += 1,stat fun -= 2,draw green value 19 6 bs,draw red value 25 5 cs
+80;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
+80;75;0;0;;draw green value 19 6 bs,draw red value 25 5 cs
+80;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
+80;75;0;0;;draw green value 19 6 bs,draw red value 25 5 cs
+80;400;0;0;;draw green value 19 6 bs,draw red value 25 6 cs,if bs >= 5 goto gamewin,if cs >= 5 goto gameloose,goto nextround
 
 # Win screen
 78;3000;0;0;data/sfx/game_win.wav;label gamewin,goto end

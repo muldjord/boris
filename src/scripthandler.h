@@ -36,12 +36,13 @@ class ScriptHandler : public QObject
   Q_OBJECT;
 
 public:
-  ScriptHandler(QImage *image, Boris *boris);
+  ScriptHandler(QImage *image, bool *drawing, Boris *boris);
   void runScript(const QList<QString> &script, int &stop);
 
 private:
   Boris *boris = nullptr;
   QImage *image = nullptr;
+  bool *drawing = nullptr;
   
   // Main command parser
   void runCommand(QList<QString> &parameters, int &stop);
@@ -57,6 +58,8 @@ private:
 
   // Helpers
   void condition(QList<QString> &parameters, bool &isTrue, bool &compare);
+  void drawText(QPainter &painter, const Qt::GlobalColor &color,
+                const int &x, const int &y, const QString &text);
   int getValue(const QString &value);
   
 };

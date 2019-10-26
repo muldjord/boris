@@ -52,8 +52,8 @@ pitchLock
 23;75;0;0;;var segs -= 1
 24;75;0;0;;stat fun -= 1
 25;75;0;0;;
-26;75;0;0;;
-27;75;0;0;;
+26;75;0;0;;draw begin
+27;75;0;0;;if place >= 0 draw blue value 16 3 place else draw red value 16 3 place 
 28;75;0;0;;
 29;75;0;0;;
 30;75;0;0;;
@@ -63,7 +63,7 @@ pitchLock
 34;75;0;0;;
 35;75;0;0;;
 36;75;0;0;;
-37;75;0;0;;
+37;75;0;0;;draw end
 38;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 
 # Overtake left
@@ -72,8 +72,8 @@ pitchLock
 41;75;0;0;;var segs -= 1
 42;75;0;0;;stat fun += 2
 43;75;0;0;;
-44;75;0;0;;
-45;75;0;0;;
+44;75;0;0;;draw begin
+45;75;0;0;;if place >= 0 draw blue value 16 3 place else draw red value 16 3 place 
 46;75;0;0;;
 47;75;0;0;;
 48;75;0;0;;
@@ -83,7 +83,7 @@ pitchLock
 52;75;0;0;;
 53;75;0;0;;
 54;75;0;0;;
-55;75;0;0;;
+55;75;0;0;;draw end
 56;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 
 # Overtaken right
@@ -92,8 +92,8 @@ pitchLock
 59;75;0;0;;var segs -= 1
 60;75;0;0;;stat fun -= 1
 61;75;0;0;;
-62;75;0;0;;
-63;75;0;0;;
+62;75;0;0;;draw begin
+63;75;0;0;;if place >= 0 draw blue value 16 3 place else draw red value 16 3 place 
 64;75;0;0;;
 65;75;0;0;;
 66;75;0;0;;
@@ -103,7 +103,7 @@ pitchLock
 70;75;0;0;;
 71;75;0;0;;
 72;75;0;0;;
-73;75;0;0;;
+73;75;0;0;;draw end
 74;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 
 # Overtake right
@@ -112,8 +112,8 @@ pitchLock
 77;75;0;0;;var segs -= 1
 78;75;0;0;;stat fun += 2
 79;75;0;0;;
-80;75;0;0;;
-81;75;0;0;;
+80;75;0;0;;draw begin
+81;75;0;0;;if place >= 0 draw blue value 16 3 place else draw red value 16 3 place 
 82;75;0;0;;
 83;75;0;0;;
 84;75;0;0;;
@@ -123,7 +123,7 @@ pitchLock
 88;75;0;0;;
 89;75;0;0;;
 90;75;0;0;;
-91;75;0;0;;
+91;75;0;0;;draw end
 92;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 
 # Right turn begin

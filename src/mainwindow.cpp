@@ -46,6 +46,7 @@
 
 QList<Behaviour> behaviours;
 QList<Behaviour> weathers;
+QMap<QChar, QImage> pfont;
 
 MainWindow::MainWindow()
 {
@@ -272,6 +273,12 @@ void MainWindow::loadAssets()
     qInfo("Weather types loaded ok... :)\n");
   } else {
     qInfo("Error when loading some weather types, please check your png and dat files\n");
+  }
+
+  if(Loader::loadFont(pfont)) {
+    qInfo("Font loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading font...\n");
   }
 
   if(settings.showWelcome) {

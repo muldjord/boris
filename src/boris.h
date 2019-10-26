@@ -133,6 +133,8 @@ private:
   QPixmap origShadow;
   QGraphicsPixmapItem *borisSprite;
   QGraphicsPixmapItem *scriptSprite;
+  QImage scriptImage = QImage(32, 32, QImage::Format_ARGB32_Premultiplied);
+  bool drawing = false;
   QGraphicsPixmapItem *dirtSprite;
   QPixmap origDirt;
   QGraphicsPixmapItem *bruisesSprite;

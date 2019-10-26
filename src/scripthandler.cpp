@@ -30,11 +30,13 @@
 #include <stdio.h>
 
 extern QList<Behaviour> behaviours;
+extern QMap<QChar, QImage> pfont;
 
-ScriptHandler::ScriptHandler(QImage *image, Boris *boris)
+ScriptHandler::ScriptHandler(QImage *image, bool *drawing, Boris *boris)
 {
   this->boris = boris;
   this->image = image;
+  this->drawing = drawing;
 }
 
 void ScriptHandler::runScript(const QList<QString> &script, int &stop)
@@ -251,6 +253,16 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
   parameters.removeFirst(); // Remove 'draw'
 
   if(parameters.count() >= 1) {
+    if(parameters.first() == "begin") {
+      parameters.removeFirst(); // Remove 'begin'
+      *drawing = true;
+      return;
+    } else if(parameters.first() == "end") {
+      parameters.removeFirst(); // Remove 'end'
+      image->fill(Qt::transparent);
+      *drawing = false;
+      return;
+    }
     QPainter painter;
     QString colorString = parameters.first();
     Qt::GlobalColor color = Qt::transparent;
@@ -333,17 +345,25 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
       } else if(parameters.first() == "text") {
         parameters.removeFirst(); // Remove 'text'
         if(parameters.count() >= 3) {
-          QFont font;
-          font.setFamily("pixelfont");
-          font.setPixelSize(5);
-          font.setStyleStrategy(QFont::NoAntialias);
-          painter.setFont(font);
           int x = getValue(parameters.at(0));
           int y = getValue(parameters.at(1));
           QString text = parameters.at(2);
           printf("Drawing %s text '%s' at %d,%d\n", colorString.toStdString().c_str(),
                  text.toStdString().c_str(), x, y);
-          painter.drawText(x, y, text);
+          drawText(painter, color, x, y, text);
+          parameters.removeFirst(); // Remove x
+          parameters.removeFirst(); // Remove y
+          parameters.removeFirst(); // Remove string
+        }
+      } else if(parameters.first() == "value") {
+        parameters.removeFirst(); // Remove 'value'
+        if(parameters.count() >= 3) {
+          int x = getValue(parameters.at(0));
+          int y = getValue(parameters.at(1));
+          int value = getValue(parameters.at(2));
+          printf("Drawing %s value %d at %d,%d\n", colorString.toStdString().c_str(),
+                 value, x, y);
+          drawText(painter, color, x, y, QString::number(value));
           parameters.removeFirst(); // Remove x
           parameters.removeFirst(); // Remove y
           parameters.removeFirst(); // Remove string
@@ -351,6 +371,25 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
       }
     }
     painter.end();
+  }
+}
+
+void ScriptHandler::drawText(QPainter &painter, const Qt::GlobalColor &color,
+                             const int &x, const int &y, const QString &text)
+{
+  int idx = x;
+  for(const auto &textChar: text) {
+    QImage charImage;
+    if(pfont.contains(textChar)) {
+      charImage = pfont[textChar];
+    } else {
+      charImage = QImage(5, 4, QImage::Format_ARGB32_Premultiplied);
+      charImage.fill(Qt::red);
+    }
+    charImage.setColor(1, QColor(color).rgb());
+
+    painter.drawImage(idx, y, charImage);
+    idx += charImage.width();
   }
 }
 

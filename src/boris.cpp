@@ -45,6 +45,7 @@ constexpr double PI = 3.1415927;
 
 extern QList<Behaviour> behaviours;
 extern QList<Behaviour> weathers;
+extern QMap<QChar, QImage> pfont;
 
 Boris::Boris(Settings *settings)
 {
@@ -287,6 +288,10 @@ void Boris::changeBehaviour(QString behav, int time)
   // Reset all script variables
   scriptVars.clear();
 
+  // Clear script image canvas
+  scriptImage.fill(Qt::transparent);
+  drawing = false;
+  
   // If Boris has died, just return
   if(!isAlive) {
     return;
@@ -443,14 +448,14 @@ void Boris::runScript()
   scriptVars["yvel"] = mouseVVel;
   scriptVars["xvel"] = mouseHVel;
 
-  QImage image(32, 32, QImage::Format_ARGB32_Premultiplied);
-  image.fill(Qt::transparent);
-
-  ScriptHandler scriptHandler(&image, this);
+  if(!drawing) {
+    scriptImage.fill(Qt::transparent);
+  }
+  ScriptHandler scriptHandler(&scriptImage, &drawing, this);
   int stop = 0; // Will be true if a goto or break is run
   scriptHandler.runScript(behaviours.at(curBehav).frames.at(curFrame).script, stop);
 
-  scriptSprite->setPixmap(QPixmap::fromImage(image));
+  scriptSprite->setPixmap(QPixmap::fromImage(scriptImage));
 
   if(stop == 1) {
     return;
