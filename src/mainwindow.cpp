@@ -50,6 +50,29 @@ QMap<QChar, QImage> pfont;
 
 MainWindow::MainWindow()
 {
+  // For use when correcting large number of frame numbers in a behaviour
+  /*
+    int deltaFrames = -68;
+    QFile blah("data/behavs/pong.dat");
+    QFile blahnew("data/behavs/pongnew.dat");
+    blah.open(QIODevice::ReadOnly);
+    blahnew.open(QIODevice::WriteOnly);
+    while(!blah.atEnd()) {
+    QByteArray line = blah.readLine();
+    if(line.contains(";")) {
+    int frame = line.split(';').first().toInt();
+    int newFrame = frame;
+    if(frame > 50) {
+    newFrame += deltaFrames;
+    line.replace(QByteArray::number(frame) + ";", QByteArray::number(newFrame) + ";");
+    }
+    }
+    blahnew.write(line);
+    }
+    blah.close();
+    blahnew.close();
+  */    
+
   qsrand((uint)QTime::currentTime().msec());
 
   QFontDatabase::addApplicationFont("data/fonts/pixelfont.ttf");
