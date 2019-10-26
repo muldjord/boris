@@ -42,6 +42,7 @@
 #include <QHostInfo>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QFontDatabase>
 
 QList<Behaviour> behaviours;
 QList<Behaviour> weathers;
@@ -50,6 +51,8 @@ MainWindow::MainWindow()
 {
   qsrand((uint)QTime::currentTime().msec());
 
+  QFontDatabase::addApplicationFont("data/fonts/pixelfont.ttf");
+  
   QString iniFile = "config.ini";
   if(QFileInfo::exists("config_" + QHostInfo::localHostName().toLower() + ".ini")) {
     iniFile = "config_" + QHostInfo::localHostName().toLower() + ".ini";
