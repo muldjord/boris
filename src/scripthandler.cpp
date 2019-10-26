@@ -342,6 +342,36 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           parameters.removeFirst(); // Remove x
           parameters.removeFirst(); // Remove y
         }
+      } else if(parameters.first() == "ellipse") {
+        parameters.removeFirst(); // Remove 'ellipse'
+        if(parameters.count() >= 4) {
+          painter.setBrush(QBrush(color, Qt::SolidPattern));
+          int x = getValue(parameters.at(0));
+          int y = getValue(parameters.at(1));
+          int w = getValue(parameters.at(2));
+          int h = getValue(parameters.at(3));
+          printf("Drawing %s ellipse at %d,%d with a width of %d and a height of %d\n", colorString.toStdString().c_str(), x, y, w, h);
+          painter.drawEllipse(x, y, w, h);
+          parameters.removeFirst(); // Remove x
+          parameters.removeFirst(); // Remove y
+          parameters.removeFirst(); // Remove width
+          parameters.removeFirst(); // Remove height
+        }
+      } else if(parameters.first() == "rectangle") {
+        parameters.removeFirst(); // Remove 'rectangle'
+        if(parameters.count() >= 4) {
+          painter.setBrush(QBrush(color, Qt::SolidPattern));
+          int x = getValue(parameters.at(0));
+          int y = getValue(parameters.at(1));
+          int w = getValue(parameters.at(2));
+          int h = getValue(parameters.at(3));
+          printf("Drawing %s rectangle at %d,%d with a width of %d and a height of %d\n", colorString.toStdString().c_str(), x, y, w, h);
+          painter.drawRect(x, y, w, h);
+          parameters.removeFirst(); // Remove x
+          parameters.removeFirst(); // Remove y
+          parameters.removeFirst(); // Remove width
+          parameters.removeFirst(); // Remove height
+        }
       } else if(parameters.first() == "text") {
         parameters.removeFirst(); // Remove 'text'
         if(parameters.count() >= 3) {
