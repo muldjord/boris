@@ -10,7 +10,7 @@ pitchLock
 #Frames
 0;75;0;0;;var place = 0
 1;75;0;0;;var segs = 16,var segs += @8
-2;75;0;0;;
+2;75;0;0;;define nextseg, if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 3;75;0;0;;
 4;75;0;0;;
 5;75;0;0;;
@@ -36,7 +36,7 @@ pitchLock
 17;75;0;0;;
 18;75;0;0;;
 19;75;0;0;;
-20;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+20;75;0;0;;call nextseg
 
 # Main road
 15;75;0;0;data/sfx/engine.wav;label s
@@ -44,7 +44,7 @@ pitchLock
 17;75;0;0;;
 18;75;0;0;;
 19;75;0;0;;
-20;75;0;0;;if @5 > 1 goto s,if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+20;75;0;0;;if @5 > 1 goto s,call nextseg
 
 # Overtaken left
 21;75;0;0;data/sfx/overtaken.wav;label ll
@@ -64,7 +64,7 @@ pitchLock
 35;75;0;0;;
 36;75;0;0;;
 37;75;0;0;;draw end
-38;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+38;75;0;0;;call nextseg
 
 # Overtake left
 39;75;0;0;data/sfx/overtake.wav;label wl
@@ -84,7 +84,7 @@ pitchLock
 53;75;0;0;;
 54;75;0;0;;
 55;75;0;0;;draw end
-56;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+56;75;0;0;;call nextseg
 
 # Overtaken right
 57;75;0;0;data/sfx/overtaken.wav;label lr
@@ -104,7 +104,7 @@ pitchLock
 71;75;0;0;;
 72;75;0;0;;
 73;75;0;0;;draw end
-74;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+74;75;0;0;;call nextseg
 
 # Overtake right
 75;75;0;0;data/sfx/overtake.wav;label wr
@@ -124,7 +124,7 @@ pitchLock
 89;75;0;0;;
 90;75;0;0;;
 91;75;0;0;;draw end
-92;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+92;75;0;0;;call nextseg
 
 # Right turn begin
 93;75;0;0;data/sfx/engine_into_turn.wav;label rtb
@@ -148,7 +148,7 @@ pitchLock
 107;75;0;0;;
 108;75;0;0;;
 109;75;0;0;;
-110;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+110;75;0;0;;call nextseg
 
 # Left turn begin
 111;75;0;0;data/sfx/engine_into_turn.wav;label ltb
@@ -172,7 +172,7 @@ pitchLock
 125;75;0;0;;
 126;75;0;0;;
 127;75;0;0;;
-128;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+128;75;0;0;;call nextseg
 
 # Tunnel
 129;75;0;0;data/sfx/tunnel.wav;label t
@@ -186,7 +186,7 @@ pitchLock
 137;75;0;0;;
 138;75;0;0;;
 139;75;0;0;;
-140;75;0;0;;if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+140;75;0;0;;call nextseg
 
 # Finish line
 141;75;0;0;data/sfx/engine_out.wav;label f
