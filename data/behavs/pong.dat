@@ -487,7 +487,8 @@ doNotDisturb
 278;75;0;0;;goto cscore
 
 # Boris scores
-12;75;0;0;data/sfx/win1.wav;label bscore,var bs += 1,stat fun += 6,draw green value 19 5 bs,draw red value 25 6 cs
+12;250;0;0;data/sfx/win1.wav;label bscore,var bs += 1,stat fun += 6,draw green value 19 6 bs - 1,draw red value 25 6 cs
+12;75;0;0;;draw green value 19 5 bs,draw red value 25 6 cs
 12;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
 12;75;0;0;;draw green value 19 5 bs,draw red value 25 6 cs
 12;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
@@ -495,7 +496,8 @@ doNotDisturb
 12;400;0;0;;draw green value 19 6 bs,draw red value 25 6 cs,if bs >= 5 goto gamewin,if cs >= 5 goto gameloose,goto nextround
 
 # CPU scores
-12;75;0;0;data/sfx/grumpy1.wav;label cscore,var cs += 1,stat fun -= 2,draw green value 19 6 bs,draw red value 25 5 cs
+12;250;0;0;data/sfx/grumpy1.wav;label cscore,var cs += 1,stat fun -= 2,draw green value 19 6 bs,draw red value 25 6 cs - 1
+12;75;0;0;;draw green value 19 6 bs,draw red value 25 5 cs
 12;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
 12;75;0;0;;draw green value 19 6 bs,draw red value 25 5 cs
 12;75;0;0;;draw green value 19 6 bs,draw red value 25 6 cs
