@@ -477,6 +477,9 @@ void Boris::nextFrame()
     }
   }
 
+  QTime frameTimer;
+  frameTimer.start();
+
   QBitmap mask = behaviours.at(curBehav).frames.at(curFrame).sprite.mask();
 
   QPixmap dirtPixmap(origDirt);
@@ -517,9 +520,15 @@ void Boris::nextFrame()
     }
   }
   int frameTime = behaviours.at(curBehav).frames.at(curFrame).time;
-  animTimer.setInterval(frameTime - ((double)frameTime / 100.0 * stats->getHyper()));
-  if(animTimer.interval() <= 5)
-    animTimer.setInterval(5);
+  frameTime -= ((double)frameTime / 100.0 * stats->getHyper());
+  int elapsedTime = frameTimer.elapsed();
+  if(elapsedTime < frameTime) {
+    frameTime -= elapsedTime;
+  }
+  if(frameTime <= 5) {
+    frameTime = 5;
+  }
+  animTimer.setInterval(frameTime);
 
   if(behaviours.at(curBehav).frames.at(curFrame).dx != 0 ||
      behaviours.at(curBehav).frames.at(curFrame).dy != 0) {
