@@ -74,6 +74,7 @@ Behaviour::Behaviour(const Behaviour &behaviour) : QObject()
   this->pitchLock = behaviour.pitchLock;
   this->frames = behaviour.frames;
   this->labels = behaviour.labels;
+  this->defines = behaviour.defines;
 }
 
 void Behaviour::operator=(const Behaviour &behaviour)
@@ -95,4 +96,5 @@ void Behaviour::operator=(const Behaviour &behaviour)
   this->pitchLock = behaviour.pitchLock;
   this->frames = behaviour.frames;
   this->labels = behaviour.labels;
+  this->defines = behaviour.defines;
 }

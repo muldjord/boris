@@ -70,6 +70,8 @@ void ScriptHandler::runCommand(QList<QString> &parameters, int &stop)
     handleDraw(parameters);
   } else if(parameters.first() == "break") {
     handleBreak(stop);
+  } else if(parameters.first() == "call") {
+    handleCall(parameters, stop);
   }
 }
 
@@ -406,6 +408,18 @@ void ScriptHandler::handleBreak(int &stop)
 {
   printf("Changing behaviour\n");
   stop = 2; // Will tell the Boris class to change behaviour
+}
+
+void ScriptHandler::handleCall(QList<QString> &parameters, int &stop)
+{
+  parameters.removeFirst(); // Remove 'call'
+  if(behaviours.at(boris->curBehav).defines.contains(parameters.first())) {
+    printf("Calling define '%s'\n", parameters.first().toStdString().c_str());
+    runScript(behaviours.at(boris->curBehav).defines[parameters.first()], stop);
+  } else {
+    printf("Calling define '%s', ERROR: Unknown define\n", parameters.first().toStdString().c_str());
+  }
+  parameters.removeFirst(); // Remove define name
 }
 
 int ScriptHandler::getValue(QList<QString> &parameters)

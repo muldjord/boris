@@ -74,6 +74,7 @@ public:
   bool pitchLock = false;
   QList<Frame> frames;
   QMap<QString, int> labels; // Used for scripts when goto'ing
+  QMap<QString, QList<QString> > defines; // Used for defines of reusable code lines
 };
 
 #endif // _BEHAVIOUR_H

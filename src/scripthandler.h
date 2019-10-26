@@ -55,6 +55,7 @@ private:
   void handlePrint(QList<QString> &parameters);
   void handleDraw(QList<QString> &parameters);
   void handleBreak(int &stop);
+  void handleCall(QList<QString> &parameters, int &stop);
 
   // Helpers
   void condition(QList<QString> &parameters, bool &isTrue, bool &compare);

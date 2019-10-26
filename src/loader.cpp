@@ -193,14 +193,19 @@ bool Loader::loadBehaviours(const Settings &settings,
           while(script.right(1) == ",") {
             script.append(QString(dat.readLine().trimmed()));
           }
-          QList<QString> instructions = script.simplified().split(",");
-          f.script = instructions;
+          const QList<QString> instructions = script.simplified().split(",");
           for(const auto &instruction: instructions) {
             if(instruction.split(" ").count() == 2 &&
                instruction.split(" ").first() == "label") {
               // Point this label to current frame
               b.labels[instruction.split(" ").at(1)] = frames;
+            } else if(instruction.split(" ").count() >= 2 &&
+                      instruction.split(" ").first() == "define") {
+              b.defines[instruction.split(" ").at(1)] = instructions.mid(1);
             }
+          }
+          if(!script.contains("define")) {
+            f.script = instructions;
           }
         }
         b.frames.append(f);
