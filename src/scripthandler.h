@@ -48,13 +48,16 @@ private:
 
   // Command handlers
   void handleIf(QList<QString> &parameters, int &stop);
-  void handleCondition(QList<QString> &parameters, bool &isTrue, bool &compare);
   void handleGoto(QList<QString> &parameters, int &stop);
   void handleVar(QList<QString> &parameters);
   void handleStat(QList<QString> &parameters);
   void handlePrint(QList<QString> &parameters);
   void handleDraw(QList<QString> &parameters);
   void handleBreak(int &stop);
+
+  // Helpers
+  void condition(QList<QString> &parameters, bool &isTrue, bool &compare);
+  int getValue(const QString &value);
   
 };
 

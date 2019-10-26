@@ -77,7 +77,7 @@ void ScriptHandler::handleIf(QList<QString> &parameters, int &stop)
 
   bool isTrue = false;
   bool compare = true;
-  handleCondition(parameters, isTrue, compare);
+  condition(parameters, isTrue, compare);
   if(isTrue) {
     if(parameters.first() == "then") {
       parameters.removeFirst();
@@ -93,26 +93,10 @@ void ScriptHandler::handleIf(QList<QString> &parameters, int &stop)
   }
 }
 
-void ScriptHandler::handleCondition(QList<QString> &parameters, bool &isTrue, bool &compare)
+void ScriptHandler::condition(QList<QString> &parameters, bool &isTrue, bool &compare)
 {
-  bool isInt = false;
-  int compareFrom = parameters.first().toInt(&isInt);
-  if(!isInt) {
-    if(parameters.first().left(1) == "@") {
-      compareFrom = (qrand() % parameters.first().right(parameters.first().length() - 1).toInt()) + 1;
-    } else {
-      compareFrom = boris->scriptVars[parameters.first()];
-    }
-  }
-  isInt = false;
-  int compareTo = parameters.at(2).toInt(&isInt);
-  if(!isInt) {
-    if(parameters.at(2).left(1) == "@") {
-      compareTo = (qrand() % parameters.at(2).right(parameters.at(2).length() - 1).toInt()) + 1;
-    } else {
-      compareTo = boris->scriptVars[parameters.at(2)];
-    }
-  }
+  int compareFrom = getValue(parameters.first());
+  int compareTo = getValue(parameters.at(2));
   
   if(compare) {
     isTrue = false;
@@ -156,7 +140,7 @@ void ScriptHandler::handleCondition(QList<QString> &parameters, bool &isTrue, bo
       if(isTrue) {
         compare = false;
       }
-      handleCondition(parameters, isTrue, compare);
+      condition(parameters, isTrue, compare);
       return;
     } else if(parameters.first() == "and") {
       printf(" and ");
@@ -164,7 +148,7 @@ void ScriptHandler::handleCondition(QList<QString> &parameters, bool &isTrue, bo
       if(!isTrue) {
         compare = false;
       }
-      handleCondition(parameters, isTrue, compare);
+      condition(parameters, isTrue, compare);
       return;
     } else {
       printf(", ");
@@ -189,15 +173,8 @@ void ScriptHandler::handleVar(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'var'
 
-  bool isInt = false;
-  int number = parameters.at(2).toInt(&isInt);;
-  if(!isInt) {
-    if(parameters.at(2).left(1) == "@") {
-      number = (qrand() % parameters.at(2).right(parameters.at(2).length() - 1).toInt()) + 1;
-    } else {
-      number = boris->scriptVars[parameters.at(2)];
-    }
-  }
+  int number = getValue(parameters.at(2));
+
   if(parameters.at(1) == "=") {
     boris->scriptVars[parameters.first()] = number;
   } else if(parameters.at(1) == "+=") {
@@ -220,15 +197,8 @@ void ScriptHandler::handleStat(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'stat'
 
-  bool isInt = false;
-  int number = parameters.at(2).toInt(&isInt);;
-  if(!isInt) {
-    if(parameters.at(2).left(1) == "@") {
-      number = (qrand() % parameters.at(2).right(parameters.at(2).length() - 1).toInt()) + 1;
-    } else {
-      number = boris->scriptVars[parameters.at(2)];
-    }
-  }
+  int number = getValue(parameters.at(2));
+
   int *stat = nullptr;
   if(parameters.first() == "hyper") {
     stat = &boris->hyperQueue;
@@ -282,24 +252,69 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
 
   if(parameters.count() >= 1) {
     QPainter painter;
+    QString colorString = parameters.first();
     Qt::GlobalColor color = Qt::transparent;
-    if(parameters.first() == "black") {
+    if(colorString == "black") {
       color = Qt::black;
-    } else if(parameters.first() == "white") {
+    } else if(colorString == "white") {
       color = Qt::white;
+    } else if(colorString == "cyan") {
+      color = Qt::cyan;
+    } else if(colorString == "darkcyan") {
+      color = Qt::darkCyan;
+    } else if(colorString == "red") {
+      color = Qt::red;
+    } else if(colorString == "darkred") {
+      color = Qt::darkRed;
+    } else if(colorString == "magenta") {
+      color = Qt::magenta;
+    } else if(colorString == "darkmagenta") {
+      color = Qt::darkMagenta;
+    } else if(colorString == "green") {
+      color = Qt::green;
+    } else if(colorString == "darkgreen") {
+      color = Qt::darkGreen;
+    } else if(colorString == "yellow") {
+      color = Qt::yellow;
+    } else if(colorString == "darkyellow") {
+      color = Qt::darkYellow;
+    } else if(colorString == "blue") {
+      color = Qt::blue;
+    } else if(colorString == "darkblue") {
+      color = Qt::darkBlue;
+    } else if(colorString == "gray") {
+      color = Qt::gray;
+    } else if(colorString == "grey") {
+      color = Qt::gray;
+    } else if(colorString == "darkgray") {
+      color = Qt::darkGray;
+    } else if(colorString == "darkgrey") {
+      color = Qt::darkGray;
+    } else if(colorString == "lightgray") {
+      color = Qt::lightGray;
+    } else if(colorString == "lightgrey") {
+      color = Qt::lightGray;
+    } else {
+      printf("Color '%s' doesn't exist\n", colorString.toStdString().c_str());
+      return;
     }
     painter.begin(image);
     painter.setRenderHint(QPainter::Antialiasing, false);
-    painter.setRenderHint(QPainter::TextAntialiasing, false);
     painter.setPen(QPen(QColor(color)));
-    parameters.removeFirst(); // Remove drawing color
+    
+    parameters.removeFirst(); // Remove drawing color string
     
     if(parameters.count() >= 1) {
       if(parameters.first() == "line") {
         parameters.removeFirst(); // Remove 'line'
-        if(parameters.count() >= 2) {
-          painter.drawLine(parameters.at(0).toInt(), parameters.at(1).toInt(),
-                           parameters.at(2).toInt(), parameters.at(3).toInt());
+        if(parameters.count() >= 4) {
+          int x1 = getValue(parameters.at(0));
+          int y1 = getValue(parameters.at(1));
+          int x2 = getValue(parameters.at(2));
+          int y2 = getValue(parameters.at(3));
+          printf("Drawing %s line from %d,%d to %d,%d\n", colorString.toStdString().c_str(),
+                 x1, y1, x2, y2);
+          painter.drawLine(x1, y1, x2, y2);
           parameters.removeFirst(); // Remove x1
           parameters.removeFirst(); // Remove y1
           parameters.removeFirst(); // Remove x2
@@ -308,9 +323,30 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
       } else if(parameters.first() == "pixel") {
         parameters.removeFirst(); // Remove 'pixel'
         if(parameters.count() >= 2) {
-          painter.drawPoint(parameters.at(0).toInt(), parameters.at(1).toInt());
+          int x = getValue(parameters.at(0));
+          int y = getValue(parameters.at(1));
+          printf("Drawing %s pixel at %d,%d\n", colorString.toStdString().c_str(), x, y);
+          painter.drawPoint(x, y);
           parameters.removeFirst(); // Remove x
           parameters.removeFirst(); // Remove y
+        }
+      } else if(parameters.first() == "text") {
+        parameters.removeFirst(); // Remove 'text'
+        if(parameters.count() >= 3) {
+          QFont font;
+          font.setFamily("pixelfont");
+          font.setPixelSize(5);
+          font.setStyleStrategy(QFont::NoAntialias);
+          painter.setFont(font);
+          int x = getValue(parameters.at(0));
+          int y = getValue(parameters.at(1));
+          QString text = parameters.at(2);
+          printf("Drawing %s text '%s' at %d,%d\n", colorString.toStdString().c_str(),
+                 text.toStdString().c_str(), x, y);
+          painter.drawText(x, y, text);
+          parameters.removeFirst(); // Remove x
+          parameters.removeFirst(); // Remove y
+          parameters.removeFirst(); // Remove string
         }
       }
     }
@@ -322,4 +358,18 @@ void ScriptHandler::handleBreak(int &stop)
 {
   printf("Changing behaviour\n");
   stop = 2; // Will tell the Boris class to change behaviour
+}
+
+int ScriptHandler::getValue(const QString &value)
+{
+  bool isInt = false;
+  int result = value.toInt(&isInt);
+  if(!isInt) {
+    if(value.left(1) == "@") {
+      result = (qrand() % value.right(value.length() - 1).toInt()) + 1;
+    } else {
+      result = boris->scriptVars[value];
+    }
+  }
+  return result;
 }
