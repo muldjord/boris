@@ -10,7 +10,7 @@ pitchLock
 #Frames
 0;75;0;0;;var place = 0
 1;75;0;0;;var segs = 16,var segs += @8
-2;75;0;0;;define nextseg, if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
+2;75;0;0;;define nextseg:if segs = 0 goto f,var rand = @8,if rand = 1 goto s,if rand = 2 goto ll,if rand = 3 goto wl,if rand = 4 goto lr,if rand = 5 goto wr,if rand = 6 goto rtb,if rand = 7 goto ltb,if rand = 8 goto t
 3;75;0;0;;
 4;75;0;0;;
 5;75;0;0;;
