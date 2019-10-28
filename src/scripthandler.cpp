@@ -130,6 +130,10 @@ void ScriptHandler::condition(QList<QString> &parameters, bool &isTrue, bool &co
       if(compareFrom == compareTo) {
         isTrue = true;
       }
+    } else if(op == "!=") {
+      if(compareFrom != compareTo) {
+        isTrue = true;
+      }
     }
   }
 
