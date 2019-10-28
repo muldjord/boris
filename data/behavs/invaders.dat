@@ -1,7 +1,6 @@
 title=Play 'Space Invaders'
 category=Fun
 energy=-3
-fun=22
 hunger=1
 social=-8
 hygiene=-3
@@ -9,51 +8,75 @@ oneShot
 doNotDisturb
 #Frames
 0;75;0;0;;var level = 1,var lives = 3
-1;75;0;0;;
-2;75;0;0;;define hitwall:var ald *= -1,var row += 1
-3;75;0;0;;define col3gone:var max += 3,if col2 = -1 var max += 3,var col3 = -1
-4;75;0;0;;define col1gone:var min -= 3,if col2 = -1 var min -= 3,var col1 = -1
-5;75;0;0;;
-6;75;0;0;;
-7;75;0;0;;
-8;75;0;0;;
+1;75;0;0;;define drawlives:if lives >= 1 draw green pixel 26 3,
+if lives >= 2 draw green pixel 28 3,
+if lives = 3 draw green pixel 30 3
+2;75;0;0;;define hitwall:var ald *= -1,var alx += ald,var row += 1
+3;75;0;0;;
+4;75;0;0;;
+5;75;0;0;;define moveboris:var rand = @3,if rand = 1 var bx -= 1 else if rand = 3 var bx += 1,if bx > 28 var bx = 28,if bx < 16 var bx = 16,draw green line bx 13 bx + 2 13,draw green pixel bx + 1 12
+6;75;0;0;;define moveshot:var rand = @3,if rand = 1 and sy = -1 var sy = 12,if rand = 1 and sy = 12 var sx = bx + 1,if sy > 0 var sy -= 1,if sy > 0 draw yellow pixel sx sy,if sy <= 3 var sy = -1
+7;75;0;0;;define checkshot:if sx = alx + 0 or sx = alx + 0 + 1 then if sy <= row + col1 and sy >= row var col1 -= 2,
+if sx = alx + 3 or sx = alx + 3 + 1 then if sy <= row + col2 and sy >= row var col2 -= 2,
+if sx = alx + 6 or sx = alx + 6 + 1 then if sy <= row + col3 and sy >= row var col3 -= 2
+8;75;0;0;;define drawaliens:if col1 >= 2 draw white line alx row alx + 1 row,if col1 >= 4 draw white line alx row + 2 alx + 1 row + 2,if col1 >= 6 draw white line alx row + 4 alx + 1 row + 4,if col2 >= 2 draw white line alx + 3 row alx + 3 + 1 row,if col2 >= 4 draw white line alx + 3 row + 2 alx + 3 + 1 row + 2,if col2 >= 6 draw white line alx + 3 row + 4 alx + 3 + 1 row + 4,if col3 >= 2 draw white line alx + 6 row alx + 6 + 1 row,if col3 >= 4 draw white line alx + 6 row + 2 alx + 6 + 1 row + 2,if col3 >= 6 draw white line alx + 6 row + 4 alx + 6 + 1 row + 4
 9;2000;0;0;data/sfx/game_boot.wav;
 
 10;150;0;0;;label nextround,
 var col1 = 6,var col2 = 6,var col3 = 6,
+var bx = 16 + @12,
+var sx = -1,
+var sy = -1,
 var alx = 16,
 var ald = 1,
-var min = alx,var max = alx + 7,
-var row = 3
+var row = 3,
+var min = 16,
+var max = 23
 
-10;2000;0;0;;draw green text 17 4 lvl,draw green value 27 4 level
+10;2000;0;0;;draw red text 18 4 lvl,
+draw red value 26 4 level,
+if lives >= 1 draw green line 18 11 20 11,
+if lives >= 2 draw green line 22 11 24 11,
+if lives = 3 draw green line 26 11 28 11,
+if lives >= 1 draw green pixel 19 10,
+if lives >= 2 draw green pixel 23 10,
+if lives = 3 draw green pixel 27 10
 
-10;150;0;0;;label gameloop,
-if col1 >= 2 draw white line alx row alx + 1 row,
-if col1 >= 4 draw white line alx row + 2 alx + 1 row + 2,
-if col1 >= 6 draw white line alx row + 4 alx + 1 row + 4,
-if col2 >= 2 draw white line alx + 3 row alx + 3 + 1 row,
-if col2 >= 4 draw white line alx + 3 row + 2 alx + 3 + 1 row + 2,
-if col2 >= 6 draw white line alx + 3 row + 4 alx + 3 + 1 row + 4,
-if col3 >= 2 draw white line alx + 6 row alx + 6 + 1 row,
-if col3 >= 4 draw white line alx + 6 row + 2 alx + 6 + 1 row + 2,
-if col3 >= 6 draw white line alx + 6 row + 4 alx + 6 + 1 row + 4,
-if @8 = 1 and col3 > 0 var col3 -= 2,
-if col3 = 0 call col3gone,
-if @8 = 1 and col1 > 0 var col1 -= 2,
-if col1 = 0 call col1gone,
-if @8 = 1 and col2 > 0 var col2 -= 2,
-if col1 = -1 and col2 = 0 var min -= 6,if col2 = 0 var col2 = -1,
-if col3 = -1 and col2 = 0 var max += 6,if col2 = 0 var col2 = -1,
+10;75;0;0;;label gameloop,
+call moveboris,
+call moveshot,
+call drawaliens,
+call drawlives,
+call checkshot,
+if col1 <= 0 var min = 13,
+if col1 <= 0 and col2 <= 0 var min = 10,
+if col3 <= 0 var max = 26,
+if col3 <= 0 and col2 <= 0 var max = 29,
 var alx += ald,
-if ald = 1 then if alx >= max call hitwall,
-if ald = -1 then if alx <= min call hitwall,
+if ald = 1 then if alx > max call hitwall,
+if ald = -1 then if alx < min call hitwall,
 if col1 <= 0 and col2 <= 0 and col3 <= 0 goto winround,
-if row + col1 >= 16 goto gameover,
-if row + col2 >= 16 goto gameover,
-if row + col3 >= 16 goto gameover,
+if row + col1 >= 14 goto looseround,
+if row + col2 >= 14 goto looseround,
+if row + col3 >= 14 goto looseround
+
+10;75;0;0;;call moveboris,
+call moveshot,
+call drawaliens,
+call drawlives,
 goto gameloop
 
-10;50;0;0;;label winround,var level += 1,goto nextround
+10;50;0;0;data/sfx/win2.wav;label winround,stat fun += 6,var level += 1,if level <= 9 goto nextround else goto wingame
+11;50;0;0;data/sfx/grumpy2.wav;label looseround,stat fun -= 2,var lives -= 1,if lives < 0 goto gameover else goto nextround
 
-12;3000;0;0;;label gameover
+12;3000;0;0;;label gameover,goto end
+13;3000;0;0;;label wingame
+8;75;0;0;data/sfx/grumpy1.wav;label end
+7;75;0;0;;
+6;75;0;0;;
+5;75;0;0;;
+4;75;0;0;;
+3;75;0;0;;
+2;75;0;0;;
+1;75;0;0;;
+0;75;0;0;;
