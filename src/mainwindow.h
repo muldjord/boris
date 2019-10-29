@@ -56,6 +56,9 @@ private slots:
   void checkCollisions();
   void killAll();
   void updateWeather();
+  void playSoundFile(const QString &fileName,
+                     const float &panning,
+                     const float &pitch);
   void playSound(const sf::SoundBuffer *buffer,
                  const float &panning,
                  const float &pitch);

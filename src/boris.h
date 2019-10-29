@@ -96,6 +96,9 @@ signals:
   void playSound(const sf::SoundBuffer *buffer,
                  const float &panning,
                  const float &pitch);
+  void playSoundFile(const QString &fileName,
+                     const float &panning,
+                     const float &pitch);
 
 private slots:
   void handleBehaviourChange(QAction* a);

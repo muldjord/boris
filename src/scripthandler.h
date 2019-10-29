@@ -28,6 +28,8 @@
 #define _SCRIPTHANDLER_H
 
 #include "boris.h"
+#include "settings.h"
+#include "stats.h"
 
 #include <QObject>
 
@@ -36,13 +38,17 @@ class ScriptHandler : public QObject
   Q_OBJECT;
 
 public:
-  ScriptHandler(QImage *image, bool *drawing, Boris *boris);
+  ScriptHandler(QImage *image, bool *drawing,
+                Boris *boris, Settings *settings,
+                Stats *stats);
   void runScript(const QList<QString> &script, int &stop);
 
 private:
   Boris *boris = nullptr;
   QImage *image = nullptr;
   bool *drawing = nullptr;
+  Settings *settings = nullptr;
+  Stats *stats = nullptr;
   
   // Main command parser
   void runCommand(QList<QString> &parameters, int &stop);
@@ -56,6 +62,7 @@ private:
   void handleDraw(QList<QString> &parameters);
   void handleBreak(int &stop);
   void handleCall(QList<QString> &parameters, int &stop);
+  void handleSound(QList<QString> &parameters);
 
   // Helpers
   void condition(QList<QString> &parameters, bool &isTrue, bool &compare);

@@ -32,11 +32,15 @@
 extern QList<Behaviour> behaviours;
 extern QMap<QChar, QImage> pfont;
 
-ScriptHandler::ScriptHandler(QImage *image, bool *drawing, Boris *boris)
+ScriptHandler::ScriptHandler(QImage *image, bool *drawing,
+                             Boris *boris, Settings *settings,
+                             Stats *stats)
 {
   this->boris = boris;
   this->image = image;
   this->drawing = drawing;
+  this->settings = settings;
+  this->stats = stats;
 }
 
 void ScriptHandler::runScript(const QList<QString> &script, int &stop)
@@ -72,6 +76,8 @@ void ScriptHandler::runCommand(QList<QString> &parameters, int &stop)
     handleBreak(stop);
   } else if(parameters.first() == "call") {
     handleCall(parameters, stop);
+  } else if(parameters.first() == "sound") {
+    handleSound(parameters);
   }
 }
 
@@ -128,6 +134,10 @@ void ScriptHandler::condition(QList<QString> &parameters, bool &isTrue, bool &co
       }
     } else if(op == "==") {
       if(compareFrom == compareTo) {
+        isTrue = true;
+      }
+    } else if(op == "!=") {
+      if(compareFrom != compareTo) {
         isTrue = true;
       }
     }
@@ -420,6 +430,17 @@ void ScriptHandler::handleCall(QList<QString> &parameters, int &stop)
     printf("Calling define '%s', ERROR: Unknown define\n", parameters.first().toStdString().c_str());
   }
   parameters.removeFirst(); // Remove define name
+}
+
+void ScriptHandler::handleSound(QList<QString> &parameters)
+{
+  parameters.removeFirst(); // Remove 'sound'
+  if(parameters.count() >= 1) {
+    emit boris->playSoundFile(parameters.first(),
+                              (float)boris->pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
+                              (stats->getHyper() / 60.0) + 1);
+  }
+  parameters.removeFirst(); // Remove sound file name
 }
 
 int ScriptHandler::getValue(QList<QString> &parameters)
