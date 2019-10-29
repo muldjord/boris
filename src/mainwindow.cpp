@@ -332,6 +332,7 @@ void MainWindow::addBoris(int clones)
     connect(teleportAction, &QAction::triggered, borises.last(), &Boris::teleport);
     connect(weatherAction, &QAction::triggered, borises.last(), &Boris::triggerWeather);
     connect(borises.last(), &Boris::playSound, this, &MainWindow::playSound);
+    connect(borises.last(), &Boris::playSoundFile, this, &MainWindow::playSoundFile);
     borises.last()->show();
     borises.last()->earthquake();
   }
@@ -448,6 +449,15 @@ void MainWindow::updateWeather()
     weatherAction->setText(tr("Couldn't find city"));
   }
   weatherAction->setIcon(QIcon(":" + settings.weatherType + ".png"));
+}
+
+void MainWindow::playSoundFile(const QString &fileName,
+                               const float &panning,
+                               const float &pitch)
+{
+  if(soundFxs.contains(fileName)) {
+    playSound(&soundFxs[fileName], panning, pitch);
+  }
 }
 
 void MainWindow::playSound(const sf::SoundBuffer *buffer,

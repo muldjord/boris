@@ -451,7 +451,7 @@ void Boris::runScript()
   if(!drawing) {
     scriptImage.fill(Qt::transparent);
   }
-  ScriptHandler scriptHandler(&scriptImage, &drawing, this);
+  ScriptHandler scriptHandler(&scriptImage, &drawing, this, settings, stats);
   int stop = 0; // Will be true if a goto or break is run
   scriptHandler.runScript(behaviours.at(curBehav).frames.at(curFrame).script, stop);
 
