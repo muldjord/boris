@@ -84,7 +84,7 @@ goto gameloop
 
 12;3000;0;0;;label gameover,goto end
 13;3000;0;0;;label wingame
-8;75;0;0;data/sfx/grumpy1.wav;label end
+8;75;0;0;;label end
 7;75;0;0;;
 6;75;0;0;;
 5;75;0;0;;
