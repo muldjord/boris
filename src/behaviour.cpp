@@ -27,6 +27,15 @@
 
 #include "behaviour.h"
 
+Command::Command()
+{
+}
+
+bool Command::hasChildren() const
+{
+  return !children.isEmpty();
+}
+
 Frame::Frame(const Frame &frame): QObject()
 {
   this->sprite = frame.sprite;

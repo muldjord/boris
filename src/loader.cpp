@@ -198,6 +198,8 @@ bool Loader::loadBehaviours(const Settings &settings,
             const QList<QString> instructions = script.split(":").at(1).split(",");
             b.defines[script.split(":").first().split(" ").at(1)] = instructions;
           } else {
+            f.script = parseCommands(script.split(","));
+            /*
             const QList<QString> instructions = script.split(",");
             f.script = instructions;
             for(const auto &instruction: instructions) {
@@ -207,6 +209,7 @@ bool Loader::loadBehaviours(const Settings &settings,
                 b.labels[instruction.split(" ").at(1)] = frames;
               }
             }
+            */
           }
         }
         b.frames.append(f);
@@ -222,6 +225,19 @@ bool Loader::loadBehaviours(const Settings &settings,
     progressBar->setValue(progressBar->value() + info.size());
   }
   return true;
+}
+
+QList<Command> Loader::parseCommands(const QList<QString> &commands)
+{
+  for(const auto &command: commands) {
+    Command newCommand;
+    newCommand.command = command.left(command.indexOf("{") + 1);
+    if(command.contains("{")) {
+      newCommand.children = parseCommands(command.mid(command.indexOf("{") + 1,
+                                          command.indexOf("}") - command.indexOf("{") + 1));
+    }
+  }
+  return newCommand;
 }
 
 bool Loader::loadFont(QMap<QChar, QImage> &pfont)

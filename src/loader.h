@@ -49,6 +49,7 @@ public:
                              QList<Behaviour> &behaviours,
                              QMap<QString, sf::SoundBuffer> &soundFxs,
                              QProgressBar *progressBar);
+  static QList<Command> parseCommands(const QList<QString> &commands);
   static bool loadFont(QMap<QChar, QImage> &pfont);
   static void setClothesColor(const Settings &settings, QImage &image);
 };

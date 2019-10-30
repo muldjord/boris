@@ -14,8 +14,14 @@ doNotDisturb
 6;75;0;0;;
 3;75;0;0;;label stars
 4;75;0;0;;
-5;75;0;0;;
-6;75;0;0;;if @6 > 1 goto stars
+5;75;0;0;;var test = 1
+6;75;0;0;;if @6 > 1{sound data/sfx/sad01.wav,
+var rand = @2,
+if rand = 1{print test},
+if rand = 2{print test},
+goto stars},
+print test
+
 7;75;0;0;;
 8;500;0;0;;
 9;75;0;0;;
