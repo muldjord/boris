@@ -43,11 +43,11 @@ ScriptHandler::ScriptHandler(QImage *image, bool *drawing,
   this->stats = stats;
 }
 
-void ScriptHandler::runScript(const Command &script, int &stop)
+void ScriptHandler::runScript(const QList<QString> &script, int &stop)
 {
-  for(const auto &command: script.children) {
-    printf("CODE: '%s'\n", command.command.toStdString().c_str());
-    QList<QString> parameters = instruction.command.split(" ", QString::KeepEmptyParts);
+  for(const auto &instruction: script) {
+    printf("CODE: '%s'\n", instruction.toStdString().c_str());
+    QList<QString> parameters = instruction.split(" ", QString::KeepEmptyParts);
     runCommand(parameters, stop);
     if(stop) {
       break;

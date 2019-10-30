@@ -33,15 +33,6 @@
 #include <QPixmap>
 #include <QMap>
 
-class Command
-{
-public:
-  Command();
-  bool hasChildren() const;
-  QString command = QString();
-  QList<Command> children;
-};
-  
 class Frame: public QObject
 {
   Q_OBJECT;
@@ -55,7 +46,7 @@ public:
   int dx;
   int dy;
   sf::SoundBuffer *soundBuffer = nullptr;
-  Command script;
+  QList<QString> script;
 };
 
 class Behaviour: public QObject

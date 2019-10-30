@@ -69,11 +69,11 @@ int main(int argc, char *argv[])
 
   qInstallMessageHandler(customMessageHandler);
 
-  QDir::setCurrent(QApplication::applicationDirPath());
-
   QTranslator translator;
   translator.load("boris_" + QLocale::system().name());
   app.installTranslator(&translator);
+
+  QDir::setCurrent(QApplication::applicationDirPath());
 
   MainWindow window;
   

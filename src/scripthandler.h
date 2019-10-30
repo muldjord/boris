@@ -30,7 +30,6 @@
 #include "boris.h"
 #include "settings.h"
 #include "stats.h"
-#include "behaviour.h"
 
 #include <QObject>
 
@@ -42,7 +41,7 @@ public:
   ScriptHandler(QImage *image, bool *drawing,
                 Boris *boris, Settings *settings,
                 Stats *stats);
-  void runScript(const Command &script, int &stop);
+  void runScript(const QList<QString> &script, int &stop);
 
 private:
   Boris *boris = nullptr;
