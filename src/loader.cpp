@@ -164,7 +164,7 @@ bool Loader::loadBehaviours(const Settings &settings,
       }
       int frames = 0;
       while(!dat.atEnd()) {
-        QString line = QString(dat.readLine().trimmed());
+        QString line = QString(dat.readLine().simplified());
         if(line.isEmpty() || line.left(1) == "#") {
           continue;
         }
@@ -189,17 +189,15 @@ bool Loader::loadBehaviours(const Settings &settings,
         }
         if(!snippets.at(5).isEmpty()) {
           QString script = snippets.at(5).simplified();
-          script.replace(", ", ",");
           while(script.right(1) == ",") {
-            script.append(QString(dat.readLine().trimmed()));
+            script.append(QString(dat.readLine().simplified()));
           }
           script = script.simplified();
+          f.script = parseScript(script);
           if(script.contains("define") && script.contains(":")) {
-            const QList<QString> instructions = script.split(":").at(1).split(",");
-            b.defines[script.split(":").first().split(" ").at(1)] = instructions;
+            b.defines[script.split(":").first().split(" ").at(1)] = parseScript(script.split(":").at(1));
           } else {
             const QList<QString> instructions = script.split(",");
-            f.script = instructions;
             for(const auto &instruction: instructions) {
               if(instruction.split(" ").count() == 2 &&
                  instruction.split(" ").first() == "label") {
@@ -222,6 +220,44 @@ bool Loader::loadBehaviours(const Settings &settings,
     progressBar->setValue(progressBar->value() + info.size());
   }
   return true;
+}
+
+Script Loader::parseScript(const QString &script)
+{
+  Script returnScript;
+  int blockLevel = 0;
+  int blockId = 0;
+  bool inBlock = false;
+  QString commands = script;
+  QString childScript = "";
+  for(const auto ch: commands) {
+    if(ch == '{') {
+      blockLevel++;
+    }
+    if(blockLevel >= 1) {
+      if(!inBlock) {
+        inBlock = true;
+        blockId++;
+        printf("blockId: %d\n", blockId);
+      }
+      childScript.append(ch);
+      printf("childScript: '%s'\n", childScript.toStdString().c_str());
+    } else {
+      if(inBlock && !childScript.isEmpty()) {
+        printf("CONCLUDING!!!!\n");
+        inBlock = false;
+        QString blockIdStr = "##" + QString::number(blockId) + "##";
+        returnScript.blocks[blockIdStr] = parseScript(childScript);
+        commands.replace(childScript, blockIdStr);
+        childScript.clear();
+      }
+    } 
+    if(ch == '}') {
+      blockLevel--;
+    }
+  }
+  returnScript.commands = commands.split(",");
+  return returnScript;
 }
 
 bool Loader::loadFont(QMap<QChar, QImage> &pfont)

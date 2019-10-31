@@ -50,6 +50,7 @@ public:
                              QMap<QString, sf::SoundBuffer> &soundFxs,
                              QProgressBar *progressBar);
   static bool loadFont(QMap<QChar, QImage> &pfont);
+  static Script parseScript(const QString &script);
   static void setClothesColor(const Settings &settings, QImage &image);
 };
 

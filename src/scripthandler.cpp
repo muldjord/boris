@@ -43,29 +43,26 @@ ScriptHandler::ScriptHandler(QImage *image, bool *drawing,
   this->stats = stats;
 }
 
-void ScriptHandler::runScript(const QList<QString> &script, int &stop)
+void ScriptHandler::runScript(int &stop, const Script &script)
 {
-  for(const auto &instruction: script) {
-    printf("CODE: '%s'\n", instruction.toStdString().c_str());
-    QList<QString> parameters = instruction.split(" ", QString::KeepEmptyParts);
-    runCommand(parameters, stop);
+  for(const auto &command: script.commands) {
+    printf("CODE: '%s'\n", command.toStdString().c_str());
+    QList<QString> parameters = command.split(" ", QString::KeepEmptyParts);
+    runCommand(parameters, stop, script);
     if(stop) {
-      break;
+      return;
     }
   }
 }
 
-void ScriptHandler::runCommand(QList<QString> &parameters, int &stop)
+void ScriptHandler::runCommand(QList<QString> &parameters, int &stop, const Script &script)
 {
-  if(stop) {
-    return;
-  }
   if(parameters.first() == "var") {
     handleVar(parameters);
   } else if(parameters.first() == "stat") {
     handleStat(parameters);
   } else if(parameters.first() == "if") {
-    handleIf(parameters, stop);
+    handleIf(parameters, stop, script);
   } else if(parameters.first() == "goto") {
     handleGoto(parameters, stop);
   } else if(parameters.first() == "print") {
@@ -81,7 +78,7 @@ void ScriptHandler::runCommand(QList<QString> &parameters, int &stop)
   }
 }
 
-void ScriptHandler::handleIf(QList<QString> &parameters, int &stop)
+void ScriptHandler::handleIf(QList<QString> &parameters, int &stop, const Script &script)
 {
   parameters.removeFirst(); // Remove 'if'
 
@@ -92,12 +89,20 @@ void ScriptHandler::handleIf(QList<QString> &parameters, int &stop)
     if(parameters.first() == "then") {
       parameters.removeFirst();
     }
-    runCommand(parameters, stop);
+    if(parameters.first().left(2) == "##") {
+      runScript(stop, script.blocks[parameters.first()]);
+    } else {
+      runCommand(parameters, stop, script);
+    }
   } else if(parameters.contains("else") &&
             parameters.first() != "then") {
     while(parameters.takeFirst() != "else") {
     }
-    runCommand(parameters, stop);
+    if(parameters.first().left(2) == "##") {
+      runScript(stop, script.blocks[parameters.first()]);
+    } else {
+      runCommand(parameters, stop, script);
+    }
   } else {
     printf("Condition not met\n");
   }
@@ -425,7 +430,7 @@ void ScriptHandler::handleCall(QList<QString> &parameters, int &stop)
   parameters.removeFirst(); // Remove 'call'
   if(behaviours.at(boris->curBehav).defines.contains(parameters.first())) {
     printf("Calling define '%s'\n", parameters.first().toStdString().c_str());
-    runScript(behaviours.at(boris->curBehav).defines[parameters.first()], stop);
+    runScript(stop, behaviours.at(boris->curBehav).defines[parameters.first()]);
   } else {
     printf("Calling define '%s', ERROR: Unknown define\n", parameters.first().toStdString().c_str());
   }

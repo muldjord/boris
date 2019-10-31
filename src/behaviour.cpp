@@ -27,6 +27,22 @@
 
 #include "behaviour.h"
 
+Script::Script(const Script &script) : QObject()
+{
+  this->commands = script.commands;
+  this->blocks = script.blocks;
+}
+
+void Script::operator=(const Script &script)
+{
+  this->commands = script.commands;
+  this->blocks = script.blocks;
+}
+
+Script::Script()
+{
+}
+
 Frame::Frame(const Frame &frame): QObject()
 {
   this->sprite = frame.sprite;

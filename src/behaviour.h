@@ -33,6 +33,17 @@
 #include <QPixmap>
 #include <QMap>
 
+// All single commands stored in the list with all children blocks replaced by '##1##', '##2##'
+class Script: public QObject
+{
+public:
+  Script(const Script &script);
+  void operator=(const Script &script);
+  Script();
+  QList<QString> commands;
+  QMap<QString, Script> blocks; // Contains map of '##1##', '##2##'... which contains a script with the commands of that block inside
+};
+
 class Frame: public QObject
 {
   Q_OBJECT;
@@ -46,7 +57,7 @@ public:
   int dx;
   int dy;
   sf::SoundBuffer *soundBuffer = nullptr;
-  QList<QString> script;
+  Script script;
 };
 
 class Behaviour: public QObject
@@ -74,7 +85,7 @@ public:
   bool pitchLock = false;
   QList<Frame> frames;
   QMap<QString, int> labels; // Used for scripts when goto'ing
-  QMap<QString, QList<QString> > defines; // Used for defines of reusable code lines
+  QMap<QString, Script> defines; // Used for defines of reusable scripting blocks
 };
 
 #endif // _BEHAVIOUR_H
