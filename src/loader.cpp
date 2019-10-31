@@ -298,7 +298,6 @@ bool Loader::loadFont(QMap<QChar, QImage> &pfont)
         x2++;
       }
       pfont[fontChar] = fontSheet.copy(x1, 0, x2 - x1, h);
-      pfont[fontChar].save(QString(fontChar) + ".png");
       // Move past purple non-char area to where next char begins
       while(x2 < w && fontSheet.pixelIndex(x2, 0) == 2) {
         x2++;
