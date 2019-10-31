@@ -82,61 +82,61 @@ if chord = 2 and rand = 1 goto a5,
 if rand = 1 goto f4,if rand = 2 goto g4,if rand = 3 goto a4
 
 # a4
-14;75;0;0;data/sfx/piano_a4.wav;label a4,call noteprogress,if @6 = 1 or quicks >= 0 goto sa4
-15;150;0;0;;
-15;75;0;0;;label sa4,call nextstep,var rand = @3,
+16;75;0;0;data/sfx/piano_a4.wav;label a4,call noteprogress,if @6 = 1 or quicks >= 0 goto sa4
+17;150;0;0;;
+17;75;0;0;;label sa4,call nextstep,var rand = @3,
 if chord = 3 and rand = 1 goto b5,
 if rand = 1 goto g4,if rand = 2 goto a4,if rand = 3 goto b4
 
 # b4
-14;75;0;0;data/sfx/piano_b4.wav;label b4,call noteprogress,if @6 = 1 or quicks >= 0 goto sb4
-15;150;0;0;;
-15;75;0;0;;label sb4,call nextstep,var rand = @3,
+16;75;0;0;data/sfx/piano_b4.wav;label b4,call noteprogress,if @6 = 1 or quicks >= 0 goto sb4
+17;150;0;0;;
+17;75;0;0;;label sb4,call nextstep,var rand = @3,
 if rand = 1 goto a4,if rand = 2 goto b4,if rand = 3 goto c5
 
 # c5
-14;75;0;0;data/sfx/piano_c5.wav;label c5,call noteprogress,if @6 = 1 or quicks >= 0 goto sc5
-15;150;0;0;;
-15;75;0;0;;label sc5,call nextstep,var rand = @3,
+16;75;0;0;data/sfx/piano_c5.wav;label c5,call noteprogress,if @6 = 1 or quicks >= 0 goto sc5
+17;150;0;0;;
+17;75;0;0;;label sc5,call nextstep,var rand = @3,
 if rand = 1 goto b4,if rand = 2 goto c5,if rand = 3 goto d5
 
 # d5
-14;75;0;0;data/sfx/piano_d5.wav;label d5,call noteprogress,if @6 = 1 or quicks >= 0 goto sd5
-15;150;0;0;;
-15;75;0;0;;label sd5,call nextstep,var rand = @3,
+16;75;0;0;data/sfx/piano_d5.wav;label d5,call noteprogress,if @6 = 1 or quicks >= 0 goto sd5
+17;150;0;0;;
+17;75;0;0;;label sd5,call nextstep,var rand = @3,
 if chord = 1 and rand = 3 goto c4,
 if rand = 1 goto c5,if rand = 2 goto d5,if rand = 3 goto e5
 
 # e5
-14;75;0;0;data/sfx/piano_e5.wav;label e5,call noteprogress,if @6 = 1 or quicks >= 0 goto se5
-15;150;0;0;;
-15;75;0;0;;label se5,call nextstep,var rand = @3,
+16;75;0;0;data/sfx/piano_e5.wav;label e5,call noteprogress,if @6 = 1 or quicks >= 0 goto se5
+17;150;0;0;;
+17;75;0;0;;label se5,call nextstep,var rand = @3,
 if rand = 1 goto d5,if rand = 2 goto e5,if rand = 3 goto f5
 
 # f5
-14;75;0;0;data/sfx/piano_f5.wav;label f5,call noteprogress,if @6 = 1 or quicks >= 0 goto sf5
-15;150;0;0;;
-15;75;0;0;;label sf5,call nextstep,var rand = @3,
+18;75;0;0;data/sfx/piano_f5.wav;label f5,call noteprogress,if @6 = 1 or quicks >= 0 goto sf5
+19;150;0;0;;
+19;75;0;0;;label sf5,call nextstep,var rand = @3,
 if rand = 1 goto e5,if rand = 2 goto f5,if rand = 3 goto g5
 
 # g5
-14;75;0;0;data/sfx/piano_g5.wav;label g5,call noteprogress,if @6 = 1 or quicks >= 0 goto sg5
-15;150;0;0;;
-15;75;0;0;;label sg5,call nextstep,var rand = @3,
+18;75;0;0;data/sfx/piano_g5.wav;label g5,call noteprogress,if @6 = 1 or quicks >= 0 goto sg5
+19;150;0;0;;
+19;75;0;0;;label sg5,call nextstep,var rand = @3,
 if chord = 4 and rand = 3 goto f4,
 if rand = 1 goto c5,if rand = 2 goto d5,if rand = 3 goto e5
 
 # a5
-14;75;0;0;data/sfx/piano_a5.wav;label a5,call noteprogress,if @6 = 1 or quicks >= 0 goto sa5
-15;150;0;0;;
-15;75;0;0;;label sa5,call nextstep,var rand = @3,
+18;75;0;0;data/sfx/piano_a5.wav;label a5,call noteprogress,if @6 = 1 or quicks >= 0 goto sa5
+19;150;0;0;;
+19;75;0;0;;label sa5,call nextstep,var rand = @3,
 if chord = 2 and rand = 3 goto g4,
 if rand = 1 goto g5,if rand = 2 goto a5,if rand = 3 goto b5
 
 # b5
-14;75;0;0;data/sfx/piano_b5.wav;label b5,call noteprogress,if @6 = 1 or quicks >= 0 goto sb5
-15;150;0;0;;
-15;75;0;0;;label sb5,call nextstep,var rand = @3,
+18;75;0;0;data/sfx/piano_b5.wav;label b5,call noteprogress,if @6 = 1 or quicks >= 0 goto sb5
+19;150;0;0;;
+19;75;0;0;;label sb5,call nextstep,var rand = @3,
 if rand = 1 goto a5,if rand = 2 goto b5,if rand = 3 goto a4
 
 12;75;0;0;;label judge,if @2 = 1 goto good else goto bad
