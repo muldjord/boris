@@ -193,10 +193,10 @@ bool Loader::loadBehaviours(const Settings &settings,
             script.append(QString(dat.readLine().simplified()));
           }
           script = script.simplified();
-          f.script = parseScript(script);
           if(script.contains("define") && script.contains(":")) {
             b.defines[script.split(":").first().split(" ").at(1)] = parseScript(script.split(":").at(1));
           } else {
+            f.script = parseScript(script);
             const QList<QString> instructions = script.split(",");
             for(const auto &instruction: instructions) {
               if(instruction.split(" ").count() == 2 &&
@@ -234,27 +234,27 @@ Script Loader::parseScript(const QString &script)
     if(ch == '{') {
       blockLevel++;
     }
+    if(ch == '}') {
+      blockLevel--;
+    }
     if(blockLevel >= 1) {
       if(!inBlock) {
         inBlock = true;
         blockId++;
-        printf("blockId: %d\n", blockId);
       }
       childScript.append(ch);
-      printf("childScript: '%s'\n", childScript.toStdString().c_str());
     } else {
       if(inBlock && !childScript.isEmpty()) {
-        printf("CONCLUDING!!!!\n");
         inBlock = false;
+        childScript.append(ch); // Add the last '}' as well
+        QString cleaned = childScript.mid(1, childScript.length() - 2).simplified();
+        printf("childScript: '%s'\n", cleaned.toStdString().c_str());
         QString blockIdStr = "##" + QString::number(blockId) + "##";
-        returnScript.blocks[blockIdStr] = parseScript(childScript);
         commands.replace(childScript, blockIdStr);
+        returnScript.blocks[blockIdStr] = parseScript(cleaned);
         childScript.clear();
       }
     } 
-    if(ch == '}') {
-      blockLevel--;
-    }
   }
   returnScript.commands = commands.split(",");
   return returnScript;
