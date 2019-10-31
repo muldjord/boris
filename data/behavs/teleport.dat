@@ -146,6 +146,17 @@ doNotDisturb
 91;50;0;0;;
 92;50;0;0;;goto backtonormal
 
+94;60;0;0;;label penguin
+95;1000;0;0;;
+96;60;0;0;;
+95;60;0;0;;
+96;60;0;0;;
+95;1000;0;0;;
+94;50;0;0;data/sfx/teleport_buzz3.wav;
+95;50;0;0;;
+94;50;0;0;;
+95;50;0;0;;goto backtonormal
+
 80;50;0;0;;label backtonormal
 81;50;0;0;;
 80;50;0;0;;
