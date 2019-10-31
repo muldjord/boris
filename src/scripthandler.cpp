@@ -90,6 +90,7 @@ void ScriptHandler::handleIf(QList<QString> &parameters, int &stop, const Script
       parameters.removeFirst();
     }
     if(parameters.first().left(2) == "##") {
+      printf("\n");
       runScript(stop, script.blocks[parameters.first()]);
     } else {
       runCommand(parameters, stop, script);
@@ -99,6 +100,7 @@ void ScriptHandler::handleIf(QList<QString> &parameters, int &stop, const Script
     while(parameters.takeFirst() != "else") {
     }
     if(parameters.first().left(2) == "##") {
+      printf("\n");
       runScript(stop, script.blocks[parameters.first()]);
     } else {
       runCommand(parameters, stop, script);
@@ -441,6 +443,7 @@ void ScriptHandler::handleSound(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'sound'
   if(parameters.count() >= 1) {
+    printf("Playing sound '%s'\n", parameters.first().toStdString().c_str());
     emit boris->playSoundFile(parameters.first(),
                               (float)boris->pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
                               (stats->getHyper() / 60.0) + 1);
