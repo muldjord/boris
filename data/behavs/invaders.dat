@@ -6,16 +6,8 @@ social=-8
 hygiene=-3
 oneShot
 doNotDisturb
-#Frames
-0;75;0;0;;var level = 1,var lives = 3
-1;75;0;0;;
-2;75;0;0;;
 
-3;75;0;0;;define drawlives:if lives >= 1 draw green pixel 26 3,
-if lives >= 2 draw green pixel 28 3,
-if lives = 3 draw green pixel 30 3
-
-4;75;0;0;;define drawdefence:draw darkgrey pixel 18 11,
+define drawdefence:draw darkgrey pixel 18 11,
 draw darkgrey line 18 10 20 10,
 draw darkgrey pixel 20 11,
 draw darkgrey pixel 22 11,
@@ -25,16 +17,20 @@ draw darkgrey pixel 26 11,
 draw darkgrey line 26 10 28 10,
 draw darkgrey pixel 28 11
 
-5;75;0;0;;define moveboris:var rand = @3,
+define moveboris:var rand = @3,
 if rand = 1 var bx -= 1 else if rand = 3 var bx += 1,
 if bx > 28 var bx = 28,
 if bx < 16 var bx = 16,
 draw green line bx 13 bx + 2 13,
 draw green pixel bx + 1 12
 
-6;75;0;0;;define moveshot:var rand = @3,if rand = 1 and sy = -1 {var sy = 13,sound data/sfx/game_laser.wav},if rand = 1 and sy = 13 var sx = bx + 1,if sy > 0 var sy -= 1,if sy > 0 draw yellow pixel sx sy,if sy <= 3 var sy = -1
-7;75;0;0;;
-8;75;0;0;;define drawaliens:if col1 >= 2 draw white line alx row alx + 1 row,
+define drawlives:if lives >= 1 draw green pixel 26 3,
+if lives >= 2 draw green pixel 28 3,
+if lives = 3 draw green pixel 30 3
+
+define moveshot:var rand = @3,if rand = 1 and sy = -1 {var sy = 13,sound data/sfx/game_laser.wav},if rand = 1 and sy = 13 var sx = bx + 1,if sy > 0 var sy -= 1,if sy > 0 draw yellow pixel sx sy,if sy <= 3 var sy = -1
+
+define drawaliens:if col1 >= 2 draw white line alx row alx + 1 row,
 if col1 >= 4 draw white line alx row + 2 alx + 1 row + 2,
 if col1 >= 6 draw white line alx row + 4 alx + 1 row + 4,
 if col2 >= 2 draw white line alx + 3 row alx + 3 + 1 row,
@@ -43,6 +39,21 @@ if col2 >= 6 draw white line alx + 3 row + 4 alx + 3 + 1 row + 4,
 if col3 >= 2 draw white line alx + 6 row alx + 6 + 1 row,
 if col3 >= 4 draw white line alx + 6 row + 2 alx + 6 + 1 row + 2,
 if col3 >= 6 draw white line alx + 6 row + 4 alx + 6 + 1 row + 4
+
+#Frames
+0;75;0;0;;var level = 1,var lives = 3
+1;75;0;0;;
+2;75;0;0;;
+
+3;75;0;0;;
+
+4;75;0;0;;
+
+5;75;0;0;;
+
+6;75;0;0;;
+7;75;0;0;;
+8;75;0;0;;
 9;2000;0;0;data/sfx/game_boot.wav;
 
 10;150;0;0;;label nextround,

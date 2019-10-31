@@ -115,51 +115,77 @@ bool Loader::loadBehaviours(const Settings &settings,
       b.category = "";
 
       while(!dat.atEnd()) {
-        QByteArray line = dat.readLine().trimmed();
+        QByteArray line = dat.readLine().simplified();
+        if(line.isEmpty()) {
+          continue;
+        }
         if(line.contains("#Frames")) {
           break;
         }
+        if(line.contains("define") && line.contains(":")) {
+          QString script = QString(line);
+          while(script.right(1) == ",") {
+            script.append(QString(dat.readLine().simplified()));
+          }
+          script = script.simplified();
+          b.defines[script.split(":").first().split(" ").at(1)] = parseScript(script.split(":").at(1));
+          continue;
+        }
         if(line == "oneShot") {
           b.oneShot = true;
+          continue;
         }
         if(line == "doNotDisturb") {
           b.doNotDisturb = true;
+          continue;
         }
         if(line == "allowFlip") {
           b.allowFlip = true;
+          continue;
         }
         if(line == "pitchLock") {
           b.pitchLock = true;
+          continue;
         }
         if(line.contains("title")) {
           b.title = line.mid(6,line.length());
+          continue;
         }
         if(line.contains("category")) {
           b.category = line.mid(9,line.length());
+          continue;
         }
         if(line.contains("hyper")) {
           b.hyper = line.mid(6,line.length()).toInt();
+          continue;
         }
         if(line.contains("health")) {
           b.health = line.mid(7,line.length()).toInt();
+          continue;
         }
         if(line.contains("energy")) {
           b.energy = line.mid(7,line.length()).toInt();
+          continue;
         }
         if(line.contains("hunger")) {
           b.hunger = line.mid(7,line.length()).toInt();
+          continue;
         }
         if(line.contains("bladder")) {
           b.bladder = line.mid(8,line.length()).toInt();
+          continue;
         }
         if(line.contains("social")) {
           b.social = line.mid(7,line.length()).toInt();
+          continue;
         }
         if(line.contains("fun")) {
           b.fun = line.mid(4,line.length()).toInt();
+          continue;
         }
         if(line.contains("hygiene")) {
           b.hygiene = line.mid(8,line.length()).toInt();
+          continue;
         }
       }
       int frames = 0;
@@ -193,17 +219,13 @@ bool Loader::loadBehaviours(const Settings &settings,
             script.append(QString(dat.readLine().simplified()));
           }
           script = script.simplified();
-          if(script.contains("define") && script.contains(":")) {
-            b.defines[script.split(":").first().split(" ").at(1)] = parseScript(script.split(":").at(1));
-          } else {
-            f.script = parseScript(script);
-            const QList<QString> instructions = script.split(",");
-            for(const auto &instruction: instructions) {
-              if(instruction.split(" ").count() == 2 &&
-                 instruction.split(" ").first() == "label") {
-                // Point this label to current frame
-                b.labels[instruction.split(" ").at(1)] = frames;
-              }
+          f.script = parseScript(script);
+          const QList<QString> instructions = script.split(",");
+          for(const auto &instruction: instructions) {
+            if(instruction.split(" ").count() == 2 &&
+               instruction.split(" ").first() == "label") {
+              // Point this label to current frame
+              b.labels[instruction.split(" ").at(1)] = frames;
             }
           }
         }
