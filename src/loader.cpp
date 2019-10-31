@@ -252,7 +252,7 @@ Script Loader::parseScript(const QString &script)
   bool inBlock = false;
   QString commands = script;
   QString childScript = "";
-  for(const auto ch: commands) {
+  for(const auto ch: script) {
     if(ch == '{') {
       blockLevel++;
     }
