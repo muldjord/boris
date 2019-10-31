@@ -1,0 +1,52 @@
+Multiline code:
+var a = @2,
+if a = 1 {
+  var b = @2,
+  if b = 1 {
+    goto here
+  } else if b = 2 {
+    goto there
+  } else {
+    if @2 = 1 {
+      break
+    }
+  }
+} else {
+  break
+};
+
+Singleline version of same code with hierarchy:
+var a = @2,if a = 1 { var b = @2,if b = 1 { goto here } else if b = 2 { goto there } else { if @2 = 1 { break } } } else { break };
+var a = @2,if a = 1.................................................................................................else..........
+......................var b = @2,if b = 1...............else if b = 2................else .................................break..
+............................................goto here...................goto there..........if @2 = 1.............................
+........................................................................................................break.....................
+
+Breakdown:
+var a = @2
+if a = 1 #A# else #B#
+#A#
+  var b = @2
+  if b = 1 #AA# else if b = 2 #AB# else #AC#
+  #AA#
+    goto here
+  #AB#
+    goto there
+  #AC#
+    if @2 = 1 #AAA# break
+      #AAA#
+	break
+#B#
+  break
+
+block definition:
+{ command1, command2 }
+
+command separator:
+','
+
+overall separator:
+' '
+
+script end:
+';'
