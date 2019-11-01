@@ -18,7 +18,7 @@ define noteprogress:var song -= 1,
 var notes -= 1,
 var quicks -= 1
 
-define nextstep:if song <= 0 goto judge,
+define nextstep:if song <= 0 goto wrapup,
 if notes <= 0 goto choosechord
 
 #Frames
@@ -139,9 +139,32 @@ if rand = 1 goto g5,if rand = 2 goto a5,if rand = 3 goto b5
 19;75;0;0;;label sb5,call nextstep,var rand = @3,
 if rand = 1 goto a5,if rand = 2 goto b5,if rand = 3 goto a4
 
-12;75;0;0;;label judge,if @2 = 1 goto good else goto bad
-11;1000;0;0;data/sfx/win2.wav;label good,goto end
-11;1000;0;0;data/sfx/grumpy1.wav;label bad
+13;300;0;0;;label wrapup,var rand = @4,if rand = 1 goto end1,if rand = 2 goto end2,if rand = 3 goto end3,if rand = 4 goto end4
+
+# End 1
+14;75;0;0;data/sfx/piano_c4.wav;label end1
+15;225;0;0;;
+16;75;0;0;data/sfx/piano_d4.wav;
+17;225;0;0;;goto end
+
+# End 2
+18;75;0;0;data/sfx/piano_g4.wav;label end2
+19;225;0;0;;
+16;75;0;0;data/sfx/piano_f4.wav;
+17;225;0;0;;goto end
+
+# End 3
+18;75;0;0;data/sfx/piano_d5.wav;label end3
+19;225;0;0;;
+16;75;0;0;data/sfx/piano_c5.wav;
+17;225;0;0;;goto end
+
+# End 4
+14;75;0;0;data/sfx/piano_e4.wav;label end4
+15;225;0;0;;
+16;75;0;0;data/sfx/piano_f4.wav;
+17;225;0;0;;goto end
+
 10;75;0;0;;label end
 9;75;0;0;;
 8;75;0;0;;
