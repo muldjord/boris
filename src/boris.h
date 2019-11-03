@@ -91,6 +91,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent* event);
   void enterEvent(QEvent *event);
   void leaveEvent(QEvent *event);
+  void wheelEvent(QWheelEvent *);
 
 signals:
   void playSound(const sf::SoundBuffer *buffer,
@@ -110,6 +111,7 @@ private slots:
   void nextWeatherFrame();
   void hideWeather();
   void readyForFriend();
+  void balanceInteractions();
   
 private:
   Settings *settings;
@@ -128,6 +130,8 @@ private:
   QTimer physicsTimer;
   QTimer statTimer;
   QTimer statQueueTimer;
+  QTimer interactionsTimer;
+  int interactions = 0;
   bool mMoving;
   QPoint mLastMousePosition;
   bool alreadyEvading;

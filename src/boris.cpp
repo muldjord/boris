@@ -161,6 +161,11 @@ Boris::Boris(Settings *settings)
   connect(&statQueueTimer, &QTimer::timeout, this, &Boris::statQueueProgress);
   statQueueTimer.start();
   
+  interactionsTimer.setInterval(2000);
+  interactionsTimer.setSingleShot(true);
+  connect(&interactionsTimer, &QTimer::timeout, this, &Boris::balanceInteractions);
+  interactionsTimer.start();
+
   setCursor(QCursor(QPixmap(":mouse_hover.png")));
 
   updateBoris();
@@ -654,6 +659,7 @@ void Boris::mouseMoveEvent(QMouseEvent* event)
       stats->move(this->pos().x() + (size / 2) - (stats->width() / 2), this->pos().y() + size + size / 3);
     }
   }
+
 }
 
 void Boris::mouseReleaseEvent(QMouseEvent* event)
@@ -669,6 +675,13 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
     hVel = mouseHVel;
     vVel = mouseVVel;
     alt = QCursor::pos().y() + 40;
+  }
+}
+
+void Boris::wheelEvent(QWheelEvent *)
+{
+  if(stats->underMouse) {
+    changeBehaviour("_tickle");
   }
 }
 
@@ -735,6 +748,7 @@ void Boris::handlePhysics()
     double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
     if(hypotenuse < size * 3) {
       if(!alreadyEvading) {
+        interactions++;
         if(fabs(mouseHVel) > 20.0 || fabs(mouseVVel) > 20.0) {
           double fleeAngle = atan2((this->pos().y() + (size / 2.0)) - p.y(),
                                    p.x() - (this->pos().x() + (size / 2.0))
@@ -761,7 +775,7 @@ void Boris::handlePhysics()
           } else if(fleeAngle >= 292.5 && fleeAngle < 337.5) {
             changeBehaviour("_flee_left_up", (qrand() % 2000) + 1000);
           }
-        } else if(stats->getFun() > 10 && qrand() % 100 >= 50) {
+        } else if(stats->getFun() > 10 && interactions >= 4 && qrand() % 10 >= 3) {
           changeBehaviour(getFileFromCategory("Social"));
         }
       }
@@ -1411,4 +1425,15 @@ int Boris::getCurBehav()
 void Boris::readyForFriend()
 {
   borisFriend = nullptr;
+}
+
+void Boris::balanceInteractions()
+{
+  // This balances the interaction count which is increased when mouse is moved across Boris
+  if(interactions > 6) {
+    interactions = 6;
+  } else if(interactions > 0) {
+    interactions--;
+  }
+  interactionsTimer.start();
 }
