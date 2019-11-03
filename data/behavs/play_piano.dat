@@ -11,8 +11,12 @@ pitchLock
 define chordinit:stat fun += 3,
 var notes = 3,
 var notes += @4,
+var notes += notes % 2,
 var quicks = 2,
-var quicks += @2
+var quicks += @2,
+var quicks += quicks % 2,
+print notes,
+print quicks
 
 define noteprogress:var song -= 1,
 var notes -= 1,
@@ -22,7 +26,7 @@ define nextstep:if song <= 0 goto wrapup,
 if notes <= 0 goto choosechord
 
 #Frames
-0;75;0;0;;var song = 64,var song += @64
+0;75;0;0;;var song = 64,var song += @64,var song += song % 2
 1;75;0;0;;
 2;75;0;0;;
 3;75;0;0;;
