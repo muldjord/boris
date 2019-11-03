@@ -680,7 +680,7 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
 
 void Boris::wheelEvent(QWheelEvent *)
 {
-  if(stats->underMouse) {
+  if(stats->underMouse && !falling && !grabbed) {
     changeBehaviour("_tickle");
   }
 }
