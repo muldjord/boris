@@ -614,18 +614,12 @@ void Boris::handleBehaviourChange(QAction* a) {
 void Boris::enterEvent(QEvent *event)
 {
   event->accept();
-  if(settings->stats == STATS_MOUSEOVER || settings->stats == STATS_CRITICAL) {
-    stats->show();
-  }
   stats->underMouse = true;
 }
 
 void Boris::leaveEvent(QEvent *event)
 {
   event->accept();
-  if(settings->stats == STATS_MOUSEOVER || settings->stats == STATS_CRITICAL) {
-    stats->hide(); 
-  }
   stats->underMouse = false;
 }
 
@@ -680,7 +674,7 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
 
 void Boris::wheelEvent(QWheelEvent *)
 {
-  if(stats->underMouse && !falling && !grabbed) {
+  if(stats->underMouse && !falling && !grabbed && !behaviours.at(curBehav).doNotDisturb) {
     changeBehaviour("_tickle");
   }
 }
@@ -1429,6 +1423,12 @@ void Boris::readyForFriend()
 
 void Boris::balanceInteractions()
 {
+  if((settings->stats == STATS_MOUSEOVER || settings->stats == STATS_CRITICAL) &&
+     stats->underMouse) {
+    stats->show();
+  } else {
+    stats->hide();
+  }
   // This balances the interaction count which is increased when mouse is moved across Boris
   if(interactions > 6) {
     interactions = 6;
