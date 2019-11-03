@@ -3,11 +3,15 @@ oneShot
 allowFlip
 #Frames
 0;50;0;0;;
-1;75;0;0;;var rand = @4,if rand = 1 sound data/sfx/tickle1.wav,if rand = 2 sound data/sfx/tickle2.wav,if rand = 3 sound data/sfx/tickle3.wav,if rand = 4 sound data/sfx/tickle4.wav,if @8 = 1 stat energy -= 1,if @4 = 1 stat fun += 1,if @2 = 1 stat social += 1
+1;75;0;0;;var rand = @4,if rand = 1 sound data/sfx/tickle1.wav,if rand = 2 sound data/sfx/tickle2.wav,if rand = 3 sound data/sfx/tickle3.wav,if rand = 4 sound data/sfx/tickle4.wav,if @8 = 1 stat energy -= 1,if @3 = 1 stat fun += 1,if @1 = 1 stat social += 1
 2;75;0;0;;
 1;75;0;0;;
 2;75;0;0;;
-0;75;0;0;;
-3;75;0;0;;
-4;75;0;0;;
-5;75;0;0;;
+1;75;0;0;;
+2;75;0;0;;
+1;75;0;0;;
+2;95;0;0;;
+0;100;0;0;;
+3;100;0;0;;
+4;100;0;0;;
+5;100;0;0;;

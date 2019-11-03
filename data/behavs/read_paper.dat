@@ -1,12 +1,10 @@
 title=Read the paper
 category=Energy
-energy=10
-fun=5
 hygiene=-2
 oneShot
 allowFlip
 #Frames
-0;75;0;0;;var turns = 1,var turns += @3
+0;75;0;0;;var turns = 1,var turns += @4
 1;75;0;0;;
 2;75;0;0;;
 3;75;0;0;;
@@ -24,8 +22,8 @@ allowFlip
 15;75;0;0;;
 18;75;0;0;data/sfx/turn_page.wav;label pageturn
 19;75;0;0;;var turns -= 1,var skimmings = @3
-20;75;0;0;;
-21;75;0;0;;
+20;75;0;0;;stat energy += 3
+21;75;0;0;;stat fun += 1
 22;75;0;0;;
 23;75;0;0;;
 24;75;0;0;;
