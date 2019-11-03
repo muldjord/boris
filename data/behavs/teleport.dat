@@ -100,7 +100,7 @@ doNotDisturb
 76;60;0;0;;
 77;60;0;0;;
 78;60;0;0;;
-79;60;0;0;;var rand = @5,if rand = 1 goto boris else if rand = 2 goto donald else if rand = 3 goto garfield else if rand = 4 goto penguin else if rand = 4 goto alien
+79;60;0;0;;var rand = @5,if rand = 1 goto boris else if rand = 2 goto donald else if rand = 3 goto garfield else if rand = 4 goto penguin else if rand = 5 goto alien
 
 82;60;0;0;;label boris
 83;1000;0;0;;
