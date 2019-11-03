@@ -132,6 +132,7 @@ private:
   QTimer statQueueTimer;
   QTimer interactionsTimer;
   int interactions = 0;
+  int annoyance = 0;
   bool mMoving;
   QPoint mLastMousePosition;
   bool alreadyEvading;

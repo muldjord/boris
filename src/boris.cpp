@@ -42,6 +42,7 @@
 
 constexpr int STATTIMER = 200;
 constexpr double PI = 3.1415927;
+constexpr int ANNOYMAX = 42;
 
 extern QList<Behaviour> behaviours;
 extern QList<Behaviour> weathers;
@@ -678,7 +679,12 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
 void Boris::wheelEvent(QWheelEvent *)
 {
   if(stats->underMouse && !falling && !grabbed && !behaviours.at(curBehav).doNotDisturb) {
-    changeBehaviour("_tickle");
+    if(annoyance < ANNOYMAX) {
+      changeBehaviour("_tickle");
+    } else {
+      changeBehaviour("_annoyed");
+    }
+    annoyance++;
   }
 }
 
@@ -1435,6 +1441,11 @@ void Boris::balanceInteractions()
     interactions = 6;
   } else if(interactions > 0) {
     interactions--;
+  }
+  if(annoyance > ANNOYMAX) {
+    annoyance = ANNOYMAX;
+  } else if(annoyance > 0) {
+    annoyance = annoyance - 4;
   }
   interactionsTimer.start();
 }
