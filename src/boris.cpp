@@ -620,6 +620,9 @@ void Boris::enterEvent(QEvent *event)
 void Boris::leaveEvent(QEvent *event)
 {
   event->accept();
+  if(settings->stats == STATS_MOUSEOVER || settings->stats == STATS_CRITICAL) {
+    stats->hide(); 
+  }
   stats->underMouse = false;
 }
 
@@ -1426,8 +1429,6 @@ void Boris::balanceInteractions()
   if((settings->stats == STATS_MOUSEOVER || settings->stats == STATS_CRITICAL) &&
      stats->underMouse) {
     stats->show();
-  } else {
-    stats->hide();
   }
   // This balances the interaction count which is increased when mouse is moved across Boris
   if(interactions > 6) {
