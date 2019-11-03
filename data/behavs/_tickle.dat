@@ -4,18 +4,12 @@ social=2
 oneShot
 allowFlip
 #Frames
-10;161;0;0;;var rand = @4,if rand = 1 sound data/sfx/tickle1.wav,if rand = 2 sound data/sfx/tickle2.wav,if rand = 3 sound data/sfx/tickle3.wav,if rand = 4 sound data/sfx/tickle4.wav,if @8 = 1 stat energy -= 1
-11;93;0;0;;
-10;71;0;0;;
-11;68;0;0;;
-10;61;0;0;;
-11;94;0;0;;
-10;102;0;0;;
-11;102;0;0;;
-10;100;0;0;;
-11;75;0;0;;
-12;75;0;0;;
-13;75;0;0;;
-14;75;0;0;;
-15;75;0;0;;
-16;75;0;0;;
+0;50;0;0;;
+1;75;0;0;;var rand = @4,if rand = 1 sound data/sfx/tickle1.wav,if rand = 2 sound data/sfx/tickle2.wav,if rand = 3 sound data/sfx/tickle3.wav,if rand = 4 sound data/sfx/tickle4.wav,if @8 = 1 stat energy -= 1
+2;75;0;0;;
+1;75;0;0;;
+2;75;0;0;;
+0;75;0;0;;
+3;75;0;0;;
+4;75;0;0;;
+5;75;0;0;;
