@@ -468,10 +468,19 @@ int ScriptHandler::getValue(QList<QString> &parameters)
   if(parameters.count() >= 2) {
     if(parameters.first() == "+") {
       parameters.removeFirst(); // Remove '+'
-      result += getValue(parameters);
+      return result + getValue(parameters);
     } else if(parameters.first() == "-") {
       parameters.removeFirst(); // Remove '-'
-      result -= getValue(parameters);
+      return result - getValue(parameters);
+    } else if(parameters.first() == "*") {
+      parameters.removeFirst(); // Remove '*'
+      return result * getValue(parameters);
+    } else if(parameters.first() == "/") {
+      parameters.removeFirst(); // Remove '/'
+      return result / getValue(parameters);
+    } else if(parameters.first() == "%") {
+      parameters.removeFirst(); // Remove '%'
+      return result % getValue(parameters);
     }
   }
 
