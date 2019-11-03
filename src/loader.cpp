@@ -270,7 +270,6 @@ Script Loader::parseScript(const QString &script)
         inBlock = false;
         childScript.append(ch); // Add the last '}' as well
         QString cleaned = childScript.mid(1, childScript.length() - 2).simplified();
-        printf("childScript: '%s'\n", cleaned.toStdString().c_str());
         QString blockIdStr = "##" + QString::number(blockId) + "##";
         commands.replace(childScript, blockIdStr);
         returnScript.blocks[blockIdStr] = parseScript(cleaned);
