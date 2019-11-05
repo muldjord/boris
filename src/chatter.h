@@ -30,11 +30,10 @@
 
 #include "settings.h"
 
-#include <QWidget>
 #include <QLabel>
 #include <QMouseEvent>
 
-class Chatter : public QWidget
+class Chatter : public QLabel
 {
   Q_OBJECT;
 
@@ -49,9 +48,6 @@ protected:
   
 private:
   Settings *settings;
-
-  QLabel *chatterLabel;
-  QLabel *bubbleTip;
   int currentLine = 0;
 };
 

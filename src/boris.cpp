@@ -46,7 +46,6 @@ constexpr int ANNOYMAX = 42;
 
 extern QList<Behaviour> behaviours;
 extern QList<Behaviour> weathers;
-extern QMap<QChar, QImage> pfont;
 
 Boris::Boris(Settings *settings)
 {
