@@ -317,7 +317,7 @@ void Boris::changeBehaviour(QString behav, int time)
   // Pick random behaviour but rule out certain behavs such as weewee and sleep
   // Bias towards behavs from 'Idle' and 'Walk' categories to make Boris less erratic
   if(qrand() % 10 >= 3) {
-    if(qrand() % 75 >= stats->getEnergy()) {
+    if(qrand() % 60 >= stats->getEnergy()) {
       curBehav = getIdxFromCategory("Idle");
     } else {
       curBehav = getIdxFromCategory("Walk");
@@ -633,9 +633,9 @@ void Boris::mousePressEvent(QMouseEvent* event)
     bMenu->exec(QCursor::pos());
   }
   if(event->button() == Qt::LeftButton) {
-    if(behaviours.at(curBehav).file == "sleep" && stats->getEnergy() < 100) {
-      energyQueue -= 50;
-      funQueue -= 25;
+    if(behaviours.at(curBehav).file == "sleep" && stats->getEnergy() <= 95) {
+      energyQueue -= 25;
+      funQueue -= 20;
     }
     setCursor(QCursor(QPixmap(":mouse_grab.png")));
     grabbed = true;
@@ -692,15 +692,17 @@ void Boris::handlePhysics()
 {
   if(!grabbed && weatherSprite->isVisible()) {
     sinVal += (double)(qrand() % 2000) / 20000.0;
-    if(sinVal > PI)
+    if(sinVal > PI) {
       sinVal = 0.0;
-    if(settings->windDirection.contains("W")) {
-      moveBoris(round(-(sin(sinVal) + 0.25) * settings->windSpeed * 0.1), 0);
-    } else if(settings->windDirection.contains("E")) {
-      moveBoris(round((sin(sinVal) + 0.25) * settings->windSpeed * 0.1), 0);
     }
-    if(chatter->isVisible())
+    if(settings->windDirection.contains("W")) {
+      moveBoris(round(-(sin(sinVal) + 0.25) * settings->windSpeed * 0.05), 0);
+    } else if(settings->windDirection.contains("E")) {
+      moveBoris(round((sin(sinVal) + 0.25) * settings->windSpeed * 0.05), 0);
+    }
+    if(chatter->isVisible()) {
       chatter->moveChatter(this->pos().x(), this->pos().y(), size);
+    }
   }
   
   if(falling && !grabbed) {
