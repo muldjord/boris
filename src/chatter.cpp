@@ -57,7 +57,7 @@ QPair<QString, int> Chatter::initChatter(const int x, const int y, const int &bo
   if(!settings->chatLines.isEmpty()) {
     currentLine = qrand() % settings->chatLines.count();
     chatType = settings->chatLines.at(currentLine).type;
-    chatText = settings->chatLines.at(currentLine).text.toUpper();
+    chatText = settings->chatLines.at(currentLine).text;
   }
 
   int textWidth = 0;
@@ -89,21 +89,21 @@ QPair<QString, int> Chatter::initChatter(const int x, const int y, const int &bo
 
   QImage bubbleAtlas(":bubble.png");
   QImage bubbleTip(":bubble_tip.png");
-  QImage bubbleImage(bubbleText.width() + bubbleAtlas.width() - 1,
+  QImage bubbleImage(bubbleText.width() + bubbleAtlas.width() - 1 - 2,
                      bubbleText.height() + bubbleAtlas.height() - 1 + bubbleTip.height() - 2,
                      QImage::Format_ARGB32_Premultiplied);
   bubbleImage.fill(Qt::transparent);
   painter.begin(&bubbleImage);
   painter.drawImage(0, 0, bubbleAtlas.copy(0, 0, 6, 6));
-  painter.drawImage(6, 0, bubbleAtlas.copy(6, 0, 1, 6).scaled(bubbleText.width(), 6));
-  painter.drawImage(6 + bubbleText.width(), 0, bubbleAtlas.copy(7, 0, 6, 6));
-  painter.drawImage(0, 6, bubbleAtlas.copy(0, 6, 6, 1).scaled(6, bubbleText.height()));
+  painter.drawImage(6, 0, bubbleAtlas.copy(6, 0, 1, 6).scaled(bubbleText.width() - 2, 6));
+  painter.drawImage(6 + bubbleText.width() - 2, 0, bubbleAtlas.copy(7, 0, 6, 6));
+  painter.drawImage(0, 6, bubbleAtlas.copy(0, 6, 6, 1).scaled(6, bubbleText.height() - 2));
   painter.drawImage(6, 6, bubbleText);
-  painter.drawImage(6 + bubbleText.width(), 6, bubbleAtlas.copy(7, 6, 6, 1).scaled(6, bubbleText.height()));
-  painter.drawImage(0, 6 + bubbleText.height(), bubbleAtlas.copy(0, 7, 6, 6));
-  painter.drawImage(6, 6 + bubbleText.height(), bubbleAtlas.copy(6, 7, 1, 6).scaled(bubbleText.width(), 6));
-  painter.drawImage(6 + bubbleText.width(), 6 + bubbleText.height(), bubbleAtlas.copy(7, 7, 6, 6));
-  painter.drawImage(bubbleImage.width() / 2, 6 + 6 + bubbleText.height() - 2, bubbleTip);
+  painter.drawImage(6 + bubbleText.width() - 2, 6, bubbleAtlas.copy(7, 6, 6, 1).scaled(6, bubbleText.height() - 2));
+  painter.drawImage(0, 6 + bubbleText.height() - 2, bubbleAtlas.copy(0, 7, 6, 6));
+  painter.drawImage(6, 6 + bubbleText.height() - 2, bubbleAtlas.copy(6, 7, 1, 6).scaled(bubbleText.width() - 2, 6));
+  painter.drawImage(6 + bubbleText.width() - 2, 6 + bubbleText.height() - 2, bubbleAtlas.copy(7, 7, 6, 6));
+  painter.drawImage(bubbleImage.width() / 2, 6 + 6 + bubbleText.height() - 4, bubbleTip);
   painter.end();
   
   bubbleImage = bubbleImage.scaledToWidth(bubbleImage.width() * 2);
@@ -122,7 +122,6 @@ QPair<QString, int> Chatter::initChatter(const int x, const int y, const int &bo
 void Chatter::moveChatter(const int x, const int y, const int &borisSize)
 {
   move((x + (borisSize / 8 * 7)) - (width() / 2), y + (borisSize / 10 * 9) - height());
-  //bubbleTip->move(width() / 2, height() - 27);
 }
 
 void Chatter::mousePressEvent(QMouseEvent *event)
