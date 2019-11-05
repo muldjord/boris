@@ -49,6 +49,7 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 * Added scoping to if sentences in scripting language
 * Boris is now ticklish (scroll mouse wheel on him)
 * Boris now less likely to pick a "social" behav when moving mouse over him
+* Refactored speech bubble class
 
 #### Version 2.0.2 (4th December 2018):
 * Added 'allowFlip' flag to behaviours giving those a 50% of being flipped horizontally
