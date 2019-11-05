@@ -98,12 +98,13 @@ QPair<QString, int> Chatter::initChatter(const int x, const int y, const int &bo
   painter.drawImage(6, 0, bubbleAtlas.copy(6, 0, 1, 6).scaled(bubbleText.width() - 2, 6));
   painter.drawImage(6 + bubbleText.width() - 2, 0, bubbleAtlas.copy(7, 0, 6, 6));
   painter.drawImage(0, 6, bubbleAtlas.copy(0, 6, 6, 1).scaled(6, bubbleText.height() - 2));
-  painter.drawImage(6, 6, bubbleText);
   painter.drawImage(6 + bubbleText.width() - 2, 6, bubbleAtlas.copy(7, 6, 6, 1).scaled(6, bubbleText.height() - 2));
   painter.drawImage(0, 6 + bubbleText.height() - 2, bubbleAtlas.copy(0, 7, 6, 6));
   painter.drawImage(6, 6 + bubbleText.height() - 2, bubbleAtlas.copy(6, 7, 1, 6).scaled(bubbleText.width() - 2, 6));
   painter.drawImage(6 + bubbleText.width() - 2, 6 + bubbleText.height() - 2, bubbleAtlas.copy(7, 7, 6, 6));
   painter.drawImage(bubbleImage.width() / 2, 6 + 6 + bubbleText.height() - 4, bubbleTip);
+  // Draw actual text last, to make sure borders don't overlap it
+  painter.drawImage(6, 6, bubbleText);
   painter.end();
   
   bubbleImage = bubbleImage.scaledToWidth(bubbleImage.width() * 2);
