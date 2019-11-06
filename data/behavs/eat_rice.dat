@@ -24,6 +24,6 @@ allowFlip
 16;75;0;0;;
 17;75;0;0;;
 14;75;0;0;;label munch
-15;75;0;0;;stat hunger -= 3
+15;75;0;0;;stat hunger -= 4
 16;75;0;0;;
-17;75;0;0;;if @4 > 1 goto munch
+17;75;0;0;;if @8 > 1 goto munch
