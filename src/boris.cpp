@@ -268,9 +268,9 @@ QString Boris::getFileFromCategory(QString category)
 int Boris::getIdxFromCategory(QString category)
 {
   QList<QString> b;
-  for(int i = 0; i < behaviours.length(); ++i) {
-    if(behaviours.at(i).category == category) {
-      b.append(behaviours.at(i).file);
+  for(const auto &behav: behaviours) {
+    if(behav.category == category) {
+      b.append(behav.file);
     }
   }
   int chosen = qrand() % b.length();
@@ -356,11 +356,7 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   if(time == 0) {
-    if(behaviours.at(curBehav).file.contains("casual_walk")) {
-      time = qrand() % 2000 + 500;
-    } else {
-      time = qrand() % 7000 + 5000;
-    }
+    time = qrand() % 7000 + 5000;
   }
   time = time - ((double)time / 100.0 * stats->getHyper());
   behavTimer.setInterval(time);
@@ -1272,59 +1268,6 @@ void Boris::processAi(QString &behav, int &time)
         stats->flashStat("bladder");
       } else if(behav == "_social") {
         stats->flashStat("social");
-      }
-    }
-  }
-  if(behav == "" && time == 0 &&
-     qrand() % 20 >= 3 && behaviours.at(curBehav).file.contains("casual_walk")) {
-    time = qrand() % 2000 + 500;
-    if(behaviours.at(curBehav).file == "casual_walk_up") {
-      if(qrand() % 2) {
-        behav = "casual_walk_left_up";
-      } else {
-        behav = "casual_walk_right_up";
-      }
-    } else if(behaviours.at(curBehav).file == "casual_walk_right_up") {
-      if(qrand() % 2) {
-        behav = "casual_walk_up";
-      } else {
-        behav = "casual_walk_right";
-      }
-    } else if(behaviours.at(curBehav).file == "casual_walk_right") {
-      if(qrand() % 2) {
-        behav = "casual_walk_right_up";
-      } else {
-        behav = "casual_walk_right_down";
-      }
-    } else if(behaviours.at(curBehav).file == "casual_walk_right_down") {
-      if(qrand() % 2) {
-        behav = "casual_walk_right";
-      } else {
-        behav = "casual_walk_down";
-      }
-    } else if(behaviours.at(curBehav).file == "casual_walk_down") {
-      if(qrand() % 2) {
-        behav = "casual_walk_right_down";
-      } else {
-        behav = "casual_walk_left_down";
-      }
-    } else if(behaviours.at(curBehav).file == "casual_walk_left_down") {
-      if(qrand() % 2) {
-        behav = "casual_walk_down";
-      } else {
-        behav = "casual_walk_left";
-      }
-    } else if(behaviours.at(curBehav).file == "casual_walk_left") {
-      if(qrand() % 2) {
-        behav = "casual_walk_left_down";
-      } else {
-        behav = "casual_walk_left_up";
-      }
-    } else if(behaviours.at(curBehav).file == "casual_walk_left_up") {
-      if(qrand() % 2) {
-        behav = "casual_walk_left";
-      } else {
-        behav = "casual_walk_up";
       }
     }
   }
