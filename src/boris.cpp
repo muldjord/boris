@@ -316,7 +316,7 @@ void Boris::changeBehaviour(QString behav, int time)
   // Pick random behaviour but rule out certain behavs such as weewee and sleep
   // Bias towards behavs from 'Idle' and 'Walk' categories to make Boris less erratic
   if(qrand() % 10 >= 3) {
-    if(qrand() % 60 >= stats->getEnergy()) {
+    if(qrand() % 70 >= stats->getEnergy()) {
       curBehav = getIdxFromCategory("Idle");
     } else {
       curBehav = getIdxFromCategory("Walk");
