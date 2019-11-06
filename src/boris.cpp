@@ -268,9 +268,9 @@ QString Boris::getFileFromCategory(QString category)
 int Boris::getIdxFromCategory(QString category)
 {
   QList<QString> b;
-  for(int i = 0; i < behaviours.length(); ++i) {
-    if(behaviours.at(i).category == category) {
-      b.append(behaviours.at(i).file);
+  for(const auto &behav: behaviours) {
+    if(behav.category == category) {
+      b.append(behav.file);
     }
   }
   int chosen = qrand() % b.length();
