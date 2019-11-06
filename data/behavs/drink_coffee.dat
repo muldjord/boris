@@ -23,7 +23,7 @@ define deltastats:stat hyper += 6,stat energy += 6,stat bladder += 5
 2;125;0;0;;
 1;125;0;0;;
 8;800;0;0;;
-5;30;0;0;data/sfx/ding.wav;
+5;30;0;0;data/sfx/plok.wav;
 6;30;0;0;;
 8;500;0;0;;
 7;30;0;0;;
@@ -51,7 +51,7 @@ define deltastats:stat hyper += 6,stat energy += 6,stat bladder += 5
 8;30;0;0;;
 7;30;0;0;;
 8;30;0;0;;
-5;30;0;0;data/sfx/ding.wav;
+5;30;0;0;data/sfx/plok.wav;
 6;30;0;0;;
 8;500;0;0;;
 7;30;0;0;;
