@@ -703,9 +703,9 @@ void Boris::handlePhysics()
   if(falling && !grabbed) {
     moveBoris(hVel, vVel);
     vVel += 0.5;
-    if(behaviours.at(curBehav).file != "_parachute_deploy") {
+    if(behaviours.at(curBehav).file != "_umbrella_falling") {
       if(vVel > 10 && qrand() % 100 <= 7) {
-        changeBehaviour("_parachute_deploy");
+        changeBehaviour("_umbrella_falling");
       }
     } else {
       if(vVel > 2) {
@@ -718,10 +718,10 @@ void Boris::handlePhysics()
     if(this->pos().y() >= alt) {
       move(this->pos().x(), alt);
       if(vVel < 5.0) {
-        if(behaviours.at(curBehav).file != "_parachute_deploy") {
+        if(behaviours.at(curBehav).file != "_umbrella_falling") {
           changeBehaviour("_landing");
         } else {
-          changeBehaviour("_complain");
+          changeBehaviour("_umbrella_landing");
         }
         falling = false;
       } else {
