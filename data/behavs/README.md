@@ -28,6 +28,7 @@ Options or flags, one per line of any of the following:
   * Fun: Boris will choose from this category when he is feeling depressed
   * Movement: These are only used entirely at random when Boris is feeling well and satisfied
   * Idle: When Boris is feeling well and satisfied he will often choose from this category when idling about
+  * Locomotion: These behaviours are fully scripted 360 degree locomotion behaviours used to move Boris around the desktop (eg. when Boris walks around)
 * health=&lt;INTEGER&gt;: The amount of Boris' health this behaviour will increase or decrease when starting the behaviour
 * energy=&lt;INTEGER&gt;: The amount of Boris' energy this behaviour will increase or decrease when starting the behaviour
 * hyper=&lt;INTEGER&gt;: The amount of Boris' hyperactivity level this behaviour will increase or decrease when starting the behaviour
@@ -40,6 +41,10 @@ Options or flags, one per line of any of the following:
 * doNotDisturb: If this exists, Boris will not be disturbed by the mouse or other Borises while this behaviour is in progress
 * allowFlip: If this line exists there is a 50% chance the behaviour will be mirrored horizontally
 * pitchLock: Disable the minute pitch randomness otherwise used when playing sounds from this behaviour
+#### Code defines
+The scripting language supports very basic code block defines. These are not functions, but rather blocks of code that can then be reused throughout a behaviour by using the `call <DEFINE>` command.
+
+
 
 ### Frame definitions
 Each frame in a behaviour must be contained on a single line under the `#Frames` line. Empty lines are allowed (they will simply be ignored) and so are comment lines starting with `#` (these are also ignored).
@@ -49,9 +54,16 @@ Each frame in a behaviour must be contained on a single line under the `#Frames`
 * deltay: Same as deltax but for the y axis. Keep in mind that it counts from top to bottom. Use 'rand' if you want him to move to a random location on the y axis
 * soundfx: Filename for sound fx that will be played when this frame is reached. This is optional and can be left out if it's a silent frame
 * script: The script that will be run at the end of showing the frame. This is optional. Scripting language is detailed below
+* Example:
+```
+define mainblock:if progress <= 0 break,
+var rand = @4,
+if rand = 1 goto label1 else if rand = 2 goto label2 else if rand = 3 goto label3
+```
+This defines a block of code called `mainblock` which can then be called at any time with `call mainblock` which simply replaces that call with the code contained in the block.
 
 ### Scripting language definition
-Boris can be scripted quite heavily to allow for some fun and interesting behaviour outcomes. A frame can have as many lines of script added to it as needed. Comma (`,`) is used to seperate each line from the next. Multiline scripts are possible - just end a line with a comma and the following line will be seen as part of the same frame script. The last line of a script must NOT end with a comma.
+Boris can be scripted quite heavily to allow for some fun and interesting behaviour outcomes. A frame can have as many lines of script added to it as needed. Comma (`,`) is used to seperate each line from the next. Multiline scripts are possible just end a line with a comma and the following line will be seen as part of the same frame script. The last line of a script must NOT end with a comma.
 
 This:
 ```
@@ -67,7 +79,7 @@ Is the same as this:
 11;75;0;0;;break
 12;75;0;0;;label that
 ```
-The following won't work as intended because of the stray comma after `goto that`:
+The following will cause weird behaviour or might even make it crash because of the stray comma after `goto that`:
 ```
 10;75;0;0;;label this,
 var a = @6,
@@ -75,7 +87,7 @@ if a = 1 goto that,
 11;75;0;0;;break
 12;75;0;0;;label that
 ```
-The rudimentary language allows for the following commands to be used:
+The Boris scripting language allows for the following commands to be used:
 
 #### Commands
 
@@ -86,10 +98,12 @@ Use this command to create and assign values to variables for later use inside t
 * Examples:
 ```
 var a = 1
-var b = a
+var b = a + @5
 var a = @42
+var c = a - b
+var d = 13 % 3
 ```
-The `@` results in a random value from 1 to the number following the `@`.
+The `@` results in a random value from 1 to the number following the `@`. You can use `+`, `-`, `*`, `/` and `%`. The last one is modulo which gives you the remainder after a division. IMPORTANT! Boris does not support floating point values. If you divide values the result will be converted to an integer by stripping any decimals from the value (eg. 3.45 becomes 3).
 
 ##### stat
 Use this to dynamically change any supported Boris stat while the behaviour is running.
@@ -118,9 +132,9 @@ label end
 As you can see a label can be named pretty much anything. Do not use any of the reserved keywords used by the language though. It will give you some very odd behaviour. So make sure you steer clear of `if`, `var`, `goto` and so on.
 
 ##### if
-Good old if sentence. It can do a lot, but there's also some stuff i can't do.
+Good old if sentence. This is probably the most important of all the commands as it allows for conditions to be tested and acted upon.
 * Definition:
-`if <EXPRESSION> [then if ...] <COMMAND> else <COMMAND>`
+`if <EXPRESSION> [then if ...] [{] <COMMANDs> [}] else [{] <COMMAND(s)> [}]`
 * Expression definition:
 `<VARIABLE or VALUE> =|==|<|>|<=|>= <VARIABLE or VALUE>`
 * Expression examples:
@@ -129,10 +143,17 @@ this = 1
 @4 = that and 4 = @7
 that = 1 or @5 = this or @2 = 1
 ```
-You can also combine `and` and `or` expressions but they probably won't work as you would expect. As this is a very rudimentary language I only implemented it in a very basic manner so I would strongly suggest sticking to only using `or` or `and` within one call to `if`.
+You can also combine `and` and `or` expressions but as this is a very rudimentary language I only implemented it in a very basic manner so I would strongly suggest sticking to only using `or` or `and` within one call to `if`.
+
+###### Scoped if's
+For advanced scripting it is also possible to scope the if sentence like so:
+```
+if this = 1 { command1, command2, command3... and so on } else { command1, command2... and so on }
+```
+This allows you to run several commands if a condition is true.
 
 ###### The 'then' keyword and when to use it
-Due to the nature of how I parse the scripting language there is one instance where you would need to use the keyword `then` to get some of the more advanced sentences working. For single expression if's it is not needed. So you can do the following just fine:
+Due to the nature of how the scripting language is parsed there is one instance where you would need to use the keyword `then` to get some of the more advanced sentences working. For single expression if's it is not needed. So you can do the following just fine:
 `if a = 1 goto here else goto there`
 But it IS needed if an `if` is directly followed by another `if`.
 * Examples:
@@ -177,3 +198,37 @@ Forces the behaviour to exit entirely and change to the next behaviour. Can be u
 if a = 0 break
 break
 ```
+
+##### call
+Calls and rund a block of code from a define (documented further up).
+* Definition:
+`call <DEFINE>`
+* Example:
+```
+call mainblock
+```
+This will replace the call with the code from the define and run it. Very useful if you have the same piece of code several times throughout. Then just create a single define for the block instead and call it.
+
+##### sound
+Plays a sound from the sound effect folder.
+* Definition:
+`sound <FILENAME>`
+* Example:
+```
+sound data/sfx/soundfile.wav
+```
+Keep in mind that this command DOES NOT allow spaces in the filename. So a file called `sound file.wav` will not work. Rename it to `soundfile.wav` instead. Filename and path is relative to where the Boris executable is run from.
+
+#### Hardcoded / reserved variables
+The following variables are reserved and hardcoded. You should not try to set these yourself, but feel free to use them to make some interesting behaviours.
+
+* energy: Boris' current energy level (0-100, 100 means he's well rested)
+* health: Boris' current health level (0-100, 100 means he's doing well)
+* hyper: Boris' current hyper level (0-100, 100 means he will speed around the desktop like crazy)
+* hunger: Boris' current hunger level (0-100, 100 means he's VERY hungry)
+* bladder: Boris' current toilet need level (0-100, 100 means he need to go NOW!)
+* social: Boris' current social level (0-100, 0 means Boris will seek your attention)
+* fun: Boris' current fun level (0-100, 100 means Boris has been having a lot of fun)
+* hygiene: Boris' current hygiene level (0-100, 100 means he's clean)
+* yvel: The delta movement of the mouse on the x axis (0-n, 0 means no movement)
+* xvel: The delta movement of the mouse on the y axis (0-n, 0 means no movement)
