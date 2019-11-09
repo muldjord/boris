@@ -256,7 +256,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::loadAssets()
 {
-  for(int a = 0; a < 16; ++a) { // Create 16 audio channels in total
+  for(int a = 0; a < 24; ++a) { // Create 24 audio channels in total
     sf::Sound soundChannel;
     soundChannel.setAttenuation(0.f);
     soundChannels.append(soundChannel);

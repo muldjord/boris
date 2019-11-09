@@ -7,46 +7,350 @@ hygiene=-10
 oneShot
 doNotDisturb
 pitchLock
+
+define nextpattern:var patterns -= 1,
+if patterns <= 0 goto end,
+var rand = @7,
+if rand = 1 goto p1,
+if rand = 2 goto p2,
+if rand = 3 goto p3,
+if rand = 4 goto p4,
+if rand = 5 goto p5,
+if rand = 6 goto b1,
+if rand = 7 goto b2
+
 #Frames
-# Kick drum
-0;50;0;0;data/sfx/drums_kd.wav;
-1;250;0;0;;
+1;100;0;0;;var patterns = @8 + 4,call nextpattern
 
-# Snare drum
-2;50;0;0;data/sfx/drums_sn.wav;
-3;250;0;0;;
-
-# Hihat open
-4;50;0;0;data/sfx/drums_ho.wav;
-5;250;0;0;;
-
-# Hihat closed
+# Pattern 1 (8/4 hihat)
+18;50;0;0;data/sfx/drums_kd_c1.wav;label p1
+19;250;0;0;;
 4;50;0;0;data/sfx/drums_hc.wav;
 5;250;0;0;;
+22;50;0;0;data/sfx/drums_sn_hc.wav;
+23;250;0;0;;
+4;50;0;0;data/sfx/drums_hc.wav;
+5;100;0;0;;
+0;50;0;0;data/sfx/drums_kd.wav;
+1;100;0;0;;
+16;50;0;0;data/sfx/drums_kd_hc.wav;
+17;250;0;0;;
+16;50;0;0;data/sfx/drums_kd_hc.wav;
+17;250;0;0;;
+22;50;0;0;data/sfx/drums_sn_hc.wav;
+23;250;0;0;;
+4;50;0;0;data/sfx/drums_ho.wav;
+5;250;0;0;;
+16;50;0;0;data/sfx/drums_kd_hc.wav;
+17;250;0;0;;
+4;50;0;0;data/sfx/drums_hc.wav;
+5;250;0;0;;
+22;50;0;0;data/sfx/drums_sn_hc.wav;
+23;250;0;0;;
+4;50;0;0;data/sfx/drums_hc.wav;
+5;100;0;0;;
+0;50;0;0;data/sfx/drums_kd.wav;
+1;100;0;0;;
+16;50;0;0;data/sfx/drums_kd_hc.wav;
+17;250;0;0;;
+16;50;0;0;data/sfx/drums_kd_hc.wav;
+17;250;0;0;;
+22;50;0;0;data/sfx/drums_sn_hc.wav;
+23;250;0;0;;
+4;50;0;0;data/sfx/drums_ho.wav;
+5;250;0;0;;if @4 = 1 goto p1 else call nextpattern
 
-# Crash 1
-6;50;0;0;data/sfx/drums_c1.wav;
-7;250;0;0;;
-
-# Crash 2
-8;50;0;0;data/sfx/drums_c2.wav;
-9;250;0;0;;
-
-# Ride
+# Pattern 2 (8/4 ride)
+20;50;0;0;data/sfx/drums_kd_c2.wav;label p2
+21;250;0;0;;
 8;50;0;0;data/sfx/drums_rd.wav;
 9;250;0;0;;
+26;50;0;0;data/sfx/drums_sn_rd.wav;
+27;250;0;0;;
+8;50;0;0;data/sfx/drums_rd.wav;
+9;100;0;0;;
+0;50;0;0;data/sfx/drums_kd.wav;
+1;100;0;0;;
+20;50;0;0;data/sfx/drums_kd_rd.wav;
+21;250;0;0;;
+20;50;0;0;data/sfx/drums_kd_rd.wav;
+21;250;0;0;;
+26;50;0;0;data/sfx/drums_sn_rd.wav;
+27;250;0;0;;
+8;50;0;0;data/sfx/drums_rd.wav;
+9;250;0;0;;
+20;50;0;0;data/sfx/drums_kd_rd.wav;
+21;250;0;0;;
+8;50;0;0;data/sfx/drums_rd.wav;
+9;250;0;0;;
+26;50;0;0;data/sfx/drums_sn_rd.wav;
+27;250;0;0;;
+8;50;0;0;data/sfx/drums_rd.wav;
+9;100;0;0;;
+0;50;0;0;data/sfx/drums_kd.wav;
+1;100;0;0;;
+20;50;0;0;data/sfx/drums_kd_rd.wav;
+21;250;0;0;;
+20;50;0;0;data/sfx/drums_kd_rd.wav;
+21;250;0;0;;
+26;50;0;0;data/sfx/drums_sn_rd.wav;
+27;250;0;0;;
+8;50;0;0;data/sfx/drums_rd.wav;
+9;250;0;0;;if @4 = 1 goto p2 else call nextpattern
 
-# Tom 1
+# Pattern 3 (4/4 hihat)
+18;50;0;0;data/sfx/drums_kd_c1.wav;label p3
+19;550;0;0;;
+22;50;0;0;data/sfx/drums_sn_ho.wav;
+23;550;0;0;;
+4;50;0;0;data/sfx/drums_ho.wav;
+5;250;0;0;;
+0;50;0;0;data/sfx/drums_kd.wav;
+1;250;0;0;;
+22;50;0;0;data/sfx/drums_sn_ho.wav;
+23;250;0;0;;
+0;50;0;0;data/sfx/drums_kd.wav;
+1;250;0;0;;
+16;50;0;0;data/sfx/drums_kd_ho.wav;
+17;550;0;0;;
+22;50;0;0;data/sfx/drums_sn_ho.wav;
+23;550;0;0;;
+4;50;0;0;data/sfx/drums_ho.wav;
+5;250;0;0;;
+0;50;0;0;data/sfx/drums_kd.wav;
+1;100;0;0;;
+0;50;0;0;data/sfx/drums_kd.wav;
+1;100;0;0;;
+22;50;0;0;data/sfx/drums_sn_ho.wav;
+23;550;0;0;;if @4 = 1 goto p3 else call nextpattern
+
+# Pattern 4 (Kick roll)
+20;50;0;0;data/sfx/drums_kd_c2.wav;label p4
+21;100;0;0;;
+0;50;0;0;data/sfx/drums_kd.wav;
+1;100;0;0;;
+20;50;0;0;data/sfx/drums_kd_rd.wav;
+21;100;0;0;;
+0;50;0;0;data/sfx/drums_kd.wav;
+1;100;0;0;;
+40;50;0;0;data/sfx/drums_kd_sn_rd.wav;
+41;100;0;0;;
+0;50;0;0;data/sfx/drums_kd.wav;
+1;100;0;0;;
+20;50;0;0;data/sfx/drums_kd_rd.wav;
+21;100;0;0;;
+0;50;0;0;data/sfx/drums_kd.wav;
+1;100;0;0;;
+20;25;0;0;data/sfx/drums_kd_rd.wav;
+21;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+20;25;0;0;data/sfx/drums_kd_rd.wav;
+21;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+40;25;0;0;data/sfx/drums_kd_sn_rd.wav;
+41;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+20;25;0;0;data/sfx/drums_kd_rd.wav;
+21;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;if @4 = 1 goto p4 else call nextpattern
+
+# Pattern 5 (blast on hihat)
+18;25;0;0;data/sfx/drums_kd_c1.wav;label p5
+19;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+16;25;0;0;data/sfx/drums_kd_ho.wav;
+17;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+16;25;0;0;data/sfx/drums_kd_ho.wav;
+17;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+16;25;0;0;data/sfx/drums_kd_ho.wav;
+17;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+16;25;0;0;data/sfx/drums_kd_ho.wav;
+17;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+16;25;0;0;data/sfx/drums_kd_ho.wav;
+17;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+16;25;0;0;data/sfx/drums_kd_ho.wav;
+17;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+16;25;0;0;data/sfx/drums_kd_ho.wav;
+17;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+20;25;0;0;data/sfx/drums_kd_rd.wav;
+21;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+40;25;0;0;data/sfx/drums_kd_sn_rd.wav;
+41;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+20;25;0;0;data/sfx/drums_kd_rd.wav;
+21;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+40;25;0;0;data/sfx/drums_kd_sn_rd.wav;
+41;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;
+0;25;0;0;data/sfx/drums_kd.wav;
+1;50;0;0;;if @4 = 1 goto p5 else call nextpattern
+
+# Break 1
+10;50;0;0;data/sfx/drums_t1.wav;label b1
+11;100;0;0;;
 10;50;0;0;data/sfx/drums_t1.wav;
-11;250;0;0;;
-
-# Tom 2
+11;100;0;0;;
 12;50;0;0;data/sfx/drums_t2.wav;
-13;250;0;0;;
+13;100;0;0;;
+12;50;0;0;data/sfx/drums_t2.wav;
+13;100;0;0;;
+10;50;0;0;data/sfx/drums_t1.wav;
+11;100;0;0;;
+10;50;0;0;data/sfx/drums_t1.wav;
+11;100;0;0;;
+12;50;0;0;data/sfx/drums_t2.wav;
+13;100;0;0;;
+12;50;0;0;data/sfx/drums_t2.wav;
+13;100;0;0;;
+10;25;0;0;data/sfx/drums_t1.wav;
+11;50;0;0;;
+10;25;0;0;data/sfx/drums_t1.wav;
+11;50;0;0;;
+10;25;0;0;data/sfx/drums_t1.wav;
+11;50;0;0;;
+10;25;0;0;data/sfx/drums_t1.wav;
+11;50;0;0;;
+12;25;0;0;data/sfx/drums_t2.wav;
+13;50;0;0;;
+12;25;0;0;data/sfx/drums_t2.wav;
+13;50;0;0;;
+12;25;0;0;data/sfx/drums_t2.wav;
+13;50;0;0;;
+12;25;0;0;data/sfx/drums_t2.wav;
+13;50;0;0;;
+14;25;0;0;data/sfx/drums_t3.wav;
+15;50;0;0;;
+14;25;0;0;data/sfx/drums_t3.wav;
+15;50;0;0;;
+14;25;0;0;data/sfx/drums_t3.wav;
+15;50;0;0;;
+14;25;0;0;data/sfx/drums_t3.wav;
+15;50;0;0;;
+2;50;0;0;data/sfx/drums_sn.wav;
+3;100;0;0;;
+2;50;0;0;data/sfx/drums_sn.wav;
+3;100;0;0;;call nextpattern
 
-# Tom 3
-14;50;0;0;data/sfx/drums_t3.wav;
-15;250;0;0;;
+# Break 2
+42;25;0;0;data/sfx/drums_kd_sn.wav;label b2
+43;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+32;25;0;0;data/sfx/drums_kd_t1.wav;
+33;50;0;0;;
+10;25;0;0;data/sfx/drums_t1.wav;
+11;50;0;0;;
+10;25;0;0;data/sfx/drums_t1.wav;
+11;50;0;0;;
+10;25;0;0;data/sfx/drums_t1.wav;
+11;50;0;0;;
+42;25;0;0;data/sfx/drums_kd_sn.wav;
+43;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+32;25;0;0;data/sfx/drums_kd_t1.wav;
+33;50;0;0;;
+10;25;0;0;data/sfx/drums_t1.wav;
+11;50;0;0;;
+10;25;0;0;data/sfx/drums_t1.wav;
+11;50;0;0;;
+10;25;0;0;data/sfx/drums_t1.wav;
+11;50;0;0;;
+42;25;0;0;data/sfx/drums_kd_sn.wav;
+43;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+2;25;0;0;data/sfx/drums_sn.wav;
+3;50;0;0;;
+32;25;0;0;data/sfx/drums_kd_t1.wav;
+33;50;0;0;;
+10;25;0;0;data/sfx/drums_t1.wav;
+11;50;0;0;;
+10;25;0;0;data/sfx/drums_t1.wav;
+11;50;0;0;;
+10;25;0;0;data/sfx/drums_t1.wav;
+11;50;0;0;;
+34;25;0;0;data/sfx/drums_kd_t2.wav;
+35;50;0;0;;
+12;25;0;0;data/sfx/drums_t2.wav;
+13;50;0;0;;
+12;25;0;0;data/sfx/drums_t2.wav;
+13;50;0;0;;
+12;25;0;0;data/sfx/drums_t2.wav;
+13;50;0;0;;
+36;25;0;0;data/sfx/drums_kd_t3.wav;
+37;50;0;0;;
+14;25;0;0;data/sfx/drums_t3.wav;
+15;50;0;0;;
+14;25;0;0;data/sfx/drums_t3.wav;
+15;50;0;0;;
+14;25;0;0;data/sfx/drums_t3.wav;
+15;50;0;0;;call nextpattern
 
 # Kick drum + hihat open
 16;50;0;0;data/sfx/drums_kd_ho.wav;
@@ -76,6 +380,46 @@ pitchLock
 22;50;0;0;data/sfx/drums_sn_hc.wav;
 23;250;0;0;;
 
+# Hihat open
+4;50;0;0;data/sfx/drums_ho.wav;
+5;250;0;0;;
+
+# Hihat closed
+4;50;0;0;data/sfx/drums_hc.wav;
+5;250;0;0;;
+
+# Kick drum
+0;50;0;0;data/sfx/drums_kd.wav;
+1;250;0;0;;
+
+# Snare drum
+2;50;0;0;data/sfx/drums_sn.wav;
+3;250;0;0;;
+
+# Crash 1
+6;50;0;0;data/sfx/drums_c1.wav;
+7;250;0;0;;
+
+# Crash 2
+8;50;0;0;data/sfx/drums_c2.wav;
+9;250;0;0;;
+
+# Ride
+8;50;0;0;data/sfx/drums_rd.wav;
+9;250;0;0;;
+
+# Tom 1
+10;50;0;0;data/sfx/drums_t1.wav;
+11;250;0;0;;
+
+# Tom 2
+12;50;0;0;data/sfx/drums_t2.wav;
+13;250;0;0;;
+
+# Tom 3
+14;50;0;0;data/sfx/drums_t3.wav;
+15;250;0;0;;
+
 # Snare drum + crash 1
 24;50;0;0;data/sfx/drums_sn_c1.wav;
 25;250;0;0;;
@@ -96,3 +440,32 @@ pitchLock
 30;50;0;0;data/sfx/drums_t3_t1.wav;
 31;250;0;0;;
 
+# Kick + tom 1
+32;50;0;0;data/sfx/drums_kd_t1.wav;
+33;250;0;0;;
+
+# Kick + tom 2
+34;50;0;0;data/sfx/drums_kd_t2.wav;
+35;250;0;0;;
+
+# Kick + tom 3
+36;50;0;0;data/sfx/drums_kd_t3.wav;
+37;250;0;0;;
+
+# Kick + snare + hihat closed
+38;50;0;0;data/sfx/drums_kd_sn_hc.wav;
+39;250;0;0;;
+
+# Kick + snare + hihat open
+38;50;0;0;data/sfx/drums_kd_sn_ho.wav;
+39;250;0;0;;
+
+# Kick + snare + ride
+40;50;0;0;data/sfx/drums_kd_sn_rd.wav;
+41;250;0;0;;
+
+# Kick + snare
+42;50;0;0;data/sfx/drums_kd_sn.wav;
+43;250;0;0;;
+
+1;50;0;0;;label end
