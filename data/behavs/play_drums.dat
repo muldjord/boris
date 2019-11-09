@@ -8,220 +8,91 @@ oneShot
 doNotDisturb
 pitchLock
 #Frames
-
-# Kick drum + crash 1
-18;50;0;0;data/sfx/drums_kd_c1.wav;label kdc1
-19;250;0;0;;
-# Hihat closed
-4;50;0;0;data/sfx/drums_hc.wav;label hc
-5;250;0;0;;
-# Snare drum + hihat closed
-22;50;0;0;data/sfx/drums_sn_hc.wav;label snhc
-23;250;0;0;;
-# Hihat closed
-4;50;0;0;data/sfx/drums_hc.wav;label hc
-5;250;0;0;;
-# Kick drum + hihat closed
-16;50;0;0;data/sfx/drums_kd_hc.wav;label kdhc
-17;250;0;0;;
-# Kick drum + hihat closed
-16;50;0;0;data/sfx/drums_kd_hc.wav;label kdhc
-17;250;0;0;;
-# Snare drum + hihat closed
-22;50;0;0;data/sfx/drums_sn_hc.wav;label snhc
-23;250;0;0;;
-# Hihat open
-4;50;0;0;data/sfx/drums_ho.wav;label ho
-5;250;0;0;;
-
-# Kick drum + hihat closed
-16;50;0;0;data/sfx/drums_kd_hc.wav;label kdhc
-17;250;0;0;;
-# Hihat closed
-4;50;0;0;data/sfx/drums_hc.wav;label hc
-5;250;0;0;;
-# Snare drum + hihat closed
-22;50;0;0;data/sfx/drums_sn_hc.wav;label snhc
-23;250;0;0;;
-# Hihat closed
-4;50;0;0;data/sfx/drums_hc.wav;label hc
-5;250;0;0;;
-# Kick drum + hihat closed
-16;50;0;0;data/sfx/drums_kd_hc.wav;label kdhc
-17;250;0;0;;
-# Kick drum + hihat closed
-16;50;0;0;data/sfx/drums_kd_hc.wav;label kdhc
-17;250;0;0;;
-# Snare drum + hihat closed
-22;50;0;0;data/sfx/drums_sn_hc.wav;label snhc
-23;250;0;0;;
-# Hihat open
-4;50;0;0;data/sfx/drums_ho.wav;label ho
-5;250;0;0;;
-
-# Break 1
-10;50;0;0;data/sfx/drums_t1.wav;label t1
-11;100;0;0;;
-10;50;0;0;data/sfx/drums_t1.wav;label t1
-11;100;0;0;;
-10;50;0;0;data/sfx/drums_t1.wav;label t1
-11;100;0;0;;
-10;50;0;0;data/sfx/drums_t1.wav;label t1
-11;100;0;0;;
-12;50;0;0;data/sfx/drums_t2.wav;label t2
-13;100;0;0;;
-12;50;0;0;data/sfx/drums_t2.wav;label t2
-13;100;0;0;;
-12;50;0;0;data/sfx/drums_t2.wav;label t2
-13;100;0;0;;
-12;50;0;0;data/sfx/drums_t2.wav;label t2
-13;100;0;0;;
-12;50;0;0;data/sfx/drums_t2.wav;label t2
-13;100;0;0;;
-12;50;0;0;data/sfx/drums_t2.wav;label t2
-13;100;0;0;;
-12;50;0;0;data/sfx/drums_t2.wav;label t2
-13;100;0;0;;
-12;50;0;0;data/sfx/drums_t2.wav;label t2
-13;100;0;0;;
-14;50;0;0;data/sfx/drums_t3.wav;label t3
-15;100;0;0;;
-14;50;0;0;data/sfx/drums_t3.wav;label t3
-15;100;0;0;;
-14;50;0;0;data/sfx/drums_t3.wav;label t3
-15;100;0;0;;
-14;50;0;0;data/sfx/drums_t3.wav;label t3
-15;100;0;0;;
-
-# Kick drum + crash 1
-18;50;0;0;data/sfx/drums_kd_c1.wav;label kdc1
-19;250;0;0;;
-# Hihat closed
-4;50;0;0;data/sfx/drums_hc.wav;label hc
-5;250;0;0;;
-# Snare drum + hihat closed
-22;50;0;0;data/sfx/drums_sn_hc.wav;label snhc
-23;250;0;0;;
-# Hihat closed
-4;50;0;0;data/sfx/drums_hc.wav;label hc
-5;250;0;0;;
-# Kick drum + hihat closed
-16;50;0;0;data/sfx/drums_kd_hc.wav;label kdhc
-17;250;0;0;;
-# Kick drum + hihat closed
-16;50;0;0;data/sfx/drums_kd_hc.wav;label kdhc
-17;250;0;0;;
-# Snare drum + hihat closed
-22;50;0;0;data/sfx/drums_sn_hc.wav;label snhc
-23;250;0;0;;
-# Hihat open
-4;50;0;0;data/sfx/drums_ho.wav;label ho
-5;250;0;0;;
-
-# Kick drum + hihat closed
-16;50;0;0;data/sfx/drums_kd_hc.wav;label kdhc
-17;250;0;0;;
-# Hihat closed
-4;50;0;0;data/sfx/drums_hc.wav;label hc
-5;250;0;0;;
-# Snare drum + hihat closed
-22;50;0;0;data/sfx/drums_sn_hc.wav;label snhc
-23;250;0;0;;
-# Hihat closed
-4;50;0;0;data/sfx/drums_hc.wav;label hc
-5;250;0;0;;
-# Kick drum + hihat closed
-16;50;0;0;data/sfx/drums_kd_hc.wav;label kdhc
-17;250;0;0;;
-# Kick drum + hihat closed
-16;50;0;0;data/sfx/drums_kd_hc.wav;label kdhc
-17;250;0;0;;
-# Snare drum + hihat closed
-22;50;0;0;data/sfx/drums_sn_hc.wav;label snhc
-23;250;0;0;;
-# Hihat open
-4;50;0;0;data/sfx/drums_ho.wav;label ho
-5;250;0;0;;
-
-
-
 # Kick drum
-0;50;0;0;data/sfx/drums_kd.wav;label kd
+0;50;0;0;data/sfx/drums_kd.wav;
 1;250;0;0;;
 
 # Snare drum
-2;50;0;0;data/sfx/drums_sd.wav;label sd
+2;50;0;0;data/sfx/drums_sn.wav;
 3;250;0;0;;
 
 # Hihat open
-4;50;0;0;data/sfx/drums_ho.wav;label ho
+4;50;0;0;data/sfx/drums_ho.wav;
 5;250;0;0;;
 
 # Hihat closed
-4;50;0;0;data/sfx/drums_hc.wav;label hc
+4;50;0;0;data/sfx/drums_hc.wav;
 5;250;0;0;;
 
 # Crash 1
-6;50;0;0;data/sfx/drums_c1.wav;label c1
+6;50;0;0;data/sfx/drums_c1.wav;
 7;250;0;0;;
 
 # Crash 2
-8;50;0;0;data/sfx/drums_c2.wav;label c2
+8;50;0;0;data/sfx/drums_c2.wav;
 9;250;0;0;;
 
 # Ride
-8;50;0;0;data/sfx/drums_rd.wav;label rd
+8;50;0;0;data/sfx/drums_rd.wav;
 9;250;0;0;;
 
 # Tom 1
-10;50;0;0;data/sfx/drums_t1.wav;label t1
+10;50;0;0;data/sfx/drums_t1.wav;
 11;250;0;0;;
 
 # Tom 2
-12;50;0;0;data/sfx/drums_t2.wav;label t2
+12;50;0;0;data/sfx/drums_t2.wav;
 13;250;0;0;;
 
 # Tom 3
-14;50;0;0;data/sfx/drums_t3.wav;label t3
+14;50;0;0;data/sfx/drums_t3.wav;
 15;250;0;0;;
 
 # Kick drum + hihat open
-16;50;0;0;data/sfx/drums_kd_ho.wav;label kdho
+16;50;0;0;data/sfx/drums_kd_ho.wav;
 17;250;0;0;;
 
 # Kick drum + hihat closed
-16;50;0;0;data/sfx/drums_kd_hc.wav;label kdhc
+16;50;0;0;data/sfx/drums_kd_hc.wav;
 17;250;0;0;;
 
 # Kick drum + crash 1
-18;50;0;0;data/sfx/drums_kd_c1.wav;label kdc1
+18;50;0;0;data/sfx/drums_kd_c1.wav;
 19;250;0;0;;
 
 # Kick drum + crash 2
-20;50;0;0;data/sfx/drums_kd_c2.wav;label kdc2
+20;50;0;0;data/sfx/drums_kd_c2.wav;
 21;250;0;0;;
 
 # Kick drum + ride
-20;50;0;0;data/sfx/drums_kd_rd.wav;label kdrd
+20;50;0;0;data/sfx/drums_kd_rd.wav;
 21;250;0;0;;
 
 # Snare drum + hihat open
-22;50;0;0;data/sfx/drums_sn_ho.wav;label snho
+22;50;0;0;data/sfx/drums_sn_ho.wav;
 23;250;0;0;;
 
 # Snare drum + hihat closed
-22;50;0;0;data/sfx/drums_sn_hc.wav;label snhc
+22;50;0;0;data/sfx/drums_sn_hc.wav;
 23;250;0;0;;
 
 # Snare drum + crash 1
-24;50;0;0;data/sfx/drums_sn_c1.wav;label snc1
+24;50;0;0;data/sfx/drums_sn_c1.wav;
 25;250;0;0;;
 
 # Snare drum + crash 2
-26;50;0;0;data/sfx/drums_sn_c2.wav;label snc2
+26;50;0;0;data/sfx/drums_sn_c2.wav;
 27;250;0;0;;
 
 # Snare drum + ride
-26;50;0;0;data/sfx/drums_sn_rd.wav;label snrd
+26;50;0;0;data/sfx/drums_sn_rd.wav;
 27;250;0;0;;
+
+# Tom 3 + snare
+28;50;0;0;data/sfx/drums_t3_sn.wav;
+29;250;0;0;;
+
+# Tom 3 + tom 1
+30;50;0;0;data/sfx/drums_t3_t1.wav;
+31;250;0;0;;
 
