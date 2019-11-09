@@ -468,4 +468,12 @@ if rand = 7 goto b2
 42;50;0;0;data/sfx/drums_kd_sn.wav;
 43;250;0;0;;
 
-1;50;0;0;;label end
+# End playing session
+20;50;0;0;data/sfx/drums_kd_c2.wav;label end
+21;1150;0;0;;
+0;50;0;0;data/sfx/drums_kd.wav;
+1;100;0;0;;
+0;50;0;0;data/sfx/drums_kd.wav;
+1;100;0;0;;
+22;50;0;0;data/sfx/drums_sn_ho.wav;
+23;2250;0;0;;
