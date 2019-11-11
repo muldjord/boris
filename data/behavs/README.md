@@ -44,8 +44,6 @@ Options or flags, one per line of any of the following:
 #### Code defines
 The scripting language supports very basic code block defines. These are not functions, but rather blocks of code that can then be reused throughout a behaviour by using the `call <DEFINE>` command.
 
-
-
 ### Frame definitions
 Each frame in a behaviour must be contained on a single line under the `#Frames` line. Empty lines are allowed (they will simply be ignored) and so are comment lines starting with `#` (these are also ignored).
 * sprite: The sprite number from the sprite sheet that will be used by this frame. The first sprite in a sheet is number 0
@@ -199,6 +197,15 @@ if a = 0 break
 break
 ```
 
+##### behav
+Changes the current behaviour to the behaviour with the requested behaviour filename (without the .dat suffix). NOTE! You cannot use spaces in the filename.
+* Definition:
+`behav <FILENAME>`
+* Example:
+```
+behav play_piano
+```
+
 ##### call
 Calls and rund a block of code from a define (documented further up).
 * Definition:
@@ -218,6 +225,105 @@ Plays a sound from the sound effect folder.
 sound data/sfx/soundfile.wav
 ```
 Keep in mind that this command DOES NOT allow spaces in the filename. So a file called `sound file.wav` will not work. Rename it to `soundfile.wav` instead. Filename and path is relative to where the Boris executable is run from.
+
+##### draw
+There are several drawing routines in Boris scripting. This allows you to draw on top of Boris on each frame. It is also possible to begin drawing on one frame and end drawing on another for additive drawing over several frames.
+
+###### Colors
+Drawing on Boris have hardcoded colors. These are specified as below:
+* white
+* cyan
+* darkcyan
+* red
+* darkred
+* magenta
+* darkmagenta
+* green
+* darkgreen
+* yellow
+* darkyellow
+* blue
+* darkblue
+* grey / gray
+* darkgrey / darkgray
+* lightgrey / lightgray
+
+Each drawing command consists of the color, then the draw type and lastly the parameters that are required for the chosen type.
+
+###### pixel
+* Definition:
+`draw <COLOR> pixel x y`
+* Example:
+```
+draw yellow pixel 6 5
+```
+This will draw a single yellow pixel at 6, 5.
+
+###### line
+* Definition:
+`draw <COLOR> line x1 y1 x2 y2`
+* Example:
+```
+draw blue line 0 2 7 8
+```
+This will draw a blue line from 0, 2 to 7, 8.
+
+###### ellipse
+* Definition:
+`draw <COLOR> ellipse x y w h`
+* Example:
+```
+draw red ellipse 3 4 5 5
+```
+This will draw a red ellipse at 3, 4 with a width and height of 5.
+
+###### rectangle
+* Definition:
+`draw <COLOR> rectangle x y w h`
+* Example:
+```
+draw red rectangle 3 4 5 5
+```
+This will draw a red rectangle at 3, 4 with a width and height of 5.
+
+###### text
+* Definition:
+`draw <COLOR> text x y this_is_the_text`
+* Example:
+```
+draw yellow text 2 2 sometext
+```
+This will draw the yellow text `sometext` at 2, 2 using the internal minimal pixel font. NOTE! The text line cannot have spaces in it!
+
+###### value
+* Definition:
+`draw <COLOR> value x y <VARIABLE or VALUE>`
+* Example:
+```
+draw yellow value 2 2 somevariable
+draw red value 2 2 42
+```
+The first example will draw the value of the `somevariable` variable at 2, 2 using a yellow color. The second example will draw the value `42` at 2, 2 using a red color.
+
+###### Additive drawing
+Per default all drawing routines are performed on the current frame sprite and cleared when moving on to the next. By using additive drawing you can begin drawin on one frame, then draw more stuff on subsequent frames, and end the drawing routine on a frame later on. It is only after the drawing routine has been ended it will be cleared upon moving on to the next frame.
+* Example:
+```
+10;75;0;0;;draw begin,draw red point 5 6
+11;75;0;0;;draw blue line 3 5 8 7
+12;75;0;0;;draw yellow ellipse 3 4 5 5
+15;75;0;0;;draw end
+```
+
+##### spawn
+Spawn an item from the items folder (default is `data/items`). The item name is the name of the file without the suffix. The items must be png images.
+* Definition:
+`spawn <ITEM FILENAME>`
+* Example:
+```
+spawn christmas_tree
+```
+This will spawn an item using the graphics from `data/items/christmas_tree.png`. The items are scaled according to the current size of Boris.
 
 #### Hardcoded / reserved variables
 The following variables are reserved and hardcoded. You should not try to set these yourself, but feel free to use them to make some interesting behaviours.
