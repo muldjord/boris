@@ -104,6 +104,11 @@ MainWindow::MainWindow()
   }
   settings.weathersPath = iniSettings.value("weathers_path").toString();
 
+  if(!iniSettings.contains("items_path")) {
+    iniSettings.setValue("items_path", "data/items");
+  }
+  settings.itemsPath = iniSettings.value("items_path").toString();
+
   // Force weather from ini
   if(iniSettings.contains("weather_force_type")) {
     settings.weatherType = iniSettings.value("weather_force_type").toString();

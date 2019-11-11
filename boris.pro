@@ -13,6 +13,7 @@ LIBS += -lsfml-audio
 HEADERS += src/mainwindow.h \
            src/about.h \
            src/boris.h \
+           src/item.h \
            src/scripthandler.h \
            src/behaviour.h \
            src/stats.h \
@@ -23,6 +24,7 @@ HEADERS += src/mainwindow.h \
 SOURCES += src/mainwindow.cpp \
            src/about.cpp \
            src/boris.cpp \
+           src/item.cpp \
            src/scripthandler.cpp \
            src/behaviour.cpp \
            src/main.cpp \

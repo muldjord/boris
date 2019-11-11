@@ -26,6 +26,7 @@
  */
 
 #include "scripthandler.h"
+#include "item.h"
 
 #include <stdio.h>
 
@@ -67,10 +68,14 @@ void ScriptHandler::runCommand(QList<QString> &parameters, int &stop, const Scri
     handleGoto(parameters, stop);
   } else if(parameters.first() == "print") {
     handlePrint(parameters);
+  } else if(parameters.first() == "spawn") {
+    handleSpawn(parameters);
   } else if(parameters.first() == "draw") {
     handleDraw(parameters);
   } else if(parameters.first() == "break") {
     handleBreak(stop);
+  } else if(parameters.first() == "behav") {
+    handleBehav(parameters, stop);
   } else if(parameters.first() == "call") {
     handleCall(parameters, stop);
   } else if(parameters.first() == "sound") {
@@ -265,6 +270,15 @@ void ScriptHandler::handlePrint(QList<QString> &parameters)
   }
 }
 
+void ScriptHandler::handleSpawn(QList<QString> &parameters)
+{
+  parameters.removeFirst(); // Remove 'spawn'
+  new Item(boris->pos().x(), boris->pos().y() + (boris->size / 2),
+           boris->size, settings->itemsPath +
+           (settings->itemsPath.right(1) == "/"?"":"/") + parameters.first() + ".png");
+  parameters.removeFirst(); // Remove 'filename'
+}
+
 void ScriptHandler::handleDraw(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'draw'
@@ -437,6 +451,15 @@ void ScriptHandler::handleCall(QList<QString> &parameters, int &stop)
     printf("Calling define '%s', ERROR: Unknown define\n", parameters.first().toStdString().c_str());
   }
   parameters.removeFirst(); // Remove define name
+}
+
+void ScriptHandler::handleBehav(QList<QString> &parameters, int &stop)
+{
+  parameters.removeFirst(); // Remove 'behav'
+  boris->changeBehaviour(parameters.first());
+  printf("Changing behaviour to '%s'\n", parameters.first().toStdString().c_str());
+  stop = 1; // Will tell the Boris class to exit the script processing
+  parameters.removeFirst(); // Remove behaviour filename
 }
 
 void ScriptHandler::handleSound(QList<QString> &parameters)

@@ -457,7 +457,7 @@ void Boris::runScript()
   scriptVars["mx"] = p.x();
   scriptVars["my"] = p.y();
   scriptVars["mdist"] = getMouseDistance();
-  scriptVars["mseg"] = getMouseSector();
+  scriptVars["msec"] = getMouseSector();
   QDate date = QDate::currentDate();
   QTime time = QTime::currentTime();
   scriptVars["day"] = date.day();
@@ -471,7 +471,7 @@ void Boris::runScript()
     scriptImage.fill(Qt::transparent);
   }
   ScriptHandler scriptHandler(&scriptImage, &drawing, this, settings, stats);
-  int stop = 0; // Will be true if a goto or break is run
+  int stop = 0; // Will be > 0 if a goto, behav or break command is run
   scriptHandler.runScript(stop, behaviours.at(curBehav).frames.at(curFrame).script);
 
   scriptSprite->setPixmap(QPixmap::fromImage(scriptImage));
@@ -865,10 +865,10 @@ void Boris::handlePhysics()
 void Boris::earthquake()
 {
   if(!falling && !grabbed) {
-    changeBehaviour("_falling", 200000);
+    changeBehaviour("_falling");
     falling = true;
     vVel = ((qrand() % 12) * -1) - 5;
-    hVel = qrand() % 20 - 11;
+    hVel = qrand() % 11 - 5;
     alt = pos().y();
   }
 }
