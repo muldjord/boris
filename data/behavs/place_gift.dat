@@ -1,5 +1,5 @@
 title=Place gift
-category=Fun
+category=Social
 oneShot
 #Frames
 0;75;0;0;;
@@ -33,7 +33,7 @@ oneShot
 28;75;0;0;;
 29;75;0;0;;
 30;2000;0;0;;
-31;75;0;0;data/sfx/pow.wav;stat fun += 25
+31;75;0;0;data/sfx/pow.wav;stat fun += 5
 32;75;0;0;;
 33;75;0;0;;spawn teddy
 34;75;0;0;;
@@ -44,7 +44,7 @@ oneShot
 39;250;0;0;;
 40;75;0;0;;
 41;75;0;0;;
-42;75;0;0;data/sfx/tadaa.wav;
+42;75;0;0;data/sfx/tadaa.wav;stat social += 15
 43;75;0;0;;
 42;500;0;0;;
 43;1500;0;0;;
