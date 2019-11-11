@@ -46,7 +46,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item)
   itemSprite = this->scene()->addPixmap(QPixmap(item));
   itemSprite->setPos(0, 0);
 
-  setCursor(QCursor(QPixmap(":mouse_hover.png")));
+  setCursor(QCursor(QPixmap(":mouse_closet.png"), 15, 16));
 
   setFixedSize(size, size);
   scale(size / 32.0, size / 32.0);

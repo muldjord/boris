@@ -7,6 +7,7 @@
     <file alias="icon_quit.png">icons/icon_quit.png</file>
     <file alias="mouse_hover.png">icons/mouse_hover.png</file>
     <file alias="mouse_grab.png">icons/mouse_grab.png</file>
+    <file alias="mouse_closet.png">icons/mouse_closet.png</file>
     <file alias="earthquake.png">icons/earthquake.png</file>
     <file alias="teleport.png">icons/teleport.png</file>
     <file alias="pfont.png">data/gfx/pfont.png</file>
