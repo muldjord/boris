@@ -3,13 +3,13 @@ category=Fun
 energy=-8
 hunger=5
 social=-2
-hygiene=-10
 oneShot
 doNotDisturb
 pitchLock
 
 define nextpattern:var patterns -= 1,
 if patterns <= 0 goto end,
+stat fun += 2,
 var rand = @7,
 if rand = 1 goto p1,
 if rand = 2 goto p2,
@@ -24,7 +24,7 @@ if rand = 7 goto b2
 
 # Pattern 1 (8/4 hihat)
 18;50;0;0;data/sfx/drums_kd_c1.wav;label p1
-19;250;0;0;;
+19;250;0;0;;stat hygiene -= 1
 4;50;0;0;data/sfx/drums_hc.wav;
 5;250;0;0;;
 22;50;0;0;data/sfx/drums_sn_hc.wav;
@@ -62,7 +62,7 @@ if rand = 7 goto b2
 
 # Pattern 2 (8/4 ride)
 20;50;0;0;data/sfx/drums_kd_c2.wav;label p2
-21;250;0;0;;
+21;250;0;0;;stat hygiene -= 1
 8;50;0;0;data/sfx/drums_rd.wav;
 9;250;0;0;;
 26;50;0;0;data/sfx/drums_sn_rd.wav;
@@ -126,7 +126,7 @@ if rand = 7 goto b2
 
 # Pattern 4 (Kick roll)
 20;50;0;0;data/sfx/drums_kd_c2.wav;label p4
-21;100;0;0;;
+21;100;0;0;;stat hygiene -= 2
 0;50;0;0;data/sfx/drums_kd.wav;
 1;100;0;0;;
 20;50;0;0;data/sfx/drums_kd_rd.wav;
@@ -176,7 +176,7 @@ if rand = 7 goto b2
 
 # Pattern 5 (blast on hihat)
 18;25;0;0;data/sfx/drums_kd_c1.wav;label p5
-19;50;0;0;;
+19;50;0;0;;stat hygiene -= 2
 2;25;0;0;data/sfx/drums_sn.wav;
 3;50;0;0;;
 16;25;0;0;data/sfx/drums_kd_ho.wav;
@@ -242,7 +242,7 @@ if rand = 7 goto b2
 
 # Break 1
 10;50;0;0;data/sfx/drums_t1.wav;label b1
-11;100;0;0;;
+11;100;0;0;;stat hygiene -= 1
 10;50;0;0;data/sfx/drums_t1.wav;
 11;100;0;0;;
 12;50;0;0;data/sfx/drums_t2.wav;
@@ -288,7 +288,7 @@ if rand = 7 goto b2
 
 # Break 2
 42;25;0;0;data/sfx/drums_kd_sn.wav;label b2
-43;50;0;0;;
+43;50;0;0;;stat hygiene -= 2
 2;25;0;0;data/sfx/drums_sn.wav;
 3;50;0;0;;
 2;25;0;0;data/sfx/drums_sn.wav;
