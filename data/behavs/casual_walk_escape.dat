@@ -1,5 +1,4 @@
 title=Escape mouse
-category=Locomotion
 oneShot
 define progress:var steps -= 1,if @32 = 1 break
 define nextescape:if msec = 0 goto south else if msec = 1 goto southwest else if msec = 2 goto west else if msec = 3 goto northwest else if msec = 4 goto north else if msec = 5 goto northeast else if msec = 6 goto east else if msec = 7 goto southeast

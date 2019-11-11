@@ -4,7 +4,7 @@ oneShot
 define progress:var steps -= 1,var straight -= 1,if @32 = 1 break
 #Frames
 # Initialize walk
-80;75;1;0;;var steps = 8 + @24,var straight = @6,var rand = @8,if rand = 1 goto east else if rand = 2 goto southeast else if rand = 3 goto south else if rand = 4 goto southwest else if rand = 5 goto west else if rand = 6 goto northwest else if rand = 7 goto north else if rand = 8 goto northeast
+80;75;1;0;;if fun < 50 behav casual_walk_escape,var steps = 8 + @24,var straight = @6,var rand = @8,if rand = 1 goto east else if rand = 2 goto southeast else if rand = 3 goto south else if rand = 4 goto southwest else if rand = 5 goto west else if rand = 6 goto northwest else if rand = 7 goto north else if rand = 8 goto northeast
 
 # Walk east
 0;75;1;0;;label east
