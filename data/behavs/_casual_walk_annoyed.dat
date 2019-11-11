@@ -1,10 +1,9 @@
 title=Escape mouse
 oneShot
-define progress:var steps -= 1,if @32 = 1 break
-define nextescape:if msec = 0 goto south else if msec = 1 goto southwest else if msec = 2 goto west else if msec = 3 goto northwest else if msec = 4 goto north else if msec = 5 goto northeast else if msec = 6 goto east else if msec = 7 goto southeast
+define progress:var steps -= 1,var straight -= 1,if @32 = 1 break
 #Frames
 # Initialize walk
-80;75;1;0;;var steps = 8 + @24,call nextescape
+80;75;1;0;;var steps = 8 + @24,var straight = @6,var rand = @8,if rand = 1 goto east else if rand = 2 goto southeast else if rand = 3 goto south else if rand = 4 goto southwest else if rand = 5 goto west else if rand = 6 goto northwest else if rand = 7 goto north else if rand = 8 goto northeast
 
 # Walk east
 0;75;1;0;;label east
@@ -16,7 +15,7 @@ define nextescape:if msec = 0 goto south else if msec = 1 goto southwest else if
 6;75;1;0;;
 7;75;1;0;;
 8;75;1;0;;
-9;75;1;0;;if steps <= 0 break,call nextescape
+9;75;1;0;;if steps <= 0 break,if straight > 0 goto east else { var straight = @6,if @2 = 1 goto southeast else goto northeast }
 
 # Walk south-east
 10;75;1;0;;label southeast
@@ -28,7 +27,7 @@ define nextescape:if msec = 0 goto south else if msec = 1 goto southwest else if
 16;75;1;0;;
 17;75;1;1;;
 18;75;1;0;;
-19;75;1;1;;if steps <= 0 break,call nextescape
+19;75;1;1;;if steps <= 0 break,if straight > 0 goto southeast else { var straight = @6,if @2 = 1 goto south else goto east }
 
 # Walk south
 20;75;0;0;;label south
@@ -40,7 +39,7 @@ define nextescape:if msec = 0 goto south else if msec = 1 goto southwest else if
 26;75;0;1;;
 27;75;0;1;;
 28;75;0;1;;
-29;75;0;0;;if steps <= 0 break,call nextescape
+29;75;0;0;;if steps <= 0 break,if straight > 0 goto south else { var straight = @6,if @2 = 1 goto southeast else goto southwest }
 
 # Walk south-west
 30;75;-1;0;;label southwest
@@ -52,7 +51,7 @@ define nextescape:if msec = 0 goto south else if msec = 1 goto southwest else if
 36;75;-1;0;;
 37;75;-1;1;;
 38;75;-1;0;;
-39;75;-1;1;;if steps <= 0 break,call nextescape
+39;75;-1;1;;if steps <= 0 break,if straight > 0 goto southwest else { var straight = @6,if @2 = 1 goto west else goto south }
 
 # Walk west
 40;75;-1;0;;label west
@@ -64,7 +63,7 @@ define nextescape:if msec = 0 goto south else if msec = 1 goto southwest else if
 46;75;-1;0;;
 47;75;-1;0;;
 48;75;-1;0;;
-49;75;-1;0;;if steps <= 0 break,call nextescape
+49;75;-1;0;;if steps <= 0 break,if straight > 0 goto west else { var straight = @6,if @2 = 1 goto northwest else goto southwest }
 
 # Walk north-west
 50;75;-1;0;;label northwest
@@ -76,7 +75,7 @@ define nextescape:if msec = 0 goto south else if msec = 1 goto southwest else if
 56;75;-1;0;;
 57;75;-1;-1;;
 58;75;-1;0;;
-59;75;-1;-1;;if steps <= 0 break,call nextescape
+59;75;-1;-1;;if steps <= 0 break,if straight > 0 goto northwest else { var straight = @6,if @2 = 1 goto north else goto west }
 
 # Walk north
 60;75;0;0;;label north
@@ -88,7 +87,7 @@ define nextescape:if msec = 0 goto south else if msec = 1 goto southwest else if
 66;75;0;0;;
 67;75;0;-1;;
 68;75;0;-1;;
-69;75;0;-1;;if steps <= 0 break,call nextescape
+69;75;0;-1;;if steps <= 0 break,if straight > 0 goto north else { var straight = @6,if @2 = 1 goto northeast else goto northwest }
 
 # Walk north-east
 70;75;1;0;;label northeast
@@ -100,4 +99,4 @@ define nextescape:if msec = 0 goto south else if msec = 1 goto southwest else if
 76;75;1;0;;
 77;75;1;-1;;
 78;75;1;0;;
-79;75;1;-1;;if steps <= 0 break,call nextescape
+79;75;1;-1;;if steps <= 0 break,if straight > 0 goto northeast else { var straight = @6,if @2 = 1 goto east else goto north }
