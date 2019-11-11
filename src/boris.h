@@ -164,6 +164,8 @@ private:
   int getIdxFromCategory(QString category);
   void processVision();
   void processAi(QString &behav, int &time);
+  int getMouseDistance();
+  int getMouseSector();
   int curWeather;
   int curWeatherFrame;
   int timeForWeather;

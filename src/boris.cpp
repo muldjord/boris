@@ -346,7 +346,7 @@ void Boris::changeBehaviour(QString behav, int time)
   chatter->hide();
   // Check for chatter
   if(behaviours.at(curBehav).file == "chatter") {
-    QPair<QString, int> selectedChatter = chatter->initChatter(this->pos().x(), this->pos().y(), size);
+    QPair<QString, int> selectedChatter = chatter->initChatter(pos().x(), pos().y(), size);
     for(int a = 0; a < behaviours.size(); ++a) {
       if(behaviours.at(a).file == selectedChatter.first) {
         curBehav = a;
@@ -438,6 +438,9 @@ QPixmap Boris::getShadow(const QPixmap &sprite)
 void Boris::runScript()
 {
   // Update current stat variables for scripting use
+  scriptVars["bx"] = pos().x();
+  scriptVars["by"] = pos().y();
+  scriptVars["bsize"] = size;
   scriptVars["energy"] = stats->getEnergy();
   scriptVars["health"] = stats->getHealth();
   scriptVars["hyper"] = stats->getHyper();
@@ -446,8 +449,23 @@ void Boris::runScript()
   scriptVars["social"] = stats->getSocial();
   scriptVars["fun"] = stats->getFun();
   scriptVars["hygiene"] = stats->getHygiene();
-  scriptVars["yvel"] = mouseVVel;
   scriptVars["xvel"] = mouseHVel;
+  scriptVars["yvel"] = mouseVVel;
+  scriptVars["bx"] = pos().x() + (size / 2);
+  scriptVars["by"] = pos().y() + size;
+  QPoint p = QCursor::pos();
+  scriptVars["mx"] = p.x();
+  scriptVars["my"] = p.y();
+  scriptVars["mdist"] = getMouseDistance();
+  scriptVars["mseg"] = getMouseSector();
+  QDate date = QDate::currentDate();
+  QTime time = QTime::currentTime();
+  scriptVars["day"] = date.day();
+  scriptVars["month"] = date.month();
+  scriptVars["year"] = date.year();
+  scriptVars["hour"] = time.hour();
+  scriptVars["minute"] = time.minute();
+  scriptVars["second"] = time.second();
 
   if(!drawing) {
     scriptImage.fill(Qt::transparent);
@@ -466,6 +484,77 @@ void Boris::runScript()
     return;
   }
   curFrame++;
+}
+
+int Boris::getMouseDistance()
+{
+  QPoint p = QCursor::pos();
+  int xA = p.x();
+  int yA = p.y();
+  int xB = pos().x() + (size / 2);
+  int yB = pos().y() + size;
+
+  return sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
+}
+
+int Boris::getMouseSector()
+{
+  // Mouse pointer coordinate
+  QPoint m = QCursor::pos();
+  // Center coordinate of Boris
+  QPoint b(pos().x() + (size / 2), pos().y() + size);
+
+  // First find seg coordinate on x
+  int xScale = abs(b.y() - m.y()) * 2;
+  double xScaleSeg = xScale / 3.0;
+  double xZero = b.x() - (xScale / 2.0);
+  int xSeg = -1;
+  if(m.x() < xZero + xScaleSeg) {
+    xSeg = 0;
+  } else if(m.x() < xZero + (xScaleSeg * 2)) {
+    xSeg = 1;
+  } else if(m.x() >= xZero + (xScaleSeg * 2)) {
+    xSeg = 2;
+  }
+  // Then find seg coordinate on y
+  int yScale = abs(b.x() - m.x()) * 2;
+  double yScaleSeg = yScale / 3.0;
+  double yZero = b.y() - (yScale / 2.0);
+  int ySeg = -1;
+  if(m.y() < yZero + yScaleSeg) {
+    ySeg = 0;
+  } else if(m.y() < yZero + (yScaleSeg * 2)) {
+    ySeg = 1;
+  } else if(m.y() >= yZero + (yScaleSeg * 2)) {
+    ySeg = 2;
+  }
+  int mouseSector = -1;
+  if(xSeg == 0) {
+    if(ySeg == 0) {
+      mouseSector = 7; // NW
+    } else if(ySeg == 1) {
+      mouseSector = 6; // W
+    } else if(ySeg == 2) {
+      mouseSector = 5; // SW
+    }
+  } else if(xSeg == 1) {
+    if(ySeg == 0) {
+      mouseSector = 0; // N
+    } else if(ySeg == 1) {
+      mouseSector = -1; // Precise center
+    } else if(ySeg == 2) {
+      mouseSector = 4; // S
+    }
+  } else if(xSeg == 2) {
+    if(ySeg == 0) {
+      mouseSector = 1; // NE
+    } else if(ySeg == 1) {
+      mouseSector = 2; // E
+    } else if(ySeg == 2) {
+      mouseSector = 3; // SE
+    }
+  }
+  return mouseSector;
 }
 
 void Boris::nextFrame()
@@ -517,11 +606,11 @@ void Boris::nextFrame()
   if(settings->sound && behaviours.at(curBehav).frames.at(curFrame).soundBuffer != nullptr) {
     if(behaviours.at(curBehav).pitchLock) {
       emit playSound(behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
-                     (float)this->pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
+                     (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
                      (stats->getHyper() / 60.0) + 1);
     } else {
       emit playSound(behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
-                     (float)this->pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
+                     (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
                      (stats->getHyper() / 60.0) + (0.95 + (qrand() % 100) / 1000.0));
     }
   }
@@ -562,28 +651,28 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
     if(flipped) {
       dX *= -1;
     }
-    dX = this->pos().x() + (dX * ceil((double)size / 32.0));
+    dX = pos().x() + (dX * ceil((double)size / 32.0));
   }
   if(dY == 666) {
     dY = qrand() % maxY;
   } else {
-    dY = this->pos().y() + (dY * ceil((double)size / 32.0));
+    dY = pos().y() + (dY * ceil((double)size / 32.0));
   }
   
   move(dX, dY);
-  stats->move(this->pos().x() + (size / 2) - (stats->width() / 2),
-              this->pos().y() - stats->height() + (size / 3));
+  stats->move(pos().x() + (size / 2) - (stats->width() / 2),
+              pos().y() - stats->height() + (size / 3));
   // Move stats below Boris when he's at the top of the screen
   if(stats->pos().y() < 0) {
-    stats->move(this->pos().x() + (size / 2) - (stats->width() / 2),
-                this->pos().y() + size + size / 3);
+    stats->move(pos().x() + (size / 2) - (stats->width() / 2),
+                pos().y() + size + size / 3);
   }
   // if Boris is outside borders
-  if(this->pos().y() > maxY || this->pos().y() < minY) {
+  if(pos().y() > maxY || pos().y() < minY) {
     if(falling) {
       healthQueue -= 5; // It hurts to hit the borders
       // Physics velocity when hitting borders
-      if(this->pos().x() + dX > maxX || this->pos().x() + dX < minX) {
+      if(pos().x() + dX > maxX || pos().x() + dX < minX) {
         hVel *= -0.4;
         vVel *= 0.4;
       } else {
@@ -647,9 +736,9 @@ void Boris::mouseMoveEvent(QMouseEvent* event)
   if(event->buttons().testFlag(Qt::LeftButton) && mMoving) {
     this->move(event->globalPos().x() - (float)size / 32.0 * 17.0, 
                event->globalPos().y() - (float)size / 32.0 * 16.0);
-    stats->move(this->pos().x() + (size / 2) - (stats->width() / 2), this->pos().y() - stats->height());
+    stats->move(pos().x() + (size / 2) - (stats->width() / 2), pos().y() - stats->height());
     if(stats->pos().y() < 0) {
-      stats->move(this->pos().x() + (size / 2) - (stats->width() / 2), this->pos().y() + size + size / 3);
+      stats->move(pos().x() + (size / 2) - (stats->width() / 2), pos().y() + size + size / 3);
     }
   }
 
@@ -661,8 +750,8 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
     setCursor(QCursor(QPixmap(":mouse_hover.png")));
     grabbed = false;
     mMoving = false;
-    settings->borisX = this->pos().x();
-    settings->borisY = this->pos().y();
+    settings->borisX = pos().x();
+    settings->borisY = pos().y();
     changeBehaviour("_falling");
     falling = true;
     hVel = mouseHVel;
@@ -696,7 +785,7 @@ void Boris::handlePhysics()
       moveBoris(round((sin(sinVal) + 0.25) * settings->windSpeed * 0.05), 0);
     }
     if(chatter->isVisible()) {
-      chatter->moveChatter(this->pos().x(), this->pos().y(), size);
+      chatter->moveChatter(pos().x(), pos().y(), size);
     }
   }
   
@@ -715,8 +804,8 @@ void Boris::handlePhysics()
       }
       hVel *= 0.9;
     }
-    if(this->pos().y() >= alt) {
-      move(this->pos().x(), alt);
+    if(pos().y() >= alt) {
+      move(pos().x(), alt);
       if(vVel < 5.0) {
         if(behaviours.at(curBehav).file != "_umbrella_falling") {
           changeBehaviour("_landing");
@@ -740,39 +829,26 @@ void Boris::handlePhysics()
 
   if(!falling && !grabbed &&
      !behaviours.at(curBehav).doNotDisturb) {
-    QPoint p = QCursor::pos();
-    int xA = p.x();
-    int yA = p.y();
-    int xB = this->pos().x() + (size / 2);
-    int yB = this->pos().y() + (size / 2);
-    double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
-    if(hypotenuse < size * 3) {
+    if(getMouseDistance() < size * 3) {
       if(!alreadyEvading) {
         interactions++;
         if(fabs(mouseHVel) > 20.0 || fabs(mouseVVel) > 20.0) {
-          double fleeAngle = atan2((this->pos().y() + (size / 2.0)) - p.y(),
-                                   p.x() - (this->pos().x() + (size / 2.0))
-                                   ) * 180.0 / PI;
-          if (fleeAngle < 0) {
-            fleeAngle += 360;
-          } else if (fleeAngle > 360) {
-            fleeAngle -= 360;
-          }
-          if((fleeAngle >= 0.0 && fleeAngle < 22.5) || (fleeAngle >= 337.5 && fleeAngle < 360.0)) {
+          int mouseSector = getMouseSector();
+          if(mouseSector == 2) {
             changeBehaviour("_flee_left", (qrand() % 2000) + 1000);
-          } else if(fleeAngle >= 22.5 && fleeAngle < 67.5) {
+          } else if(mouseSector == 1) {
             changeBehaviour("_flee_left_down", (qrand() % 2000) + 1000);
-          } else if(fleeAngle >= 67.5 && fleeAngle < 112.5) {
+          } else if(mouseSector == 0) {
             changeBehaviour("_flee_down", (qrand() % 2000) + 1000);
-          } else if(fleeAngle >= 112.5 && fleeAngle < 157.5) {
+          } else if(mouseSector == 7) {
             changeBehaviour("_flee_right_down", (qrand() % 2000) + 1000);
-          } else if(fleeAngle >= 157.5 && fleeAngle < 202.5) {
+          } else if(mouseSector == 6) {
             changeBehaviour("_flee_right", (qrand() % 2000) + 1000);
-          } else if(fleeAngle >= 202.5 && fleeAngle < 247.5) {
+          } else if(mouseSector == 5) {
             changeBehaviour("_flee_right_up", (qrand() % 2000) + 1000);
-          } else if(fleeAngle >= 247.5 && fleeAngle < 292.5) {
+          } else if(mouseSector == 4) {
             changeBehaviour("_flee_up", (qrand() % 2000) + 1000);
-          } else if(fleeAngle >= 292.5 && fleeAngle < 337.5) {
+          } else if(mouseSector == 3) {
             changeBehaviour("_flee_left_up", (qrand() % 2000) + 1000);
           }
         } else if(stats->getFun() > 10 && interactions >= 4 && qrand() % 10 >= 3) {
@@ -793,7 +869,7 @@ void Boris::earthquake()
     falling = true;
     vVel = ((qrand() % 12) * -1) - 5;
     hVel = qrand() % 20 - 11;
-    alt = this->pos().y();
+    alt = pos().y();
   }
 }
 
@@ -835,17 +911,17 @@ void Boris::sanityCheck()
   int maxY = QApplication::desktop()->height() - height();
 
   // Make sure Boris is not located outside boundaries
-  if(this->pos().y() < minY) {
-    move(this->pos().x(), minY);
+  if(pos().y() < minY) {
+    move(pos().x(), minY);
   }
-  if(this->pos().y() > maxY) {
-    move(this->pos().x(), maxY);
+  if(pos().y() > maxY) {
+    move(pos().x(), maxY);
   }
-  if(this->pos().x() > maxX) {
-    move(minX, this->pos().y());
+  if(pos().x() > maxX) {
+    move(minX, pos().y());
   }
-  if(this->pos().x() < minX) {
-    move(maxX, this->pos().y());
+  if(pos().x() < minX) {
+    move(maxX, pos().y());
   }
 
   // Make sure Boris altitude is not outside bottom boundary
@@ -995,7 +1071,7 @@ int Boris::getHygiene()
 
 void Boris::collide(Boris *b)
 {
-  if(this->pos().y() > b->pos().y()) {
+  if(pos().y() > b->pos().y()) {
     // Bring this Boris to the front, because he is considered closer in 3D space
     raise();
     setFocus();
@@ -1006,8 +1082,8 @@ void Boris::collide(Boris *b)
   }
   borisFriend = b;
     
-  double angle = atan2(this->pos().y() - borisFriend->pos().y(),
-                       borisFriend->pos().x() - this->pos().x()) * 180 / 3.1415927;
+  double angle = atan2(pos().y() - borisFriend->pos().y(),
+                       borisFriend->pos().x() - pos().x()) * 180 / 3.1415927;
   if(angle < 0) {
     angle += 360;
   } else if(angle >= 360) {
