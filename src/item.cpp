@@ -31,7 +31,7 @@
 
 #include <QTimer>
 
-Item::Item(const int &x, const int &y, const int &size, const QString &item)
+Item::Item(const int &x, const int &y, const int &size, const QString &item, const int &timeout)
 {
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
@@ -51,7 +51,9 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item)
   setFixedSize(size, size);
   scale(size / 32.0, size / 32.0);
   move(x, y);
-  QTimer::singleShot(300000, this, &Item::close); // Destroy item after 5 minutes
+  if(timeout > 0) {
+    QTimer::singleShot(timeout * 1000, this, &Item::close); // Destroy item after timeout seconds
+  }
   show();
 }
 

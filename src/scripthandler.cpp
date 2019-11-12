@@ -275,7 +275,8 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
   parameters.removeFirst(); // Remove 'spawn'
   new Item(boris->pos().x() + 10, boris->pos().y() + (boris->size / 2) + 2,
            boris->size, settings->itemsPath +
-           (settings->itemsPath.right(1) == "/"?"":"/") + parameters.first() + ".png");
+           (settings->itemsPath.right(1) == "/"?"":"/") + parameters.first() + ".png",
+           settings->itemTimeout);
   parameters.removeFirst(); // Remove 'filename'
 }
 
