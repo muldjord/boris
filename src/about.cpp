@@ -46,7 +46,7 @@ About::About(Settings *settings)
 {
   this->settings = settings;
   
-  setFixedSize(900, 520);
+  setFixedSize(900, 560);
   move((settings->desktopWidth / 2) - (width() / 2), 256);
   setWindowIcon(QIcon(":icon.png"));
   setWindowTitle("Boris v" VERSION);
@@ -125,6 +125,12 @@ About::About(Settings *settings)
   clonesLineEdit->setValidator(clonesValidator);
   clonesLineEdit->setText(QString::number(settings->clones));
 
+  QLabel *itemLabel = new QLabel(tr("Item timeout in seconds (10-3600 or 0 for never):"));
+  itemLineEdit = new QLineEdit();
+  QIntValidator *itemValidator = new QIntValidator(10, 3600, this);
+  itemLineEdit->setValidator(itemValidator);
+  itemLineEdit->setText(QString::number(settings->itemTimeout));
+
   QLabel *weatherLabel = new QLabel(tr("Show weather for city (mouse over for help):"));
   weatherLineEdit = new QLineEdit();
   weatherLineEdit->setToolTip(tr("Try typing in a nearby city. If it doesn't work, go to openweathermap.org and search for a city until you find one that exists.<br/>Then type that in exactly as it is shown on their website."));
@@ -182,6 +188,8 @@ About::About(Settings *settings)
   configLayout->addWidget(sizeLineEdit);
   configLayout->addWidget(clonesLabel);
   configLayout->addWidget(clonesLineEdit);
+  configLayout->addWidget(itemLabel);
+  configLayout->addWidget(itemLineEdit);
   configLayout->addWidget(statsLabel);
   configLayout->addWidget(statsComboBox);
   configLayout->addWidget(independenceLabel);
@@ -246,6 +254,17 @@ void About::saveAll()
   } else {
     settings->clones = 0;
   }
+  if(itemLineEdit->text().toInt() != 0) {
+    if(itemLineEdit->text().toInt() < 10) {
+      itemLineEdit->setText("10");
+    }
+    if(itemLineEdit->text().toInt() > 3600) {
+      itemLineEdit->setText("3600");
+    }
+    settings->itemTimeout = itemLineEdit->text().toInt();
+  } else {
+    settings->itemTimeout = 0;
+  }
   settings->city = weatherLineEdit->text();
   settings->key = weatherKeyLineEdit->text();
   settings->feedUrl = feedUrlLineEdit->text();
@@ -274,6 +293,7 @@ void About::saveAll()
   iniSettings.setValue("boris_y", settings->borisY);
   iniSettings.setValue("clones", settings->clones);
   iniSettings.setValue("size", settings->size);
+  iniSettings.setValue("item_timeout", settings->itemTimeout);
   iniSettings.setValue("independence", settings->independence);
   iniSettings.setValue("chatter", settings->chatter);
   iniSettings.setValue("sound", settings->sound);

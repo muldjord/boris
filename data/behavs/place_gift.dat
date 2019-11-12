@@ -36,7 +36,7 @@ doNotDisturb
 30;2000;0;0;;
 31;75;0;0;data/sfx/pow.wav;stat fun += 5
 32;75;0;0;;
-33;75;0;0;;var rand = @3,if rand = 1 spawn teddy,if rand = 2 spawn horse,if rand = 3 spawn train
+33;75;0;0;;var rand = @4,if rand = 1 spawn teddy,if rand = 2 spawn horse,if rand = 3 spawn train,if rand = 4 spawn c64
 34;75;0;0;;
 35;75;0;0;;
 36;75;0;0;;

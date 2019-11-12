@@ -51,6 +51,7 @@ private:
   
   QLineEdit *clonesLineEdit;
   QLineEdit *sizeLineEdit;
+  QLineEdit *itemLineEdit;
   QLineEdit *weatherLineEdit;
   QLineEdit *weatherKeyLineEdit;
   QLineEdit *feedUrlLineEdit;

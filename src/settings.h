@@ -86,7 +86,9 @@ struct Settings {
   QList<ChatLine> chatLines;
   QString chatFile = "chatter.dat";
   QString feedUrl = "http://rss.slashdot.org/Slashdot/slashdotMain";
-  
+
+  // Items
+  int itemTimeout = 300; // Seconds before items disappear. 0 for never
 };
 
 #endif // SETTINGS_H

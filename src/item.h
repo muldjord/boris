@@ -35,7 +35,7 @@ class Item : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Item(const int &x, const int &y, const int &size, const QString &item);
+  Item(const int &x, const int &y, const int &size, const QString &item, const int &timeout);
   ~Item();
 
 protected:

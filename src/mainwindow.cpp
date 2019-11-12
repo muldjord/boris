@@ -159,7 +159,12 @@ MainWindow::MainWindow()
     iniSettings.setValue("independence", 75);
   }
   settings.independence = iniSettings.value("independence").toInt();
-  
+
+  if(!iniSettings.contains("item_timeout")) {
+    iniSettings.setValue("item_timeout", 300);
+  }
+  settings.itemTimeout = iniSettings.value("item_timeout").toInt();
+
   if(!iniSettings.contains("iddqd")) {
     iniSettings.setValue("iddqd", false);
   }
