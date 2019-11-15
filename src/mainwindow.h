@@ -53,7 +53,6 @@ protected:
 private slots:
   void loadAssets();
   void aboutBox();
-  void checkCollisions();
   void killAll();
   void updateWeather();
   void playSoundFile(const QString &fileName,
@@ -84,10 +83,8 @@ private:
   QAction *quitAction;
   QSystemTrayIcon *trayIcon;
   QMenu *trayIconMenu;
-  QLinkedList<Boris*> borises;
   void addBoris(int clones);
   void removeBoris(int clones);
-  QTimer collisTimer;
   sf::Sound *sound;
 };
 

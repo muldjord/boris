@@ -43,6 +43,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
+QLinkedList<Boris*> borises;
 QList<Behaviour> behaviours;
 QList<Behaviour> weathers;
 QMap<QChar, QImage> pfont;
@@ -318,11 +319,6 @@ void MainWindow::loadAssets()
 
   addBoris((settings.clones == 0?qrand() % 99 + 1:settings.clones));
 
-  collisTimer.setInterval(100);
-  collisTimer.setSingleShot(true);
-  connect(&collisTimer, &QTimer::timeout, this, &MainWindow::checkCollisions);
-  collisTimer.start();
-
   progressBar->setValue(progressBar->maximum());
   
   delete progressBar;
@@ -418,26 +414,6 @@ void MainWindow::mousePressEvent(QMouseEvent* event)
   if(event->button() == Qt::RightButton) {
     trayIconMenu->exec(QCursor::pos());
   }
-}
-
-void MainWindow::checkCollisions()
-{
-  for(auto &borisA: borises) {
-    for(auto &borisB: borises) {
-      if(borisA != borisB) {
-        int xA = borisA->pos().x();
-        int yA = borisA->pos().y();
-        int xB = borisB->pos().x();
-        int yB = borisB->pos().y();
-        double hypotenuse = sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
-        if(hypotenuse < borisB->size * 2) {
-          borisA->collide(borisB);
-          break;
-        }
-      }
-    }
-  }
-  collisTimer.start();
 }
 
 void MainWindow::killAll()

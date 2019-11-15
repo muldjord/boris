@@ -39,11 +39,13 @@
 #include <QBitmap>
 #include <QScreen>
 #include <QTime>
+#include <QLinkedList>
 
 constexpr int STATTIMER = 200;
 constexpr double PI = 3.1415927;
 constexpr int ANNOYMAX = 42;
 
+extern QLinkedList<Boris*> borises;
 extern QList<Behaviour> behaviours;
 extern QList<Behaviour> weathers;
 
@@ -456,8 +458,8 @@ void Boris::runScript()
   QPoint p = QCursor::pos();
   scriptVars["mx"] = p.x();
   scriptVars["my"] = p.y();
-  scriptVars["mdist"] = getMouseDistance();
-  scriptVars["msec"] = getMouseSector();
+  scriptVars["mdist"] = getDistance(QCursor::pos());
+  scriptVars["msec"] = getSector(QCursor::pos());
   QDate date = QDate::currentDate();
   QTime time = QTime::currentTime();
   scriptVars["day"] = date.day();
@@ -486,9 +488,8 @@ void Boris::runScript()
   curFrame++;
 }
 
-int Boris::getMouseDistance()
+int Boris::getDistance(const QPoint &p)
 {
-  QPoint p = QCursor::pos();
   int xA = p.x();
   int yA = p.y();
   int xB = pos().x() + (size / 2);
@@ -497,64 +498,62 @@ int Boris::getMouseDistance()
   return sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
 }
 
-int Boris::getMouseSector()
+int Boris::getSector(const QPoint &p)
 {
-  // Mouse pointer coordinate
-  QPoint m = QCursor::pos();
   // Center coordinate of Boris
   QPoint b(pos().x() + (size / 2), pos().y() + size);
 
   // First find seg coordinate on x
-  int xScale = abs(b.y() - m.y()) * 2;
+  int xScale = abs(b.y() - p.y()) * 2;
   double xScaleSeg = xScale / 3.0;
   double xZero = b.x() - (xScale / 2.0);
   int xSeg = -1;
-  if(m.x() < xZero + xScaleSeg) {
+  if(p.x() < xZero + xScaleSeg) {
     xSeg = 0;
-  } else if(m.x() < xZero + (xScaleSeg * 2)) {
+  } else if(p.x() < xZero + (xScaleSeg * 2)) {
     xSeg = 1;
-  } else if(m.x() >= xZero + (xScaleSeg * 2)) {
+  } else if(p.x() >= xZero + (xScaleSeg * 2)) {
     xSeg = 2;
   }
   // Then find seg coordinate on y
-  int yScale = abs(b.x() - m.x()) * 2;
+  int yScale = abs(b.x() - p.x()) * 2;
   double yScaleSeg = yScale / 3.0;
   double yZero = b.y() - (yScale / 2.0);
   int ySeg = -1;
-  if(m.y() < yZero + yScaleSeg) {
+  if(p.y() < yZero + yScaleSeg) {
     ySeg = 0;
-  } else if(m.y() < yZero + (yScaleSeg * 2)) {
+  } else if(p.y() < yZero + (yScaleSeg * 2)) {
     ySeg = 1;
-  } else if(m.y() >= yZero + (yScaleSeg * 2)) {
+  } else if(p.y() >= yZero + (yScaleSeg * 2)) {
     ySeg = 2;
   }
-  int mouseSector = -1;
+  int pointSector = -1;
   if(xSeg == 0) {
     if(ySeg == 0) {
-      mouseSector = 7; // NW
+      pointSector = Direction::NorthWest;
     } else if(ySeg == 1) {
-      mouseSector = 6; // W
+      pointSector = Direction::West;
     } else if(ySeg == 2) {
-      mouseSector = 5; // SW
+      pointSector = Direction::SouthWest;
     }
   } else if(xSeg == 1) {
     if(ySeg == 0) {
-      mouseSector = 0; // N
+      pointSector = Direction::North;
     } else if(ySeg == 1) {
-      mouseSector = -1; // Precise center
+      pointSector = Direction::None;
     } else if(ySeg == 2) {
-      mouseSector = 4; // S
+      pointSector = Direction::South;
     }
   } else if(xSeg == 2) {
     if(ySeg == 0) {
-      mouseSector = 1; // NE
+      pointSector = Direction::NorthEast;
     } else if(ySeg == 1) {
-      mouseSector = 2; // E
+      pointSector = Direction::East;
     } else if(ySeg == 2) {
-      mouseSector = 3; // SE
+      pointSector = Direction::SouthEast;
     }
   }
-  return mouseSector;
+  return pointSector;
 }
 
 void Boris::nextFrame()
@@ -829,11 +828,11 @@ void Boris::handlePhysics()
 
   if(!falling && !grabbed &&
      !behaviours.at(curBehav).doNotDisturb) {
-    if(getMouseDistance() < size * 3) {
+    if(getDistance(QCursor::pos()) < size * 3) {
       if(!alreadyEvading) {
         interactions++;
         if(fabs(mouseHVel) > 20.0 || fabs(mouseVVel) > 20.0) {
-          int mouseSector = getMouseSector();
+          int mouseSector = getSector(QCursor::pos());
           if(mouseSector == 2) {
             changeBehaviour("_flee_left", (qrand() % 2000) + 1000);
           } else if(mouseSector == 1) {
@@ -1069,9 +1068,9 @@ int Boris::getHygiene()
   return stats->getHygiene();
 }
 
-void Boris::collide(Boris *b)
+void Boris::collide(Boris *boris)
 {
-  if(pos().y() > b->pos().y()) {
+  if(pos().y() > boris->pos().y()) {
     // Bring this Boris to the front, because he is considered closer in 3D space
     raise();
     setFocus();
@@ -1080,34 +1079,9 @@ void Boris::collide(Boris *b)
   if(borisFriend != nullptr || falling || grabbed || behaviours.at(curBehav).doNotDisturb) {
     return;
   }
-  borisFriend = b;
+  borisFriend = boris;
     
-  double angle = atan2(pos().y() - borisFriend->pos().y(),
-                       borisFriend->pos().x() - pos().x()) * 180 / 3.1415927;
-  if(angle < 0) {
-    angle += 360;
-  } else if(angle >= 360) {
-    angle -= 360;
-  }
-
-  int friendAt = Direction::None;
-  if((angle >= 0.0 && angle < 22.5) || (angle >= 337.5 && angle < 360.0)) {
-    friendAt = Direction::East;
-  } else if(angle >= 22.5 && angle < 67.5) {
-    friendAt = Direction::NorthEast;
-  } else if(angle >= 67.5 && angle < 112.5) {
-    friendAt = Direction::North;
-  } else if(angle >= 112.5 && angle < 157.5) {
-    friendAt = Direction::NorthWest;
-  } else if(angle >= 157.5 && angle < 202.5) {
-    friendAt = Direction::West;
-  } else if(angle >= 202.5 && angle < 247.5) {
-    friendAt = Direction::SouthWest;
-  } else if(angle >= 247.5 && angle < 292.5) {
-    friendAt = Direction::South;
-  } else if(angle >= 292.5 && angle < 337.5) {
-    friendAt = Direction::SouthEast;
-  }
+  int friendAt = getSector(QPoint(boris->pos().x() + (size / 2), boris->pos().y() + size));
 
   if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
     if(friendAt == Direction::South ||
@@ -1453,6 +1427,16 @@ void Boris::readyForFriend()
 
 void Boris::balanceInteractions()
 {
+  // Check if there are any collisions with other Borises
+  for(auto &boris: borises) {
+    if(boris != this) {
+      if(getDistance(QPoint(boris->pos().x() + (size / 2), boris->pos().y() + size)) < size * 2) {
+        collide(boris);
+        break;
+      }
+    }
+  }
+
   if((settings->stats == STATS_MOUSEOVER || settings->stats == STATS_CRITICAL) &&
      stats->underMouse) {
     stats->show();

@@ -42,14 +42,14 @@
 
 namespace Direction {
   constexpr int None = -1;
-  constexpr int East = 0;
-  constexpr int NorthEast = 45;
-  constexpr int North = 90;
-  constexpr int NorthWest = 135;
-  constexpr int West = 180;
-  constexpr int SouthWest = 225;
-  constexpr int South = 270;
-  constexpr int SouthEast = 315;
+  constexpr int North = 0;
+  constexpr int NorthEast = 1;
+  constexpr int East = 2;
+  constexpr int SouthEast = 3;
+  constexpr int South = 4;
+  constexpr int SouthWest = 5;
+  constexpr int West = 6;
+  constexpr int NorthWest = 7;
 };
 
 class Boris : public QGraphicsView
@@ -59,7 +59,7 @@ public:
   Boris(Settings *settings);
   ~Boris();
   QTimer behavTimer;
-  void collide(Boris *b);
+  void collide(Boris *boris);
   Boris *borisFriend;
   int getHygiene();
   void moveBoris(int dX, int dY, const bool &flipped = false, const bool &vision = true);
@@ -164,8 +164,8 @@ private:
   int getIdxFromCategory(QString category);
   void processVision();
   void processAi(QString &behav, int &time);
-  int getMouseDistance();
-  int getMouseSector();
+  int getDistance(const QPoint &p);
+  int getSector(const QPoint &p);
   int curWeather;
   int curWeatherFrame;
   int timeForWeather;
