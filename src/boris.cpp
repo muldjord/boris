@@ -165,7 +165,7 @@ Boris::Boris(Settings *settings)
   
   interactionsTimer.setInterval(2000);
   interactionsTimer.setSingleShot(true);
-  connect(&interactionsTimer, &QTimer::timeout, this, &Boris::balanceInteractions);
+  connect(&interactionsTimer, &QTimer::timeout, this, &Boris::checkInteractions);
   interactionsTimer.start();
 
   setCursor(QCursor(QPixmap(":mouse_hover.png")));
@@ -440,8 +440,6 @@ QPixmap Boris::getShadow(const QPixmap &sprite)
 void Boris::runScript()
 {
   // Update current stat variables for scripting use
-  scriptVars["bx"] = pos().x();
-  scriptVars["by"] = pos().y();
   scriptVars["bsize"] = size;
   scriptVars["energy"] = stats->getEnergy();
   scriptVars["health"] = stats->getHealth();
@@ -453,11 +451,11 @@ void Boris::runScript()
   scriptVars["hygiene"] = stats->getHygiene();
   scriptVars["xvel"] = mouseHVel;
   scriptVars["yvel"] = mouseVVel;
-  scriptVars["bx"] = pos().x() + (size / 2);
-  scriptVars["by"] = pos().y() + size;
+  scriptVars["borisx"] = pos().x() + (size / 2);
+  scriptVars["borisy"] = pos().y() + size;
   QPoint p = QCursor::pos();
-  scriptVars["mx"] = p.x();
-  scriptVars["my"] = p.y();
+  scriptVars["mousex"] = p.x();
+  scriptVars["mousey"] = p.y();
   scriptVars["mdist"] = getDistance(QCursor::pos());
   scriptVars["msec"] = getSector(QCursor::pos());
   QDate date = QDate::currentDate();
@@ -1425,7 +1423,7 @@ void Boris::readyForFriend()
   borisFriend = nullptr;
 }
 
-void Boris::balanceInteractions()
+void Boris::checkInteractions()
 {
   // Check if there are any collisions with other Borises
   for(auto &boris: borises) {

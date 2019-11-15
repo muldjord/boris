@@ -338,10 +338,10 @@ The following variables are reserved and hardcoded. You should not try to set th
 * hygiene: Boris' current hygiene level (0-100, 100 means he's clean)
 * yvel: The delta movement of the mouse on the x axis (0-n, 0 means no movement)
 * xvel: The delta movement of the mouse on the y axis (0-n, 0 means no movement)
-* bx: Current Boris x coordinate
-* by: Current Boris y coordinate
-* mx: Current mouse pointer x coordinate
-* my: Current mouse pointer x coordinate
+* borisx: Current Boris x center coordinate
+* borisy: Current Boris y center coordinate
+* mousex: Current mouse pointer x coordinate
+* mousey: Current mouse pointer x coordinate
 * mdist: The current pixel distance from Boris to the mouse cursor
 * bsize: The current size of Boris in pixels
 * msec: The direction sector the mouse is within relative to Boris. Sectors are 0-7 clockwise where 0 is north. 1 is northeast and so on.

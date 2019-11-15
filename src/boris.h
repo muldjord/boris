@@ -111,7 +111,7 @@ private slots:
   void nextWeatherFrame();
   void hideWeather();
   void readyForFriend();
-  void balanceInteractions();
+  void checkInteractions();
   
 private:
   Settings *settings;
