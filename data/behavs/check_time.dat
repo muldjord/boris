@@ -4,7 +4,6 @@ fun=1
 hunger=1
 social=-2
 oneShot
-allowFlip
 #Frames
 0;75;0;0;;
 1;75;0;0;;
@@ -15,12 +14,12 @@ allowFlip
 6;75;0;0;;
 7;100;0;0;;
 8;1200;0;0;;
-9;800;0;0;;
+9;800;0;0;;draw begin,draw black value 0 0 hour,draw black text 9 0 :,draw black value 13 0 minute
 10;50;0;0;;
 9;50;0;0;;
 10;50;0;0;;
 9;1900;0;0;;
-7;100;0;0;;
+7;100;0;0;;draw end
 6;75;0;0;;
 5;75;0;0;;
 4;75;0;0;;
