@@ -1078,7 +1078,8 @@ void Boris::collide(Boris *boris)
     return;
   }
   borisFriend = boris;
-    
+  // Queue current behaviour so it isn't 'forgotten'
+  behavQueue.prepend(behaviours.at(curBehav).file);
   int friendAt = getSector(QPoint(boris->pos().x() + (size / 2), boris->pos().y() + size));
 
   if(behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
