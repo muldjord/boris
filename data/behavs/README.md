@@ -318,12 +318,12 @@ Per default all drawing routines are performed on the current frame sprite and c
 ##### spawn
 Spawn an item from the items folder (default is `data/items`). The item name is the name of the file without the suffix. The items must be png images.
 * Definition:
-`spawn <ITEM FILENAME>`
+`spawn <ITEM FILENAME> x y`
 * Example:
 ```
-spawn christmas_tree
+spawn christmas_tree 10 2
 ```
-This will spawn an item using the graphics from `data/items/christmas_tree.png`. The items are scaled according to the current size of Boris.
+This will spawn an item at x, y relative to Boris using the graphics from `data/items/christmas_tree.png`. The coordinates and item are scaled according to the current size of Boris.
 
 #### Hardcoded / reserved variables
 The following variables are reserved and hardcoded. You should not try to set these yourself, but feel free to use them to make some interesting behaviours.
