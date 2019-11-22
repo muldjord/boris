@@ -273,11 +273,15 @@ void ScriptHandler::handlePrint(QList<QString> &parameters)
 void ScriptHandler::handleSpawn(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'spawn'
-  new Item(boris->pos().x() + 10, boris->pos().y() + (boris->size / 2) + 2,
+  QString itemName = parameters.takeFirst();
+  int iX = getValue(parameters);
+  int iY = getValue(parameters);
+  printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
+  new Item(boris->pos().x() + (iX * (boris->size / 32)),
+           boris->pos().y() + (boris->size / 2) + (iY * (boris->size / 32)),
            boris->size, settings->itemsPath +
-           (settings->itemsPath.right(1) == "/"?"":"/") + parameters.first() + ".png",
+           (settings->itemsPath.right(1) == "/"?"":"/") + itemName + ".png",
            settings->itemTimeout);
-  parameters.removeFirst(); // Remove 'filename'
 }
 
 void ScriptHandler::handleDraw(QList<QString> &parameters)
