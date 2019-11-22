@@ -46,6 +46,7 @@
 QLinkedList<Boris*> borises;
 QList<Behaviour> behaviours;
 QList<Behaviour> weathers;
+QList<Behaviour> itemList;
 QMap<QChar, QImage> pfont;
 
 MainWindow::MainWindow()
@@ -278,11 +279,11 @@ void MainWindow::loadAssets()
   totalAssetsSize += Loader::getAssetsSize(QDir(settings.soundsPath, "*.wav", QDir::Name,
                                                       QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
   
-  totalAssetsSize += Loader::getAssetsSize(QDir(settings.behavsPath, "*.png", QDir::Name,
-                                       QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
+  totalAssetsSize += Loader::getAssetsSize(QDir(settings.behavsPath, "*.png", QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
 
-  totalAssetsSize += Loader::getAssetsSize(QDir(settings.weathersPath, "*.png", QDir::Name,
-                                       QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
+  totalAssetsSize += Loader::getAssetsSize(QDir(settings.weathersPath, "*.png", QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
+
+  totalAssetsSize += Loader::getAssetsSize(QDir(settings.itemsPath, "*.png", QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
 
   qInfo("Loading %d kilobytes of assets, please wait...\n", totalAssetsSize / 1024);
 
@@ -304,6 +305,12 @@ void MainWindow::loadAssets()
     qInfo("Weather types loaded ok... :)\n");
   } else {
     qInfo("Error when loading some weather types, please check your png and dat files\n");
+  }
+
+  if(Loader::loadBehaviours(settings, settings.itemsPath, itemList, soundFxs, progressBar)) {
+    qInfo("Items loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading some items, please check your png and dat files\n");
   }
 
   if(Loader::loadFont(pfont)) {

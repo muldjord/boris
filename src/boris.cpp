@@ -360,7 +360,7 @@ void Boris::changeBehaviour(QString behav, int time)
   if(time == 0) {
     time = qrand() % 7000 + 5000;
   }
-  time = time - ((double)time / 100.0 * stats->getHyper());
+  time = time - (time / 100.0 * stats->getHyper());
   behavTimer.setInterval(time);
 
 #ifdef DEBUG
@@ -612,7 +612,7 @@ void Boris::nextFrame()
     }
   }
   int frameTime = behaviours.at(curBehav).frames.at(curFrame).time;
-  frameTime -= ((double)frameTime / 100.0 * stats->getHyper());
+  frameTime -= (frameTime / 100.0 * stats->getHyper());
   int elapsedTime = frameTimer.elapsed();
   if(elapsedTime < frameTime) {
     frameTime -= elapsedTime;
@@ -648,12 +648,12 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
     if(flipped) {
       dX *= -1;
     }
-    dX = pos().x() + (dX * ceil((double)size / 32.0));
+    dX = pos().x() + (dX * ceil(size / 32.0));
   }
   if(dY == 666) {
     dY = qrand() % maxY;
   } else {
-    dY = pos().y() + (dY * ceil((double)size / 32.0));
+    dY = pos().y() + (dY * ceil(size / 32.0));
   }
   
   move(dX, dY);
@@ -772,7 +772,7 @@ void Boris::wheelEvent(QWheelEvent *)
 void Boris::handlePhysics()
 {
   if(!grabbed && weatherSprite->isVisible()) {
-    sinVal += (double)(qrand() % 2000) / 20000.0;
+    sinVal += (qrand() % 2000) / 20000.0;
     if(sinVal > PI) {
       sinVal = 0.0;
     }
@@ -950,7 +950,7 @@ void Boris::statQueueProgress()
 {
   // Adjust timer interval to match how hyper Boris is
   int interval = STATTIMER;
-  statQueueTimer.setInterval(interval - ((double)interval / 100.0 * stats->getHyper()));
+  statQueueTimer.setInterval(interval - (interval / 100.0 * stats->getHyper()));
   if(statQueueTimer.interval() < 5)
     statQueueTimer.setInterval(5);
 

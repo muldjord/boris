@@ -27,22 +27,59 @@
 #ifndef _ITEM_H
 #define _ITEM_H
 
+#include "behaviour.h"
+#include "settings.h"
+#include "stats.h"
+#include "boris.h"
+
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QMouseEvent>
+#include <QTimer>
 
 class Item : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Item(const int &x, const int &y, const int &size, const QString &item, const int &timeout);
+  Item(const int &x, const int &y, const int &size, const QString &item, const int &timeout, Boris *boris, Settings *settings, Stats *stats);
   ~Item();
+  void moveItem(int dX, int dY, const bool &flipped = false);
+  QMap<QString, int> scriptVars;
 
 protected:
   void mousePressEvent(QMouseEvent* event);
 
+signals:
+  void playSound(const sf::SoundBuffer *buffer,
+                 const float &panning,
+                 const float &pitch);
+  void playSoundFile(const QString &fileName,
+                     const float &panning,
+                     const float &pitch);
+
+private slots:
+  void nextFrame();
+  QPixmap getShadow(const QPixmap &sprite);
+
 private:
+  Settings *settings;
+  Stats *stats;
+  Boris *boris;
+  bool flipFrames = false;
   QGraphicsPixmapItem *itemSprite;
+  QGraphicsPixmapItem *shadowSprite;
+  QPixmap origShadow;
+  QTimer animTimer;
+  QGraphicsPixmapItem *scriptSprite;
+  QImage scriptImage = QImage(32, 32, QImage::Format_ARGB32_Premultiplied);
+  bool drawing = false;
+  int curFrame = 0;
+  int curItem = 0;
+  int size = 64;
+  void runScript();
+  void sanityCheck();
+  int getDistance(const QPoint &p);
+  int getSector(const QPoint &p);
 
 };
 

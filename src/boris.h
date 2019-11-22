@@ -175,9 +175,6 @@ private:
   int tooLateForLoo;
 
   void killBoris();
-
-  QList<QString> scriptInstructions;
-  
 };
 
 #endif // _BORIS_H

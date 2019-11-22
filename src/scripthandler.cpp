@@ -279,9 +279,8 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
   printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
   new Item(boris->pos().x() + (iX * (boris->size / 32)),
            boris->pos().y() + (boris->size / 2) + (iY * (boris->size / 32)),
-           boris->size, settings->itemsPath +
-           (settings->itemsPath.right(1) == "/"?"":"/") + itemName + ".png",
-           settings->itemTimeout);
+           boris->size, itemName,
+           settings->itemTimeout, boris, settings, stats);
 }
 
 void ScriptHandler::handleDraw(QList<QString> &parameters)
