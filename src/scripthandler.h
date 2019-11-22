@@ -39,9 +39,25 @@ class ScriptHandler : public QObject
   Q_OBJECT;
 
 public:
-  ScriptHandler(QImage *image, bool *drawing,
-                Boris *boris, Settings *settings,
-                Stats *stats);
+  ScriptHandler(QImage *image,
+                bool *drawing,
+                Settings *settings,
+                Stats *stats,
+                const QMap<QString, int> &labels,
+                const QMap<QString, Script> &defines,
+                int &curFrame,
+                QMap<QString, int> &scriptVars,
+                const QPoint &pos,
+                const int &size,
+                int &hyperQueue,
+                int &healthQueue,
+                int &energyQueue,
+                int &hungerQueue,
+                int &bladderQueue,
+                int &socialQueue,
+                int &funQueue,
+                int &hygieneQueue,
+                Boris *boris = nullptr);
   void runScript(int &stop, const Script &script);
 
 private:
@@ -50,6 +66,21 @@ private:
   bool *drawing = nullptr;
   Settings *settings = nullptr;
   Stats *stats = nullptr;
+  
+  const QMap<QString, int> &labels;
+  const QMap<QString, Script> &defines;
+  int &curFrame;
+  QMap<QString, int> &scriptVars;
+  const QPoint &pos;
+  const int &size;
+  int &hyperQueue;
+  int &healthQueue;
+  int &energyQueue;
+  int &hungerQueue;
+  int &bladderQueue;
+  int &socialQueue;
+  int &funQueue;
+  int &hygieneQueue;
   
   // Main command handler
   void runCommand(QList<QString> &parameters, int &stop, const Script &script);

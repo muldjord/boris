@@ -470,7 +470,8 @@ void Boris::runScript()
   if(!drawing) {
     scriptImage.fill(Qt::transparent);
   }
-  ScriptHandler scriptHandler(&scriptImage, &drawing, this, settings, stats);
+
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, stats, behaviours.at(curBehav).labels, behaviours.at(curBehav).defines, curFrame, scriptVars, pos(), size, hyperQueue, healthQueue, energyQueue, hungerQueue, bladderQueue, socialQueue, funQueue, hygieneQueue, this);
   int stop = 0; // Will be > 0 if a goto, behav or break command is run
   scriptHandler.runScript(stop, behaviours.at(curBehav).frames.at(curFrame).script);
 

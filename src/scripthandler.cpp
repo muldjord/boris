@@ -30,18 +30,34 @@
 
 #include <stdio.h>
 
-extern QList<Behaviour> behaviours;
 extern QMap<QChar, QImage> pfont;
 
-ScriptHandler::ScriptHandler(QImage *image, bool *drawing,
-                             Boris *boris, Settings *settings,
-                             Stats *stats)
+ScriptHandler::ScriptHandler(QImage *image,
+                             bool *drawing,
+                             Settings *settings,
+                             Stats *stats,
+                             const QMap<QString, int> &labels,
+                             const QMap<QString, Script> &defines,
+                             int &curFrame,
+                             QMap<QString, int> &scriptVars,
+                             const QPoint &pos,
+                             const int &size,
+                             int &hyperQueue,
+                             int &healthQueue,
+                             int &energyQueue,
+                             int &hungerQueue,
+                             int &bladderQueue,
+                             int &socialQueue,
+                             int &funQueue,
+                             int &hygieneQueue,
+                             Boris *boris)
+: labels(labels), defines(defines), curFrame(curFrame), scriptVars(scriptVars), pos(pos), size(size), hyperQueue(hyperQueue), healthQueue(healthQueue), energyQueue(energyQueue), hungerQueue(hungerQueue), bladderQueue(bladderQueue), socialQueue(socialQueue), funQueue(funQueue), hygieneQueue(hygieneQueue)
 {
-  this->boris = boris;
   this->image = image;
   this->drawing = drawing;
   this->settings = settings;
   this->stats = stats;
+  this->boris = boris;
 }
 
 void ScriptHandler::runScript(int &stop, const Script &script)
@@ -184,9 +200,9 @@ void ScriptHandler::handleGoto(QList<QString> &parameters, int &stop)
 {
   parameters.removeFirst(); // Remove 'goto'
 
-  if(behaviours.at(boris->curBehav).labels.contains(parameters.first())) {
-    printf("Going to label '%s' at frame %d\n", parameters.first().toStdString().c_str(), behaviours.at(boris->curBehav).labels[parameters.first()]);
-    boris->curFrame = behaviours.at(boris->curBehav).labels[parameters.first()];
+  if(labels.contains(parameters.first())) {
+    printf("Going to label '%s' at frame %d\n", parameters.first().toStdString().c_str(), labels[parameters.first()]);
+    curFrame = labels[parameters.first()];
   } else {
     printf("Going to '%s', ERROR: Unknown label\n", parameters.first().toStdString().c_str());
   }
@@ -204,18 +220,18 @@ void ScriptHandler::handleVar(QList<QString> &parameters)
   int number = getValue(parameters);
 
   if(op == "=") {
-    boris->scriptVars[variable] = number;
+    scriptVars[variable] = number;
   } else if(op == "+=") {
-    boris->scriptVars[variable] += number;
+    scriptVars[variable] += number;
   } else if(op == "-=") {
-    boris->scriptVars[variable] -= number;
+    scriptVars[variable] -= number;
   } else if(op == "*=") {
-    boris->scriptVars[variable] *= number;
+    scriptVars[variable] *= number;
   } else if(op == "/=") {
-    boris->scriptVars[variable] /= number;
+    scriptVars[variable] /= number;
   }
 
-  printf("%s = %d\n", variable.toStdString().c_str(), boris->scriptVars[variable]);
+  printf("%s = %d\n", variable.toStdString().c_str(), scriptVars[variable]);
 }
 
 void ScriptHandler::handleStat(QList<QString> &parameters)
@@ -230,21 +246,21 @@ void ScriptHandler::handleStat(QList<QString> &parameters)
 
   int *stat = nullptr;
   if(statType == "hyper") {
-    stat = &boris->hyperQueue;
+    stat = &hyperQueue;
   } else if(statType == "health") {
-    stat = &boris->healthQueue;
+    stat = &healthQueue;
   } else if(statType == "energy") {
-    stat = &boris->energyQueue;
+    stat = &energyQueue;
   } else if(statType == "hunger") {
-    stat = &boris->hungerQueue;
+    stat = &hungerQueue;
   } else if(statType == "bladder") {
-    stat = &boris->bladderQueue;
+    stat = &bladderQueue;
   } else if(statType == "social") {
-    stat = &boris->socialQueue;
+    stat = &socialQueue;
   } else if(statType == "fun") {
-    stat = &boris->funQueue;
+    stat = &funQueue;
   } else if(statType == "hygiene") {
-    stat = &boris->hygieneQueue;
+    stat = &hygieneQueue;
   }
   if(stat != nullptr) {
     if(op == "+=") {
@@ -263,8 +279,8 @@ void ScriptHandler::handlePrint(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'print'
 
-  if(boris->scriptVars.contains(parameters.first())) {
-    printf("%s = %d\n", parameters.first().toStdString().c_str(), boris->scriptVars[parameters.first()]);
+  if(scriptVars.contains(parameters.first())) {
+    printf("%s = %d\n", parameters.first().toStdString().c_str(), scriptVars[parameters.first()]);
   } else {
     printf("%s, ERROR: Unknown variable\n", parameters.first().toStdString().c_str());
   }
@@ -277,9 +293,9 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
   int iX = getValue(parameters);
   int iY = getValue(parameters);
   printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
-  new Item(boris->pos().x() + (iX * (boris->size / 32)),
-           boris->pos().y() + (boris->size / 2) + (iY * (boris->size / 32)),
-           boris->size, itemName,
+  new Item(pos.x() + (iX * (size / 32)),
+           pos.y() + (size / 2) + (iY * (size / 32)),
+           size, itemName,
            settings->itemTimeout, boris, settings, stats);
 }
 
@@ -448,9 +464,9 @@ void ScriptHandler::handleBreak(int &stop)
 void ScriptHandler::handleCall(QList<QString> &parameters, int &stop)
 {
   parameters.removeFirst(); // Remove 'call'
-  if(behaviours.at(boris->curBehav).defines.contains(parameters.first())) {
+  if(defines.contains(parameters.first())) {
     printf("Calling define '%s'\n", parameters.first().toStdString().c_str());
-    runScript(stop, behaviours.at(boris->curBehav).defines[parameters.first()]);
+    runScript(stop, defines[parameters.first()]);
   } else {
     printf("Calling define '%s', ERROR: Unknown define\n", parameters.first().toStdString().c_str());
   }
@@ -472,7 +488,7 @@ void ScriptHandler::handleSound(QList<QString> &parameters)
   if(parameters.count() >= 1) {
     printf("Playing sound '%s'\n", parameters.first().toStdString().c_str());
     emit boris->playSoundFile(parameters.first(),
-                              (float)boris->pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
+                              (float)pos.x() / (float)settings->desktopWidth * 2.0 - 1.0,
                               (stats->getHyper() / 60.0) + 1);
   }
   parameters.removeFirst(); // Remove sound file name
@@ -486,7 +502,7 @@ int ScriptHandler::getValue(QList<QString> &parameters)
     if(parameters.first().left(1) == "@") {
       result = (qrand() % parameters.first().right(parameters.first().length() - 1).toInt()) + 1;
     } else {
-      result = boris->scriptVars[parameters.first()];
+      result = scriptVars[parameters.first()];
     }
   }
 

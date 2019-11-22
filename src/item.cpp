@@ -62,7 +62,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, con
   }
 
   setScene(new QGraphicsScene);
-  scene()->setSceneRect(0.0, 0.0, size, size);
+  scene()->setSceneRect(0.0, 0.0, 32, 32 + 1); // + 1 to make room for shadow
 
   origShadow.load(":shadow.png");
   shadowSprite = this->scene()->addPixmap(origShadow);
@@ -72,11 +72,11 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, con
   itemSprite->setPos(0, 0);
 
   scriptSprite = this->scene()->addPixmap(QPixmap());
-  scriptSprite->setPos(0, 15); // To make room for shadow
+  scriptSprite->setPos(0, 0); // To make room for shadow
 
   setCursor(QCursor(QPixmap(":mouse_closet.png"), 15, 16));
 
-  setFixedSize(size, size);
+  setFixedSize(size, size + (size / 32)); // To make room for shadow
   scale(size / 32.0, size / 32.0);
   move(x, y);
   if(timeout > 0) {
@@ -127,7 +127,7 @@ QPixmap Item::getShadow(const QPixmap &sprite)
       }
     }
   }
-  shadowSprite->setPos(firstLeft, bottom - 15);
+  shadowSprite->setPos(firstLeft, bottom - 30);
   int firstRight = 0;
   for(int row = 0; row < sprite.height(); ++row) {
     QRgb *rowBits = (QRgb *)image.constScanLine(row);
@@ -169,17 +169,26 @@ void Item::runScript()
   if(!drawing) {
     scriptImage.fill(Qt::transparent);
   }
-  ScriptHandler scriptHandler(&scriptImage, &drawing, boris, settings, stats);
+  // These are needed for NOTHING, but scripthandler needs them to work... 
+  int hyperQueue = 0;
+  int healthQueue = 0;
+  int energyQueue = 0;
+  int hungerQueue = 0;
+  int bladderQueue = 0;
+  int socialQueue = 0;
+  int funQueue = 0;
+  int hygieneQueue = 0;
+
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, stats, itemList.at(curItem).labels, itemList.at(curItem).defines, curFrame, scriptVars, pos(), size, hyperQueue, healthQueue, energyQueue, hungerQueue, bladderQueue, socialQueue, funQueue, hygieneQueue);
   int stop = 0; // Will be > 0 if a goto, behav or break command is run
   scriptHandler.runScript(stop, itemList.at(curItem).frames.at(curFrame).script);
 
   scriptSprite->setPixmap(QPixmap::fromImage(scriptImage));
 
   if(stop == 1) {
-    emit close();
     return;
   } else if(stop == 2) {
-    emit close();
+    delete this;
     return;
   }
   curFrame++;
@@ -217,7 +226,6 @@ void Item::nextFrame()
     }
   }
   int frameTime = itemList.at(curItem).frames.at(curFrame).time;
-  frameTime -= (frameTime / 100.0 * stats->getHyper());
   int elapsedTime = frameTimer.elapsed();
   if(elapsedTime < frameTime) {
     frameTime -= elapsedTime;
@@ -355,6 +363,6 @@ int Item::getSector(const QPoint &p)
 void Item::mousePressEvent(QMouseEvent* event)
 {
   if(event->button() == Qt::LeftButton) {
-    emit close();
+    delete this;
   }
 }

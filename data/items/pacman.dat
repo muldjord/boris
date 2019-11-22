@@ -1,0 +1,29 @@
+title=Pacman
+#Frames
+0;50;1;0;;label right
+1;50;1;0;;
+2;50;1;0;;
+3;50;1;0;;
+2;50;1;0;;
+1;50;1;0;;if @8 > 1 goto right,var rand = @3,if rand = 1 goto down,if rand = 2 goto left,if rand = 3 goto up
+
+0;50;0;1;;label down
+4;50;0;1;;
+5;50;0;1;;
+6;50;0;1;;
+5;50;0;1;;
+4;50;0;1;;if @8 > 1 goto down,var rand = @3,if rand = 1 goto left,if rand = 2 goto up,if rand = 3 goto right
+
+0;50;-1;0;;label left
+7;50;-1;0;;
+8;50;-1;0;;
+9;50;-1;0;;
+8;50;-1;0;;
+7;50;-1;0;;if @8 > 1 goto left,var rand = @3,if rand = 1 goto up,if rand = 2 goto right,if rand = 3 goto down
+
+0;50;0;-1;;label up
+10;50;0;-1;;
+11;50;0;-1;;
+12;50;0;-1;;
+11;50;0;-1;;
+10;50;0;-1;;if @8 > 1 goto up,var rand = @3,if rand = 1 goto right,if rand = 2 goto down,if rand = 3 goto left
