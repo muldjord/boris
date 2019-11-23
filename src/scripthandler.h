@@ -61,7 +61,6 @@ private:
   QImage *image = nullptr;
   bool *drawing = nullptr;
   Settings *settings = nullptr;
-  Stats *stats = nullptr;
   
   const QMap<QString, int> &labels;
   const QMap<QString, Script> &defines;

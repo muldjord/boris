@@ -125,6 +125,11 @@ About::About(Settings *settings)
   clonesLineEdit->setValidator(clonesValidator);
   clonesLineEdit->setText(QString::number(settings->clones));
 
+  enableItems = new QCheckBox(tr("Allow item spawning"));
+  if(settings->items) {
+    enableItems->setCheckState(Qt::Checked);
+  }
+
   QLabel *itemLabel = new QLabel(tr("Item timeout in seconds (10-3600 or 0 for never):"));
   itemLineEdit = new QLineEdit();
   QIntValidator *itemValidator = new QIntValidator(10, 3600, this);
@@ -177,11 +182,6 @@ About::About(Settings *settings)
   volumeSlider->setValue(settings->volume * 100);
   connect(volumeSlider, &QSlider::valueChanged, this, &About::volumeChanged);
   
-  enableItems = new QCheckBox(tr("Enable items"));
-  if(settings->items) {
-    enableItems->setCheckState(Qt::Checked);
-  }
-
   showWelcome = new QCheckBox(tr("Always show this dialog on startup"));
   if(settings->showWelcome) {
     showWelcome->setCheckState(Qt::Checked);
