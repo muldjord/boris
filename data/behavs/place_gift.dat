@@ -36,7 +36,7 @@ doNotDisturb
 30;2000;0;0;;
 31;75;0;0;data/sfx/poof.wav;stat fun += 5
 32;75;0;0;;
-33;75;0;0;;var rand = @5,if rand = 1 spawn teddy 10 2,if rand = 2 spawn horse 10 2,if rand = 3 spawn train 10 2,if rand = 4 spawn c64 10 2,if rand = 5 spawn pacman 10 2
+33;75;0;0;;var rand = @6,if rand = 1 spawn teddy 10 2,if rand = 2 spawn horse 10 2,if rand = 3 spawn train 10 2,if rand = 4 spawn c64 10 2,if rand = 5 spawn pacman 10 2,if rand = 6 spawn glass_ball 10 2
 34;75;0;0;;
 35;75;0;0;;
 36;75;0;0;;
