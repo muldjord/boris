@@ -27,6 +27,7 @@
 
 #include "item.h"
 #include "scripthandler.h"
+#include "soundmixer.h"
 #include "settings.h"
 
 #include "SFML/Audio.hpp"
@@ -40,12 +41,11 @@
 #include <QTime>
 
 extern QList<Behaviour> itemList;
+extern SoundMixer soundMixer;
 
-Item::Item(const int &x, const int &y, const int &size, const QString &item, const int &timeout, Boris *boris, Settings *settings, Stats *stats)
+Item::Item(const int &x, const int &y, const int &size, const QString &item, Settings *settings)
 {
   this->settings = settings;
-  this->stats = stats;
-  this->boris = boris;
   
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
@@ -79,8 +79,8 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, con
   setFixedSize(size, size + (size / 32)); // To make room for shadow
   scale(size / 32.0, size / 32.0);
   move(x, y);
-  if(timeout > 0) {
-    QTimer::singleShot(timeout * 1000, this, &Item::close); // Destroy item after timeout seconds
+  if(settings->itemTimeout > 0) {
+    QTimer::singleShot(settings->itemTimeout * 1000, this, &Item::destroy);
   }
 
   if(itemList.at(curItem).allowFlip && qrand() %2) {
@@ -169,17 +169,9 @@ void Item::runScript()
   if(!drawing) {
     scriptImage.fill(Qt::transparent);
   }
-  // These are needed for NOTHING, but scripthandler needs them to work... 
-  int hyperQueue = 0;
-  int healthQueue = 0;
-  int energyQueue = 0;
-  int hungerQueue = 0;
-  int bladderQueue = 0;
-  int socialQueue = 0;
-  int funQueue = 0;
-  int hygieneQueue = 0;
 
-  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, stats, itemList.at(curItem).labels, itemList.at(curItem).defines, curFrame, scriptVars, pos(), size, hyperQueue, healthQueue, energyQueue, hungerQueue, bladderQueue, socialQueue, funQueue, hygieneQueue);
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, itemList.at(curItem).labels, itemList.at(curItem).defines, scriptVars, pos(), size);
+  connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Item::setCurFrame);
   int stop = 0; // Will be > 0 if a goto, behav or break command is run
   scriptHandler.runScript(stop, itemList.at(curItem).frames.at(curFrame).script);
 
@@ -188,7 +180,7 @@ void Item::runScript()
   if(stop == 1) {
     return;
   } else if(stop == 2) {
-    delete this;
+    destroy();
     return;
   }
   curFrame++;
@@ -216,13 +208,12 @@ void Item::nextFrame()
 
   if(settings->sound && itemList.at(curItem).frames.at(curFrame).soundBuffer != nullptr) {
     if(itemList.at(curItem).pitchLock) {
-      emit playSound(itemList.at(curItem).frames.at(curFrame).soundBuffer,
-                     (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
-                     (stats->getHyper() / 60.0) + 1);
+      soundMixer.playSound(itemList.at(curItem).frames.at(curFrame).soundBuffer,
+                           (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0, 1.0);
     } else {
-      emit playSound(itemList.at(curItem).frames.at(curFrame).soundBuffer,
-                     (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
-                     (stats->getHyper() / 60.0) + (0.95 + (qrand() % 100) / 1000.0));
+      soundMixer.playSound(itemList.at(curItem).frames.at(curFrame).soundBuffer,
+                           (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
+                           0.95 + (qrand() % 100) / 1000.0);
     }
   }
   int frameTime = itemList.at(curItem).frames.at(curFrame).time;
@@ -363,6 +354,16 @@ int Item::getSector(const QPoint &p)
 void Item::mousePressEvent(QMouseEvent* event)
 {
   if(event->button() == Qt::LeftButton) {
-    delete this;
+    destroy();
   }
+}
+
+void Item::setCurFrame(const int &frame)
+{
+  curFrame = frame;
+}
+
+void Item::destroy()
+{
+  delete this;
 }

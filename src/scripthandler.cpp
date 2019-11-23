@@ -26,38 +26,27 @@
  */
 
 #include "scripthandler.h"
+#include "soundmixer.h"
 #include "item.h"
 
 #include <stdio.h>
 
 extern QMap<QChar, QImage> pfont;
+extern SoundMixer soundMixer;
 
 ScriptHandler::ScriptHandler(QImage *image,
                              bool *drawing,
                              Settings *settings,
-                             Stats *stats,
                              const QMap<QString, int> &labels,
                              const QMap<QString, Script> &defines,
-                             int &curFrame,
                              QMap<QString, int> &scriptVars,
-                             const QPoint &pos,
-                             const int &size,
-                             int &hyperQueue,
-                             int &healthQueue,
-                             int &energyQueue,
-                             int &hungerQueue,
-                             int &bladderQueue,
-                             int &socialQueue,
-                             int &funQueue,
-                             int &hygieneQueue,
-                             Boris *boris)
-: labels(labels), defines(defines), curFrame(curFrame), scriptVars(scriptVars), pos(pos), size(size), hyperQueue(hyperQueue), healthQueue(healthQueue), energyQueue(energyQueue), hungerQueue(hungerQueue), bladderQueue(bladderQueue), socialQueue(socialQueue), funQueue(funQueue), hygieneQueue(hygieneQueue)
+                             const QPoint parentPos,
+                             const int &size)
+: labels(labels), defines(defines), scriptVars(scriptVars), parentPos(parentPos), size(size)
 {
   this->image = image;
   this->drawing = drawing;
   this->settings = settings;
-  this->stats = stats;
-  this->boris = boris;
 }
 
 void ScriptHandler::runScript(int &stop, const Script &script)
@@ -202,7 +191,7 @@ void ScriptHandler::handleGoto(QList<QString> &parameters, int &stop)
 
   if(labels.contains(parameters.first())) {
     printf("Going to label '%s' at frame %d\n", parameters.first().toStdString().c_str(), labels[parameters.first()]);
-    curFrame = labels[parameters.first()];
+    emit setCurFrame(labels[parameters.first()]);
   } else {
     printf("Going to '%s', ERROR: Unknown label\n", parameters.first().toStdString().c_str());
   }
@@ -238,38 +227,17 @@ void ScriptHandler::handleStat(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'stat'
 
-  QString statType = parameters.first();
-  parameters.removeFirst(); // Remove stat type
-  QString op = parameters.first();
-  parameters.removeFirst(); // Remove operator
+  QString statType = parameters.takeFirst();
+  QString op = parameters.takeFirst();
   int number = getValue(parameters);
 
-  int *stat = nullptr;
-  if(statType == "hyper") {
-    stat = &hyperQueue;
-  } else if(statType == "health") {
-    stat = &healthQueue;
-  } else if(statType == "energy") {
-    stat = &energyQueue;
-  } else if(statType == "hunger") {
-    stat = &hungerQueue;
-  } else if(statType == "bladder") {
-    stat = &bladderQueue;
-  } else if(statType == "social") {
-    stat = &socialQueue;
-  } else if(statType == "fun") {
-    stat = &funQueue;
-  } else if(statType == "hygiene") {
-    stat = &hygieneQueue;
+  if(op == "-=") {
+    number *= -1;
   }
-  if(stat != nullptr) {
-    if(op == "+=") {
-      *stat += number;
-    } else if(op == "-=") {
-      *stat -= number;
-    }
+  if(statType == "hyper" || statType == "health" || statType == "energy" || statType == "hunger" || statType == "bladder" || statType == "social" || statType == "fun" || statType == "hygiene") {
     printf("%s %s %d\n", statType.toStdString().c_str(),
            op.toStdString().c_str(), number);
+    emit statChange(statType, number);
   } else {
     printf("%s, ERROR: Unknown stat\n", statType.toStdString().c_str());
   }
@@ -293,10 +261,9 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
   int iX = getValue(parameters);
   int iY = getValue(parameters);
   printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
-  new Item(pos.x() + (iX * (size / 32)),
-           pos.y() + (size / 2) + (iY * (size / 32)),
-           size, itemName,
-           settings->itemTimeout, boris, settings, stats);
+  new Item(parentPos.x() + (iX * (size / 32)),
+           parentPos.y() + (size / 2) + (iY * (size / 32)),
+           size, itemName, settings);
 }
 
 void ScriptHandler::handleDraw(QList<QString> &parameters)
@@ -476,7 +443,7 @@ void ScriptHandler::handleCall(QList<QString> &parameters, int &stop)
 void ScriptHandler::handleBehav(QList<QString> &parameters, int &stop)
 {
   parameters.removeFirst(); // Remove 'behav'
-  boris->changeBehaviour(parameters.first());
+  emit behavFromFile(parameters.first());
   printf("Changing behaviour to '%s'\n", parameters.first().toStdString().c_str());
   stop = 1; // Will tell the Boris class to exit the script processing
   parameters.removeFirst(); // Remove behaviour filename
@@ -487,9 +454,9 @@ void ScriptHandler::handleSound(QList<QString> &parameters)
   parameters.removeFirst(); // Remove 'sound'
   if(parameters.count() >= 1) {
     printf("Playing sound '%s'\n", parameters.first().toStdString().c_str());
-    emit boris->playSoundFile(parameters.first(),
-                              (float)pos.x() / (float)settings->desktopWidth * 2.0 - 1.0,
-                              (stats->getHyper() / 60.0) + 1);
+    soundMixer.playSoundFile(parameters.first(),
+                             (float)parentPos.x() / (float)settings->desktopWidth * 2.0 - 1.0,
+                             (scriptVars["hyper"] / 60.0) + 1);
   }
   parameters.removeFirst(); // Remove sound file name
 }

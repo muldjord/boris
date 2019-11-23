@@ -29,8 +29,6 @@
 
 #include "behaviour.h"
 #include "settings.h"
-#include "stats.h"
-#include "boris.h"
 
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
@@ -41,7 +39,7 @@ class Item : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Item(const int &x, const int &y, const int &size, const QString &item, const int &timeout, Boris *boris, Settings *settings, Stats *stats);
+  Item(const int &x, const int &y, const int &size, const QString &item, Settings *settings);
   ~Item();
   void moveItem(int dX, int dY, const bool &flipped = false);
   QMap<QString, int> scriptVars;
@@ -49,22 +47,14 @@ public:
 protected:
   void mousePressEvent(QMouseEvent* event);
 
-signals:
-  void playSound(const sf::SoundBuffer *buffer,
-                 const float &panning,
-                 const float &pitch);
-  void playSoundFile(const QString &fileName,
-                     const float &panning,
-                     const float &pitch);
-
 private slots:
   void nextFrame();
   QPixmap getShadow(const QPixmap &sprite);
-
+  void setCurFrame(const int &frame);
+  void destroy();
+  
 private:
   Settings *settings;
-  Stats *stats;
-  Boris *boris;
   bool flipFrames = false;
   QGraphicsPixmapItem *itemSprite;
   QGraphicsPixmapItem *shadowSprite;

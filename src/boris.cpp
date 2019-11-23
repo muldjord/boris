@@ -26,6 +26,7 @@
  */
 
 #include "boris.h"
+#include "soundmixer.h"
 #include "scripthandler.h"
 
 #include "SFML/Audio.hpp"
@@ -48,6 +49,7 @@ constexpr int ANNOYMAX = 42;
 extern QLinkedList<Boris*> borises;
 extern QList<Behaviour> behaviours;
 extern QList<Behaviour> weathers;
+extern SoundMixer soundMixer;
 
 Boris::Boris(Settings *settings)
 {
@@ -471,7 +473,10 @@ void Boris::runScript()
     scriptImage.fill(Qt::transparent);
   }
 
-  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, stats, behaviours.at(curBehav).labels, behaviours.at(curBehav).defines, curFrame, scriptVars, pos(), size, hyperQueue, healthQueue, energyQueue, hungerQueue, bladderQueue, socialQueue, funQueue, hygieneQueue, this);
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, behaviours.at(curBehav).labels, behaviours.at(curBehav).defines, scriptVars, pos(), size);
+  connect(&scriptHandler, &ScriptHandler::behavFromFile, this, &Boris::behavFromFile);
+  connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Boris::setCurFrame);
+  connect(&scriptHandler, &ScriptHandler::statChange, this, &Boris::statChange);
   int stop = 0; // Will be > 0 if a goto, behav or break command is run
   scriptHandler.runScript(stop, behaviours.at(curBehav).frames.at(curFrame).script);
 
@@ -603,13 +608,13 @@ void Boris::nextFrame()
 
   if(settings->sound && behaviours.at(curBehav).frames.at(curFrame).soundBuffer != nullptr) {
     if(behaviours.at(curBehav).pitchLock) {
-      emit playSound(behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
-                     (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
-                     (stats->getHyper() / 60.0) + 1);
+      soundMixer.playSound(behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
+                           (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
+                           (stats->getHyper() / 60.0) + 1);
     } else {
-      emit playSound(behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
-                     (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
-                     (stats->getHyper() / 60.0) + (0.95 + (qrand() % 100) / 1000.0));
+      soundMixer.playSound(behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
+                           (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
+                           (stats->getHyper() / 60.0) + (0.95 + (qrand() % 100) / 1000.0));
     }
   }
   int frameTime = behaviours.at(curBehav).frames.at(curFrame).time;
@@ -1453,4 +1458,35 @@ void Boris::checkInteractions()
     annoyance = annoyance - 4;
   }
   interactionsTimer.start();
+}
+
+void Boris::statChange(const QString &type, const int &amount)
+{
+  if(type == "hyper") {
+    hyperQueue += amount;
+  } else if(type == "health") {
+    healthQueue += amount;
+  } else if(type == "energy") {
+    energyQueue += amount;
+  } else if(type == "hunger") {
+    hungerQueue += amount;
+  } else if(type == "bladder") {
+    bladderQueue += amount;
+  } else if(type == "social") {
+    socialQueue += amount;
+  } else if(type == "fun") {
+    funQueue += amount;
+  } else if(type == "hygiene") {
+    hygieneQueue += amount;
+  }
+}
+
+void Boris::behavFromFile(const QString &file)
+{
+  changeBehaviour(file);
+}
+
+void Boris::setCurFrame(const int &frame)
+{
+  curFrame = frame;
 }

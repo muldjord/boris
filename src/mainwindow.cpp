@@ -28,6 +28,7 @@
 #include "mainwindow.h"
 #include "about.h"
 #include "loader.h"
+#include "soundmixer.h"
 
 #include "SFML/Audio.hpp"
 
@@ -48,32 +49,10 @@ QList<Behaviour> behaviours;
 QList<Behaviour> weathers;
 QList<Behaviour> itemList;
 QMap<QChar, QImage> pfont;
+SoundMixer soundMixer(24);
 
 MainWindow::MainWindow()
 {
-  // For use when correcting large number of frame numbers in a behaviour
-  /*
-    int deltaFrames = -68;
-    QFile blah("data/behavs/pong.dat");
-    QFile blahnew("data/behavs/pongnew.dat");
-    blah.open(QIODevice::ReadOnly);
-    blahnew.open(QIODevice::WriteOnly);
-    while(!blah.atEnd()) {
-    QByteArray line = blah.readLine();
-    if(line.contains(";")) {
-    int frame = line.split(';').first().toInt();
-    int newFrame = frame;
-    if(frame > 50) {
-    newFrame += deltaFrames;
-    line.replace(QByteArray::number(frame) + ";", QByteArray::number(newFrame) + ";");
-    }
-    }
-    blahnew.write(line);
-    }
-    blah.close();
-    blahnew.close();
-  */    
-
   qsrand((uint)QTime::currentTime().msec());
 
   QString iniFile = "config.ini";
@@ -268,12 +247,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::loadAssets()
 {
-  for(int a = 0; a < 24; ++a) { // Create 24 audio channels in total
-    sf::Sound soundChannel;
-    soundChannel.setAttenuation(0.f);
-    soundChannels.append(soundChannel);
-  }
-
   int totalAssetsSize = 0;
 
   totalAssetsSize += Loader::getAssetsSize(QDir(settings.soundsPath, "*.wav", QDir::Name,
@@ -289,25 +262,25 @@ void MainWindow::loadAssets()
 
   progressBar->setMaximum(totalAssetsSize);
   
-  if(Loader::loadSoundFxs(settings.soundsPath, soundFxs, progressBar)) {
+  if(Loader::loadSoundFxs(settings.soundsPath, soundMixer.soundFxs, progressBar)) {
     qInfo("Sounds loaded ok... :)\n");
   } else {
     qInfo("Error when loading some sounds, please check your wav files\n");
   }
 
-  if(Loader::loadBehaviours(settings, settings.behavsPath, behaviours, soundFxs, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.behavsPath, behaviours, soundMixer.soundFxs, progressBar)) {
     qInfo("Behaviours loaded ok... :)\n");
   } else {
     qInfo("Error when loading some behaviours, please check your png and dat files\n");
   }
   
-  if(Loader::loadBehaviours(settings, settings.weathersPath, weathers, soundFxs, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.weathersPath, weathers, soundMixer.soundFxs, progressBar)) {
     qInfo("Weather types loaded ok... :)\n");
   } else {
     qInfo("Error when loading some weather types, please check your png and dat files\n");
   }
 
-  if(Loader::loadBehaviours(settings, settings.itemsPath, itemList, soundFxs, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.itemsPath, itemList, soundMixer.soundFxs, progressBar)) {
     qInfo("Items loaded ok... :)\n");
   } else {
     qInfo("Error when loading some items, please check your png and dat files\n");
@@ -341,8 +314,6 @@ void MainWindow::addBoris(int clones)
     connect(earthquakeAction, &QAction::triggered, borises.last(), &Boris::earthquake);
     connect(teleportAction, &QAction::triggered, borises.last(), &Boris::teleport);
     connect(weatherAction, &QAction::triggered, borises.last(), &Boris::triggerWeather);
-    connect(borises.last(), &Boris::playSound, this, &MainWindow::playSound);
-    connect(borises.last(), &Boris::playSoundFile, this, &MainWindow::playSoundFile);
     borises.last()->show();
     borises.last()->earthquake();
   }
@@ -439,28 +410,4 @@ void MainWindow::updateWeather()
     weatherAction->setText(tr("Couldn't find city"));
   }
   weatherAction->setIcon(QIcon(":" + settings.weatherType + ".png"));
-}
-
-void MainWindow::playSoundFile(const QString &fileName,
-                               const float &panning,
-                               const float &pitch)
-{
-  if(soundFxs.contains(fileName)) {
-    playSound(&soundFxs[fileName], panning, pitch);
-  }
-}
-
-void MainWindow::playSound(const sf::SoundBuffer *buffer,
-                           const float &panning,
-                           const float &pitch)
-{
-  for(auto &channel: soundChannels) {
-    if(channel.getStatus() == sf::SoundSource::Status::Stopped) {
-      channel.setBuffer(*buffer);
-      channel.setPosition(panning, 0.f, 2.f);
-      channel.setPitch(pitch);
-      channel.play();
-      break;
-    }
-  }
 }

@@ -42,26 +42,22 @@ public:
   ScriptHandler(QImage *image,
                 bool *drawing,
                 Settings *settings,
-                Stats *stats,
                 const QMap<QString, int> &labels,
                 const QMap<QString, Script> &defines,
-                int &curFrame,
                 QMap<QString, int> &scriptVars,
-                const QPoint &pos,
-                const int &size,
-                int &hyperQueue,
-                int &healthQueue,
-                int &energyQueue,
-                int &hungerQueue,
-                int &bladderQueue,
-                int &socialQueue,
-                int &funQueue,
-                int &hygieneQueue,
-                Boris *boris = nullptr);
+                const QPoint parentPos,
+                const int &size);
   void runScript(int &stop, const Script &script);
 
+signals:
+  void playSoundFile(const QString &fileName,
+                     const float &panning,
+                     const float &pitch);
+  void statChange(const QString &type, const int &amount);
+  void behavFromFile(const QString &file);
+  void setCurFrame(const int &frame);
+  
 private:
-  Boris *boris = nullptr;
   QImage *image = nullptr;
   bool *drawing = nullptr;
   Settings *settings = nullptr;
@@ -69,18 +65,9 @@ private:
   
   const QMap<QString, int> &labels;
   const QMap<QString, Script> &defines;
-  int &curFrame;
   QMap<QString, int> &scriptVars;
-  const QPoint &pos;
+  const QPoint parentPos;
   const int &size;
-  int &hyperQueue;
-  int &healthQueue;
-  int &energyQueue;
-  int &hungerQueue;
-  int &bladderQueue;
-  int &socialQueue;
-  int &funQueue;
-  int &hygieneQueue;
   
   // Main command handler
   void runCommand(QList<QString> &parameters, int &stop, const Script &script);

@@ -55,12 +55,6 @@ private slots:
   void aboutBox();
   void killAll();
   void updateWeather();
-  void playSoundFile(const QString &fileName,
-                     const float &panning,
-                     const float &pitch);
-  void playSound(const sf::SoundBuffer *buffer,
-                 const float &panning,
-                 const float &pitch);
 
 signals:
   void updateBoris();
@@ -70,8 +64,6 @@ private:
   QWidget *loadWidget;
   QProgressBar *progressBar;
   NetComm *netComm;
-  QMap<QString, sf::SoundBuffer> soundFxs;
-  QList<sf::Sound> soundChannels;
   QList<QString> extractSnippets(QString line);
   QString *aboutText;
   void createTrayIcon();
@@ -85,7 +77,6 @@ private:
   QMenu *trayIconMenu;
   void addBoris(int clones);
   void removeBoris(int clones);
-  sf::Sound *sound;
 };
 
 #endif // _MAINWINDOW_H

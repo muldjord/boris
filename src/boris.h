@@ -63,8 +63,8 @@ public:
   Boris *borisFriend;
   int getHygiene();
   void moveBoris(int dX, int dY, const bool &flipped = false, const bool &vision = true);
-  void changeBehaviour(QString behav = "", int time = 0);
   int getCurBehav();
+  void changeBehaviour(const QString behav = "", const int time = 0);
   int size = 64;
   QMap<QString, int> scriptVars;
   int hyperQueue;
@@ -93,14 +93,6 @@ protected:
   void leaveEvent(QEvent *event);
   void wheelEvent(QWheelEvent *);
 
-signals:
-  void playSound(const sf::SoundBuffer *buffer,
-                 const float &panning,
-                 const float &pitch);
-  void playSoundFile(const QString &fileName,
-                     const float &panning,
-                     const float &pitch);
-
 private slots:
   void handleBehaviourChange(QAction* a);
   void handlePhysics();
@@ -112,6 +104,9 @@ private slots:
   void hideWeather();
   void readyForFriend();
   void checkInteractions();
+  void statChange(const QString &type, const int &amount);
+  void behavFromFile(const QString &file);
+  void setCurFrame(const int &frame);
   
 private:
   Settings *settings;
