@@ -59,7 +59,7 @@ doNotDisturb
 53;75;0;0;;
 54;75;0;0;;
 55;75;0;0;;
-56;75;0;0;;if month = 12 spawn christmas_tree 4 -1 else spawn tree 4 -1
+56;75;0;0;;spawn trees
 57;75;0;0;;
 58;75;-4;-2;;
 59;75;0;0;;
