@@ -56,18 +56,18 @@ http://www.muldjord.com/boris&lt;br/&gt;&lt;br/&gt;It&apos;s FREE and OPEN SOURC
         <translation type="vanished">Boris kloner (1-100):</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="128"/>
+        <location filename="src/about.cpp" line="139"/>
         <source>Show weather for city (mouse over for help):</source>
         <oldsource>Show weather for city:</oldsource>
         <translation>Vis vejr for by (hold musen over for hjælp):</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="130"/>
+        <location filename="src/about.cpp" line="141"/>
         <source>Try typing in a nearby city. If it doesn&apos;t work, go to openweathermap.org and search for a city until you find one that exists.&lt;br/&gt;Then type that in exactly as it is shown on their website.</source>
         <translation>Prøv at indtaste en nærliggende by. Hvis ikke det virker, så gå ind på openweathermap.org og søg på en by indtil du finder en der eksisterer.&lt;br/&gt;Indtast derefter bynavnet præcist som det er vist på hjemmesiden.</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="133"/>
+        <location filename="src/about.cpp" line="144"/>
         <source>OpenWeatherMap key (mouse over for help):</source>
         <translation>OpenWeatherMap nøgle (hold musen over for hjælp):</translation>
     </message>
@@ -84,7 +84,7 @@ http://www.muldjord.com/boris&lt;br/&gt;&lt;br/&gt;It&apos;s FREE and OPEN SOURC
         <translation type="vanished">Indtast en vilkårlig RSS feed adresse. Boris vil nogen gange fortælle dig en titel fra dette feed</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="145"/>
+        <location filename="src/about.cpp" line="156"/>
         <source>Always show</source>
         <translation>Vis altid</translation>
     </message>
@@ -97,27 +97,27 @@ http://www.muldjord.com/boris&lt;br/&gt;&lt;br/&gt;It&apos;s FREE and OPEN SOURC
         <translation type="vanished">Vis kun når musen holdes over</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="151"/>
+        <location filename="src/about.cpp" line="162"/>
         <source>Independence:</source>
         <translation>Selvstændighed:</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="157"/>
+        <location filename="src/about.cpp" line="168"/>
         <source>Enable Boris speech bubbles</source>
         <translation>Tillad Boris talebobler</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="162"/>
+        <location filename="src/about.cpp" line="173"/>
         <source>Enable sound</source>
         <translation>Aktivér lyd</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="174"/>
+        <location filename="src/about.cpp" line="185"/>
         <source>Always show this dialog on startup</source>
         <translation>Vis altid denne dialog ved start</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="143"/>
+        <location filename="src/about.cpp" line="154"/>
         <source>Vitality stats:</source>
         <oldsource>Always show vitality stats</oldsource>
         <translation>Boris&apos; helbred:</translation>
@@ -148,37 +148,47 @@ http://www.muldjord.com/boris&lt;br/&gt;&lt;br/&gt;It&apos;s FREE and OPEN SOURC
         <translation>Boris kloner (1-100 eller 0 for tilfældig):</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="135"/>
+        <location filename="src/about.cpp" line="128"/>
+        <source>Allow item spawning</source>
+        <translation>Tillad objekter</translation>
+    </message>
+    <message>
+        <location filename="src/about.cpp" line="133"/>
+        <source>Item timeout in seconds (10-3600 or 0 for never):</source>
+        <translation>Tid før objekter udløber (10-3600 eller 0 for aldrig):</translation>
+    </message>
+    <message>
+        <location filename="src/about.cpp" line="146"/>
         <source>The weather functionality needs an API key to function. The default one should work.&lt;br/&gt;In case it doesn&apos;t, get a new one for free at openweathermap.org/appid.</source>
         <translation>Vejr funktionaliteten skal bruge en API nøgle for at fungere. Standard nøglen burde fungere.&lt;br/&gt;I tilfælde af at den ikke gør, kan du få en nye på openweathermap.org/appid.</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="138"/>
+        <location filename="src/about.cpp" line="149"/>
         <source>RSS feed url (mouse over for help):</source>
         <translation>RSS feed adresse (hold musen over for hjælp):</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="140"/>
+        <location filename="src/about.cpp" line="151"/>
         <source>Type in any RSS feed url. Boris will sometimes update you on a title from this feed. You can click it to open it in the default browser.</source>
         <translation>Indtast en vilkårlig RSS feed adresse. Boris vil nogen gange fortælle dig en titel fra dette feed. Klik på overskriften for at åbne den i en browser.</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="146"/>
+        <location filename="src/about.cpp" line="157"/>
         <source>Show on critical levels and mouse over</source>
         <translation>Vis ved kritiske niveaeu og når musen holdes over</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="147"/>
+        <location filename="src/about.cpp" line="158"/>
         <source>Show only on mouse over</source>
         <translation>Vis kun når musen holdes over</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="148"/>
+        <location filename="src/about.cpp" line="159"/>
         <source>Never show</source>
         <translation>Vis aldrig</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="167"/>
+        <location filename="src/about.cpp" line="178"/>
         <source>Sound volume:</source>
         <translation>Lyd niveau:</translation>
     </message>
@@ -186,52 +196,52 @@ http://www.muldjord.com/boris&lt;br/&gt;&lt;br/&gt;It&apos;s FREE and OPEN SOURC
 <context>
     <name>Boris</name>
     <message>
-        <location filename="src/boris.cpp" line="172"/>
+        <location filename="src/boris.cpp" line="188"/>
         <source>Behaviours</source>
         <translation>Opførsler</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="173"/>
+        <location filename="src/boris.cpp" line="189"/>
         <source>Health</source>
         <translation>Helbred</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="187"/>
+        <location filename="src/boris.cpp" line="203"/>
         <source>Movement</source>
         <translation>Bevægelse</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="175"/>
+        <location filename="src/boris.cpp" line="191"/>
         <source>Energy</source>
         <translation>Energi</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="177"/>
+        <location filename="src/boris.cpp" line="193"/>
         <source>Food</source>
         <translation>Mad</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="179"/>
+        <location filename="src/boris.cpp" line="195"/>
         <source>Toilet</source>
         <translation>Toilet</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="183"/>
+        <location filename="src/boris.cpp" line="199"/>
         <source>Social</source>
         <translation>Social</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="185"/>
+        <location filename="src/boris.cpp" line="201"/>
         <source>Fun</source>
         <translation>Sjov</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="189"/>
+        <location filename="src/boris.cpp" line="205"/>
         <source>Iddqd</source>
         <translation>Iddqd</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="181"/>
+        <location filename="src/boris.cpp" line="197"/>
         <source>Hygiene</source>
         <translation>Hygiejne</translation>
     </message>
@@ -239,30 +249,30 @@ http://www.muldjord.com/boris&lt;br/&gt;&lt;br/&gt;It&apos;s FREE and OPEN SOURC
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="src/mainwindow.cpp" line="203"/>
+        <location filename="src/mainwindow.cpp" line="223"/>
         <source>Looking for Boris, please wait...
 </source>
         <translation>Leder efter Boris, vent et øjeblik...
 </translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="320"/>
+        <location filename="src/mainwindow.cpp" line="340"/>
         <source>&amp;Config / about...</source>
         <translation>&amp;Konfigurér / om...</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="324"/>
+        <location filename="src/mainwindow.cpp" line="344"/>
         <source>&amp;Earthquake!!!</source>
         <oldsource>&amp;Earthquake</oldsource>
         <translation>&amp;Jordskælv!!!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="326"/>
+        <location filename="src/mainwindow.cpp" line="346"/>
         <source>&amp;Beam me up, Scotty!</source>
         <translation>&amp;Beam me up, Scotty!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="329"/>
+        <location filename="src/mainwindow.cpp" line="349"/>
         <source>Updating weather...</source>
         <translation>Opdaterer vejr...</translation>
     </message>
@@ -276,7 +286,7 @@ http://www.muldjord.com/boris&lt;br/&gt;&lt;br/&gt;It&apos;s FREE and OPEN SOURC
         <translation>Kunne ikke finde by</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="331"/>
+        <location filename="src/mainwindow.cpp" line="351"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>
