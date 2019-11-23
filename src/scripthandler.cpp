@@ -260,10 +260,14 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
   QString itemName = parameters.takeFirst();
   int iX = getValue(parameters);
   int iY = getValue(parameters);
-  printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
-  new Item(parentPos.x() + (iX * (size / 32)),
-           parentPos.y() + (size / 2) + (iY * (size / 32)),
-           size, itemName, settings);
+  if(settings->items) {
+    printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
+    new Item(parentPos.x() + (iX * (size / 32)),
+             parentPos.y() + (size / 2) + (iY * (size / 32)),
+             size, itemName, settings);
+  } else {
+    printf("Items disabled, ignoring spawn\n");
+  }
 }
 
 void ScriptHandler::handleDraw(QList<QString> &parameters)

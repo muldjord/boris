@@ -185,6 +185,11 @@ MainWindow::MainWindow()
   settings.volume = iniSettings.value("volume").toInt() / 100.0;
   sf::Listener::setGlobalVolume(settings.volume * 100.0);
   
+  if(!iniSettings.contains("items")) {
+    iniSettings.setValue("items", true);
+  }
+  settings.items = iniSettings.value("items").toBool();
+
   if(!iniSettings.contains("lemmy_mode")) {
     iniSettings.setValue("lemmy_mode", false);
   }

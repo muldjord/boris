@@ -63,6 +63,7 @@ struct Settings {
   int independence = 75;
   int stats = STATS_CRITICAL;
   bool sound = true;
+  bool items = true;
   double volume = 0.5;
   bool chatter = true;
 

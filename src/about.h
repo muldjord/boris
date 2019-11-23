@@ -58,6 +58,7 @@ private:
   QComboBox *statsComboBox;
   //QCheckBox *showStats;
   QCheckBox *enableSound;
+  QCheckBox *enableItems;
   QCheckBox *enableChatter;
   QCheckBox *showWelcome;
   QSlider *independenceSlider;

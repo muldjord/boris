@@ -46,7 +46,7 @@ About::About(Settings *settings)
 {
   this->settings = settings;
   
-  setFixedSize(900, 560);
+  setFixedSize(900, 600);
   move((settings->desktopWidth / 2) - (width() / 2), 256);
   setWindowIcon(QIcon(":icon.png"));
   setWindowTitle("Boris v" VERSION);
@@ -177,6 +177,11 @@ About::About(Settings *settings)
   volumeSlider->setValue(settings->volume * 100);
   connect(volumeSlider, &QSlider::valueChanged, this, &About::volumeChanged);
   
+  enableItems = new QCheckBox(tr("Enable items"));
+  if(settings->items) {
+    enableItems->setCheckState(Qt::Checked);
+  }
+
   showWelcome = new QCheckBox(tr("Always show this dialog on startup"));
   if(settings->showWelcome) {
     showWelcome->setCheckState(Qt::Checked);
@@ -188,6 +193,7 @@ About::About(Settings *settings)
   configLayout->addWidget(sizeLineEdit);
   configLayout->addWidget(clonesLabel);
   configLayout->addWidget(clonesLineEdit);
+  configLayout->addWidget(enableItems);
   configLayout->addWidget(itemLabel);
   configLayout->addWidget(itemLineEdit);
   configLayout->addWidget(statsLabel);
@@ -281,6 +287,11 @@ void About::saveAll()
   } else {
     settings->chatter = false;
   }
+  if(enableItems->isChecked()) {
+    settings->items = true;
+  } else {
+    settings->items = false;
+  }
   
   // Save relevants config to ini also
   QString iniFile = "config.ini";
@@ -297,6 +308,7 @@ void About::saveAll()
   iniSettings.setValue("independence", settings->independence);
   iniSettings.setValue("chatter", settings->chatter);
   iniSettings.setValue("sound", settings->sound);
+  iniSettings.setValue("items", settings->items);
   iniSettings.setValue("volume", settings->volume * 100);
   iniSettings.setValue("feed_url", settings->feedUrl);
   iniSettings.setValue("weather_city", settings->city);
