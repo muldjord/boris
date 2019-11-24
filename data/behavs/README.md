@@ -197,6 +197,15 @@ if a = 0 break
 break
 ```
 
+##### stop
+Similar to 'break' but doesn't change the behaviour. It simply stops the frame timer so all progression within the current behaviour is stalled completely. This is useful for behaviours that have a last frame you wish to stop at and stay there.
+* Definition:
+`stop`
+* Example:
+```
+if a = 1 goto dostuff else stop
+```
+
 ##### behav
 Changes the current behaviour to the behaviour with the requested behaviour filename (without the .dat suffix). NOTE! You cannot use spaces in the filename.
 * Definition:
