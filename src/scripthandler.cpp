@@ -79,6 +79,8 @@ void ScriptHandler::runCommand(QList<QString> &parameters, int &stop, const Scri
     handleDraw(parameters);
   } else if(parameters.first() == "break") {
     handleBreak(stop);
+  } else if(parameters.first() == "stop") {
+    handleStop(stop);
   } else if(parameters.first() == "behav") {
     handleBehav(parameters, stop);
   } else if(parameters.first() == "call") {
@@ -425,6 +427,12 @@ void ScriptHandler::handleBreak(int &stop)
 {
   printf("Changing behaviour\n");
   stop = 2; // Will tell the Boris class to change behaviour
+}
+
+void ScriptHandler::handleStop(int &stop)
+{
+  printf("Stopping frame progression\n");
+  stop = 3; // Will stop the animation and behaviour timers
 }
 
 void ScriptHandler::handleCall(QList<QString> &parameters, int &stop)

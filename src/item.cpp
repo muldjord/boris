@@ -182,6 +182,9 @@ void Item::runScript()
   } else if(stop == 2) {
     destroy();
     return;
+  } else if(stop == 3) {
+    animTimer.stop();
+    return;
   }
   curFrame++;
 }

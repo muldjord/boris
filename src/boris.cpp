@@ -488,6 +488,10 @@ void Boris::runScript()
     behavTimer.stop();
     nextBehaviour();
     return;
+  } else if(stop == 3) {
+    behavTimer.stop();
+    animTimer.stop();
+    return;
   }
   curFrame++;
 }
