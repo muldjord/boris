@@ -1,19 +1,19 @@
 title=Trees
 allowFlip
 #Frames
-0;50;0;0;;if month = 12 { if @4 > 1 goto christmaspine else goto pine } else goto pine
+0;50;0;0;;var seeds = 1,if month = 12 { if @4 > 1 goto christmaspine else goto pine } else goto pine
 
 # Ordinary pine tree
-0;20000;0;0;;label pine
-1;20000;0;0;;
-2;20000;0;0;;
-3;20000;0;0;;
-4;60000;0;0;;label grownpine,goto grownpine
+0;30000;0;0;;label pine
+1;30000;0;0;;
+2;30000;0;0;;
+3;30000;0;0;;
+4;60000;0;0;;if seeds > 0 { spawn tree 16 + @128 - 64 16 + @128 - 64,var seeds -= 1 },label grownpine,goto grownpine
 
 # Christmas pine tree
-5;20000;0;0;;label christmaspine
-6;20000;0;0;;
-7;20000;0;0;;
-8;20000;0;0;;
+5;30000;0;0;;label christmaspine
+6;30000;0;0;;
+7;30000;0;0;;
+8;30000;0;0;;
 9;60000;0;0;;label grownchristmaspine,goto grownchristmaspine
 

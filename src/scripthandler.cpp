@@ -246,12 +246,7 @@ void ScriptHandler::handleStat(QList<QString> &parameters)
 void ScriptHandler::handlePrint(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'print'
-
-  if(scriptVars.contains(parameters.first())) {
-    printf("%s = %d\n", parameters.first().toStdString().c_str(), scriptVars[parameters.first()]);
-  } else {
-    printf("%s, ERROR: Unknown variable\n", parameters.first().toStdString().c_str());
-  }
+  printf("%d\n", getValue(parameters));
 }
 
 void ScriptHandler::handleSpawn(QList<QString> &parameters)
@@ -263,7 +258,7 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
   if(settings->items) {
     printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
     new Item(parentPos.x() + (iX * (size / 32)),
-             parentPos.y() + (size / 2) + (iY * (size / 32)),
+             parentPos.y() + (iY * (size / 32)),
              size, itemName, settings);
   } else {
     printf("Items disabled, ignoring spawn\n");
