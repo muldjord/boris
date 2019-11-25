@@ -566,6 +566,9 @@ int Boris::getSector(const QPoint &p)
 
 void Boris::nextFrame()
 {
+  QTime frameTimer;
+  frameTimer.start();
+
   sanityCheck();
   
   if(curFrame >= behaviours.at(curBehav).frames.count()) {
@@ -578,9 +581,6 @@ void Boris::nextFrame()
       changeBehaviour();
     }
   }
-
-  QTime frameTimer;
-  frameTimer.start();
 
   QBitmap mask = behaviours.at(curBehav).frames.at(curFrame).sprite.mask();
 
