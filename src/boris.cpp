@@ -140,9 +140,8 @@ Boris::Boris(Settings *settings)
     }
   }
 
+  behavTimer.setSingleShot(true);
   connect(&behavTimer, &QTimer::timeout, this, &Boris::nextBehaviour);
-  behavTimer.setInterval((qrand() % 8000) + 1000);
-  behavTimer.start();
 
   physicsTimer.setInterval(30);
   connect(&physicsTimer, &QTimer::timeout, this, &Boris::handlePhysics);
@@ -294,6 +293,9 @@ void Boris::nextBehaviour()
 
 void Boris::changeBehaviour(QString behav, int time)
 {
+  // Always stop behavTimer, just in case. At this point we never want it to be running
+  behavTimer.stop();
+  
   // Reset all script variables
   scriptVars.clear();
 
@@ -313,7 +315,7 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   // Process the AI if no forced behaviour is set
-  if(behav == "" && time == 0) {
+  if(behav == "" && time == -1) {
     processAi(behav, time);
   }
   
@@ -359,18 +361,6 @@ void Boris::changeBehaviour(QString behav, int time)
     time = selectedChatter.second;
   }
 
-  if(time == 0) {
-    time = qrand() % 7000 + 5000;
-  }
-  time = time - (time / 100.0 * stats->getHyper());
-  behavTimer.setInterval(time);
-
-#ifdef DEBUG
-  qInfo("Changing to behaviour '%d' titled '%s' for %d ms\n",
-         curBehav, behaviours.at(curBehav).file.toStdString().c_str(),
-         behavTimer.interval());
-#endif
-
   // Applying behaviour stats to Boris
   hyperQueue += behaviours.at(curBehav).hyper;
   healthQueue += behaviours.at(curBehav).health;
@@ -381,21 +371,25 @@ void Boris::changeBehaviour(QString behav, int time)
   funQueue += behaviours.at(curBehav).fun;
   hygieneQueue += behaviours.at(curBehav).hygiene;
   
-  curFrame = 0;
   if(behaviours.at(curBehav).allowFlip && qrand() %2) {
     flipFrames = true;
   } else {
     flipFrames = false;
   }
-  if(behaviours.at(curBehav).oneShot) {
-#ifdef DEBUG
-    qInfo("Behaviour is oneShot, ignoring timeout\n");
-#endif
-    behavTimer.stop();
-  } else {
+
+  bool isTimed = time == -1;
+  if(time == -1) {
+    time = qrand() % 7000 + 5000;
+  }
+  time = time - (time / 100.0 * stats->getHyper());
+
+  if(isTimed) {
+    behavTimer.setInterval(time);
     behavTimer.start();
   }
-  animTimer.setInterval(0);
+
+  curFrame = 0;
+  nextFrame();
 }
 
 QPixmap Boris::getShadow(const QPixmap &sprite)
@@ -439,7 +433,7 @@ QPixmap Boris::getShadow(const QPixmap &sprite)
   return QPixmap::fromImage(shadow);
 }
 
-void Boris::runScript()
+void Boris::runScript(int &stop)
 {
   // Update current stat variables for scripting use
   scriptVars["bsize"] = size;
@@ -477,23 +471,9 @@ void Boris::runScript()
   connect(&scriptHandler, &ScriptHandler::behavFromFile, this, &Boris::behavFromFile);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Boris::setCurFrame);
   connect(&scriptHandler, &ScriptHandler::statChange, this, &Boris::statChange);
-  int stop = 0; // Will be > 0 if a goto, behav or break command is run
   scriptHandler.runScript(stop, behaviours.at(curBehav).frames.at(curFrame).script);
 
   scriptSprite->setPixmap(QPixmap::fromImage(scriptImage));
-
-  if(stop == 1) {
-    return;
-  } else if(stop == 2) {
-    behavTimer.stop();
-    nextBehaviour();
-    return;
-  } else if(stop == 3) {
-    behavTimer.stop();
-    animTimer.stop();
-    return;
-  }
-  curFrame++;
 }
 
 int Boris::getDistance(const QPoint &p)
@@ -572,14 +552,11 @@ void Boris::nextFrame()
   sanityCheck();
   
   if(curFrame >= behaviours.at(curBehav).frames.count()) {
-    if(!isAlive) {
+    if(behaviours.at(curBehav).oneShot) {
+      changeBehaviour();
       return;
     }
     curFrame = 0;
-    if(!behavTimer.isActive() && !grabbed) {
-      behavTimer.start();
-      changeBehaviour();
-    }
   }
 
   QBitmap mask = behaviours.at(curBehav).frames.at(curFrame).sprite.mask();
@@ -631,8 +608,6 @@ void Boris::nextFrame()
               flipFrames);
   }
 
-  runScript();
-
   int elapsedTime = frameTimer.elapsed();
   if(elapsedTime < frameTime) {
     frameTime -= elapsedTime;
@@ -641,6 +616,28 @@ void Boris::nextFrame()
     frameTime = 5;
   }
   animTimer.setInterval(frameTime);
+
+  int stop = 0; // Will be > 0 if a goto, behav or break command is run
+  runScript(stop);
+  if(stop == 1) {
+    // This is a 'goto' or 'behav' command
+    // In case of 'goto' curFrame has been set in scriptHandler
+    // In case of 'behav' behavFromFile has been emitted
+  } else if(stop == 2) {
+    // This is a 'break' command
+    // It will change to the next behaviour in line
+    behavTimer.stop();
+    nextBehaviour();
+    return;
+  } else if(stop == 3) {
+    // This is a 'stop' command
+    // It will cease any frame and animation progression
+    behavTimer.stop();
+    animTimer.stop();
+    return;
+  } else {
+    curFrame++;
+  }
 
   animTimer.start();
 }
@@ -831,9 +828,6 @@ void Boris::handlePhysics()
   }
   mouseHVel = (QCursor::pos().x() - oldCursor.x()) / 4.0;
   mouseVVel = (QCursor::pos().y() - oldCursor.y()) / 4.0;
-#ifdef DEBUG
-  qInfo("mouseHVel is %f\n", mouseHVel);("mouseVVel is %f\n", mouseVVel);
-#endif
   oldCursor = QCursor::pos();
 
   if(!falling && !grabbed &&
@@ -1233,7 +1227,7 @@ void Boris::processVision()
 
 void Boris::processAi(QString &behav, int &time)
 {
-  // You might wonder why I check behav == "" and time == 0 in all the following if sentences.
+  // You might wonder why I check behav == "" and time == -1 in all the following if sentences.
   // The reason is that they might change throughout the function, and thus makes sense to
   // make sure an AI decision hasn't already been made.
 
@@ -1245,7 +1239,7 @@ void Boris::processAi(QString &behav, int &time)
   }
 
   // Check if Boris has put off the toilet visit for too long. If so, make him s**t his pants :(
-  if(behav == "" && time == 0 && stats->getBladder() <= 0) {
+  if(behav == "" && time == -1 && stats->getBladder() <= 0) {
     tooLateForLoo++;
     if(tooLateForLoo >= 6) {
       tooLateForLoo = 0;
@@ -1253,7 +1247,7 @@ void Boris::processAi(QString &behav, int &time)
     }
   }
   
-  if(behav == "" && time == 0 && qrand() % 2) {
+  if(behav == "" && time == -1 && qrand() % 2) {
     // Stat check
     QList<QString> potentials;
     if(stats->getFun() <= 50) {

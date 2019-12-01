@@ -4,16 +4,16 @@ allowFlip
 0;50;0;0;;var seeds = 1,if month = 12 and @4 > 1 goto christmaspine else goto pine
 
 # Ordinary pine tree
-0;30000;0;0;;label pine
-1;30000;0;0;;
-2;30000;0;0;;
-3;30000;0;0;;
+0;500;0;0;;label pine
+1;500;0;0;;
+2;500;0;0;;
+3;500;0;0;;
 4;500;0;0;;if seeds > 0 { spawn tree @128 - 64 @128 - 64,var seeds -= 1 },stop
 
 # Christmas pine tree
-5;30000;0;0;;label christmaspine
-6;30000;0;0;;
-7;30000;0;0;;
-8;30000;0;0;;
+5;500;0;0;;label christmaspine
+6;500;0;0;;
+7;500;0;0;;
+8;500;0;0;;
 9;500;0;0;;if seeds > 0 { spawn tree @128 - 64 @128 - 64,var seeds -= 1 },stop
 

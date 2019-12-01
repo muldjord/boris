@@ -58,13 +58,12 @@ class Boris : public QGraphicsView
 public:
   Boris(Settings *settings);
   ~Boris();
-  QTimer behavTimer;
   void collide(Boris *boris);
   Boris *borisFriend;
   int getHygiene();
   void moveBoris(int dX, int dY, const bool &flipped = false, const bool &vision = true);
   int getCurBehav();
-  void changeBehaviour(const QString behav = "", const int time = 0);
+  void changeBehaviour(QString behav = "", int time = -1);
   int size = 64;
   QMap<QString, int> scriptVars;
   int hyperQueue;
@@ -114,12 +113,13 @@ private:
   bool falling;
   bool grabbed;
   void showWeather(QString &behav);
-  void runScript();
+  void runScript(int &stop);
   void createBehavMenu();
   int staticBehavs;
   int independence;
   
   QMenu* bMenu;
+  QTimer behavTimer;
   QTimer animTimer;
   QTimer weatherTimer;
   QTimer physicsTimer;

@@ -149,7 +149,7 @@ QPixmap Item::getShadow(const QPixmap &sprite)
   return QPixmap::fromImage(shadow);
 }
 
-void Item::runScript()
+void Item::runScript(int &stop)
 {
   // Update current stat variables for scripting use
   QPoint p = QCursor::pos();
@@ -172,21 +172,9 @@ void Item::runScript()
 
   ScriptHandler scriptHandler(&scriptImage, &drawing, settings, itemList.at(curItem).labels, itemList.at(curItem).defines, scriptVars, pos(), size);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Item::setCurFrame);
-  int stop = 0; // Will be > 0 if a goto, behav or break command is run
   scriptHandler.runScript(stop, itemList.at(curItem).frames.at(curFrame).script);
 
   scriptSprite->setPixmap(QPixmap::fromImage(scriptImage));
-
-  if(stop == 1) {
-    return;
-  } else if(stop == 2) {
-    destroy();
-    return;
-  } else if(stop == 3) {
-    animTimer.stop();
-    return;
-  }
-  curFrame++;
 }
 
 void Item::nextFrame()
@@ -236,7 +224,18 @@ void Item::nextFrame()
               flipFrames);
   }
 
-  runScript();
+  int stop = 0; // Will be > 0 if a goto, behav or break command is run
+  runScript(stop);
+  if(stop == 1) {
+  } else if(stop == 2) {
+    destroy();
+    return;
+  } else if(stop == 3) {
+    animTimer.stop();
+    return;
+  } else {
+    curFrame++;
+  }
   animTimer.start();
 }
 

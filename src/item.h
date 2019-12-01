@@ -66,7 +66,7 @@ private:
   int curFrame = 0;
   int curItem = 0;
   int size = 64;
-  void runScript();
+  void runScript(int &stop);
   void sanityCheck();
   int getDistance(const QPoint &p);
   int getSector(const QPoint &p);
