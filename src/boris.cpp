@@ -369,7 +369,10 @@ void Boris::changeBehaviour(QString behav, int time)
     flipFrames = false;
   }
 
-  if(time != -1) {
+  if(!behaviours.at(curBehav).oneShot) {
+    if(time == -1) {
+      time = qrand() % 7000 + 5000;
+    }
     time = time - (time / 100.0 * stats->getHyper());
     behavTimer.setInterval(time);
     behavTimer.start();
