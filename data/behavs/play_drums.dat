@@ -9,7 +9,7 @@ pitchLock
 
 define nextpattern:var patterns -= 1,
 if patterns <= 0 goto end,
-stat fun += 2,
+stat fun += 4,
 var rand = @7,
 if rand = 1 goto p1,
 if rand = 2 goto p2,
