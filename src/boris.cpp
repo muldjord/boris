@@ -302,14 +302,13 @@ void Boris::changeBehaviour(QString behav, int time)
   drawing = false;
   
   // Check if there are behaviours in queue, these are prioritized
-  if(behav == "" && behavQueue.length() != 0) {
-    behav = behavQueue.first();
-    behavQueue.removeFirst();
+  if(behav == "" && !behavQueue.isEmpty()) {
+    behav = behavQueue.takeFirst();
   }
 
   // Process the AI if no forced behaviour is set
-  if(behav == "" && time == -1) {
-    processAi(behav, time);
+  if(behav == "") {
+    processAi(behav);
   }
   
   // Pick random behaviour but rule out certain behavs such as weewee and sleep
@@ -370,13 +369,8 @@ void Boris::changeBehaviour(QString behav, int time)
     flipFrames = false;
   }
 
-  bool isTimed = time == -1;
-  if(time == -1) {
-    time = qrand() % 7000 + 5000;
-  }
-  time = time - (time / 100.0 * stats->getHyper());
-
-  if(isTimed) {
+  if(time != -1) {
+    time = time - (time / 100.0 * stats->getHyper());
     behavTimer.setInterval(time);
     behavTimer.start();
   }
@@ -613,18 +607,15 @@ void Boris::nextFrame()
   int stop = 0; // Will be > 0 if a goto, behav or break command is run
   runScript(stop);
   if(stop == 1) {
-    // This is a 'goto' or 'behav' command
     // In case of 'goto' curFrame has been set in scriptHandler
     // In case of 'behav' behavFromFile has been emitted
   } else if(stop == 2) {
-    // This is a 'break' command
-    // It will change to the next behaviour in line
+    // In case of 'break' it will change to the next behaviour in line
     behavTimer.stop();
     nextBehaviour();
     return;
   } else if(stop == 3) {
-    // This is a 'stop' command
-    // It will cease any frame and animation progression
+    // In case of 'stop' it will cease any frame and animation progression
     behavTimer.stop();
     animTimer.stop();
     return;
@@ -830,22 +821,23 @@ void Boris::handlePhysics()
         interactions++;
         if(fabs(mouseHVel) > 20.0 || fabs(mouseVVel) > 20.0) {
           int mouseSector = getSector(QCursor::pos());
+          int timeout = (qrand() % 2000) + 1000;
           if(mouseSector == 2) {
-            changeBehaviour("_flee_left", (qrand() % 2000) + 1000);
+            changeBehaviour("_flee_left", timeout);
           } else if(mouseSector == 1) {
-            changeBehaviour("_flee_left_down", (qrand() % 2000) + 1000);
+            changeBehaviour("_flee_left_down", timeout);
           } else if(mouseSector == 0) {
-            changeBehaviour("_flee_down", (qrand() % 2000) + 1000);
+            changeBehaviour("_flee_down", timeout);
           } else if(mouseSector == 7) {
-            changeBehaviour("_flee_right_down", (qrand() % 2000) + 1000);
+            changeBehaviour("_flee_right_down", timeout);
           } else if(mouseSector == 6) {
-            changeBehaviour("_flee_right", (qrand() % 2000) + 1000);
+            changeBehaviour("_flee_right", timeout);
           } else if(mouseSector == 5) {
-            changeBehaviour("_flee_right_up", (qrand() % 2000) + 1000);
+            changeBehaviour("_flee_right_up", timeout);
           } else if(mouseSector == 4) {
-            changeBehaviour("_flee_up", (qrand() % 2000) + 1000);
+            changeBehaviour("_flee_up", timeout);
           } else if(mouseSector == 3) {
-            changeBehaviour("_flee_left_up", (qrand() % 2000) + 1000);
+            changeBehaviour("_flee_left_up", timeout);
           }
         } else if(stats->getFun() > 10 && interactions >= 4 && qrand() % 10 >= 3) {
           changeBehaviour(getFileFromCategory("Social"));
@@ -1217,9 +1209,9 @@ void Boris::processVision()
   }
 }
 
-void Boris::processAi(QString &behav, int &time)
+void Boris::processAi(QString &behav)
 {
-  // You might wonder why I check behav == "" and time == -1 in all the following if sentences.
+  // You might wonder why I check behav == "" in all the following if sentences.
   // The reason is that they might change throughout the function, and thus makes sense to
   // make sure an AI decision hasn't already been made.
 
@@ -1231,7 +1223,7 @@ void Boris::processAi(QString &behav, int &time)
   }
 
   // Check if Boris has put off the toilet visit for too long. If so, make him s**t his pants :(
-  if(behav == "" && time == -1 && stats->getBladder() <= 0) {
+  if(behav == "" && stats->getBladder() <= 0) {
     tooLateForLoo++;
     if(tooLateForLoo >= 6) {
       tooLateForLoo = 0;
@@ -1239,7 +1231,7 @@ void Boris::processAi(QString &behav, int &time)
     }
   }
   
-  if(behav == "" && time == -1 && qrand() % 2) {
+  if(behav == "" && qrand() % 2) {
     // Stat check
     QList<QString> potentials;
     if(stats->getFun() <= 50) {

@@ -20,7 +20,7 @@ if rand = 6 goto b1,
 if rand = 7 goto b2
 
 #Frames
-1;100;0;0;;var patterns = @8 + 4,call nextpattern
+1;100;0;0;;var patterns = @6 + 6,call nextpattern
 
 # Pattern 1 (8/4 hihat)
 18;50;0;0;data/sfx/drums_kd_c1.wav;label p1

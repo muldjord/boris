@@ -158,7 +158,7 @@ private:
   QString getFileFromCategory(QString category);
   int getIdxFromCategory(QString category);
   void processVision();
-  void processAi(QString &behav, int &time);
+  void processAi(QString &behav);
   int getDistance(const QPoint &p);
   int getSector(const QPoint &p);
   int curWeather = 0;
