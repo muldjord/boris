@@ -98,17 +98,11 @@ Boris::Boris(Settings *settings)
   weatherSprite->setPos(0, 0);
   weatherSprite->hide();
   
-  curWeather = 0;
-  curWeatherFrame = 0;
-  curFrame = 0;
-  curBehav = 0;
   grabbed = false;
   falling = false;
   isAlive = true;
   flipFrames = false;
   alreadyEvading = false;
-  timeForWeather = 0;
-  tooLateForLoo = 0;
   
   createBehavMenu();
 
@@ -293,6 +287,10 @@ void Boris::nextBehaviour()
 
 void Boris::changeBehaviour(QString behav, int time)
 {
+  if(behaviours.at(curBehav).file == "_drop_dead") {
+    return;
+  }
+
   // Always stop behavTimer, just in case. At this point we never want it to be running
   behavTimer.stop();
   
@@ -303,11 +301,6 @@ void Boris::changeBehaviour(QString behav, int time)
   scriptImage.fill(Qt::transparent);
   drawing = false;
   
-  // If Boris has died, just return
-  if(!isAlive) {
-    return;
-  }
-
   // Check if there are behaviours in queue, these are prioritized
   if(behav == "" && behavQueue.length() != 0) {
     behav = behavQueue.first();
@@ -552,11 +545,11 @@ void Boris::nextFrame()
   sanityCheck();
   
   if(curFrame >= behaviours.at(curBehav).frames.count()) {
+    curFrame = 0;
     if(behaviours.at(curBehav).oneShot) {
       changeBehaviour();
       return;
     }
-    curFrame = 0;
   }
 
   QBitmap mask = behaviours.at(curBehav).frames.at(curFrame).sprite.mask();
@@ -943,13 +936,12 @@ void Boris::sanityCheck()
 void Boris::killBoris()
 {
   qInfo("Boris has died... RIP!\n");
+  isAlive = false;
   statQueueTimer.stop();
+  statTimer.stop();
   dirtSprite->setOpacity(0.0);
   bruisesSprite->setOpacity(0.0);
   changeBehaviour("_drop_dead");
-  behavTimer.stop();
-  statTimer.stop();
-  isAlive = false;
 }
 
 void Boris::statQueueProgress()

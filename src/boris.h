@@ -74,8 +74,8 @@ public:
   int socialQueue;
   int funQueue;
   int hygieneQueue;
-  int curFrame;
-  int curBehav;
+  int curFrame = 0;
+  int curBehav = 0;
                                                         
 public slots:
   void earthquake();
@@ -161,13 +161,13 @@ private:
   void processAi(QString &behav, int &time);
   int getDistance(const QPoint &p);
   int getSector(const QPoint &p);
-  int curWeather;
-  int curWeatherFrame;
-  int timeForWeather;
+  int curWeather = 0;
+  int curWeatherFrame = 0;
+  int timeForWeather = 0;
 
-  bool isAlive;
-  bool flipFrames;
-  int tooLateForLoo;
+  bool isAlive = true;
+  bool flipFrames = false;
+  int tooLateForLoo = 0;
 
   void killBoris();
 };
