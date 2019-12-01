@@ -207,6 +207,14 @@ void Item::nextFrame()
                            0.95 + (qrand() % 100) / 1000.0);
     }
   }
+
+  if(itemList.at(curItem).frames.at(curFrame).dx != 0 ||
+     itemList.at(curItem).frames.at(curFrame).dy != 0) {
+    moveItem(itemList.at(curItem).frames.at(curFrame).dx,
+              itemList.at(curItem).frames.at(curFrame).dy,
+              flipFrames);
+  }
+
   int frameTime = itemList.at(curItem).frames.at(curFrame).time;
   int elapsedTime = frameTimer.elapsed();
   if(elapsedTime < frameTime) {
@@ -217,25 +225,22 @@ void Item::nextFrame()
   }
   animTimer.setInterval(frameTime);
 
-  if(itemList.at(curItem).frames.at(curFrame).dx != 0 ||
-     itemList.at(curItem).frames.at(curFrame).dy != 0) {
-    moveItem(itemList.at(curItem).frames.at(curFrame).dx,
-              itemList.at(curItem).frames.at(curFrame).dy,
-              flipFrames);
-  }
-
   int stop = 0; // Will be > 0 if a goto, behav or break command is run
   runScript(stop);
   if(stop == 1) {
+    // In case of 'goto' curFrame has been set in scriptHandler
   } else if(stop == 2) {
+    // In case of 'break' it will destroy the item
     destroy();
     return;
   } else if(stop == 3) {
+    // In case of 'stop' it will cease any frame and animation progression
     animTimer.stop();
     return;
   } else {
     curFrame++;
   }
+
   animTimer.start();
 }
 

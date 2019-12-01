@@ -588,8 +588,6 @@ void Boris::nextFrame()
                            (stats->getHyper() / 60.0) + (0.95 + (qrand() % 100) / 1000.0));
     }
   }
-  int frameTime = behaviours.at(curBehav).frames.at(curFrame).time;
-  frameTime -= (frameTime / 100.0 * stats->getHyper());
 
   if(behaviours.at(curBehav).frames.at(curFrame).dx != 0 ||
      behaviours.at(curBehav).frames.at(curFrame).dy != 0) {
@@ -598,6 +596,8 @@ void Boris::nextFrame()
               flipFrames);
   }
 
+  int frameTime = behaviours.at(curBehav).frames.at(curFrame).time;
+  frameTime -= (frameTime / 100.0 * stats->getHyper());
   int elapsedTime = frameTimer.elapsed();
   if(elapsedTime < frameTime) {
     frameTime -= elapsedTime;
