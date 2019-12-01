@@ -1,0 +1,15 @@
+title=Watching the mouse
+category=Idle
+fun=-2
+
+define nextsec:if msec = 0 goto north else if msec = 1 goto northeast else if msec = 2 goto east else if msec = 3 goto southeast else if msec = 4 goto south else if msec = 5 goto southwest else if msec = 6 goto west else if msec = 7 goto northwest
+
+#Frames
+0;250;0;0;;label north,draw black pixel 15 9,draw black pixel 19 9,call nextsec
+0;250;0;0;;label northeast,draw black pixel 16 9,draw black pixel 20 9,call nextsec
+0;250;0;0;;label east,draw black pixel 16 10,draw black pixel 20 10,call nextsec
+0;250;0;0;;label southeast,draw black pixel 16 11,draw black pixel 20 11,call nextsec
+0;250;0;0;;label south,draw black pixel 16 11,draw black pixel 19 11,call nextsec
+2;250;0;0;;label southwest,draw black pixel 9 11,draw black pixel 13 11,call nextsec
+2;250;0;0;;label west,draw black pixel 9 10,draw black pixel 13 10,call nextsec
+2;250;0;0;;label northwest,draw black pixel 9 9,draw black pixel 13 9,call nextsec
