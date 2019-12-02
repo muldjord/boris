@@ -92,7 +92,7 @@ bool Loader::loadBehaviours(const Settings &settings,
       setClothesColor(settings, rawImage);
       QPixmap t = QPixmap::fromImage(rawImage);
       if(t.width() % 32 != 0) {
-        qInfo("  Sprite does not adhere to 32 pixel width per sprite, can't load...\n");
+        qWarning("  Sprite does not adhere to 32 pixel width per sprite, can't load...\n");
         return false;
       } else {
         for (int i = 0; i < t.width() / 32; ++i) {
@@ -236,7 +236,7 @@ bool Loader::loadBehaviours(const Settings &settings,
       qInfo("  Added behaviour: %s\n", b.title.toStdString().c_str());
       behaviours.append(b);
     } else {
-      qInfo("  Error in behaviour: %s\n", info.fileName().toStdString().c_str());
+      qWarning("  Error in behaviour: %s\n", info.fileName().toStdString().c_str());
       return false;
     }
     progressBar->setValue(progressBar->value() + info.size());
