@@ -55,11 +55,14 @@ private slots:
   void aboutBox();
   void killAll();
   void updateWeather();
+  void triggerBehaviour(QAction *a);
 
 signals:
   void updateBoris();
-
+  void queueBehavFromFile(const QString &file);
+  
 private:
+  QMenu *bMenu;
   Settings settings;
   QWidget *loadWidget;
   QProgressBar *progressBar;
@@ -67,10 +70,12 @@ private:
   QList<QString> extractSnippets(QString line);
   QString *aboutText;
   void createTrayIcon();
+  void createBehavMenu();
   void createActions();
   QAction *aboutAction;
   QAction *earthquakeAction;
   QAction *teleportAction;
+  QAction *behavsAction;
   QAction *weatherAction;
   QAction *quitAction;
   QSystemTrayIcon *trayIcon;

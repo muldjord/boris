@@ -211,6 +211,8 @@ MainWindow::MainWindow()
   settings.key = iniSettings.value("weather_key").toString();
 
   createActions();
+  bMenu = new QMenu();
+  bMenu->setTitle(tr("Behaviours"));
   createTrayIcon();
   trayIcon->show();
 
@@ -308,6 +310,8 @@ void MainWindow::loadAssets()
   
   delete progressBar;
   delete loadWidget;
+
+  createBehavMenu();
 }
 
 void MainWindow::addBoris(int clones)
@@ -317,7 +321,7 @@ void MainWindow::addBoris(int clones)
     borises << new Boris(&settings);
     connect(this, &MainWindow::updateBoris, borises.last(), &Boris::updateBoris);
     connect(earthquakeAction, &QAction::triggered, borises.last(), &Boris::earthquake);
-    connect(teleportAction, &QAction::triggered, borises.last(), &Boris::teleport);
+    connect(this, &MainWindow::queueBehavFromFile, borises.last(), &Boris::queueBehavFromFile);
     connect(weatherAction, &QAction::triggered, borises.last(), &Boris::triggerWeather);
     borises.last()->show();
     borises.last()->earthquake();
@@ -343,8 +347,6 @@ void MainWindow::createActions()
 
   earthquakeAction = new QAction(tr("&Earthquake!!!"), this);
   earthquakeAction->setIcon(QIcon(":earthquake.png"));
-  teleportAction = new QAction(tr("&Beam me up, Scotty!"), this);
-  teleportAction->setIcon(QIcon(":teleport.png"));
 
   weatherAction = new QAction(tr("Updating weather..."), this);
   
@@ -360,7 +362,7 @@ void MainWindow::createTrayIcon()
   trayIconMenu = new QMenu;
   trayIconMenu->addAction(aboutAction);
   trayIconMenu->addAction(earthquakeAction);
-  trayIconMenu->addAction(teleportAction);
+  trayIconMenu->addMenu(bMenu);
   trayIconMenu->addAction(weatherAction);
   trayIconMenu->addSeparator();
   trayIconMenu->addAction(quitAction);
@@ -415,4 +417,80 @@ void MainWindow::updateWeather()
     weatherAction->setText(tr("Couldn't find city"));
   }
   weatherAction->setIcon(QIcon(":" + settings.weatherType + ".png"));
+}
+
+void MainWindow::createBehavMenu()
+{
+  QMenu *healthMenu = new QMenu(tr("Health"), bMenu);
+  healthMenu->setIcon(QIcon(":health.png"));
+  QMenu *energyMenu = new QMenu(tr("Energy"), bMenu);
+  energyMenu->setIcon(QIcon(":energy.png"));
+  QMenu *hungerMenu = new QMenu(tr("Food"), bMenu);
+  hungerMenu->setIcon(QIcon(":hunger.png"));
+  QMenu *bladderMenu = new QMenu(tr("Toilet"), bMenu);
+  bladderMenu->setIcon(QIcon(":bladder.png"));
+  QMenu *hygieneMenu = new QMenu(tr("Hygiene"), bMenu);
+  hygieneMenu->setIcon(QIcon(":hygiene.png"));
+  QMenu *socialMenu = new QMenu(tr("Social"), bMenu);
+  socialMenu->setIcon(QIcon(":social.png"));
+  QMenu *funMenu = new QMenu(tr("Fun"), bMenu);
+  funMenu->setIcon(QIcon(":fun.png"));
+  QMenu *movementMenu = new QMenu(tr("Movement"), bMenu);
+  movementMenu->setIcon(QIcon(":movement.png"));
+  QMenu *iddqdMenu = new QMenu(tr("Iddqd"), bMenu);
+  iddqdMenu->setIcon(QIcon(":iddqd.png"));
+  connect(healthMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
+  connect(energyMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
+  connect(hungerMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
+  connect(bladderMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
+  connect(hygieneMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
+  connect(socialMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
+  connect(funMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
+  connect(movementMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
+  connect(iddqdMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
+  for(const auto &behaviour: behaviours) {
+    if(behaviour.file.left(1) != "_") {
+      if(behaviour.category == "Movement") {
+        movementMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category == "Energy") {
+        energyMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category == "Hunger") {
+        hungerMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category == "Bladder") {
+        bladderMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category == "Social") {
+        socialMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category == "Fun") {
+        funMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category == "Hygiene") {
+        hygieneMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category == "Health") {
+        healthMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else {
+        iddqdMenu->addAction(QIcon(":iddqd.png"), behaviour.title);
+      }
+    } else {
+      iddqdMenu->addAction(QIcon(":iddqd.png"), behaviour.title);
+    }
+  }
+  bMenu->addMenu(healthMenu);
+  bMenu->addMenu(energyMenu);
+  bMenu->addMenu(hungerMenu);
+  bMenu->addMenu(bladderMenu);
+  bMenu->addMenu(hygieneMenu);
+  bMenu->addMenu(socialMenu);
+  bMenu->addMenu(funMenu);
+  bMenu->addMenu(movementMenu);
+  if(settings.iddqd) {
+    bMenu->addMenu(iddqdMenu);
+  }
+}
+
+void MainWindow::triggerBehaviour(QAction* a)
+{
+  for(const auto &behaviour: behaviours) {
+    if(behaviour.title == a->text()) {
+      emit queueBehavFromFile(behaviour.file);
+    }
+  }
 }

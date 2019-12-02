@@ -206,29 +206,29 @@ void Boris::createBehavMenu()
   connect(funMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   connect(movementMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   connect(iddqdMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
-  for(int i = 0; i < behaviours.length(); ++i) {
-    if(behaviours.at(i).file.left(1) != "_") {
-      if(behaviours.at(i).category == "Movement") {
-        movementMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
-      } else if(behaviours.at(i).category == "Energy") {
-        energyMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
-      } else if(behaviours.at(i).category == "Hunger") {
-        hungerMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
-      } else if(behaviours.at(i).category == "Bladder") {
-        bladderMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
-      } else if(behaviours.at(i).category == "Social") {
-        socialMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
-      } else if(behaviours.at(i).category == "Fun") {
-        funMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
-      } else if(behaviours.at(i).category == "Hygiene") {
-        hygieneMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
-      } else if(behaviours.at(i).category == "Health") {
-        healthMenu->addAction(QIcon(":" + behaviours.at(i).category.toLower() + ".png"), behaviours.at(i).title);
+  for(const auto &behaviour: behaviours) {
+    if(behaviour.file.left(1) != "_") {
+      if(behaviour.category == "Movement") {
+        movementMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category == "Energy") {
+        energyMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category == "Hunger") {
+        hungerMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category == "Bladder") {
+        bladderMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category == "Social") {
+        socialMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category == "Fun") {
+        funMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category == "Hygiene") {
+        hygieneMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category == "Health") {
+        healthMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
       } else {
-        iddqdMenu->addAction(QIcon(":iddqd.png"), behaviours.at(i).title);
+        iddqdMenu->addAction(QIcon(":iddqd.png"), behaviour.title);
       }
     } else {
-      iddqdMenu->addAction(QIcon(":iddqd.png"), behaviours.at(i).title);
+      iddqdMenu->addAction(QIcon(":iddqd.png"), behaviour.title);
     }
   }
   bMenu->addMenu(healthMenu);
@@ -247,9 +247,9 @@ void Boris::createBehavMenu()
 QString Boris::getFileFromCategory(QString category)
 {
   QList<QString> b;
-  for(int i = 0; i < behaviours.length(); ++i) {
-    if(behaviours.at(i).category == category) {
-      b.append(behaviours.at(i).file);
+  for(const auto &behaviour: behaviours) {
+    if(behaviour.category == category) {
+      b.append(behaviour.file);
     }
   }
   int chosen = qrand() % b.length();
@@ -682,9 +682,9 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
 }
 
 void Boris::handleBehaviourChange(QAction* a) {
-  for(int i = 0; i < behaviours.length(); ++i) {
-    if(behaviours.at(i).title == a->text()) {
-      behavQueue.append(behaviours.at(i).file);
+  for(const auto &behaviour: behaviours) {
+    if(behaviour.title == a->text()) {
+      behavQueue.append(behaviour.file);
     }
   }
 }
@@ -1468,9 +1468,16 @@ void Boris::statChange(const QString &type, const int &amount)
   }
 }
 
+// Used by scripthandler to immediately switch to behav using file
 void Boris::behavFromFile(const QString &file)
 {
   changeBehaviour(file);
+}
+
+// Used by mainwindow context menu to queue a behav from file
+void Boris::queueBehavFromFile(const QString &file)
+{
+  behavQueue.append(file);
 }
 
 void Boris::setCurFrame(const int &frame)

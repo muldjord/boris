@@ -83,6 +83,7 @@ public slots:
   void triggerWeather();
   void nextBehaviour();
   void updateBoris();
+  void queueBehavFromFile(const QString &file);
   
 protected:
   void mouseMoveEvent(QMouseEvent* event);
