@@ -325,7 +325,7 @@ Per default all drawing routines are performed on the current frame sprite and c
 ```
 
 ##### spawn
-Spawn an item from the items folder (default is `data/items`). The item name is the name of the file without the suffix. The items must be png images.
+Spawn an item from the items folder (default is `data/items`). The item name is the name of the corresponding dat+png file pair without a suffix. Items can be animated and scripted mostly the same way Boris behaviours can.
 * Definition:
 `spawn <ITEM FILENAME> x y`
 * Example:
