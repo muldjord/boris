@@ -360,3 +360,5 @@ The following variables are reserved and hardcoded. You should not try to set th
 * hour: The current hour (0-23)
 * minute: The current minute within the hour
 * second: The current second within the current minute
+* wind: The current wind speed in meters per second
+* temp: The current temperature in celsius
