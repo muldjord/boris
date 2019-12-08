@@ -452,6 +452,8 @@ void Boris::runScript(int &stop)
   scriptVars["hour"] = time.hour();
   scriptVars["minute"] = time.minute();
   scriptVars["second"] = time.second();
+  scriptVars["wind"] = settings->windSpeed;
+  scriptVars["temp"] = settings->temperature;
 
   if(!drawing) {
     scriptImage.fill(Qt::transparent);
