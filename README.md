@@ -26,7 +26,7 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
-#### Version 3.0.0 (In progress, unreleased):
+#### Version 3.0.0 (8th December 2019):
 * Boris is now fully scriptable allowing for random outcomes of behaviours
 * Behaviours now allows comments inside frame area in .dat files
 * Boris now gets hyper when drinking coffee
@@ -46,10 +46,12 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 * Added scripting to many existing behaviours for more interesting outcomes
 * Added a bunch of new dynamic behaviours
 * Added drawing routines to scripting language
-* Added scoping to if sentences in scripting language
+* Added scoping to 'if' sentences in scripting language
 * Boris is now ticklish (scroll mouse wheel on him)
 * Boris now less likely to pick a "social" behav when moving mouse over him
 * Refactored speech bubble class
+* Added tray icon behaviour menu that allows user to queue a behaviour for all Boris instances at once
+* Added items that can be spawned from boris scripts. The items are even scriptable themselves and can spawn new items
 
 #### Version 2.0.2 (4th December 2018):
 * Added 'allowFlip' flag to behaviours giving those a 50% of being flipped horizontally
