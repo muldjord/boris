@@ -26,6 +26,9 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 
 ## Release notes
 
+#### Version 3.0.1 (In progress, unreleased):
+* Boris now sometimes farts in his sleep, a very important feature
+
 #### Version 3.0.0 (8th December 2019):
 * Boris is now fully scriptable allowing for random outcomes of behaviours
 * Behaviours now allows comments inside frame area in .dat files
