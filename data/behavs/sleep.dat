@@ -53,12 +53,12 @@ doNotDisturb
 26;175;0;0;;
 27;175;0;0;;
 28;175;0;0;;
-29;175;0;0;;if @8 = 1 { var rand = @6,if rand = 1 goto fart1 else if rand = 2 goto fart2 else if rand = 3 goto fart3 else if rand = 4 goto fart4 else if rand = 5 goto fart5 else if rand = 6 goto fart6 },if energy < 98 goto slumber else goto end
+29;175;0;0;;if @8 = 1 { var rand = @8,if rand = 1 goto fart1 else if rand = 2 goto fart2 else if rand = 3 goto fart3 else if rand = 4 goto fart4 else if rand = 5 goto fart5 else if rand = 6 goto fart6 else if rand = 7 goto mumble1 else if rand = 8 goto mumble2 },if energy < 98 goto slumber else goto end
 
 12;500;0;0;;label fart1
 12;750;0;0;data/sfx/fart1.wav;
-11;2000;0;0;data/sfx/sleep_mumble3.wav;
-12;1500;0;0;;goto slumber
+11;3000;0;0;data/sfx/sleep_mumble3.wav;
+12;1000;0;0;;goto slumber
 
 12;750;0;0;;label fart2
 12;1000;0;0;data/sfx/fart2.wav;
@@ -92,14 +92,69 @@ doNotDisturb
 13;150;0;0;;
 12;1000;0;0;;goto slumber
 
-12;1000;0;0;;label fart4
-12;1500;0;0;data/sfx/fart4.wav;goto slumber
+12;1000;0;0;data/sfx/fart4.wav;label fart4
+12;50;0;0;data/sfx/sleep_mumble1.wav;
+13;250;0;0;;
+12;150;0;0;;
+13;300;0;0;;
+12;125;0;0;;
+13;75;0;0;;
+12;50;0;0;;
+13;100;0;0;;
+12;100;0;0;;
+13;125;0;0;;
+12;250;0;0;;
+13;150;0;0;;
+12;1500;0;0;;goto slumber
 
 12;250;0;0;;label fart5
-12;2000;0;0;data/sfx/fart5.wav;goto slumber
+12;1000;0;0;data/sfx/fart5.wav;
+12;200;0;0;data/sfx/sleep_mumble2.wav;
+13;300;0;0;;
+12;125;0;0;;
+13;100;0;0;;
+12;75;0;0;;
+13;75;0;0;;
+12;50;0;0;;
+13;100;0;0;;
+12;100;0;0;;
+13;75;0;0;;
+12;50;0;0;;
+13;50;0;0;;
+12;1500;0;0;;goto slumber
 
-12;2500;0;0;;label fart6
-12;500;0;0;data/sfx/fart6.wav;goto slumber
+12;1500;0;0;;label fart6
+12;2100;0;0;data/sfx/fart6.wav;goto slumber
+
+12;800;0;0;;label mumble1
+12;50;0;0;data/sfx/sleep_mumble1.wav;
+13;250;0;0;;
+12;150;0;0;;
+13;300;0;0;;
+12;125;0;0;;
+13;75;0;0;;
+12;50;0;0;;
+13;100;0;0;;
+12;100;0;0;;
+13;125;0;0;;
+12;250;0;0;;
+13;150;0;0;;
+12;1500;0;0;;goto slumber
+
+12;1000;0;0;;label mumble2
+12;200;0;0;data/sfx/sleep_mumble2.wav;
+13;300;0;0;;
+12;125;0;0;;
+13;100;0;0;;
+12;75;0;0;;
+13;75;0;0;;
+12;50;0;0;;
+13;100;0;0;;
+12;100;0;0;;
+13;75;0;0;;
+12;50;0;0;;
+13;50;0;0;;
+12;1500;0;0;;goto slumber
 
 12;75;0;0;;label end
 11;1000;0;0;;
