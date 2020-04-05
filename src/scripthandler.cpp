@@ -283,55 +283,60 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
       return;
     }
     QPainter painter;
+    painter.begin(image);
+    painter.setRenderHint(QPainter::Antialiasing, false);
     QString colorString = parameters.first();
     Qt::GlobalColor color = Qt::transparent;
     if(colorString == "black") {
-      color = Qt::black;
+      painter.setPen(QPen(QColor(Qt::black)));
     } else if(colorString == "white") {
-      color = Qt::white;
+      painter.setPen(QPen(QColor(Qt::white)));
     } else if(colorString == "cyan") {
-      color = Qt::cyan;
+      painter.setPen(QPen(QColor(Qt::cyan)));
     } else if(colorString == "darkcyan") {
-      color = Qt::darkCyan;
+      painter.setPen(QPen(QColor(Qt::darkCyan)));
     } else if(colorString == "red") {
-      color = Qt::red;
+      painter.setPen(QPen(QColor(Qt::red)));
     } else if(colorString == "darkred") {
-      color = Qt::darkRed;
+      painter.setPen(QPen(QColor(Qt::darkRed)));
     } else if(colorString == "magenta") {
-      color = Qt::magenta;
+      painter.setPen(QPen(QColor(Qt::magenta)));
     } else if(colorString == "darkmagenta") {
-      color = Qt::darkMagenta;
+      painter.setPen(QPen(QColor(Qt::darkMagenta)));
     } else if(colorString == "green") {
-      color = Qt::green;
+      painter.setPen(QPen(QColor(Qt::green)));
     } else if(colorString == "darkgreen") {
-      color = Qt::darkGreen;
+      painter.setPen(QPen(QColor(Qt::darkGreen)));
     } else if(colorString == "yellow") {
-      color = Qt::yellow;
+      painter.setPen(QPen(QColor(Qt::yellow)));
     } else if(colorString == "darkyellow") {
-      color = Qt::darkYellow;
+      painter.setPen(QPen(QColor(Qt::darkYellow)));
     } else if(colorString == "blue") {
-      color = Qt::blue;
+      painter.setPen(QPen(QColor(Qt::blue)));
     } else if(colorString == "darkblue") {
-      color = Qt::darkBlue;
+      painter.setPen(QPen(QColor(Qt::darkBlue)));
     } else if(colorString == "gray") {
-      color = Qt::gray;
+      painter.setPen(QPen(QColor(Qt::gray)));
     } else if(colorString == "grey") {
-      color = Qt::gray;
+      painter.setPen(QPen(QColor(Qt::gray)));
     } else if(colorString == "darkgray") {
-      color = Qt::darkGray;
+      painter.setPen(QPen(QColor(Qt::darkGray)));
     } else if(colorString == "darkgrey") {
-      color = Qt::darkGray;
+      painter.setPen(QPen(QColor(Qt::darkGray)));
     } else if(colorString == "lightgray") {
-      color = Qt::lightGray;
+      painter.setPen(QPen(QColor(Qt::lightGray)));
     } else if(colorString == "lightgrey") {
-      color = Qt::lightGray;
+      painter.setPen(QPen(QColor(Qt::lightGray)));
+    } else if(colorString.length() == 7 && colorString.left(1) == "#") {
+      int redVal = colorString.mid(1, 2).toInt(nullptr, 16);
+      int blueVal = colorString.mid(3, 2).toInt(nullptr, 16);
+      int greenVal = colorString.mid(5, 2).toInt(nullptr, 16);
+      painter.setPen(QPen(QColor(redVal, greenVal, blueVal)));
     } else {
-      printf("Color '%s' doesn't exist\n", colorString.toStdString().c_str());
-      return;
+      printf("Color '%s' is malformed, falling back to black\n",
+             colorString.toStdString().c_str());
+      painter.setPen(QPen(QColor(Qt::black)));
     }
-    painter.begin(image);
-    painter.setRenderHint(QPainter::Antialiasing, false);
-    painter.setPen(QPen(QColor(color)));
     
     parameters.removeFirst(); // Remove drawing color string
     
