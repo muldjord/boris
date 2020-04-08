@@ -1,28 +1,37 @@
 title=Chicken
 allowFlip
 
-define jumpdecide:var rand = @4,if rand = 1 goto jumpnorth,if rand = 2 goto jumpeast,if rand = 3 goto jumpsouth,if rand = 4 goto jumpwest
+define jumpdecide:var rand = @8,if rand = 1 goto jumpnorth,if rand = 2 goto jumpnortheast,if rand = 3 goto jumpeast,if rand = 4 goto jumpsoutheast,if rand = 5 goto jumpsouth,if rand = 6 goto jumpsouthwest,if rand = 7 goto jumpwest,if rand = 8 goto jumpnorthwest
 
 #Frames
 # Stand east
 0;250;0;0;;label standeast,var rand = @9,if rand <= 2 goto blinkeast,if rand = 3 goto chirpeast,if rand = 4 call jumpdecide,goto standeast
-1;250;0;0;;label chirpeast,goto standeast
+1;250;0;0;data/sfx/chirp.wav;label chirpeast,goto standeast
 2;75;0;0;;label blinkeast,goto standeast
 
 #Frames
 # Stand west
 9;250;0;0;;label standwest,var rand = @9,if rand <= 2 goto blinkwest,if rand = 3 goto chirpwest,if rand = 4 call jumpdecide,goto standwest
-10;250;0;0;;label chirpwest,goto standwest
+10;250;0;0;data/sfx/chirp.wav;label chirpwest,goto standwest
 11;75;0;0;;label blinkwest,goto standwest
 
 # Jump north
-12;75;0;0;;label jumpnorth
-13;75;0;0;;
-14;75;0;-1;;
-15;75;0;-1;;
-16;75;0;-1;;
-17;75;0;-1;;
-12;75;0;0;;if @4 < 4 goto jumpnorth else goto standeast
+3;75;0;0;;label jumpnorth
+4;75;0;0;;
+5;75;0;-1;;
+6;75;0;-1;;
+7;75;0;-1;;
+8;75;0;-1;;
+3;75;0;0;;if @4 < 4 { var rand = @3,if rand = 1 goto jumpnorthwest,if rand = 2 goto jumpnorth,if rand = 3 goto jumpnortheast } else goto standeast
+
+# Jump northeast
+3;75;0;0;;label jumpnortheast
+4;75;0;0;;
+5;75;1;-1;;
+6;75;1;-1;;
+7;75;1;-1;;
+8;75;1;-1;;
+3;75;0;0;;if @4 < 4 { var rand = @3,if rand = 1 goto jumpnorth,if rand = 2 goto jumpnortheast,if rand = 3 goto jumpeast } else goto standeast
 
 # Jump east
 3;75;0;0;;label jumpeast
@@ -31,7 +40,16 @@ define jumpdecide:var rand = @4,if rand = 1 goto jumpnorth,if rand = 2 goto jump
 6;75;1;0;;
 7;75;1;0;;
 8;75;1;0;;
-3;75;0;0;;if @4 < 4 goto jumpeast else goto standeast
+3;75;0;0;;if @4 < 4 { var rand = @3,if rand = 1 goto jumpnortheast,if rand = 2 goto jumpeast,if rand = 3 goto jumpsoutheast } else goto standeast
+
+# Jump southeast
+3;75;0;0;;label jumpsoutheast
+4;75;0;0;;
+5;75;1;1;;
+6;75;1;1;;
+7;75;1;1;;
+8;75;1;1;;
+3;75;0;0;;if @4 < 4 { var rand = @3,if rand = 1 goto jumpeast,if rand = 2 goto jumpsoutheast,if rand = 3 goto jumpsouth } else goto standeast
 
 # Jump south
 12;75;0;0;;label jumpsouth
@@ -40,7 +58,16 @@ define jumpdecide:var rand = @4,if rand = 1 goto jumpnorth,if rand = 2 goto jump
 15;75;0;1;;
 16;75;0;1;;
 17;75;0;1;;
-12;75;0;0;;if @4 < 4 goto jumpsouth else goto standwest
+12;75;0;0;;if @4 < 4 { var rand = @3,if rand = 1 goto jumpsoutheast,if rand = 2 goto jumpsouth,if rand = 3 goto jumpsouthwest } else goto standwest
+
+# Jump southwest
+12;75;0;0;;label jumpsouthwest
+13;75;0;0;;
+14;75;-1;1;;
+15;75;-1;1;;
+16;75;-1;1;;
+17;75;-1;1;;
+12;75;0;0;;if @4 < 4 { var rand = @3,if rand = 1 goto jumpsouth,if rand = 2 goto jumpsouthwest,if rand = 3 goto jumphwest } else goto standwest
 
 # Jump west
 12;75;0;0;;label jumpwest
@@ -49,4 +76,13 @@ define jumpdecide:var rand = @4,if rand = 1 goto jumpnorth,if rand = 2 goto jump
 15;75;-1;0;;
 16;75;-1;0;;
 17;75;-1;0;;
-12;75;0;0;;if @4 < 4 goto jumpwest else goto standwest
+12;75;0;0;;if @4 < 4 { var rand = @3,if rand = 1 goto jumpsouthwest,if rand = 2 goto jumpwest,if rand = 3 goto jumpnorthwest } else goto standwest
+
+# Jump northwest
+12;75;0;0;;label jumpnorthwest
+13;75;0;0;;
+14;75;-1;-1;;
+15;75;-1;-1;;
+16;75;-1;-1;;
+17;75;-1;-1;;
+12;75;0;0;;if @4 < 4 { var rand = @3,if rand = 1 goto jumpwest,if rand = 2 goto jumpnorthwest,if rand = 3 goto jumpnorth } else goto standwest
