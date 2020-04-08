@@ -4,25 +4,25 @@ allowFlip
 0;50;0;0;;var rand = @6,if rand = 1 goto egg1,if rand = 2 goto egg2,if rand = 3 goto egg3,if rand = 4 goto egg4,if rand = 5 goto egg5,if rand = 6 goto egg6
 
 # Egg 1
-1;3000;0;0;;label egg1,if @4 = 1 goto spawnchicken else goto egg1
+1;5000;0;0;;label egg1,if @8 = 1 goto spawnchicken else goto egg1
 
 # Egg 2
-2;3000;0;0;;label egg2,if @4 = 1 goto spawnchicken else goto egg2
+2;5000;0;0;;label egg2,if @8 = 1 goto spawnchicken else goto egg2
 
 # Egg 3
-3;3000;0;0;;label egg3,if @4 = 1 goto spawnchicken else goto egg3
+3;5000;0;0;;label egg3,if @8 = 1 goto spawnchicken else goto egg3
 
 # Egg 4
-4;3000;0;0;;label egg4,if @4 = 1 goto spawnchicken else goto egg4
+4;5000;0;0;;label egg4,if @8 = 1 goto spawnchicken else goto egg4
 
 # Egg 5
-5;3000;0;0;;label egg5,if @4 = 1 goto spawnchicken else goto egg5
+5;5000;0;0;;label egg5,if @8 = 1 goto spawnchicken else goto egg5
 
 # Egg 6
-6;3000;0;0;;label egg6,if @4 = 1 goto spawnchicken else goto egg6
+6;5000;0;0;;label egg6,if @8 = 1 goto spawnchicken else goto egg6
 
 # Spawn chicken
-7;75;0;0;;label spawnchicken
+7;75;0;0;data/sfx/poof.wav;label spawnchicken
 8;75;0;0;;
 9;75;0;0;;
 10;75;0;0;;
