@@ -4,19 +4,29 @@ allowFlip
 0;50;0;0;;var rand = @6,if rand = 1 goto egg1,if rand = 2 goto egg2,if rand = 3 goto egg3,if rand = 4 goto egg4,if rand = 5 goto egg5,if rand = 6 goto egg6
 
 # Egg 1
-1;30000;0;0;;label egg1,stop
+1;3000;0;0;;label egg1,if @4 = 1 goto spawnchicken else goto egg1
 
 # Egg 2
-2;30000;0;0;;label egg2,stop
+2;3000;0;0;;label egg2,if @4 = 1 goto spawnchicken else goto egg2
 
 # Egg 3
-3;30000;0;0;;label egg3,stop
+3;3000;0;0;;label egg3,if @4 = 1 goto spawnchicken else goto egg3
 
 # Egg 4
-4;30000;0;0;;label egg4,stop
+4;3000;0;0;;label egg4,if @4 = 1 goto spawnchicken else goto egg4
 
 # Egg 5
-5;30000;0;0;;label egg5,stop
+5;3000;0;0;;label egg5,if @4 = 1 goto spawnchicken else goto egg5
 
 # Egg 6
-6;30000;0;0;;label egg6,stop
+6;3000;0;0;;label egg6,if @4 = 1 goto spawnchicken else goto egg6
+
+# Spawn chicken
+7;75;0;0;;label spawnchicken
+8;75;0;0;;
+9;75;0;0;;
+10;75;0;0;;
+11;75;0;0;;spawn chicken 0 0
+12;75;0;0;;
+13;75;0;0;;
+14;75;0;0;;break

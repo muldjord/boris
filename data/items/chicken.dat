@@ -1,0 +1,52 @@
+title=Chicken
+allowFlip
+
+define jumpdecide:var rand = @4,if rand = 1 goto jumpnorth,if rand = 2 goto jumpeast,if rand = 3 goto jumpsouth,if rand = 4 goto jumpwest
+
+#Frames
+# Stand east
+0;250;0;0;;label standeast,var rand = @9,if rand <= 2 goto blinkeast,if rand = 3 goto chirpeast,if rand = 4 call jumpdecide,goto standeast
+1;250;0;0;;label chirpeast,goto standeast
+2;75;0;0;;label blinkeast,goto standeast
+
+#Frames
+# Stand west
+9;250;0;0;;label standwest,var rand = @9,if rand <= 2 goto blinkwest,if rand = 3 goto chirpwest,if rand = 4 call jumpdecide,goto standwest
+10;250;0;0;;label chirpwest,goto standwest
+11;75;0;0;;label blinkwest,goto standwest
+
+# Jump north
+12;75;0;0;;label jumpnorth
+13;75;0;0;;
+14;75;0;-1;;
+15;75;0;-1;;
+16;75;0;-1;;
+17;75;0;-1;;
+12;75;0;0;;if @4 < 4 goto jumpnorth else goto standeast
+
+# Jump east
+3;75;0;0;;label jumpeast
+4;75;0;0;;
+5;75;1;0;;
+6;75;1;0;;
+7;75;1;0;;
+8;75;1;0;;
+3;75;0;0;;if @4 < 4 goto jumpeast else goto standeast
+
+# Jump south
+12;75;0;0;;label jumpsouth
+13;75;0;0;;
+14;75;0;1;;
+15;75;0;1;;
+16;75;0;1;;
+17;75;0;1;;
+12;75;0;0;;if @4 < 4 goto jumpsouth else goto standwest
+
+# Jump west
+12;75;0;0;;label jumpwest
+13;75;0;0;;
+14;75;-1;0;;
+15;75;-1;0;;
+16;75;-1;0;;
+17;75;-1;0;;
+12;75;0;0;;if @4 < 4 goto jumpwest else goto standwest
