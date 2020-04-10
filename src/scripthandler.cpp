@@ -391,7 +391,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           parameters.removeFirst(); // Remove string
           printf("Drawing %s text '%s' at %d,%d\n", colorString.toStdString().c_str(),
                  text.toStdString().c_str(), x, y);
-          drawText(painter, color, x, y, text);
+          drawText(painter, x, y, text);
         }
       } else if(parameters.first() == "value") {
         parameters.removeFirst(); // Remove 'value'
@@ -401,7 +401,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           int value = getValue(parameters);
           printf("Drawing %s value %d at %d,%d\n", colorString.toStdString().c_str(),
                  value, x, y);
-          drawText(painter, color, x, y, QString::number(value));
+          drawText(painter, x, y, QString::number(value));
         }
       }
     }
@@ -409,8 +409,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
   }
 }
 
-void ScriptHandler::drawText(QPainter &painter, const Qt::GlobalColor &color,
-                             const int &x, const int &y, const QString &text)
+void ScriptHandler::drawText(QPainter &painter, const int &x, const int &y, const QString &text)
 {
   int idx = x;
   for(const auto &textChar: text) {
@@ -421,7 +420,7 @@ void ScriptHandler::drawText(QPainter &painter, const Qt::GlobalColor &color,
       charImage = QImage(5, 4, QImage::Format_ARGB32_Premultiplied);
       charImage.fill(Qt::red);
     }
-    charImage.setColor(1, QColor(color).rgb());
+    charImage.setColor(1, painter.pen().color().rgb());
 
     painter.drawImage(idx, y, charImage);
     idx += charImage.width();
