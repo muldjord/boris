@@ -15,7 +15,8 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 
 ## Building from source (Ubuntu Linux and Debian derivatives)
 ### Prerequisites
-``` 
+```
+$ sudo apt update
 $ sudo apt install build-essential qt5-default qtmultimedia5-dev libsfml-dev
 ```
 
