@@ -17,7 +17,8 @@ Copyright 2018 Lars Muldjord. This program is distributed under the terms of the
 ### Requirements
 * Qt 5 dev libs including multimedia package
 * SFML dev libs
-* For Ubuntu and other Debian derivatives running "sudo apt-get install qt5-default qtmultimedia5-dev libsfml-dev" should be enough. If not, please let me know.
+* For Ubuntu and other Debian derivatives running "sudo apt-get install qt5-default qtmultimedia5-dev libsfml-dev g++" should be enough. If not, please let me know.
+* You can also use the Debian (also works with Mint, Ubuntu, and other Debian-based distros) installation script.
 
 ### Build commands
 * qmake
