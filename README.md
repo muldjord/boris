@@ -13,16 +13,18 @@ muldjordlars@gmail.com.
 
 Copyright 2018 Lars Muldjord. This program is distributed under the terms of the GNU General Public License. Be sure to read the license in COPYING.TXT or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.
 
-## Building from source (Linux)
-### Requirements
-* Qt 5 dev libs including multimedia package
-* SFML dev libs
-* For Ubuntu and other Debian derivatives running "sudo apt-get install qt5-default qtmultimedia5-dev libsfml-dev" should be enough. If not, please let me know.
+## Building from source (Ubuntu Linux and Debian derivatives)
+### Prerequisites
+``` 
+$ sudo apt install build-essential qt5-default qtmultimedia5-dev libsfml-dev
+```
 
 ### Build commands
-* qmake
-* make
-* ./Boris
+```
+$ qmake
+$ make
+$ ./Boris
+```
 
 ## Release notes
 
