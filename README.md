@@ -23,13 +23,13 @@ $ sudo apt install build-essential qt5-default qtmultimedia5-dev libsfml-dev
 ### Build commands
 ```
 $ qmake
-$ make
+$ make -j8
 $ ./Boris
 ```
 
 ## Release notes
 
-#### Version 3.0.1 (In progress, unreleased):
+#### Version 3.0.1 (15th September 2020):
 * Boris now sometimes farts in his sleep, a very important feature
 
 #### Version 3.0.0 (8th December 2019):
