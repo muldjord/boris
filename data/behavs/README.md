@@ -11,7 +11,7 @@ The format of the dat files is as follows:
 ```
 <Behaviour options and flags>
 #Frames
-sprite;time;deltax;deltay;soundfx;script
+<Frame definitions>
 ```
 The line `#Frames` must be there so the software knows when the frame definitions begin.
 
