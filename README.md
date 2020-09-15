@@ -1,17 +1,17 @@
 # Boris
-Desktop screenmate written entirely in Qt. Boris will keep you company while you work. He has a bit of a prankster personality and needs to be cared for in order to stay alive. Move your mouse over him to check on his health stats. Visualizes weather from OpenWeatherMap which affects the behaviour of Boris while he roams your desktop. Let's hope there's not a thunderstorm coming up...!
+A scriptable desktop screenmate written in Qt (for graphics) and SFML (for sound). Boris will keep you company while you work. He has a bit of a prankster personality and needs to be cared for in order to stay alive. Move your mouse over him to check on his health stats. Visualizes weather from OpenWeatherMap which affects the behaviour of Boris while he roams your desktop. Let's hope there's not a thunderstorm coming up...!
 
 * Programming: Lars Muldjord
 * Graphics: Lars Muldjord
 * Sound: Lars Muldjord
 * Website: http://www.muldjord.com/boris
 
-Boris was programmed using the Qt framework (http://www.qt.io) and C++.
+Boris was programmed in C++ using the [Qt framework](http://www.qt.io) for graphics and the [SFML library](https://www.sfml-dev.org) for sound.
 
 Bug reports, suggestions and / or comments can be emailed to me at:
 muldjordlars@gmail.com.
 
-Copyright 2018 Lars Muldjord. This program is distributed under the terms of the GNU General Public License. Be sure to read the license in COPYING.TXT or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.
+Copyright 2020 Lars Muldjord. This program is distributed under the terms of the GNU General Public License. Be sure to read the license in COPYING.TXT or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.
 
 ## Building from source (Ubuntu Linux and Debian derivatives)
 ### Prerequisites
