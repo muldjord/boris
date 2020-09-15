@@ -15,7 +15,7 @@ The format of the dat files is as follows:
 ```
 The line `#Frames` must be there so the software knows when the frame definitions begin.
 
-### Options and flags
+### Behaviour options and flags
 Options or flags, one per line of any of the following:
 * title=&lt;STRING&gt;: The title used by the behaviour when right-clicking Boris
 * category=&lt;STRING&gt;: The category this behaviour is categorically categorized into:
