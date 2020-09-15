@@ -41,8 +41,17 @@ Options or flags, one per line of any of the following:
 * doNotDisturb: If this exists, Boris will not be disturbed by the mouse or other Borises while this behaviour is in progress
 * allowFlip: If this line exists there is a 50% chance the behaviour will be mirrored horizontally
 * pitchLock: Disable the minute pitch randomness otherwise used when playing sounds from this behaviour
+
 #### Code defines
 The scripting language supports very basic code block defines. These are not functions, but rather blocks of code that can then be reused throughout a behaviour by using the `call <DEFINE>` command.
+
+##### Example:
+```
+define mainblock:if progress <= 0 break,
+var rand = @4,
+if rand = 1 goto label1 else if rand = 2 goto label2 else if rand = 3 goto label3
+```
+This defines a block of code called `mainblock` which can then be called at any time with `call mainblock` which simply replaces that call with the code contained in the block.
 
 ### Frame definitions
 Each frame in a behaviour must be contained on a single line under the `#Frames` line. Empty lines are allowed (they will simply be ignored) and so are comment lines starting with `#` (these are also ignored).
@@ -52,13 +61,6 @@ Each frame in a behaviour must be contained on a single line under the `#Frames`
 * deltay: Same as deltax but for the y axis. Keep in mind that it counts from top to bottom. Use 'rand' if you want him to move to a random location on the y axis
 * soundfx: Filename for sound fx that will be played when this frame is reached. This is optional and can be left out if it's a silent frame
 * script: The script that will be run at the end of showing the frame. This is optional. Scripting language is detailed below
-* Example:
-```
-define mainblock:if progress <= 0 break,
-var rand = @4,
-if rand = 1 goto label1 else if rand = 2 goto label2 else if rand = 3 goto label3
-```
-This defines a block of code called `mainblock` which can then be called at any time with `call mainblock` which simply replaces that call with the code contained in the block.
 
 ### Scripting language definition
 Boris can be scripted quite heavily to allow for some fun and interesting behaviour outcomes. A frame can have as many lines of script added to it as needed. Comma (`,`) is used to seperate each line from the next. Multiline scripts are possible just end a line with a comma and the following line will be seen as part of the same frame script. The last line of a script must NOT end with a comma.
