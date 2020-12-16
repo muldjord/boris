@@ -218,7 +218,7 @@ behav play_piano
 ```
 
 ##### call
-Calls and rund a block of code from a define (documented further up).
+Calls and runs a block of code from a define (documented further up).
 * Definition:
 `call <DEFINE>`
 * Example:
