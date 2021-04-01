@@ -12,7 +12,8 @@
     <file alias="teleport.png">icons/teleport.png</file>
     <file alias="pfont.png">data/gfx/pfont.png</file>
     <file alias="bubble.png">data/gfx/bubble.png</file>
-    <file alias="bubble_tip.png">data/gfx/bubble_tip.png</file>
+    <file alias="bubble_speech.png">data/gfx/bubble_speech.png</file>
+    <file alias="bubble_thought.png">data/gfx/bubble_thought.png</file>
     <file alias="stats.png">data/gfx/stats.png</file>
     <file alias="flash_icon.png">data/gfx/flash_icon.png</file>
     <file alias="bruises.png">data/gfx/bruises.png</file>
