@@ -45,6 +45,7 @@ struct Settings {
   bool showWelcome = true;
   bool statLogging = false;
   int desktopWidth = 1920;
+  bool scriptOutput = true;
 
   // If set to true the vision processing will take place, wall detection and such
   bool vision = false;
