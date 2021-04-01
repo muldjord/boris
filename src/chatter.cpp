@@ -36,33 +36,39 @@
 
 extern QMap<QChar, QImage> pfont;
 
-Chatter::Chatter(Settings *settings, QWidget *parent) : QLabel(parent)
+Chatter::Chatter(Settings *settings) : settings(settings)
 {
-  this->settings = settings;
-
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
   setFrameShape(QFrame::NoFrame);
   setStyleSheet("background:transparent");
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+  QGraphicsScene *scene = new QGraphicsScene();
+  setScene(scene);
+
+  bubbleSprite = this->scene()->addPixmap(QPixmap());
 }
 
 Chatter::~Chatter()
 {
 }
 
-QPair<QString, int> Chatter::initChatter(const int x, const int y, const int &borisSize)
+void Chatter::initChatter(const int x, const int y,
+                          const int &borisSize,
+                          const QString &bubbleText,
+                          const QString &bubbleType,
+                          const QUrl &rssUrl)
 {
-  QString chatType = "_complain";
-  QString chatText = "I'm speechless...";
-  if(!settings->chatLines.isEmpty()) {
-    currentLine = qrand() % settings->chatLines.count();
-    chatType = settings->chatLines.at(currentLine).type;
-    chatText = settings->chatLines.at(currentLine).text;
+  if(rssUrl.isValid()) {
+    this->rssUrl = rssUrl;
+  } else {
+    this->rssUrl.clear();
   }
-
   int textWidth = 0;
   int textHeight = 0;
-  for(const auto &ch: chatText) {
+  for(const auto &ch: bubbleText) {
     if(pfont.contains(ch)) {
       textWidth += pfont[ch].width();
       if(pfont[ch].height() > textHeight) {
@@ -70,12 +76,12 @@ QPair<QString, int> Chatter::initChatter(const int x, const int y, const int &bo
       }
     }
   }
-  QImage bubbleText(textWidth, textHeight, QImage::Format_ARGB32_Premultiplied);
-  bubbleText.fill(Qt::white);
+  QImage textImage(textWidth, textHeight, QImage::Format_ARGB32_Premultiplied);
+  textImage.fill(Qt::white);
   QPainter painter;
-  painter.begin(&bubbleText);
+  painter.begin(&textImage);
   int idx = 0;
-  for(const auto &ch: chatText) {
+  for(const auto &ch: bubbleText) {
     QImage charImage;
     if(pfont.contains(ch)) {
       charImage = pfont[ch];
@@ -88,36 +94,42 @@ QPair<QString, int> Chatter::initChatter(const int x, const int y, const int &bo
   painter.end();
 
   QImage bubbleAtlas(":bubble.png");
-  QImage bubbleTip(":bubble_tip.png");
-  QImage bubbleImage(bubbleText.width() + bubbleAtlas.width() - 1 - 2,
-                     bubbleText.height() + bubbleAtlas.height() - 1 + bubbleTip.height() - 2,
+  QImage bubbleSpeech(":bubble_speech.png");
+  QImage bubbleThought(":bubble_thought.png");
+  QImage bubbleImage(textImage.width() + bubbleAtlas.width() - 1 - 2,
+                     textImage.height() + bubbleAtlas.height() - 1 + bubbleSpeech.height() - 2,
                      QImage::Format_ARGB32_Premultiplied);
   bubbleImage.fill(Qt::transparent);
   painter.begin(&bubbleImage);
   painter.drawImage(0, 0, bubbleAtlas.copy(0, 0, 6, 6));
-  painter.drawImage(6, 0, bubbleAtlas.copy(6, 0, 1, 6).scaled(bubbleText.width() - 2, 6));
-  painter.drawImage(6 + bubbleText.width() - 2, 0, bubbleAtlas.copy(7, 0, 6, 6));
-  painter.drawImage(0, 6, bubbleAtlas.copy(0, 6, 6, 1).scaled(6, bubbleText.height() - 2));
-  painter.drawImage(6 + bubbleText.width() - 2, 6, bubbleAtlas.copy(7, 6, 6, 1).scaled(6, bubbleText.height() - 2));
-  painter.drawImage(0, 6 + bubbleText.height() - 2, bubbleAtlas.copy(0, 7, 6, 6));
-  painter.drawImage(6, 6 + bubbleText.height() - 2, bubbleAtlas.copy(6, 7, 1, 6).scaled(bubbleText.width() - 2, 6));
-  painter.drawImage(6 + bubbleText.width() - 2, 6 + bubbleText.height() - 2, bubbleAtlas.copy(7, 7, 6, 6));
-  painter.drawImage(bubbleImage.width() / 2, 6 + 6 + bubbleText.height() - 4, bubbleTip);
+  painter.drawImage(6, 0, bubbleAtlas.copy(6, 0, 1, 6).scaled(textImage.width() - 2, 6));
+  painter.drawImage(6 + textImage.width() - 2, 0, bubbleAtlas.copy(7, 0, 6, 6));
+  painter.drawImage(0, 6, bubbleAtlas.copy(0, 6, 6, 1).scaled(6, textImage.height() - 2));
+  painter.drawImage(6 + textImage.width() - 2, 6, bubbleAtlas.copy(7, 6, 6, 1).scaled(6, textImage.height() - 2));
+  painter.drawImage(0, 6 + textImage.height() - 2, bubbleAtlas.copy(0, 7, 6, 6));
+  painter.drawImage(6, 6 + textImage.height() - 2, bubbleAtlas.copy(6, 7, 1, 6).scaled(textImage.width() - 2, 6));
+  painter.drawImage(6 + textImage.width() - 2, 6 + textImage.height() - 2, bubbleAtlas.copy(7, 7, 6, 6));
+  if(bubbleType == "_thought") {
+    painter.drawImage(bubbleImage.width() / 2, 6 + 6 + textImage.height() - 4, bubbleThought);
+  } else {
+    painter.drawImage(bubbleImage.width() / 2, 6 + 6 + textImage.height() - 4, bubbleSpeech);
+  }
   // Draw actual text last, to make sure borders don't overlap it
-  painter.drawImage(6, 6, bubbleText);
+  painter.drawImage(6, 6, textImage);
   painter.end();
-  
-  bubbleImage = bubbleImage.scaledToWidth(bubbleImage.width() * 2);
-  setPixmap(QPixmap::fromImage(bubbleImage));
-  int duration = 2000 + (chatText.length() * 120);
+
+  bubbleSprite->setPixmap(QPixmap::fromImage(bubbleImage));
+  scene()->setSceneRect(0.0, 0.0, bubbleImage.width(), bubbleImage.height());
+  resetTransform();
+  scale(borisSize / 32.0, borisSize / 32.0);
+  bubbleSprite->setPos(0, 0);
+  int duration = 2000 + (bubbleText.length() * 120);
 
   if(settings->chatter) {
     show();
     move((x + (borisSize / 8 * 7)) - (width() / 2), y + (borisSize / 10 * 9) - height());
     QTimer::singleShot(duration, this, &Chatter::hide);
   }
-
-  return QPair<QString, int>(chatType, duration);
 }
 
 void Chatter::moveChatter(const int x, const int y, const int &borisSize)
@@ -127,8 +139,8 @@ void Chatter::moveChatter(const int x, const int y, const int &borisSize)
 
 void Chatter::mousePressEvent(QMouseEvent *event)
 {
-  if(event->button() == Qt::LeftButton && settings->chatLines.at(currentLine).url.isValid()) {
-    QDesktopServices::openUrl(settings->chatLines.at(currentLine).url);
+  if(event->button() == Qt::LeftButton && rssUrl.isValid()) {
+    QDesktopServices::openUrl(rssUrl);
   }
   event->ignore();
 }

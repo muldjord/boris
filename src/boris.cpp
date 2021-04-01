@@ -124,7 +124,7 @@ Boris::Boris(Settings *settings)
   funQueue = 0;
   hygieneQueue = 0;
   stats = new Stats(settings, hyper, health, energy, hunger, bladder, social, fun, hygiene, this);
-  chatter = new Chatter(settings, this);
+  chatter = new Chatter(settings);
   
   staticBehavs = 0;
   // Figure out how many static behaviours there are
@@ -341,16 +341,25 @@ void Boris::changeBehaviour(QString behav, int time)
   }
   
   // Hide speech bubble in case Boris was grabbed or otherwise stopped in the middle of speaking
-  chatter->hide();
+  //chatter->hide();
   // Check for chatter
   if(behaviours.at(curBehav).file == "chatter") {
-    QPair<QString, int> selectedChatter = chatter->initChatter(pos().x(), pos().y(), size);
+    QString chatType = "_complain";
+    QString chatText = "I'm speechless...";
+    QUrl chatUrl = QUrl();
+    if(!settings->chatLines.isEmpty()) {
+      int currentLine = qrand() % settings->chatLines.count();
+      chatType = settings->chatLines.at(currentLine).type;
+      chatText = settings->chatLines.at(currentLine).text;
+      chatUrl = settings->chatLines.at(currentLine).url;
+    }
+    chatter->initChatter(pos().x(), pos().y(), size, chatText, chatType, chatUrl);
     for(int a = 0; a < behaviours.size(); ++a) {
-      if(behaviours.at(a).file == selectedChatter.first) {
+      if(behaviours.at(a).file == chatType) {
         curBehav = a;
       }
     }
-    time = selectedChatter.second;
+    time = 2000 + (chatText.length() * 120);
   }
 
   // Applying behaviour stats to Boris
@@ -1303,15 +1312,24 @@ void Boris::processAi(QString &behav)
       behav = potentials.at(qrand() % potentials.size());
       // Flash stat if appropriate
       if(behav == "_fun") {
+        chatter->initChatter(pos().x(), pos().y(), size, "I'm bored...", "_thought");
         stats->flashStat("fun");
       } else if(behav == "_energy") {
+        chatter->initChatter(pos().x(), pos().y(), size, "I'm feeling drowsy...", "_thought");
         stats->flashStat("energy");
       } else if(behav == "_hunger") {
+        chatter->initChatter(pos().x(), pos().y(), size, "I'm feeling hungry...", "_thought");
         stats->flashStat("hunger");
       } else if(behav == "_bladder") {
+        chatter->initChatter(pos().x(), pos().y(), size, "I really need to go to the toilet!", "_thought");
         stats->flashStat("bladder");
       } else if(behav == "_social") {
+        chatter->initChatter(pos().x(), pos().y(), size, "I wish someone would play with me.", "_thought");
         stats->flashStat("social");
+      } else if(behav == "_health") {
+        chatter->initChatter(pos().x(), pos().y(), size, "I don't feel so good...", "_thought");
+      } else if(behav == "_hygiene") {
+        chatter->initChatter(pos().x(), pos().y(), size, "Urgh, I smell pretty bad...", "_thought");
       }
     }
   }

@@ -70,6 +70,11 @@ MainWindow::MainWindow()
   }
   settings.statLogging = iniSettings.value("stat_logging").toBool();
 
+  if(!iniSettings.contains("script_output")) {
+    iniSettings.setValue("script_output", true);
+  }
+  settings.scriptOutput = iniSettings.value("script_output").toBool();
+  
   if(!iniSettings.contains("sounds_path")) {
     iniSettings.setValue("sounds_path", "data/sfx");
   }

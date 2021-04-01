@@ -30,17 +30,23 @@
 
 #include "settings.h"
 
-#include <QLabel>
+#include <QGraphicsView>
+#include <QGraphicsPixmapItem>
 #include <QMouseEvent>
+#include <QUrl>
 
-class Chatter : public QLabel
+class Chatter : public QGraphicsView
 {
   Q_OBJECT;
 
 public:
-  Chatter(Settings *settings, QWidget *parent);
+  Chatter(Settings *settings);
   ~Chatter();
-  QPair<QString, int> initChatter(const int x, const int y, const int &borisSize);
+  void initChatter(const int x, const int y,
+                   const int &borisSize,
+                   const QString &bubbleText,
+                   const QString &bubbleType,
+                   const QUrl &rssUrl = QUrl());
   void moveChatter(const int x, const int y, const int &borisSize);
   
 protected:
@@ -48,7 +54,8 @@ protected:
   
 private:
   Settings *settings;
-  int currentLine = 0;
+  QGraphicsPixmapItem *bubbleSprite;
+  QUrl rssUrl = QUrl();
 };
 
 #endif // _CHATTER_H
