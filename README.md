@@ -34,6 +34,11 @@ $ ./Boris
 
 ## Release notes
 
+#### Version 3.0.2 (In progress, unreleased):
+* Reworked chatter / speech bubble class
+* Boris will now think about how he feels when stats are down
+* Added 'script_output' variable to config.ini to allow disabling script output in terminal
+
 #### Version 3.0.1 (15th September 2020):
 * Boris now sometimes farts in his sleep, a very important feature
 
