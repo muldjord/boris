@@ -43,7 +43,8 @@
 extern QList<Behaviour> itemList;
 extern SoundMixer soundMixer;
 
-Item::Item(const int &x, const int &y, const int &size, const QString &item, Settings *settings)
+Item::Item(const int &x, const int &y, const int &size, const QString &item, Settings *settings) :
+  size(size)
 {
   this->settings = settings;
   
