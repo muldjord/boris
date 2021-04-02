@@ -40,6 +40,8 @@ $ ./Boris
 * Boris will now think about how he feels when stats are down
 * Added 'script_output' variable to config.ini to allow disabling script output in terminal
 * Replaced deprecated qrand with QRandomGenerator (which unfortunately has the side-effect of now requiring Qt 5.10)
+* Added '_thought' chatter type
+* Added 'Dance' idle behaviour
 
 #### Version 3.0.1 (15th September 2020):
 * Boris now sometimes farts in his sleep, a very important feature
