@@ -834,7 +834,7 @@ void Boris::handlePhysics()
     if(getDistance(QCursor::pos()) < size * 3) {
       if(!alreadyEvading) {
         interactions++;
-        if(fabs(mouseHVel) > 20.0 || fabs(mouseVVel) > 20.0) {
+        if(fabs(mouseHVel) > 40.0 || fabs(mouseVVel) > 40.0) {
           int mouseSector = getSector(QCursor::pos());
           int timeout = QRandomGenerator::global()->bounded(2000) + 1000;
           if(mouseSector == 2) {
