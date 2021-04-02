@@ -42,6 +42,7 @@ $ ./Boris
 * Replaced deprecated qrand with QRandomGenerator (which unfortunately has the side-effect of now requiring Qt 5.10)
 * Added '_thought' chatter type
 * Added 'Dance' idle behaviour
+* Gave Boris a bed to sleep in
 
 #### Version 3.0.1 (15th September 2020):
 * Boris now sometimes farts in his sleep, a very important feature
