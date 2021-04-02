@@ -1313,7 +1313,7 @@ void Boris::processAi(QString &behav)
       behav = potentials.at(QRandomGenerator::global()->bounded(potentials.size()));
       // Flash stat if appropriate
       if(behav == "_fun") {
-        chatter->initChatter(pos().x(), pos().y(), size, "I'm bored...", "_complain");
+        chatter->initChatter(pos().x(), pos().y(), size, "I'm bored...", "_thought");
         stats->flashStat("fun");
       } else if(behav == "_energy") {
         chatter->initChatter(pos().x(), pos().y(), size, "I'm feeling drowsy...", "_thought");
