@@ -11,7 +11,7 @@ A scriptable desktop screenmate written in Qt (for graphics) and SFML (for sound
 * Sound: Lars Muldjord
 * Website: http://www.muldjord.com/boris
 
-Boris was programmed in C++ using the [Qt framework](http://www.qt.io) for graphics and the [SFML library](https://www.sfml-dev.org) for sound.
+Boris was programmed in C++ using the [Qt framework](http://www.qt.io) for graphics and the [SFML library](https://www.sfml-dev.org) for sound. Boris requires Qt 5.10 or later.
 
 Bug reports, suggestions and / or comments can be emailed to me at:
 muldjordlars@gmail.com.
@@ -20,6 +20,7 @@ Copyright 2020 Lars Muldjord. This program is distributed under the terms of the
 
 ## Building from source (Ubuntu Linux and Debian derivatives)
 ### Prerequisites
+Boris requires Qt 5.10 or later. Install all prerequisites with the following commands:
 ```
 $ sudo apt update
 $ sudo apt install build-essential qt5-default qtmultimedia5-dev libsfml-dev
@@ -38,6 +39,7 @@ $ ./Boris
 * Reworked chatter / speech bubble class
 * Boris will now think about how he feels when stats are down
 * Added 'script_output' variable to config.ini to allow disabling script output in terminal
+* Replaced deprecated qrand with QRandomGenerator (which unfortunately has the side-effect of now requiring Qt 5.10)
 
 #### Version 3.0.1 (15th September 2020):
 * Boris now sometimes farts in his sleep, a very important feature
