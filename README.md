@@ -44,6 +44,7 @@ $ ./Boris
 * Added 'Dance' idle behaviour
 * Gave Boris a bed to sleep in
 * Improved / reworked '_fun' behaviour used when fun stat is low
+* Improved / reworked '_social' behaviour used when social stat is low
 
 #### Version 3.0.1 (15th September 2020):
 * Boris now sometimes farts in his sleep, a very important feature
