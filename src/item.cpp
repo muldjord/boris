@@ -39,6 +39,8 @@
 #include <QTimer>
 #include <QDate>
 #include <QTime>
+#include <QElapsedTimer>
+#include <QRandomGenerator>
 
 extern QList<Behaviour> itemList;
 extern SoundMixer soundMixer;
@@ -84,7 +86,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
     QTimer::singleShot(settings->itemTimeout * 1000, this, &Item::destroy);
   }
 
-  if(itemList.at(curItem).allowFlip && qrand() %2) {
+  if(itemList.at(curItem).allowFlip && QRandomGenerator::global()->bounded(2)) {
     flipFrames = true;
   } else {
     flipFrames = false;
@@ -186,7 +188,7 @@ void Item::nextFrame()
     curFrame = 0;
   }
 
-  QTime frameTimer;
+  QElapsedTimer frameTimer;
   frameTimer.start();
 
   if(flipFrames) {
@@ -205,7 +207,7 @@ void Item::nextFrame()
     } else {
       soundMixer.playSound(itemList.at(curItem).frames.at(curFrame).soundBuffer,
                            (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
-                           0.95 + (qrand() % 100) / 1000.0);
+                           0.95 + QRandomGenerator::global()->bounded(100) / 1000.0);
     }
   }
 
@@ -253,7 +255,7 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
   int maxY = QApplication::desktop()->height() - size;
 
   if(dX == 666) {
-    dX = qrand() % maxX;
+    dX = QRandomGenerator::global()->bounded(maxX);
   } else {
     if(flipped) {
       dX *= -1;
@@ -261,7 +263,7 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
     dX = pos().x() + (dX * ceil(size / 32.0));
   }
   if(dY == 666) {
-    dY = qrand() % maxY;
+    dY = QRandomGenerator::global()->bounded(maxY);
   } else {
     dY = pos().y() + (dY * ceil(size / 32.0));
   }

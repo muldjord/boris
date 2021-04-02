@@ -195,7 +195,11 @@ bool Loader::loadBehaviours(const Settings &settings,
           continue;
         }
         Frame f;
+#if QT_VERSION >= 0x050e00
+        QList<QString> snippets = line.split(";", Qt::KeepEmptyParts);
+#else
         QList<QString> snippets = line.split(";", QString::KeepEmptyParts);
+#endif
         f.sprite = sprites.at(snippets.at(0).toInt());
         f.time = snippets.at(1).toInt();
         if(snippets.at(2) == "rand") {

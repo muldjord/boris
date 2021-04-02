@@ -40,13 +40,14 @@
 #include <QBitmap>
 #include <QScreen>
 #include <QTime>
-#include <QLinkedList>
+#include <QElapsedTimer>
+#include <QRandomGenerator>
 
 constexpr int STATTIMER = 200;
 constexpr double PI = 3.1415927;
 constexpr int ANNOYMAX = 42;
 
-extern QLinkedList<Boris*> borises;
+extern QList<Boris*> borises;
 extern QList<Behaviour> behaviours;
 extern QList<Behaviour> weathers;
 extern SoundMixer soundMixer;
@@ -61,7 +62,7 @@ Boris::Boris(Settings *settings)
     borisY = QApplication::desktop()->height() - height();
   }
   
-  move(borisX + (qrand() % 200) - 100, borisY + (qrand() % 200) - 100);
+  move(borisX + QRandomGenerator::global()->bounded(200) - 100, borisY + QRandomGenerator::global()->bounded(200) - 100);
 
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
@@ -109,12 +110,12 @@ Boris::Boris(Settings *settings)
   // Set initial stats with some randomization
   int hyper = 0;
   int health = 100;
-  int energy = 50 + qrand() % 25;
-  int hunger = 50 + qrand() % 25;
-  int bladder = 50 + qrand() % 25;
+  int energy = 50 + QRandomGenerator::global()->bounded(25);
+  int hunger = 50 + QRandomGenerator::global()->bounded(25);
+  int bladder = 50 + QRandomGenerator::global()->bounded(25);
   int hygiene = 100;
-  int social = 50 + qrand() % 25;
-  int fun = 50 + qrand() % 25;
+  int social = 50 + QRandomGenerator::global()->bounded(25);
+  int fun = 50 + QRandomGenerator::global()->bounded(25);
   hyperQueue = 0;
   healthQueue = 0;
   energyQueue = 0;
@@ -252,7 +253,7 @@ QString Boris::getFileFromCategory(QString category)
       b.append(behaviour.file);
     }
   }
-  int chosen = qrand() % b.length();
+  int chosen = QRandomGenerator::global()->bounded(b.length());
   for(int i = 0; i < behaviours.length(); ++i) {
     if(behaviours.at(i).file == b.at(chosen)) {
       chosen = i;
@@ -270,7 +271,7 @@ int Boris::getIdxFromCategory(QString category)
       b.append(behav.file);
     }
   }
-  int chosen = qrand() % b.length();
+  int chosen = QRandomGenerator::global()->bounded(b.length());
   for(int i = 0; i < behaviours.length(); ++i) {
     if(behaviours.at(i).file == b.at(chosen)) {
       chosen = i;
@@ -313,15 +314,15 @@ void Boris::changeBehaviour(QString behav, int time)
   
   // Pick random behaviour but rule out certain behavs such as weewee and sleep
   // Bias towards behavs from 'Idle' and 'Locomotion' categories to make Boris less erratic
-  if(qrand() % 10 >= 3) {
-    if(qrand() % 70 >= stats->getEnergy()) {
+  if(QRandomGenerator::global()->bounded(10) >= 3) {
+    if(QRandomGenerator::global()->bounded(70) >= stats->getEnergy()) {
       curBehav = getIdxFromCategory("Idle");
     } else {
       curBehav = getIdxFromCategory("Locomotion");
     }
   } else {
     do {
-      curBehav = (qrand() % (behaviours.size() - staticBehavs)) + staticBehavs;
+      curBehav = QRandomGenerator::global()->bounded(behaviours.size() - staticBehavs) + staticBehavs;
     } while(behaviours.at(curBehav).file == "weewee" ||
             behaviours.at(curBehav).file == "toilet_visit" ||
             behaviours.at(curBehav).file == "sleep" ||
@@ -348,7 +349,7 @@ void Boris::changeBehaviour(QString behav, int time)
     QString chatText = "I'm speechless...";
     QUrl chatUrl = QUrl();
     if(!settings->chatLines.isEmpty()) {
-      int currentLine = qrand() % settings->chatLines.count();
+      int currentLine = QRandomGenerator::global()->bounded(settings->chatLines.count());
       chatType = settings->chatLines.at(currentLine).type;
       chatText = settings->chatLines.at(currentLine).text;
       chatUrl = settings->chatLines.at(currentLine).url;
@@ -371,7 +372,7 @@ void Boris::changeBehaviour(QString behav, int time)
   funQueue += behaviours.at(curBehav).fun;
   hygieneQueue += behaviours.at(curBehav).hygiene;
   
-  if(behaviours.at(curBehav).allowFlip && qrand() %2) {
+  if(behaviours.at(curBehav).allowFlip && QRandomGenerator::global()->bounded(2)) {
     flipFrames = true;
   } else {
     flipFrames = false;
@@ -379,7 +380,7 @@ void Boris::changeBehaviour(QString behav, int time)
 
   if(!behaviours.at(curBehav).oneShot) {
     if(time == -1) {
-      time = qrand() % 7000 + 5000;
+      time = QRandomGenerator::global()->bounded(7000) + 5000;
     }
     time = time - (time / 100.0 * stats->getHyper());
     behavTimer.setInterval(time);
@@ -546,7 +547,7 @@ int Boris::getSector(const QPoint &p)
 
 void Boris::nextFrame()
 {
-  QTime frameTimer;
+  QElapsedTimer frameTimer;
   frameTimer.start();
 
   sanityCheck();
@@ -595,7 +596,7 @@ void Boris::nextFrame()
     } else {
       soundMixer.playSound(behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
                            (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
-                           (stats->getHyper() / 60.0) + (0.95 + (qrand() % 100) / 1000.0));
+                           (stats->getHyper() / 60.0) + (0.95 + QRandomGenerator::global()->bounded(100) / 1000.0));
     }
   }
 
@@ -649,7 +650,7 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
   int maxY = QApplication::desktop()->height() - height();
 
   if(dX == 666) {
-    dX = qrand() % maxX;
+    dX = QRandomGenerator::global()->bounded(maxX);
   } else {
     if(flipped) {
       dX *= -1;
@@ -657,7 +658,7 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
     dX = pos().x() + (dX * ceil(size / 32.0));
   }
   if(dY == 666) {
-    dY = qrand() % maxY;
+    dY = QRandomGenerator::global()->bounded(maxY);
   } else {
     dY = pos().y() + (dY * ceil(size / 32.0));
   }
@@ -779,7 +780,7 @@ void Boris::wheelEvent(QWheelEvent *)
 void Boris::handlePhysics()
 {
   if(!grabbed && weatherSprite->isVisible()) {
-    sinVal += (qrand() % 2000) / 20000.0;
+    sinVal += QRandomGenerator::global()->bounded(2000) / 20000.0;
     if(sinVal > PI) {
       sinVal = 0.0;
     }
@@ -797,7 +798,7 @@ void Boris::handlePhysics()
     moveBoris(hVel, vVel);
     vVel += 0.5;
     if(behaviours.at(curBehav).file != "_umbrella_falling") {
-      if(vVel > 10 && qrand() % 100 <= 7) {
+      if(vVel > 10 && QRandomGenerator::global()->bounded(100) <= 7) {
         changeBehaviour("_umbrella_falling");
       }
     } else {
@@ -835,7 +836,7 @@ void Boris::handlePhysics()
         interactions++;
         if(fabs(mouseHVel) > 20.0 || fabs(mouseVVel) > 20.0) {
           int mouseSector = getSector(QCursor::pos());
-          int timeout = (qrand() % 2000) + 1000;
+          int timeout = QRandomGenerator::global()->bounded(2000) + 1000;
           if(mouseSector == 2) {
             changeBehaviour("_flee_left", timeout);
           } else if(mouseSector == 1) {
@@ -853,7 +854,7 @@ void Boris::handlePhysics()
           } else if(mouseSector == 3) {
             changeBehaviour("_flee_left_up", timeout);
           }
-        } else if(stats->getFun() > 10 && interactions >= 4 && qrand() % 10 >= 3) {
+        } else if(stats->getFun() > 10 && interactions >= 4 && QRandomGenerator::global()->bounded(10) >= 3) {
           changeBehaviour(getFileFromCategory("Social"));
         }
       }
@@ -869,8 +870,8 @@ void Boris::earthquake()
   if(!falling && !grabbed) {
     changeBehaviour("_falling");
     falling = true;
-    vVel = ((qrand() % 12) * -1) - 5;
-    hVel = qrand() % 11 - 5;
+    vVel = (QRandomGenerator::global()->bounded(12) * -1) - 5;
+    hVel = QRandomGenerator::global()->bounded(11) - 5;
     alt = pos().y();
   }
 }
@@ -897,11 +898,11 @@ void Boris::statProgress()
   } else if(QTime::currentTime().hour() >= 6 && QTime::currentTime().hour() < 8) {
     energyQueue -= 1;
   }
-  hyperQueue -= qrand() % 7;
-  hungerQueue -= qrand() % 2;
-  socialQueue -= qrand() % 2;
-  hygieneQueue -= qrand() % 1;
-  funQueue -= qrand() % 3;
+  hyperQueue -= QRandomGenerator::global()->bounded(7);
+  hungerQueue -= QRandomGenerator::global()->bounded(2);
+  socialQueue -= QRandomGenerator::global()->bounded(2);
+  hygieneQueue -= QRandomGenerator::global()->bounded(1);
+  funQueue -= QRandomGenerator::global()->bounded(3);
   // Nothing needed for 'health' and 'bladder'
 }
 
@@ -1100,42 +1101,42 @@ void Boris::collide(Boris *boris)
     }
   } else if(borisFriend->getHygiene() <= 22) {
     if(friendAt == Direction::South) {
-      changeBehaviour("_flee_up", (qrand() % 2000) + 1500);
+      changeBehaviour("_flee_up", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::SouthEast) {
-      changeBehaviour("_flee_left_up", (qrand() % 2000) + 1500);
+      changeBehaviour("_flee_left_up", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::East) {
-      changeBehaviour("_flee_left", (qrand() % 2000) + 1500);
+      changeBehaviour("_flee_left", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::NorthEast) {
-      changeBehaviour("_flee_left_down", (qrand() % 2000) + 1500);
+      changeBehaviour("_flee_left_down", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::North) {
-      changeBehaviour("_flee_down", (qrand() % 2000) + 1500);
+      changeBehaviour("_flee_down", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::NorthWest) {
-      changeBehaviour("_flee_right_down", (qrand() % 2000) + 1500);
+      changeBehaviour("_flee_right_down", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::West) {
-      changeBehaviour("_flee_right", (qrand() % 2000) + 1500);
+      changeBehaviour("_flee_right", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::SouthWest) {
-      changeBehaviour("_flee_right_up", (qrand() % 2000) + 1500);
+      changeBehaviour("_flee_right_up", QRandomGenerator::global()->bounded(2000) + 1500);
     }
   } else {
     if(friendAt == Direction::South) {
-      changeBehaviour("_casual_wave_down", (qrand() % 2000) + 1500);
+      changeBehaviour("_casual_wave_down", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::SouthEast) {
-      changeBehaviour("_casual_wave_right_down", (qrand() % 2000) + 1500);
+      changeBehaviour("_casual_wave_right_down", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::East) {
-      changeBehaviour("_casual_wave_right", (qrand() % 2000) + 1500);
+      changeBehaviour("_casual_wave_right", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::NorthEast) {
-      changeBehaviour("_casual_wave_right_up", (qrand() % 2000) + 1500);
+      changeBehaviour("_casual_wave_right_up", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::North) {
-      changeBehaviour("_casual_wave_up", (qrand() % 2000) + 1500);
+      changeBehaviour("_casual_wave_up", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::NorthWest) {
-      changeBehaviour("_casual_wave_left_up", (qrand() % 2000) + 1500);
+      changeBehaviour("_casual_wave_left_up", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::West) {
-      changeBehaviour("_casual_wave_left", (qrand() % 2000) + 1500);
+      changeBehaviour("_casual_wave_left", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::SouthWest) {
-      changeBehaviour("_casual_wave_left_down", (qrand() % 2000) + 1500);
+      changeBehaviour("_casual_wave_left_down", QRandomGenerator::global()->bounded(2000) + 1500);
     }
   }
-  QTimer::singleShot((qrand() % 5000) + 15000, this, &Boris::readyForFriend);
+  QTimer::singleShot(QRandomGenerator::global()->bounded(5000) + 15000, this, &Boris::readyForFriend);
 }
 
 void Boris::processVision()
@@ -1245,71 +1246,71 @@ void Boris::processAi(QString &behav)
     }
   }
   
-  if(behav == "" && qrand() % 2) {
+  if(behav == "" && QRandomGenerator::global()->bounded(2)) {
     // Stat check
     QList<QString> potentials;
     if(stats->getFun() <= 50) {
-      if(qrand() % (100 - stats->getFun()) > independence) {
+      if(QRandomGenerator::global()->bounded(100 - stats->getFun()) > independence) {
         potentials.append("_fun");
       } else if(stats->getFun() <= 15) {
-        if(qrand() % 100 < independence) {
+        if(QRandomGenerator::global()->bounded(100) < independence) {
           potentials.append(getFileFromCategory("Fun"));
         }
       }
     }
     if(stats->getEnergy() <= 50) {
-      if(qrand() % (100 - stats->getEnergy()) > independence) {
+      if(QRandomGenerator::global()->bounded(100 - stats->getEnergy()) > independence) {
         potentials.append("_energy");
       } else if(stats->getEnergy() <= 15) {
-        if(qrand() % 100 < independence) {
+        if(QRandomGenerator::global()->bounded(100) < independence) {
           potentials.append(getFileFromCategory("Energy"));
         }
       }
     }
     if(stats->getHunger() <= 50) {
-      if(qrand() % (100 - stats->getHunger()) > independence) {
+      if(QRandomGenerator::global()->bounded(100 - stats->getHunger()) > independence) {
         potentials.append("_hunger");
       } else if(stats->getHunger() <= 15) {
-        if(qrand() % 100 < independence) {
+        if(QRandomGenerator::global()->bounded(100) < independence) {
           potentials.append(getFileFromCategory("Hunger"));
         }
       }
     }
     if(stats->getBladder() <= 50) {
-      if(qrand() % (100 - stats->getBladder()) > independence) {
+      if(QRandomGenerator::global()->bounded(100 - stats->getBladder()) > independence) {
         potentials.append("_bladder");
       } else if(stats->getBladder() <= 15) {
-        if(qrand() % 100 < independence) {
+        if(QRandomGenerator::global()->bounded(100) < independence) {
           potentials.append(getFileFromCategory("Bladder"));
         }
       }
     }
     if(stats->getSocial() <= 50) {
-      if(qrand() % (100 - stats->getSocial()) > independence) {
+      if(QRandomGenerator::global()->bounded(100 - stats->getSocial()) > independence) {
         potentials.append("_social");
       } else if(stats->getSocial() <= 15) {
-        if(qrand() % 100 < independence) {
+        if(QRandomGenerator::global()->bounded(100) < independence) {
           potentials.append(getFileFromCategory("Social"));
         }
       }
     }
     if(stats->getHygiene() <= 50) {
-      if(qrand() % (100 - stats->getHygiene()) > independence) {
+      if(QRandomGenerator::global()->bounded(100 - stats->getHygiene()) > independence) {
         potentials.append("_hygiene");
       } else if(stats->getHygiene() <= 15) {
-        if(qrand() % 100 < independence) {
+        if(QRandomGenerator::global()->bounded(100) < independence) {
           potentials.append(getFileFromCategory("Hygiene"));
         }
       }
     }
     if(stats->getHealth() <= 50) {
-      if(qrand() % (150 - stats->getHealth()) > independence) {
+      if(QRandomGenerator::global()->bounded(150 - stats->getHealth()) > independence) {
         potentials.append("_health");
       }
     }
     // Now choose one from the potentials
     if(!potentials.isEmpty()) {
-      behav = potentials.at(qrand() % potentials.size());
+      behav = potentials.at(QRandomGenerator::global()->bounded(potentials.size()));
       // Flash stat if appropriate
       if(behav == "_fun") {
         chatter->initChatter(pos().x(), pos().y(), size, "I'm bored...", "_complain");
@@ -1343,7 +1344,7 @@ void Boris::updateBoris()
   // Set new size
   size = settings->size;
   if(size == 0) {
-    size = (qrand() % (256 - 32)) + 32; // Make him at least 32
+    size = QRandomGenerator::global()->bounded(257 - 32) + 32; // Make him at least 32 and max 256
   }
   setFixedSize(size, size + (size / 2.0));
   resetTransform();
@@ -1355,7 +1356,7 @@ void Boris::updateBoris()
   // Set new independence value
   independence = settings->independence;
   if(independence == 0) {
-    independence = (qrand() % 99) + 1;
+    independence = QRandomGenerator::global()->bounded(99) + 1;
   }
 
   // Show or hide stats

@@ -44,7 +44,11 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-QLinkedList<Boris*> borises;
+#if QT_VERSION >= 0x050a00
+#include <QRandomGenerator>
+#endif
+
+QList<Boris*> borises;
 QList<Behaviour> behaviours;
 QList<Behaviour> weathers;
 QList<Behaviour> itemList;
@@ -53,7 +57,9 @@ SoundMixer soundMixer(24);
 
 MainWindow::MainWindow()
 {
-  qsrand((uint)QTime::currentTime().msec());
+#if QT_VERSION < 0x050a00
+  qsrand(QTime::currentTime().msec());
+#endif
 
   QString iniFile = "config.ini";
   if(QFileInfo::exists("config_" + QHostInfo::localHostName().toLower() + ".ini")) {
@@ -309,8 +315,11 @@ void MainWindow::loadAssets()
     about.exec();
   }
 
+#if QT_VERSION >= 0x050a00
+  addBoris((settings.clones == 0?QRandomGenerator::global()->generate() % 99 + 1:settings.clones));
+#else
   addBoris((settings.clones == 0?qrand() % 99 + 1:settings.clones));
-
+#endif
   progressBar->setValue(progressBar->maximum());
   
   delete progressBar;
@@ -388,7 +397,11 @@ void MainWindow::aboutBox()
 
   int newClones = settings.clones;
   if(newClones == 0) {
+#if QT_VERSION >= 0x050a00
+    newClones = (QRandomGenerator::global()->generate() % 99) + 1;
+#else
     newClones = (qrand() % 99) + 1;
+#endif
   }
   if(borises.count() > newClones) {
     removeBoris(borises.count() - newClones);
