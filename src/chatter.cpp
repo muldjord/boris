@@ -49,17 +49,18 @@ Chatter::Chatter(Settings *settings) : settings(settings)
   setScene(scene);
 
   bubbleSprite = this->scene()->addPixmap(QPixmap());
+  bubbleSprite->setPos(0, 0);
 }
 
 Chatter::~Chatter()
 {
 }
 
-void Chatter::initChatter(const int x, const int y,
-                          const int &borisSize,
-                          const QString &bubbleText,
-                          const QString &bubbleType,
-                          const QUrl &rssUrl)
+int Chatter::initChatter(const int x, const int y,
+                         const int &borisSize,
+                         const QString &bubbleText,
+                         const QString &bubbleType,
+                         const QUrl &rssUrl)
 {
   if(rssUrl.isValid()) {
     this->rssUrl = rssUrl;
@@ -120,21 +121,23 @@ void Chatter::initChatter(const int x, const int y,
 
   bubbleSprite->setPixmap(QPixmap::fromImage(bubbleImage));
   scene()->setSceneRect(0.0, 0.0, bubbleImage.width(), bubbleImage.height());
+  setFixedSize(bubbleImage.width() * borisSize / 32.0, bubbleImage.height() * borisSize / 32.0);
   resetTransform();
   scale(borisSize / 32.0, borisSize / 32.0);
-  bubbleSprite->setPos(0, 0);
-  int duration = 2000 + (bubbleText.length() * 120);
+  int duration = 1000 + (bubbleText.length() * 200);
 
   if(settings->chatter) {
     show();
-    move((x + (borisSize / 8 * 7)) - (width() / 2), y + (borisSize / 10 * 9) - height());
+    moveChatter(x, y, borisSize);
     QTimer::singleShot(duration, this, &Chatter::hide);
   }
+
+  return duration;
 }
 
-void Chatter::moveChatter(const int x, const int y, const int &borisSize)
+void Chatter::moveChatter(const int &x, const int &y, const int &borisSize)
 {
-  move((x + (borisSize / 8 * 7)) - (width() / 2), y + (borisSize / 10 * 9) - height());
+  move((x + (borisSize * 0.75)) - (width() * 0.5), y);
 }
 
 void Chatter::mousePressEvent(QMouseEvent *event)

@@ -42,12 +42,12 @@ class Chatter : public QGraphicsView
 public:
   Chatter(Settings *settings);
   ~Chatter();
-  void initChatter(const int x, const int y,
-                   const int &borisSize,
-                   const QString &bubbleText,
-                   const QString &bubbleType,
-                   const QUrl &rssUrl = QUrl());
-  void moveChatter(const int x, const int y, const int &borisSize);
+  int initChatter(const int x, const int y,
+                  const int &borisSize,
+                  const QString &bubbleText,
+                  const QString &bubbleType,
+                  const QUrl &rssUrl = QUrl());
+  void moveChatter(const int &x, const int &y, const int &borisSize);
   
 protected:
   void mousePressEvent(QMouseEvent *event);
