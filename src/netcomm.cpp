@@ -53,7 +53,11 @@ NetComm::~NetComm()
 
 void NetComm::updateAll()
 {
-  weatherRequest.setUrl(QUrl("http://api.openweathermap.org/data/2.5/weather?q=" + settings->city + "&mode=xml&units=metric&appid=" + settings->key));
+  if(settings->city.toInt()) {
+    weatherRequest.setUrl(QUrl("http://api.openweathermap.org/data/2.5/weather?id=" + settings->city + "&mode=xml&units=metric&appid=" + settings->key));
+  } else {
+    weatherRequest.setUrl(QUrl("http://api.openweathermap.org/data/2.5/weather?q=" + settings->city + "&mode=xml&units=metric&appid=" + settings->key));
+  }
   get(weatherRequest);
   feedRequest.setUrl(QUrl(settings->feedUrl));
   get(feedRequest);
