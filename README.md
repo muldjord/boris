@@ -43,6 +43,7 @@ $ ./Boris
 * Added '_thought' chatter type
 * Added 'Dance' idle behaviour
 * Gave Boris a bed to sleep in
+* Improved / reworked '_fun' behaviour used when fun stat is low
 
 #### Version 3.0.1 (15th September 2020):
 * Boris now sometimes farts in his sleep, a very important feature
