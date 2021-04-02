@@ -1319,7 +1319,7 @@ void Boris::processAi(QString &behav)
         chatter->initChatter(pos().x(), pos().y(), size, "I'm feeling drowsy...", "_thought");
         stats->flashStat("energy");
       } else if(behav == "_hunger") {
-        chatter->initChatter(pos().x(), pos().y(), size, "I'm feeling hungry...", "_thought");
+        chatter->initChatter(pos().x(), pos().y(), size, "Oh boy, I'm feeling hungry...", "_thought");
         stats->flashStat("hunger");
       } else if(behav == "_bladder") {
         chatter->initChatter(pos().x(), pos().y(), size, "I really need to go to the bathroom!", "_thought");
