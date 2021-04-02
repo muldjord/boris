@@ -1312,7 +1312,7 @@ void Boris::processAi(QString &behav)
       behav = potentials.at(qrand() % potentials.size());
       // Flash stat if appropriate
       if(behav == "_fun") {
-        chatter->initChatter(pos().x(), pos().y(), size, "I'm bored...", "_thought");
+        chatter->initChatter(pos().x(), pos().y(), size, "I'm bored...", "_complain");
         stats->flashStat("fun");
       } else if(behav == "_energy") {
         chatter->initChatter(pos().x(), pos().y(), size, "I'm feeling drowsy...", "_thought");
@@ -1321,10 +1321,10 @@ void Boris::processAi(QString &behav)
         chatter->initChatter(pos().x(), pos().y(), size, "I'm feeling hungry...", "_thought");
         stats->flashStat("hunger");
       } else if(behav == "_bladder") {
-        chatter->initChatter(pos().x(), pos().y(), size, "I really need to go to the toilet!", "_thought");
+        chatter->initChatter(pos().x(), pos().y(), size, "I really need to go to the bathroom!", "_thought");
         stats->flashStat("bladder");
       } else if(behav == "_social") {
-        chatter->initChatter(pos().x(), pos().y(), size, "I wish someone would play with me.", "_thought");
+        chatter->initChatter(pos().x(), pos().y(), size, "I wish someone would play with me...", "_thought");
         stats->flashStat("social");
       } else if(behav == "_health") {
         chatter->initChatter(pos().x(), pos().y(), size, "I don't feel so good...", "_thought");
