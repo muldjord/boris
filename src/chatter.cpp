@@ -137,7 +137,7 @@ int Chatter::initChatter(const int x, const int y,
 
 void Chatter::moveChatter(const int &x, const int &y, const int &borisSize)
 {
-  move((x + (borisSize * 0.75)) - (width() * 0.5), y);
+  move((x + (borisSize * 0.7)) - (width() * 0.5), y);
 }
 
 void Chatter::mousePressEvent(QMouseEvent *event)
