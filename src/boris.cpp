@@ -353,13 +353,12 @@ void Boris::changeBehaviour(QString behav, int time)
       chatText = settings->chatLines.at(currentLine).text;
       chatUrl = settings->chatLines.at(currentLine).url;
     }
-    chatter->initChatter(pos().x(), pos().y(), size, chatText, chatType, chatUrl);
+    time = chatter->initChatter(pos().x(), pos().y(), size, chatText, chatType, chatUrl);
     for(int a = 0; a < behaviours.size(); ++a) {
       if(behaviours.at(a).file == chatType) {
         curBehav = a;
       }
     }
-    time = 2000 + (chatText.length() * 120);
   }
 
   // Applying behaviour stats to Boris
@@ -664,6 +663,7 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
   }
   
   move(dX, dY);
+  chatter->moveChatter(pos().x(), pos().y(), size);
   stats->move(pos().x() + (size / 2) - (stats->width() / 2),
               pos().y() - stats->height() + (size / 3));
   // Move stats below Boris when he's at the top of the screen
