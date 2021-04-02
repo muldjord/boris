@@ -2,7 +2,7 @@ energy=-5
 fun=-5
 oneShot
 #Frames
-0;75;0;0;;if yvel > 5 or xvel > 5 then sound data/sfx/falling.wav
+0;75;0;0;;if yvel > 3 or xvel > 3 then sound data/sfx/falling.wav
 1;75;0;0;;
 2;75;0;0;;
 3;75;0;0;;
