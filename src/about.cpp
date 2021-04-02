@@ -138,7 +138,7 @@ About::About(Settings *settings)
 
   QLabel *weatherLabel = new QLabel(tr("Show weather for city (mouse over for help):"));
   weatherLineEdit = new QLineEdit();
-  weatherLineEdit->setToolTip(tr("Try typing in a nearby city. If it doesn't work, go to openweathermap.org and search for a city until you find one that exists.<br/>Then type that in exactly as it is shown on their website."));
+  weatherLineEdit->setToolTip(tr("Type in a nearby city name or the openweathermap city id. Using a city id is the most stable method. To find the id for your city go to openweathermap.org and do a city lookup. The city id will be the last part of the website address."));
   weatherLineEdit->setText(settings->city);
 
   QLabel *weatherKeyLabel = new QLabel(tr("OpenWeatherMap key (mouse over for help):"));
