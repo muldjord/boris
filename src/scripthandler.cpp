@@ -31,6 +31,8 @@
 
 #include <stdio.h>
 
+#include <QRandomGenerator>
+
 extern QMap<QChar, QImage> pfont;
 extern SoundMixer soundMixer;
 
@@ -55,7 +57,11 @@ void ScriptHandler::runScript(int &stop, const Script &script)
     if(settings->scriptOutput) {
       printf("CODE: '%s'\n", command.toStdString().c_str());
     }
+#if QT_VERSION >= 0x050e00
+    QList<QString> parameters = command.split(" ", Qt::KeepEmptyParts);
+#else
     QList<QString> parameters = command.split(" ", QString::KeepEmptyParts);
+#endif
     runCommand(parameters, stop, script);
     if(stop) {
       return;
@@ -536,7 +542,7 @@ int ScriptHandler::getValue(QList<QString> &parameters)
   int result = parameters.first().toInt(&isInt);
   if(!isInt) {
     if(parameters.first().left(1) == "@") {
-      result = (qrand() % parameters.first().right(parameters.first().length() - 1).toInt()) + 1;
+      result = QRandomGenerator::global()->bounded(parameters.first().right(parameters.first().length() - 1).toInt()) + 1;
     } else {
       result = scriptVars[parameters.first()];
     }
