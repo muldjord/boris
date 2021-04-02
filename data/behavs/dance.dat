@@ -1,0 +1,27 @@
+title=Dance
+category=Idle
+fun=3
+hunger=1
+social=1
+allowFlip
+define nextdance:var cycles = 2 + @6,if @2 = 1 goto dance1 else goto dance2
+#Frames
+0;75;0;0;;call nextdance
+
+0;100;0;0;;label dance1,var cycles -= 1
+1;100;0;0;;
+2;100;0;0;;
+3;100;0;0;;
+4;100;0;0;;
+5;100;0;0;;
+3;100;0;0;;
+2;100;0;0;;if cycles > 0 goto dance1 else call nextdance
+
+6;100;0;0;;label dance2,var cycles -= 1
+7;100;0;0;;
+8;100;0;0;;
+9;100;0;0;;
+10;100;0;0;;
+11;100;0;0;;
+12;100;0;0;;
+13;100;0;0;;if cycles > 0 goto dance2 else call nextdance
