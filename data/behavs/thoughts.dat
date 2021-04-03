@@ -1,0 +1,16 @@
+title=What are you thinking?
+category=Social
+#Frames
+0;50;0;0;;var line = @11,
+if line = 1 think "I wonder if I'm a real person...",
+if line = 2 think "Where am I when the computer is turned off?",
+if line = 3 think "Am I living in the Matrix?",
+if line = 4 think "Do I have a purpose or am I just entertainment?",
+if line = 5 think "I wonder if Santa is real...",
+if line = 6 think "Is this the North Pole?",
+if line = 7 think "Should I start a band?",
+if line = 8 think "Am I at work or is this my vacation?",
+if line = 9 think "Mars is the only planet populated entirely by robots.",
+if line = 10 think "Do I forget everything when the computer restarts?",
+if line = 11 think "I just farted, I wonder if anyone heard it...",
+behav _thought
