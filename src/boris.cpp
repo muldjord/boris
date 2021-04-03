@@ -208,7 +208,7 @@ void Boris::createBehavMenu()
   connect(movementMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   connect(iddqdMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   for(const auto &behaviour: behaviours) {
-    if(behaviour.file.left(1) != "_") {
+    if(behaviour.file.left(1) != "_" || behaviour.category != "Hidden") {
       if(behaviour.category == "Movement") {
         movementMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
       } else if(behaviour.category == "Energy") {
@@ -318,7 +318,7 @@ void Boris::changeBehaviour(QString behav, int time)
     if(QRandomGenerator::global()->bounded(70) >= stats->getEnergy()) {
       curBehav = getIdxFromCategory("Idle");
     } else {
-      curBehav = getIdxFromCategory("Locomotion");
+      curBehav = getIdxFromCategory("Locomotion"); // This category DOES exist. See data/behavs/README.md
     }
   } else {
     do {
@@ -333,7 +333,6 @@ void Boris::changeBehaviour(QString behav, int time)
 
   // If a specific behaviour is requested, use that
   if(!behav.isEmpty()) {
-    //behav = "_health"; // Use this to test behaviours
     for(int a = 0; a < behaviours.size(); ++a) {
       if(behaviours.at(a).file == behav) {
         curBehav = a;
@@ -724,6 +723,7 @@ void Boris::mouseMoveEvent(QMouseEvent* event)
     if(stats->pos().y() < 0) {
       stats->move(pos().x() + (size / 2) - (stats->width() / 2), pos().y() + size + size / 3);
     }
+    bubble->moveBubble(pos().x(), pos().y(), size);
   }
 
 }
