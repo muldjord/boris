@@ -102,17 +102,8 @@ bool Loader::loadBehaviours(const Settings &settings,
 
       // Create behaviour container
       Behaviour b;
-      b.hyper = 0;
-      b.health = 0;
-      b.energy = 0;
-      b.hunger = 0;
-      b.bladder = 0;
-      b.social = 0;
-      b.fun = 0;
-      b.hygiene = 0;
       b.file = info.completeBaseName();
       b.title = info.completeBaseName();
-      b.category = "";
 
       while(!dat.atEnd()) {
         QByteArray line = dat.readLine().simplified();
@@ -281,7 +272,29 @@ Script Loader::parseScript(const QString &script)
       }
     } 
   }
-  returnScript.commands = commands.split(",");
+  if(commands.contains("\"")) {
+    bool inQuotes = false;
+    QString command = "";
+    for(const auto &curChar: commands.split("")) {
+      // if this = 1 then say "This, that" else if this = 2 say "Something" else goto 10,
+      if(curChar == "\"") {
+        if(inQuotes) {
+          inQuotes = false;
+        } else {
+          inQuotes = true;
+        }
+      }
+      if(curChar == "," && !inQuotes) {
+        returnScript.commands.append(command);
+        command.clear();
+      } else {
+        command.append(curChar);
+      }
+    }
+    returnScript.commands.append(command);
+  } else {
+    returnScript.commands = commands.split(",");
+  }
   return returnScript;
 }
 
@@ -289,7 +302,7 @@ bool Loader::loadFont(QMap<QString, QImage> &pfont)
 {
   QImage fontSheet(":pfont.png");
   if(!fontSheet.isNull()) {
-    QList<QString> fontChars({"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "æ", "ø", "å", " ", ".", ",", ":", ";", "!", "?", "\"", "\"", "_", "+", "-", "*", "/", "<", ">", "="});
+    QList<QString> fontChars({"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "æ", "ø", "å", " ", ".", ",", ":", ";", "!", "?", "\"", "\'", "_", "+", "-", "*", "/", "<", ">", "="});
     int w = fontSheet.width();
     int h = fontSheet.height();
     int x1 = 0;
