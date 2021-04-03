@@ -48,6 +48,10 @@ $ ./Boris
 * Added 'say' BorisScript command
 * Added 'think' BorisScript command
 * All speech bubbles are now in scripts instead of being hardcoded
+* RSS feed functionality is now imlemented through BorisScript instead of being hardcoded
+* Added conditional speech bubbles to several behaviours (For instance: Boris now keeps score when using the hula hoop)
+* Added 'How do you feel?" Social behaviour which will assess Boris' stats and give a response in a speech bubble
+* Added a few missing wall hit sounds to 'Pong' game
 
 #### Version 3.0.1 (15th September 2020):
 * Boris now sometimes farts in his sleep, a very important feature
