@@ -246,7 +246,7 @@ The length of the text will determine how long it is shown for.
 `say "<TEXT>"|rss`
 * Examples:
 ```
-say "This is the text that will be in the speech bubble!"
+say "This is the text that will be shown in the speech bubble!"
 say rss
 ```
 The double-quotes at the beginning and end are important! If you leave them out it will lead to undefined behaviour or crashes. Double-quotes inside the text is not allowed.
@@ -260,7 +260,7 @@ The length of the text will determine how long it is shown for.
 `think "<TEXT>"|rss`
 * Examples:
 ```
-think "This is the text that will be in the thought bubble!"
+think "This is the text that will be shown in the thought bubble!"
 think rss
 ```
 The double-quotes at the beginning and end are important! If you leave them out it will lead to undefined behaviour or crashes. Double-quotes inside the text is not allowed.
