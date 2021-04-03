@@ -462,7 +462,7 @@ void MainWindow::createBehavMenu()
   connect(movementMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
   connect(iddqdMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
   for(const auto &behaviour: behaviours) {
-    if(behaviour.file.left(1) != "_") {
+    if(behaviour.file.left(1) != "_" || behaviour.category != "Hidden") {
       if(behaviour.category == "Movement") {
         movementMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
       } else if(behaviour.category == "Energy") {
