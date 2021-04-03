@@ -251,6 +251,8 @@ say rss
 ```
 The double-quotes at the beginning and end are important! If you leave them out it will lead to undefined behaviour or crashes. Double-quotes inside the text is not allowed.
 
+NOTE! You can use variables inside the double quoted text by prepending them with a '$'. Any variables will be replaced with the contained value. See the 'hula_hoop.dat' behaviour for an example.
+
 ##### think
 Spawns a thought bubble containing the specified text. Alternatively you can use the keyword "rss" (without the double-quotes) which will make Boris pick a headline from the configured RSS feed.
 
@@ -264,6 +266,8 @@ think "This is the text that will be shown in the thought bubble!"
 think rss
 ```
 The double-quotes at the beginning and end are important! If you leave them out it will lead to undefined behaviour or crashes. Double-quotes inside the text is not allowed.
+
+NOTE! You can use variables inside the double quoted text by prepending them with a '$'. Any variables will be replaced with the contained value. See the 'hula_hoop.dat' behaviour for an example.
 
 ##### draw
 There are several drawing routines in Boris scripting. This allows you to draw on top of Boris on each frame. It is also possible to begin drawing on one frame and end drawing on another for additive drawing over several frames.
