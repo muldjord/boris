@@ -52,7 +52,7 @@ QList<Boris*> borises;
 QList<Behaviour> behaviours;
 QList<Behaviour> weathers;
 QList<Behaviour> itemList;
-QMap<QChar, QImage> pfont;
+QMap<QString, QImage> pfont;
 SoundMixer soundMixer(24);
 
 MainWindow::MainWindow()
