@@ -33,12 +33,13 @@
 
 #include <QRandomGenerator>
 
-extern QMap<QChar, QImage> pfont;
+extern QMap<QString, QImage> pfont;
 extern SoundMixer soundMixer;
 
 ScriptHandler::ScriptHandler(QImage *image,
                              bool *drawing,
                              Settings *settings,
+                             Bubble *bubble,
                              const QMap<QString, int> &labels,
                              const QMap<QString, Script> &defines,
                              QMap<QString, int> &scriptVars,
@@ -49,6 +50,7 @@ ScriptHandler::ScriptHandler(QImage *image,
   this->image = image;
   this->drawing = drawing;
   this->settings = settings;
+  this->bubble = bubble;
 }
 
 void ScriptHandler::runScript(int &stop, const Script &script)
@@ -95,6 +97,10 @@ void ScriptHandler::runCommand(QList<QString> &parameters, int &stop, const Scri
     handleCall(parameters, stop);
   } else if(parameters.first() == "sound") {
     handleSound(parameters);
+  } else if(parameters.first() == "say") {
+    handleSay(parameters);
+  } else if(parameters.first() == "think") {
+    handleThink(parameters);
   }
 }
 
@@ -296,7 +302,7 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
       printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
     }
     new Item(parentPos.x() + (iX * (size / 32)),
-             parentPos.y() + (iY * (size / 32)),
+             parentPos.y() + (size / 2) + (iY * (size / 32)),
              size, itemName, settings);
   } else {
     if(settings->scriptOutput) {
@@ -534,6 +540,82 @@ void ScriptHandler::handleSound(QList<QString> &parameters)
                              (scriptVars["hyper"] / 60.0) + 1);
   }
   parameters.removeFirst(); // Remove sound file name
+}
+
+void ScriptHandler::handleSay(QList<QString> &parameters)
+{
+  parameters.removeFirst(); // Remove 'say'
+  if(parameters.count() >= 1) {
+    QString bubbleText = "";
+    if(parameters.first() == "rss") {
+      parameters.removeFirst(); // Remove 'rss'
+      if(!settings->rssLines.isEmpty()) {
+        int rssLine = QRandomGenerator::global()->bounded(settings->rssLines.count());
+        bubbleText = settings->rssLines.at(rssLine).text;
+        bubble->initBubble(parentPos.x(), parentPos.y(), size,
+                           bubbleText,
+                           "_chat",
+                           settings->rssLines.at(rssLine).url);
+      }
+    } else {
+      int quotes = 0;
+      while(quotes < 2) {
+        QString word = parameters.first();
+        parameters.removeFirst();
+        if(word.count('\"') > 0) {
+          quotes += word.count('\"');
+          word.replace('\"', "");
+        }
+        bubbleText.append(word + " ");
+      }
+      bubbleText = bubbleText.trimmed();
+      for(const auto &variable: scriptVars.keys()) {
+        bubbleText.replace("$" + variable, QString::number(scriptVars[variable]));
+      }
+      bubble->initBubble(parentPos.x(), parentPos.y(), size, bubbleText);
+    }
+    if(settings->scriptOutput) {
+      printf("Saying '%s'\n", bubbleText.toStdString().c_str());
+    }
+  }
+}
+
+void ScriptHandler::handleThink(QList<QString> &parameters)
+{
+  parameters.removeFirst(); // Remove 'think'
+  if(parameters.count() >= 1) {
+    QString bubbleText = "";
+    if(parameters.first() == "rss") {
+      parameters.removeFirst(); // Remove 'rss'
+      if(!settings->rssLines.isEmpty()) {
+        int rssLine = QRandomGenerator::global()->bounded(settings->rssLines.count());
+        bubbleText = settings->rssLines.at(rssLine).text;
+        bubble->initBubble(parentPos.x(), parentPos.y(), size,
+                           bubbleText,
+                           "_thought",
+                           settings->rssLines.at(rssLine).url);
+      }
+    } else {
+      int quotes = 0;
+      while(quotes < 2) {
+        QString word = parameters.first();
+        parameters.removeFirst();
+        if(word.count('\"') > 0) {
+          quotes += word.count('\"');
+          word.replace('\"', "");
+        }
+        bubbleText.append(word + " ");
+      }
+      bubbleText = bubbleText.trimmed();
+      for(const auto &variable: scriptVars.keys()) {
+        bubbleText.replace("$" + variable, QString::number(scriptVars[variable]));
+      }
+      bubble->initBubble(parentPos.x(), parentPos.y(), size, bubbleText, "_thought");
+    }
+    if(settings->scriptOutput) {
+      printf("Thinking '%s'\n", bubbleText.toStdString().c_str());
+    }
+  }
 }
 
 int ScriptHandler::getValue(QList<QString> &parameters)

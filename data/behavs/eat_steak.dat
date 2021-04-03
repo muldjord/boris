@@ -13,7 +13,7 @@ allowFlip
 5;50;0;0;;
 6;50;0;0;;
 7;200;0;0;;
-8;50;0;0;;
+8;50;0;0;;if hunger > 90 think "I'm about to explode, I should stop." else if hunger > 75 think "I'm almost full..." else if hunger > 50 think "This tastes great!"
 9;50;0;0;;
 8;50;0;0;;
 9;50;0;0;;

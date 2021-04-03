@@ -52,7 +52,7 @@ QList<Boris*> borises;
 QList<Behaviour> behaviours;
 QList<Behaviour> weathers;
 QList<Behaviour> itemList;
-QMap<QChar, QImage> pfont;
+QMap<QString, QImage> pfont;
 SoundMixer soundMixer(24);
 
 MainWindow::MainWindow()
@@ -175,16 +175,11 @@ MainWindow::MainWindow()
     settings.stats = STATS_NEVER;
   }
   
-  if(!iniSettings.contains("chatter")) {
-    iniSettings.setValue("chatter", true);
+  if(!iniSettings.contains("bubbles")) {
+    iniSettings.setValue("bubbles", true);
   }
-  settings.chatter = iniSettings.value("chatter").toBool();
+  settings.bubbles = iniSettings.value("bubbles").toBool();
 
-  if(!iniSettings.contains("chat_file")) {
-    iniSettings.setValue("chat_file", "data/chatter.dat");
-  }
-  settings.chatFile = iniSettings.value("chat_file").toString();
-  
   if(!iniSettings.contains("sound")) {
     iniSettings.setValue("sound", true);
   }
@@ -467,7 +462,7 @@ void MainWindow::createBehavMenu()
   connect(movementMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
   connect(iddqdMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
   for(const auto &behaviour: behaviours) {
-    if(behaviour.file.left(1) != "_") {
+    if(behaviour.file.left(1) != "_" || behaviour.category != "Hidden") {
       if(behaviour.category == "Movement") {
         movementMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
       } else if(behaviour.category == "Energy") {

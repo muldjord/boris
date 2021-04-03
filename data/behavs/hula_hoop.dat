@@ -5,7 +5,7 @@ hygiene=-5
 oneShot
 allowFlip
 #Frames
-0;75;0;0;;var loops = 1,var loops += @5
+0;75;0;0;;var loops = 1,var loops += @5,var hulas = 1
 1;75;0;0;;
 2;75;0;0;;
 19;75;0;0;;
@@ -21,7 +21,7 @@ allowFlip
 29;75;0;0;;
 30;75;0;0;;
 31;75;0;0;;
-32;90;0;0;;label hulainit,stat energy -= 1,var hulas = 2,var hulas += @7,var prehula = @3,if prehula = 1 goto prehula1,if prehula = 2 goto prehula2,if prehula = 3 goto prehula3
+32;90;0;0;;label hulainit,stat energy -= 1,var highscore = hulas,var hulas = 0,var remaining = 2,var remaining += @7,var prehula = @3,if prehula = 1 goto prehula1,if prehula = 2 goto prehula2,if prehula = 3 goto prehula3
 
 33;1200;0;0;;label prehula1
 34;100;0;0;;
@@ -44,13 +44,13 @@ allowFlip
 36;75;0;0;;goto firsthula
 
 3;75;0;0;;label hula
-4;75;0;0;;label firsthula,var hulas -= 1
+4;75;0;0;;label firsthula,var remaining -= 1
 5;75;0;0;;stat fun += 2
 6;75;0;0;;
 7;75;0;0;;
 8;75;0;0;;
-9;75;0;0;;
-10;75;0;0;;if hulas > 0 goto hula
+9;75;0;0;;var hulas += 1,think "Number $hulas",if hulas = highscore + 1 sound data/sfx/win2.wav
+10;75;0;0;;if remaining > 0 goto hula
 11;75;0;0;;
 12;75;0;0;;
 13;75;0;0;;

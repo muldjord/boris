@@ -100,29 +100,16 @@ void NetComm::netReply(QNetworkReply *r)
 
     emit weatherUpdated();
   } else if(r->request() == feedRequest) {
-    settings->chatLines.clear();
+    settings->rssLines.clear();
     qInfo("Updating feed:\n");
     QDomNodeList titles = doc.elementsByTagName("item");
     for(int a = 0; a < titles.length(); ++a) {
-      ChatLine feedLine;
-      feedLine.type = "_whisper";
-      feedLine.text = titles.at(a).firstChildElement("title").text().trimmed();
-      feedLine.url = QUrl(titles.at(a).firstChildElement("link").text());
-      qInfo("  '%s'\n", feedLine.text.toStdString().c_str());
-      settings->chatLines.append(feedLine);
+      RssLine rssLine;
+      rssLine.text = titles.at(a).firstChildElement("title").text().trimmed();
+      rssLine.url = QUrl(titles.at(a).firstChildElement("link").text());
+      qInfo("  '%s'\n", rssLine.text.toStdString().c_str());
+      settings->rssLines.append(rssLine);
     }
-
-    QFile chatFile(settings->chatFile);
-    if(chatFile.open(QIODevice::ReadOnly)) {
-      do {
-        QList<QString> snippets = QString(chatFile.readLine()).split(";");
-        ChatLine chatLine;
-        chatLine.type = snippets.at(0);
-        chatLine.text = snippets.at(1).simplified();
-        settings->chatLines.append(chatLine);
-      } while(chatFile.canReadLine());
-    }
-    chatFile.close();
   }
   netTimer.start();
   r->deleteLater();

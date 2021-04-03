@@ -29,7 +29,7 @@
 
 #include "behaviour.h"
 #include "stats.h"
-#include "chatter.h"
+#include "bubble.h"
 #include "settings.h"
 
 #include <QGraphicsView>
@@ -154,7 +154,7 @@ private:
   QPoint oldCursor;
   void sanityCheck();
   Stats *stats;
-  Chatter *chatter;
+  Bubble *bubble;
   QList<QString> behavQueue;
   QString getFileFromCategory(QString category);
   int getIdxFromCategory(QString category);

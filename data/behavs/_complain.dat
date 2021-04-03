@@ -1,7 +1,8 @@
 title=Complain
-fun=-10
-social=8
-hunger=5
+social=5
+fun=-5
+oneShot
+allowFlip
 #Frames
 0;100;0;0;data/sfx/annoyed1.wav;
 1;100;0;0;;

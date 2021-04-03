@@ -20,7 +20,7 @@ HEADERS += src/mainwindow.h \
            src/stats.h \
            src/loader.h \
            src/netcomm.h \
-           src/chatter.h
+           src/bubble.h
 
 SOURCES += src/mainwindow.cpp \
            src/soundmixer.cpp \
@@ -33,7 +33,7 @@ SOURCES += src/mainwindow.cpp \
            src/stats.cpp \
            src/loader.cpp \
            src/netcomm.cpp \
-           src/chatter.cpp
+           src/bubble.cpp
 
 RESOURCES += boris.qrc
 TRANSLATIONS = boris_da_DK.ts

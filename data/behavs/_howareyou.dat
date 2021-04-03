@@ -1,0 +1,70 @@
+title=How are you?
+category=Social
+#Frames
+0;50;0;0;;var tried = 0
+
+0;50;0;0;;label checkup,
+if tried > 14 goto feelinggood,
+var rand = @7,
+if rand = 1 goto health,
+if rand = 2 goto hygiene,
+if rand = 3 goto energy,
+if rand = 4 goto hunger,
+if rand = 5 goto bladder,
+if rand = 6 goto social,
+if rand = 7 goto fun
+
+# Health
+0;50;0;0;;label health,
+var tried += 1,
+if health < 15 {say "Well, how do you think!? You keep throwing me around, I feel terrible!",behav _complain},
+if health < 30 {say "I'm not feeling well, thanks to you!",behav _complain},
+if health < 55 {say "I'm ok, but please stop throwing me around.",behav _chat},
+goto checkup
+
+# Hygiene
+0;50;0;0;;label hygiene,
+var tried += 1,
+if hygiene < 15 {say "I feel like a pig in a pigsty! You should give me a shower.",behav _complain},
+if hygiene < 30 {say "I'm a bit dirty, maybe I should wash my hands.",behav _chat},
+goto checkup
+
+# Energy
+0;50;0;0;;label energy,
+var tried += 1,
+if energy < 15 {say "I'm really tired... I need to take a nap.",behav _chat},
+if energy < 30 {say "I'm a bit drowsy, I should take a nap soon.",behav _chat},
+goto checkup
+
+# Hunger
+0;50;0;0;;label hunger,
+var tried += 1,
+if hunger > 85 {say "I'm starving! Please feed me!",behav _complain},
+if hunger > 70 {say "I'm a bit peckish, I could go for a snack. Any suggestions?",behav _chat},
+goto checkup
+
+# Bladder
+0;50;0;0;;label bladder,
+var tried += 1,
+if bladder > 85 {say "Pst... I'm about to poop my pants.",behav _whisper},
+if bladder > 70 {say "It's soon time for a bathroom break.",behav _chat},
+goto checkup
+
+# Social
+0;50;0;0;;label social,
+var tried += 1,
+if social < 15 {say "I feel lonely... Very, very lonely.",stat social += 10,behav _chat},
+if social < 30 {say "I'm a bit lonely, do you want to hang out?",stat social += 10,behav _chat},
+goto checkup
+
+# Fun
+0;50;0;0;;label fun,
+var tried += 1,
+if fun < 15 {say "I'm really bored! I wanna have fun!",behav _complain},
+if fun < 30 {say "I'm a bit bored, I should do something fun. Any suggestions?",behav _chat},
+goto checkup
+
+# Feeling good
+0;50;0;0;;label feelinggood,
+say "I'm feeling fine, thank you for asking.",
+behav _chat
