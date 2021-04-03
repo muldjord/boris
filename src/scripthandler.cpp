@@ -569,6 +569,9 @@ void ScriptHandler::handleSay(QList<QString> &parameters)
         bubbleText.append(word + " ");
       }
       bubbleText = bubbleText.trimmed();
+      for(const auto &variable: scriptVars.keys()) {
+        bubbleText.replace("$" + variable, QString::number(scriptVars[variable]));
+      }
       bubble->initBubble(parentPos.x(), parentPos.y(), size, bubbleText);
     }
     if(settings->scriptOutput) {
@@ -604,6 +607,9 @@ void ScriptHandler::handleThink(QList<QString> &parameters)
         bubbleText.append(word + " ");
       }
       bubbleText = bubbleText.trimmed();
+      for(const auto &variable: scriptVars.keys()) {
+        bubbleText.replace("$" + variable, QString::number(scriptVars[variable]));
+      }
       bubble->initBubble(parentPos.x(), parentPos.y(), size, bubbleText, "_thought");
     }
     if(settings->scriptOutput) {
