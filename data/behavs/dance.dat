@@ -1,8 +1,8 @@
 title=Dance
-category=Idle
+category=Social
 fun=3
-hunger=1
-social=1
+hunger=2
+social=8
 allowFlip
 define nextdance:var cycles = 2 + @6,if @2 = 1 goto dance1 else goto dance2
 #Frames
