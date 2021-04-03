@@ -45,6 +45,9 @@ $ ./Boris
 * Gave Boris a bed to sleep in
 * Improved / reworked '_fun' behaviour used when fun stat is low
 * Improved / reworked '_social' behaviour used when social stat is low
+* Added 'say' BorisScript command
+* Added 'think' BorisScript command
+* All speech bubbles are now in scripts instead of being hardcoded
 
 #### Version 3.0.1 (15th September 2020):
 * Boris now sometimes farts in his sleep, a very important feature
