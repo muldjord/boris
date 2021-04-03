@@ -114,7 +114,7 @@ Boris::Boris(Settings *settings)
   int hunger = 50 + QRandomGenerator::global()->bounded(25);
   int bladder = 50 + QRandomGenerator::global()->bounded(25);
   int hygiene = 100;
-  int social = 50 + QRandomGenerator::global()->bounded(25);
+  int social = 15 + QRandomGenerator::global()->bounded(25);
   int fun = 50 + QRandomGenerator::global()->bounded(25);
   hyperQueue = 0;
   healthQueue = 0;
@@ -831,7 +831,7 @@ void Boris::handlePhysics()
 
   if(!falling && !grabbed &&
      !behaviours.at(curBehav).doNotDisturb) {
-    if(getDistance(QCursor::pos()) < size * 3) {
+    if(getDistance(QCursor::pos()) < size * 2) {
       if(!alreadyEvading) {
         interactions++;
         if(fabs(mouseHVel) > 40.0 || fabs(mouseVVel) > 40.0) {
@@ -854,7 +854,8 @@ void Boris::handlePhysics()
           } else if(mouseSector == 3) {
             changeBehaviour("_flee_left_up", timeout);
           }
-        } else if(stats->getFun() > 10 && interactions >= 4 && QRandomGenerator::global()->bounded(10) >= 3) {
+        } else if(stats->getFun() > 10 &&
+                  stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 10) + 20) {
           changeBehaviour(getFileFromCategory("Social"));
         }
       }
@@ -1038,8 +1039,8 @@ void Boris::statQueueProgress()
     stats->deltaSocial(1);
   }
   if(socialQueue < 0) {
-    socialQueue++;
-    stats->deltaSocial(-1);
+    socialQueue += 2;
+    stats->deltaSocial(-2);
   }
   if(funQueue > 0) {
     funQueue--;
@@ -1455,8 +1456,8 @@ void Boris::checkInteractions()
     stats->show();
   }
   // This balances the interaction count which is increased when mouse is moved across Boris
-  if(interactions > 6) {
-    interactions = 6;
+  if(interactions > 10) {
+    interactions = 10;
   } else if(interactions > 0) {
     interactions--;
   }
