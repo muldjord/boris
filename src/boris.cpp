@@ -344,6 +344,7 @@ void Boris::changeBehaviour(QString behav, int time)
   // Hide speech bubble in case Boris was grabbed or otherwise stopped in the middle of speaking
   //chatter->hide();
   // Check for chatter
+  /*
   if(behaviours.at(curBehav).file == "chatter") {
     QString chatType = "_complain";
     QString chatText = "I'm speechless...";
@@ -361,6 +362,7 @@ void Boris::changeBehaviour(QString behav, int time)
       }
     }
   }
+  */
 
   // Applying behaviour stats to Boris
   hyperQueue += behaviours.at(curBehav).hyper;
@@ -468,7 +470,7 @@ void Boris::runScript(int &stop)
     scriptImage.fill(Qt::transparent);
   }
 
-  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, chatter, behaviours.at(curBehav).labels, behaviours.at(curBehav).defines, scriptVars, QPoint(pos().x(), pos().y() + (size / 2)), size);
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, chatter, behaviours.at(curBehav).labels, behaviours.at(curBehav).defines, scriptVars, QPoint(pos().x(), pos().y()), size);
   connect(&scriptHandler, &ScriptHandler::behavFromFile, this, &Boris::behavFromFile);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Boris::setCurFrame);
   connect(&scriptHandler, &ScriptHandler::statChange, this, &Boris::statChange);
