@@ -237,6 +237,34 @@ sound data/sfx/soundfile.wav
 ```
 Keep in mind that this command DOES NOT allow spaces in the filename. So a file called `sound file.wav` will not work. Rename it to `soundfile.wav` instead. Filename and path is relative to where the Boris executable is run from.
 
+##### say
+Spawns a speech bubble containing the specified text. Alternatively you can use the keyword "rss" (without the double-quotes) which will make Boris pick a headline from the configured RSS feed.
+
+The length of the text will determine how long it is shown for.
+
+* Definition:
+`say "<TEXT>"|rss`
+* Examples:
+```
+say "This is the text that will be in the speech bubble!"
+say rss
+```
+The double-quotes at the beginning and end are important! If you leave them out it will lead to undefined behaviour or crashes. Double-quotes inside the text is not allowed.
+
+##### think
+Spawns a thought bubble containing the specified text. Alternatively you can use the keyword "rss" (without the double-quotes) which will make Boris pick a headline from the configured RSS feed.
+
+The length of the text will determine how long it is shown for.
+
+* Definition:
+`think "<TEXT>"|rss`
+* Examples:
+```
+think "This is the text that will be in the thought bubble!"
+think rss
+```
+The double-quotes at the beginning and end are important! If you leave them out it will lead to undefined behaviour or crashes. Double-quotes inside the text is not allowed.
+
 ##### draw
 There are several drawing routines in Boris scripting. This allows you to draw on top of Boris on each frame. It is also possible to begin drawing on one frame and end drawing on another for additive drawing over several frames.
 

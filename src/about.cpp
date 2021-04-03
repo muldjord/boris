@@ -165,9 +165,9 @@ About::About(Settings *settings)
   independenceSlider->setMaximum(100);
   independenceSlider->setValue(settings->independence);
 
-  enableChatter = new QCheckBox(tr("Enable Boris speech bubbles"));
-  if(settings->chatter) {
-    enableChatter->setCheckState(Qt::Checked);
+  enableBubble = new QCheckBox(tr("Enable Boris speech bubbles"));
+  if(settings->bubbles) {
+    enableBubble->setCheckState(Qt::Checked);
   }
 
   enableSound = new QCheckBox(tr("Enable sound"));
@@ -207,7 +207,7 @@ About::About(Settings *settings)
   configLayout->addWidget(weatherLineEdit);
   configLayout->addWidget(weatherKeyLabel);
   configLayout->addWidget(weatherKeyLineEdit);
-  configLayout->addWidget(enableChatter);
+  configLayout->addWidget(enableBubble);
   configLayout->addWidget(feedUrlLabel);
   configLayout->addWidget(feedUrlLineEdit);
   
@@ -282,10 +282,10 @@ void About::saveAll()
     settings->sound = false;
   }
   settings->volume = volumeSlider->value() / 100.0;
-  if(enableChatter->isChecked()) {
-    settings->chatter = true;
+  if(enableBubble->isChecked()) {
+    settings->bubbles = true;
   } else {
-    settings->chatter = false;
+    settings->bubbles = false;
   }
   if(enableItems->isChecked()) {
     settings->items = true;
@@ -306,7 +306,7 @@ void About::saveAll()
   iniSettings.setValue("size", settings->size);
   iniSettings.setValue("item_timeout", settings->itemTimeout);
   iniSettings.setValue("independence", settings->independence);
-  iniSettings.setValue("chatter", settings->chatter);
+  iniSettings.setValue("bubble", settings->bubbles);
   iniSettings.setValue("sound", settings->sound);
   iniSettings.setValue("items", settings->items);
   iniSettings.setValue("volume", settings->volume * 100);

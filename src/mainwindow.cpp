@@ -175,16 +175,11 @@ MainWindow::MainWindow()
     settings.stats = STATS_NEVER;
   }
   
-  if(!iniSettings.contains("chatter")) {
-    iniSettings.setValue("chatter", true);
+  if(!iniSettings.contains("bubbles")) {
+    iniSettings.setValue("bubbles", true);
   }
-  settings.chatter = iniSettings.value("chatter").toBool();
+  settings.bubbles = iniSettings.value("bubbles").toBool();
 
-  if(!iniSettings.contains("chat_file")) {
-    iniSettings.setValue("chat_file", "data/chatter.dat");
-  }
-  settings.chatFile = iniSettings.value("chat_file").toString();
-  
   if(!iniSettings.contains("sound")) {
     iniSettings.setValue("sound", true);
   }

@@ -59,7 +59,7 @@ private:
   //QCheckBox *showStats;
   QCheckBox *enableSound;
   QCheckBox *enableItems;
-  QCheckBox *enableChatter;
+  QCheckBox *enableBubble;
   QCheckBox *showWelcome;
   QSlider *independenceSlider;
   QSlider *volumeSlider;

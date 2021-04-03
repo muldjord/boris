@@ -34,9 +34,8 @@ constexpr int STATS_CRITICAL = 43;
 constexpr int STATS_MOUSEOVER = 44;
 constexpr int STATS_NEVER = 45;
 
-struct ChatLine
+struct RssLine
 {
-  QString type;
   QString text;
   QUrl url;
 };
@@ -66,7 +65,7 @@ struct Settings {
   bool sound = true;
   bool items = true;
   double volume = 0.5;
-  bool chatter = true;
+  bool bubbles = true;
 
   // Secret / only in config.ini
   bool iddqd = false;
@@ -85,8 +84,7 @@ struct Settings {
   QString key = "fe9fe6cf47c03d2640d5063fbfa053a2";
 
   // Chatlines
-  QList<ChatLine> chatLines;
-  QString chatFile = "chatter.dat";
+  QList<RssLine> rssLines;
   QString feedUrl = "http://rss.slashdot.org/Slashdot/slashdotMain";
 
   // Items

@@ -125,7 +125,7 @@ Boris::Boris(Settings *settings)
   funQueue = 0;
   hygieneQueue = 0;
   stats = new Stats(settings, hyper, health, energy, hunger, bladder, social, fun, hygiene, this);
-  chatter = new Chatter(settings);
+  bubble = new Bubble(settings);
   
   staticBehavs = 0;
   // Figure out how many static behaviours there are
@@ -172,7 +172,7 @@ Boris::Boris(Settings *settings)
 Boris::~Boris()
 {
   delete stats;
-  delete chatter;
+  delete bubble;
   delete bMenu;
 }
 
@@ -447,7 +447,7 @@ void Boris::runScript(int &stop)
     scriptImage.fill(Qt::transparent);
   }
 
-  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, chatter, behaviours.at(curBehav).labels, behaviours.at(curBehav).defines, scriptVars, QPoint(pos().x(), pos().y()), size);
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, bubble, behaviours.at(curBehav).labels, behaviours.at(curBehav).defines, scriptVars, QPoint(pos().x(), pos().y()), size);
   connect(&scriptHandler, &ScriptHandler::behavFromFile, this, &Boris::behavFromFile);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Boris::setCurFrame);
   connect(&scriptHandler, &ScriptHandler::statChange, this, &Boris::statChange);
@@ -643,7 +643,7 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
   }
   
   move(dX, dY);
-  chatter->moveChatter(pos().x(), pos().y(), size);
+  bubble->moveBubble(pos().x(), pos().y(), size);
   stats->move(pos().x() + (size / 2) - (stats->width() / 2),
               pos().y() - stats->height() + (size / 3));
   // Move stats below Boris when he's at the top of the screen
@@ -768,8 +768,8 @@ void Boris::handlePhysics()
     } else if(settings->windDirection.contains("E")) {
       moveBoris(round((sin(sinVal) + 0.25) * settings->windSpeed * 0.05), 0);
     }
-    if(chatter->isVisible()) {
-      chatter->moveChatter(pos().x(), pos().y(), size);
+    if(bubble->isVisible()) {
+      bubble->moveBubble(pos().x(), pos().y(), size);
     }
   }
   
@@ -1292,24 +1292,24 @@ void Boris::processAi(QString &behav)
       behav = potentials.at(QRandomGenerator::global()->bounded(potentials.size()));
       // Flash stat if appropriate
       if(behav == "_fun") {
-        chatter->initChatter(pos().x(), pos().y(), size, "I'm bored...", "_thought");
+        bubble->initBubble(pos().x(), pos().y(), size, "I'm bored...", "_thought");
         stats->flashStat("fun");
       } else if(behav == "_energy") {
-        chatter->initChatter(pos().x(), pos().y(), size, "I'm feeling drowsy...", "_thought");
+        bubble->initBubble(pos().x(), pos().y(), size, "I'm feeling drowsy...", "_thought");
         stats->flashStat("energy");
       } else if(behav == "_hunger") {
-        chatter->initChatter(pos().x(), pos().y(), size, "Oh boy, I'm feeling hungry...", "_thought");
+        bubble->initBubble(pos().x(), pos().y(), size, "Oh boy, I'm feeling hungry...", "_thought");
         stats->flashStat("hunger");
       } else if(behav == "_bladder") {
-        chatter->initChatter(pos().x(), pos().y(), size, "I really need to go to the bathroom!", "_thought");
+        bubble->initBubble(pos().x(), pos().y(), size, "I really need to go to the bathroom!", "_thought");
         stats->flashStat("bladder");
       } else if(behav == "_social") {
-        chatter->initChatter(pos().x(), pos().y(), size, "I wish someone would play with me...", "_thought");
+        bubble->initBubble(pos().x(), pos().y(), size, "I wish someone would play with me...", "_thought");
         stats->flashStat("social");
       } else if(behav == "_health") {
-        chatter->initChatter(pos().x(), pos().y(), size, "I don't feel so good...", "_thought");
+        bubble->initBubble(pos().x(), pos().y(), size, "I don't feel so good...", "_thought");
       } else if(behav == "_hygiene") {
-        chatter->initChatter(pos().x(), pos().y(), size, "Urgh, I smell pretty bad...", "_thought");
+        bubble->initBubble(pos().x(), pos().y(), size, "Urgh, I smell pretty bad...", "_thought");
       }
     }
   }

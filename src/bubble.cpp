@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /***************************************************************************
- *            chatter.cpp
+ *            bubble.cpp
  *
  *  Thu Oct 27 18:47:00 CEST 2016
  *  Copyright 2016 Lars Muldjord
@@ -25,7 +25,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
 
-#include "chatter.h"
+#include "bubble.h"
 
 #include <stdio.h>
 #include <QHBoxLayout>
@@ -36,7 +36,7 @@
 
 extern QMap<QString, QImage> pfont;
 
-Chatter::Chatter(Settings *settings) : settings(settings)
+Bubble::Bubble(Settings *settings) : settings(settings)
 {
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
@@ -52,11 +52,11 @@ Chatter::Chatter(Settings *settings) : settings(settings)
   bubbleSprite->setPos(0, 0);
 }
 
-Chatter::~Chatter()
+Bubble::~Bubble()
 {
 }
 
-int Chatter::initChatter(const int x, const int y,
+int Bubble::initBubble(const int x, const int y,
                          const int &borisSize,
                          const QString &bubbleText,
                          const QString &bubbleType,
@@ -126,21 +126,21 @@ int Chatter::initChatter(const int x, const int y,
   scale(borisSize / 32.0, borisSize / 32.0);
   int duration = 2000 + (bubbleText.length() * 175);
 
-  if(settings->chatter) {
+  if(settings->bubbles) {
     show();
-    moveChatter(x, y, borisSize);
-    QTimer::singleShot(duration, this, &Chatter::hide);
+    moveBubble(x, y, borisSize);
+    QTimer::singleShot(duration, this, &Bubble::hide);
   }
 
   return duration;
 }
 
-void Chatter::moveChatter(const int &x, const int &y, const int &borisSize)
+void Bubble::moveBubble(const int &x, const int &y, const int &borisSize)
 {
   move((x + (borisSize * 0.7)) - (width() * 0.5), y);
 }
 
-void Chatter::mousePressEvent(QMouseEvent *event)
+void Bubble::mousePressEvent(QMouseEvent *event)
 {
   if(event->button() == Qt::LeftButton && rssUrl.isValid()) {
     QDesktopServices::openUrl(rssUrl);

@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /***************************************************************************
- *            chatter.h
+ *            bubble.h
  *
  *  Thu Oct 27 18:47:00 CEST 2016
  *  Copyright 2016 Lars Muldjord
@@ -25,8 +25,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
 
-#ifndef _CHATTER_H
-#define _CHATTER_H
+#ifndef _BUBBLE_H
+#define _BUBBLE_H
 
 #include "settings.h"
 
@@ -35,19 +35,19 @@
 #include <QMouseEvent>
 #include <QUrl>
 
-class Chatter : public QGraphicsView
+class Bubble : public QGraphicsView
 {
   Q_OBJECT;
 
 public:
-  Chatter(Settings *settings);
-  ~Chatter();
-  int initChatter(const int x, const int y,
+  Bubble(Settings *settings);
+  ~Bubble();
+  int initBubble(const int x, const int y,
                   const int &borisSize,
                   const QString &bubbleText,
                   const QString &bubbleType = "_chat",
                   const QUrl &rssUrl = QUrl());
-  void moveChatter(const int &x, const int &y, const int &borisSize);
+  void moveBubble(const int &x, const int &y, const int &borisSize);
   
 protected:
   void mousePressEvent(QMouseEvent *event);
@@ -58,4 +58,4 @@ private:
   QUrl rssUrl = QUrl();
 };
 
-#endif // _CHATTER_H
+#endif // _BUBBLE_H
