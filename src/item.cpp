@@ -173,7 +173,7 @@ void Item::runScript(int &stop)
     scriptImage.fill(Qt::transparent);
   }
 
-  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, itemList.at(curItem).labels, itemList.at(curItem).defines, scriptVars, pos(), size);
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, nullptr, itemList.at(curItem).labels, itemList.at(curItem).defines, scriptVars, pos(), size);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Item::setCurFrame);
   scriptHandler.runScript(stop, itemList.at(curItem).frames.at(curFrame).script);
 
