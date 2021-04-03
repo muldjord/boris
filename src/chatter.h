@@ -45,7 +45,7 @@ public:
   int initChatter(const int x, const int y,
                   const int &borisSize,
                   const QString &bubbleText,
-                  const QString &bubbleType,
+                  const QString &bubbleType = "_chat",
                   const QUrl &rssUrl = QUrl());
   void moveChatter(const int &x, const int &y, const int &borisSize);
   
