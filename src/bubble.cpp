@@ -29,7 +29,6 @@
 
 #include <stdio.h>
 #include <QHBoxLayout>
-#include <QTimer>
 #include <QFile>
 #include <QDesktopServices>
 #include <QPainter>
@@ -50,6 +49,9 @@ Bubble::Bubble(Settings *settings) : settings(settings)
 
   bubbleSprite = this->scene()->addPixmap(QPixmap());
   bubbleSprite->setPos(0, 0);
+
+  hideTimer.setSingleShot(true);
+  connect(&hideTimer, &QTimer::timeout, this, &Bubble::hide);
 }
 
 Bubble::~Bubble()
@@ -124,12 +126,13 @@ int Bubble::initBubble(const int x, const int y,
   setFixedSize(bubbleImage.width() * borisSize / 32.0, bubbleImage.height() * borisSize / 32.0);
   resetTransform();
   scale(borisSize / 32.0, borisSize / 32.0);
-  int duration = 2000 + (bubbleText.length() * 175);
+  int duration = 1000 + (bubbleText.length() * 100);
 
   if(settings->bubbles) {
     show();
     moveBubble(x, y, borisSize);
-    QTimer::singleShot(duration, this, &Bubble::hide);
+    hideTimer.setInterval(duration);
+    hideTimer.start();
   }
 
   return duration;

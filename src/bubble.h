@@ -34,6 +34,7 @@
 #include <QGraphicsPixmapItem>
 #include <QMouseEvent>
 #include <QUrl>
+#include <QTimer>
 
 class Bubble : public QGraphicsView
 {
@@ -56,6 +57,7 @@ private:
   Settings *settings;
   QGraphicsPixmapItem *bubbleSprite;
   QUrl rssUrl = QUrl();
+  QTimer hideTimer;
 };
 
 #endif // _BUBBLE_H
