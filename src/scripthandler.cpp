@@ -39,7 +39,7 @@ extern SoundMixer soundMixer;
 ScriptHandler::ScriptHandler(QImage *image,
                              bool *drawing,
                              Settings *settings,
-                             Chatter *chatter,
+                             Bubble *bubble,
                              const QMap<QString, int> &labels,
                              const QMap<QString, Script> &defines,
                              QMap<QString, int> &scriptVars,
@@ -50,7 +50,7 @@ ScriptHandler::ScriptHandler(QImage *image,
   this->image = image;
   this->drawing = drawing;
   this->settings = settings;
-  this->chatter = chatter;
+  this->bubble = bubble;
 }
 
 void ScriptHandler::runScript(int &stop, const Script &script)
@@ -545,46 +545,66 @@ void ScriptHandler::handleSound(QList<QString> &parameters)
 void ScriptHandler::handleSay(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'say'
+  QString bubbleText = "";
   if(parameters.count() >= 1) {
-    QString bubbleText = "";
-    int quotes = 0;
-    while(quotes < 2) {
-      QString word = parameters.first();
-      parameters.removeFirst();
-      if(word.count('\"') > 0) {
-        quotes += word.count('\"');
-        word.replace('\"', "");
+    if(parameters.first() == "rss") {
+      parameters.removeFirst(); // Remove 'rss'
+      int rssLine = QRandomGenerator::global()->bounded(settings->rssLines.count());
+      bubbleText = settings->rssLines.at(rssLine).text;
+      bubble->initBubble(parentPos.x(), parentPos.y(), size,
+                           bubbleText,
+                           "_chat",
+                           settings->rssLines.at(rssLine).url);
+    } else {
+      int quotes = 0;
+      while(quotes < 2) {
+        QString word = parameters.first();
+        parameters.removeFirst();
+        if(word.count('\"') > 0) {
+          quotes += word.count('\"');
+          word.replace('\"', "");
+        }
+        bubbleText.append(word + " ");
       }
-      bubbleText.append(word + " ");
+      bubbleText = bubbleText.trimmed();
+      bubble->initBubble(parentPos.x(), parentPos.y(), size, bubbleText);
     }
-    bubbleText = bubbleText.trimmed();
-    if(settings->scriptOutput) {
-      printf("Saying '%s'\n", bubbleText.toStdString().c_str());
-    }
-    chatter->initChatter(parentPos.x(), parentPos.y(), size, bubbleText);
+  }
+  if(settings->scriptOutput) {
+    printf("Saying '%s'\n", bubbleText.toStdString().c_str());
   }
 }
 
 void ScriptHandler::handleThink(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'think'
+  QString bubbleText = "";
   if(parameters.count() >= 1) {
-    QString bubbleText = "";
-    int quotes = 0;
-    while(quotes < 2) {
-      QString word = parameters.first();
-      parameters.removeFirst();
-      if(word.count('\"') > 0) {
-        quotes += word.count('\"');
-        word.replace('\"', "");
+    if(parameters.first() == "rss") {
+      parameters.removeFirst(); // Remove 'rss'
+      int rssLine = QRandomGenerator::global()->bounded(settings->rssLines.count());
+      bubbleText = settings->rssLines.at(rssLine).text;
+      bubble->initBubble(parentPos.x(), parentPos.y(), size,
+                           bubbleText,
+                           "_thought",
+                           settings->rssLines.at(rssLine).url);
+    } else {
+      int quotes = 0;
+      while(quotes < 2) {
+        QString word = parameters.first();
+        parameters.removeFirst();
+        if(word.count('\"') > 0) {
+          quotes += word.count('\"');
+          word.replace('\"', "");
+        }
+        bubbleText.append(word + " ");
       }
-      bubbleText.append(word + " ");
+      bubbleText = bubbleText.trimmed();
+      bubble->initBubble(parentPos.x(), parentPos.y(), size, bubbleText, "_thought");
     }
-    bubbleText = bubbleText.trimmed();
-    if(settings->scriptOutput) {
-      printf("Thinking '%s'\n", bubbleText.toStdString().c_str());
-    }
-    chatter->initChatter(parentPos.x(), parentPos.y(), size, bubbleText, "_thought");
+  }
+  if(settings->scriptOutput) {
+    printf("Thinking '%s'\n", bubbleText.toStdString().c_str());
   }
 }
 

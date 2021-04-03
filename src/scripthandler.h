@@ -31,7 +31,7 @@
 #include "settings.h"
 #include "stats.h"
 #include "behaviour.h"
-#include "chatter.h"
+#include "bubble.h"
 
 #include <QObject>
 
@@ -43,7 +43,7 @@ public:
   ScriptHandler(QImage *image,
                 bool *drawing,
                 Settings *settings,
-                Chatter *chatter,
+                Bubble *bubble,
                 const QMap<QString, int> &labels,
                 const QMap<QString, Script> &defines,
                 QMap<QString, int> &scriptVars,
@@ -63,7 +63,7 @@ private:
   QImage *image = nullptr;
   bool *drawing = nullptr;
   Settings *settings = nullptr;
-  Chatter *chatter = nullptr;
+  Bubble *bubble = nullptr;
   
   const QMap<QString, int> &labels;
   const QMap<QString, Script> &defines;
