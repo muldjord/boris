@@ -49,7 +49,7 @@ public:
                              QList<Behaviour> &behaviours,
                              QMap<QString, sf::SoundBuffer> &soundFxs,
                              QProgressBar *progressBar);
-  static bool loadFont(QMap<QChar, QImage> &pfont);
+  static bool loadFont(QMap<QString, QImage> &pfont);
   static Script parseScript(const QString &script);
   static void setClothesColor(const Settings &settings, QImage &image);
 };
