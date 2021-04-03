@@ -341,29 +341,6 @@ void Boris::changeBehaviour(QString behav, int time)
     }
   }
   
-  // Hide speech bubble in case Boris was grabbed or otherwise stopped in the middle of speaking
-  //chatter->hide();
-  // Check for chatter
-  /*
-  if(behaviours.at(curBehav).file == "chatter") {
-    QString chatType = "_complain";
-    QString chatText = "I'm speechless...";
-    QUrl chatUrl = QUrl();
-    if(!settings->chatLines.isEmpty()) {
-      int currentLine = QRandomGenerator::global()->bounded(settings->chatLines.count());
-      chatType = settings->chatLines.at(currentLine).type;
-      chatText = settings->chatLines.at(currentLine).text;
-      chatUrl = settings->chatLines.at(currentLine).url;
-    }
-    time = chatter->initChatter(pos().x(), pos().y(), size, chatText, chatType, chatUrl);
-    for(int a = 0; a < behaviours.size(); ++a) {
-      if(behaviours.at(a).file == chatType) {
-        curBehav = a;
-      }
-    }
-  }
-  */
-
   // Applying behaviour stats to Boris
   hyperQueue += behaviours.at(curBehav).hyper;
   healthQueue += behaviours.at(curBehav).health;
