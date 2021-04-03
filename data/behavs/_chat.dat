@@ -1,6 +1,8 @@
 title=Chat
 fun=2
 social=12
+oneShot
+allowFlip
 #Frames
 0;100;0;0;data/sfx/chat1.wav;
 1;100;0;0;;
