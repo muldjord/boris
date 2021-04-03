@@ -31,6 +31,7 @@
 #include "settings.h"
 #include "stats.h"
 #include "behaviour.h"
+#include "chatter.h"
 
 #include <QObject>
 
@@ -42,6 +43,7 @@ public:
   ScriptHandler(QImage *image,
                 bool *drawing,
                 Settings *settings,
+                Chatter *chatter,
                 const QMap<QString, int> &labels,
                 const QMap<QString, Script> &defines,
                 QMap<QString, int> &scriptVars,
@@ -61,6 +63,7 @@ private:
   QImage *image = nullptr;
   bool *drawing = nullptr;
   Settings *settings = nullptr;
+  Chatter *chatter = nullptr;
   
   const QMap<QString, int> &labels;
   const QMap<QString, Script> &defines;
@@ -84,6 +87,8 @@ private:
   void handleBehav(QList<QString> &parameters, int &stop);
   void handleCall(QList<QString> &parameters, int &stop);
   void handleSound(QList<QString> &parameters);
+  void handleSay(QList<QString> &parameters);
+  void handleThink(QList<QString> &parameters);
 
   // Helpers
   void condition(QList<QString> &parameters, bool &isTrue, bool &compare);

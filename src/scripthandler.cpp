@@ -39,6 +39,7 @@ extern SoundMixer soundMixer;
 ScriptHandler::ScriptHandler(QImage *image,
                              bool *drawing,
                              Settings *settings,
+                             Chatter *chatter,
                              const QMap<QString, int> &labels,
                              const QMap<QString, Script> &defines,
                              QMap<QString, int> &scriptVars,
@@ -49,6 +50,7 @@ ScriptHandler::ScriptHandler(QImage *image,
   this->image = image;
   this->drawing = drawing;
   this->settings = settings;
+  this->chatter = chatter;
 }
 
 void ScriptHandler::runScript(int &stop, const Script &script)
@@ -95,6 +97,10 @@ void ScriptHandler::runCommand(QList<QString> &parameters, int &stop, const Scri
     handleCall(parameters, stop);
   } else if(parameters.first() == "sound") {
     handleSound(parameters);
+  } else if(parameters.first() == "say") {
+    handleSay(parameters);
+  } else if(parameters.first() == "think") {
+    handleThink(parameters);
   }
 }
 
@@ -534,6 +540,52 @@ void ScriptHandler::handleSound(QList<QString> &parameters)
                              (scriptVars["hyper"] / 60.0) + 1);
   }
   parameters.removeFirst(); // Remove sound file name
+}
+
+void ScriptHandler::handleSay(QList<QString> &parameters)
+{
+  parameters.removeFirst(); // Remove 'say'
+  if(parameters.count() >= 1) {
+    QString bubbleText = "";
+    int quotes = 0;
+    while(quotes < 2) {
+      QString word = parameters.first();
+      parameters.removeFirst();
+      if(word.count('\"') > 0) {
+        quotes += word.count('\"');
+        word.replace('\"', "");
+      }
+      bubbleText.append(word + " ");
+    }
+    bubbleText = bubbleText.trimmed();
+    if(settings->scriptOutput) {
+      printf("Saying '%s'\n", bubbleText.toStdString().c_str());
+    }
+    chatter->initChatter(parentPos.x(), parentPos.y(), size, bubbleText);
+  }
+}
+
+void ScriptHandler::handleThink(QList<QString> &parameters)
+{
+  parameters.removeFirst(); // Remove 'think'
+  if(parameters.count() >= 1) {
+    QString bubbleText = "";
+    int quotes = 0;
+    while(quotes < 2) {
+      QString word = parameters.first();
+      parameters.removeFirst();
+      if(word.count('\"') > 0) {
+        quotes += word.count('\"');
+        word.replace('\"', "");
+      }
+      bubbleText.append(word + " ");
+    }
+    bubbleText = bubbleText.trimmed();
+    if(settings->scriptOutput) {
+      printf("Thinking '%s'\n", bubbleText.toStdString().c_str());
+    }
+    chatter->initChatter(parentPos.x(), parentPos.y(), size, bubbleText, "_thought");
+  }
 }
 
 int ScriptHandler::getValue(QList<QString> &parameters)
