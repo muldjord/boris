@@ -34,7 +34,7 @@
 #include <QDesktopServices>
 #include <QPainter>
 
-extern QMap<QChar, QImage> pfont;
+extern QMap<QString, QImage> pfont;
 
 Chatter::Chatter(Settings *settings) : settings(settings)
 {
@@ -82,7 +82,7 @@ int Chatter::initChatter(const int x, const int y,
   QPainter painter;
   painter.begin(&textImage);
   int idx = 0;
-  for(const auto &ch: bubbleText) {
+  for(const auto &ch: bubbleText.split("")) {
     QImage charImage;
     if(pfont.contains(ch)) {
       charImage = pfont[ch];
@@ -124,7 +124,7 @@ int Chatter::initChatter(const int x, const int y,
   setFixedSize(bubbleImage.width() * borisSize / 32.0, bubbleImage.height() * borisSize / 32.0);
   resetTransform();
   scale(borisSize / 32.0, borisSize / 32.0);
-  int duration = 1000 + (bubbleText.length() * 200);
+  int duration = 2000 + (bubbleText.length() * 175);
 
   if(settings->chatter) {
     show();
