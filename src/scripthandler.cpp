@@ -545,16 +545,18 @@ void ScriptHandler::handleSound(QList<QString> &parameters)
 void ScriptHandler::handleSay(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'say'
-  QString bubbleText = "";
   if(parameters.count() >= 1) {
+    QString bubbleText = "";
     if(parameters.first() == "rss") {
       parameters.removeFirst(); // Remove 'rss'
-      int rssLine = QRandomGenerator::global()->bounded(settings->rssLines.count());
-      bubbleText = settings->rssLines.at(rssLine).text;
-      bubble->initBubble(parentPos.x(), parentPos.y(), size,
+      if(!settings->rssLines.isEmpty()) {
+        int rssLine = QRandomGenerator::global()->bounded(settings->rssLines.count());
+        bubbleText = settings->rssLines.at(rssLine).text;
+        bubble->initBubble(parentPos.x(), parentPos.y(), size,
                            bubbleText,
                            "_chat",
                            settings->rssLines.at(rssLine).url);
+      }
     } else {
       int quotes = 0;
       while(quotes < 2) {
@@ -569,25 +571,27 @@ void ScriptHandler::handleSay(QList<QString> &parameters)
       bubbleText = bubbleText.trimmed();
       bubble->initBubble(parentPos.x(), parentPos.y(), size, bubbleText);
     }
-  }
-  if(settings->scriptOutput) {
-    printf("Saying '%s'\n", bubbleText.toStdString().c_str());
+    if(settings->scriptOutput) {
+      printf("Saying '%s'\n", bubbleText.toStdString().c_str());
+    }
   }
 }
 
 void ScriptHandler::handleThink(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'think'
-  QString bubbleText = "";
   if(parameters.count() >= 1) {
+    QString bubbleText = "";
     if(parameters.first() == "rss") {
       parameters.removeFirst(); // Remove 'rss'
-      int rssLine = QRandomGenerator::global()->bounded(settings->rssLines.count());
-      bubbleText = settings->rssLines.at(rssLine).text;
-      bubble->initBubble(parentPos.x(), parentPos.y(), size,
+      if(!settings->rssLines.isEmpty()) {
+        int rssLine = QRandomGenerator::global()->bounded(settings->rssLines.count());
+        bubbleText = settings->rssLines.at(rssLine).text;
+        bubble->initBubble(parentPos.x(), parentPos.y(), size,
                            bubbleText,
                            "_thought",
                            settings->rssLines.at(rssLine).url);
+      }
     } else {
       int quotes = 0;
       while(quotes < 2) {
@@ -602,9 +606,9 @@ void ScriptHandler::handleThink(QList<QString> &parameters)
       bubbleText = bubbleText.trimmed();
       bubble->initBubble(parentPos.x(), parentPos.y(), size, bubbleText, "_thought");
     }
-  }
-  if(settings->scriptOutput) {
-    printf("Thinking '%s'\n", bubbleText.toStdString().c_str());
+    if(settings->scriptOutput) {
+      printf("Thinking '%s'\n", bubbleText.toStdString().c_str());
+    }
   }
 }
 
