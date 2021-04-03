@@ -33,7 +33,7 @@
 
 #include <QRandomGenerator>
 
-extern QMap<QChar, QImage> pfont;
+extern QMap<QString, QImage> pfont;
 extern SoundMixer soundMixer;
 
 ScriptHandler::ScriptHandler(QImage *image,
@@ -302,7 +302,7 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
       printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
     }
     new Item(parentPos.x() + (iX * (size / 32)),
-             parentPos.y() + (iY * (size / 32)),
+             parentPos.y() + (size / 2) + (iY * (size / 32)),
              size, itemName, settings);
   } else {
     if(settings->scriptOutput) {
