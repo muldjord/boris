@@ -17,6 +17,7 @@ HEADERS += src/mainwindow.h \
            src/item.h \
            src/scripthandler.h \
            src/behaviour.h \
+           src/sprite.h \
            src/stats.h \
            src/loader.h \
            src/netcomm.h \
