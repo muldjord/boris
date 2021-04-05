@@ -46,8 +46,8 @@ goto checkup
 # Bladder
 0;50;0;0;;label bladder,
 var tried += 1,
-if bladder > 85 {say "Pst... I'm about to poop my pants.",behav _whisper},
-if bladder > 70 {say "It's soon time for a bathroom break.",behav _chat},
+if bladder < 15 {say "Pst... I'm about to poop my pants.",behav _whisper},
+if bladder < 30 {say "It's soon time for a bathroom break.",behav _chat},
 goto checkup
 
 # Social
@@ -66,5 +66,5 @@ goto checkup
 
 # Feeling good
 0;50;0;0;;label feelinggood,
-say "I'm feeling fine, thank you for asking.",
+say "I'm fine, thank you for asking.",
 behav _chat
