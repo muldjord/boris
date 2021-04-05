@@ -2,7 +2,7 @@ oneShot
 allowFlip
 #Frames
 0;100;0;0;data/sfx/grumpy2.wav;
-1;100;0;0;;
+1;100;0;0;;think "I'm bored..."
 2;100;0;0;;
 3;3000;0;0;;
 4;100;0;0;;
