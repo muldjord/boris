@@ -272,6 +272,8 @@ NOTE! You can use variables inside the double quoted text by prepending them wit
 ##### draw
 There are several drawing routines in Boris scripting. This allows you to draw on top of Boris on each frame. It is also possible to begin drawing on one frame and end drawing on another for additive drawing over several frames.
 
+Most drawing commands consist of the color, then the type and lastly the parameters that are required for the chosen type. The only exception is the 'sprite' type.
+
 ###### Colors
 Drawing on Boris have hardcoded colors. These are specified as below:
 * white
@@ -290,8 +292,6 @@ Drawing on Boris have hardcoded colors. These are specified as below:
 * grey / gray
 * darkgrey / darkgray
 * lightgrey / lightgray
-
-Each drawing command consists of the color, then the draw type and lastly the parameters that are required for the chosen type.
 
 ###### pixel
 * Definition:
@@ -337,6 +337,17 @@ This will draw a red rectangle at 3, 4 with a width and height of 5.
 draw yellow text 2 2 sometext
 ```
 This will draw the yellow text `sometext` at 2, 2 using the internal minimal pixel font. NOTE! The text line cannot have spaces in it!
+
+###### sprite
+* Definition:
+`draw sprite <NAME> frame x y`
+* Example:
+```
+draw sprite test 0 8 4
+```
+This will draw frame 0 from the sprite `test` at the coordinates 8, 4. All sprites are loaded from the `data/sprites` folder. The names are the basename of the files contained within that folder. And each frame is cut at deltas of the height of the sprite sheet. See the example sprites in the folder.
+
+NOTE! The 'draw sprite' command is very useful if you want to have different facial expressions for Boris within a single behaviour. Then you can simply have the base Boris frame in the behaviour, and use sprites to apply different facial expressions to that same base frame.
 
 ###### value
 * Definition:
