@@ -28,12 +28,14 @@
 #include "scripthandler.h"
 #include "soundmixer.h"
 #include "item.h"
+#include "sprite.h"
 
 #include <stdio.h>
 
 #include <QRandomGenerator>
 
-extern QMap<QString, QImage> pfont;
+extern QMap<QString, Sprite> sprites;
+extern QMap<QString, QImage> pixelFont;
 extern SoundMixer soundMixer;
 
 ScriptHandler::ScriptHandler(QImage *image,
@@ -329,6 +331,21 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
     QPainter painter;
     painter.begin(image);
     painter.setRenderHint(QPainter::Antialiasing, false);
+    if(parameters.first() == "sprite") {
+      parameters.removeFirst(); // Remove 'sprite'
+      if(parameters.count() >= 4) {
+        QString sprite = parameters.first();
+        parameters.removeFirst(); // Remove sprite name
+        int f = getValue(parameters); // Sprite frame
+        int x = getValue(parameters);
+        int y = getValue(parameters);
+        if(settings->scriptOutput) {
+          printf("Drawing frame %d from sprite '%s' at %d,%d\n", f, sprite.toStdString().c_str(), x, y);
+        }
+        painter.drawImage(x, y, sprites[sprite].at(f));
+      }        
+      return;
+    }
     QString colorString = parameters.first();
     Qt::GlobalColor color = Qt::transparent;
     if(colorString == "black") {
@@ -472,8 +489,8 @@ void ScriptHandler::drawText(QPainter &painter, const int &x, const int &y, cons
   int idx = x;
   for(const auto &textChar: text) {
     QImage charImage;
-    if(pfont.contains(textChar)) {
-      charImage = pfont[textChar];
+    if(pixelFont.contains(textChar)) {
+      charImage = pixelFont[textChar];
     } else {
       charImage = QImage(5, 4, QImage::Format_ARGB32_Premultiplied);
       charImage.fill(Qt::red);
