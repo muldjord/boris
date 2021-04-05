@@ -1,20 +1,20 @@
 title=Eat rice pudding
 category=Hunger
 energy=10
-bladder=10
-hygiene=-10
 allowFlip
+oneShot
 #Frames
-0;75;0;0;;if hunger >= 100 break
+0;75;0;0;;var bites = @4 + 1
+0;75;0;0;;label bite,var bites -= 1,if hunger >= 100 goto imfull
 1;75;0;0;;
 2;75;0;0;;
 3;75;0;0;;
 4;75;0;0;;
 5;75;0;0;;
 6;75;0;0;;
-7;75;0;0;;
-8;75;0;0;;
-9;75;0;0;;
+7;75;0;0;;if @4 = 1 {if @2 = 1 say "Nice and mushy." else say "Just the way I like it."}
+8;75;0;0;;stat hygience -= 2
+9;75;0;0;;stat bladder += 2
 10;75;0;0;data/sfx/eating.wav;
 11;75;0;0;;
 12;75;0;0;;
@@ -26,4 +26,10 @@ allowFlip
 14;75;0;0;;label munch
 15;75;0;0;;stat hunger -= 4
 16;75;0;0;;
-17;75;0;0;;if @8 > 1 goto munch
+17;75;0;0;;if @8 > 1 goto munch else if bites = 0 goto hadenough else goto bite
+
+2;2000;0;0;;label imfull,say "I'm done!"
+2;2000;0;0;;break
+
+2;2000;0;0;;label hadenough,say "I think I've had enough."
+2;2000;0;0;;break

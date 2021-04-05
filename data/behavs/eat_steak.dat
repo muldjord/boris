@@ -1,11 +1,11 @@
 title=Eat a steak
 category=Hunger
 energy=10
-bladder=10
-hygiene=-20
 allowFlip
+oneShot
 #Frames
-0;75;0;0;;if hunger >= 100 break
+0;75;0;0;;var bites = @4 + 1
+0;75;0;0;;label bite,var bites -= 1,if hunger >= 100 goto imfull
 1;75;0;0;;
 2;75;0;0;data/sfx/steak_bite.wav;
 3;75;0;0;;
@@ -13,9 +13,9 @@ allowFlip
 5;50;0;0;;
 6;50;0;0;;
 7;200;0;0;;
-8;50;0;0;;if hunger > 90 think "I'm about to explode, I should stop." else if hunger > 75 think "I'm almost full..." else if hunger > 50 think "This tastes great!"
-9;50;0;0;;
-8;50;0;0;;
+8;50;0;0;;if @4 = 1 {if @2 = 1 say "Yummy!" else say "Delicious!"}
+9;50;0;0;;stat hygience -= 5
+8;50;0;0;;stat bladder += 2
 9;50;0;0;;
 8;50;0;0;;
 9;50;0;0;;
@@ -28,4 +28,10 @@ allowFlip
 12;100;0;0;;label munch
 13;100;0;0;;stat hunger -= 4
 14;100;0;0;;
-15;100;0;0;;if @8 > 1 goto munch
+15;100;0;0;;if @8 > 1 goto munch else if bites = 0 goto hadenough else goto bite
+
+0;2000;0;0;;label imfull,say "I'm full."
+0;2000;0;0;;break
+
+0;2000;0;0;;label hadenough,say "That's enough for me."
+0;2000;0;0;;break
