@@ -33,7 +33,7 @@
 #include <QDesktopServices>
 #include <QPainter>
 
-extern QMap<QString, QImage> pfont;
+extern QMap<QString, QImage> pixelFont;
 
 Bubble::Bubble(Settings *settings) : settings(settings)
 {
@@ -72,10 +72,10 @@ int Bubble::initBubble(const int x, const int y,
   int textWidth = 0;
   int textHeight = 0;
   for(const auto &ch: bubbleText) {
-    if(pfont.contains(ch)) {
-      textWidth += pfont[ch].width();
-      if(pfont[ch].height() > textHeight) {
-        textHeight = pfont[ch].height();
+    if(pixelFont.contains(ch)) {
+      textWidth += pixelFont[ch].width();
+      if(pixelFont[ch].height() > textHeight) {
+        textHeight = pixelFont[ch].height();
       }
     }
   }
@@ -86,8 +86,8 @@ int Bubble::initBubble(const int x, const int y,
   int idx = 0;
   for(const auto &ch: bubbleText.split("")) {
     QImage charImage;
-    if(pfont.contains(ch)) {
-      charImage = pfont[ch];
+    if(pixelFont.contains(ch)) {
+      charImage = pixelFont[ch];
     } else {
       continue;
     }
