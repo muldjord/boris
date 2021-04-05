@@ -21,7 +21,7 @@ allowFlip
 29;75;0;0;;
 30;75;0;0;;
 31;75;0;0;;
-32;90;0;0;;label hulainit,stat energy -= 1,var highscore = hulas,var hulas = 0,var remaining = 2,var remaining += @7,var prehula = @3,if prehula = 1 goto prehula1,if prehula = 2 goto prehula2,if prehula = 3 goto prehula3
+32;90;0;0;;label hulainit,stat hunger += 2,stat energy -= 1,var highscore = hulas,var hulas = 0,var remaining = 2,var remaining += @7,var prehula = @3,if prehula = 1 goto prehula1,if prehula = 2 goto prehula2,if prehula = 3 goto prehula3
 
 33;1200;0;0;;label prehula1
 34;100;0;0;;
