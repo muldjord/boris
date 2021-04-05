@@ -168,7 +168,6 @@ private:
 
   bool isAlive = true;
   bool flipFrames = false;
-  int tooLateForLoo = 0;
 
   void killBoris();
 };
