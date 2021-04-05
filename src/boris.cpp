@@ -1217,15 +1217,6 @@ void Boris::processAi(QString &behav)
     showWeather(behav);
   }
 
-  // Check if Boris has put off the toilet visit for too long. If so, make him s**t his pants :(
-  if(behav == "" && stats->getBladder() <= 0) {
-    tooLateForLoo++;
-    if(tooLateForLoo >= 6) {
-      tooLateForLoo = 0;
-      behav = "_too_late";
-    }
-  }
-  
   if(behav == "" && QRandomGenerator::global()->bounded(2)) {
     // Stat check
     QList<QString> potentials;
