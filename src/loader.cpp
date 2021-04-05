@@ -298,7 +298,7 @@ Script Loader::parseScript(const QString &script)
   return returnScript;
 }
 
-bool Loader::loadFont(QMap<QString, QImage> &pfont)
+bool Loader::loadFont(QMap<QString, QImage> &pixelFont)
 {
   QImage fontSheet(":pfont.png");
   if(!fontSheet.isNull()) {
@@ -313,7 +313,7 @@ bool Loader::loadFont(QMap<QString, QImage> &pfont)
       while(x2 < w && fontSheet.pixelIndex(x2, 0) != 2) {
         x2++;
       }
-      pfont[fontChar] = fontSheet.copy(x1, 0, x2 - x1, h);
+      pixelFont[fontChar] = fontSheet.copy(x1, 0, x2 - x1, h);
       // Move past purple non-char area to where next char begins
       while(x2 < w && fontSheet.pixelIndex(x2, 0) == 2) {
         x2++;
@@ -322,6 +322,32 @@ bool Loader::loadFont(QMap<QString, QImage> &pfont)
     }
   } else {
     return false;
+  }
+  return true;
+}
+
+bool Loader::loadSprites(const QString &spritesDir,
+                         QMap<QString, Sprite> &sprites)
+{
+  QDir d(spritesDir,
+         "*.png",
+         QDir::Name,
+         QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
+  QFileInfoList infoList = d.entryInfoList();
+  for(const auto &info: infoList) {
+    Sprite sprite;
+    QImage rawImage(info.absoluteFilePath());
+    if(rawImage.width() % rawImage.height() != 0) {
+      qWarning("  Error in sprite: %s\n", info.baseName().toStdString().c_str());
+      qWarning("  Sprite width does not adhere to a multiple of height, can't load...\n");
+      return false;
+    } else {
+      for (int i = 0; i < rawImage.width() / rawImage.height(); ++i) {
+        sprite.append(rawImage.copy(rawImage.height() * i, 0, rawImage.height(), rawImage.height()));
+      }
+      qInfo("  Added sprite: %s (%d frames)\n", info.baseName().toStdString().c_str(), sprite.count());
+      sprites[info.baseName()] = sprite;
+    }
   }
   return true;
 }

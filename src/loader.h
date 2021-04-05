@@ -29,6 +29,7 @@
 
 #include "behaviour.h"
 #include "mainwindow.h"
+#include "sprite.h"
 
 #include "SFML/Audio.hpp"
 
@@ -49,7 +50,9 @@ public:
                              QList<Behaviour> &behaviours,
                              QMap<QString, sf::SoundBuffer> &soundFxs,
                              QProgressBar *progressBar);
-  static bool loadFont(QMap<QString, QImage> &pfont);
+  static bool loadFont(QMap<QString, QImage> &pixelFont);
+  static bool loadSprites(const QString &spritesDir,
+                          QMap<QString, Sprite> &sprites);
   static Script parseScript(const QString &script);
   static void setClothesColor(const Settings &settings, QImage &image);
 };
