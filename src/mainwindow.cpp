@@ -52,7 +52,8 @@ QList<Boris*> borises;
 QList<Behaviour> behaviours;
 QList<Behaviour> weathers;
 QList<Behaviour> itemList;
-QMap<QString, QImage> pfont;
+QMap<QString, Sprite> sprites;
+QMap<QString, QImage> pixelFont;
 SoundMixer soundMixer(24);
 
 MainWindow::MainWindow()
@@ -100,6 +101,11 @@ MainWindow::MainWindow()
     iniSettings.setValue("items_path", "data/items");
   }
   settings.itemsPath = iniSettings.value("items_path").toString();
+
+  if(!iniSettings.contains("sprites_path")) {
+    iniSettings.setValue("sprites_path", "data/sprites");
+  }
+  settings.spritesPath = iniSettings.value("sprites_path").toString();
 
   // Force weather from ini
   if(iniSettings.contains("weather_force_type")) {
@@ -299,7 +305,13 @@ void MainWindow::loadAssets()
     qInfo("Error when loading some items, please check your png and dat files\n");
   }
 
-  if(Loader::loadFont(pfont)) {
+  if(Loader::loadSprites(settings.spritesPath, sprites)) {
+    qInfo("Sprites loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading sprites...\n");
+  }
+
+  if(Loader::loadFont(pixelFont)) {
     qInfo("Font loaded ok... :)\n");
   } else {
     qInfo("Error when loading font...\n");
