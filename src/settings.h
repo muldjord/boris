@@ -54,6 +54,7 @@ struct Settings {
   QString behavsPath = "data/behavs";
   QString weathersPath = "data/weathers";
   QString itemsPath = "data/items";
+  QString spritesPath = "data/sprites";
 
   // Boris related
   int borisX = 64;
