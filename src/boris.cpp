@@ -1293,24 +1293,19 @@ void Boris::processAi(QString &behav)
       behav = potentials.at(QRandomGenerator::global()->bounded(potentials.size()));
       // Flash stat if appropriate
       if(behav == "_fun") {
-        bubble->initBubble(pos().x(), pos().y(), size, "I'm bored...", "_thought");
         stats->flashStat("fun");
       } else if(behav == "_energy") {
-        bubble->initBubble(pos().x(), pos().y(), size, "I'm feeling drowsy...", "_thought");
         stats->flashStat("energy");
       } else if(behav == "_hunger") {
-        bubble->initBubble(pos().x(), pos().y(), size, "Oh boy, I'm feeling hungry...", "_thought");
         stats->flashStat("hunger");
       } else if(behav == "_bladder") {
-        bubble->initBubble(pos().x(), pos().y(), size, "I really need to go to the bathroom!", "_thought");
         stats->flashStat("bladder");
       } else if(behav == "_social") {
-        bubble->initBubble(pos().x(), pos().y(), size, "I wish someone would play with me...", "_thought");
         stats->flashStat("social");
       } else if(behav == "_health") {
-        bubble->initBubble(pos().x(), pos().y(), size, "I don't feel so good...", "_thought");
+        // This is a visual stat, nothing to flash
       } else if(behav == "_hygiene") {
-        bubble->initBubble(pos().x(), pos().y(), size, "Urgh, I smell pretty bad...", "_thought");
+        // This is a visual stat, nothing to flash
       }
     }
   }
@@ -1329,9 +1324,6 @@ void Boris::updateBoris()
   setFixedSize(size, size + (size / 2.0));
   resetTransform();
   scale(size / 32.0, size / 32.0);
-
-  // The following should be used in a reimplementation of resizeEvent
-  //fitInView(QRectF(0.0, 0.0, 32.0, 48.0), Qt::IgnoreAspectRatio);
 
   // Set new independence value
   independence = settings->independence;
