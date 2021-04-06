@@ -34,6 +34,7 @@
 #include <QDir>
 #include <QTextStream>
 #include <QDesktopWidget>
+#include <QRegularExpression>
 
 qint64 Loader::getAssetsSize(const QDir &dir)
 {
@@ -329,41 +330,45 @@ bool Loader::loadFont(QMap<QString, QImage> &pixelFont)
 bool Loader::loadSprites(const QString &spritesDir,
                          QMap<QString, Sprite> &sprites)
 {
+  bool allGood = true;
   QDir d(spritesDir,
          "*.png",
          QDir::Name,
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
   QFileInfoList infoList = d.entryInfoList();
   for(const auto &info: infoList) {
+    if(!QRegularExpression("^[a-z]{0,42}$").match(info.baseName()).hasMatch()) {
+      qWarning("  Sprite file '%s' contains illegal characters, skipping...\n", info.baseName().toStdString().c_str());
+      allGood = false;
+      continue;
+    }
     Sprite sprite;
     QImage spriteSheet(info.absoluteFilePath());
-    int w = spriteSheet.width();
-    int h = spriteSheet.height();
     int x1 = 0;
-    const QRgb *scanLine = (QRgb *)spriteSheet.constScanLine(0);
-    for(int x2 = 0; x2 < w; ++x2) {
-      if(qRed(scanLine[x2]) != 255 && qBlue(scanLine[x2]) != 255) {
-        continue;
-      }
-      sprite.append(spriteSheet.copy(x1, 0, x2, rawImage.height()));
-      while(x2 < w  && qRed(scanLine[x2]) == 255 && qBlue(scanLine[x2]) == 255) {
-        x2++;
+    int x2 = 0;
+    bool inSprite = true;
+    for(x2 = 0; x2 <= spriteSheet.width(); ++x2) {
+      if(inSprite) {
+        if(x2 < spriteSheet.width() &&
+           spriteSheet.pixelColor(x2, 0) != QColor(255, 0, 255)) {
+          continue;
+        }
+        if(x2 > x1) {
+          sprite.append(spriteSheet.copy(x1, 0, x2 - x1, spriteSheet.height()));
+        }
+        inSprite = false;
+      } else {
+        if(spriteSheet.pixelColor(x2, 0) == QColor(255, 0, 255)) {
+          continue;
+        }
+        inSprite = true;
       }
       x1 = x2;
     }
-    if(rawImage.width() % rawImage.height() != 0) {
-      qWarning("  Error in sprite: %s\n", info.baseName().toStdString().c_str());
-      qWarning("  Sprite width does not adhere to a multiple of height, can't load...\n");
-      return false;
-    } else {
-      for (int i = 0; i < rawImage.width() / rawImage.height(); ++i) {
-        sprite.append(rawImage.copy(rawImage.height() * i, 0, rawImage.height(), rawImage.height()));
-      }
-      qInfo("  Added sprite: %s (%d frames)\n", info.baseName().toStdString().c_str(), sprite.count());
-      sprites[info.baseName()] = sprite;
-    }
+    qInfo("  Added sprite: %s (%d frames)\n", info.baseName().toStdString().c_str(), sprite.count());
+    sprites[info.baseName()] = sprite;
   }
-  return true;
+  return allGood;
 }
 
 void Loader::setClothesColor(const Settings &settings, QImage &image)
