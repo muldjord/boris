@@ -71,6 +71,7 @@ private:
   int getDistance(const QPoint &p);
   int getSector(const QPoint &p);
 
+  bool stopAndDestroy = false;
 };
 
 #endif // _ITEM_H
