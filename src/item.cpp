@@ -182,6 +182,12 @@ void Item::runScript(int &stop)
 
 void Item::nextFrame()
 {
+  if(stopAndDestroy) {
+    stopAndDestroy = false;
+    destroy();
+    return;
+  }
+
   sanityCheck();
   
   if(curFrame >= itemList.at(curItem).frames.count()) {
@@ -233,9 +239,8 @@ void Item::nextFrame()
   if(stop == 1) {
     // In case of 'goto' curFrame has been set in scriptHandler
   } else if(stop == 2) {
-    // In case of 'break' it will destroy the item
-    destroy();
-    return;
+    // In case of 'break' it will destroy the item when the frame timer times out
+    stopAndDestroy = true;
   } else if(stop == 3) {
     // In case of 'stop' it will cease any frame and animation progression
     animTimer.stop();
