@@ -318,14 +318,11 @@ void Boris::changeBehaviour(QString behav, int time)
   if(QRandomGenerator::global()->bounded(10) >= 3) {
     if(QRandomGenerator::global()->bounded(70) >= stats->getEnergy()) {
       curBehav = getIdxFromCategory("Idle");
-      printf("IDLE: '%s'\n", behaviours.at(curBehav).file.toStdString().c_str());
     } else {
       curBehav = getIdxFromCategory("Locomotion"); // This category DOES exist. See data/behavs/README.md
-      printf("LOCO: '%s'\n", behaviours.at(curBehav).file.toStdString().c_str());
     }
   } else {
     curBehav = QRandomGenerator::global()->bounded(behaviours.size() - staticBehavs) + staticBehavs;
-    printf("RAND: '%s'\n", behaviours.at(curBehav).file.toStdString().c_str());
   }
 
   // If a specific behaviour is requested, use that
@@ -1434,7 +1431,6 @@ void Boris::checkInteractions()
   if(interactions < 0) {
     interactions = 0;
   }
-  printf("Interactions: %d\n", interactions);
 
   if(annoyance > ANNOYMAX) {
     annoyance = ANNOYMAX;
@@ -1443,7 +1439,6 @@ void Boris::checkInteractions()
   if(annoyance < 0) {
     annoyance = 0;
   }
-  printf("Annoyance: %d\n", annoyance);
 
   interactionsTimer.start();
 }

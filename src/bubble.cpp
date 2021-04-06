@@ -59,10 +59,11 @@ Bubble::~Bubble()
 }
 
 int Bubble::initBubble(const int x, const int y,
-                         const int &borisSize,
-                         const QString &bubbleText,
-                         const QString &bubbleType,
-                         const QUrl &rssUrl)
+                       const int &borisSize,
+                       const int &hyper,
+                       const QString &bubbleText,
+                       const QString &bubbleType,
+                       const QUrl &rssUrl)
 {
   if(rssUrl.isValid()) {
     this->rssUrl = rssUrl;
@@ -127,7 +128,7 @@ int Bubble::initBubble(const int x, const int y,
   resetTransform();
   scale(borisSize / 32.0, borisSize / 32.0);
   int duration = 1000 + (bubbleText.length() * 100);
-
+  duration = duration - (duration / 100.0 * hyper);
   if(settings->bubbles) {
     show();
     moveBubble(x, y, borisSize);

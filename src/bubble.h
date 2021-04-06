@@ -44,10 +44,11 @@ public:
   Bubble(Settings *settings);
   ~Bubble();
   int initBubble(const int x, const int y,
-                  const int &borisSize,
-                  const QString &bubbleText,
-                  const QString &bubbleType = "_chat",
-                  const QUrl &rssUrl = QUrl());
+                 const int &borisSize,
+                 const int &hyper,
+                 const QString &bubbleText,
+                 const QString &bubbleType = "_chat",
+                 const QUrl &rssUrl = QUrl());
   void moveBubble(const int &x, const int &y, const int &borisSize);
   
 protected:

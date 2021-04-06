@@ -569,7 +569,7 @@ void ScriptHandler::handleSay(QList<QString> &parameters)
       if(!settings->rssLines.isEmpty()) {
         int rssLine = QRandomGenerator::global()->bounded(settings->rssLines.count());
         bubbleText = settings->rssLines.at(rssLine).text;
-        bubble->initBubble(parentPos.x(), parentPos.y(), size,
+        bubble->initBubble(parentPos.x(), parentPos.y(), size, scriptVars["hyper"],
                            bubbleText,
                            "_chat",
                            settings->rssLines.at(rssLine).url);
@@ -589,7 +589,7 @@ void ScriptHandler::handleSay(QList<QString> &parameters)
       for(const auto &variable: scriptVars.keys()) {
         bubbleText.replace("$" + variable, QString::number(scriptVars[variable]));
       }
-      bubble->initBubble(parentPos.x(), parentPos.y(), size, bubbleText);
+      bubble->initBubble(parentPos.x(), parentPos.y(), size, scriptVars["hyper"], bubbleText);
     }
     if(settings->scriptOutput) {
       printf("Saying '%s'\n", bubbleText.toStdString().c_str());
@@ -607,7 +607,7 @@ void ScriptHandler::handleThink(QList<QString> &parameters)
       if(!settings->rssLines.isEmpty()) {
         int rssLine = QRandomGenerator::global()->bounded(settings->rssLines.count());
         bubbleText = settings->rssLines.at(rssLine).text;
-        bubble->initBubble(parentPos.x(), parentPos.y(), size,
+        bubble->initBubble(parentPos.x(), parentPos.y(), size, scriptVars["hyper"],
                            bubbleText,
                            "_thought",
                            settings->rssLines.at(rssLine).url);
@@ -627,7 +627,7 @@ void ScriptHandler::handleThink(QList<QString> &parameters)
       for(const auto &variable: scriptVars.keys()) {
         bubbleText.replace("$" + variable, QString::number(scriptVars[variable]));
       }
-      bubble->initBubble(parentPos.x(), parentPos.y(), size, bubbleText, "_thought");
+      bubble->initBubble(parentPos.x(), parentPos.y(), size, scriptVars["hyper"], bubbleText, "_thought");
     }
     if(settings->scriptOutput) {
       printf("Thinking '%s'\n", bubbleText.toStdString().c_str());
