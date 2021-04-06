@@ -324,7 +324,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
       return;
     } else if(parameters.first() == "end") {
       parameters.removeFirst(); // Remove 'end'
-      image->fill(Qt::transparent);
+      //image->fill(Qt::transparent);
       *drawing = false;
       return;
     }

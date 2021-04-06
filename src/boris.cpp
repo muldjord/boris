@@ -442,17 +442,21 @@ void Boris::runScript(int &stop)
   scriptVars["wind"] = settings->windSpeed;
   scriptVars["temp"] = settings->temperature;
 
-  if(!drawing) {
-    scriptImage.fill(Qt::transparent);
-  }
-
   ScriptHandler scriptHandler(&scriptImage, &drawing, settings, bubble, behaviours.at(curBehav).labels, behaviours.at(curBehav).defines, scriptVars, QPoint(pos().x(), pos().y()), size);
   connect(&scriptHandler, &ScriptHandler::behavFromFile, this, &Boris::behavFromFile);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Boris::setCurFrame);
   connect(&scriptHandler, &ScriptHandler::statChange, this, &Boris::statChange);
   scriptHandler.runScript(stop, behaviours.at(curBehav).frames.at(curFrame).script);
 
-  scriptSprite->setPixmap(QPixmap::fromImage(scriptImage));
+  if(flipFrames) {
+    QImage flipped = scriptImage.mirrored(true, false);
+    scriptSprite->setPixmap(QPixmap::fromImage(flipped));
+  } else {
+    scriptSprite->setPixmap(QPixmap::fromImage(scriptImage));
+  }
+  if(!drawing) {
+    scriptImage.fill(Qt::transparent);
+  }
 }
 
 int Boris::getDistance(const QPoint &p)
