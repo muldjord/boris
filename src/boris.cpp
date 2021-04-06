@@ -838,7 +838,7 @@ void Boris::handlePhysics()
               changeBehaviour("_flee_left_up", timeout);
             }
           } else if(stats->getFun() > 10 &&
-                    stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 20)) {
+                    stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 40)) {
             changeBehaviour("_mouse_interact");
             interactions = 0;
           }
