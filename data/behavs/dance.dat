@@ -4,9 +4,10 @@ fun=1
 hunger=1
 social=1
 allowFlip
-define nextdance:var cycles = 1 + @4,if @2 = 1 goto dance1 else goto dance2
+oneShot
+define nextdance:var dances -= 1,if dances <= 0 break,var cycles = @4,if dances % 2 = 0 goto dance1 else goto dance2
 #Frames
-0;50;0;0;;call nextdance
+0;50;0;0;;var dances = @6 + 3,call nextdance
 
 0;100;0;0;;label dance1,var cycles -= 1
 1;100;0;0;;
