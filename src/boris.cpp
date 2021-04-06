@@ -318,11 +318,14 @@ void Boris::changeBehaviour(QString behav, int time)
   if(QRandomGenerator::global()->bounded(10) >= 3) {
     if(QRandomGenerator::global()->bounded(70) >= stats->getEnergy()) {
       curBehav = getIdxFromCategory("Idle");
+      printf("IDLE: '%s'\n", behaviours.at(curBehav).file.toStdString().c_str());
     } else {
       curBehav = getIdxFromCategory("Locomotion"); // This category DOES exist. See data/behavs/README.md
+      printf("LOCO: '%s'\n", behaviours.at(curBehav).file.toStdString().c_str());
     }
   } else {
     curBehav = QRandomGenerator::global()->bounded(behaviours.size() - staticBehavs) + staticBehavs;
+    printf("RAND: '%s'\n", behaviours.at(curBehav).file.toStdString().c_str());
   }
 
   // If a specific behaviour is requested, use that
@@ -330,6 +333,7 @@ void Boris::changeBehaviour(QString behav, int time)
     for(int a = 0; a < behaviours.size(); ++a) {
       if(behaviours.at(a).file == behav) {
         curBehav = a;
+        break;
       }
     }
   }
@@ -813,10 +817,10 @@ void Boris::handlePhysics()
 
   if(!falling && !grabbed &&
      !behaviours.at(curBehav).doNotDisturb) {
-    if(getDistance(QCursor::pos()) < size * 2) {
+    if(getDistance(QCursor::pos()) < size * 3) {
       if(!alreadyEvading) {
         interactions++;
-        if(fabs(mouseHVel) > 40.0 || fabs(mouseVVel) > 40.0) {
+        if(fabs(mouseHVel) > 35.0 || fabs(mouseVVel) > 35.0) {
           int mouseSector = getSector(QCursor::pos());
           int timeout = QRandomGenerator::global()->bounded(2000) + 1000;
           if(mouseSector == 2) {
@@ -837,8 +841,9 @@ void Boris::handlePhysics()
             changeBehaviour("_flee_left_up", timeout);
           }
         } else if(stats->getFun() > 10 &&
-                  stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 10) + 20) {
-          changeBehaviour(getFileFromCategory("Social"));
+                  stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 20)) {
+          changeBehaviour("_mouse_interact");
+          interactions = 0;
         }
       }
       alreadyEvading = true;
@@ -1426,6 +1431,7 @@ void Boris::checkInteractions()
   } else if(interactions > 0) {
     interactions--;
   }
+  printf("Interactions: %d\n", interactions);
   if(annoyance > ANNOYMAX) {
     annoyance = ANNOYMAX;
   } else if(annoyance > 0) {
