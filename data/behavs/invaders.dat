@@ -52,7 +52,7 @@ if col3 >= 6 draw white line alx + 6 row + 4 alx + 6 + 1 row + 4
 8;75;0;0;;
 9;2000;0;0;data/sfx/game_boot.wav;
 
-10;150;0;0;;label nextround,
+10;2000;0;0;;label nextround,
 var col1 = 6,var col2 = 6,var col3 = 6,
 var bx = 16 + @12,
 var sx = -1,
@@ -61,9 +61,8 @@ var alx = 16,
 var ald = 1,
 var row = 4,
 var min = 16,
-var max = 23
-
-10;2000;0;0;;draw red text 18 4 lvl,
+var max = 23,
+draw red text 18 4 lvl,
 draw red value 26 4 level,
 if lives >= 1 draw green line 18 11 20 11,
 if lives >= 2 draw green line 22 11 24 11,
@@ -100,10 +99,9 @@ call drawaliens,
 call drawlives,
 goto gameloop
 
-10;10;0;0;data/sfx/game_win.wav;label winround
-10;10;0;0;data/sfx/win2.wav;stat fun += 6,var level += 1,if level <= 9 goto nextround else goto wingame
-10;10;0;0;data/sfx/game_loose.wav;label looseround
-11;10;0;0;data/sfx/grumpy2.wav;stat fun -= 2,var lives -= 1,if lives < 0 goto gameover else goto nextround
+10;500;0;0;data/sfx/game_win.wav;label winround,sound data/sfx/win2.wav,stat fun += 6,var level += 1,if level <= 9 goto nextround else goto wingame
+
+11;500;0;0;data/sfx/game_loose.wav;label looseround,sound data/sfx/grumpy2.wav,stat fun -= 2,var lives -= 1,if lives < 0 goto gameover else goto nextround
 
 12;3000;0;0;;label gameover,goto end
 13;3000;0;0;;label wingame

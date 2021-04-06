@@ -345,7 +345,7 @@ This will draw the yellow text `sometext` at 2, 2 using the internal minimal pix
 ```
 draw sprite test 0 8 4
 ```
-This will draw frame 0 from the sprite `test` at the coordinates 8, 4. All sprites are loaded from the `data/sprites` folder. The names are the basename of the files contained within that folder. And each frame is cut at deltas of the height of the sprite sheet. See the example sprites in the folder.
+This will draw frame 0 from the sprite `test` at the coordinates 8, 4. All sprites are loaded from the `data/sprites` folder. The sprite names are the basename of the files contained within that folder (only lower case letters allowed and spaces *not* allowed). Each frame is cut from horizontal sprite sheets separated by the *exact* color R:255, G:0, B:0(known as magenta). See the example sprites in the folder.
 
 NOTE! The 'draw sprite' command is very useful if you want to have different facial expressions for Boris within a single behaviour. Then you can simply have the base Boris frame in the behaviour, and use sprites to apply different facial expressions to that same base frame.
 

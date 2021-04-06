@@ -12,9 +12,9 @@ if rand = 1 goto drink1 else if rand = 2 goto drink2 else if rand = 3 goto drink
 
 define deltastats:var drinks -= 1,stat hyper += 6,stat energy += 6,stat bladder += 5
 
-define drawcoffee1:if drinks >= 3 draw sprite coffee 0 13 18 else if drinks = 2 draw sprite coffee 1 13 18
+define drawcoffee1:if drinks >= 3 draw sprite coffee 0 13 18 else if drinks = 2 draw sprite coffee 1 14 18
 
-define drawcoffee2:if drinks >= 2 draw sprite coffee 1 13 17
+define drawcoffee2:if drinks >= 2 draw sprite coffee 1 14 17
 
 #Frames
 0;500;0;0;;var drinks = 2,var drinks += @2,call drawcoffee1,call choosedrink

@@ -1,4 +1,3 @@
-title=Walk casually
 category=Locomotion
 oneShot
 define progress:var steps -= 1,var straight -= 1,if @32 = 1 break
