@@ -815,35 +815,36 @@ void Boris::handlePhysics()
   mouseVVel = (QCursor::pos().y() - oldCursor.y()) / 4.0;
   oldCursor = QCursor::pos();
 
-  if(!falling && !grabbed &&
-     !behaviours.at(curBehav).doNotDisturb) {
+  if(!falling && !grabbed) {
     if(getDistance(QCursor::pos()) < size * 3) {
       if(!alreadyEvading) {
         interactions++;
-        if(fabs(mouseHVel) > 35.0 || fabs(mouseVVel) > 35.0) {
-          int mouseSector = getSector(QCursor::pos());
-          int timeout = QRandomGenerator::global()->bounded(2000) + 1000;
-          if(mouseSector == 2) {
-            changeBehaviour("_flee_left", timeout);
-          } else if(mouseSector == 1) {
-            changeBehaviour("_flee_left_down", timeout);
-          } else if(mouseSector == 0) {
-            changeBehaviour("_flee_down", timeout);
-          } else if(mouseSector == 7) {
-            changeBehaviour("_flee_right_down", timeout);
-          } else if(mouseSector == 6) {
-            changeBehaviour("_flee_right", timeout);
-          } else if(mouseSector == 5) {
-            changeBehaviour("_flee_right_up", timeout);
-          } else if(mouseSector == 4) {
-            changeBehaviour("_flee_up", timeout);
-          } else if(mouseSector == 3) {
-            changeBehaviour("_flee_left_up", timeout);
+        if(!behaviours.at(curBehav).doNotDisturb) {
+          if(fabs(mouseHVel) > 35.0 || fabs(mouseVVel) > 35.0) {
+            int mouseSector = getSector(QCursor::pos());
+            int timeout = QRandomGenerator::global()->bounded(2000) + 1000;
+            if(mouseSector == 2) {
+              changeBehaviour("_flee_left", timeout);
+            } else if(mouseSector == 1) {
+              changeBehaviour("_flee_left_down", timeout);
+            } else if(mouseSector == 0) {
+              changeBehaviour("_flee_down", timeout);
+            } else if(mouseSector == 7) {
+              changeBehaviour("_flee_right_down", timeout);
+            } else if(mouseSector == 6) {
+              changeBehaviour("_flee_right", timeout);
+            } else if(mouseSector == 5) {
+              changeBehaviour("_flee_right_up", timeout);
+            } else if(mouseSector == 4) {
+              changeBehaviour("_flee_up", timeout);
+            } else if(mouseSector == 3) {
+              changeBehaviour("_flee_left_up", timeout);
+            }
+          } else if(stats->getFun() > 10 &&
+                    stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 20)) {
+            changeBehaviour("_mouse_interact");
+            interactions = 0;
           }
-        } else if(stats->getFun() > 10 &&
-                  stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 20)) {
-          changeBehaviour("_mouse_interact");
-          interactions = 0;
         }
       }
       alreadyEvading = true;
@@ -1428,15 +1429,22 @@ void Boris::checkInteractions()
   // This balances the interaction count which is increased when mouse is moved across Boris
   if(interactions > 10) {
     interactions = 10;
-  } else if(interactions > 0) {
-    interactions--;
+  }
+  interactions--;
+  if(interactions < 0) {
+    interactions = 0;
   }
   printf("Interactions: %d\n", interactions);
+
   if(annoyance > ANNOYMAX) {
     annoyance = ANNOYMAX;
-  } else if(annoyance > 0) {
-    annoyance = annoyance - 4;
   }
+  annoyance = annoyance - 4;
+  if(annoyance < 0) {
+    annoyance = 0;
+  }
+  printf("Annoyance: %d\n", annoyance);
+
   interactionsTimer.start();
 }
 
