@@ -169,6 +169,8 @@ private:
   bool isAlive = true;
   bool flipFrames = false;
 
+  bool stopNextBehaviour = false;
+
   void killBoris();
 };
 

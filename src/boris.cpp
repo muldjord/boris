@@ -288,9 +288,11 @@ void Boris::nextBehaviour()
 
 void Boris::changeBehaviour(QString behav, int time)
 {
+  /*
   if(behaviours.at(curBehav).file == "_drop_dead") {
     return;
   }
+  */
 
   // Always stop behavTimer, just in case. At this point we never want it to be running
   behavTimer.stop();
@@ -312,7 +314,6 @@ void Boris::changeBehaviour(QString behav, int time)
     processAi(behav);
   }
   
-  // Pick random behaviour but rule out certain behavs such as weewee and sleep
   // Bias towards behavs from 'Idle' and 'Locomotion' categories to make Boris less erratic
   if(QRandomGenerator::global()->bounded(10) >= 3) {
     if(QRandomGenerator::global()->bounded(70) >= stats->getEnergy()) {
@@ -321,14 +322,7 @@ void Boris::changeBehaviour(QString behav, int time)
       curBehav = getIdxFromCategory("Locomotion"); // This category DOES exist. See data/behavs/README.md
     }
   } else {
-    do {
-      curBehav = QRandomGenerator::global()->bounded(behaviours.size() - staticBehavs) + staticBehavs;
-    } while(behaviours.at(curBehav).file == "weewee" ||
-            behaviours.at(curBehav).file == "toilet_visit" ||
-            behaviours.at(curBehav).file == "sleep" ||
-            behaviours.at(curBehav).file == "shower" ||
-            behaviours.at(curBehav).file == "wash_hands" ||
-            behaviours.at(curBehav).file == "patch_up");
+    curBehav = QRandomGenerator::global()->bounded(behaviours.size() - staticBehavs) + staticBehavs;
   }
 
   // If a specific behaviour is requested, use that
@@ -529,6 +523,13 @@ int Boris::getSector(const QPoint &p)
 
 void Boris::nextFrame()
 {
+  if(stopNextBehaviour) {
+    stopNextBehaviour = false;
+    behavTimer.stop();
+    nextBehaviour();
+    return;
+  }
+
   QElapsedTimer frameTimer;
   frameTimer.start();
 
@@ -606,10 +607,8 @@ void Boris::nextFrame()
     // In case of 'goto' curFrame has been set in scriptHandler
     // In case of 'behav' behavFromFile has been emitted
   } else if(stop == 2) {
-    // In case of 'break' it will change to the next behaviour in line
-    behavTimer.stop();
-    nextBehaviour();
-    return;
+    // In case of 'break' it will change to the next behaviour when the frame times out
+    stopNextBehaviour = true;
   } else if(stop == 3) {
     // In case of 'stop' it will cease any frame and animation progression
     behavTimer.stop();
@@ -704,7 +703,7 @@ void Boris::mousePressEvent(QMouseEvent* event)
     bMenu->exec(QCursor::pos());
   }
   if(event->button() == Qt::LeftButton) {
-    if(behaviours.at(curBehav).file == "sleep" && stats->getEnergy() <= 95) {
+    if(behaviours.at(curBehav).file == "_sleep" && stats->getEnergy() <= 95) {
       energyQueue -= 25;
       funQueue -= 20;
     }
