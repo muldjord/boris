@@ -336,7 +336,21 @@ bool Loader::loadSprites(const QString &spritesDir,
   QFileInfoList infoList = d.entryInfoList();
   for(const auto &info: infoList) {
     Sprite sprite;
-    QImage rawImage(info.absoluteFilePath());
+    QImage spriteSheet(info.absoluteFilePath());
+    int w = spriteSheet.width();
+    int h = spriteSheet.height();
+    int x1 = 0;
+    const QRgb *scanLine = (QRgb *)spriteSheet.constScanLine(0);
+    for(int x2 = 0; x2 < w; ++x2) {
+      if(qRed(scanLine[x2]) != 255 && qBlue(scanLine[x2]) != 255) {
+        continue;
+      }
+      sprite.append(spriteSheet.copy(x1, 0, x2, rawImage.height()));
+      while(x2 < w  && qRed(scanLine[x2]) == 255 && qBlue(scanLine[x2]) == 255) {
+        x2++;
+      }
+      x1 = x2;
+    }
     if(rawImage.width() % rawImage.height() != 0) {
       qWarning("  Error in sprite: %s\n", info.baseName().toStdString().c_str());
       qWarning("  Sprite width does not adhere to a multiple of height, can't load...\n");
