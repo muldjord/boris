@@ -1,0 +1,5 @@
+title=Hula hoop
+reaction=hula_hoop
+allowFlip
+#Frames
+0;1000;0;0;;stop
