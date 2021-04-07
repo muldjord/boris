@@ -5,10 +5,10 @@ hygiene=-5
 oneShot
 allowFlip
 #Frames
-0;75;0;0;;var loops = 1,var loops += @5,var hulas = 1
-1;75;0;0;;
-2;75;0;0;;
-19;75;0;0;;
+#0;75;0;0;;
+#1;75;0;0;;
+#2;75;0;0;;
+19;75;0;0;;var loops = 1,var loops += @5,var hulas = 1
 20;75;0;0;;
 21;75;0;0;;
 22;75;0;0;;
