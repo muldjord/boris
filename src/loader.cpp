@@ -103,6 +103,7 @@ bool Loader::loadBehaviours(const Settings &settings,
 
       // Create behaviour container
       Behaviour b;
+      b.absoluteFilePath = info.absoluteFilePath();
       b.file = info.completeBaseName();
       b.title = info.completeBaseName();
 
@@ -145,6 +146,10 @@ bool Loader::loadBehaviours(const Settings &settings,
         }
         if(line.contains("category")) {
           b.category = line.mid(9,line.length());
+          continue;
+        }
+        if(line.contains("reaction")) {
+          b.reaction = line.mid(9,line.length());
           continue;
         }
         if(line.contains("hyper")) {

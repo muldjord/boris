@@ -105,6 +105,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   connect(&animTimer, &QTimer::timeout, this, &Item::nextFrame);
   animTimer.start();
 
+  QTimer::singleShot(60000, this, &Item::setDormant);
   setCursor(QCursor(QPixmap(":mouse_hover.png")));
   show();
 }
@@ -413,9 +414,9 @@ QPoint Item::getGlobalCenter()
                 pos().y() + (height() / 2));
 }
 
-QString Item::getItemName()
+QString Item::getReactionBehaviour()
 {
-  return itemBehaviours.at(curItem).file;
+  return itemBehaviours.at(curItem).reaction;
 }
 
 void Item::destroy()
@@ -427,4 +428,9 @@ void Item::destroy()
     }
   }
   delete this;
+}
+
+void Item::setDormant()
+{
+  dormant = true;
 }

@@ -9,15 +9,18 @@ The png files are horizontal sets of sprites that are loaded together with the `
 ## DAT behaviour definition files
 The format of the dat files is as follows:
 ```
-<Behaviour options and flags>
+<Behaviour options>
+<Behaviour flags>
+<Code defines>
 #Frames
 <Frame definitions>
 ```
 The line `#Frames` must be there so the software knows when the frame definitions begin.
 
-### Behaviour options and flags
-Options or flags, one per line of any of the following:
-* title=&lt;STRING&gt;: The title used by the behaviour when right-clicking Boris
+### Behaviour options
+* title=&lt;STRING&gt;: The title used by the behaviour. This is the title shown in the system tray menus.
+
+#### Options specific to Boris behaviours
 * category=&lt;STRING&gt;: The category this behaviour is categorically categorized into:
   * Health: Used for behaviours that heal Boris. He will not choose these on his own
   * Energy: Boris will choose from this category when he is low on energy / sleepy
@@ -37,12 +40,19 @@ Options or flags, one per line of any of the following:
 * social=&lt;INTEGER&gt;: The amount of Boris' social needs this behaviour will increase or decrease when starting the behaviour
 * fun=&lt;INTEGER&gt;: The amount of Boris' fun level this behaviour will increase or decrease when starting the behaviour
 * hygiene=&lt;INTEGER&gt;: The amount of Boris' filth level this behaviour will increase or decrease when starting the behaviour
-* oneShot: This behaviour will be played from start to finish and then switch to a new behaviour
-* doNotDisturb: If this exists, Boris will not be disturbed by the mouse or other Borises while this behaviour is in progress
-* allowFlip: If this line exists there is a 50% chance the behaviour will be mirrored horizontally
+
+#### Options specific to item behaviours
+* reaction=&lt;STRING&gt;: This tells Boris what behaviour he should react with when user drags the item on top of him, or when he walks into it while roaming the desktop. It should match the basename of the Boris behaviour file without the file extension.
+
+### Behaviour flags
+* allowFlip: If this line exists there is a 50% chance the behaviour will be mirrored horizontally when initiated
 * pitchLock: Disable the minute pitch randomness otherwise used when playing sounds from this behaviour
 
-#### Code defines
+#### Flags specific to Boris behaviours
+* oneShot: This behaviour will be played from start to finish and then switch to a new behaviour
+* doNotDisturb: If this exists, Boris will not be disturbed by the mouse or other Borises while this behaviour is in progress
+
+### Code defines
 The scripting language supports very basic code block defines. These are not functions, but rather blocks of code that can then be reused throughout a behaviour by using the `call <DEFINE>` command.
 
 ##### Example:

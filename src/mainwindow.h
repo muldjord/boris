@@ -56,13 +56,15 @@ private slots:
   void killAll();
   void updateWeather();
   void triggerBehaviour(QAction *a);
+  void spawnItem(QAction *a);
 
 signals:
   void updateBoris();
   void queueBehavFromFile(const QString &file);
   
 private:
-  QMenu *bMenu;
+  QMenu *behavioursMenu;
+  QMenu *itemsMenu;
   Settings settings;
   QWidget *loadWidget;
   QProgressBar *progressBar;
@@ -71,6 +73,7 @@ private:
   QString *aboutText;
   void createTrayIcon();
   void createBehavMenu();
+  void createItemsMenu();
   void createActions();
   QAction *aboutAction;
   QAction *earthquakeAction;

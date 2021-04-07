@@ -31,6 +31,7 @@
 #include "stats.h"
 #include "bubble.h"
 #include "settings.h"
+#include "item.h"
 
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
@@ -120,7 +121,7 @@ private:
   int staticBehavs;
   int independence;
   
-  QMenu* bMenu;
+  QMenu* behavioursMenu;
   QTimer behavTimer;
   QTimer animTimer;
   QTimer weatherTimer;
@@ -163,6 +164,7 @@ private:
   void processAi(QString &behav);
   int getDistance(const QPoint &p);
   int getSector(const QPoint &p);
+  void itemInteract(Item *item);
   int curWeather = 0;
   int curWeatherFrame = 0;
   int timeForWeather = 0;

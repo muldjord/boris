@@ -43,9 +43,10 @@ public:
   ~Item();
   void moveItem(int dX, int dY, const bool &flipped = false);
   QPoint getGlobalCenter();
-  QString getItemName();
+  QString getReactionBehaviour();
   QMap<QString, int> scriptVars;
   bool grabbed = false;
+  bool dormant = false;
 
 public slots:
   void destroy();
@@ -60,6 +61,7 @@ private slots:
   void nextFrame();
   QPixmap getShadow(const QPixmap &sprite);
   void setCurFrame(const int &frame);
+  void setDormant();
   
 private:
   Settings *settings;

@@ -52,7 +52,7 @@
 QList<Item*> itemList;
 QList<Behaviour> itemBehaviours;
 
-QList<Boris*> borises;
+QList<Boris*> borisList;
 QList<Behaviour> behaviours;
 
 QList<Behaviour> weathers;
@@ -227,8 +227,10 @@ MainWindow::MainWindow()
   settings.key = iniSettings.value("weather_key").toString();
 
   createActions();
-  bMenu = new QMenu();
-  bMenu->setTitle(tr("Behaviours"));
+  behavioursMenu = new QMenu();
+  behavioursMenu->setTitle(tr("Behaviours"));
+  itemsMenu = new QMenu();
+  itemsMenu->setTitle(tr("Items"));
   createTrayIcon();
   trayIcon->show();
 
@@ -263,7 +265,7 @@ MainWindow::~MainWindow()
   iniSettings.setValue("boris_x", settings.borisX);
   iniSettings.setValue("boris_y", settings.borisY);
   delete trayIcon;
-  for(auto &boris: borises) {
+  for(auto &boris: borisList) {
     delete boris;
   }
 }
@@ -337,30 +339,31 @@ void MainWindow::loadAssets()
   delete loadWidget;
 
   createBehavMenu();
+  createItemsMenu();
 }
 
 void MainWindow::addBoris(int clones)
 {
   qInfo("Spawning %d clone(s)\n", clones);
   while(clones--) {
-    borises << new Boris(&settings);
-    connect(this, &MainWindow::updateBoris, borises.last(), &Boris::updateBoris);
-    connect(earthquakeAction, &QAction::triggered, borises.last(), &Boris::earthquake);
-    connect(this, &MainWindow::queueBehavFromFile, borises.last(), &Boris::queueBehavFromFile);
-    connect(weatherAction, &QAction::triggered, borises.last(), &Boris::triggerWeather);
-    borises.last()->show();
-    borises.last()->earthquake();
+    borisList << new Boris(&settings);
+    connect(this, &MainWindow::updateBoris, borisList.last(), &Boris::updateBoris);
+    connect(earthquakeAction, &QAction::triggered, borisList.last(), &Boris::earthquake);
+    connect(this, &MainWindow::queueBehavFromFile, borisList.last(), &Boris::queueBehavFromFile);
+    connect(weatherAction, &QAction::triggered, borisList.last(), &Boris::triggerWeather);
+    borisList.last()->show();
+    borisList.last()->earthquake();
   }
 }
 
 void MainWindow::removeBoris(int clones)
 {
   // Reset all Boris collide pointers within all existing clones to prevent crash
-  for(const auto &boris: borises) {
+  for(const auto &boris: borisList) {
     boris->borisFriend = nullptr;
   }
   while(clones--) {
-    delete borises.takeLast();
+    delete borisList.takeLast();
   }
 }
 
@@ -387,7 +390,8 @@ void MainWindow::createTrayIcon()
   trayIconMenu = new QMenu;
   trayIconMenu->addAction(aboutAction);
   trayIconMenu->addAction(earthquakeAction);
-  trayIconMenu->addMenu(bMenu);
+  trayIconMenu->addMenu(behavioursMenu);
+  trayIconMenu->addMenu(itemsMenu);
   trayIconMenu->addAction(weatherAction);
   trayIconMenu->addSeparator();
   trayIconMenu->addAction(quitAction);
@@ -414,10 +418,10 @@ void MainWindow::aboutBox()
     newClones = (qrand() % 99) + 1;
 #endif
   }
-  if(borises.count() > newClones) {
-    removeBoris(borises.count() - newClones);
-  } else if(borises.count() < newClones) {
-    addBoris(newClones - borises.count());
+  if(borisList.count() > newClones) {
+    removeBoris(borisList.count() - newClones);
+  } else if(borisList.count() < newClones) {
+    addBoris(newClones - borisList.count());
   }
   
   netComm->updateAll();
@@ -433,7 +437,7 @@ void MainWindow::mousePressEvent(QMouseEvent* event)
 void MainWindow::killAll()
 {
   QTimer::singleShot(2000, qApp, SLOT(quit()));
-  for(auto &boris: borises) {
+  for(auto &boris: borisList) {
     boris->changeBehaviour("casual_wave");
   }
 }
@@ -450,23 +454,23 @@ void MainWindow::updateWeather()
 
 void MainWindow::createBehavMenu()
 {
-  QMenu *healthMenu = new QMenu(tr("Health"), bMenu);
+  QMenu *healthMenu = new QMenu(tr("Health"), behavioursMenu);
   healthMenu->setIcon(QIcon(":health.png"));
-  QMenu *energyMenu = new QMenu(tr("Energy"), bMenu);
+  QMenu *energyMenu = new QMenu(tr("Energy"), behavioursMenu);
   energyMenu->setIcon(QIcon(":energy.png"));
-  QMenu *hungerMenu = new QMenu(tr("Food"), bMenu);
+  QMenu *hungerMenu = new QMenu(tr("Food"), behavioursMenu);
   hungerMenu->setIcon(QIcon(":hunger.png"));
-  QMenu *bladderMenu = new QMenu(tr("Toilet"), bMenu);
+  QMenu *bladderMenu = new QMenu(tr("Toilet"), behavioursMenu);
   bladderMenu->setIcon(QIcon(":bladder.png"));
-  QMenu *hygieneMenu = new QMenu(tr("Hygiene"), bMenu);
+  QMenu *hygieneMenu = new QMenu(tr("Hygiene"), behavioursMenu);
   hygieneMenu->setIcon(QIcon(":hygiene.png"));
-  QMenu *socialMenu = new QMenu(tr("Social"), bMenu);
+  QMenu *socialMenu = new QMenu(tr("Social"), behavioursMenu);
   socialMenu->setIcon(QIcon(":social.png"));
-  QMenu *funMenu = new QMenu(tr("Fun"), bMenu);
+  QMenu *funMenu = new QMenu(tr("Fun"), behavioursMenu);
   funMenu->setIcon(QIcon(":fun.png"));
-  QMenu *movementMenu = new QMenu(tr("Movement"), bMenu);
+  QMenu *movementMenu = new QMenu(tr("Movement"), behavioursMenu);
   movementMenu->setIcon(QIcon(":movement.png"));
-  QMenu *iddqdMenu = new QMenu(tr("Iddqd"), bMenu);
+  QMenu *iddqdMenu = new QMenu(tr("Iddqd"), behavioursMenu);
   iddqdMenu->setIcon(QIcon(":iddqd.png"));
   connect(healthMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
   connect(energyMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
@@ -502,17 +506,27 @@ void MainWindow::createBehavMenu()
       iddqdMenu->addAction(QIcon(":iddqd.png"), behaviour.title);
     }
   }
-  bMenu->addMenu(healthMenu);
-  bMenu->addMenu(energyMenu);
-  bMenu->addMenu(hungerMenu);
-  bMenu->addMenu(bladderMenu);
-  bMenu->addMenu(hygieneMenu);
-  bMenu->addMenu(socialMenu);
-  bMenu->addMenu(funMenu);
-  bMenu->addMenu(movementMenu);
+  behavioursMenu->addMenu(healthMenu);
+  behavioursMenu->addMenu(energyMenu);
+  behavioursMenu->addMenu(hungerMenu);
+  behavioursMenu->addMenu(bladderMenu);
+  behavioursMenu->addMenu(hygieneMenu);
+  behavioursMenu->addMenu(socialMenu);
+  behavioursMenu->addMenu(funMenu);
+  behavioursMenu->addMenu(movementMenu);
   if(settings.iddqd) {
-    bMenu->addMenu(iddqdMenu);
+    behavioursMenu->addMenu(iddqdMenu);
   }
+}
+
+void MainWindow::createItemsMenu()
+{
+  for(const auto &item: itemBehaviours) {
+    if(item.file.left(1) != "_") {
+      itemsMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
+    }
+  }
+  connect(itemsMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
 }
 
 void MainWindow::triggerBehaviour(QAction* a)
@@ -520,6 +534,16 @@ void MainWindow::triggerBehaviour(QAction* a)
   for(const auto &behaviour: behaviours) {
     if(behaviour.title == a->text()) {
       emit queueBehavFromFile(behaviour.file);
+    }
+  }
+}
+
+void MainWindow::spawnItem(QAction* a)
+{
+  for(const auto &item: itemBehaviours) {
+    if(item.title == a->text()) {
+      itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::desktop()->width()),
+                               QRandomGenerator::global()->bounded(QApplication::desktop()->height()), settings.size, item.file, &settings));
     }
   }
 }

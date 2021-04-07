@@ -73,9 +73,11 @@ Behaviour::Behaviour()
 
 Behaviour::Behaviour(const Behaviour &behaviour) : QObject()
 {
+  this->absoluteFilePath = behaviour.absoluteFilePath;
   this->file = behaviour.file;
   this->title = behaviour.title;
   this->category = behaviour.category;
+  this->reaction = behaviour.reaction;
   this->hyper = behaviour.hyper;
   this->health = behaviour.health;
   this->energy = behaviour.energy;
@@ -95,9 +97,11 @@ Behaviour::Behaviour(const Behaviour &behaviour) : QObject()
 
 void Behaviour::operator=(const Behaviour &behaviour)
 {
+  this->absoluteFilePath = behaviour.absoluteFilePath;
   this->file = behaviour.file;
   this->title = behaviour.title;
   this->category = behaviour.category;
+  this->reaction = behaviour.reaction;
   this->hyper = behaviour.hyper;
   this->health = behaviour.health;
   this->energy = behaviour.energy;

@@ -28,7 +28,6 @@
 #include "boris.h"
 #include "soundmixer.h"
 #include "scripthandler.h"
-#include "item.h"
 
 #include "SFML/Audio.hpp"
 
@@ -48,7 +47,7 @@ constexpr int STATTIMER = 200;
 constexpr double PI = 3.1415927;
 constexpr int ANNOYMAX = 42;
 
-extern QList<Boris*> borises;
+extern QList<Boris*> borisList;
 extern QList<Item*> itemList;
 extern QList<Behaviour> behaviours;
 extern QList<Behaviour> weathers;
@@ -175,30 +174,30 @@ Boris::~Boris()
 {
   delete stats;
   delete bubble;
-  delete bMenu;
+  delete behavioursMenu;
 }
 
 void Boris::createBehavMenu()
 {
-  bMenu = new QMenu();
-  bMenu->setTitle(tr("Behaviours"));
-  QMenu *healthMenu = new QMenu(tr("Health"), bMenu);
+  behavioursMenu = new QMenu();
+  behavioursMenu->setTitle(tr("Behaviours"));
+  QMenu *healthMenu = new QMenu(tr("Health"), behavioursMenu);
   healthMenu->setIcon(QIcon(":health.png"));
-  QMenu *energyMenu = new QMenu(tr("Energy"), bMenu);
+  QMenu *energyMenu = new QMenu(tr("Energy"), behavioursMenu);
   energyMenu->setIcon(QIcon(":energy.png"));
-  QMenu *hungerMenu = new QMenu(tr("Food"), bMenu);
+  QMenu *hungerMenu = new QMenu(tr("Food"), behavioursMenu);
   hungerMenu->setIcon(QIcon(":hunger.png"));
-  QMenu *bladderMenu = new QMenu(tr("Toilet"), bMenu);
+  QMenu *bladderMenu = new QMenu(tr("Toilet"), behavioursMenu);
   bladderMenu->setIcon(QIcon(":bladder.png"));
-  QMenu *hygieneMenu = new QMenu(tr("Hygiene"), bMenu);
+  QMenu *hygieneMenu = new QMenu(tr("Hygiene"), behavioursMenu);
   hygieneMenu->setIcon(QIcon(":hygiene.png"));
-  QMenu *socialMenu = new QMenu(tr("Social"), bMenu);
+  QMenu *socialMenu = new QMenu(tr("Social"), behavioursMenu);
   socialMenu->setIcon(QIcon(":social.png"));
-  QMenu *funMenu = new QMenu(tr("Fun"), bMenu);
+  QMenu *funMenu = new QMenu(tr("Fun"), behavioursMenu);
   funMenu->setIcon(QIcon(":fun.png"));
-  QMenu *movementMenu = new QMenu(tr("Movement"), bMenu);
+  QMenu *movementMenu = new QMenu(tr("Movement"), behavioursMenu);
   movementMenu->setIcon(QIcon(":movement.png"));
-  QMenu *iddqdMenu = new QMenu(tr("Iddqd"), bMenu);
+  QMenu *iddqdMenu = new QMenu(tr("Iddqd"), behavioursMenu);
   iddqdMenu->setIcon(QIcon(":iddqd.png"));
   connect(healthMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   connect(energyMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
@@ -234,16 +233,16 @@ void Boris::createBehavMenu()
       iddqdMenu->addAction(QIcon(":iddqd.png"), behaviour.title);
     }
   }
-  bMenu->addMenu(healthMenu);
-  bMenu->addMenu(energyMenu);
-  bMenu->addMenu(hungerMenu);
-  bMenu->addMenu(bladderMenu);
-  bMenu->addMenu(hygieneMenu);
-  bMenu->addMenu(socialMenu);
-  bMenu->addMenu(funMenu);
-  bMenu->addMenu(movementMenu);
+  behavioursMenu->addMenu(healthMenu);
+  behavioursMenu->addMenu(energyMenu);
+  behavioursMenu->addMenu(hungerMenu);
+  behavioursMenu->addMenu(bladderMenu);
+  behavioursMenu->addMenu(hygieneMenu);
+  behavioursMenu->addMenu(socialMenu);
+  behavioursMenu->addMenu(funMenu);
+  behavioursMenu->addMenu(movementMenu);
   if(settings->iddqd) {
-    bMenu->addMenu(iddqdMenu);
+    behavioursMenu->addMenu(iddqdMenu);
   }
 }
 
@@ -710,7 +709,7 @@ void Boris::leaveEvent(QEvent *event)
 void Boris::mousePressEvent(QMouseEvent* event)
 {
   if(event->button() == Qt::RightButton) {
-    bMenu->exec(QCursor::pos());
+    behavioursMenu->exec(QCursor::pos());
   }
   if(event->button() == Qt::LeftButton) {
     if(behaviours.at(curBehav).file == "_sleep" && stats->getEnergy() <= 95) {
@@ -1419,7 +1418,7 @@ void Boris::readyForFriend()
 void Boris::checkInteractions()
 {
   // Check if there are any collisions with other Borises
-  for(auto &boris: borises) {
+  for(auto &boris: borisList) {
     if(boris != this) {
       if(getDistance(boris->getGlobalCenter()) < size * 2) {
         collide(boris);
@@ -1430,12 +1429,10 @@ void Boris::checkInteractions()
 
   // Check if user is dragging any items close by
   for(auto &item: itemList) {
-    if(item->grabbed &&
+    if(!falling && !grabbed && !behaviours.at(curBehav).doNotDisturb &&
+       (item->dormant || item->grabbed) &&
        getDistance(item->getGlobalCenter()) < size) {
-      if(item->getItemName() == "easter_egg" && !falling && !grabbed && !behaviours.at(curBehav).doNotDisturb) {
-        item->destroy();
-        changeBehaviour("_chat");
-      }
+      itemInteract(item);
       break;
     }
   }
@@ -1462,6 +1459,14 @@ void Boris::checkInteractions()
   }
 
   interactionsTimer.start();
+}
+
+void Boris::itemInteract(Item * item)
+{
+  if(!item->getReactionBehaviour().isEmpty()) {
+    changeBehaviour(item->getReactionBehaviour());
+    item->destroy();
+  }
 }
 
 void Boris::statChange(const QString &type, const int &amount)

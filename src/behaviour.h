@@ -68,9 +68,11 @@ public:
   Behaviour(const Behaviour &behaviour);
   void operator=(const Behaviour &behaviour);
   Behaviour();
+  QString absoluteFilePath;
   QString file;
   QString title;
   QString category = "Hidden";
+  QString reaction = "";
   int hyper = 0;
   int health = 0;
   int energy = 0;
