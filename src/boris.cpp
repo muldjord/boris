@@ -829,21 +829,21 @@ void Boris::handlePhysics()
             int mouseSector = getSector(QCursor::pos());
             int timeout = QRandomGenerator::global()->bounded(2000) + 1000;
             if(mouseSector == 2) {
-              changeBehaviour("_flee_left", timeout);
+              changeBehaviour("_flee_w", timeout);
             } else if(mouseSector == 1) {
-              changeBehaviour("_flee_left_down", timeout);
+              changeBehaviour("_flee_sw", timeout);
             } else if(mouseSector == 0) {
-              changeBehaviour("_flee_down", timeout);
+              changeBehaviour("_flee_s", timeout);
             } else if(mouseSector == 7) {
-              changeBehaviour("_flee_right_down", timeout);
+              changeBehaviour("_flee_se", timeout);
             } else if(mouseSector == 6) {
-              changeBehaviour("_flee_right", timeout);
+              changeBehaviour("_flee_e", timeout);
             } else if(mouseSector == 5) {
-              changeBehaviour("_flee_right_up", timeout);
+              changeBehaviour("_flee_ne", timeout);
             } else if(mouseSector == 4) {
-              changeBehaviour("_flee_up", timeout);
+              changeBehaviour("_flee_n", timeout);
             } else if(mouseSector == 3) {
-              changeBehaviour("_flee_left_up", timeout);
+              changeBehaviour("_flee_nw", timeout);
             }
           } else if(stats->getFun() > 10 &&
                     stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 40)) {
@@ -1086,48 +1086,48 @@ void Boris::collide(Boris *boris)
        friendAt == Direction::SouthEast ||
        friendAt == Direction::East ||
        friendAt == Direction::NorthEast) {
-      changeBehaviour("_sad_right");
+      changeBehaviour("_sad_e");
     } else if(friendAt == Direction::North ||
        friendAt == Direction::NorthWest ||
        friendAt == Direction::West ||
        friendAt == Direction::SouthWest) {
-      changeBehaviour("_sad_left");
+      changeBehaviour("_sad_w");
     }
   } else if(borisFriend->getHygiene() <= 22) {
     if(friendAt == Direction::South) {
-      changeBehaviour("_flee_up", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_flee_s", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::SouthEast) {
-      changeBehaviour("_flee_left_up", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_flee_se", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::East) {
-      changeBehaviour("_flee_left", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_flee_e", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::NorthEast) {
-      changeBehaviour("_flee_left_down", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_flee_ne", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::North) {
-      changeBehaviour("_flee_down", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_flee_n", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::NorthWest) {
-      changeBehaviour("_flee_right_down", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_flee_nw", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::West) {
-      changeBehaviour("_flee_right", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_flee_w", QRandomGenerator::global()->bounded(2000) + 1500);
     } else if(friendAt == Direction::SouthWest) {
-      changeBehaviour("_flee_right_up", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_flee_sw", QRandomGenerator::global()->bounded(2000) + 1500);
     }
   } else {
     if(friendAt == Direction::South) {
-      changeBehaviour("_casual_wave_down", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_wave_s");
     } else if(friendAt == Direction::SouthEast) {
-      changeBehaviour("_casual_wave_right_down", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_wave_se");
     } else if(friendAt == Direction::East) {
-      changeBehaviour("_casual_wave_right", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_wave_e");
     } else if(friendAt == Direction::NorthEast) {
-      changeBehaviour("_casual_wave_right_up", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_wave_ne");
     } else if(friendAt == Direction::North) {
-      changeBehaviour("_casual_wave_up", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_wave_n");
     } else if(friendAt == Direction::NorthWest) {
-      changeBehaviour("_casual_wave_left_up", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_wave_nw");
     } else if(friendAt == Direction::West) {
-      changeBehaviour("_casual_wave_left", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_wave_w");
     } else if(friendAt == Direction::SouthWest) {
-      changeBehaviour("_casual_wave_left_down", QRandomGenerator::global()->bounded(2000) + 1500);
+      changeBehaviour("_wave_sw");
     }
   }
   QTimer::singleShot(QRandomGenerator::global()->bounded(5000) + 15000, this, &Boris::readyForFriend);
