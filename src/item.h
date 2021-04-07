@@ -39,14 +39,14 @@ class Item : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Item(const int &x, const int &y, const int &size, const QString &item, Settings *settings);
+  Item(const int &x, const int &y, const int &size, const QString &item, Settings *settings, const bool &ignore = true);
   ~Item();
   void moveItem(int dX, int dY, const bool &flipped = false);
   QPoint getGlobalCenter();
   QString getReactionBehaviour();
   QMap<QString, int> scriptVars;
   bool grabbed = false;
-  bool ignore = true;
+  bool ignore;
 
 public slots:
   void destroy();

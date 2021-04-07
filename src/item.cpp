@@ -46,10 +46,11 @@ extern QList<Item*> itemList;
 extern QList<Behaviour> itemBehaviours;
 extern SoundMixer soundMixer;
 
-Item::Item(const int &x, const int &y, const int &size, const QString &item, Settings *settings) :
+Item::Item(const int &x, const int &y, const int &size, const QString &item, Settings *settings, const bool &ignore) :
   size(size)
 {
   this->settings = settings;
+  this->ignore = ignore;
   
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);

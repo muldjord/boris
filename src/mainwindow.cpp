@@ -543,7 +543,11 @@ void MainWindow::spawnItem(QAction* a)
   for(const auto &item: itemBehaviours) {
     if(item.title == a->text()) {
       itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::desktop()->width()),
-                               QRandomGenerator::global()->bounded(QApplication::desktop()->height()), settings.size, item.file, &settings));
+                               QRandomGenerator::global()->bounded(QApplication::desktop()->height()),
+                               settings.size,
+                               item.file,
+                               &settings,
+                               false));
     }
   }
 }
