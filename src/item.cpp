@@ -385,7 +385,10 @@ void Item::mousePressEvent(QMouseEvent* event)
     setCursor(QCursor(QPixmap(":mouse_grab.png")));
     this->move(event->globalPos().x() - size / 32.0 * 16.0,
                event->globalPos().y() - size / 32.0 * 20.0);
+  } else if(event->button() == Qt::MiddleButton) {
+    destroy();
   }
+
 }
 
 void Item::mouseMoveEvent(QMouseEvent* event)
