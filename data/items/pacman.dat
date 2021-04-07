@@ -1,4 +1,5 @@
 title=Pacman
+reaction=pacman
 #Frames
 0;50;1;0;;label right
 1;50;1;0;;

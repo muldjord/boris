@@ -105,7 +105,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   connect(&animTimer, &QTimer::timeout, this, &Item::nextFrame);
   animTimer.start();
 
-  QTimer::singleShot(60000, this, &Item::setDormant);
+  QTimer::singleShot(60000, this, &Item::dontIgnore);
   setCursor(QCursor(QPixmap(":mouse_hover.png")));
   show();
 }
@@ -380,6 +380,7 @@ void Item::mousePressEvent(QMouseEvent* event)
 {
   if(event->button() == Qt::LeftButton) {
     grabbed = true;
+    ignore = false;
     setCursor(QCursor(QPixmap(":mouse_grab.png")));
     this->move(event->globalPos().x() - size / 32.0 * 16.0,
                event->globalPos().y() - size / 32.0 * 20.0);
@@ -430,7 +431,7 @@ void Item::destroy()
   delete this;
 }
 
-void Item::setDormant()
+void Item::dontIgnore()
 {
-  dormant = true;
+  ignore = false;
 }

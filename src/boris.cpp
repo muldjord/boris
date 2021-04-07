@@ -1430,7 +1430,7 @@ void Boris::checkInteractions()
   // Check if user is dragging any items close by
   for(auto &item: itemList) {
     if(!falling && !grabbed && !behaviours.at(curBehav).doNotDisturb &&
-       (item->dormant || item->grabbed) &&
+       (!item->ignore || item->grabbed) &&
        getDistance(item->getGlobalCenter()) < size) {
       itemInteract(item);
       break;

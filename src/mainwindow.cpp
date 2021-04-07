@@ -438,7 +438,7 @@ void MainWindow::killAll()
 {
   QTimer::singleShot(2000, qApp, SLOT(quit()));
   for(auto &boris: borisList) {
-    boris->changeBehaviour("casual_wave");
+    boris->changeBehaviour("wave");
   }
 }
 

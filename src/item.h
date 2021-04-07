@@ -46,7 +46,7 @@ public:
   QString getReactionBehaviour();
   QMap<QString, int> scriptVars;
   bool grabbed = false;
-  bool dormant = false;
+  bool ignore = true;
 
 public slots:
   void destroy();
@@ -61,7 +61,7 @@ private slots:
   void nextFrame();
   QPixmap getShadow(const QPixmap &sprite);
   void setCurFrame(const int &frame);
-  void setDormant();
+  void dontIgnore();
   
 private:
   Settings *settings;
