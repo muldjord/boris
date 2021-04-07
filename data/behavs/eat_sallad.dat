@@ -30,4 +30,4 @@ oneShot
 
 2;2000;0;0;;label imfull,say "I'm full.",break
 
-2;2000;0;0;;label hadenough,say "I think that's enough greens for now.",break
+2;2000;0;0;;label hadenough,say "I think that's enough.",break

@@ -30,6 +30,6 @@ oneShot
 14;100;0;0;;
 15;100;0;0;;if @8 > 1 goto munch else if bites = 0 goto hadenough else goto bite
 
-0;2000;0;0;;label imfull,say "I'm full.",break
+0;2000;0;0;;label imfull,say "I'm stuffed.",break
 
-0;2000;0;0;;label hadenough,say "That's enough for me.",break
+0;2000;0;0;;label hadenough,say "That's enough for now.",break

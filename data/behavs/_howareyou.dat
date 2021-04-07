@@ -17,30 +17,30 @@ if rand = 7 goto fun
 # Health
 0;50;0;0;;label health,
 var tried += 1,
-if health < 15 {say "Well, how do you think!? You keep throwing me around, I feel terrible!",behav _complain},
+if health < 15 {say "Stop throwing me around!!!",behav _complain},
 if health < 30 {say "I'm not feeling well, thanks to you!",behav _complain},
-if health < 55 {say "I'm ok, but please stop throwing me around.",behav _chat},
+if health < 55 {say "I'm ok, but please stop throwing me around.",behav _complain},
 goto checkup
 
 # Hygiene
 0;50;0;0;;label hygiene,
 var tried += 1,
-if hygiene < 15 {say "I feel like a pig in a pigsty! You should give me a shower.",behav _complain},
-if hygiene < 30 {say "I'm a bit dirty, maybe I should wash my hands.",behav _chat},
+if hygiene < 15 {say "I smell terrible, I need a shower...",behav _complain},
+if hygiene < 30 {say "I should wash my hands.",behav _chat},
 goto checkup
 
 # Energy
 0;50;0;0;;label energy,
 var tried += 1,
 if energy < 15 {say "I'm really tired... I need to take a nap.",behav _chat},
-if energy < 30 {say "I'm a bit drowsy, I should take a nap soon.",behav _chat},
+if energy < 30 {say "I'm a bit drowsy, maybe I should take a nap...",behav _chat},
 goto checkup
 
 # Hunger
 0;50;0;0;;label hunger,
 var tried += 1,
 if hunger > 85 {say "I'm starving! Please feed me!",behav _complain},
-if hunger > 70 {say "I'm a bit peckish, I could go for a snack. Any suggestions?",behav _chat},
+if hunger > 70 {say "I'm a bit peckish, I could go for a snack.",behav _chat},
 goto checkup
 
 # Bladder
@@ -54,7 +54,7 @@ goto checkup
 0;50;0;0;;label social,
 var tried += 1,
 if social < 15 {say "I feel lonely... Very, very lonely.",stat social += 10,behav _chat},
-if social < 30 {say "I'm a bit lonely, do you want to hang out?",stat social += 10,behav _chat},
+if social < 30 {say "Do you want to hang out?",stat social += 10,behav _chat},
 goto checkup
 
 # Fun
