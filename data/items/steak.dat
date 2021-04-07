@@ -1,0 +1,4 @@
+title=Steak
+reaction=eat_steak
+#Frames
+0;1000;0;0;;stop

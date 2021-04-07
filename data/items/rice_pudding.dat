@@ -1,0 +1,4 @@
+title=Rice pudding
+reaction=eat_rice
+#Frames
+0;1000;0;0;;stop
