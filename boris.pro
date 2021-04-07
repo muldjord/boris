@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = Boris
 QT += widgets xml network
-
+CONFIG += release
 include(./VERSION)
 DEFINES+=VERSION=\\\"$$VERSION\\\"
 
