@@ -104,6 +104,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   connect(&animTimer, &QTimer::timeout, this, &Item::nextFrame);
   animTimer.start();
 
+  setCursor(QCursor(QPixmap(":mouse_hover.png")));
   show();
 }
 
@@ -366,10 +367,35 @@ int Item::getSector(const QPoint &p)
   return pointSector;
 }
 
-void Item::mousePressEvent(QMouseEvent* event)
+void Item::mouseDoubleClickEvent(QMouseEvent* event)
 {
   if(event->button() == Qt::LeftButton) {
     destroy();
+  }
+}
+
+void Item::mousePressEvent(QMouseEvent* event)
+{
+  if(event->button() == Qt::LeftButton) {
+    setCursor(QCursor(QPixmap(":mouse_grab.png")));
+    this->move(event->globalPos().x() - size / 32.0 * 16.0,
+               event->globalPos().y() - size / 32.0 * 20.0);
+  }
+}
+
+void Item::mouseMoveEvent(QMouseEvent* event)
+{
+  if(event->buttons().testFlag(Qt::LeftButton)) {
+    this->move(event->globalPos().x() - size / 32.0 * 16.0, 
+               event->globalPos().y() - size / 32.0 * 20.0);
+  }
+
+}
+
+void Item::mouseReleaseEvent(QMouseEvent* event)
+{
+  if(event->button() == Qt::LeftButton) {
+    setCursor(QCursor(QPixmap(":mouse_hover.png")));
   }
 }
 
