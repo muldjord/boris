@@ -100,12 +100,6 @@ Boris::Boris(Settings *settings)
   weatherSprite->setPos(0, 0);
   weatherSprite->hide();
   
-  grabbed = false;
-  falling = false;
-  isAlive = true;
-  flipFrames = false;
-  alreadyEvading = false;
-  
   createBehavMenu();
 
   // Set initial stats with some randomization
@@ -822,7 +816,7 @@ void Boris::handlePhysics()
 
   if(!falling && !grabbed) {
     if(getDistance(QCursor::pos()) < size * 3) {
-      if(!alreadyEvading) {
+      if(!mouseHovering) {
         interactions++;
         if(!behaviours.at(curBehav).doNotDisturb) {
           if(fabs(mouseHVel) > 35.0 || fabs(mouseVVel) > 35.0) {
@@ -852,9 +846,9 @@ void Boris::handlePhysics()
           }
         }
       }
-      alreadyEvading = true;
+      mouseHovering = true;
     } else {
-      alreadyEvading = false;
+      mouseHovering = false;
     }
   }
 }

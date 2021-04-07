@@ -113,8 +113,8 @@ private slots:
 private:
   Settings *settings;
 
-  bool falling;
-  bool grabbed;
+  bool falling = false;
+  bool grabbed = false;
   void showWeather(QString &behav);
   void runScript(int &stop);
   void createBehavMenu();
@@ -133,7 +133,7 @@ private:
   int annoyance = 0;
   bool mMoving;
   QPoint mLastMousePosition;
-  bool alreadyEvading;
+  bool mouseHovering = false;
 
   QGraphicsPixmapItem *shadowSprite;
   QPixmap origShadow;
