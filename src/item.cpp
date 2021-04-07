@@ -417,7 +417,7 @@ QPoint Item::getGlobalCenter()
 
 QString Item::getReactionBehaviour()
 {
-  return itemBehaviours.at(curItem).reaction;
+  return itemBehaviours.at(curItem).reactions.at(QRandomGenerator::global()->bounded(itemBehaviours.at(curItem).reactions.count()));
 }
 
 void Item::destroy()

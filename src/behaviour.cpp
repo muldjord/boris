@@ -77,7 +77,7 @@ Behaviour::Behaviour(const Behaviour &behaviour) : QObject()
   this->file = behaviour.file;
   this->title = behaviour.title;
   this->category = behaviour.category;
-  this->reaction = behaviour.reaction;
+  this->reactions = behaviour.reactions;
   this->hyper = behaviour.hyper;
   this->health = behaviour.health;
   this->energy = behaviour.energy;
@@ -101,7 +101,7 @@ void Behaviour::operator=(const Behaviour &behaviour)
   this->file = behaviour.file;
   this->title = behaviour.title;
   this->category = behaviour.category;
-  this->reaction = behaviour.reaction;
+  this->reactions = behaviour.reactions;
   this->hyper = behaviour.hyper;
   this->health = behaviour.health;
   this->energy = behaviour.energy;

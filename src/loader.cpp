@@ -149,7 +149,7 @@ bool Loader::loadBehaviours(const Settings &settings,
           continue;
         }
         if(line.contains("reaction")) {
-          b.reaction = line.mid(9,line.length());
+          b.reactions = QString::fromUtf8(line.mid(9,line.length())).replace(" ", "").split(',');
           continue;
         }
         if(line.contains("hyper")) {

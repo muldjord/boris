@@ -42,7 +42,7 @@ The line `#Frames` must be there so the software knows when the frame definition
 * hygiene=&lt;INTEGER&gt;: The amount of Boris' filth level this behaviour will increase or decrease when starting the behaviour
 
 #### Options specific to item behaviours
-* reaction=&lt;STRING&gt;: This tells Boris what behaviour he should react with when user drags the item on top of him, or when he walks into it while roaming the desktop. It should match the basename of the Boris behaviour file without the file extension.
+* reaction=&lt;STRING&gt;: This tells Boris what behaviour he should react with when user drags the item on top of him, or when he walks into it while roaming the desktop. You can add as many as you like separated by commas (eg. 'reaction=play_piano,play_drums').
 
 ### Behaviour flags
 * allowFlip: If this line exists there is a 50% chance the behaviour will be mirrored horizontally when initiated

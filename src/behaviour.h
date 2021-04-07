@@ -72,7 +72,7 @@ public:
   QString file;
   QString title;
   QString category = "Hidden";
-  QString reaction = "";
+  QList<QString> reactions;
   int hyper = 0;
   int health = 0;
   int energy = 0;
