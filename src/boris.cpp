@@ -283,11 +283,10 @@ void Boris::nextBehaviour()
 
 void Boris::changeBehaviour(QString behav, int time)
 {
-  /*
+  // This is necessary even though there's a 'stop' in the behaviour. Otherwise he will revive midair.
   if(behaviours.at(curBehav).file == "_drop_dead") {
     return;
   }
-  */
 
   // Always stop behavTimer, just in case. At this point we never want it to be running
   behavTimer.stop();
