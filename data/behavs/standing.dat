@@ -1,0 +1,12 @@
+title=Stand and relax
+category=Idle
+social=-2
+fun=-2
+allowFlip
+#Frames
+0;1000;0;0;;
+1;75;0;0;;
+0;75;0;0;;
+1;75;0;0;;
+0;1500;0;0;;
+1;75;0;0;;
