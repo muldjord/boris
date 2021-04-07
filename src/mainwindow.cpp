@@ -29,6 +29,7 @@
 #include "about.h"
 #include "loader.h"
 #include "soundmixer.h"
+#include "item.h"
 
 #include "SFML/Audio.hpp"
 
@@ -48,10 +49,13 @@
 #include <QRandomGenerator>
 #endif
 
+QList<Item*> itemList;
+QList<Behaviour> itemBehaviours;
+
 QList<Boris*> borises;
 QList<Behaviour> behaviours;
+
 QList<Behaviour> weathers;
-QList<Behaviour> itemList;
 QMap<QString, Sprite> sprites;
 QMap<QString, QImage> pixelFont;
 SoundMixer soundMixer(24);
@@ -299,7 +303,7 @@ void MainWindow::loadAssets()
     qInfo("Error when loading some weather types, please check your png and dat files\n");
   }
 
-  if(Loader::loadBehaviours(settings, settings.itemsPath, itemList, soundMixer.soundFxs, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.itemsPath, itemBehaviours, soundMixer.soundFxs, progressBar)) {
     qInfo("Items loaded ok... :)\n");
   } else {
     qInfo("Error when loading some items, please check your png and dat files\n");

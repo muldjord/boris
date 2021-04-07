@@ -28,6 +28,7 @@
 #include "boris.h"
 #include "soundmixer.h"
 #include "scripthandler.h"
+#include "item.h"
 
 #include "SFML/Audio.hpp"
 
@@ -48,6 +49,7 @@ constexpr double PI = 3.1415927;
 constexpr int ANNOYMAX = 42;
 
 extern QList<Boris*> borises;
+extern QList<Item*> itemList;
 extern QList<Behaviour> behaviours;
 extern QList<Behaviour> weathers;
 extern SoundMixer soundMixer;
@@ -458,10 +460,17 @@ int Boris::getDistance(const QPoint &p)
 {
   int xA = p.x();
   int yA = p.y();
-  int xB = pos().x() + (size / 2);
-  int yB = pos().y() + size;
+  QPoint globalCenter = getGlobalCenter();
+  int xB = globalCenter.x();
+  int yB = globalCenter.y();
 
   return sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
+}
+
+QPoint Boris::getGlobalCenter()
+{
+  return QPoint(pos().x() + (width() / 2),
+                pos().y() + height() - (size / 2));
 }
 
 int Boris::getSector(const QPoint &p)
@@ -712,8 +721,8 @@ void Boris::mousePressEvent(QMouseEvent* event)
     grabbed = true;
     changeBehaviour("_grabbed");
     mMoving = true;
-    this->move(event->globalPos().x() - (float)size / 32.0 * 17.0, 
-               event->globalPos().y() - (float)size / 32.0 * 16.0);
+    this->move(event->globalPos().x() - size / 32.0 * 17.0, 
+               event->globalPos().y() - size / 32.0 * 16.0);
     oldCursor = QCursor::pos();
   }
 }
@@ -721,8 +730,8 @@ void Boris::mousePressEvent(QMouseEvent* event)
 void Boris::mouseMoveEvent(QMouseEvent* event)
 {
   if(event->buttons().testFlag(Qt::LeftButton) && mMoving) {
-    this->move(event->globalPos().x() - (float)size / 32.0 * 17.0, 
-               event->globalPos().y() - (float)size / 32.0 * 16.0);
+    this->move(event->globalPos().x() - size / 32.0 * 17.0, 
+               event->globalPos().y() - size / 32.0 * 16.0);
     stats->move(pos().x() + (size / 2) - (stats->width() / 2), pos().y() - stats->height());
     if(stats->pos().y() < 0) {
       stats->move(pos().x() + (size / 2) - (stats->width() / 2), pos().y() + size + size / 3);
@@ -1412,10 +1421,22 @@ void Boris::checkInteractions()
   // Check if there are any collisions with other Borises
   for(auto &boris: borises) {
     if(boris != this) {
-      if(getDistance(QPoint(boris->pos().x() + (size / 2), boris->pos().y() + size)) < size * 2) {
+      if(getDistance(boris->getGlobalCenter()) < size * 2) {
         collide(boris);
         break;
       }
+    }
+  }
+
+  // Check if user is dragging any items close by
+  for(auto &item: itemList) {
+    if(item->grabbed &&
+       getDistance(item->getGlobalCenter()) < size) {
+      if(item->getItemName() == "easter_egg" && !falling && !grabbed && !behaviours.at(curBehav).doNotDisturb) {
+        item->destroy();
+        changeBehaviour("_chat");
+      }
+      break;
     }
   }
 

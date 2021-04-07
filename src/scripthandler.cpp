@@ -34,6 +34,7 @@
 
 #include <QRandomGenerator>
 
+extern QList<Item*> itemList;
 extern QMap<QString, Sprite> sprites;
 extern QMap<QString, QImage> pixelFont;
 extern SoundMixer soundMixer;
@@ -303,9 +304,9 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
     if(settings->scriptOutput) {
       printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
     }
-    new Item(parentPos.x() + (iX * (size / 32)),
-             parentPos.y() + (size / 2) + (iY * (size / 32)),
-             size, itemName, settings);
+    itemList.append(new Item(parentPos.x() + (iX * (size / 32)),
+                             parentPos.y() + (size / 2) + (iY * (size / 32)),
+                             size, itemName, settings));
   } else {
     if(settings->scriptOutput) {
       printf("Items disabled, ignoring spawn\n");

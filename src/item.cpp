@@ -42,7 +42,8 @@
 #include <QElapsedTimer>
 #include <QRandomGenerator>
 
-extern QList<Behaviour> itemList;
+extern QList<Item*> itemList;
+extern QList<Behaviour> itemBehaviours;
 extern SoundMixer soundMixer;
 
 Item::Item(const int &x, const int &y, const int &size, const QString &item, Settings *settings) :
@@ -57,8 +58,8 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   
-  for(int a = 0; a < itemList.count(); ++a) {
-    if(itemList.at(a).file == item) {
+  for(int a = 0; a < itemBehaviours.count(); ++a) {
+    if(itemBehaviours.at(a).file == item) {
       curItem = a;
       break;
     }
@@ -86,7 +87,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
     QTimer::singleShot(settings->itemTimeout * 1000, this, &Item::destroy);
   }
 
-  if(itemList.at(curItem).allowFlip && QRandomGenerator::global()->bounded(2)) {
+  if(itemBehaviours.at(curItem).allowFlip && QRandomGenerator::global()->bounded(2)) {
     flipFrames = true;
   } else {
     flipFrames = false;
@@ -174,9 +175,9 @@ void Item::runScript(int &stop)
     scriptImage.fill(Qt::transparent);
   }
 
-  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, nullptr, itemList.at(curItem).labels, itemList.at(curItem).defines, scriptVars, pos(), size);
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, nullptr, itemBehaviours.at(curItem).labels, itemBehaviours.at(curItem).defines, scriptVars, pos(), size);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Item::setCurFrame);
-  scriptHandler.runScript(stop, itemList.at(curItem).frames.at(curFrame).script);
+  scriptHandler.runScript(stop, itemBehaviours.at(curItem).frames.at(curFrame).script);
 
   scriptSprite->setPixmap(QPixmap::fromImage(scriptImage));
 }
@@ -191,7 +192,7 @@ void Item::nextFrame()
 
   sanityCheck();
   
-  if(curFrame >= itemList.at(curItem).frames.count()) {
+  if(curFrame >= itemBehaviours.at(curItem).frames.count()) {
     curFrame = 0;
   }
 
@@ -199,33 +200,33 @@ void Item::nextFrame()
   frameTimer.start();
 
   if(flipFrames) {
-    QImage flipped = itemList.at(curItem).frames.at(curFrame).sprite.toImage().mirrored(true, false);
+    QImage flipped = itemBehaviours.at(curItem).frames.at(curFrame).sprite.toImage().mirrored(true, false);
     itemSprite->setPixmap(QPixmap::fromImage(flipped));
     shadowSprite->setPixmap(getShadow(QPixmap::fromImage(flipped)));
   } else {
-    itemSprite->setPixmap(itemList.at(curItem).frames.at(curFrame).sprite);
-    shadowSprite->setPixmap(getShadow(itemList.at(curItem).frames.at(curFrame).sprite));
+    itemSprite->setPixmap(itemBehaviours.at(curItem).frames.at(curFrame).sprite);
+    shadowSprite->setPixmap(getShadow(itemBehaviours.at(curItem).frames.at(curFrame).sprite));
   }
 
-  if(settings->sound && itemList.at(curItem).frames.at(curFrame).soundBuffer != nullptr) {
-    if(itemList.at(curItem).pitchLock) {
-      soundMixer.playSound(itemList.at(curItem).frames.at(curFrame).soundBuffer,
+  if(settings->sound && itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer != nullptr) {
+    if(itemBehaviours.at(curItem).pitchLock) {
+      soundMixer.playSound(itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
                            (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0, 1.0);
     } else {
-      soundMixer.playSound(itemList.at(curItem).frames.at(curFrame).soundBuffer,
+      soundMixer.playSound(itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
                            (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
                            0.95 + QRandomGenerator::global()->bounded(100) / 1000.0);
     }
   }
 
-  if(itemList.at(curItem).frames.at(curFrame).dx != 0 ||
-     itemList.at(curItem).frames.at(curFrame).dy != 0) {
-    moveItem(itemList.at(curItem).frames.at(curFrame).dx,
-              itemList.at(curItem).frames.at(curFrame).dy,
+  if(itemBehaviours.at(curItem).frames.at(curFrame).dx != 0 ||
+     itemBehaviours.at(curItem).frames.at(curFrame).dy != 0) {
+    moveItem(itemBehaviours.at(curItem).frames.at(curFrame).dx,
+              itemBehaviours.at(curItem).frames.at(curFrame).dy,
               flipFrames);
   }
 
-  int frameTime = itemList.at(curItem).frames.at(curFrame).time;
+  int frameTime = itemBehaviours.at(curItem).frames.at(curFrame).time;
   int elapsedTime = frameTimer.elapsed();
   if(elapsedTime < frameTime) {
     frameTime -= elapsedTime;
@@ -377,6 +378,7 @@ void Item::mouseDoubleClickEvent(QMouseEvent* event)
 void Item::mousePressEvent(QMouseEvent* event)
 {
   if(event->button() == Qt::LeftButton) {
+    grabbed = true;
     setCursor(QCursor(QPixmap(":mouse_grab.png")));
     this->move(event->globalPos().x() - size / 32.0 * 16.0,
                event->globalPos().y() - size / 32.0 * 20.0);
@@ -394,6 +396,7 @@ void Item::mouseMoveEvent(QMouseEvent* event)
 
 void Item::mouseReleaseEvent(QMouseEvent* event)
 {
+  grabbed = false;
   if(event->button() == Qt::LeftButton) {
     setCursor(QCursor(QPixmap(":mouse_hover.png")));
   }
@@ -404,7 +407,24 @@ void Item::setCurFrame(const int &frame)
   curFrame = frame;
 }
 
+QPoint Item::getGlobalCenter()
+{
+  return QPoint(pos().x() + (width() / 2),
+                pos().y() + (height() / 2));
+}
+
+QString Item::getItemName()
+{
+  return itemBehaviours.at(curItem).file;
+}
+
 void Item::destroy()
 {
+  // Remove from collide list
+  for(int a = 0; a < itemList.count(); ++a) {
+    if(itemList.at(a) == this) {
+      itemList.removeAt(a);
+    }
+  }
   delete this;
 }

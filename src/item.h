@@ -42,7 +42,13 @@ public:
   Item(const int &x, const int &y, const int &size, const QString &item, Settings *settings);
   ~Item();
   void moveItem(int dX, int dY, const bool &flipped = false);
+  QPoint getGlobalCenter();
+  QString getItemName();
   QMap<QString, int> scriptVars;
+  bool grabbed = false;
+
+public slots:
+  void destroy();
 
 protected:
   void mouseDoubleClickEvent(QMouseEvent* event);
@@ -54,7 +60,6 @@ private slots:
   void nextFrame();
   QPixmap getShadow(const QPixmap &sprite);
   void setCurFrame(const int &frame);
-  void destroy();
   
 private:
   Settings *settings;

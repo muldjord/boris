@@ -64,6 +64,7 @@ public:
   void moveBoris(int dX, int dY, const bool &flipped = false, const bool &vision = true);
   int getCurBehav();
   void changeBehaviour(QString behav = "", int time = -1);
+  QPoint getGlobalCenter();
   int size = 64;
   QMap<QString, int> scriptVars;
   int hyperQueue;
