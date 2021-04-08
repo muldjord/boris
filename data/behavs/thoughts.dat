@@ -13,4 +13,6 @@ if line = 8 think "Am I at work or is this my vacation?",
 if line = 9 think "Mars is the only planet populated entirely by robots.",
 if line = 10 think "Do I forget everything when the computer restarts?",
 if line = 11 think "I just farted, I wonder if anyone heard it...",
+if line = 12 think "Why can't I remember my childhood?",
+if line = 13 think "Do I know any good wendings, that I can use in another afsnit?",
 behav _thought
