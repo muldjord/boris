@@ -29,10 +29,12 @@
 #include "soundmixer.h"
 #include "item.h"
 #include "sprite.h"
+#include "exprtk/exprtk.h"
 
 #include <stdio.h>
 
 #include <QRandomGenerator>
+#include <QRegularExpression>
 
 extern QList<Item*> itemList;
 extern QMap<QString, Sprite> sprites;
@@ -105,6 +107,7 @@ void ScriptHandler::runCommand(QList<QString> &parameters, int &stop, const Scri
   } else if(parameters.first() == "think") {
     handleThink(parameters);
   }
+  // IMPORTANT!!! When adding new commands, REMEMBER TO ALSO ADD THEM TO 'getValue()'!!!
 }
 
 void ScriptHandler::handleIf(QList<QString> &parameters, int &stop, const Script &script)
@@ -636,38 +639,166 @@ void ScriptHandler::handleThink(QList<QString> &parameters)
   }
 }
 
+template <typename T>
+double runExpression(const std::string expression_string)
+{
+  typedef exprtk::symbol_table<T> symbol_table_t;
+  typedef exprtk::expression<T>     expression_t;
+  typedef exprtk::parser<T>             parser_t;
+
+  symbol_table_t symbol_table;
+  
+  expression_t expression;
+  expression.register_symbol_table(symbol_table);
+  
+  parser_t parser;
+  parser.compile(expression_string, expression);
+
+  return expression.value();
+}
+
 int ScriptHandler::getValue(QList<QString> &parameters)
 {
-  bool isInt = false;
-  int result = parameters.first().toInt(&isInt);
-  if(!isInt) {
-    if(parameters.first().left(1) == "@") {
-      result = QRandomGenerator::global()->bounded(parameters.first().right(parameters.first().length() - 1).toInt()) + 1;
-    } else {
-      result = scriptVars[parameters.first()];
+  QString code = "";
+  while(!parameters.isEmpty() &&
+        parameters.first() != "<" &&
+        parameters.first() != ">" &&
+        parameters.first() != "<=" &&
+        parameters.first() != ">=" &&
+        parameters.first() != "var" &&
+        parameters.first() != "stat" &&
+        parameters.first() != "if" &&
+        parameters.first() != "goto" &&
+        parameters.first() != "print" &&
+        parameters.first() != "spawn" &&
+        parameters.first() != "draw" &&
+        parameters.first() != "break" &&
+        parameters.first() != "stop" &&
+        parameters.first() != "behav" &&
+        parameters.first() != "call" &&
+        parameters.first() != "sound" &&
+        parameters.first() != "say" &&
+        parameters.first() != "think" &&
+        parameters.first() != "and" &&
+        parameters.first() != "or") {
+
+    bool isInt = false;
+    parameters.first().toInt(&isInt);
+
+    code.append(parameters.first().trimmed());
+    parameters.removeFirst();
+
+    if(isInt && parameters.count() >= 1) {
+      if(scriptVars.contains(parameters.first())) {
+        break;
+      }
+      isInt = false;
+      parameters.first().toInt(&isInt);
+      if(isInt) {
+        break;
+      }
     }
   }
 
-  parameters.removeFirst(); // Remove value
+  QList<QString> tokens;
 
-  if(parameters.count() >= 2) {
-    if(parameters.first() == "+") {
-      parameters.removeFirst(); // Remove '+'
-      return result + getValue(parameters);
-    } else if(parameters.first() == "-") {
-      parameters.removeFirst(); // Remove '-'
-      return result - getValue(parameters);
-    } else if(parameters.first() == "*") {
-      parameters.removeFirst(); // Remove '*'
-      return result * getValue(parameters);
-    } else if(parameters.first() == "/") {
-      parameters.removeFirst(); // Remove '/'
-      return result / getValue(parameters);
-    } else if(parameters.first() == "%") {
-      parameters.removeFirst(); // Remove '%'
-      return result % getValue(parameters);
-    }
+  QRegularExpression regExp("^([A-Za-z]+[0-9]*|[0-9]+|@[0-9]+|(\\(|\\)|\\*|\\+|-|\\/|%))");
+  while(regExp.match(code).hasMatch()) {
+    tokens.append(regExp.match(code).captured(0));
+    code.remove(0, regExp.match(code).captured(0).length());
   }
+
+  QString expString = "";
+  for(auto &token: tokens) {
+    if(token.left(1) == "@") {
+      token = QString::number(QRandomGenerator::global()->bounded(token.mid(1).toInt()));
+    } else if(scriptVars.contains(token)) {
+      token = QString::number(scriptVars[token]);
+    }
+    expString.append(token);
+  }
+  printf("Expression string: '%s'\n", expString.toStdString().c_str());
+  
+  return runExpression<double>(expString.toStdString());
+}
+
+/*
+QList<QString> ScriptHandler::tokenize(QString code) {
+  QList<QString> results;
+
+  QRegularExpression regExp("^([A-Za-z]+|[0-9]+|\S|@[0-9]+)");
+  while(regExp.match(code).hasMatch()) {
+    results.append(regExp.match(code).captured(0));
+    code.remove(0, regExp.match(code).captured(0).length());
+  }
+  return results;
+}
+
+bool ScriptHandler::isNumber(const QString &token) {
+  return QRegularExpression("^[0-9]+$").match(token).hasMatch();
+}
+
+bool ScriptHandler::isName(const QString &token) {
+  return QRegularExpression("^[A-Za-z]+$").match(token).hasMatch();
+}
+
+void ScriptHandler::parsePrimaryExpr(const QList<QString> &tokens, int &position) {
+  QString t = tokens.at(position);
+  
+  if (isNumber(t)) {
+    position++;;
+    return {type: "number", value: t};
+  } else if (isName(t)) {
+    position++;;
+    return {type: "name", id: t};
+  } else if (t === "(") {
+    position++;;
+    var expr = parseExpr();
+    if (tokens.at(position) !== ")")
+      throw new SyntaxError("expected )");
+    consume(")");
+    return expr;
+  } else {
+    // If we get here, the next token doesn’t match any of the three
+    // rules. So it’s an error.
+    throw new SyntaxError("expected a number, a variable, or parentheses");
+  }
+}
+
+function ScriptHandler::parseMulExpr(const QList<QString> &tokens, int &position) {
+  var expr = parsePrimaryExpr(tokens, position);
+  var t = tokens.at(position);
+  while (t === "*" || t === "/") {
+    position++;;
+    var rhs = parsePrimaryExpr(tokens, position);
+    expr = {type: t, left: expr, right: rhs};
+    t = tokens.at(position);
+  }
+  return expr;
+}
+
+QString ScriptHandler::parseExpr(const QList<QString> &tokens, int &position) {
+  var expr = parseMulExpr(tokens, position);
+  var t = tokens.at(position);
+  while (t === "+" || t === "-") {
+    position++;;
+    var rhs = parseMulExpr(tokens, position);
+    expr = {type: t, left: expr, right: rhs};
+    t = tokens.at(position);
+  }
+  return expr;
+}
+
+function ScriptHandler::parse(const QString &code) {
+  QList<QString> tokens = tokenize(code);
+
+  int position = 0;
+
+  var result = parseExpr(tokens, position);
+
+  if (position !== tokens.length)
+    throw new SyntaxError("unexpected '" + tokens.at(position) + "'");
 
   return result;
 }
+*/
