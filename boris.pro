@@ -21,7 +21,8 @@ HEADERS += src/mainwindow.h \
            src/stats.h \
            src/loader.h \
            src/netcomm.h \
-           src/bubble.h
+           src/bubble.h \
+           src/exprtk/exprtk.h
 
 SOURCES += src/mainwindow.cpp \
            src/soundmixer.cpp \
