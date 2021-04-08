@@ -66,7 +66,7 @@ This defines a block of code called `mainblock` which can then be called at any 
 ### Frame definitions
 Each frame in a behaviour must be contained on a single line under the `#Frames` line. Empty lines are allowed (they will simply be ignored) and so are comment lines starting with `#` (these are also ignored).
 * sprite: The sprite number from the sprite sheet that will be used by this frame. The first sprite in a sheet is number 0
-* time: Time in miliseconds this frame will be shown before proceeding to next frame
+* time: Time in miliseconds this frame will be shown before proceeding to the next frame
 * deltax: Move Boris this number of pixels on the x axis when this frame is shown. Use 'rand' if you want him to move to a random location on the x axis
 * deltay: Same as deltax but for the y axis. Keep in mind that it counts from top to bottom. Use 'rand' if you want him to move to a random location on the y axis
 * soundfx: Filename for sound fx that will be played when this frame is reached. This is optional and can be left out if it's a silent frame
@@ -112,6 +112,7 @@ var b = a + @5
 var a = @42
 var c = a - b
 var d = 13 % 3
+var e = ((45 - 3 * d) + 4) % 2
 ```
 The `@` results in a random value from 1 to the number following the `@`. You can use `+`, `-`, `*`, `/` and `%`. The last one is modulo which gives you the remainder after a division. IMPORTANT! Boris does not support floating point values. If you divide values the result will be converted to an integer by stripping any decimals from the value (eg. 3.45 becomes 3).
 
@@ -152,6 +153,7 @@ Good old if sentence. This is probably the most important of all the commands as
 this = 1
 @4 = that and 4 = @7
 that = 1 or @5 = this or @2 = 1
+((45 - 3 * d) + 4) % 2 = 5
 ```
 You can also combine `and` and `or` expressions but as this is a very rudimentary language I only implemented it in a very basic manner so I would strongly suggest sticking to only using `or` or `and` within one call to `if`.
 
@@ -169,7 +171,7 @@ But it IS needed if an `if` is directly followed by another `if`.
 * Examples:
 `if a = 1 then if b = 1 goto here else if b = 2 goto there`
 `if a = 2 then if b = 1 goto here else if b = 2 goto there`
-This allows for some quite complex scripting where `a` can be any value and you can subsequently test for other conditions if the first condition was true.
+This allows for some quite complex scripting where `a` can be any value and you can subsequently test for other conditions if the first condition was true. You can also just scope the code after the first if to avoid 'then' altogether.
 * Examples:
 ```
 if a = 2 goto here
