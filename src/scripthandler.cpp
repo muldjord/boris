@@ -659,7 +659,7 @@ int ScriptHandler::getValue(QList<QString> &parameters)
        parameters.first().left(1) == "@" ||
        scriptVars.contains(parameters.first())) {
       if(parameters.first().left(1) == "@") {
-        parameters.first() = QString::number(QRandomGenerator::global()->bounded(parameters.first().mid(1).toInt()));
+        parameters.first() = QString::number(QRandomGenerator::global()->bounded(parameters.first().mid(1).toInt()) + 1);
       } else if(scriptVars.contains(parameters.first())) {
         parameters.first() = QString::number(scriptVars[parameters.first()]);
       }
