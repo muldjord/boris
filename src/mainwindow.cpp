@@ -522,7 +522,7 @@ void MainWindow::createBehavMenu()
 void MainWindow::createItemsMenu()
 {
   for(const auto &item: itemBehaviours) {
-    if(item.file.left(1) != "_") {
+    if(item.file.left(1) != "_" && !item.reactions.isEmpty()) {
       itemsMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
     }
   }

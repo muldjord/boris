@@ -1459,6 +1459,8 @@ void Boris::itemInteract(Item * item)
   if(!item->getReactionBehaviour().isEmpty()) {
     changeBehaviour(item->getReactionBehaviour());
     item->destroy();
+  } else {
+    bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "I don't know what to do with that.", "_thought");
   }
 }
 
