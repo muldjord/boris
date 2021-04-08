@@ -3,9 +3,9 @@ category=Social
 oneShot
 doNotDisturb
 #Frames
-0;75;0;0;;var vara = 2016 % 19,
-var varb = 2016 / 100,
-var varc = 2016 % 100,
+0;75;0;0;;var vara = year % 19,
+var varb = year / 100,
+var varc = year % 100,
 var vard = varb / 4,
 var vare = varb % 4,
 var varf = (varb + 8) / 25,
@@ -15,8 +15,8 @@ var vari = varc / 4,
 var vark = varc % 4,
 var varl = (32 + 2 * vare + 2 * vari - varh - vark) % 7,
 var varm = (vara + 11 * varh + 22 * varl) / 451,
-var varn = (varh + varl - 7 * varm + 114) / 31,
-var varp = (varh + varl - 7 * varm + 114) % 31 + 1
+var easterd = (varh + varl - 7 * varm + 114) / 31,
+var easterm = (varh + varl - 7 * varm + 114) % 31 + 1
 1;75;0;0;;
 2;75;0;0;;
 3;75;0;0;;
@@ -49,7 +49,7 @@ var varp = (varh + varl - 7 * varm + 114) % 31 + 1
 30;2000;0;0;;
 31;75;0;0;data/sfx/poof.wav;stat fun += 5
 32;75;0;0;;
-33;75;0;0;;if month = 4 and date < 15 spawn easter_egg 6 0 else { var rand = @8,if rand = 1 spawn teddy 6 0,if rand = 2 spawn horse 6 0,if rand = 3 spawn train 6 0,if rand = 4 spawn c64 6 0,if rand = 5 spawn pacman 6 0,if rand = 6 spawn glass_ball 6 0,if rand = 7 spawn football 6 0,if rand = 8 spawn coffee_mug 6 0 }
+33;75;0;0;;if month = easterm and day >= easterd - 5 and day <= easterd + 5 spawn easter_egg 6 0 else { var rand = @8,if rand = 1 spawn teddy 6 0,if rand = 2 spawn horse 6 0,if rand = 3 spawn train 6 0,if rand = 4 spawn c64 6 0,if rand = 5 spawn pacman 6 0,if rand = 6 spawn glass_ball 6 0,if rand = 7 spawn football 6 0,if rand = 8 spawn coffee_mug 6 0 }
 34;75;0;0;;
 35;75;0;0;;
 36;75;0;0;;
