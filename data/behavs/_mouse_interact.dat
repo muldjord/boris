@@ -2,7 +2,7 @@ title=Watching the mouse
 category=Idle
 fun=-2
 
-define nextsec:if mouseover = 0 and mdist < bsize {stat social += 2,var mouseover = 1,if @4 = 4 behav scare},if mouseover = 1 and mdist > bsize var mouseover = 0,if msec = 0 { if @24 = 1 goto bnorth else goto north } else if msec = 1 { if @24 = 1 goto bnortheast else goto northeast } else if msec = 2 { if @24 = 1 goto beast else goto east } else if msec = 3 { if @24 = 1 goto bsoutheast else goto southeast } else if msec = 4 { if @24 = 1 goto bsouth else goto south } else if msec = 5 { if @24 = 1 goto bsouthwest else goto southwest } else if msec = 6 { if @24 = 1 goto bwest else goto west } else if msec = 7 { if @24 = 1 goto bnorthwest else goto northwest }
+define nextsec:if mouseover = 0 and mdist < bsize {stat social += 2,var mouseover = 1,var rand = @6,if rand = 1 behav tongue_out else if rand = 2 behav wave else if rand = 3 behav scare},if mouseover = 1 and mdist > bsize var mouseover = 0,if msec = 0 { if @24 = 1 goto bnorth else goto north } else if msec = 1 { if @24 = 1 goto bnortheast else goto northeast } else if msec = 2 { if @24 = 1 goto beast else goto east } else if msec = 3 { if @24 = 1 goto bsoutheast else goto southeast } else if msec = 4 { if @24 = 1 goto bsouth else goto south } else if msec = 5 { if @24 = 1 goto bsouthwest else goto southwest } else if msec = 6 { if @24 = 1 goto bwest else goto west } else if msec = 7 { if @24 = 1 goto bnorthwest else goto northwest }
 
 #Frames
 0;50;0;0;;var mouseover = 0
