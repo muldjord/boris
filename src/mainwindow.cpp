@@ -262,7 +262,7 @@ MainWindow::MainWindow()
   itemTimer.setInterval(settings.itemSpawnInterval * 1000);
   itemTimer.setSingleShot(true);
   connect(&itemTimer, &QTimer::timeout, this, &MainWindow::spawnRandomItem);
-  if(settings.items) {
+  if(settings.items && settings.itemSpawnInterval) {
     itemTimer.start();
   }
 }
@@ -439,7 +439,7 @@ void MainWindow::aboutBox()
   netComm->updateAll();
 
   itemTimer.setInterval(settings.itemSpawnInterval * 1000);
-  if(settings.items) {
+  if(settings.items && settings.itemSpawnInterval) {
     itemTimer.start();
   } else {
     itemTimer.stop();
@@ -571,8 +571,9 @@ void MainWindow::spawnRandomItem()
                            &settings,
                            false));
   
-  itemTimer.setInterval(settings.itemSpawnInterval * 1000);
-  itemTimer.start();
+  if(settings.items && settings.itemSpawnInterval) {
+    itemTimer.start();
+  }
 }
 
 void MainWindow::spawnItem(QAction* a)
