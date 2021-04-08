@@ -35,7 +35,7 @@ $ ./Boris
 
 ## Release notes
 
-#### Version 3.0.2 (In progress, unreleased):
+#### Version 3.1.0 (In progress, unreleased):
 * Reworked chatter / speech bubble class
 * Boris will now think about how he feels when stats are down
 * Added 'script_output' variable to config.ini to allow disabling script output in terminal
@@ -49,9 +49,15 @@ $ ./Boris
 * Added 'think' BorisScript command
 * All speech bubbles are now in scripts instead of being hardcoded
 * RSS feed functionality is now imlemented through BorisScript instead of being hardcoded
+* Added 'Tell me the news' Social behaviour which will show rss feed output
+* Added 'What are you thinking?' Social behaviour which shows a more philosophical side of Boris
 * Added conditional speech bubbles to several behaviours (For instance: Boris now keeps score when using the hula hoop)
-* Added 'How do you feel?" Social behaviour which will assess Boris' stats and give a response in a speech bubble
+* Added 'How are you?" Social behaviour which will assess Boris' stats and give a response in a speech bubble
 * Added a few missing wall hit sounds to 'Pong' game
+* Improved BorisScript arithmetic expressions considerably, now using 'tinyexpr.c' by Lewis Van Winkle
+* Added user item spawning using the tray icon menu
+* Added item interactions using the BorisScript 'reaction' header option
+* Added 'draw sprite' BorisScript command that uses sprites from 'data/sprites'
 
 #### Version 3.0.1 (15th September 2020):
 * Boris now sometimes farts in his sleep, a very important feature
