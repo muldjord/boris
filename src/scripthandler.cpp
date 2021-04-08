@@ -29,7 +29,7 @@
 #include "soundmixer.h"
 #include "item.h"
 #include "sprite.h"
-#include "exprtk/exprtk.h"
+#include "tinyexpr.h"
 
 #include <stdio.h>
 
@@ -639,40 +639,31 @@ void ScriptHandler::handleThink(QList<QString> &parameters)
   }
 }
 
-template <typename T>
-double runExpression(const std::string expression_string)
-{
-  typedef exprtk::symbol_table<T> symbol_table_t;
-  typedef exprtk::expression<T>     expression_t;
-  typedef exprtk::parser<T>             parser_t;
-
-  symbol_table_t symbol_table;
-  
-  expression_t expression;
-  expression.register_symbol_table(symbol_table);
-  
-  parser_t parser;
-  parser.compile(expression_string, expression);
-
-  return expression.value();
-}
-
 int ScriptHandler::getValue(QList<QString> &parameters)
 {
   QList<QString> code;
   while(!parameters.isEmpty()) {
+    QString startPars = "";
+    QString endPars = "";
+    while(parameters.first().left(1) == "(") {
+      startPars.append("(");
+      parameters.first().remove(0, 1);
+    }
+    while(parameters.first().right(1) == ")") {
+      endPars.append(")");
+      parameters.first().remove(parameters.first().length() - 1, 1);
+    }
     bool isInt = false;
     parameters.first().toInt(&isInt);
     if(isInt ||
        parameters.first().left(1) == "@" ||
        scriptVars.contains(parameters.first())) {
-      QString token = parameters.first().trimmed();
-      if(token.left(1) == "@") {
-        token = QString::number(QRandomGenerator::global()->bounded(token.mid(1).toInt()));
-      } else if(scriptVars.contains(token)) {
-        token = QString::number(scriptVars[token]);
+      if(parameters.first().left(1) == "@") {
+        parameters.first() = QString::number(QRandomGenerator::global()->bounded(parameters.first().mid(1).toInt()));
+      } else if(scriptVars.contains(parameters.first())) {
+        parameters.first() = QString::number(scriptVars[parameters.first()]);
       }
-      code.append(token);
+      code.append(startPars + parameters.first() + endPars);
       parameters.removeFirst();
       if(parameters.count() >= 1) {
         if(parameters.first() != "+" &&
@@ -686,33 +677,14 @@ int ScriptHandler::getValue(QList<QString> &parameters)
         }
       }
     } else {
-      code.append(parameters.first().trimmed());
+      code.append(startPars + parameters.first() + endPars);
       parameters.removeFirst();
     }
   }
 
-  int result = 0;
-  if(code.count() == 1) {
-    result = code.first().toInt();
-  } else if(code.count() == 3) {
-    if(code.at(1) == "+") {
-      result = code.first().toInt() + code.last().toInt();
-    } else if(code.at(1) == "-") {
-      result = code.first().toInt() - code.last().toInt();
-    } else if(code.at(1) == "*") {
-      result = code.first().toInt() * code.last().toInt();
-    } else if(code.at(1) == "/") {
-      result = code.first().toInt() / code.last().toInt();
-    } else if(code.at(1) == "%") {
-      result = code.first().toInt() % code.last().toInt();
-    }
-  } else {
-    QString codeConcat = "";
-    for(const auto &token: code) {
-      codeConcat.append(token);
-    }
-    result = runExpression<double>(codeConcat.toStdString());
+  QString codeConcat = "";
+  for(const auto &token: code) {
+    codeConcat.append(token);
   }
-  
-  return result;
+  return te_interp(codeConcat.toStdString().c_str(), 0);
 }
