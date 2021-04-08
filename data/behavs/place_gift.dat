@@ -3,7 +3,20 @@ category=Social
 oneShot
 doNotDisturb
 #Frames
-0;75;0;0;;
+0;75;0;0;;var vara = 2016 % 19,
+var varb = 2016 / 100,
+var varc = 2016 % 100,
+var vard = varb / 4,
+var vare = varb % 4,
+var varf = (varb + 8) / 25,
+var varg = (varb - varf + 1) / 3,
+var varh = (19 * vara + varb - vard - varg + 15) % 30,
+var vari = varc / 4,
+var vark = varc % 4,
+var varl = (32 + 2 * vare + 2 * vari - varh - vark) % 7,
+var varm = (vara + 11 * varh + 22 * varl) / 451,
+var varn = (varh + varl - 7 * varm + 114) / 31,
+var varp = (varh + varl - 7 * varm + 114) % 31 + 1
 1;75;0;0;;
 2;75;0;0;;
 3;75;0;0;;
