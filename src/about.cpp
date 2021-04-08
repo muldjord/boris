@@ -46,7 +46,7 @@ About::About(Settings *settings)
 {
   this->settings = settings;
   
-  setFixedSize(900, 600);
+  setFixedSize(900, 700);
   move((settings->desktopWidth / 2) - (width() / 2), 256);
   setWindowIcon(QIcon(":icon.png"));
   setWindowTitle("Boris v" VERSION);
@@ -68,7 +68,7 @@ About::About(Settings *settings)
 
   // Author tab
   QWidget *authorWidget = new QWidget;
-  QLabel *authorText = new QLabel(tr("<strong>Programming:</strong> Lars Muldjord<br/><strong>Graphics:</strong> Lars Muldjord<br/><strong>Sound:</strong> Lars Muldjord<br/><br/>Boris was programmed using the Qt framework (http://www.qt.io) and C++.<br/><br/>Bug reports, suggestions and / or comments can be emailed to me at: muldjordlars@gmail.com.<br/><br/>If your friends / colleagues would like to get their own Boris, tell them to visit:<br/><br/>http://www.muldjord.com/boris<br/><br/>Copyright 2019 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the 'License' tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html."));
+  QLabel *authorText = new QLabel(tr("<strong>Programming:</strong> Lars Muldjord<br/><strong>Graphics:</strong> Lars Muldjord<br/><strong>Sound:</strong> Lars Muldjord<br/><br/>Boris was programmed using the Qt framework (http://www.qt.io) and C++.<br/><br/>Bug reports, suggestions and / or comments can be emailed to me at: muldjordlars@gmail.com.<br/><br/>If your friends / colleagues would like to get their own Boris, tell them to visit:<br/><br/>https://github.com/muldjord/boris<br/><br/>Copyright 2021 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the 'License' tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html."));
   authorText->setWordWrap(true);
   authorText->setMaximumWidth(400);
 
@@ -125,16 +125,25 @@ About::About(Settings *settings)
   clonesLineEdit->setValidator(clonesValidator);
   clonesLineEdit->setText(QString::number(settings->clones));
 
-  enableItems = new QCheckBox(tr("Allow item spawning"));
+  enableItems = new QCheckBox(tr("Allow items"));
+  enableItems->setToolTip(tr("Boris will sometimes place various items around the desktop. Items will also be randomly spawned or created using the tray icon menu."));
   if(settings->items) {
     enableItems->setCheckState(Qt::Checked);
   }
 
-  QLabel *itemLabel = new QLabel(tr("Item timeout in seconds (10-3600 or 0 for never):"));
-  itemLineEdit = new QLineEdit();
+  QLabel *itemSpawnIntervalLabel = new QLabel(tr("Seconds between random item spawn (5-3600 or 0 for never):"));
+  itemSpawnIntervalLineEdit = new QLineEdit();
+  itemSpawnIntervalLineEdit->setToolTip(tr("If items are enabled random items will be spawned around the desktop at this interval. If set to 0 no items will spawn randomly."));
+  QIntValidator *itemSpawnIntervalValidator = new QIntValidator(5, 3600, this);
+  itemSpawnIntervalLineEdit->setValidator(itemSpawnIntervalValidator);
+  itemSpawnIntervalLineEdit->setText(QString::number(settings->itemSpawnInterval));
+
+  QLabel *itemTimeoutLabel = new QLabel(tr("Item timeout in seconds (10-3600 or 0 for never):"));
+  itemTimeoutLineEdit = new QLineEdit();
+  itemTimeoutLineEdit->setToolTip(tr("Items will disappear after this amount of time. Setting this to 0 will make them stay indefinitely."));
   QIntValidator *itemValidator = new QIntValidator(10, 3600, this);
-  itemLineEdit->setValidator(itemValidator);
-  itemLineEdit->setText(QString::number(settings->itemTimeout));
+  itemTimeoutLineEdit->setValidator(itemValidator);
+  itemTimeoutLineEdit->setText(QString::number(settings->itemTimeout));
 
   QLabel *weatherLabel = new QLabel(tr("Show weather for city (mouse over for help):"));
   weatherLineEdit = new QLineEdit();
@@ -194,8 +203,10 @@ About::About(Settings *settings)
   configLayout->addWidget(clonesLabel);
   configLayout->addWidget(clonesLineEdit);
   configLayout->addWidget(enableItems);
-  configLayout->addWidget(itemLabel);
-  configLayout->addWidget(itemLineEdit);
+  configLayout->addWidget(itemSpawnIntervalLabel);
+  configLayout->addWidget(itemSpawnIntervalLineEdit);
+  configLayout->addWidget(itemTimeoutLabel);
+  configLayout->addWidget(itemTimeoutLineEdit);
   configLayout->addWidget(statsLabel);
   configLayout->addWidget(statsComboBox);
   configLayout->addWidget(independenceLabel);
@@ -260,14 +271,25 @@ void About::saveAll()
   } else {
     settings->clones = 0;
   }
-  if(itemLineEdit->text().toInt() != 0) {
-    if(itemLineEdit->text().toInt() < 10) {
-      itemLineEdit->setText("10");
+  if(itemSpawnIntervalLineEdit->text().toInt() != 0) {
+    if(itemSpawnIntervalLineEdit->text().toInt() < 5) {
+      itemSpawnIntervalLineEdit->setText("5");
     }
-    if(itemLineEdit->text().toInt() > 3600) {
-      itemLineEdit->setText("3600");
+    if(itemSpawnIntervalLineEdit->text().toInt() > 3600) {
+      itemSpawnIntervalLineEdit->setText("3600");
     }
-    settings->itemTimeout = itemLineEdit->text().toInt();
+    settings->itemSpawnInterval = itemSpawnIntervalLineEdit->text().toInt();
+  } else {
+    settings->itemSpawnInterval = 0;
+  }
+  if(itemTimeoutLineEdit->text().toInt() != 0) {
+    if(itemTimeoutLineEdit->text().toInt() < 10) {
+      itemTimeoutLineEdit->setText("10");
+    }
+    if(itemTimeoutLineEdit->text().toInt() > 3600) {
+      itemTimeoutLineEdit->setText("3600");
+    }
+    settings->itemTimeout = itemTimeoutLineEdit->text().toInt();
   } else {
     settings->itemTimeout = 0;
   }
@@ -304,11 +326,12 @@ void About::saveAll()
   iniSettings.setValue("boris_y", settings->borisY);
   iniSettings.setValue("clones", settings->clones);
   iniSettings.setValue("size", settings->size);
+  iniSettings.setValue("items", settings->items);
   iniSettings.setValue("item_timeout", settings->itemTimeout);
+  iniSettings.setValue("item_spawn_timer", settings->itemSpawnInterval);
   iniSettings.setValue("independence", settings->independence);
   iniSettings.setValue("bubble", settings->bubbles);
   iniSettings.setValue("sound", settings->sound);
-  iniSettings.setValue("items", settings->items);
   iniSettings.setValue("volume", settings->volume * 100);
   iniSettings.setValue("feed_url", settings->feedUrl);
   iniSettings.setValue("weather_city", settings->city);

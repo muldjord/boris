@@ -51,12 +51,12 @@ private:
   
   QLineEdit *clonesLineEdit;
   QLineEdit *sizeLineEdit;
-  QLineEdit *itemLineEdit;
+  QLineEdit *itemSpawnIntervalLineEdit;
+  QLineEdit *itemTimeoutLineEdit;
   QLineEdit *weatherLineEdit;
   QLineEdit *weatherKeyLineEdit;
   QLineEdit *feedUrlLineEdit;
   QComboBox *statsComboBox;
-  //QCheckBox *showStats;
   QCheckBox *enableSound;
   QCheckBox *enableItems;
   QCheckBox *enableBubble;

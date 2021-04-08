@@ -162,6 +162,16 @@ MainWindow::MainWindow()
   }
   settings.independence = iniSettings.value("independence").toInt();
 
+  if(!iniSettings.contains("items")) {
+    iniSettings.setValue("items", true);
+  }
+  settings.items = iniSettings.value("items").toBool();
+
+  if(!iniSettings.contains("item_spawn_timer")) {
+    iniSettings.setValue("item_spawn_timer", 240);
+  }
+  settings.itemSpawnInterval = iniSettings.value("item_spawn_timer").toInt();
+
   if(!iniSettings.contains("item_timeout")) {
     iniSettings.setValue("item_timeout", 300);
   }
@@ -201,11 +211,6 @@ MainWindow::MainWindow()
   settings.volume = iniSettings.value("volume").toInt() / 100.0;
   sf::Listener::setGlobalVolume(settings.volume * 100.0);
   
-  if(!iniSettings.contains("items")) {
-    iniSettings.setValue("items", true);
-  }
-  settings.items = iniSettings.value("items").toBool();
-
   if(!iniSettings.contains("lemmy_mode")) {
     iniSettings.setValue("lemmy_mode", false);
   }
@@ -253,6 +258,13 @@ MainWindow::MainWindow()
                    settings.borisY);
 
   QTimer::singleShot(100, this, &MainWindow::loadAssets);
+
+  itemTimer.setInterval(settings.itemSpawnInterval * 1000);
+  itemTimer.setSingleShot(true);
+  connect(&itemTimer, &QTimer::timeout, this, &MainWindow::spawnRandomItem);
+  if(settings.items) {
+    itemTimer.start();
+  }
 }
 
 MainWindow::~MainWindow()
@@ -425,6 +437,13 @@ void MainWindow::aboutBox()
   }
   
   netComm->updateAll();
+
+  itemTimer.setInterval(settings.itemSpawnInterval * 1000);
+  if(settings.items) {
+    itemTimer.start();
+  } else {
+    itemTimer.stop();
+  }
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)
@@ -536,6 +555,24 @@ void MainWindow::triggerBehaviour(QAction* a)
       emit queueBehavFromFile(behaviour.file);
     }
   }
+}
+
+void MainWindow::spawnRandomItem()
+{
+  int randomItem = 0;
+  do {
+    randomItem = QRandomGenerator::global()->bounded(itemBehaviours.count());
+  } while(itemBehaviours.at(randomItem).reactions.isEmpty());
+  
+  itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::desktop()->width()),
+                           QRandomGenerator::global()->bounded(QApplication::desktop()->height()),
+                           settings.size,
+                           itemBehaviours.at(randomItem).file,
+                           &settings,
+                           false));
+  
+  itemTimer.setInterval(settings.itemSpawnInterval * 1000);
+  itemTimer.start();
 }
 
 void MainWindow::spawnItem(QAction* a)

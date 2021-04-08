@@ -64,7 +64,6 @@ struct Settings {
   int independence = 75;
   int stats = STATS_CRITICAL;
   bool sound = true;
-  bool items = true;
   double volume = 0.5;
   bool bubbles = true;
 
@@ -89,6 +88,8 @@ struct Settings {
   QString feedUrl = "http://rss.slashdot.org/Slashdot/slashdotMain";
 
   // Items
+  bool items = true;
+  int itemSpawnInterval = 240; // Seconds between random item spawn. 0 for never
   int itemTimeout = 300; // Seconds before items disappear. 0 for never
 };
 

@@ -56,6 +56,7 @@ private slots:
   void killAll();
   void updateWeather();
   void triggerBehaviour(QAction *a);
+  void spawnRandomItem();
   void spawnItem(QAction *a);
 
 signals:
@@ -63,6 +64,7 @@ signals:
   void queueBehavFromFile(const QString &file);
   
 private:
+  QTimer itemTimer;
   QMenu *behavioursMenu;
   QMenu *itemsMenu;
   Settings settings;
