@@ -53,18 +53,22 @@ goto checkup
 # Social
 0;50;0;0;;label social,
 var tried += 1,
-if social < 15 {say "I feel lonely... Very, very lonely.",stat social += 10,behav _chat},
+if social < 15 {say "I'd really like some company.",stat social += 10,behav _chat},
 if social < 30 {say "Do you want to hang out?",stat social += 10,behav _chat},
 goto checkup
 
 # Fun
 0;50;0;0;;label fun,
 var tried += 1,
-if fun < 15 {say "I'm really bored! I wanna have fun!",behav _complain},
-if fun < 30 {say "I'm a bit bored, I should do something fun. Any suggestions?",behav _chat},
+if fun < 15 {say "I'm really bored!",behav _complain},
+if fun < 30 {say "It's hard to be a nissemand.",behav _complain},
 goto checkup
 
 # Feeling good
 0;50;0;0;;label feelinggood,
-say "I'm fine, thank you for asking.",
+var rand = @4,
+if rand = 1 say "I'm fine, thank you for asking.",
+if rand = 2 say "I'm good, how are you?",
+if rand = 3 say "Nothing to complain about, doing great!",
+if rand = 4 say "I'm great! How are you?",
 behav _chat
