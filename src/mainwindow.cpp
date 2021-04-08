@@ -173,7 +173,7 @@ MainWindow::MainWindow()
   settings.iddqd = iniSettings.value("iddqd").toBool();
   
   if(!iniSettings.contains("stats")) {
-    iniSettings.setValue("stats", "critical");
+    iniSettings.setValue("stats", "mouseover");
   }
   if(iniSettings.value("stats").toString() == "always") {
     settings.stats = STATS_ALWAYS;
