@@ -19,6 +19,7 @@ draw darkgrey pixel 28 11
 
 define moveboris:var rand = @3,
 if rand = 1 var bx -= 1 else if rand = 3 var bx += 1,
+if @3 = 1 var bx += ald,
 if bx > 28 var bx = 28,
 if bx < 16 var bx = 16,
 draw green line bx 13 bx + 2 13,
