@@ -751,7 +751,7 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
     falling = true;
     hVel = mouseHVel;
     vVel = mouseVVel;
-    alt = QCursor::pos().y() + 40;
+    alt = QCursor::pos().y();
   }
 }
 
