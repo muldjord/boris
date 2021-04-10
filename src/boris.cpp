@@ -134,11 +134,18 @@ Boris::Boris(Settings *settings)
   connect(&behavTimer, &QTimer::timeout, this, &Boris::nextBehaviour);
 
   // QBasicTimer for better accuracy
-  physicsTimer.start(30, this);
+  physicsTimer.setInterval(30);
+  connect(&physicsTimer, &QTimer::timeout, this, &Boris::handlePhysics);
+  physicsTimer.start();
+  //physicsTimer.start(30, this);
 
+  /*
   animTimer.setInterval(0);
   connect(&animTimer, &QTimer::timeout, this, &Boris::nextFrame);
   animTimer.start();
+  */
+
+  animTimer.start(0, Qt::PreciseTimer, this);
 
   weatherTimer.setSingleShot(true);
   connect(&weatherTimer, &QTimer::timeout, this, &Boris::nextWeatherFrame);
@@ -353,7 +360,7 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   curFrame = 0;
-  nextFrame();
+  animTimer.start(0, Qt::PreciseTimer, this);
 }
 
 QPixmap Boris::getShadow(const QPixmap &sprite)
@@ -521,7 +528,7 @@ int Boris::getSector(const QPoint &p)
   return pointSector;
 }
 
-void Boris::nextFrame()
+void Boris::timerEvent(QTimerEvent *)
 {
   if(stopNextBehaviour) {
     stopNextBehaviour = false;
@@ -609,8 +616,7 @@ void Boris::nextFrame()
   } else {
     curFrame++;
   }
-  animTimer.setInterval(frameTime);
-  animTimer.start();
+  animTimer.start(frameTime, Qt::PreciseTimer, this);
 }
 
 void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
@@ -751,7 +757,7 @@ void Boris::wheelEvent(QWheelEvent *)
   }
 }
 
-void Boris::timerEvent(QTimerEvent *)
+void Boris::handlePhysics()
 {
   if(!grabbed && weatherSprite->isVisible()) {
     sinVal += QRandomGenerator::global()->bounded(2000) / 20000.0;
