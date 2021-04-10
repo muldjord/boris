@@ -36,6 +36,7 @@
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QTimer>
+#include <QBasicTimer>
 #include <QAction>
 #include <QMouseEvent>
 #include <QKeyEvent>
@@ -88,6 +89,7 @@ public slots:
   void queueBehavFromFile(const QString &file);
   
 protected:
+  void timerEvent(QTimerEvent *event);
   void mouseMoveEvent(QMouseEvent* event);
   void mousePressEvent(QMouseEvent* event);
   void mouseReleaseEvent(QMouseEvent* event);
@@ -101,7 +103,6 @@ private slots:
   void statProgress();
   void statQueueProgress();
   QPixmap getShadow(const QPixmap &sprite);
-  void nextFrame();
   void nextWeatherFrame();
   void hideWeather();
   void readyForFriend();
@@ -123,7 +124,7 @@ private:
   
   QMenu* behavioursMenu;
   QTimer behavTimer;
-  QTimer animTimer;
+  QBasicTimer animTimer;
   QTimer weatherTimer;
   QTimer physicsTimer;
   QTimer statTimer;

@@ -137,10 +137,7 @@ Boris::Boris(Settings *settings)
   connect(&physicsTimer, &QTimer::timeout, this, &Boris::handlePhysics);
   physicsTimer.start();
 
-  animTimer.setInterval(0);
-  animTimer.setSingleShot(true);
-  connect(&animTimer, &QTimer::timeout, this, &Boris::nextFrame);
-  animTimer.start();
+  animTimer.start(0, this);
 
   weatherTimer.setSingleShot(true);
   connect(&weatherTimer, &QTimer::timeout, this, &Boris::nextWeatherFrame);
@@ -355,7 +352,7 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   curFrame = 0;
-  nextFrame();
+  animTimer.start(0, this);
 }
 
 QPixmap Boris::getShadow(const QPixmap &sprite)
@@ -523,8 +520,9 @@ int Boris::getSector(const QPoint &p)
   return pointSector;
 }
 
-void Boris::nextFrame()
+void Boris::timerEvent(QTimerEvent *)
 {
+  animTimer.stop();
   if(stopNextBehaviour) {
     stopNextBehaviour = false;
     behavTimer.stop();
@@ -601,7 +599,6 @@ void Boris::nextFrame()
   if(frameTime <= 5) {
     frameTime = 5;
   }
-  animTimer.setInterval(frameTime);
 
   int stop = 0; // Will be > 0 if a goto, behav or break command is run
   runScript(stop);
@@ -619,8 +616,7 @@ void Boris::nextFrame()
   } else {
     curFrame++;
   }
-
-  animTimer.start();
+  animTimer.start(frameTime, this);
 }
 
 void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
