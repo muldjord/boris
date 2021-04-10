@@ -360,6 +360,12 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   curFrame = 0;
+  // Look if a 'define init' exists in behaviour. If so, run it before starting first frame.
+  if(behaviours.at(curBehav).defines.contains("init")) {
+    int stop = 0;
+    runScript(stop, true);
+  }
+
   animTimer.start(0, Qt::PreciseTimer, this);
 }
 
@@ -404,7 +410,7 @@ QPixmap Boris::getShadow(const QPixmap &sprite)
   return QPixmap::fromImage(shadow);
 }
 
-void Boris::runScript(int &stop)
+void Boris::runScript(int &stop, const bool &init)
 {
   // Update current stat variables for scripting use
   scriptVars["bsize"] = size;
@@ -440,7 +446,11 @@ void Boris::runScript(int &stop)
   connect(&scriptHandler, &ScriptHandler::behavFromFile, this, &Boris::behavFromFile);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Boris::setCurFrame);
   connect(&scriptHandler, &ScriptHandler::statChange, this, &Boris::statChange);
-  scriptHandler.runScript(stop, behaviours.at(curBehav).frames.at(curFrame).script);
+  if(init) {
+    scriptHandler.runScript(stop, behaviours.at(curBehav).defines["init"]);
+  } else {
+    scriptHandler.runScript(stop, behaviours.at(curBehav).frames.at(curFrame).script);
+  }
 
   if(flipFrames) {
     QImage flipped = scriptImage.mirrored(true, false);

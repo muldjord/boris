@@ -34,6 +34,7 @@
 #include <QGraphicsPixmapItem>
 #include <QMouseEvent>
 #include <QTimer>
+#include <QBasicTimer>
 
 class Item : public QGraphicsView
 {
@@ -52,13 +53,13 @@ public slots:
   void destroy();
 
 protected:
+  void timerEvent(QTimerEvent *event);
   void mouseDoubleClickEvent(QMouseEvent* event);
   void mousePressEvent(QMouseEvent* event);
   void mouseMoveEvent(QMouseEvent* event);
   void mouseReleaseEvent(QMouseEvent* event);
 
 private slots:
-  void nextFrame();
   QPixmap getShadow(const QPixmap &sprite);
   void setCurFrame(const int &frame);
   void dontIgnore();
@@ -69,14 +70,14 @@ private:
   QGraphicsPixmapItem *itemSprite;
   QGraphicsPixmapItem *shadowSprite;
   QPixmap origShadow;
-  QTimer animTimer;
+  QBasicTimer animTimer;
   QGraphicsPixmapItem *scriptSprite;
   QImage scriptImage = QImage(32, 32, QImage::Format_ARGB32_Premultiplied);
   bool drawing = false;
   int curFrame = 0;
   int curItem = 0;
   int size = 64;
-  void runScript(int &stop);
+  void runScript(int &stop, const bool &init = false);
   void sanityCheck();
   int getDistance(const QPoint &p);
   int getSector(const QPoint &p);

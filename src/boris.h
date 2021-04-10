@@ -117,7 +117,7 @@ private:
   bool falling = false;
   bool grabbed = false;
   void showWeather(QString &behav);
-  void runScript(int &stop);
+  void runScript(int &stop, const bool &init = false);
   void createBehavMenu();
   int staticBehavs;
   int independence;

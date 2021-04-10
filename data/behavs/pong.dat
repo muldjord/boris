@@ -6,8 +6,11 @@ social=-8
 hygiene=-3
 oneShot
 doNotDisturb
+
+define init:var bs = 0,var cs = 0
+
 #Frames
-0;75;0;0;;var bs = 0,var cs = 0
+0;75;0;0;;
 1;75;0;0;;
 2;75;0;0;;
 3;75;0;0;;

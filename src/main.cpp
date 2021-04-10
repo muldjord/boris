@@ -70,7 +70,8 @@ int main(int argc, char *argv[])
   QApplication app(argc, argv);
   
   app.setQuitOnLastWindowClosed(false);
-
+  app.setStyle("Plastique");
+  
   qInstallMessageHandler(customMessageHandler);
 
   QTranslator translator;

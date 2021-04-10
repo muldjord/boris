@@ -7,6 +7,8 @@ hygiene=-3
 oneShot
 doNotDisturb
 
+define init:var level = 1,var lives = 3
+
 define drawdefence:draw darkgrey pixel 18 11,
 draw darkgrey line 18 10 20 10,
 draw darkgrey pixel 20 11,
@@ -42,7 +44,7 @@ if col3 >= 4 draw white line alx + 6 row + 2 alx + 6 + 1 row + 2,
 if col3 >= 6 draw white line alx + 6 row + 4 alx + 6 + 1 row + 4
 
 #Frames
-0;75;0;0;;var level = 1,var lives = 3
+0;75;0;0;;
 1;75;0;0;;
 2;75;0;0;;
 3;75;0;0;;

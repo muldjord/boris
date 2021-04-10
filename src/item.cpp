@@ -101,10 +101,13 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   scriptImage.fill(Qt::transparent);
   drawing = false;
 
-  animTimer.setInterval(0);
-  animTimer.setSingleShot(true);
-  connect(&animTimer, &QTimer::timeout, this, &Item::nextFrame);
-  animTimer.start();
+  // Look if a 'define init' exists in behaviour. If so, run it before starting first frame.
+  if(itemBehaviours.at(curItem).defines.contains("init")) {
+    int stop = 0;
+    runScript(stop, true);
+  }
+
+  animTimer.start(0, Qt::PreciseTimer, this);
 
   QTimer::singleShot(60000, this, &Item::dontIgnore);
   setCursor(QCursor(QPixmap(":mouse_hover.png")));
@@ -156,7 +159,7 @@ QPixmap Item::getShadow(const QPixmap &sprite)
   return QPixmap::fromImage(shadow);
 }
 
-void Item::runScript(int &stop)
+void Item::runScript(int &stop, const bool &init)
 {
   // Update current stat variables for scripting use
   QPoint p = QCursor::pos();
@@ -179,12 +182,16 @@ void Item::runScript(int &stop)
 
   ScriptHandler scriptHandler(&scriptImage, &drawing, settings, nullptr, itemBehaviours.at(curItem).labels, itemBehaviours.at(curItem).defines, scriptVars, pos(), size);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Item::setCurFrame);
-  scriptHandler.runScript(stop, itemBehaviours.at(curItem).frames.at(curFrame).script);
+  if(init) {
+    scriptHandler.runScript(stop, itemBehaviours.at(curItem).defines["init"]);
+  } else {
+    scriptHandler.runScript(stop, itemBehaviours.at(curItem).frames.at(curFrame).script);
+  }
 
   scriptSprite->setPixmap(QPixmap::fromImage(scriptImage));
 }
 
-void Item::nextFrame()
+void Item::timerEvent(QTimerEvent *)
 {
   if(stopAndDestroy) {
     stopAndDestroy = false;
@@ -197,9 +204,6 @@ void Item::nextFrame()
   if(curFrame >= itemBehaviours.at(curItem).frames.count()) {
     curFrame = 0;
   }
-
-  QElapsedTimer frameTimer;
-  frameTimer.start();
 
   if(flipFrames) {
     QImage flipped = itemBehaviours.at(curItem).frames.at(curFrame).sprite.toImage().mirrored(true, false);
@@ -229,14 +233,9 @@ void Item::nextFrame()
   }
 
   int frameTime = itemBehaviours.at(curItem).frames.at(curFrame).time;
-  int elapsedTime = frameTimer.elapsed();
-  if(elapsedTime < frameTime) {
-    frameTime -= elapsedTime;
-  }
   if(frameTime <= 5) {
     frameTime = 5;
   }
-  animTimer.setInterval(frameTime);
 
   int stop = 0; // Will be > 0 if a goto, behav or break command is run
   runScript(stop);
@@ -253,7 +252,7 @@ void Item::nextFrame()
     curFrame++;
   }
 
-  animTimer.start();
+  animTimer.start(frameTime, Qt::PreciseTimer, this);
 }
 
 void Item::moveItem(int dX, int dY, const bool &flipped)

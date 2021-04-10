@@ -55,6 +55,8 @@ The line `#Frames` must be there so the software knows when the frame definition
 ### Code defines
 The scripting language supports very basic code block defines. These are not functions, but rather blocks of code that can then be reused throughout a behaviour by using the `call <DEFINE>` command.
 
+NOTE! Anything defined in the hardcoded 'init' define will always be run first thing when a behaviour is started. See example.
+
 ##### Example:
 ```
 define mainblock:if progress <= 0 break,
@@ -62,6 +64,10 @@ var rand = @4,
 if rand = 1 goto label1 else if rand = 2 goto label2 else if rand = 3 goto label3
 ```
 This defines a block of code called `mainblock` which can then be called at any time with `call mainblock` which simply replaces that call with the code contained in the block.
+```
+define init:var score = 0,if @2 = 1 goto game1 else goto game2
+```
+This uses the hardcoded 'init' define and sets the variable 'score' to 0 before proceeding to goto a frame label. This is very useful for declaring initial behaviour variables and in cases where it is undesirable to start at frame 0.
 
 ### Frame definitions
 Each frame in a behaviour must be contained on a single line under the `#Frames` line. Empty lines are allowed (they will simply be ignored) and so are comment lines starting with `#` (these are also ignored).

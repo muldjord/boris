@@ -8,6 +8,8 @@ oneShot
 doNotDisturb
 pitchLock
 
+define init:var place = 0,var segs = 16,var segs += @8
+
 define nextseg:if segs = 0 goto f,
 var rand = @8,
 if rand = 1 goto s,
@@ -20,8 +22,8 @@ if rand = 7 goto ltb,
 if rand = 8 goto t
 
 #Frames
-0;75;0;0;;var place = 0
-1;75;0;0;;var segs = 16,var segs += @8
+0;75;0;0;;
+1;75;0;0;;
 2;75;0;0;;
 3;75;0;0;;
 4;75;0;0;;
