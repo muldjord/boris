@@ -79,7 +79,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   scriptSprite = this->scene()->addPixmap(QPixmap());
   scriptSprite->setPos(0, 0); // To make room for shadow
 
-  setCursor(QCursor(QPixmap(":mouse_closet.png"), 15, 16));
+  setCursor(Qt::OpenHandCursor);
 
   setFixedSize(size, size + (size / 32)); // To make room for shadow
   scale(size / 32.0, size / 32.0);
@@ -110,7 +110,6 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   animTimer.start(0, Qt::PreciseTimer, this);
 
   QTimer::singleShot(60000, this, &Item::dontIgnore);
-  setCursor(QCursor(QPixmap(":mouse_hover.png")));
   show();
 }
 
@@ -381,7 +380,7 @@ void Item::mousePressEvent(QMouseEvent* event)
   if(event->button() == Qt::LeftButton) {
     grabbed = true;
     ignore = false;
-    setCursor(QCursor(QPixmap(":mouse_grab.png")));
+    setCursor(Qt::ClosedHandCursor);
   } else if(event->button() == Qt::MiddleButton) {
     destroy();
   }
@@ -401,7 +400,7 @@ void Item::mouseReleaseEvent(QMouseEvent* event)
 {
   grabbed = false;
   if(event->button() == Qt::LeftButton) {
-    setCursor(QCursor(QPixmap(":mouse_hover.png")));
+    setCursor(Qt::OpenHandCursor);
   }
 }
 

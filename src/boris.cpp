@@ -164,7 +164,7 @@ Boris::Boris(Settings *settings)
   connect(&interactionsTimer, &QTimer::timeout, this, &Boris::checkInteractions);
   interactionsTimer.start();
 
-  setCursor(QCursor(QPixmap(":mouse_hover.png")));
+  setCursor(Qt::OpenHandCursor);
 
   updateBoris();
 }
@@ -715,7 +715,7 @@ void Boris::mousePressEvent(QMouseEvent* event)
       energyQueue -= 25;
       funQueue -= 20;
     }
-    setCursor(QCursor(QPixmap(":mouse_grab.png")));
+    setCursor(Qt::ClosedHandCursor);
     grabbed = true;
     changeBehaviour("_grabbed");
     mMoving = true;
@@ -742,7 +742,7 @@ void Boris::mouseMoveEvent(QMouseEvent* event)
 void Boris::mouseReleaseEvent(QMouseEvent* event)
 {
   if(event->button() == Qt::LeftButton) {
-    setCursor(QCursor(QPixmap(":mouse_hover.png")));
+    setCursor(Qt::OpenHandCursor);
     grabbed = false;
     mMoving = false;
     settings->borisX = pos().x();
