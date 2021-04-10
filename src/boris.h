@@ -98,8 +98,9 @@ protected:
   void wheelEvent(QWheelEvent *);
 
 private slots:
+  void nextFrame();
   void handleBehaviourChange(QAction* a);
-  void handlePhysics();
+  //void handlePhysics();
   void statProgress();
   void statQueueProgress();
   QPixmap getShadow(const QPixmap &sprite);
@@ -124,9 +125,9 @@ private:
   
   QMenu* behavioursMenu;
   QTimer behavTimer;
-  QBasicTimer animTimer;
+  QTimer animTimer;
   QTimer weatherTimer;
-  QTimer physicsTimer;
+  QBasicTimer physicsTimer;
   QTimer statTimer;
   QTimer statQueueTimer;
   QTimer interactionsTimer;

@@ -133,11 +133,12 @@ Boris::Boris(Settings *settings)
   behavTimer.setSingleShot(true);
   connect(&behavTimer, &QTimer::timeout, this, &Boris::nextBehaviour);
 
-  physicsTimer.setInterval(30);
-  connect(&physicsTimer, &QTimer::timeout, this, &Boris::handlePhysics);
-  physicsTimer.start();
+  // QBasicTimer for better accuracy
+  physicsTimer.start(30, this);
 
-  animTimer.start(0, this);
+  animTimer.setInterval(0);
+  connect(&animTimer, &QTimer::timeout, this, &Boris::nextFrame);
+  animTimer.start();
 
   weatherTimer.setSingleShot(true);
   connect(&weatherTimer, &QTimer::timeout, this, &Boris::nextWeatherFrame);
@@ -352,7 +353,7 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   curFrame = 0;
-  animTimer.start(0, this);
+  nextFrame();
 }
 
 QPixmap Boris::getShadow(const QPixmap &sprite)
@@ -520,18 +521,14 @@ int Boris::getSector(const QPoint &p)
   return pointSector;
 }
 
-void Boris::timerEvent(QTimerEvent *)
+void Boris::nextFrame()
 {
-  animTimer.stop();
   if(stopNextBehaviour) {
     stopNextBehaviour = false;
     behavTimer.stop();
     nextBehaviour();
     return;
   }
-
-  QElapsedTimer frameTimer;
-  frameTimer.start();
 
   sanityCheck();
   
@@ -592,10 +589,6 @@ void Boris::timerEvent(QTimerEvent *)
 
   int frameTime = behaviours.at(curBehav).frames.at(curFrame).time;
   frameTime -= (frameTime / 100.0 * stats->getHyper());
-  int elapsedTime = frameTimer.elapsed();
-  if(elapsedTime < frameTime) {
-    frameTime -= elapsedTime;
-  }
   if(frameTime <= 5) {
     frameTime = 5;
   }
@@ -616,7 +609,8 @@ void Boris::timerEvent(QTimerEvent *)
   } else {
     curFrame++;
   }
-  animTimer.start(frameTime, this);
+  animTimer.setInterval(frameTime);
+  animTimer.start();
 }
 
 void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
@@ -757,7 +751,7 @@ void Boris::wheelEvent(QWheelEvent *)
   }
 }
 
-void Boris::handlePhysics()
+void Boris::timerEvent(QTimerEvent *)
 {
   if(!grabbed && weatherSprite->isVisible()) {
     sinVal += QRandomGenerator::global()->bounded(2000) / 20000.0;
