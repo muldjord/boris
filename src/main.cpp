@@ -35,6 +35,7 @@
 #include <QFileInfo>
 #include <QHostInfo>
 #include <QMessageBox>
+#include <QStyleFactory>
 
 void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QString &msg)
 {
@@ -68,7 +69,7 @@ void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QStri
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
-  
+  app.setStyle(QStyleFactory::create("Fusion"));  
   app.setQuitOnLastWindowClosed(false);
   app.setStyle("Plastique");
   
