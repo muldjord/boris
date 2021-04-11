@@ -54,7 +54,30 @@ About::About(Settings *settings)
   // About tab
   QWidget *aboutWidget = new QWidget;
   QLabel *aboutText = new QLabel(tr("<strong>Boris bids you welcome!</strong><br/>He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye on him!<br/><br/>"
-                                    "<strong>Functions:</strong><ul><li>You can throw Boris around your desktop by left-clicking him. Don't throw him too much though, or you'll bruise him...</li><li>Right-clicking Boris brings up a menu where you can select what you want Boris to do. Each activity is added to a queue and performed in the order you select them.</li><li>Right-click the tray icon to either quit, cause an earthquake, teleport or open this config/about box.</li></ul><strong>Vitality description:</strong><ul><li>The 'Zz' icon signifies Boris' energy level. Tell him to relax to give him more energy.</li><li>The 'knife and fork' icon shows how hungry Boris is. Tell him to eat to remove his hunger.</li><li>The 'toilet' icon is an indicator of Boris' need to go to the toilet. Tell him to weewee to make him feel better.</li><li>The 'speech bubble' icon shows Boris' need for social interaction. Move you mouse over him to interact with him. Boris will also socialize with other Boris clones when he meets them.</li><li>The 'smiley' icon indicates if Boris is in a good mood. If he's sad, tell him to do something fun.</li><li>If Boris is getting dirty, tell him to take a shower.</li></ul><br/>If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit http://www.muldjord.com/boris and download it. You can also download the full source code (GPLv3) in there if you like."));
+                                    "<strong>Good to know:</strong>"
+                                    "<ul>"
+                                    "<li>You can pick Boris up if he is in your way by holding down the left mouse button while the pointer is on top of him.</li>"
+                                    "<li>Right-clicking Boris brings up a menu where you can select any of the behaviours you have unlocked using coins. Each behaviour is added to a queue and performed in the order you select them.</li>"
+                                    "<li>Right-clicking the Boris system tray icon gives you access to information and important functions that will enable you to take care of Boris. This menu also contains the 'Config / about...' dialog option which allows you to configure Boris to your liking.</li>"
+                                    "</ul>"
+                                    "<strong>Health stats:</strong>"
+                                    "<ul>"
+                                    "<li>The 'Zz' icon signifies Boris' energy level.</li>"
+                                    "<li>The 'Knife and fork' icon shows how hungry Boris currently is.</li>"
+                                    "<li>The 'Toilet' icon is an indicator of Boris' need to go to the toilet.</li>"
+                                    "<li>The 'Speech bubble' icon shows Boris' need for social interaction.</li>"
+                                    "<li>The 'Smiley' icon indicates whether Boris is in a good mood and having fun.</li>"
+                                    "</ul>"
+                                    "<strong>Other stats:</strong>"
+                                    "<ul>"
+                                    "<li>Boris can also get dirty if he eats messy food or goes to the toilet without washing his hands.</li>"
+                                    "<li>He can also get bruised if you thrown him around too much.</li>"
+                                    "</ul>"
+                                    "<strong>How to get coins:</strong>"
+                                    "<br/>It's just for fun! No real money involved. You can earn Boris coins by right-clicking the Boris system tray icon, selecting the 'Items' submenu, and choosing an item that corresponds to the current needs of Boris. The more needy Boris is for the particular thing you select, the more coins you receive. Drag the item on top of him to give it to him.<br/>"
+                                    "You can then spend the coins by selecting the 'Behaviours' submenu and choosing the behaviour you want to buy. The behaviour then becomes unlocked and can be selected anytime you want from the Boris right-click menu or Boris system tray icon 'Behaviours' submenu.<br/>"
+                                    "<br/>"
+                                    "If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit https://github.com/muldjord/boris/releases and download it. He is completely free and open source. You can also download the full source code (GPLv3) in there if you like."));
   aboutText->setWordWrap(true);
   aboutText->setMaximumWidth(400);
 
@@ -68,7 +91,7 @@ About::About(Settings *settings)
 
   // Author tab
   QWidget *authorWidget = new QWidget;
-  QLabel *authorText = new QLabel(tr("<strong>Programming:</strong> Lars Muldjord<br/><strong>Graphics:</strong> Lars Muldjord<br/><strong>Sound:</strong> Lars Muldjord<br/><br/>Boris was programmed using the Qt framework (http://www.qt.io) and C++.<br/><br/>Bug reports, suggestions and / or comments can be emailed to me at: muldjordlars@gmail.com.<br/><br/>If your friends / colleagues would like to get their own Boris, tell them to visit:<br/><br/>https://github.com/muldjord/boris<br/><br/>Copyright 2021 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the 'License' tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html."));
+  QLabel *authorText = new QLabel(tr("<strong>Programming:</strong> Lars Muldjord<br/><strong>Graphics:</strong> Lars Muldjord<br/><strong>Sound:</strong> Lars Muldjord<br/><br/>Boris was programmed using the Qt framework (http://www.qt.io) and C++.<br/><br/>Bug reports, suggestions and / or comments can be emailed to me at: muldjordlars@gmail.com.<br/><br/>If your friends / colleagues would like to get their own Boris, tell them to visit:<br/><br/>https://github.com/muldjord/boris/releases<br/><br/>Copyright 2021 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the 'License' tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html."));
   authorText->setWordWrap(true);
   authorText->setMaximumWidth(400);
 
