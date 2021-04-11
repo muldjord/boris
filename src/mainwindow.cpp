@@ -243,6 +243,7 @@ MainWindow::MainWindow()
   createActions();
   behavioursMenu = new QMenu();
   behavioursMenu->setTitle(tr("Behaviours"));
+  connect(behavioursMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
   itemsMenu = new QMenu();
   itemsMenu->setTitle(tr("Items"));
   createTrayIcon();
@@ -497,7 +498,6 @@ void MainWindow::updateBehavioursMenu()
   movementMenu->setIcon(QIcon(":movement.png"));
   QMenu *idkfaMenu = new QMenu(tr("Idkfa"), behavioursMenu);
   idkfaMenu->setIcon(QIcon(":idkfa.png"));
-  connect(behavioursMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
   for(const auto &behaviour: behaviours) {
     if(settings.unlocked.contains(behaviour.file)) {
       if(behaviour.category == "Movement") {
