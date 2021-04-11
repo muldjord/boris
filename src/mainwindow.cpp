@@ -37,13 +37,13 @@
 #include <math.h>
 #include <QApplication>
 #include <QTime>
-#include <QSettings>
 #include <QDir>
 #include <QTextStream>
 #include <QDesktopWidget>
 #include <QHostInfo>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QMessageBox>
 
 #if QT_VERSION >= 0x050a00
 #include <QRandomGenerator>
@@ -67,169 +67,178 @@ MainWindow::MainWindow()
 #endif
 
   QString iniFile = "config.ini";
-  if(QFileInfo::exists("config_" + QHostInfo::localHostName().toLower() + ".ini")) {
-    iniFile = "config_" + QHostInfo::localHostName().toLower() + ".ini";
-  }
-  QSettings iniSettings(iniFile, QSettings::IniFormat);
-  if(!iniSettings.contains("show_welcome")) {
-    iniSettings.setValue("show_welcome", true);
-  }
-  settings.showWelcome = iniSettings.value("show_welcome").toBool();
 
-  if(!iniSettings.contains("stat_logging")) {
-    iniSettings.setValue("stat_logging", false);
-  }
-  settings.statLogging = iniSettings.value("stat_logging").toBool();
-
-  if(!iniSettings.contains("script_output")) {
-    iniSettings.setValue("script_output", true);
-  }
-  settings.scriptOutput = iniSettings.value("script_output").toBool();
+  iniSettings = new QSettings(iniFile, QSettings::IniFormat);
   
-  if(!iniSettings.contains("sounds_path")) {
-    iniSettings.setValue("sounds_path", "data/sfx");
+  if(!iniSettings->contains("show_welcome")) {
+    iniSettings->setValue("show_welcome", true);
   }
-  settings.soundsPath = iniSettings.value("sounds_path").toString();
+  settings.showWelcome = iniSettings->value("show_welcome").toBool();
 
-  if(!iniSettings.contains("behavs_path")) {
-    iniSettings.setValue("behavs_path", "data/behavs");
+  if(!iniSettings->contains("stat_logging")) {
+    iniSettings->setValue("stat_logging", false);
   }
-  settings.behavsPath = iniSettings.value("behavs_path").toString();
+  settings.statLogging = iniSettings->value("stat_logging").toBool();
+
+  if(!iniSettings->contains("script_output")) {
+    iniSettings->setValue("script_output", true);
+  }
+  settings.scriptOutput = iniSettings->value("script_output").toBool();
   
-  if(!iniSettings.contains("weathers_path")) {
-    iniSettings.setValue("weathers_path", "data/weathers");
+  if(!iniSettings->contains("sounds_path")) {
+    iniSettings->setValue("sounds_path", "data/sfx");
   }
-  settings.weathersPath = iniSettings.value("weathers_path").toString();
+  settings.soundsPath = iniSettings->value("sounds_path").toString();
 
-  if(!iniSettings.contains("items_path")) {
-    iniSettings.setValue("items_path", "data/items");
+  if(!iniSettings->contains("behavs_path")) {
+    iniSettings->setValue("behavs_path", "data/behavs");
   }
-  settings.itemsPath = iniSettings.value("items_path").toString();
+  settings.behavsPath = iniSettings->value("behavs_path").toString();
+  
+  if(!iniSettings->contains("weathers_path")) {
+    iniSettings->setValue("weathers_path", "data/weathers");
+  }
+  settings.weathersPath = iniSettings->value("weathers_path").toString();
 
-  if(!iniSettings.contains("sprites_path")) {
-    iniSettings.setValue("sprites_path", "data/sprites");
+  if(!iniSettings->contains("items_path")) {
+    iniSettings->setValue("items_path", "data/items");
   }
-  settings.spritesPath = iniSettings.value("sprites_path").toString();
+  settings.itemsPath = iniSettings->value("items_path").toString();
+
+  if(!iniSettings->contains("sprites_path")) {
+    iniSettings->setValue("sprites_path", "data/sprites");
+  }
+  settings.spritesPath = iniSettings->value("sprites_path").toString();
+
+  if(!iniSettings->contains("unlocked")) {
+    iniSettings->setValue("unlocked", "whistle");
+  }
+  settings.unlocked = iniSettings->value("unlocked").toString().split(",");
 
   // Force weather from ini
-  if(iniSettings.contains("weather_force_type")) {
-    settings.weatherType = iniSettings.value("weather_force_type").toString();
+  if(iniSettings->contains("weather_force_type")) {
+    settings.weatherType = iniSettings->value("weather_force_type").toString();
     settings.forceWeatherType = true;
   }
-  if(iniSettings.contains("weather_force_temp")) {
-    settings.temperature = iniSettings.value("weather_force_temp").toDouble();
+  if(iniSettings->contains("weather_force_temp")) {
+    settings.temperature = iniSettings->value("weather_force_temp").toDouble();
     settings.forceTemperature = true;
   }
-  if(iniSettings.contains("weather_force_wind_direction")) {
-    settings.windDirection = iniSettings.value("weather_force_wind_direction").toString();
+  if(iniSettings->contains("weather_force_wind_direction")) {
+    settings.windDirection = iniSettings->value("weather_force_wind_direction").toString();
     settings.forceWindDirection = true;
   }
-  if(iniSettings.contains("weather_force_wind_speed")) {
-    settings.windSpeed = iniSettings.value("weather_force_wind_speed").toDouble();
+  if(iniSettings->contains("weather_force_wind_speed")) {
+    settings.windSpeed = iniSettings->value("weather_force_wind_speed").toDouble();
     settings.forceWindSpeed = true;
   }
   
-  if(!iniSettings.contains("boris_x")) {
-    iniSettings.setValue("boris_x", QApplication::desktop()->width() / 2);
+  if(!iniSettings->contains("coins")) {
+    iniSettings->setValue("coins", coins);
   }
-  settings.borisX = iniSettings.value("boris_x").toInt();
+  settings.coins = iniSettings->value("coins").toInt();
 
-  if(!iniSettings.contains("boris_y")) {
-    iniSettings.setValue("boris_y", QApplication::desktop()->height() / 2);
+  if(!iniSettings->contains("boris_x")) {
+    iniSettings->setValue("boris_x", QApplication::desktop()->width() / 2);
   }
-  settings.borisY = iniSettings.value("boris_y").toInt();
+  settings.borisX = iniSettings->value("boris_x").toInt();
+
+  if(!iniSettings->contains("boris_y")) {
+    iniSettings->setValue("boris_y", QApplication::desktop()->height() / 2);
+  }
+  settings.borisY = iniSettings->value("boris_y").toInt();
 
   // For use with sound panning in relation to Boris location
   settings.desktopWidth = QApplication::desktop()->width();
 
-  if(!iniSettings.contains("vision")) {
-    iniSettings.setValue("vision", false);
+  if(!iniSettings->contains("vision")) {
+    iniSettings->setValue("vision", false);
   }
-  settings.vision = iniSettings.value("vision").toBool();
+  settings.vision = iniSettings->value("vision").toBool();
 
-  if(!iniSettings.contains("clones")) {
-    iniSettings.setValue("clones", 2);
+  if(!iniSettings->contains("clones")) {
+    iniSettings->setValue("clones", 2);
   }
-  settings.clones = iniSettings.value("clones").toInt();
+  settings.clones = iniSettings->value("clones").toInt();
     
-  if(!iniSettings.contains("size")) {
-    iniSettings.setValue("size", 64);
+  if(!iniSettings->contains("size")) {
+    iniSettings->setValue("size", 64);
   }
-  settings.size = iniSettings.value("size").toInt();
+  settings.size = iniSettings->value("size").toInt();
 
-  if(!iniSettings.contains("independence")) {
-    iniSettings.setValue("independence", 75);
+  if(!iniSettings->contains("independence")) {
+    iniSettings->setValue("independence", 75);
   }
-  settings.independence = iniSettings.value("independence").toInt();
+  settings.independence = iniSettings->value("independence").toInt();
 
-  if(!iniSettings.contains("items")) {
-    iniSettings.setValue("items", true);
+  if(!iniSettings->contains("items")) {
+    iniSettings->setValue("items", true);
   }
-  settings.items = iniSettings.value("items").toBool();
+  settings.items = iniSettings->value("items").toBool();
 
-  if(!iniSettings.contains("item_spawn_timer")) {
-    iniSettings.setValue("item_spawn_timer", 240);
+  if(!iniSettings->contains("item_spawn_timer")) {
+    iniSettings->setValue("item_spawn_timer", 240);
   }
-  settings.itemSpawnInterval = iniSettings.value("item_spawn_timer").toInt();
+  settings.itemSpawnInterval = iniSettings->value("item_spawn_timer").toInt();
 
-  if(!iniSettings.contains("item_timeout")) {
-    iniSettings.setValue("item_timeout", 300);
+  if(!iniSettings->contains("item_timeout")) {
+    iniSettings->setValue("item_timeout", 300);
   }
-  settings.itemTimeout = iniSettings.value("item_timeout").toInt();
+  settings.itemTimeout = iniSettings->value("item_timeout").toInt();
 
-  if(!iniSettings.contains("iddqd")) {
-    iniSettings.setValue("iddqd", false);
+  if(!iniSettings->contains("iddqd")) {
+    iniSettings->setValue("iddqd", false);
   }
-  settings.iddqd = iniSettings.value("iddqd").toBool();
+  settings.iddqd = iniSettings->value("iddqd").toBool();
   
-  if(!iniSettings.contains("stats")) {
-    iniSettings.setValue("stats", "mouseover");
+  if(!iniSettings->contains("stats")) {
+    iniSettings->setValue("stats", "mouseover");
   }
-  if(iniSettings.value("stats").toString() == "always") {
+  if(iniSettings->value("stats").toString() == "always") {
     settings.stats = STATS_ALWAYS;
-  } else if(iniSettings.value("stats").toString() == "critical") {
+  } else if(iniSettings->value("stats").toString() == "critical") {
     settings.stats = STATS_CRITICAL;
-  } else if(iniSettings.value("stats").toString() == "mouseover") {
+  } else if(iniSettings->value("stats").toString() == "mouseover") {
     settings.stats = STATS_MOUSEOVER;
-  } else if(iniSettings.value("stats").toString() == "never") {
+  } else if(iniSettings->value("stats").toString() == "never") {
     settings.stats = STATS_NEVER;
   }
   
-  if(!iniSettings.contains("bubbles")) {
-    iniSettings.setValue("bubbles", true);
+  if(!iniSettings->contains("bubbles")) {
+    iniSettings->setValue("bubbles", true);
   }
-  settings.bubbles = iniSettings.value("bubbles").toBool();
+  settings.bubbles = iniSettings->value("bubbles").toBool();
 
-  if(!iniSettings.contains("sound")) {
-    iniSettings.setValue("sound", true);
+  if(!iniSettings->contains("sound")) {
+    iniSettings->setValue("sound", true);
   }
-  settings.sound = iniSettings.value("sound").toBool();
+  settings.sound = iniSettings->value("sound").toBool();
 
-  if(!iniSettings.contains("volume")) {
-    iniSettings.setValue("volume", 50);
+  if(!iniSettings->contains("volume")) {
+    iniSettings->setValue("volume", 50);
   }
-  settings.volume = iniSettings.value("volume").toInt() / 100.0;
+  settings.volume = iniSettings->value("volume").toInt() / 100.0;
   sf::Listener::setGlobalVolume(settings.volume * 100.0);
   
-  if(!iniSettings.contains("lemmy_mode")) {
-    iniSettings.setValue("lemmy_mode", false);
+  if(!iniSettings->contains("lemmy_mode")) {
+    iniSettings->setValue("lemmy_mode", false);
   }
-  settings.lemmyMode = iniSettings.value("lemmy_mode").toBool();
+  settings.lemmyMode = iniSettings->value("lemmy_mode").toBool();
 
-  if(!iniSettings.contains("feed_url")) {
-    iniSettings.setValue("feed_url", "http://rss.slashdot.org/Slashdot/slashdotMain");
+  if(!iniSettings->contains("feed_url")) {
+    iniSettings->setValue("feed_url", "http://rss.slashdot.org/Slashdot/slashdotMain");
   }
-  settings.feedUrl = iniSettings.value("feed_url").toString();
+  settings.feedUrl = iniSettings->value("feed_url").toString();
 
-  if(!iniSettings.contains("weather_city")) {
-    iniSettings.setValue("weather_city", "Copenhagen");
+  if(!iniSettings->contains("weather_city")) {
+    iniSettings->setValue("weather_city", "Copenhagen");
   }
-  settings.city = iniSettings.value("weather_city").toString();
+  settings.city = iniSettings->value("weather_city").toString();
 
-  if(!iniSettings.contains("weather_key")) {
-    iniSettings.setValue("weather_key", "fe9fe6cf47c03d2640d5063fbfa053a2");
+  if(!iniSettings->contains("weather_key")) {
+    iniSettings->setValue("weather_key", "fe9fe6cf47c03d2640d5063fbfa053a2");
   }
-  settings.key = iniSettings.value("weather_key").toString();
+  settings.key = iniSettings->value("weather_key").toString();
 
   createActions();
   behavioursMenu = new QMenu();
@@ -257,25 +266,20 @@ MainWindow::MainWindow()
   loadWidget->move(settings.borisX - (loadWidget->width() / 2) + (settings.size / 2),
                    settings.borisY);
 
-  QTimer::singleShot(100, this, &MainWindow::loadAssets);
-
   itemTimer.setInterval(settings.itemSpawnInterval * 1000);
   itemTimer.setSingleShot(true);
   connect(&itemTimer, &QTimer::timeout, this, &MainWindow::spawnRandomItem);
   if(settings.items && settings.itemSpawnInterval) {
     itemTimer.start();
   }
+
+  QTimer::singleShot(100, this, &MainWindow::loadAssets);
 }
 
 MainWindow::~MainWindow()
 {
-  QString iniFile = "config.ini";
-  if(QFileInfo::exists("config_" + QHostInfo::localHostName().toLower() + ".ini")) {
-    iniFile = "config_" + QHostInfo::localHostName().toLower() + ".ini";
-  }
-  QSettings iniSettings(iniFile, QSettings::IniFormat);
-  iniSettings.setValue("boris_x", settings.borisX);
-  iniSettings.setValue("boris_y", settings.borisY);
+  iniSettings->setValue("boris_x", settings.borisX);
+  iniSettings->setValue("boris_y", settings.borisY);
   delete trayIcon;
   for(auto &boris: borisList) {
     delete boris;
@@ -350,7 +354,7 @@ void MainWindow::loadAssets()
   delete progressBar;
   delete loadWidget;
 
-  createBehavMenu();
+  updateBehavioursMenu();
   createItemsMenu();
 }
 
@@ -358,11 +362,13 @@ void MainWindow::addBoris(int clones)
 {
   qInfo("Spawning %d clone(s)\n", clones);
   while(clones--) {
-    borisList << new Boris(&settings);
+    borisList.append(new Boris(&settings));
     connect(this, &MainWindow::updateBoris, borisList.last(), &Boris::updateBoris);
+    connect(this, &MainWindow::updateBorisBehavioursMenu, borisList.last(), &Boris::updateBehavioursMenu);
     connect(earthquakeAction, &QAction::triggered, borisList.last(), &Boris::earthquake);
     connect(this, &MainWindow::queueBehavFromFile, borisList.last(), &Boris::queueBehavFromFile);
     connect(weatherAction, &QAction::triggered, borisList.last(), &Boris::triggerWeather);
+    connect(borisList.last(), &Boris::addCoins, this, &MainWindow::addCoins);
     borisList.last()->show();
     borisList.last()->earthquake();
   }
@@ -381,18 +387,13 @@ void MainWindow::removeBoris(int clones)
 
 void MainWindow::createActions()
 {
-  aboutAction = new QAction(tr("&Config / about..."), this);
-  aboutAction->setIcon(QIcon(":icon_about.png"));
-  connect(aboutAction, &QAction::triggered, this, &MainWindow::aboutBox);
-
   earthquakeAction = new QAction(tr("&Earthquake!!!"), this);
   earthquakeAction->setIcon(QIcon(":earthquake.png"));
 
   weatherAction = new QAction(tr("Updating weather..."), this);
-  
-  quitAction = new QAction(tr("&Quit"), this);
-  quitAction->setIcon(QIcon(":icon_quit.png"));
-  connect(quitAction, &QAction::triggered, this, &MainWindow::killAll);
+
+  coinsAction = new QAction(QString::number(settings.coins) + tr(" coins"), this);
+  coinsAction->setIcon(QIcon(":icon_coins.png"));
 }
 
 void MainWindow::createTrayIcon()
@@ -400,19 +401,23 @@ void MainWindow::createTrayIcon()
   trayIcon = new QSystemTrayIcon;
 
   trayIconMenu = new QMenu;
-  trayIconMenu->addAction(aboutAction);
+  trayIconMenu->addAction(QIcon(":icon_about.png"), tr("&Config / about..."), this, &MainWindow::aboutBox);
   trayIconMenu->addAction(earthquakeAction);
   trayIconMenu->addMenu(behavioursMenu);
   trayIconMenu->addMenu(itemsMenu);
   trayIconMenu->addAction(weatherAction);
   trayIconMenu->addSeparator();
-  trayIconMenu->addAction(quitAction);
+  trayIconMenu->addAction(coinsAction);
+  trayIconMenu->addSeparator();
+  trayIconMenu->addAction(QIcon(":icon_quit.png"), tr("&Quit"), this, &MainWindow::killAll);
+
+  coinIcon = new QIcon(QPixmap::fromImage(QImage(":icon_coins.png")));
 
   QImage iconImage(":icon.png");
   Loader::setClothesColor(settings, iconImage);
-  QIcon icon(QPixmap::fromImage(iconImage));
+  icon = new QIcon(QPixmap::fromImage(iconImage));
+  trayIcon->setIcon(*icon);
   trayIcon->setToolTip("Boris");
-  trayIcon->setIcon(icon);
   trayIcon->setContextMenu(trayIconMenu);
 }
 
@@ -471,8 +476,9 @@ void MainWindow::updateWeather()
   weatherAction->setIcon(QIcon(":" + settings.weatherType + ".png"));
 }
 
-void MainWindow::createBehavMenu()
+void MainWindow::updateBehavioursMenu()
 {
+  behavioursMenu->clear();
   QMenu *healthMenu = new QMenu(tr("Health"), behavioursMenu);
   healthMenu->setIcon(QIcon(":health.png"));
   QMenu *energyMenu = new QMenu(tr("Energy"), behavioursMenu);
@@ -491,48 +497,89 @@ void MainWindow::createBehavMenu()
   movementMenu->setIcon(QIcon(":movement.png"));
   QMenu *iddqdMenu = new QMenu(tr("Iddqd"), behavioursMenu);
   iddqdMenu->setIcon(QIcon(":iddqd.png"));
-  connect(healthMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
-  connect(energyMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
-  connect(hungerMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
-  connect(bladderMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
-  connect(hygieneMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
-  connect(socialMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
-  connect(funMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
-  connect(movementMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
-  connect(iddqdMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
+  connect(behavioursMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
   for(const auto &behaviour: behaviours) {
-    if(behaviour.file.left(1) != "_" || behaviour.category != "Hidden") {
+    if(settings.unlocked.contains(behaviour.file)) {
       if(behaviour.category == "Movement") {
-        movementMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        QAction *tempAction = movementMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       } else if(behaviour.category == "Energy") {
-        energyMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        QAction *tempAction = energyMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       } else if(behaviour.category == "Hunger") {
-        hungerMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        QAction *tempAction = hungerMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       } else if(behaviour.category == "Bladder") {
-        bladderMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        QAction *tempAction = bladderMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       } else if(behaviour.category == "Social") {
-        socialMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        QAction *tempAction = socialMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       } else if(behaviour.category == "Fun") {
-        funMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        QAction *tempAction = funMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       } else if(behaviour.category == "Hygiene") {
-        hygieneMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        QAction *tempAction = hygieneMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       } else if(behaviour.category == "Health") {
-        healthMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
-      } else {
-        iddqdMenu->addAction(QIcon(":iddqd.png"), behaviour.title);
+        QAction *tempAction = healthMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
+      }
+    } else if(behaviour.file.left(1) != "_" || behaviour.category != "Hidden") {
+      if(behaviour.category == "Movement") {
+        QAction *tempAction = movementMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        tempAction->setData(behaviour.file);
+      } else if(behaviour.category == "Energy") {
+        QAction *tempAction = energyMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        tempAction->setData(behaviour.file);
+      } else if(behaviour.category == "Hunger") {
+        QAction *tempAction = hungerMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        tempAction->setData(behaviour.file);
+      } else if(behaviour.category == "Bladder") {
+        QAction *tempAction = bladderMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        tempAction->setData(behaviour.file);
+      } else if(behaviour.category == "Social") {
+        QAction *tempAction = socialMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        tempAction->setData(behaviour.file);
+      } else if(behaviour.category == "Fun") {
+        QAction *tempAction = funMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        tempAction->setData(behaviour.file);
+      } else if(behaviour.category == "Hygiene") {
+        QAction *tempAction = hygieneMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        tempAction->setData(behaviour.file);
+      } else if(behaviour.category == "Health") {
+        QAction *tempAction = healthMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        tempAction->setData(behaviour.file);
       }
     } else {
-      iddqdMenu->addAction(QIcon(":iddqd.png"), behaviour.title);
+      QAction *tempAction = iddqdMenu->addAction(QIcon(":iddqd.png"), behaviour.title);
+      tempAction->setData(behaviour.file);
     }
   }
-  behavioursMenu->addMenu(healthMenu);
-  behavioursMenu->addMenu(energyMenu);
-  behavioursMenu->addMenu(hungerMenu);
-  behavioursMenu->addMenu(bladderMenu);
-  behavioursMenu->addMenu(hygieneMenu);
-  behavioursMenu->addMenu(socialMenu);
-  behavioursMenu->addMenu(funMenu);
-  behavioursMenu->addMenu(movementMenu);
+  if(!healthMenu->isEmpty()) {
+    behavioursMenu->addMenu(healthMenu);
+  }
+  if(!energyMenu->isEmpty()) {
+    behavioursMenu->addMenu(energyMenu);
+  }
+  if(!hungerMenu->isEmpty()) {
+    behavioursMenu->addMenu(hungerMenu);
+  }
+  if(!bladderMenu->isEmpty()) {
+    behavioursMenu->addMenu(bladderMenu);
+  }
+  if(!hygieneMenu->isEmpty()) {
+    behavioursMenu->addMenu(hygieneMenu);
+  }
+  if(!socialMenu->isEmpty()) {
+    behavioursMenu->addMenu(socialMenu);
+  }
+  if(!funMenu->isEmpty()) {
+    behavioursMenu->addMenu(funMenu);
+  }
+  if(!movementMenu->isEmpty()) {
+    behavioursMenu->addMenu(movementMenu);
+  }
   if(settings.iddqd) {
     behavioursMenu->addMenu(iddqdMenu);
   }
@@ -540,19 +587,105 @@ void MainWindow::createBehavMenu()
 
 void MainWindow::createItemsMenu()
 {
+  QMenu *healthMenu = new QMenu(tr("Health"), itemsMenu);
+  healthMenu->setIcon(QIcon(":health.png"));
+  QMenu *energyMenu = new QMenu(tr("Energy"), itemsMenu);
+  energyMenu->setIcon(QIcon(":energy.png"));
+  QMenu *hungerMenu = new QMenu(tr("Food"), itemsMenu);
+  hungerMenu->setIcon(QIcon(":hunger.png"));
+  QMenu *bladderMenu = new QMenu(tr("Toilet"), itemsMenu);
+  bladderMenu->setIcon(QIcon(":bladder.png"));
+  QMenu *hygieneMenu = new QMenu(tr("Hygiene"), itemsMenu);
+  hygieneMenu->setIcon(QIcon(":hygiene.png"));
+  QMenu *socialMenu = new QMenu(tr("Social"), itemsMenu);
+  socialMenu->setIcon(QIcon(":social.png"));
+  QMenu *funMenu = new QMenu(tr("Fun"), itemsMenu);
+  funMenu->setIcon(QIcon(":fun.png"));
+  connect(itemsMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
   for(const auto &item: itemBehaviours) {
     if(item.file.left(1) != "_" && !item.reactions.isEmpty()) {
-      itemsMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
+      if(item.category == "Health") {
+        QAction *tempAction =
+          healthMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
+        tempAction->setData(item.file);
+      } else if(item.category == "Energy") {
+        QAction *tempAction =
+          energyMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
+        tempAction->setData(item.file);
+      } else if(item.category == "Hunger") {
+        QAction *tempAction =
+          hungerMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
+        tempAction->setData(item.file);
+      } else if(item.category == "Toilet") {
+        QAction *tempAction =
+          bladderMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
+        tempAction->setData(item.file);
+      } else if(item.category == "Hygiene") {
+        QAction *tempAction =
+          hygieneMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
+        tempAction->setData(item.file);
+      } else if(item.category == "Social") {
+        QAction *tempAction =
+          socialMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
+        tempAction->setData(item.file);
+      } else if(item.category == "Fun") {
+        QAction *tempAction =
+          funMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
+        tempAction->setData(item.file);
+      } else {
+        QAction *tempAction =
+          itemsMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
+        tempAction->setData(item.file);
+      }
     }
   }
-  connect(itemsMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
+  if(!healthMenu->isEmpty()) {
+    itemsMenu->addMenu(healthMenu);
+  }
+  if(!energyMenu->isEmpty()) {
+    itemsMenu->addMenu(energyMenu);
+  }
+  if(!hungerMenu->isEmpty()) {
+    itemsMenu->addMenu(hungerMenu);
+  }
+  if(!bladderMenu->isEmpty()) {
+    itemsMenu->addMenu(bladderMenu);
+  }
+  if(!hygieneMenu->isEmpty()) {
+    itemsMenu->addMenu(hygieneMenu);
+  }
+  if(!socialMenu->isEmpty()) {
+    itemsMenu->addMenu(socialMenu);
+  }
+  if(!funMenu->isEmpty()) {
+    itemsMenu->addMenu(funMenu);
+  }
 }
 
 void MainWindow::triggerBehaviour(QAction* a)
 {
+  QString itemFile = a->data().toString();
   for(const auto &behaviour: behaviours) {
-    if(behaviour.title == a->text()) {
-      emit queueBehavFromFile(behaviour.file);
+    if(behaviour.file == itemFile) {
+      if(settings.unlocked.contains(behaviour.file)) {
+        emit queueBehavFromFile(behaviour.file);
+      } else {
+        if(settings.coins - 10 >= 0 && QMessageBox::question(nullptr, tr("Buy?"), tr("Do you wish to buy '") + " " + behaviour.title + "' " + tr("for 10 coins?")) == QMessageBox::Yes) {
+          addCoins("-10", - 10);
+          settings.unlocked.append(behaviour.file);
+          QString unlocked = "";
+          for(const auto &unlock: settings.unlocked) {
+            unlocked.append(unlock + ",");
+          }
+          unlocked = unlocked.left(unlocked.length() - 1);
+          iniSettings->setValue("unlocked", unlocked);
+          updateBehavioursMenu();
+          emit updateBorisBehavioursMenu();
+        } else {
+          soundMixer.playSound(&soundMixer.soundFxs["data/sfx/nocoin.wav"], 0, 1);
+        }
+      }
+      break;
     }
   }
 }
@@ -578,14 +711,32 @@ void MainWindow::spawnRandomItem()
 
 void MainWindow::spawnItem(QAction* a)
 {
+  QString itemFile = a->data().toString();
   for(const auto &item: itemBehaviours) {
-    if(item.title == a->text()) {
+    if(item.file == itemFile) {
       itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::desktop()->width()),
                                QRandomGenerator::global()->bounded(QApplication::desktop()->height()),
                                settings.size,
                                item.file,
                                &settings,
                                false));
+      break;
     }
   }
+}
+
+void MainWindow::addCoins(const QString &message, const int &coins)
+{
+  soundMixer.playSound(&soundMixer.soundFxs["data/sfx/coinup.wav"], 0, 1);
+  settings.coins += coins;
+  coinsAction->setText(QString::number(settings.coins) + " " + tr("coins") + " (" + message + ")");
+  trayIcon->setIcon(*coinIcon);
+  QTimer::singleShot(10000, this, &MainWindow::removeCoinsMessage);
+  iniSettings->setValue("coins", settings.coins);
+}
+
+void MainWindow::removeCoinsMessage()
+{
+  coinsAction->setText(QString::number(settings.coins) + tr(" coins"));
+  trayIcon->setIcon(*icon);
 }

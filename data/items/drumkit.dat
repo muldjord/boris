@@ -1,4 +1,5 @@
 title=Drumkit
+category=Fun
 reaction=play_drums
 #Frames
 0;1000;0;0;;stop

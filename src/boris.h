@@ -86,6 +86,7 @@ public slots:
   void triggerWeather();
   void nextBehaviour();
   void updateBoris();
+  void updateBehavioursMenu();
   void queueBehavFromFile(const QString &file);
   
 protected:
@@ -96,6 +97,9 @@ protected:
   void enterEvent(QEvent *event);
   void leaveEvent(QEvent *event);
   void wheelEvent(QWheelEvent *);
+
+signals:
+  void addCoins(const QString &message, const int &coins);
 
 private slots:
   void handleBehaviourChange(QAction* a);
@@ -118,7 +122,6 @@ private:
   bool grabbed = false;
   void showWeather(QString &behav);
   void runScript(int &stop, const bool &init = false);
-  void createBehavMenu();
   int staticBehavs;
   int independence;
   

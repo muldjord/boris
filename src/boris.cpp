@@ -100,7 +100,10 @@ Boris::Boris(Settings *settings)
   weatherSprite->setPos(0, 0);
   weatherSprite->hide();
   
-  createBehavMenu();
+  behavioursMenu = new QMenu();
+  behavioursMenu->setTitle(tr("Behaviours"));
+  connect(behavioursMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
+  updateBehavioursMenu();
 
   // Set initial stats with some randomization
   int hyper = 0;
@@ -176,10 +179,10 @@ Boris::~Boris()
   delete behavioursMenu;
 }
 
-void Boris::createBehavMenu()
+void Boris::updateBehavioursMenu()
 {
-  behavioursMenu = new QMenu();
-  behavioursMenu->setTitle(tr("Behaviours"));
+  behavioursMenu->clear();
+
   QMenu *healthMenu = new QMenu(tr("Health"), behavioursMenu);
   healthMenu->setIcon(QIcon(":health.png"));
   QMenu *energyMenu = new QMenu(tr("Energy"), behavioursMenu);
@@ -198,48 +201,62 @@ void Boris::createBehavMenu()
   movementMenu->setIcon(QIcon(":movement.png"));
   QMenu *iddqdMenu = new QMenu(tr("Iddqd"), behavioursMenu);
   iddqdMenu->setIcon(QIcon(":iddqd.png"));
-  connect(healthMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
-  connect(energyMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
-  connect(hungerMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
-  connect(bladderMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
-  connect(hygieneMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
-  connect(socialMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
-  connect(funMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
-  connect(movementMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
-  connect(iddqdMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   for(const auto &behaviour: behaviours) {
-    if(behaviour.file.left(1) != "_" || behaviour.category != "Hidden") {
+    if(settings->unlocked.contains(behaviour.file)) {
       if(behaviour.category == "Movement") {
-        movementMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        QAction *tempAction = movementMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       } else if(behaviour.category == "Energy") {
-        energyMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        QAction *tempAction = energyMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       } else if(behaviour.category == "Hunger") {
-        hungerMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        QAction *tempAction = hungerMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       } else if(behaviour.category == "Bladder") {
-        bladderMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        QAction *tempAction = bladderMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       } else if(behaviour.category == "Social") {
-        socialMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        QAction *tempAction = socialMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       } else if(behaviour.category == "Fun") {
-        funMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        QAction *tempAction = funMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       } else if(behaviour.category == "Hygiene") {
-        hygieneMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        QAction *tempAction = hygieneMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       } else if(behaviour.category == "Health") {
-        healthMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
-      } else {
-        iddqdMenu->addAction(QIcon(":iddqd.png"), behaviour.title);
+        QAction *tempAction = healthMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+        tempAction->setData(behaviour.file);
       }
     } else {
-      iddqdMenu->addAction(QIcon(":iddqd.png"), behaviour.title);
+      QAction *tempAction = iddqdMenu->addAction(QIcon(":iddqd.png"), behaviour.title);
+      tempAction->setData(behaviour.file);
     }
   }
-  behavioursMenu->addMenu(healthMenu);
-  behavioursMenu->addMenu(energyMenu);
-  behavioursMenu->addMenu(hungerMenu);
-  behavioursMenu->addMenu(bladderMenu);
-  behavioursMenu->addMenu(hygieneMenu);
-  behavioursMenu->addMenu(socialMenu);
-  behavioursMenu->addMenu(funMenu);
-  behavioursMenu->addMenu(movementMenu);
+  if(!healthMenu->isEmpty()) {
+    behavioursMenu->addMenu(healthMenu);
+  }
+  if(!energyMenu->isEmpty()) {
+    behavioursMenu->addMenu(energyMenu);
+  }
+  if(!hungerMenu->isEmpty()) {
+    behavioursMenu->addMenu(hungerMenu);
+  }
+  if(!bladderMenu->isEmpty()) {
+    behavioursMenu->addMenu(bladderMenu);
+  }
+  if(!hygieneMenu->isEmpty()) {
+    behavioursMenu->addMenu(hygieneMenu);
+  }
+  if(!socialMenu->isEmpty()) {
+    behavioursMenu->addMenu(socialMenu);
+  }
+  if(!funMenu->isEmpty()) {
+    behavioursMenu->addMenu(funMenu);
+  }
+  if(!movementMenu->isEmpty()) {
+    behavioursMenu->addMenu(movementMenu);
+  }
   if(settings->iddqd) {
     behavioursMenu->addMenu(iddqdMenu);
   }
@@ -682,9 +699,11 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
   }
 }
 
-void Boris::handleBehaviourChange(QAction* a) {
+void Boris::handleBehaviourChange(QAction* a)
+{
+  QString behavFile = a->data().toString();
   for(const auto &behaviour: behaviours) {
-    if(behaviour.title == a->text()) {
+    if(behaviour.file == behavFile) {
       behavQueue.append(behaviour.file);
     }
   }
@@ -1464,7 +1483,29 @@ void Boris::itemInteract(Item * item)
 {
   if(!item->getReactionBehaviour().isEmpty()) {
     changeBehaviour(item->getReactionBehaviour());
+    int coins = 0;
+    QString category = item->getCategory();
+    if(category.toLower() == "health") {
+      coins = (100 - stats->getHealth());
+    } else if(category.toLower() == "energy") {
+      coins = (100 - stats->getEnergy());
+    } else if(category.toLower() == "hunger") {
+      coins = (100 - stats->getHunger());
+    } else if(category.toLower() == "bladder") {
+      coins = (100 - stats->getBladder());
+    } else if(category.toLower() == "social") {
+      coins = (100 - stats->getSocial());
+    } else if(category.toLower() == "fun") {
+      coins = (100 - stats->getFun());
+    } else if(category.toLower() == "hygiene") {
+      coins = (100 - stats->getHygiene());
+    }
+    coins /= 20;
+    
     item->destroy();
+    if(coins) {
+      emit addCoins("+" + QString::number(coins), coins);
+    }
   } else if(item->grabbed) {
     bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "I don't know what to do with that.", "_thought");
   }

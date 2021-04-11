@@ -60,6 +60,7 @@ $ ./Boris
 * Added 'draw sprite' BorisScript command that uses sprites from 'data/sprites'
 * Added random item spawn interval to about box
 * Now always runs code from 'define init' before first frame is shown from a behaviour
+* Added 'Coins' that can be spend on unlocking behaviours (no real money involved, it's just to add a sense of progression)
 
 #### Version 3.0.1 (15th September 2020):
 * Boris now sometimes farts in his sleep, a very important feature

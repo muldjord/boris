@@ -36,6 +36,7 @@
 #include <QObject>
 #include <QSystemTrayIcon>
 #include <QMenu>
+#include <QSettings>
 #include <QTimer>
 #include <QLinkedList>
 #include <QProgressBar>
@@ -50,6 +51,11 @@ public:
 protected:
   void mousePressEvent(QMouseEvent* event);
 
+signals:
+  void updateBoris();
+  void updateBorisBehavioursMenu();
+  void queueBehavFromFile(const QString &file);
+
 private slots:
   void loadAssets();
   void aboutBox();
@@ -58,12 +64,14 @@ private slots:
   void triggerBehaviour(QAction *a);
   void spawnRandomItem();
   void spawnItem(QAction *a);
+  void addCoins(const QString &message, const int &coins);
+  void removeCoinsMessage();
 
-signals:
-  void updateBoris();
-  void queueBehavFromFile(const QString &file);
-  
 private:
+  QIcon *icon = nullptr;
+  QIcon *coinIcon = nullptr;
+  QList<QString> unlocked;
+  QSettings *iniSettings = nullptr;
   QTimer itemTimer;
   QMenu *behavioursMenu;
   QMenu *itemsMenu;
@@ -74,15 +82,15 @@ private:
   QList<QString> extractSnippets(QString line);
   QString *aboutText;
   void createTrayIcon();
-  void createBehavMenu();
+  void updateBehavioursMenu();
   void createItemsMenu();
   void createActions();
-  QAction *aboutAction;
   QAction *earthquakeAction;
   QAction *teleportAction;
   QAction *behavsAction;
   QAction *weatherAction;
-  QAction *quitAction;
+  int coins = 0;
+  QAction *coinsAction;
   QSystemTrayIcon *trayIcon;
   QMenu *trayIconMenu;
   void addBoris(int clones);

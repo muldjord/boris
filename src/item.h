@@ -45,6 +45,7 @@ public:
   void moveItem(int dX, int dY, const bool &flipped = false);
   QPoint getGlobalCenter();
   QString getReactionBehaviour();
+  QString getCategory();
   QMap<QString, int> scriptVars;
   bool grabbed = false;
   bool ignore;

@@ -4,6 +4,7 @@
     <file alias="icon.png">icons/icon.png</file>
     <file alias="icon_about.png">icons/icon_about.png</file>
     <file alias="icon_front.png">icons/icon_front.png</file>
+    <file alias="icon_coins.png">icons/icon_coins.png</file>
     <file alias="icon_quit.png">icons/icon_quit.png</file>
     <file alias="mouse_hover.png">icons/mouse_hover.png</file>
     <file alias="mouse_grab.png">icons/mouse_grab.png</file>

@@ -423,6 +423,11 @@ QString Item::getReactionBehaviour()
   return QString();
 }
 
+QString Item::getCategory()
+{
+  return itemBehaviours.at(curItem).category;
+}
+
 void Item::destroy()
 {
   // Remove from collide list
