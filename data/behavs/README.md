@@ -1,7 +1,7 @@
 # Behaviour documentation
 The files in this folder defines the behaviours of Boris. You can add new behaviours simply by supplying new pairs of png+dat files. The format is documented below. Check the existing ones for examples.
 
-Note: All behaviour filenames that start with `_` (underscore) MUST NOT be deleted. These are hardcoded behaviours. Deleting any of them will make Boris crash eventually. Any behaviour filename beginning with an underscore will also be ignored whenever Boris chooses random behaviours, so this is useful for test behaviours when the `iddqd=true` setting is set in `config.ini`. This enables the Boris right-click `iddqd` behaviour menu that allows you to select and queue any available behaviour.
+Note: All behaviour filenames that start with `_` (underscore) MUST NOT be deleted. These are hardcoded behaviours. Deleting any of them will make Boris crash eventually. Any behaviour filename beginning with an underscore will also be ignored whenever Boris chooses random behaviours, so this is useful for test behaviours when the `idkfa=true` setting is set in `config.ini`. This enables the Boris right-click `idkfa` behaviour menu that allows you to select and queue any available behaviour.
 
 ## PNG sprite sheets
 The png files are horizontal sets of sprites that are loaded together with the `<FILENAME>.dat` files. The dimensions of each sprite inside the sprite sheet must be 32x32 pixels. The color format of the pngs are not important as long as they are pngs. Alpha channel / transparency is supported.

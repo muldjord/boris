@@ -44,7 +44,7 @@ struct Settings {
   bool showWelcome = true;
   bool statLogging = false;
   int desktopWidth = 1920;
-  bool scriptOutput = true;
+  bool scriptOutput = false;
 
   // If set to true the vision processing will take place, wall detection and such
   bool vision = false;
@@ -68,7 +68,7 @@ struct Settings {
   bool bubbles = true;
 
   // Secret / only in config.ini
-  bool iddqd = false;
+  bool idkfa = false;
   bool lemmyMode = false;
 
   // Weather
