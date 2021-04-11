@@ -260,6 +260,10 @@ void Boris::updateBehavioursMenu()
   if(settings->idkfa) {
     behavioursMenu->addMenu(idkfaMenu);
   }
+
+  if(behavioursMenu->isEmpty()) {
+    behavioursMenu->addAction(QIcon(":idkfa.png"), tr("No behaviours unlocked!"));
+  }
 }
 
 QString Boris::getFileFromCategory(QString category)
