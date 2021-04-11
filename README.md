@@ -73,7 +73,7 @@ $ ./Boris
 * Boris will now bounce when hitting the ground at high velocity
 * High winds (> 10 m/s) now moves Boris when showing weather
 * Boris now moves to opposite side when reaching horizontal borders
-* Added iddqd "secret" menu
+* Added idkfa "secret" menu
 * Removed "time_factor" config as it is now based on hyper stat instead
 * Added wind data to tray menu
 * Boris will now get sad when encountering a deceased friend
