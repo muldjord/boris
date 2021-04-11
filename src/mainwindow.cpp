@@ -670,17 +670,19 @@ void MainWindow::triggerBehaviour(QAction* a)
       if(settings.unlocked.contains(behaviour.file)) {
         emit queueBehavFromFile(behaviour.file);
       } else {
-        if(settings.coins - 10 >= 0 && QMessageBox::question(nullptr, tr("Buy?"), tr("Do you want to buy '") + " " + behaviour.title + "' " + tr("for 10 coins?")) == QMessageBox::Yes) {
-          addCoins("-10", - 10);
-          settings.unlocked.append(behaviour.file);
-          QString unlocked = "";
-          for(const auto &unlock: settings.unlocked) {
-            unlocked.append(unlock + ",");
+        if(settings.coins - 10 >= 0) {
+          if(QMessageBox::question(nullptr, tr("Buy?"), tr("Do you want to buy '") + " " + behaviour.title + "' " + tr("for 10 coins?")) == QMessageBox::Yes) {
+            addCoins("-10", - 10);
+            settings.unlocked.append(behaviour.file);
+            QString unlocked = "";
+            for(const auto &unlock: settings.unlocked) {
+              unlocked.append(unlock + ",");
+            }
+            unlocked = unlocked.left(unlocked.length() - 1);
+            iniSettings->setValue("unlocked", unlocked);
+            updateBehavioursMenu();
+            emit updateBorisBehavioursMenu();
           }
-          unlocked = unlocked.left(unlocked.length() - 1);
-          iniSettings->setValue("unlocked", unlocked);
-          updateBehavioursMenu();
-          emit updateBorisBehavioursMenu();
         } else {
           soundMixer.playSound(&soundMixer.soundFxs["data/sfx/nocoin.wav"], 0, 1);
           QMessageBox::information(nullptr, tr("Not enough coins!"), tr("You can't afford the '") + " " + behaviour.title + "' " + tr("behaviour.\n\nPlace items that corresponds to Boris' needs to earn coins. You can then use those coins to unlock new right-click behaviours."));
