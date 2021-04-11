@@ -199,8 +199,8 @@ void Boris::updateBehavioursMenu()
   funMenu->setIcon(QIcon(":fun.png"));
   QMenu *movementMenu = new QMenu(tr("Movement"), behavioursMenu);
   movementMenu->setIcon(QIcon(":movement.png"));
-  QMenu *iddqdMenu = new QMenu(tr("Iddqd"), behavioursMenu);
-  iddqdMenu->setIcon(QIcon(":iddqd.png"));
+  QMenu *idkfaMenu = new QMenu(tr("Idkfa"), behavioursMenu);
+  idkfaMenu->setIcon(QIcon(":idkfa.png"));
   for(const auto &behaviour: behaviours) {
     if(settings->unlocked.contains(behaviour.file)) {
       if(behaviour.category == "Movement") {
@@ -229,7 +229,7 @@ void Boris::updateBehavioursMenu()
         tempAction->setData(behaviour.file);
       }
     } else {
-      QAction *tempAction = iddqdMenu->addAction(QIcon(":iddqd.png"), behaviour.title);
+      QAction *tempAction = idkfaMenu->addAction(QIcon(":idkfa.png"), behaviour.title);
       tempAction->setData(behaviour.file);
     }
   }
@@ -257,8 +257,8 @@ void Boris::updateBehavioursMenu()
   if(!movementMenu->isEmpty()) {
     behavioursMenu->addMenu(movementMenu);
   }
-  if(settings->iddqd) {
-    behavioursMenu->addMenu(iddqdMenu);
+  if(settings->idkfa) {
+    behavioursMenu->addMenu(idkfaMenu);
   }
 }
 
