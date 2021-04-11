@@ -81,7 +81,7 @@ MainWindow::MainWindow()
   settings.statLogging = iniSettings->value("stat_logging").toBool();
 
   if(!iniSettings->contains("script_output")) {
-    iniSettings->setValue("script_output", true);
+    iniSettings->setValue("script_output", false);
   }
   settings.scriptOutput = iniSettings->value("script_output").toBool();
   
@@ -182,14 +182,14 @@ MainWindow::MainWindow()
   settings.itemSpawnInterval = iniSettings->value("item_spawn_timer").toInt();
 
   if(!iniSettings->contains("item_timeout")) {
-    iniSettings->setValue("item_timeout", 300);
+    iniSettings->setValue("item_timeout", 900);
   }
   settings.itemTimeout = iniSettings->value("item_timeout").toInt();
 
-  if(!iniSettings->contains("iddqd")) {
-    iniSettings->setValue("iddqd", false);
+  if(!iniSettings->contains("idkfa")) {
+    iniSettings->setValue("idkfa", false);
   }
-  settings.iddqd = iniSettings->value("iddqd").toBool();
+  settings.idkfa = iniSettings->value("idkfa").toBool();
   
   if(!iniSettings->contains("stats")) {
     iniSettings->setValue("stats", "mouseover");
@@ -495,8 +495,8 @@ void MainWindow::updateBehavioursMenu()
   funMenu->setIcon(QIcon(":fun.png"));
   QMenu *movementMenu = new QMenu(tr("Movement"), behavioursMenu);
   movementMenu->setIcon(QIcon(":movement.png"));
-  QMenu *iddqdMenu = new QMenu(tr("Iddqd"), behavioursMenu);
-  iddqdMenu->setIcon(QIcon(":iddqd.png"));
+  QMenu *idkfaMenu = new QMenu(tr("Idkfa"), behavioursMenu);
+  idkfaMenu->setIcon(QIcon(":idkfa.png"));
   connect(behavioursMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
   for(const auto &behaviour: behaviours) {
     if(settings.unlocked.contains(behaviour.file)) {
@@ -552,7 +552,7 @@ void MainWindow::updateBehavioursMenu()
         tempAction->setData(behaviour.file);
       }
     } else {
-      QAction *tempAction = iddqdMenu->addAction(QIcon(":iddqd.png"), behaviour.title);
+      QAction *tempAction = idkfaMenu->addAction(QIcon(":idkfa.png"), behaviour.title);
       tempAction->setData(behaviour.file);
     }
   }
@@ -580,8 +580,8 @@ void MainWindow::updateBehavioursMenu()
   if(!movementMenu->isEmpty()) {
     behavioursMenu->addMenu(movementMenu);
   }
-  if(settings.iddqd) {
-    behavioursMenu->addMenu(iddqdMenu);
+  if(settings.idkfa) {
+    behavioursMenu->addMenu(idkfaMenu);
   }
 }
 
@@ -670,7 +670,7 @@ void MainWindow::triggerBehaviour(QAction* a)
       if(settings.unlocked.contains(behaviour.file)) {
         emit queueBehavFromFile(behaviour.file);
       } else {
-        if(settings.coins - 10 >= 0 && QMessageBox::question(nullptr, tr("Buy?"), tr("Do you wish to buy '") + " " + behaviour.title + "' " + tr("for 10 coins?")) == QMessageBox::Yes) {
+        if(settings.coins - 10 >= 0 && QMessageBox::question(nullptr, tr("Buy?"), tr("Do you want to buy '") + " " + behaviour.title + "' " + tr("for 10 coins?")) == QMessageBox::Yes) {
           addCoins("-10", - 10);
           settings.unlocked.append(behaviour.file);
           QString unlocked = "";
@@ -683,6 +683,7 @@ void MainWindow::triggerBehaviour(QAction* a)
           emit updateBorisBehavioursMenu();
         } else {
           soundMixer.playSound(&soundMixer.soundFxs["data/sfx/nocoin.wav"], 0, 1);
+          QMessageBox::information(nullptr, tr("Not enough coins!"), tr("You can't afford the '") + " " + behaviour.title + "' " + tr("behaviour.\n\nPlace items that corresponds to Boris' needs to earn coins. You can then use those coins to unlock new right-click behaviours."));
         }
       }
       break;
