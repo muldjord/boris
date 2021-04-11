@@ -82,7 +82,7 @@ Behaviour::Behaviour(const Behaviour &behaviour) : QObject()
   this->health = behaviour.health;
   this->energy = behaviour.energy;
   this->hunger = behaviour.hunger;
-  this->bladder = behaviour.bladder;
+  this->toilet = behaviour.toilet;
   this->social = behaviour.social;
   this->fun = behaviour.fun;
   this->hygiene = behaviour.hygiene;
@@ -106,7 +106,7 @@ void Behaviour::operator=(const Behaviour &behaviour)
   this->health = behaviour.health;
   this->energy = behaviour.energy;
   this->hunger = behaviour.hunger;
-  this->bladder = behaviour.bladder;
+  this->toilet = behaviour.toilet;
   this->social = behaviour.social;
   this->fun = behaviour.fun;
   this->hygiene = behaviour.hygiene;

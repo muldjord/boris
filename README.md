@@ -108,7 +108,7 @@ $ ./Boris
 * Added RSS feed support
 * Added wind support. Boris will now be blown around the desktop in strong winds.
 * Made it so Boris much more often just relaxes or walks around.
-* Boris now has a chance of, erm, having an accident if 'bladder' reaches 0.
+* Boris now has a chance of, erm, having an accident if 'toilet' reaches 0.
 * Boris can now go to the toilet.
 * Boris now sometimes spins the yoyo.
 * Boris can now wash his hands.

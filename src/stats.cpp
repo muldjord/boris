@@ -31,7 +31,7 @@
 #include <math.h>
 #include <QUuid>
 
-Stats::Stats(Settings *settings, int hyper, int health, int energy, int hunger, int bladder, int social, int fun, int hygiene, QWidget *parent) : QGraphicsView(parent)
+Stats::Stats(Settings *settings, int hyper, int health, int energy, int hunger, int toilet, int social, int fun, int hygiene, QWidget *parent) : QGraphicsView(parent)
 {
   this->settings = settings;
 
@@ -39,7 +39,7 @@ Stats::Stats(Settings *settings, int hyper, int health, int energy, int hunger, 
   this->health = health;
   this->energy = energy;
   this->hunger = hunger;
-  this->bladder = bladder;
+  this->toilet = toilet;
   this->social = social;
   this->fun = fun;
   this->hygiene = hygiene;
@@ -57,7 +57,7 @@ Stats::Stats(Settings *settings, int hyper, int health, int energy, int hunger, 
   scene->addPixmap(QPixmap(":stats.png"));
   energyBar = scene->addRect(17, 7, 60, 2);
   hungerBar = scene->addRect(17, 23, 60, 2);
-  bladderBar = scene->addRect(17, 39, 60, 2);
+  toiletBar = scene->addRect(17, 39, 60, 2);
   socialBar = scene->addRect(17, 55, 60, 2);
   funBar = scene->addRect(17, 71, 60, 2);
   flashIcon = scene->addPixmap(QPixmap(":flash_icon.png"));
@@ -69,7 +69,7 @@ Stats::Stats(Settings *settings, int hyper, int health, int energy, int hunger, 
   if(settings->statLogging) {
     statLog.setFileName("stats_" + QUuid::createUuid().toString().replace("{", "").replace("}", "") + ".csv");
     if(statLog.open(QIODevice::WriteOnly)) {
-      statLog.write("hyper;health;energy;hunger;bladder;hygiene;social;fun\n");
+      statLog.write("hyper;health;energy;hunger;toilet;hygiene;social;fun\n");
       statTimer.setInterval(30000);
       statTimer.setSingleShot(false);
       connect(&statTimer, &QTimer::timeout, this, &Stats::logStats);
@@ -92,7 +92,7 @@ void Stats::logStats()
                 QByteArray::number(health) + ";" +
                 QByteArray::number(energy) + ";" +
                 QByteArray::number(hunger) + ";" +
-                QByteArray::number(bladder) + ";" +
+                QByteArray::number(toilet) + ";" +
                 QByteArray::number(hygiene) + ";" +
                 QByteArray::number(social) + ";" +
                 QByteArray::number(fun) + "\n");
@@ -118,9 +118,9 @@ int Stats::getHunger()
   return hunger;
 }
 
-int Stats::getBladder()
+int Stats::getToilet()
 {
-  return bladder;
+  return toilet;
 }
 
 int Stats::getSocial()
@@ -182,14 +182,14 @@ void Stats::deltaHunger(int value)
   }
 }
 
-void Stats::deltaBladder(int value)
+void Stats::deltaToilet(int value)
 {
-  if(bladder + value > 100) {
-    bladder = 100;
-  } else if(bladder + value < 0) {
-    bladder = 0;
+  if(toilet + value > 100) {
+    toilet = 100;
+  } else if(toilet + value < 0) {
+    toilet = 0;
   } else {
-    bladder += value;
+    toilet += value;
   }
 }
 
@@ -236,11 +236,11 @@ void Stats::updateStats()
   QColor hungerColor((5.1 * hunger > 255 ? 255 : round(5.1 * hunger)),
                      (5.1 * (hunger - 100) * -1 > 255 ? 255 : round(5.1 * (hunger - 100) * -1)), 0);
   */
-  QColor bladderColor((5.1 * (bladder - 100) * -1 > 255 ? 255 : round(5.1 * (bladder - 100) * -1)),
-                     (5.1 * bladder > 255 ? 255 : round(5.1 * bladder)), 0);
+  QColor toiletColor((5.1 * (toilet - 100) * -1 > 255 ? 255 : round(5.1 * (toilet - 100) * -1)),
+                     (5.1 * toilet > 255 ? 255 : round(5.1 * toilet)), 0);
   /*
-  QColor bladderColor((5.1 * bladder > 255 ? 255 : round(5.1 * bladder)),
-                     (5.1 * (bladder - 100) * -1 > 255 ? 255 : round(5.1 * (bladder - 100) * -1)), 0);
+  QColor toiletColor((5.1 * toilet > 255 ? 255 : round(5.1 * toilet)),
+                     (5.1 * (toilet - 100) * -1 > 255 ? 255 : round(5.1 * (toilet - 100) * -1)), 0);
   */
   QColor socialColor((5.1 * (social - 100) * -1 > 255 ? 255 : round(5.1 * (social - 100) * -1)),
                      (5.1 * social > 255 ? 255 : round(5.1 * social)), 0);
@@ -251,8 +251,8 @@ void Stats::updateStats()
   energyBar->setBrush(QBrush(energyColor));
   hungerBar->setPen(hungerColor);
   hungerBar->setBrush(QBrush(hungerColor));
-  bladderBar->setPen(bladderColor);
-  bladderBar->setBrush(QBrush(bladderColor));
+  toiletBar->setPen(toiletColor);
+  toiletBar->setBrush(QBrush(toiletColor));
   socialBar->setPen(socialColor);
   socialBar->setBrush(QBrush(socialColor));
   funBar->setPen(funColor);
@@ -260,7 +260,7 @@ void Stats::updateStats()
 
   energyBar->setRect(17, 7, 0.6 * energy, 1);
   hungerBar->setRect(17, 23, 0.6 * hunger, 1);
-  bladderBar->setRect(17, 39, 0.6 * bladder, 1);
+  toiletBar->setRect(17, 39, 0.6 * toilet, 1);
   socialBar->setRect(17, 55, 0.6 * social, 1);
   funBar->setRect(17, 71, 0.6 * fun, 1);
 
@@ -281,7 +281,7 @@ void Stats::flashStat(QString stat)
     flashIcon->setPos(7, 0);
   } else if(stat == "hunger") {
     flashIcon->setPos(7, 16);
-  } else if(stat == "bladder") {
+  } else if(stat == "toilet") {
     flashIcon->setPos(7, 32);
   } else if(stat == "social") {
     flashIcon->setPos(7, 48);

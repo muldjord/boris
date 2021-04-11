@@ -64,7 +64,7 @@ About::About(Settings *settings)
                                     "<ul>"
                                     "<li>The 'Zz' icon signifies Boris' energy level.</li>"
                                     "<li>The 'Knife and fork' icon shows how hungry Boris currently is.</li>"
-                                    "<li>The 'Toilet' icon is an indicator of Boris' need to go to the toilet.</li>"
+                                    "<li>The 'Toilet' icon is an indicator of Boris' need to go to the bathroom.</li>"
                                     "<li>The 'Speech bubble' icon shows Boris' need for social interaction.</li>"
                                     "<li>The 'Smiley' icon indicates whether Boris is in a good mood and having fun.</li>"
                                     "</ul>"

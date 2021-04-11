@@ -77,7 +77,7 @@ public:
   int health = 0;
   int energy = 0;
   int hunger = 0;
-  int bladder = 0;
+  int toilet = 0;
   int social = 0;
   int fun = 0;
   int hygiene = 0;

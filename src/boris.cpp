@@ -110,7 +110,7 @@ Boris::Boris(Settings *settings)
   int health = 100;
   int energy = 50 + QRandomGenerator::global()->bounded(25);
   int hunger = 50 + QRandomGenerator::global()->bounded(25);
-  int bladder = 50 + QRandomGenerator::global()->bounded(25);
+  int toilet = 50 + QRandomGenerator::global()->bounded(25);
   int hygiene = 100;
   int social = 15 + QRandomGenerator::global()->bounded(25);
   int fun = 50 + QRandomGenerator::global()->bounded(25);
@@ -118,11 +118,11 @@ Boris::Boris(Settings *settings)
   healthQueue = 0;
   energyQueue = 0;
   hungerQueue = 0;
-  bladderQueue = 0;
+  toiletQueue = 0;
   socialQueue = 0;
   funQueue = 0;
   hygieneQueue = 0;
-  stats = new Stats(settings, hyper, health, energy, hunger, bladder, social, fun, hygiene, this);
+  stats = new Stats(settings, hyper, health, energy, hunger, toilet, social, fun, hygiene, this);
   bubble = new Bubble(settings);
   
   staticBehavs = 0;
@@ -189,8 +189,8 @@ void Boris::updateBehavioursMenu()
   energyMenu->setIcon(QIcon(":energy.png"));
   QMenu *hungerMenu = new QMenu(tr("Food"), behavioursMenu);
   hungerMenu->setIcon(QIcon(":hunger.png"));
-  QMenu *bladderMenu = new QMenu(tr("Toilet"), behavioursMenu);
-  bladderMenu->setIcon(QIcon(":bladder.png"));
+  QMenu *toiletMenu = new QMenu(tr("Toilet"), behavioursMenu);
+  toiletMenu->setIcon(QIcon(":toilet.png"));
   QMenu *hygieneMenu = new QMenu(tr("Hygiene"), behavioursMenu);
   hygieneMenu->setIcon(QIcon(":hygiene.png"));
   QMenu *socialMenu = new QMenu(tr("Social"), behavioursMenu);
@@ -203,28 +203,28 @@ void Boris::updateBehavioursMenu()
   idkfaMenu->setIcon(QIcon(":idkfa.png"));
   for(const auto &behaviour: behaviours) {
     if(settings->unlocked.contains(behaviour.file)) {
-      if(behaviour.category == "Movement") {
+      if(behaviour.category.toLower() == "movement") {
         QAction *tempAction = movementMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
         tempAction->setData(behaviour.file);
-      } else if(behaviour.category == "Energy") {
+      } else if(behaviour.category.toLower() == "energy") {
         QAction *tempAction = energyMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
         tempAction->setData(behaviour.file);
-      } else if(behaviour.category == "Hunger") {
+      } else if(behaviour.category.toLower() == "hunger") {
         QAction *tempAction = hungerMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
         tempAction->setData(behaviour.file);
-      } else if(behaviour.category == "Bladder") {
-        QAction *tempAction = bladderMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
+      } else if(behaviour.category.toLower() == "toilet") {
+        QAction *tempAction = toiletMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
         tempAction->setData(behaviour.file);
-      } else if(behaviour.category == "Social") {
+      } else if(behaviour.category.toLower() == "social") {
         QAction *tempAction = socialMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
         tempAction->setData(behaviour.file);
-      } else if(behaviour.category == "Fun") {
+      } else if(behaviour.category.toLower() == "fun") {
         QAction *tempAction = funMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
         tempAction->setData(behaviour.file);
-      } else if(behaviour.category == "Hygiene") {
+      } else if(behaviour.category.toLower() == "hygiene") {
         QAction *tempAction = hygieneMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
         tempAction->setData(behaviour.file);
-      } else if(behaviour.category == "Health") {
+      } else if(behaviour.category.toLower() == "health") {
         QAction *tempAction = healthMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
         tempAction->setData(behaviour.file);
       }
@@ -242,8 +242,8 @@ void Boris::updateBehavioursMenu()
   if(!hungerMenu->isEmpty()) {
     behavioursMenu->addMenu(hungerMenu);
   }
-  if(!bladderMenu->isEmpty()) {
-    behavioursMenu->addMenu(bladderMenu);
+  if(!toiletMenu->isEmpty()) {
+    behavioursMenu->addMenu(toiletMenu);
   }
   if(!hygieneMenu->isEmpty()) {
     behavioursMenu->addMenu(hygieneMenu);
@@ -360,7 +360,7 @@ void Boris::changeBehaviour(QString behav, int time)
   healthQueue += behaviours.at(curBehav).health;
   energyQueue += behaviours.at(curBehav).energy;
   hungerQueue += behaviours.at(curBehav).hunger;
-  bladderQueue += behaviours.at(curBehav).bladder;
+  toiletQueue += behaviours.at(curBehav).toilet;
   socialQueue += behaviours.at(curBehav).social;
   funQueue += behaviours.at(curBehav).fun;
   hygieneQueue += behaviours.at(curBehav).hygiene;
@@ -439,7 +439,7 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["health"] = stats->getHealth();
   scriptVars["hyper"] = stats->getHyper();
   scriptVars["hunger"] = stats->getHunger();
-  scriptVars["bladder"] = stats->getBladder();
+  scriptVars["toilet"] = stats->getToilet();
   scriptVars["social"] = stats->getSocial();
   scriptVars["fun"] = stats->getFun();
   scriptVars["hygiene"] = stats->getHygiene();
@@ -919,7 +919,7 @@ void Boris::statProgress()
   socialQueue -= QRandomGenerator::global()->bounded(2);
   hygieneQueue -= QRandomGenerator::global()->bounded(1);
   funQueue -= QRandomGenerator::global()->bounded(3);
-  // Nothing needed for 'health' and 'bladder'
+  // Nothing needed for 'health' and 'toilet'
 }
 
 void Boris::sanityCheck()
@@ -983,8 +983,8 @@ void Boris::statQueueProgress()
     energyQueue = 100;
   if(hungerQueue > 100)
     hungerQueue = 100;
-  if(bladderQueue > 100)
-    bladderQueue = 100;
+  if(toiletQueue > 100)
+    toiletQueue = 100;
   if(socialQueue > 100)
     socialQueue = 100;
   if(funQueue > 100)
@@ -1000,8 +1000,8 @@ void Boris::statQueueProgress()
     energyQueue = -100;
   if(hungerQueue < -100)
     hungerQueue = -100;
-  if(bladderQueue < -100)
-    bladderQueue = -100;
+  if(toiletQueue < -100)
+    toiletQueue = -100;
   if(socialQueue < -100)
     socialQueue = -100;
   if(funQueue < -100)
@@ -1041,13 +1041,13 @@ void Boris::statQueueProgress()
     hungerQueue++;
     stats->deltaHunger(1);
   }
-  if(bladderQueue > 0) {
-    bladderQueue--;
-    stats->deltaBladder(-1);
+  if(toiletQueue > 0) {
+    toiletQueue--;
+    stats->deltaToilet(-1);
   }
-  if(bladderQueue < 0) {
-    bladderQueue += 2;
-    stats->deltaBladder(2);
+  if(toiletQueue < 0) {
+    toiletQueue += 2;
+    stats->deltaToilet(2);
   }
   if(socialQueue > 0) {
     socialQueue--;
@@ -1283,12 +1283,12 @@ void Boris::processAi(QString &behav)
         }
       }
     }
-    if(stats->getBladder() <= 50) {
-      if(QRandomGenerator::global()->bounded(100 - stats->getBladder()) > independence) {
-        potentials.append("_bladder");
-      } else if(stats->getBladder() <= 15) {
+    if(stats->getToilet() <= 50) {
+      if(QRandomGenerator::global()->bounded(100 - stats->getToilet()) > independence) {
+        potentials.append("_toilet");
+      } else if(stats->getToilet() <= 15) {
         if(QRandomGenerator::global()->bounded(100) < independence) {
-          potentials.append(getFileFromCategory("Bladder"));
+          potentials.append(getFileFromCategory("Toilet"));
         }
       }
     }
@@ -1325,8 +1325,8 @@ void Boris::processAi(QString &behav)
         stats->flashStat("energy");
       } else if(behav == "_hunger") {
         stats->flashStat("hunger");
-      } else if(behav == "_bladder") {
-        stats->flashStat("bladder");
+      } else if(behav == "_toilet") {
+        stats->flashStat("toilet");
       } else if(behav == "_social") {
         stats->flashStat("social");
       } else if(behav == "_health") {
@@ -1495,8 +1495,8 @@ void Boris::itemInteract(Item * item)
       coins = (100 - stats->getEnergy());
     } else if(category.toLower() == "hunger") {
       coins = (100 - stats->getHunger());
-    } else if(category.toLower() == "bladder") {
-      coins = (100 - stats->getBladder());
+    } else if(category.toLower() == "toilet") {
+      coins = (100 - stats->getToilet());
     } else if(category.toLower() == "social") {
       coins = (100 - stats->getSocial());
     } else if(category.toLower() == "fun") {
@@ -1525,8 +1525,8 @@ void Boris::statChange(const QString &type, const int &amount)
     energyQueue += amount;
   } else if(type == "hunger") {
     hungerQueue += amount;
-  } else if(type == "bladder") {
-    bladderQueue += amount;
+  } else if(type == "toilet") {
+    toiletQueue += amount;
   } else if(type == "social") {
     socialQueue += amount;
   } else if(type == "fun") {

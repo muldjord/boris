@@ -168,8 +168,8 @@ bool Loader::loadBehaviours(const Settings &settings,
           b.hunger = line.mid(7,line.length()).toInt();
           continue;
         }
-        if(line.contains("bladder")) {
-          b.bladder = line.mid(8,line.length()).toInt();
+        if(line.contains("toilet")) {
+          b.toilet = line.mid(8,line.length()).toInt();
           continue;
         }
         if(line.contains("social")) {

@@ -1,5 +1,5 @@
 title=Number two
-category=Bladder
+category=Toilet
 fun=-8
 social=-5
 hygiene=-80
@@ -38,13 +38,13 @@ doNotDisturb
 29;75;0;0;;
 30;7000;0;0;;
 30;500;0;0;data/sfx/poopy_time.wav;
-30;1100;0;0;;stat bladder -= 5
-30;1100;0;0;;stat bladder -= 6
-30;1200;0;0;;stat bladder -= 7
-30;200;0;0;;stat bladder -= 2
-30;200;0;0;;stat bladder -= 2
-30;1700;0;0;;stat bladder -= 10
-30;1000;0;0;;stat bladder -= 50
+30;1100;0;0;;stat toilet -= 5
+30;1100;0;0;;stat toilet -= 6
+30;1200;0;0;;stat toilet -= 7
+30;200;0;0;;stat toilet -= 2
+30;200;0;0;;stat toilet -= 2
+30;1700;0;0;;stat toilet -= 10
+30;1000;0;0;;stat toilet -= 50
 29;75;0;0;data/sfx/door_open.wav;
 28;75;0;0;;
 31;75;0;0;;

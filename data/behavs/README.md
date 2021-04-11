@@ -25,7 +25,7 @@ The line `#Frames` must be there so the software knows when the frame definition
   * Health: Used for behaviours that heal Boris. He will not choose these on his own
   * Energy: Boris will choose from this category when he is low on energy / sleepy
   * Hunger: Boris will choose from this category when he is hungry
-  * Bladder: Boris will choose from this category when he needs to go to the bathroom
+  * Toilet: Boris will choose from this category when he needs to go to the bathroom
   * Hygiene: Boris will choose from this category when he is dirty
   * Social: Boris will choose from this category when you don't pay him enough attention
   * Fun: Boris will choose from this category when he is feeling depressed
@@ -36,7 +36,7 @@ The line `#Frames` must be there so the software knows when the frame definition
 * energy=&lt;INTEGER&gt;: The amount of Boris' energy this behaviour will increase or decrease when starting the behaviour
 * hyper=&lt;INTEGER&gt;: The amount of Boris' hyperactivity level this behaviour will increase or decrease when starting the behaviour
 * hunger=&lt;INTEGER&gt;: The amount of Boris' hunger this behaviour will increase or decrease when starting the behaviour
-* bladder=&lt;INTEGER&gt;: The amount of Boris' need for a toilet this behaviour will increase or decrease when starting the behaviour
+* toilet=&lt;INTEGER&gt;: The amount of Boris' need for a toilet this behaviour will increase or decrease when starting the behaviour
 * social=&lt;INTEGER&gt;: The amount of Boris' social needs this behaviour will increase or decrease when starting the behaviour
 * fun=&lt;INTEGER&gt;: The amount of Boris' fun level this behaviour will increase or decrease when starting the behaviour
 * hygiene=&lt;INTEGER&gt;: The amount of Boris' filth level this behaviour will increase or decrease when starting the behaviour
@@ -131,7 +131,7 @@ Use this to dynamically change any supported Boris stat while the behaviour is r
 stat energy += 5
 stat hyper -= 20
 stat fun += <VARIABLE>
-stat bladder += @4
+stat toilet += @4
 ```
 The `@` results in a random value from 1 to the number following the `@`. The `<VARIABLE>` can be any previously defined variable (see `var` command).
 
@@ -404,7 +404,7 @@ The following variables are reserved and hardcoded. You should not try to set th
 * health: Boris' current health level (0-100, 100 means he's doing well)
 * hyper: Boris' current hyper level (0-100, 100 means he will speed around the desktop like crazy)
 * hunger: Boris' current hunger level (0-100, 100 means he's VERY hungry)
-* bladder: Boris' current toilet need level (0-100, 100 means he need to go NOW!)
+* toilet: Boris' current toilet need level (0-100, 100 means he need to go NOW!)
 * social: Boris' current social level (0-100, 0 means Boris will seek your attention)
 * fun: Boris' current fun level (0-100, 100 means Boris has been having a lot of fun)
 * hygiene: Boris' current hygiene level (0-100, 100 means he's clean)

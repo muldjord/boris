@@ -24,7 +24,7 @@ doNotDisturb
 14;150;0;0;;var cycles -= 1
 15;200;0;0;;stat energy += 3
 16;300;0;0;;stat health += 1
-17;1000;0;0;;stat bladder += 2
+17;1000;0;0;;stat toilet += 2
 18;900;0;0;;stat hygiene -= 3
 19;250;0;0;;
 20;175;0;0;;

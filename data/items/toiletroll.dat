@@ -1,0 +1,6 @@
+title=Toilet roll
+category=Toilet
+reaction=_toilet_visit,_weewee
+allowFlip
+#Frames
+0;1000;0;0;;stop

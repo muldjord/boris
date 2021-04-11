@@ -10,7 +10,7 @@ define choosedrink:if drinks <= 0 break,
 var rand = @3,
 if rand = 1 goto drink1 else if rand = 2 goto drink2 else if rand = 3 goto drink3
 
-define deltastats:var drinks -= 1,stat hyper += 6,stat energy += 6,stat bladder += 5
+define deltastats:var drinks -= 1,stat hyper += 6,stat energy += 6,stat toilet += 5
 
 define drawcoffee1:if drinks >= 3 draw sprite coffee 0 13 18 else if drinks = 2 draw sprite coffee 1 14 18
 

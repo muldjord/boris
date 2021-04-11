@@ -14,7 +14,7 @@ oneShot
 6;75;0;0;;
 7;75;0;0;;if @4 = 1 {if @2 = 1 say "Nice and mushy." else say "Just the way I like it."}
 8;75;0;0;;stat hygience -= 2
-9;75;0;0;;stat bladder += 2
+9;75;0;0;;stat toilet += 2
 10;75;0;0;data/sfx/eating.wav;
 11;75;0;0;;
 12;75;0;0;;

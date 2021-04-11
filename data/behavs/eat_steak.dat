@@ -15,7 +15,7 @@ oneShot
 7;200;0;0;;
 8;50;0;0;;if @4 = 1 {if @2 = 1 say "Yummy!" else say "Delicious!"}
 9;50;0;0;;stat hygience -= 5
-8;50;0;0;;stat bladder += 2
+8;50;0;0;;stat toilet += 2
 9;50;0;0;;
 8;50;0;0;;
 9;50;0;0;;

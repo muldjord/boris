@@ -1,5 +1,5 @@
 title=Number one
-category=Bladder
+category=Toilet
 fun=-8
 social=-5
 hygiene=-75
@@ -25,13 +25,13 @@ allowFlip
 15;50;0;0;;
 16;50;0;0;;
 17;50;0;0;data/sfx/weewee2.wav;label weewee
-18;50;0;0;;stat bladder -= 4
+18;50;0;0;;stat toilet -= 4
 17;50;0;0;;
 18;50;0;0;;
 17;50;0;0;;
 18;50;0;0;;
 17;50;0;0;;
-18;50;0;0;;if bladder > 95 goto end else goto weewee
+18;50;0;0;;if toilet > 95 goto end else goto weewee
 19;50;0;0;data/sfx/weewee3.wav;label end
 20;50;0;0;;
 21;50;0;0;;

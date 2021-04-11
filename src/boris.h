@@ -73,7 +73,7 @@ public:
   int healthQueue;
   int energyQueue;
   int hungerQueue;
-  int bladderQueue;
+  int toiletQueue;
   int socialQueue;
   int funQueue;
   int hygieneQueue;

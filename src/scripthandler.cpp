@@ -276,7 +276,7 @@ void ScriptHandler::handleStat(QList<QString> &parameters)
   if(op == "-=") {
     number *= -1;
   }
-  if(statType == "hyper" || statType == "health" || statType == "energy" || statType == "hunger" || statType == "bladder" || statType == "social" || statType == "fun" || statType == "hygiene") {
+  if(statType == "hyper" || statType == "health" || statType == "energy" || statType == "hunger" || statType == "toilet" || statType == "social" || statType == "fun" || statType == "hygiene") {
     if(settings->scriptOutput) {
       printf("%s %s %d\n", statType.toStdString().c_str(),
              op.toStdString().c_str(), number);
