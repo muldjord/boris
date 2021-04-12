@@ -46,8 +46,8 @@ call checkup
 # Hunger
 5;50;0;0;;label hunger,
 var tried += 1,
-if hunger > 85 {say "I'm starving! Please feed me!",behav _complain},
-if hunger > 70 {say "I'm a bit peckish, I could go for a snack.",behav _chat},
+if hunger < 15 {say "I'm starving! Please feed me!",behav _complain},
+if hunger < 30 {say "I'm a bit peckish, I could go for a snack.",behav _chat},
 call checkup
 
 # Toilet
@@ -61,14 +61,14 @@ call checkup
 5;50;0;0;;label social,
 var tried += 1,
 if social < 15 {say "I'd really like some company.",stat social += 10,behav _chat},
-if social < 30 {say "Do you want to hang out?",stat social += 10,behav _chat},
+if social < 30 {say "I'm bored, do you want to hang out?",stat social += 10,behav _chat},
 call checkup
 
 # Fun
 5;50;0;0;;label fun,
 var tried += 1,
-if fun < 15 {say "I'm really bored!",behav _complain},
-if fun < 30 {say "It's hard to be a nissemand.",behav _complain},
+if fun < 15 {say "I'm very angry!",behav _complain},
+if fun < 30 {say "I'm in a bad mood, I want to have fun.",behav _complain},
 call checkup
 
 # Feeling good
