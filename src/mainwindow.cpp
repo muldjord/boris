@@ -403,12 +403,13 @@ void MainWindow::createTrayIcon()
 
   trayIconMenu = new QMenu;
   trayIconMenu->addAction(QIcon(":icon_about.png"), tr("&Config / about..."), this, &MainWindow::aboutBox);
-  trayIconMenu->addAction(earthquakeAction);
+  trayIconMenu->addSeparator();
   trayIconMenu->addMenu(behavioursMenu);
   trayIconMenu->addMenu(itemsMenu);
-  trayIconMenu->addAction(weatherAction);
-  trayIconMenu->addSeparator();
   trayIconMenu->addAction(coinsAction);
+  trayIconMenu->addSeparator();
+  trayIconMenu->addAction(earthquakeAction);
+  trayIconMenu->addAction(weatherAction);
   trayIconMenu->addSeparator();
   trayIconMenu->addAction(QIcon(":icon_quit.png"), tr("&Quit"), this, &MainWindow::killAll);
 
