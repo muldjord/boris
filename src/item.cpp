@@ -154,7 +154,7 @@ QPixmap Item::getShadow(const QPixmap &sprite)
     firstLeft = 0;
   }
   int shadowWidth = firstRight - firstLeft;
-  QImage shadow = origShadow.toImage().scaled(shadowWidth, origShadow.height());
+  QImage shadow = origShadow.toImage().scaled(shadowWidth + 1, origShadow.height());
   return QPixmap::fromImage(shadow);
 }
 
