@@ -41,7 +41,7 @@ class Bubble : public QGraphicsView
   Q_OBJECT;
 
 public:
-  Bubble(Settings *settings);
+  Bubble(Settings &settings);
   ~Bubble();
   int initBubble(const int x, const int y,
                  const int &borisSize,
@@ -55,7 +55,7 @@ protected:
   void mousePressEvent(QMouseEvent *event);
   
 private:
-  Settings *settings;
+  Settings &settings;
   QGraphicsPixmapItem *bubbleSprite;
   QUrl rssUrl = QUrl();
   QTimer hideTimer;

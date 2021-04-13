@@ -43,14 +43,14 @@ extern SoundMixer soundMixer;
 
 ScriptHandler::ScriptHandler(QImage *image,
                              bool *drawing,
-                             Settings *settings,
+                             Settings &settings,
                              Bubble *bubble,
                              const QMap<QString, int> &labels,
                              const QMap<QString, Script> &defines,
                              QMap<QString, int> &scriptVars,
                              const QPoint parentPos,
                              const int &size)
-: labels(labels), defines(defines), scriptVars(scriptVars), parentPos(parentPos), size(size)
+  : settings(settings), labels(labels), defines(defines), scriptVars(scriptVars), parentPos(parentPos), size(size)
 {
   this->image = image;
   this->drawing = drawing;
@@ -61,7 +61,7 @@ ScriptHandler::ScriptHandler(QImage *image,
 void ScriptHandler::runScript(int &stop, const Script &script)
 {
   for(const auto &command: script.commands) {
-    if(settings->scriptOutput) {
+    if(settings.scriptOutput) {
       printf("CODE: '%s'\n", command.toStdString().c_str());
     }
 #if QT_VERSION >= 0x050e00
@@ -122,7 +122,7 @@ void ScriptHandler::handleIf(QList<QString> &parameters, int &stop, const Script
       parameters.removeFirst();
     }
     if(parameters.first().left(2) == "##") {
-      if(settings->scriptOutput) {
+      if(settings.scriptOutput) {
         printf("\n");
       }
       runScript(stop, script.blocks[parameters.first()]);
@@ -134,7 +134,7 @@ void ScriptHandler::handleIf(QList<QString> &parameters, int &stop, const Script
     while(parameters.takeFirst() != "else") {
     }
     if(parameters.first().left(2) == "##") {
-      if(settings->scriptOutput) {
+      if(settings.scriptOutput) {
         printf("\n");
       }
       runScript(stop, script.blocks[parameters.first()]);
@@ -142,7 +142,7 @@ void ScriptHandler::handleIf(QList<QString> &parameters, int &stop, const Script
       runCommand(parameters, stop, script);
     }
   } else {
-    if(settings->scriptOutput) {
+    if(settings.scriptOutput) {
       printf("Condition not met\n");
     }
   }
@@ -188,13 +188,13 @@ void ScriptHandler::condition(QList<QString> &parameters, bool &isTrue, bool &co
     }
   }
 
-  if(settings->scriptOutput) {
+  if(settings.scriptOutput) {
     printf("%d %s %d", compareFrom, op.toStdString().c_str(), compareTo);
   }
 
   if(parameters.count() >= 1) {
     if(parameters.first() == "or") {
-      if(settings->scriptOutput) {
+      if(settings.scriptOutput) {
         printf(" or ");
       }
       parameters.removeFirst();
@@ -204,7 +204,7 @@ void ScriptHandler::condition(QList<QString> &parameters, bool &isTrue, bool &co
       condition(parameters, isTrue, compare);
       return;
     } else if(parameters.first() == "and") {
-      if(settings->scriptOutput) {
+      if(settings.scriptOutput) {
         printf(" and ");
       }
       parameters.removeFirst();
@@ -214,7 +214,7 @@ void ScriptHandler::condition(QList<QString> &parameters, bool &isTrue, bool &co
       condition(parameters, isTrue, compare);
       return;
     } else {
-      if(settings->scriptOutput) {
+      if(settings.scriptOutput) {
         printf(", ");
       }
     }
@@ -226,12 +226,12 @@ void ScriptHandler::handleGoto(QList<QString> &parameters, int &stop)
   parameters.removeFirst(); // Remove 'goto'
 
   if(labels.contains(parameters.first())) {
-    if(settings->scriptOutput) {
+    if(settings.scriptOutput) {
       printf("Going to label '%s' at frame %d\n", parameters.first().toStdString().c_str(), labels[parameters.first()]);
     }
     emit setCurFrame(labels[parameters.first()]);
   } else {
-    if(settings->scriptOutput) {
+    if(settings.scriptOutput) {
       printf("Going to '%s', ERROR: Unknown label\n", parameters.first().toStdString().c_str());
     }
   }
@@ -260,7 +260,7 @@ void ScriptHandler::handleVar(QList<QString> &parameters)
     scriptVars[variable] /= number;
   }
 
-  if(settings->scriptOutput) {
+  if(settings.scriptOutput) {
     printf("%s = %d\n", variable.toStdString().c_str(), scriptVars[variable]);
   }
 }
@@ -277,13 +277,13 @@ void ScriptHandler::handleStat(QList<QString> &parameters)
     number *= -1;
   }
   if(statType == "hyper" || statType == "health" || statType == "energy" || statType == "hunger" || statType == "toilet" || statType == "social" || statType == "fun" || statType == "hygiene") {
-    if(settings->scriptOutput) {
+    if(settings.scriptOutput) {
       printf("%s %s %d\n", statType.toStdString().c_str(),
              op.toStdString().c_str(), number);
     }
     emit statChange(statType, number);
   } else {
-    if(settings->scriptOutput) {
+    if(settings.scriptOutput) {
       printf("%s, ERROR: Unknown stat\n", statType.toStdString().c_str());
     }
   }
@@ -292,7 +292,7 @@ void ScriptHandler::handleStat(QList<QString> &parameters)
 void ScriptHandler::handlePrint(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'print'
-  if(settings->scriptOutput) {
+  if(settings.scriptOutput) {
     printf("%d\n", getValue(parameters));
   }
 }
@@ -303,15 +303,15 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
   QString itemName = parameters.takeFirst();
   int iX = getValue(parameters);
   int iY = getValue(parameters);
-  if(settings->items) {
-    if(settings->scriptOutput) {
+  if(settings.items) {
+    if(settings.scriptOutput) {
       printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
     }
     itemList.append(new Item(parentPos.x() + (iX * (size / 32)),
                              parentPos.y() + (size / 2) + (iY * (size / 32)),
                              size, itemName, settings));
   } else {
-    if(settings->scriptOutput) {
+    if(settings.scriptOutput) {
       printf("Items disabled, ignoring spawn\n");
     }
   }
@@ -343,7 +343,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
         int f = getValue(parameters); // Sprite frame
         int x = getValue(parameters);
         int y = getValue(parameters);
-        if(settings->scriptOutput) {
+        if(settings.scriptOutput) {
           printf("Drawing frame %d from sprite '%s' at %d,%d\n", f, sprite.toStdString().c_str(), x, y);
         }
         painter.drawImage(x, y, sprites[sprite].at(f));
@@ -398,7 +398,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
       int greenVal = colorString.mid(5, 2).toInt(nullptr, 16);
       painter.setPen(QPen(QColor(redVal, greenVal, blueVal)));
     } else {
-      if(settings->scriptOutput) {
+      if(settings.scriptOutput) {
         printf("Color '%s' is malformed, falling back to black\n",
                colorString.toStdString().c_str());
       }
@@ -415,7 +415,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           int y1 = getValue(parameters);
           int x2 = getValue(parameters);
           int y2 = getValue(parameters);
-          if(settings->scriptOutput) {
+          if(settings.scriptOutput) {
             printf("Drawing %s line from %d,%d to %d,%d\n", colorString.toStdString().c_str(),
                    x1, y1, x2, y2);
           }
@@ -426,7 +426,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
         if(parameters.count() >= 2) {
           int x = getValue(parameters);
           int y = getValue(parameters);
-          if(settings->scriptOutput) {
+          if(settings.scriptOutput) {
             printf("Drawing %s pixel at %d,%d\n", colorString.toStdString().c_str(), x, y);
           }
           painter.drawPoint(x, y);
@@ -439,7 +439,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           int y = getValue(parameters);
           int w = getValue(parameters);
           int h = getValue(parameters);
-          if(settings->scriptOutput) {
+          if(settings.scriptOutput) {
             printf("Drawing %s ellipse at %d,%d with a width of %d and a height of %d\n", colorString.toStdString().c_str(), x, y, w, h);
           }
           painter.drawEllipse(x, y, w, h);
@@ -452,7 +452,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           int y = getValue(parameters);
           int w = getValue(parameters);
           int h = getValue(parameters);
-          if(settings->scriptOutput) {
+          if(settings.scriptOutput) {
             printf("Drawing %s rectangle at %d,%d with a width of %d and a height of %d\n", colorString.toStdString().c_str(), x, y, w, h);
           }
           painter.drawRect(x, y, w, h);
@@ -464,7 +464,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           int y = getValue(parameters);
           QString text = parameters.first();
           parameters.removeFirst(); // Remove string
-          if(settings->scriptOutput) {
+          if(settings.scriptOutput) {
             printf("Drawing %s text '%s' at %d,%d\n", colorString.toStdString().c_str(),
                    text.toStdString().c_str(), x, y);
           }
@@ -476,7 +476,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           int x = getValue(parameters);
           int y = getValue(parameters);
           int value = getValue(parameters);
-          if(settings->scriptOutput) {
+          if(settings.scriptOutput) {
             printf("Drawing %s value %d at %d,%d\n", colorString.toStdString().c_str(),
                    value, x, y);
           }
@@ -508,7 +508,7 @@ void ScriptHandler::drawText(QPainter &painter, const int &x, const int &y, cons
 
 void ScriptHandler::handleBreak(int &stop)
 {
-  if(settings->scriptOutput) {
+  if(settings.scriptOutput) {
     printf("Changing behaviour\n");
   }
   stop = 2; // Will tell the Boris class to change behaviour
@@ -516,7 +516,7 @@ void ScriptHandler::handleBreak(int &stop)
 
 void ScriptHandler::handleStop(int &stop)
 {
-  if(settings->scriptOutput) {
+  if(settings.scriptOutput) {
     printf("Stopping frame progression\n");
   }
   stop = 3; // Will stop the animation and behaviour timers
@@ -526,12 +526,12 @@ void ScriptHandler::handleCall(QList<QString> &parameters, int &stop)
 {
   parameters.removeFirst(); // Remove 'call'
   if(defines.contains(parameters.first())) {
-    if(settings->scriptOutput) {
+    if(settings.scriptOutput) {
       printf("Calling define '%s'\n", parameters.first().toStdString().c_str());
     }
     runScript(stop, defines[parameters.first()]);
   } else {
-    if(settings->scriptOutput) {
+    if(settings.scriptOutput) {
       printf("Calling define '%s', ERROR: Unknown define\n", parameters.first().toStdString().c_str());
     }
   }
@@ -542,7 +542,7 @@ void ScriptHandler::handleBehav(QList<QString> &parameters, int &stop)
 {
   parameters.removeFirst(); // Remove 'behav'
   emit behavFromFile(parameters.first());
-  if(settings->scriptOutput) {
+  if(settings.scriptOutput) {
     printf("Changing behaviour to '%s'\n", parameters.first().toStdString().c_str());
   }
   stop = 1; // Will tell the Boris class to exit the script processing
@@ -553,11 +553,11 @@ void ScriptHandler::handleSound(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'sound'
   if(parameters.count() >= 1) {
-    if(settings->scriptOutput) {
+    if(settings.scriptOutput) {
       printf("Playing sound '%s'\n", parameters.first().toStdString().c_str());
     }
     soundMixer.playSoundFile(parameters.first(),
-                             (float)parentPos.x() / (float)settings->desktopWidth * 2.0 - 1.0,
+                             (float)parentPos.x() / (float)settings.desktopWidth * 2.0 - 1.0,
                              (scriptVars["hyper"] / 60.0) + 1);
   }
   parameters.removeFirst(); // Remove sound file name
@@ -570,13 +570,13 @@ void ScriptHandler::handleSay(QList<QString> &parameters)
     QString bubbleText = "";
     if(parameters.first() == "rss") {
       parameters.removeFirst(); // Remove 'rss'
-      if(!settings->rssLines.isEmpty()) {
-        int rssLine = QRandomGenerator::global()->bounded(settings->rssLines.count());
-        bubbleText = settings->rssLines.at(rssLine).text;
+      if(!settings.rssLines.isEmpty()) {
+        int rssLine = QRandomGenerator::global()->bounded(settings.rssLines.count());
+        bubbleText = settings.rssLines.at(rssLine).text;
         bubble->initBubble(parentPos.x(), parentPos.y(), size, scriptVars["hyper"],
                            bubbleText,
                            "_chat",
-                           settings->rssLines.at(rssLine).url);
+                           settings.rssLines.at(rssLine).url);
       }
     } else {
       int quotes = 0;
@@ -595,7 +595,7 @@ void ScriptHandler::handleSay(QList<QString> &parameters)
       }
       bubble->initBubble(parentPos.x(), parentPos.y(), size, scriptVars["hyper"], bubbleText);
     }
-    if(settings->scriptOutput) {
+    if(settings.scriptOutput) {
       printf("Saying '%s'\n", bubbleText.toStdString().c_str());
     }
   }
@@ -608,13 +608,13 @@ void ScriptHandler::handleThink(QList<QString> &parameters)
     QString bubbleText = "";
     if(parameters.first() == "rss") {
       parameters.removeFirst(); // Remove 'rss'
-      if(!settings->rssLines.isEmpty()) {
-        int rssLine = QRandomGenerator::global()->bounded(settings->rssLines.count());
-        bubbleText = settings->rssLines.at(rssLine).text;
+      if(!settings.rssLines.isEmpty()) {
+        int rssLine = QRandomGenerator::global()->bounded(settings.rssLines.count());
+        bubbleText = settings.rssLines.at(rssLine).text;
         bubble->initBubble(parentPos.x(), parentPos.y(), size, scriptVars["hyper"],
                            bubbleText,
                            "_thought",
-                           settings->rssLines.at(rssLine).url);
+                           settings.rssLines.at(rssLine).url);
       }
     } else {
       int quotes = 0;
@@ -633,7 +633,7 @@ void ScriptHandler::handleThink(QList<QString> &parameters)
       }
       bubble->initBubble(parentPos.x(), parentPos.y(), size, scriptVars["hyper"], bubbleText, "_thought");
     }
-    if(settings->scriptOutput) {
+    if(settings.scriptOutput) {
       printf("Thinking '%s'\n", bubbleText.toStdString().c_str());
     }
   }

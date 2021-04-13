@@ -40,7 +40,7 @@ class Stats : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Stats(Settings *settings, int hyper, int health, int energy, int hunger, int toilet, int social, int fun, int hygiene, QWidget *parent);
+  Stats(Settings &settings, int hyper, int health, int energy, int hunger, int toilet, int social, int fun, int hygiene, QWidget *parent);
   ~Stats();
   void flashStat(QString stat = "none");
   int getHyper();
@@ -66,7 +66,7 @@ private slots:
   void logStats();
 
 private:
-  Settings *settings;
+  Settings &settings;
 
   int flashes;
   QImage image;

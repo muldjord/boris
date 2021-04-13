@@ -71,7 +71,6 @@ int main(int argc, char *argv[])
   QApplication app(argc, argv);
   app.setStyle(QStyleFactory::create("Fusion"));  
   app.setQuitOnLastWindowClosed(false);
-  app.setStyle("Plastique");
   
   qInstallMessageHandler(customMessageHandler);
 

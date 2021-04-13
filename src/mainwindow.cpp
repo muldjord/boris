@@ -66,9 +66,7 @@ MainWindow::MainWindow()
   qsrand(QTime::currentTime().msec());
 #endif
 
-  QString iniFile = "config.ini";
-
-  iniSettings = new QSettings(iniFile, QSettings::IniFormat);
+  iniSettings = new QSettings("config.ini", QSettings::IniFormat);
   
   if(!iniSettings->contains("show_welcome")) {
     iniSettings->setValue("show_welcome", true);
@@ -192,7 +190,7 @@ MainWindow::MainWindow()
   settings.idkfa = iniSettings->value("idkfa").toBool();
   
   if(!iniSettings->contains("stats")) {
-    iniSettings->setValue("stats", "mouseover");
+    iniSettings->setValue("stats", "critical");
   }
   if(iniSettings->value("stats").toString() == "always") {
     settings.stats = STATS_ALWAYS;
@@ -279,8 +277,6 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-  iniSettings->setValue("boris_x", settings.borisX);
-  iniSettings->setValue("boris_y", settings.borisY);
   delete trayIcon;
   for(auto &boris: borisList) {
     delete boris;
@@ -341,7 +337,7 @@ void MainWindow::loadAssets()
   }
 
   if(settings.showWelcome) {
-    About about(&settings);
+    About about(iniSettings, settings);
     about.exec();
   }
 
@@ -350,6 +346,7 @@ void MainWindow::loadAssets()
 #else
   addBoris((settings.clones == 0?qrand() % 99 + 1:settings.clones));
 #endif
+
   progressBar->setValue(progressBar->maximum());
   
   delete progressBar;
@@ -363,7 +360,7 @@ void MainWindow::addBoris(int clones)
 {
   qInfo("Spawning %d clone(s)\n", clones);
   while(clones--) {
-    borisList.append(new Boris(&settings));
+    borisList.append(new Boris(settings));
     connect(this, &MainWindow::updateBoris, borisList.last(), &Boris::updateBoris);
     connect(this, &MainWindow::updateBorisBehavioursMenu, borisList.last(), &Boris::updateBehavioursMenu);
     connect(earthquakeAction, &QAction::triggered, borisList.last(), &Boris::earthquake);
@@ -425,7 +422,7 @@ void MainWindow::createTrayIcon()
 
 void MainWindow::aboutBox()
 {
-  About about(&settings);
+  About about(iniSettings, settings);
   about.exec();
   emit updateBoris();
 
@@ -462,6 +459,8 @@ void MainWindow::mousePressEvent(QMouseEvent* event)
 
 void MainWindow::killAll()
 {
+  iniSettings->setValue("boris_x", settings.borisX);
+  iniSettings->setValue("boris_y", settings.borisY);
   QTimer::singleShot(2000, qApp, SLOT(quit()));
   for(auto &boris: borisList) {
     boris->changeBehaviour("wave");
@@ -528,28 +527,28 @@ void MainWindow::updateBehavioursMenu()
       }
     } else if(behaviour.file.left(1) != "_" || behaviour.category.toLower() != "hidden") {
       if(behaviour.category.toLower() == "movement") {
-        QAction *tempAction = movementMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        QAction *tempAction = movementMenu->addAction(QIcon(*coinIcon), behaviour.title + " (" + QString::number(behaviour.coins) + "c)");
         tempAction->setData(behaviour.file);
       } else if(behaviour.category.toLower() == "energy") {
-        QAction *tempAction = energyMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        QAction *tempAction = energyMenu->addAction(QIcon(*coinIcon), behaviour.title + " (" + QString::number(behaviour.coins) + "c)");
         tempAction->setData(behaviour.file);
       } else if(behaviour.category.toLower() == "hunger") {
-        QAction *tempAction = hungerMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        QAction *tempAction = hungerMenu->addAction(QIcon(*coinIcon), behaviour.title + " (" + QString::number(behaviour.coins) + "c)");
         tempAction->setData(behaviour.file);
       } else if(behaviour.category.toLower() == "toilet") {
-        QAction *tempAction = toiletMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        QAction *tempAction = toiletMenu->addAction(QIcon(*coinIcon), behaviour.title + " (" + QString::number(behaviour.coins) + "c)");
         tempAction->setData(behaviour.file);
       } else if(behaviour.category.toLower() == "social") {
-        QAction *tempAction = socialMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        QAction *tempAction = socialMenu->addAction(QIcon(*coinIcon), behaviour.title + " (" + QString::number(behaviour.coins) + "c)");
         tempAction->setData(behaviour.file);
       } else if(behaviour.category.toLower() == "fun") {
-        QAction *tempAction = funMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        QAction *tempAction = funMenu->addAction(QIcon(*coinIcon), behaviour.title + " (" + QString::number(behaviour.coins) + "c)");
         tempAction->setData(behaviour.file);
       } else if(behaviour.category.toLower() == "hygiene") {
-        QAction *tempAction = hygieneMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        QAction *tempAction = hygieneMenu->addAction(QIcon(*coinIcon), behaviour.title + " (" + QString::number(behaviour.coins) + "c)");
         tempAction->setData(behaviour.file);
       } else if(behaviour.category.toLower() == "health") {
-        QAction *tempAction = healthMenu->addAction(QIcon(*coinIcon), behaviour.title + " (10c)");
+        QAction *tempAction = healthMenu->addAction(QIcon(*coinIcon), behaviour.title + " (" + QString::number(behaviour.coins) + "c)");
         tempAction->setData(behaviour.file);
       }
     } else {
@@ -671,9 +670,9 @@ void MainWindow::triggerBehaviour(QAction* a)
       if(settings.unlocked.contains(behaviour.file)) {
         emit queueBehavFromFile(behaviour.file);
       } else {
-        if(settings.coins - 10 >= 0) {
-          if(QMessageBox::question(nullptr, tr("Buy?"), tr("Do you want to buy '") + " " + behaviour.title + "' " + tr("for 10 coins?")) == QMessageBox::Yes) {
-            addCoins("-10", - 10);
+        if(settings.coins - behaviour.coins >= 0) {
+          if(QMessageBox::question(nullptr, tr("Buy?"), tr("Do you want to buy '") + " " + behaviour.title + "' " + tr("for ") + QString::number(behaviour.coins) + tr(" coins?")) == QMessageBox::Yes) {
+            addCoins("-" + QString::number(behaviour.coins), - behaviour.coins);
             settings.unlocked.append(behaviour.file);
             QString unlocked = "";
             for(const auto &unlock: settings.unlocked) {
@@ -705,7 +704,7 @@ void MainWindow::spawnRandomItem()
                            QRandomGenerator::global()->bounded(QApplication::desktop()->height()),
                            settings.size,
                            itemBehaviours.at(randomItem).file,
-                           &settings,
+                           settings,
                            false));
   
   if(settings.items && settings.itemSpawnInterval) {
@@ -722,7 +721,7 @@ void MainWindow::spawnItem(QAction* a)
                                QRandomGenerator::global()->bounded(QApplication::desktop()->height()),
                                settings.size,
                                item.file,
-                               &settings,
+                               settings,
                                false));
       break;
     }

@@ -42,7 +42,7 @@ class ScriptHandler : public QObject
 public:
   ScriptHandler(QImage *image,
                 bool *drawing,
-                Settings *settings,
+                Settings &settings,
                 Bubble *bubble,
                 const QMap<QString, int> &labels,
                 const QMap<QString, Script> &defines,
@@ -62,7 +62,7 @@ signals:
 private:
   QImage *image = nullptr;
   bool *drawing = nullptr;
-  Settings *settings = nullptr;
+  Settings &settings;
   Bubble *bubble = nullptr;
   
   const QMap<QString, int> &labels;

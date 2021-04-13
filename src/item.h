@@ -40,7 +40,7 @@ class Item : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Item(const int &x, const int &y, const int &size, const QString &item, Settings *settings, const bool &ignore = true);
+  Item(const int &x, const int &y, const int &size, const QString &item, Settings &settings, const bool &ignore = true);
   ~Item();
   void moveItem(int dX, int dY, const bool &flipped = false);
   QPoint getGlobalCenter();
@@ -66,7 +66,7 @@ private slots:
   void dontIgnore();
   
 private:
-  Settings *settings;
+  Settings &settings;
   bool flipFrames = false;
   QGraphicsPixmapItem *itemSprite;
   QGraphicsPixmapItem *shadowSprite;

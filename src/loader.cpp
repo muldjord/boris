@@ -112,10 +112,10 @@ bool Loader::loadBehaviours(const Settings &settings,
         if(line.isEmpty()) {
           continue;
         }
-        if(line.contains("#Frames")) {
+        if(line.left(7) == "#Frames") {
           break;
         }
-        if(line.contains("define") && line.contains(":")) {
+        if(line.left(6) == "define" && line.contains(":")) {
           QString script = QString(line);
           while(script.right(1) == ",") {
             script.append(QString(dat.readLine().simplified()));
@@ -140,47 +140,51 @@ bool Loader::loadBehaviours(const Settings &settings,
           b.pitchLock = true;
           continue;
         }
-        if(line.contains("title")) {
+        if(line.left(5) == "title") {
           b.title = line.mid(6,line.length());
           continue;
         }
-        if(line.contains("category")) {
+        if(line.left(8) == "category") {
           b.category = line.mid(9,line.length());
           continue;
         }
-        if(line.contains("reaction")) {
+        if(line.left(8) == "reaction") {
           b.reactions = QString::fromUtf8(line.mid(9,line.length())).replace(" ", "").split(',');
           continue;
         }
-        if(line.contains("hyper")) {
+        if(line.left(5) == "coins") {
+          b.coins = line.mid(6,line.length()).toInt();
+          continue;
+        }
+        if(line.left(5) == "hyper") {
           b.hyper = line.mid(6,line.length()).toInt();
           continue;
         }
-        if(line.contains("health")) {
+        if(line.left(6) == "health") {
           b.health = line.mid(7,line.length()).toInt();
           continue;
         }
-        if(line.contains("energy")) {
+        if(line.left(6) == "energy") {
           b.energy = line.mid(7,line.length()).toInt();
           continue;
         }
-        if(line.contains("hunger")) {
+        if(line.left(6) == "hunger") {
           b.hunger = line.mid(7,line.length()).toInt();
           continue;
         }
-        if(line.contains("toilet")) {
+        if(line.left(6) == "toilet") {
           b.toilet = line.mid(8,line.length()).toInt();
           continue;
         }
-        if(line.contains("social")) {
+        if(line.left(6) == "social") {
           b.social = line.mid(7,line.length()).toInt();
           continue;
         }
-        if(line.contains("fun")) {
+        if(line.left(3) == "fun") {
           b.fun = line.mid(4,line.length()).toInt();
           continue;
         }
-        if(line.contains("hygiene")) {
+        if(line.left(7) == "hygiene") {
           b.hygiene = line.mid(8,line.length()).toInt();
           continue;
         }

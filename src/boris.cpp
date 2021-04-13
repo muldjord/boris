@@ -53,12 +53,10 @@ extern QList<Behaviour> behaviours;
 extern QList<Behaviour> weathers;
 extern SoundMixer soundMixer;
 
-Boris::Boris(Settings *settings)
+Boris::Boris(Settings &settings) : settings(settings)
 {
-  this->settings = settings;
-  
-  int borisX = settings->borisX;
-  int borisY = settings->borisY;
+  int borisX = settings.borisX;
+  int borisY = settings.borisY;
   if(borisY > QApplication::desktop()->height() - height()) {
     borisY = QApplication::desktop()->height() - height();
   }
@@ -202,7 +200,7 @@ void Boris::updateBehavioursMenu()
   QMenu *idkfaMenu = new QMenu(tr("Idkfa"), behavioursMenu);
   idkfaMenu->setIcon(QIcon(":idkfa.png"));
   for(const auto &behaviour: behaviours) {
-    if(settings->unlocked.contains(behaviour.file)) {
+    if(settings.unlocked.contains(behaviour.file)) {
       if(behaviour.category.toLower() == "movement") {
         QAction *tempAction = movementMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"), behaviour.title);
         tempAction->setData(behaviour.file);
@@ -257,7 +255,7 @@ void Boris::updateBehavioursMenu()
   if(!movementMenu->isEmpty()) {
     behavioursMenu->addMenu(movementMenu);
   }
-  if(settings->idkfa) {
+  if(settings.idkfa) {
     behavioursMenu->addMenu(idkfaMenu);
   }
 
@@ -460,8 +458,8 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["hour"] = time.hour();
   scriptVars["minute"] = time.minute();
   scriptVars["second"] = time.second();
-  scriptVars["wind"] = settings->windSpeed;
-  scriptVars["temp"] = settings->temperature;
+  scriptVars["wind"] = settings.windSpeed;
+  scriptVars["temp"] = settings.temperature;
 
   ScriptHandler scriptHandler(&scriptImage, &drawing, settings, bubble, behaviours.at(curBehav).labels, behaviours.at(curBehav).defines, scriptVars, QPoint(pos().x(), pos().y()), size);
   connect(&scriptHandler, &ScriptHandler::behavFromFile, this, &Boris::behavFromFile);
@@ -606,14 +604,14 @@ void Boris::timerEvent(QTimerEvent *)
     bruisesSprite->setPixmap(bruisesPixmap);
   }
 
-  if(settings->sound && behaviours.at(curBehav).frames.at(curFrame).soundBuffer != nullptr) {
+  if(settings.sound && behaviours.at(curBehav).frames.at(curFrame).soundBuffer != nullptr) {
     if(behaviours.at(curBehav).pitchLock) {
       soundMixer.playSound(behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
-                           (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
+                           (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
                            (stats->getHyper() / 60.0) + 1);
     } else {
       soundMixer.playSound(behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
-                           (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
+                           (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
                            (stats->getHyper() / 60.0) + (0.95 + QRandomGenerator::global()->bounded(100) / 1000.0));
     }
   }
@@ -698,7 +696,7 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
       changeBehaviour();
     }
   }
-  if(vision && settings->vision && !falling && !grabbed) {
+  if(vision && settings.vision && !falling && !grabbed) {
     processVision();
   }
 }
@@ -722,7 +720,7 @@ void Boris::enterEvent(QEvent *event)
 void Boris::leaveEvent(QEvent *event)
 {
   event->accept();
-  if(settings->stats == STATS_MOUSEOVER || settings->stats == STATS_CRITICAL) {
+  if(settings.stats == STATS_MOUSEOVER || settings.stats == STATS_CRITICAL) {
     stats->hide(); 
   }
   stats->underMouse = false;
@@ -768,8 +766,8 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
     setCursor(Qt::OpenHandCursor);
     grabbed = false;
     mMoving = false;
-    settings->borisX = pos().x();
-    settings->borisY = pos().y();
+    settings.borisX = pos().x();
+    settings.borisY = pos().y();
     changeBehaviour("_falling");
     falling = true;
     hVel = mouseHVel;
@@ -797,10 +795,10 @@ void Boris::handlePhysics()
     if(sinVal > PI) {
       sinVal = 0.0;
     }
-    if(settings->windDirection.contains("W")) {
-      moveBoris(round(-(sin(sinVal) + 0.25) * settings->windSpeed * 0.05), 0);
-    } else if(settings->windDirection.contains("E")) {
-      moveBoris(round((sin(sinVal) + 0.25) * settings->windSpeed * 0.05), 0);
+    if(settings.windDirection.contains("W")) {
+      moveBoris(round(-(sin(sinVal) + 0.25) * settings.windSpeed * 0.05), 0);
+    } else if(settings.windDirection.contains("E")) {
+      moveBoris(round((sin(sinVal) + 0.25) * settings.windSpeed * 0.05), 0);
     }
     if(bubble->isVisible()) {
       bubble->moveBubble(pos().x(), pos().y(), size);
@@ -1344,7 +1342,7 @@ void Boris::updateBoris()
   borisFriend = nullptr;
 
   // Set new size
-  size = settings->size;
+  size = settings.size;
   if(size == 0) {
     size = QRandomGenerator::global()->bounded(257 - 32) + 32; // Make him at least 32 and max 256
   }
@@ -1353,13 +1351,13 @@ void Boris::updateBoris()
   scale(size / 32.0, size / 32.0);
 
   // Set new independence value
-  independence = settings->independence;
+  independence = settings.independence;
   if(independence == 0) {
     independence = QRandomGenerator::global()->bounded(99) + 1;
   }
 
   // Show or hide stats
-  if(settings->stats == STATS_ALWAYS) {
+  if(settings.stats == STATS_ALWAYS) {
     stats->show();
   } else {
     stats->hide();
@@ -1389,7 +1387,7 @@ void Boris::showWeather(QString &behav)
   sinVal = 0.0;
   
   for(int a = 0; a < weathers.count(); ++a) {
-    if(weathers.at(a).file == settings->weatherType) {
+    if(weathers.at(a).file == settings.weatherType) {
       curWeather = a;
       break;
     }
@@ -1402,21 +1400,21 @@ void Boris::showWeather(QString &behav)
   QTimer::singleShot(30000, this, SLOT(hideWeather()));
   
   if(!falling && !grabbed) {
-    if(settings->weatherType == "01d") {
+    if(settings.weatherType == "01d") {
       behavQueue.append("sunglasses");
-    } else if(settings->weatherType == "02d" && settings->temperature >= 15) {
+    } else if(settings.weatherType == "02d" && settings.temperature >= 15) {
       behavQueue.append("sunglasses");
-    } else if(settings->weatherType == "09d" || settings->weatherType == "09n" ||
-              settings->weatherType == "10d" || settings->weatherType == "10n") {
+    } else if(settings.weatherType == "09d" || settings.weatherType == "09n" ||
+              settings.weatherType == "10d" || settings.weatherType == "10n") {
       behavQueue.append("_umbrella");
-    } else if(settings->weatherType == "11d" || settings->weatherType == "11n") {
+    } else if(settings.weatherType == "11d" || settings.weatherType == "11n") {
       behav = "_lightning";
-    } else if(settings->weatherType == "13d" || settings->weatherType == "13n") {
+    } else if(settings.weatherType == "13d" || settings.weatherType == "13n") {
       behavQueue.append("_freezing");
-    } else if(settings->weatherType == "01n" || settings->weatherType == "02n") {
+    } else if(settings.weatherType == "01n" || settings.weatherType == "02n") {
       behavQueue.append("_energy"); // Yawn for weathers that have a moon
-    } else if(settings->weatherType == "04d" || settings->weatherType == "04n" ||
-              settings->weatherType == "50d" || settings->weatherType == "50n") {
+    } else if(settings.weatherType == "04d" || settings.weatherType == "04n" ||
+              settings.weatherType == "50d" || settings.weatherType == "50n") {
       behavQueue.append("_cloudy");
     }
   }
@@ -1459,7 +1457,7 @@ void Boris::checkInteractions()
     }
   }
 
-  if((settings->stats == STATS_MOUSEOVER || settings->stats == STATS_CRITICAL) &&
+  if((settings.stats == STATS_MOUSEOVER || settings.stats == STATS_CRITICAL) &&
      stats->underMouse) {
     stats->show();
   }

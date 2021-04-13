@@ -39,15 +39,14 @@
 #include <QFile>
 #include <QIntValidator>
 #include <QHostInfo>
-#include <QSettings>
 #include <QFileInfo>
 
-About::About(Settings *settings)
+About::About(QSettings *iniSettings, Settings &settings) : settings(settings)
 {
-  this->settings = settings;
+  this->iniSettings = iniSettings;
   
   setFixedSize(900, 700);
-  move((settings->desktopWidth / 2) - (width() / 2), 256);
+  move((settings.desktopWidth / 2) - (width() / 2), 256);
   setWindowIcon(QIcon(":icon.png"));
   setWindowTitle("Boris v" VERSION);
 
@@ -140,17 +139,17 @@ About::About(Settings *settings)
   sizeLineEdit = new QLineEdit();
   QIntValidator *sizeValidator = new QIntValidator(0, 256, this);
   sizeLineEdit->setValidator(sizeValidator);
-  sizeLineEdit->setText(QString::number(settings->size));
+  sizeLineEdit->setText(QString::number(settings.size));
 
   QLabel *clonesLabel = new QLabel(tr("Boris clones (1-100 or 0 for random):"));
   clonesLineEdit = new QLineEdit();
   QIntValidator *clonesValidator = new QIntValidator(0, 100, this);
   clonesLineEdit->setValidator(clonesValidator);
-  clonesLineEdit->setText(QString::number(settings->clones));
+  clonesLineEdit->setText(QString::number(settings.clones));
 
   enableItems = new QCheckBox(tr("Allow items"));
   enableItems->setToolTip(tr("Boris will sometimes place various items around the desktop. Items will also be randomly spawned or created using the tray icon menu."));
-  if(settings->items) {
+  if(settings.items) {
     enableItems->setCheckState(Qt::Checked);
   }
 
@@ -159,29 +158,29 @@ About::About(Settings *settings)
   itemSpawnIntervalLineEdit->setToolTip(tr("If items are enabled random items will be spawned around the desktop at this interval. If set to 0 no items will spawn randomly."));
   QIntValidator *itemSpawnIntervalValidator = new QIntValidator(5, 3600, this);
   itemSpawnIntervalLineEdit->setValidator(itemSpawnIntervalValidator);
-  itemSpawnIntervalLineEdit->setText(QString::number(settings->itemSpawnInterval));
+  itemSpawnIntervalLineEdit->setText(QString::number(settings.itemSpawnInterval));
 
   QLabel *itemTimeoutLabel = new QLabel(tr("Item timeout in seconds (10-3600 or 0 for never):"));
   itemTimeoutLineEdit = new QLineEdit();
   itemTimeoutLineEdit->setToolTip(tr("Items will disappear after this amount of time. Setting this to 0 will make them stay indefinitely."));
   QIntValidator *itemValidator = new QIntValidator(10, 3600, this);
   itemTimeoutLineEdit->setValidator(itemValidator);
-  itemTimeoutLineEdit->setText(QString::number(settings->itemTimeout));
+  itemTimeoutLineEdit->setText(QString::number(settings.itemTimeout));
 
   QLabel *weatherLabel = new QLabel(tr("Show weather for city (mouse over for help):"));
   weatherLineEdit = new QLineEdit();
   weatherLineEdit->setToolTip(tr("Type in a nearby city name or the openweathermap city id. Using a city id is the most stable method. To find the id for your city go to openweathermap.org and do a city lookup. The city id will be the last part of the website address."));
-  weatherLineEdit->setText(settings->city);
+  weatherLineEdit->setText(settings.city);
 
   QLabel *weatherKeyLabel = new QLabel(tr("OpenWeatherMap key (mouse over for help):"));
   weatherKeyLineEdit = new QLineEdit();
   weatherKeyLineEdit->setToolTip(tr("The weather functionality needs an API key to function. The default one should work.<br/>In case it doesn't, get a new one for free at openweathermap.org/appid."));
-  weatherKeyLineEdit->setText(settings->key);
+  weatherKeyLineEdit->setText(settings.key);
 
   QLabel *feedUrlLabel = new QLabel(tr("RSS feed url (mouse over for help):"));
   feedUrlLineEdit = new QLineEdit();
   feedUrlLineEdit->setToolTip(tr("Type in any RSS feed url. Boris will sometimes update you on a title from this feed. You can click it to open it in the default browser."));
-  feedUrlLineEdit->setText(settings->feedUrl);
+  feedUrlLineEdit->setText(settings.feedUrl);
 
   QLabel *statsLabel = new QLabel(tr("Vitality stats:"));
   statsComboBox = new QComboBox();
@@ -189,21 +188,21 @@ About::About(Settings *settings)
   statsComboBox->addItem(tr("Show on critical levels and mouse over"), STATS_CRITICAL);
   statsComboBox->addItem(tr("Show only on mouse over"), STATS_MOUSEOVER);
   statsComboBox->addItem(tr("Never show"), STATS_NEVER);
-  statsComboBox->setCurrentIndex(statsComboBox->findData(settings->stats));
+  statsComboBox->setCurrentIndex(statsComboBox->findData(settings.stats));
 
   QLabel *independenceLabel = new QLabel(tr("Independence:"));
   independenceSlider = new QSlider(Qt::Horizontal);
   independenceSlider->setMinimum(0);
   independenceSlider->setMaximum(100);
-  independenceSlider->setValue(settings->independence);
+  independenceSlider->setValue(settings.independence);
 
   enableBubble = new QCheckBox(tr("Enable Boris speech bubbles"));
-  if(settings->bubbles) {
+  if(settings.bubbles) {
     enableBubble->setCheckState(Qt::Checked);
   }
 
   enableSound = new QCheckBox(tr("Enable sound"));
-  if(settings->sound) {
+  if(settings.sound) {
     enableSound->setCheckState(Qt::Checked);
   }
 
@@ -211,11 +210,11 @@ About::About(Settings *settings)
   volumeSlider = new QSlider(Qt::Horizontal);
   volumeSlider->setMinimum(0);
   volumeSlider->setMaximum(100);
-  volumeSlider->setValue(settings->volume * 100);
+  volumeSlider->setValue(settings.volume * 100);
   connect(volumeSlider, &QSlider::valueChanged, this, &About::volumeChanged);
   
   showWelcome = new QCheckBox(tr("Always show this dialog on startup"));
-  if(settings->showWelcome) {
+  if(settings.showWelcome) {
     showWelcome->setCheckState(Qt::Checked);
   }
 
@@ -268,9 +267,9 @@ void About::volumeChanged(int value)
 void About::saveAll()
 {
   if(showWelcome->isChecked()) {
-    settings->showWelcome = true;
+    settings.showWelcome = true;
   } else {
-    settings->showWelcome = false;
+    settings.showWelcome = false;
   }
   if(sizeLineEdit->text().toInt() != 0) {
     if(sizeLineEdit->text().toInt() < 8) {
@@ -279,9 +278,9 @@ void About::saveAll()
     if(sizeLineEdit->text().toInt() > 256) {
       sizeLineEdit->setText("256");
     }
-    settings->size = sizeLineEdit->text().toInt();
+    settings.size = sizeLineEdit->text().toInt();
   } else {
-    settings->size = 0;
+    settings.size = 0;
   }
   if(clonesLineEdit->text().toInt() != 0) {
     if(clonesLineEdit->text().toInt() < 1) {
@@ -290,9 +289,9 @@ void About::saveAll()
     if(clonesLineEdit->text().toInt() > 100) {
       clonesLineEdit->setText("100");
     }
-    settings->clones = clonesLineEdit->text().toInt();
+    settings.clones = clonesLineEdit->text().toInt();
   } else {
-    settings->clones = 0;
+    settings.clones = 0;
   }
   if(itemSpawnIntervalLineEdit->text().toInt() != 0) {
     if(itemSpawnIntervalLineEdit->text().toInt() < 5) {
@@ -301,9 +300,9 @@ void About::saveAll()
     if(itemSpawnIntervalLineEdit->text().toInt() > 3600) {
       itemSpawnIntervalLineEdit->setText("3600");
     }
-    settings->itemSpawnInterval = itemSpawnIntervalLineEdit->text().toInt();
+    settings.itemSpawnInterval = itemSpawnIntervalLineEdit->text().toInt();
   } else {
-    settings->itemSpawnInterval = 0;
+    settings.itemSpawnInterval = 0;
   }
   if(itemTimeoutLineEdit->text().toInt() != 0) {
     if(itemTimeoutLineEdit->text().toInt() < 10) {
@@ -312,61 +311,55 @@ void About::saveAll()
     if(itemTimeoutLineEdit->text().toInt() > 3600) {
       itemTimeoutLineEdit->setText("3600");
     }
-    settings->itemTimeout = itemTimeoutLineEdit->text().toInt();
+    settings.itemTimeout = itemTimeoutLineEdit->text().toInt();
   } else {
-    settings->itemTimeout = 0;
+    settings.itemTimeout = 0;
   }
-  settings->city = weatherLineEdit->text();
-  settings->key = weatherKeyLineEdit->text();
-  settings->feedUrl = feedUrlLineEdit->text();
-  settings->stats = statsComboBox->currentData().toInt();
-  settings->independence = independenceSlider->value();
+  settings.city = weatherLineEdit->text();
+  settings.key = weatherKeyLineEdit->text();
+  settings.feedUrl = feedUrlLineEdit->text();
+  settings.stats = statsComboBox->currentData().toInt();
+  settings.independence = independenceSlider->value();
   if(enableSound->isChecked()) {
-    settings->sound = true;
+    settings.sound = true;
   } else {
-    settings->sound = false;
+    settings.sound = false;
   }
-  settings->volume = volumeSlider->value() / 100.0;
+  settings.volume = volumeSlider->value() / 100.0;
   if(enableBubble->isChecked()) {
-    settings->bubbles = true;
+    settings.bubbles = true;
   } else {
-    settings->bubbles = false;
+    settings.bubbles = false;
   }
   if(enableItems->isChecked()) {
-    settings->items = true;
+    settings.items = true;
   } else {
-    settings->items = false;
+    settings.items = false;
   }
   
-  // Save relevants config to ini also
-  QString iniFile = "config.ini";
-  if(QFileInfo::exists("config_" + QHostInfo::localHostName().toLower() + ".ini")) {
-    iniFile = "config_" + QHostInfo::localHostName().toLower() + ".ini";
-  }
-  QSettings iniSettings(iniFile, QSettings::IniFormat);
-  iniSettings.setValue("show_welcome", settings->showWelcome);
-  iniSettings.setValue("boris_x", settings->borisX);
-  iniSettings.setValue("boris_y", settings->borisY);
-  iniSettings.setValue("clones", settings->clones);
-  iniSettings.setValue("size", settings->size);
-  iniSettings.setValue("items", settings->items);
-  iniSettings.setValue("item_timeout", settings->itemTimeout);
-  iniSettings.setValue("item_spawn_timer", settings->itemSpawnInterval);
-  iniSettings.setValue("independence", settings->independence);
-  iniSettings.setValue("bubble", settings->bubbles);
-  iniSettings.setValue("sound", settings->sound);
-  iniSettings.setValue("volume", settings->volume * 100);
-  iniSettings.setValue("feed_url", settings->feedUrl);
-  iniSettings.setValue("weather_city", settings->city);
-  iniSettings.setValue("weather_key", settings->key);
-  if(settings->stats == STATS_ALWAYS) {
-    iniSettings.setValue("stats", "always");
-  } else if(settings->stats == STATS_CRITICAL) {
-    iniSettings.setValue("stats", "critical");
-  } else if(settings->stats == STATS_MOUSEOVER) {
-    iniSettings.setValue("stats", "mouseover");
-  } else if(settings->stats == STATS_NEVER) {
-    iniSettings.setValue("stats", "never");
+  iniSettings->setValue("show_welcome", settings.showWelcome);
+  iniSettings->setValue("boris_x", settings.borisX);
+  iniSettings->setValue("boris_y", settings.borisY);
+  iniSettings->setValue("clones", settings.clones);
+  iniSettings->setValue("size", settings.size);
+  iniSettings->setValue("items", settings.items);
+  iniSettings->setValue("item_timeout", settings.itemTimeout);
+  iniSettings->setValue("item_spawn_timer", settings.itemSpawnInterval);
+  iniSettings->setValue("independence", settings.independence);
+  iniSettings->setValue("bubble", settings.bubbles);
+  iniSettings->setValue("sound", settings.sound);
+  iniSettings->setValue("volume", settings.volume * 100);
+  iniSettings->setValue("feed_url", settings.feedUrl);
+  iniSettings->setValue("weather_city", settings.city);
+  iniSettings->setValue("weather_key", settings.key);
+  if(settings.stats == STATS_ALWAYS) {
+    iniSettings->setValue("stats", "always");
+  } else if(settings.stats == STATS_CRITICAL) {
+    iniSettings->setValue("stats", "critical");
+  } else if(settings.stats == STATS_MOUSEOVER) {
+    iniSettings->setValue("stats", "mouseover");
+  } else if(settings.stats == STATS_NEVER) {
+    iniSettings->setValue("stats", "never");
   }
 
   accept();

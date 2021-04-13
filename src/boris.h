@@ -58,7 +58,7 @@ class Boris : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Boris(Settings *settings);
+  Boris(Settings &settings);
   ~Boris();
   void collide(Boris *boris);
   Boris *borisFriend;
@@ -116,7 +116,7 @@ private slots:
   void setCurFrame(const int &frame);
   
 private:
-  Settings *settings;
+  Settings &settings;
 
   bool falling = false;
   bool grabbed = false;

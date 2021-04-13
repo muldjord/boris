@@ -35,7 +35,7 @@
 
 extern QMap<QString, QImage> pixelFont;
 
-Bubble::Bubble(Settings *settings) : settings(settings)
+Bubble::Bubble(Settings &settings) : settings(settings)
 {
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
@@ -129,7 +129,7 @@ int Bubble::initBubble(const int x, const int y,
   scale(borisSize / 32.0, borisSize / 32.0);
   int duration = 1000 + (bubbleText.length() * 100);
   duration = duration - (duration / 100.0 * hyper);
-  if(settings->bubbles) {
+  if(settings.bubbles) {
     show();
     moveBubble(x, y, borisSize);
     hideTimer.setInterval(duration);

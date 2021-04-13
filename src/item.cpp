@@ -46,10 +46,8 @@ extern QList<Item*> itemList;
 extern QList<Behaviour> itemBehaviours;
 extern SoundMixer soundMixer;
 
-Item::Item(const int &x, const int &y, const int &size, const QString &item, Settings *settings, const bool &ignore) :
-  size(size)
+Item::Item(const int &x, const int &y, const int &size, const QString &item, Settings &settings, const bool &ignore) : settings(settings), size(size)
 {
-  this->settings = settings;
   this->ignore = ignore;
   
   setAttribute(Qt::WA_TranslucentBackground);
@@ -84,8 +82,8 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   setFixedSize(size, size + (size / 32)); // To make room for shadow
   scale(size / 32.0, size / 32.0);
   move(x, y);
-  if(settings->itemTimeout > 0) {
-    QTimer::singleShot(settings->itemTimeout * 1000, this, &Item::destroy);
+  if(settings.itemTimeout > 0) {
+    QTimer::singleShot(settings.itemTimeout * 1000, this, &Item::destroy);
   }
 
   if(itemBehaviours.at(curItem).allowFlip && QRandomGenerator::global()->bounded(2)) {
@@ -213,13 +211,13 @@ void Item::timerEvent(QTimerEvent *)
     shadowSprite->setPixmap(getShadow(itemBehaviours.at(curItem).frames.at(curFrame).sprite));
   }
 
-  if(settings->sound && itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer != nullptr) {
+  if(settings.sound && itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer != nullptr) {
     if(itemBehaviours.at(curItem).pitchLock) {
       soundMixer.playSound(itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
-                           (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0, 1.0);
+                           (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0, 1.0);
     } else {
       soundMixer.playSound(itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
-                           (float)pos().x() / (float)settings->desktopWidth * 2.0 - 1.0,
+                           (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
                            0.95 + QRandomGenerator::global()->bounded(100) / 1000.0);
     }
   }

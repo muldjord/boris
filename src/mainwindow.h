@@ -68,14 +68,14 @@ private slots:
   void removeCoinsMessage();
 
 private:
+  QSettings *iniSettings = nullptr;
+  Settings settings;
   QIcon *icon = nullptr;
   QIcon *coinIcon = nullptr;
   QList<QString> unlocked;
-  QSettings *iniSettings = nullptr;
   QTimer itemTimer;
   QMenu *behavioursMenu;
   QMenu *itemsMenu;
-  Settings settings;
   QWidget *loadWidget;
   QProgressBar *progressBar;
   NetComm *netComm;

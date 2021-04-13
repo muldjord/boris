@@ -34,12 +34,13 @@
 #include <QCheckBox>
 #include <QSlider>
 #include <QComboBox>
+#include <QSettings>
 
 class About : public QDialog
 {
   Q_OBJECT;
 public:
-  About(Settings *settings);
+  About(QSettings *iniSettings, Settings &settings);
   ~About();
 
 private slots:
@@ -47,7 +48,8 @@ private slots:
   void saveAll();
 
 private:
-  Settings *settings;
+  Settings &settings;
+  QSettings *iniSettings;
   
   QLineEdit *clonesLineEdit;
   QLineEdit *sizeLineEdit;
