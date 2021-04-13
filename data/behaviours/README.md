@@ -254,7 +254,7 @@ Plays a sound from the sound effect folder.
 ```
 sound data/sounds/soundfile.wav
 ```
-Keep in mind that this command DOES NOT allow spaces in the filename. So a file called `sound file.wav` will not work. Rename it to `soundfile.wav` instead. Filename and path is relative to where the Boris executable is run from.
+Keep in mind that this command DOES NOT allow spaces in the filename. So a file called `sound file.wav` will not work. Rename it to `soundfile.wav` instead. Filename and path is relative to the 'data/sounds' path (eg. 'data/sounds/soundfile.wav' should be typed in as simply 'soundfile.wav').
 
 ##### say
 Spawns a speech bubble containing the specified text. Alternatively you can use the keyword "rss" (without the double-quotes) which will make Boris pick a headline from the configured RSS feed.
