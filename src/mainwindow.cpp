@@ -483,6 +483,8 @@ void MainWindow::updateBehavioursMenu()
     }
     if(tempMenu == nullptr) {
       tempMenu = new QMenu(behaviour.category, behavioursMenu);
+      tempMenu->setIcon(QIcon(settings.graphicsPath + "/" +
+                              behaviour.category.toLower() + ".png"));
       subMenus.append(tempMenu);
     }
     if(settings.unlocked.contains(behaviour.file)) {
@@ -491,7 +493,7 @@ void MainWindow::updateBehavioursMenu()
                           behaviour.title)->setData(behaviour.file);
     } else if(behaviour.file.left(1) != "_" || behaviour.category.toLower() != "hidden") {
       tempMenu->addAction(QIcon(*coinIcon),
-                            behaviour.title + " (" + QString::number(behaviour.coins) + "c)")->setData(behaviour.file);
+                          behaviour.title + " (" + QString::number(behaviour.coins) + "c)")->setData(behaviour.file);
     } else {
       tempMenu = idkfaMenu;
     }
@@ -512,78 +514,31 @@ void MainWindow::updateBehavioursMenu()
 
 void MainWindow::createItemsMenu()
 {
-  QMenu *healthMenu = new QMenu(tr("Health"), itemsMenu);
-  healthMenu->setIcon(QIcon(settings.graphicsPath + "/health.png"));
-  QMenu *energyMenu = new QMenu(tr("Energy"), itemsMenu);
-  energyMenu->setIcon(QIcon(settings.graphicsPath + "/energy.png"));
-  QMenu *hungerMenu = new QMenu(tr("Food"), itemsMenu);
-  hungerMenu->setIcon(QIcon(settings.graphicsPath + "/hunger.png"));
-  QMenu *toiletMenu = new QMenu(tr("Toilet"), itemsMenu);
-  toiletMenu->setIcon(QIcon(settings.graphicsPath + "/toilet.png"));
-  QMenu *hygieneMenu = new QMenu(tr("Hygiene"), itemsMenu);
-  hygieneMenu->setIcon(QIcon(settings.graphicsPath + "/hygiene.png"));
-  QMenu *socialMenu = new QMenu(tr("Social"), itemsMenu);
-  socialMenu->setIcon(QIcon(settings.graphicsPath + "/social.png"));
-  QMenu *funMenu = new QMenu(tr("Fun"), itemsMenu);
-  funMenu->setIcon(QIcon(settings.graphicsPath + "/fun.png"));
-  connect(itemsMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
+  QList<QMenu*> subMenus;
+
   for(const auto &item: itemBehaviours) {
-    if(item.file.left(1) != "_" && !item.reactions.isEmpty()) {
-      if(item.category.toLower() == "health") {
-        QAction *tempAction =
-          healthMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
-        tempAction->setData(item.file);
-      } else if(item.category.toLower() == "energy") {
-        QAction *tempAction =
-          energyMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
-        tempAction->setData(item.file);
-      } else if(item.category.toLower() == "hunger") {
-        QAction *tempAction =
-          hungerMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
-        tempAction->setData(item.file);
-      } else if(item.category.toLower() == "toilet") {
-        QAction *tempAction =
-          toiletMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
-        tempAction->setData(item.file);
-      } else if(item.category.toLower() == "hygiene") {
-        QAction *tempAction =
-          hygieneMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
-        tempAction->setData(item.file);
-      } else if(item.category.toLower() == "social") {
-        QAction *tempAction =
-          socialMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
-        tempAction->setData(item.file);
-      } else if(item.category.toLower() == "fun") {
-        QAction *tempAction =
-          funMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
-        tempAction->setData(item.file);
-      } else {
-        QAction *tempAction =
-          itemsMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title);
-        tempAction->setData(item.file);
+    QMenu *tempMenu = nullptr;
+    for(auto &subMenu: subMenus) {
+      if(subMenu->title() == item.category) {
+        tempMenu = subMenu;
+        break;
       }
     }
+    if(tempMenu == nullptr) {
+      tempMenu = new QMenu(item.category, itemsMenu);
+      tempMenu->setIcon(QIcon(settings.graphicsPath + "/" +
+                              item.category.toLower() + ".png"));
+      connect(tempMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
+      subMenus.append(tempMenu);
+    }
+    if(item.file.left(1) != "_" && !item.reactions.isEmpty()) {
+      tempMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title)->setData(item.file);
+    }
   }
-  if(!healthMenu->isEmpty()) {
-    itemsMenu->addMenu(healthMenu);
-  }
-  if(!energyMenu->isEmpty()) {
-    itemsMenu->addMenu(energyMenu);
-  }
-  if(!hungerMenu->isEmpty()) {
-    itemsMenu->addMenu(hungerMenu);
-  }
-  if(!toiletMenu->isEmpty()) {
-    itemsMenu->addMenu(toiletMenu);
-  }
-  if(!hygieneMenu->isEmpty()) {
-    itemsMenu->addMenu(hygieneMenu);
-  }
-  if(!socialMenu->isEmpty()) {
-    itemsMenu->addMenu(socialMenu);
-  }
-  if(!funMenu->isEmpty()) {
-    itemsMenu->addMenu(funMenu);
+  for(auto &subMenu: subMenus) {
+    if(!subMenu->isEmpty()) {
+      itemsMenu->addMenu(subMenu);
+    }
   }
 }
 
