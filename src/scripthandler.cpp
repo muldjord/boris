@@ -36,9 +36,6 @@
 #include <QRandomGenerator>
 #include <QRegularExpression>
 
-extern QList<Item*> itemList;
-extern QMap<QString, Sprite> sprites;
-extern QMap<QString, QImage> pixelFont;
 extern SoundMixer soundMixer;
 
 ScriptHandler::ScriptHandler(QImage *image,
@@ -54,7 +51,6 @@ ScriptHandler::ScriptHandler(QImage *image,
 {
   this->image = image;
   this->drawing = drawing;
-  this->settings = settings;
   this->bubble = bubble;
 }
 
@@ -307,9 +303,9 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
     if(settings.scriptOutput) {
       printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
     }
-    itemList.append(new Item(parentPos.x() + (iX * (size / 32)),
-                             parentPos.y() + (size / 2) + (iY * (size / 32)),
-                             size, itemName, settings));
+    settings.itemList.append(new Item(parentPos.x() + (iX * (size / 32)),
+                                      parentPos.y() + (size / 2) + (iY * (size / 32)),
+                                      size, itemName, settings));
   } else {
     if(settings.scriptOutput) {
       printf("Items disabled, ignoring spawn\n");
@@ -346,7 +342,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
         if(settings.scriptOutput) {
           printf("Drawing frame %d from sprite '%s' at %d,%d\n", f, sprite.toStdString().c_str(), x, y);
         }
-        painter.drawImage(x, y, sprites[sprite].at(f));
+        painter.drawImage(x, y, settings.sprites[sprite].at(f));
       }        
       return;
     }
@@ -493,8 +489,8 @@ void ScriptHandler::drawText(QPainter &painter, const int &x, const int &y, cons
   int idx = x;
   for(const auto &textChar: text) {
     QImage charImage;
-    if(pixelFont.contains(textChar)) {
-      charImage = pixelFont[textChar];
+    if(settings.pixelFont.contains(textChar)) {
+      charImage = settings.pixelFont[textChar];
     } else {
       charImage = QImage(5, 4, QImage::Format_ARGB32_Premultiplied);
       charImage.fill(Qt::red);

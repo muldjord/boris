@@ -50,9 +50,8 @@ public:
                              QList<Behaviour> &behaviours,
                              QMap<QString, sf::SoundBuffer> &soundFxs,
                              QProgressBar *progressBar);
-  static bool loadFont(const QString &graphicsPath, QMap<QString, QImage> &pixelFont);
-  static bool loadSprites(const QString &spritesPath,
-                          QMap<QString, Sprite> &sprites);
+  static bool loadFont(Settings &settings);
+  static bool loadSprites(Settings &settings);
   static Script parseScript(const QString &script);
   static void setClothesColor(const Settings &settings, QImage &image);
 };

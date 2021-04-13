@@ -54,6 +54,10 @@ namespace Direction {
   constexpr int NorthWest = 7;
 };
 
+class Stats;
+class Bubble;
+class Item;
+
 class Boris : public QGraphicsView
 {
   Q_OBJECT;

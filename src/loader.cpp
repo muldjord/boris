@@ -308,9 +308,9 @@ Script Loader::parseScript(const QString &script)
   return returnScript;
 }
 
-bool Loader::loadFont(const QString &graphicsPath, QMap<QString, QImage> &pixelFont)
+bool Loader::loadFont(Settings &settings)
 {
-  QImage fontSheet(graphicsPath + "/pfont.png");
+  QImage fontSheet(settings.graphicsPath + "/pfont.png");
   if(!fontSheet.isNull()) {
     QList<QString> fontChars({"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "æ", "ø", "å", " ", ".", ",", ":", ";", "!", "?", "\"", "\'", "_", "+", "-", "*", "/", "<", ">", "="});
     int w = fontSheet.width();
@@ -323,7 +323,7 @@ bool Loader::loadFont(const QString &graphicsPath, QMap<QString, QImage> &pixelF
       while(x2 < w && fontSheet.pixelIndex(x2, 0) != 2) {
         x2++;
       }
-      pixelFont[fontChar] = fontSheet.copy(x1, 0, x2 - x1, h);
+      settings.pixelFont[fontChar] = fontSheet.copy(x1, 0, x2 - x1, h);
       // Move past purple non-char area to where next char begins
       while(x2 < w && fontSheet.pixelIndex(x2, 0) == 2) {
         x2++;
@@ -336,11 +336,10 @@ bool Loader::loadFont(const QString &graphicsPath, QMap<QString, QImage> &pixelF
   return true;
 }
 
-bool Loader::loadSprites(const QString &spritesPath,
-                         QMap<QString, Sprite> &sprites)
+bool Loader::loadSprites(Settings &settings)
 {
   bool allGood = true;
-  QDir d(spritesPath,
+  QDir d(settings.spritesPath,
          "*.png",
          QDir::Name,
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
@@ -375,7 +374,7 @@ bool Loader::loadSprites(const QString &spritesPath,
       x1 = x2;
     }
     qInfo("  Added sprite: %s (%d frames)\n", info.baseName().toStdString().c_str(), sprite.count());
-    sprites[info.baseName()] = sprite;
+    settings.sprites[info.baseName()] = sprite;
   }
   return allGood;
 }

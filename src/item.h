@@ -36,6 +36,8 @@
 #include <QTimer>
 #include <QBasicTimer>
 
+struct Settings;
+
 class Item : public QGraphicsView
 {
   Q_OBJECT;

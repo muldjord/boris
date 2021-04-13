@@ -33,8 +33,6 @@
 #include <QDesktopServices>
 #include <QPainter>
 
-extern QMap<QString, QImage> pixelFont;
-
 Bubble::Bubble(Settings &settings) : settings(settings)
 {
   setAttribute(Qt::WA_TranslucentBackground);
@@ -73,10 +71,10 @@ int Bubble::initBubble(const int x, const int y,
   int textWidth = 0;
   int textHeight = 0;
   for(const auto &ch: bubbleText) {
-    if(pixelFont.contains(ch)) {
-      textWidth += pixelFont[ch].width();
-      if(pixelFont[ch].height() > textHeight) {
-        textHeight = pixelFont[ch].height();
+    if(settings.pixelFont.contains(ch)) {
+      textWidth += settings.pixelFont[ch].width();
+      if(settings.pixelFont[ch].height() > textHeight) {
+        textHeight = settings.pixelFont[ch].height();
       }
     }
   }
@@ -87,8 +85,8 @@ int Bubble::initBubble(const int x, const int y,
   int idx = 0;
   for(const auto &ch: bubbleText.split("")) {
     QImage charImage;
-    if(pixelFont.contains(ch)) {
-      charImage = pixelFont[ch];
+    if(settings.pixelFont.contains(ch)) {
+      charImage = settings.pixelFont[ch];
     } else {
       continue;
     }

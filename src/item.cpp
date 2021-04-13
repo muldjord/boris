@@ -42,8 +42,6 @@
 #include <QElapsedTimer>
 #include <QRandomGenerator>
 
-extern QList<Item*> itemList;
-extern QList<Behaviour> itemBehaviours;
 extern SoundMixer soundMixer;
 
 Item::Item(const int &x, const int &y, const int &size, const QString &item, Settings &settings, const bool &ignore) : settings(settings), size(size)
@@ -57,8 +55,8 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   
-  for(int a = 0; a < itemBehaviours.count(); ++a) {
-    if(itemBehaviours.at(a).file == item) {
+  for(int a = 0; a < settings.itemBehaviours.count(); ++a) {
+    if(settings.itemBehaviours.at(a).file == item) {
       curItem = a;
       break;
     }
@@ -86,7 +84,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
     QTimer::singleShot(settings.itemTimeout * 1000, this, &Item::destroy);
   }
 
-  if(itemBehaviours.at(curItem).allowFlip && QRandomGenerator::global()->bounded(2)) {
+  if(settings.itemBehaviours.at(curItem).allowFlip && QRandomGenerator::global()->bounded(2)) {
     flipFrames = true;
   } else {
     flipFrames = false;
@@ -100,7 +98,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   drawing = false;
 
   // Look if a 'define init' exists in behaviour. If so, run it before starting first frame.
-  if(itemBehaviours.at(curItem).defines.contains("init")) {
+  if(settings.itemBehaviours.at(curItem).defines.contains("init")) {
     int stop = 0;
     runScript(stop, true);
   }
@@ -177,12 +175,12 @@ void Item::runScript(int &stop, const bool &init)
     scriptImage.fill(Qt::transparent);
   }
 
-  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, nullptr, itemBehaviours.at(curItem).labels, itemBehaviours.at(curItem).defines, scriptVars, pos(), size);
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, nullptr, settings.itemBehaviours.at(curItem).labels, settings.itemBehaviours.at(curItem).defines, scriptVars, pos(), size);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Item::setCurFrame);
   if(init) {
-    scriptHandler.runScript(stop, itemBehaviours.at(curItem).defines["init"]);
+    scriptHandler.runScript(stop, settings.itemBehaviours.at(curItem).defines["init"]);
   } else {
-    scriptHandler.runScript(stop, itemBehaviours.at(curItem).frames.at(curFrame).script);
+    scriptHandler.runScript(stop, settings.itemBehaviours.at(curItem).frames.at(curFrame).script);
   }
 
   scriptSprite->setPixmap(QPixmap::fromImage(scriptImage));
@@ -198,38 +196,38 @@ void Item::timerEvent(QTimerEvent *)
 
   sanityCheck();
   
-  if(curFrame >= itemBehaviours.at(curItem).frames.count()) {
+  if(curFrame >= settings.itemBehaviours.at(curItem).frames.count()) {
     curFrame = 0;
   }
 
   if(flipFrames) {
-    QImage flipped = itemBehaviours.at(curItem).frames.at(curFrame).sprite.toImage().mirrored(true, false);
+    QImage flipped = settings.itemBehaviours.at(curItem).frames.at(curFrame).sprite.toImage().mirrored(true, false);
     itemSprite->setPixmap(QPixmap::fromImage(flipped));
     shadowSprite->setPixmap(getShadow(QPixmap::fromImage(flipped)));
   } else {
-    itemSprite->setPixmap(itemBehaviours.at(curItem).frames.at(curFrame).sprite);
-    shadowSprite->setPixmap(getShadow(itemBehaviours.at(curItem).frames.at(curFrame).sprite));
+    itemSprite->setPixmap(settings.itemBehaviours.at(curItem).frames.at(curFrame).sprite);
+    shadowSprite->setPixmap(getShadow(settings.itemBehaviours.at(curItem).frames.at(curFrame).sprite));
   }
 
-  if(settings.sound && itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer != nullptr) {
-    if(itemBehaviours.at(curItem).pitchLock) {
-      soundMixer.playSound(itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
+  if(settings.sound && settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer != nullptr) {
+    if(settings.itemBehaviours.at(curItem).pitchLock) {
+      soundMixer.playSound(settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
                            (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0, 1.0);
     } else {
-      soundMixer.playSound(itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
+      soundMixer.playSound(settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
                            (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
                            0.95 + QRandomGenerator::global()->bounded(100) / 1000.0);
     }
   }
 
-  if(itemBehaviours.at(curItem).frames.at(curFrame).dx != 0 ||
-     itemBehaviours.at(curItem).frames.at(curFrame).dy != 0) {
-    moveItem(itemBehaviours.at(curItem).frames.at(curFrame).dx,
-              itemBehaviours.at(curItem).frames.at(curFrame).dy,
+  if(settings.itemBehaviours.at(curItem).frames.at(curFrame).dx != 0 ||
+     settings.itemBehaviours.at(curItem).frames.at(curFrame).dy != 0) {
+    moveItem(settings.itemBehaviours.at(curItem).frames.at(curFrame).dx,
+              settings.itemBehaviours.at(curItem).frames.at(curFrame).dy,
               flipFrames);
   }
 
-  int frameTime = itemBehaviours.at(curItem).frames.at(curFrame).time;
+  int frameTime = settings.itemBehaviours.at(curItem).frames.at(curFrame).time;
   if(frameTime <= 5) {
     frameTime = 5;
   }
@@ -415,23 +413,23 @@ QPoint Item::getGlobalCenter()
 
 QString Item::getReactionBehaviour()
 {
-  if(!itemBehaviours.at(curItem).reactions.isEmpty()) {
-    return itemBehaviours.at(curItem).reactions.at(QRandomGenerator::global()->bounded(itemBehaviours.at(curItem).reactions.count()));
+  if(!settings.itemBehaviours.at(curItem).reactions.isEmpty()) {
+    return settings.itemBehaviours.at(curItem).reactions.at(QRandomGenerator::global()->bounded(settings.itemBehaviours.at(curItem).reactions.count()));
   }
   return QString();
 }
 
 QString Item::getCategory()
 {
-  return itemBehaviours.at(curItem).category;
+  return settings.itemBehaviours.at(curItem).category;
 }
 
 void Item::destroy()
 {
   // Remove from collide list
-  for(int a = 0; a < itemList.count(); ++a) {
-    if(itemList.at(a) == this) {
-      itemList.removeAt(a);
+  for(int a = 0; a < settings.itemList.count(); ++a) {
+    if(settings.itemList.at(a) == this) {
+      settings.itemList.removeAt(a);
     }
   }
   delete this;

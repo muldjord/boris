@@ -27,7 +27,16 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include "item.h"
+#include "behaviour.h"
+#include "sprite.h"
+#include "boris.h"
+#include "soundmixer.h"
+
 #include <QUrl>
+#include <QMap>
+#include <QString>
+#include <QImage>
 
 constexpr int STATS_ALWAYS = 42;
 constexpr int STATS_CRITICAL = 43;
@@ -39,6 +48,9 @@ struct RssLine
   QString text;
   QUrl url;
 };
+
+class Item;
+class Boris;
 
 struct Settings {
   bool showWelcome = true;
@@ -97,6 +109,17 @@ struct Settings {
   int coins = 0;
   QList<QString> unlocked;
 
+  // Resources
+  QList<Boris*> borisList;
+  QList<Behaviour> behaviours;
+  
+  QList<Item*> itemList;
+  QList<Behaviour> itemBehaviours;
+  
+  QList<Behaviour> weathers;
+
+  QMap<QString, QImage> pixelFont;
+  QMap<QString, Sprite> sprites;
 };
 
 #endif // SETTINGS_H

@@ -49,15 +49,6 @@
 #include <QRandomGenerator>
 #endif
 
-QList<Item*> itemList;
-QList<Behaviour> itemBehaviours;
-
-QList<Boris*> borisList;
-QList<Behaviour> behaviours;
-
-QList<Behaviour> weathers;
-QMap<QString, Sprite> sprites;
-QMap<QString, QImage> pixelFont;
 SoundMixer soundMixer(24);
 
 MainWindow::MainWindow()
@@ -233,7 +224,7 @@ MainWindow::MainWindow()
   createTrayIcon();
   trayIcon->show();
 
-  netComm = new NetComm(&settings);
+  netComm = new NetComm(settings);
   connect(netComm, &NetComm::weatherUpdated, this, &MainWindow::updateWeather);
 
   loadWidget = new QWidget;
@@ -264,7 +255,7 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow()
 {
   delete trayIcon;
-  for(auto &boris: borisList) {
+  for(auto &boris: settings.borisList) {
     delete boris;
   }
 }
@@ -292,31 +283,31 @@ void MainWindow::loadAssets()
     qInfo("Error when loading some sounds, please check your wav files\n");
   }
 
-  if(Loader::loadBehaviours(settings, settings.behavioursPath, behaviours, soundMixer.soundFxs, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.behavioursPath, settings.behaviours, soundMixer.soundFxs, progressBar)) {
     qInfo("Behaviours loaded ok... :)\n");
   } else {
     qInfo("Error when loading some behaviours, please check your png and dat files\n");
   }
   
-  if(Loader::loadBehaviours(settings, settings.weathersPath, weathers, soundMixer.soundFxs, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.weathersPath, settings.weathers, soundMixer.soundFxs, progressBar)) {
     qInfo("Weather types loaded ok... :)\n");
   } else {
     qInfo("Error when loading some weather types, please check your png and dat files\n");
   }
 
-  if(Loader::loadBehaviours(settings, settings.itemsPath, itemBehaviours, soundMixer.soundFxs, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.itemsPath, settings.itemBehaviours, soundMixer.soundFxs, progressBar)) {
     qInfo("Items loaded ok... :)\n");
   } else {
     qInfo("Error when loading some items, please check your png and dat files\n");
   }
 
-  if(Loader::loadSprites(settings.spritesPath, sprites)) {
+  if(Loader::loadSprites(settings)) {
     qInfo("Sprites loaded ok... :)\n");
   } else {
     qInfo("Error when loading sprites...\n");
   }
 
-  if(Loader::loadFont(settings.graphicsPath, pixelFont)) {
+  if(Loader::loadFont(settings)) {
     qInfo("Font loaded ok... :)\n");
   } else {
     qInfo("Error when loading font...\n");
@@ -346,26 +337,26 @@ void MainWindow::addBoris(int clones)
 {
   qInfo("Spawning %d clone(s)\n", clones);
   while(clones--) {
-    borisList.append(new Boris(settings));
-    connect(this, &MainWindow::updateBoris, borisList.last(), &Boris::updateBoris);
-    connect(this, &MainWindow::updateBorisBehavioursMenu, borisList.last(), &Boris::updateBehavioursMenu);
-    connect(earthquakeAction, &QAction::triggered, borisList.last(), &Boris::earthquake);
-    connect(this, &MainWindow::queueBehavFromFile, borisList.last(), &Boris::queueBehavFromFile);
-    connect(weatherAction, &QAction::triggered, borisList.last(), &Boris::triggerWeather);
-    connect(borisList.last(), &Boris::addCoins, this, &MainWindow::addCoins);
-    borisList.last()->show();
-    borisList.last()->earthquake();
+    settings.borisList.append(new Boris(settings));
+    connect(this, &MainWindow::updateBoris, settings.borisList.last(), &Boris::updateBoris);
+    connect(this, &MainWindow::updateBorisBehavioursMenu, settings.borisList.last(), &Boris::updateBehavioursMenu);
+    connect(earthquakeAction, &QAction::triggered, settings.borisList.last(), &Boris::earthquake);
+    connect(this, &MainWindow::queueBehavFromFile, settings.borisList.last(), &Boris::queueBehavFromFile);
+    connect(weatherAction, &QAction::triggered, settings.borisList.last(), &Boris::triggerWeather);
+    connect(settings.borisList.last(), &Boris::addCoins, this, &MainWindow::addCoins);
+    settings.borisList.last()->show();
+    settings.borisList.last()->earthquake();
   }
 }
 
 void MainWindow::removeBoris(int clones)
 {
   // Reset all Boris collide pointers within all existing clones to prevent crash
-  for(const auto &boris: borisList) {
+  for(const auto &boris: settings.borisList) {
     boris->borisFriend = nullptr;
   }
   while(clones--) {
-    delete borisList.takeLast();
+    delete settings.borisList.takeLast();
   }
 }
 
@@ -421,10 +412,10 @@ void MainWindow::aboutBox()
     newClones = (qrand() % 99) + 1;
 #endif
   }
-  if(borisList.count() > newClones) {
-    removeBoris(borisList.count() - newClones);
-  } else if(borisList.count() < newClones) {
-    addBoris(newClones - borisList.count());
+  if(settings.borisList.count() > newClones) {
+    removeBoris(settings.borisList.count() - newClones);
+  } else if(settings.borisList.count() < newClones) {
+    addBoris(newClones - settings.borisList.count());
   }
   
   netComm->updateAll();
@@ -449,7 +440,7 @@ void MainWindow::killAll()
   iniSettings->setValue("boris_x", settings.borisX);
   iniSettings->setValue("boris_y", settings.borisY);
   QTimer::singleShot(2000, qApp, SLOT(quit()));
-  for(auto &boris: borisList) {
+  for(auto &boris: settings.borisList) {
     boris->changeBehaviour("wave");
   }
 }
@@ -473,36 +464,53 @@ void MainWindow::updateBehavioursMenu()
   QMenu *idkfaMenu = new QMenu(tr("Idkfa"), behavioursMenu);
   idkfaMenu->setIcon(QIcon(settings.graphicsPath + "/idkfa.png"));
 
-  for(const auto &behaviour: behaviours) {
-    QMenu *tempMenu = nullptr;
-    for(auto &subMenu: subMenus) {
-      if(subMenu->title() == behaviour.category) {
-        tempMenu = subMenu;
-        break;
+  for(const auto &behaviour: settings.behaviours) {
+    QString title = behaviour.title;
+    QString iconFile(settings.graphicsPath + "/" + behaviour.category.toLower() + ".png");
+    QMenu *menu = nullptr;
+      
+    // Set correct title
+    if(!settings.unlocked.contains(behaviour.file)) {
+      title.append(" (" + QString::number(behaviour.coins) + "c)");
+    }
+
+    // Set correct icon file
+    if(!settings.unlocked.contains(behaviour.file)) {
+      iconFile = settings.graphicsPath + "/coin.png";
+    }
+    if(!QFile::exists(iconFile)) {
+      iconFile = ":missing.png";
+    }
+
+    // Find correct menu to put behaviour into
+    if((behaviour.file.left(1) == "_" && behaviour.category.isEmpty()) ||
+       behaviour.category == "Hidden" ||
+       behaviour.category == "Locomotion") {
+      menu = idkfaMenu;
+    }
+    if(menu == nullptr) {
+      for(auto &subMenu: subMenus) {
+        if(subMenu->title() == behaviour.category && behaviour.category != "Hidden") {
+          menu = subMenu;
+          break;
+        }
       }
     }
-    if(tempMenu == nullptr) {
-      tempMenu = new QMenu(behaviour.category, behavioursMenu);
-      tempMenu->setIcon(QIcon(settings.graphicsPath + "/" +
-                              behaviour.category.toLower() + ".png"));
-      subMenus.append(tempMenu);
+    if(menu == nullptr) {
+      menu = new QMenu(behaviour.category, behavioursMenu);
+      menu->setIcon(QIcon(iconFile));
+      subMenus.append(menu);
     }
-    if(settings.unlocked.contains(behaviour.file)) {
-      tempMenu->addAction(QIcon(settings.graphicsPath + "/" +
-                                behaviour.category.toLower() + ".png"),
-                          behaviour.title)->setData(behaviour.file);
-    } else if(behaviour.file.left(1) != "_" || behaviour.category.toLower() != "hidden") {
-      tempMenu->addAction(QIcon(*coinIcon),
-                          behaviour.title + " (" + QString::number(behaviour.coins) + "c)")->setData(behaviour.file);
-    } else {
-      tempMenu = idkfaMenu;
-    }
+
+    menu->addAction(QIcon(iconFile), title)->setData(behaviour.file);
   }
+  
   for(auto &subMenu: subMenus) {
     if(!subMenu->isEmpty()) {
       behavioursMenu->addMenu(subMenu);
     }
   }
+
   if(settings.idkfa && !idkfaMenu->isEmpty()) {
     behavioursMenu->addMenu(idkfaMenu);
   }
@@ -516,7 +524,7 @@ void MainWindow::createItemsMenu()
 {
   QList<QMenu*> subMenus;
 
-  for(const auto &item: itemBehaviours) {
+  for(const auto &item: settings.itemBehaviours) {
     QMenu *tempMenu = nullptr;
     for(auto &subMenu: subMenus) {
       if(subMenu->title() == item.category) {
@@ -545,7 +553,7 @@ void MainWindow::createItemsMenu()
 void MainWindow::triggerBehaviour(QAction* a)
 {
   QString itemFile = a->data().toString();
-  for(const auto &behaviour: behaviours) {
+  for(const auto &behaviour: settings.behaviours) {
     if(behaviour.file == itemFile) {
       if(settings.unlocked.contains(behaviour.file)) {
         emit queueBehavFromFile(behaviour.file);
@@ -577,15 +585,15 @@ void MainWindow::spawnRandomItem()
 {
   int randomItem = 0;
   do {
-    randomItem = QRandomGenerator::global()->bounded(itemBehaviours.count());
-  } while(itemBehaviours.at(randomItem).reactions.isEmpty());
+    randomItem = QRandomGenerator::global()->bounded(settings.itemBehaviours.count());
+  } while(settings.itemBehaviours.at(randomItem).reactions.isEmpty());
   
-  itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::desktop()->width()),
-                           QRandomGenerator::global()->bounded(QApplication::desktop()->height()),
-                           settings.size,
-                           itemBehaviours.at(randomItem).file,
-                           settings,
-                           false));
+  settings.itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::desktop()->width()),
+                                    QRandomGenerator::global()->bounded(QApplication::desktop()->height()),
+                                    settings.size,
+                                    settings.itemBehaviours.at(randomItem).file,
+                                    settings,
+                                    false));
   
   if(settings.items && settings.itemSpawnInterval) {
     itemTimer.start();
@@ -595,9 +603,9 @@ void MainWindow::spawnRandomItem()
 void MainWindow::spawnItem(QAction* a)
 {
   QString itemFile = a->data().toString();
-  for(const auto &item: itemBehaviours) {
+  for(const auto &item: settings.itemBehaviours) {
     if(item.file == itemFile) {
-      itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::desktop()->width()),
+      settings.itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::desktop()->width()),
                                QRandomGenerator::global()->bounded(QApplication::desktop()->height()),
                                settings.size,
                                item.file,

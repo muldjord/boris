@@ -36,6 +36,8 @@
 #include <QFile>
 #include <QTimer>
 
+class Settings;
+
 class Stats : public QGraphicsView
 {
   Q_OBJECT;
