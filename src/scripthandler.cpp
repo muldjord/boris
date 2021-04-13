@@ -556,7 +556,8 @@ void ScriptHandler::handleSound(QList<QString> &parameters)
     if(settings.scriptOutput) {
       printf("Playing sound '%s'\n", parameters.first().toStdString().c_str());
     }
-    soundMixer.playSoundFile(parameters.first(),
+    soundMixer.playSoundFile(settings.soundsPath +
+                             (settings.soundsPath.right(1) == "/"?"":"/") + parameters.first(),
                              (float)parentPos.x() / (float)settings.desktopWidth * 2.0 - 1.0,
                              (scriptVars["hyper"] / 60.0) + 1);
   }

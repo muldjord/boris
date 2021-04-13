@@ -1,0 +1,18 @@
+title=Tap your foot
+category=Idle
+coins=5
+social=-2
+fun=-2
+allowFlip
+#Frames
+0;75;0;0;foot_tap.wav;
+1;75;0;0;;
+0;75;0;0;foot_tap.wav;
+1;75;0;0;;
+0;75;0;0;foot_tap.wav;
+1;75;0;0;;
+0;75;0;0;foot_tap.wav;
+1;75;0;0;;
+0;75;0;0;foot_tap.wav;
+1;75;0;0;;
+0;2000;0;0;foot_tap.wav;

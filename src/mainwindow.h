@@ -86,8 +86,7 @@ private:
   void createItemsMenu();
   void createActions();
   QAction *earthquakeAction;
-  QAction *teleportAction;
-  QAction *behavsAction;
+  //QAction *behavioursAction;
   QAction *weatherAction;
   int coins = 0;
   QAction *coinsAction;

@@ -83,30 +83,16 @@ MainWindow::MainWindow()
   }
   settings.scriptOutput = iniSettings->value("script_output").toBool();
   
-  if(!iniSettings->contains("sounds_path")) {
-    iniSettings->setValue("sounds_path", "data/sfx");
+  if(!iniSettings->contains("data_path")) {
+    iniSettings->setValue("data_path", "data");
   }
-  settings.soundsPath = iniSettings->value("sounds_path").toString();
+  QString dataPath = iniSettings->value("data_path").toString();
 
-  if(!iniSettings->contains("behavs_path")) {
-    iniSettings->setValue("behavs_path", "data/behavs");
-  }
-  settings.behavsPath = iniSettings->value("behavs_path").toString();
-  
-  if(!iniSettings->contains("weathers_path")) {
-    iniSettings->setValue("weathers_path", "data/weathers");
-  }
-  settings.weathersPath = iniSettings->value("weathers_path").toString();
-
-  if(!iniSettings->contains("items_path")) {
-    iniSettings->setValue("items_path", "data/items");
-  }
-  settings.itemsPath = iniSettings->value("items_path").toString();
-
-  if(!iniSettings->contains("sprites_path")) {
-    iniSettings->setValue("sprites_path", "data/sprites");
-  }
-  settings.spritesPath = iniSettings->value("sprites_path").toString();
+  settings.behavioursPath = dataPath + "/behaviours";
+  settings.itemsPath = dataPath + "/items";
+  settings.soundsPath = dataPath + "/sounds";
+  settings.spritesPath = dataPath + "/sprites";
+  settings.weathersPath = dataPath + "/weathers";
 
   if(!iniSettings->contains("unlocked")) {
     iniSettings->setValue("unlocked", "whistle");
@@ -290,7 +276,7 @@ void MainWindow::loadAssets()
   totalAssetsSize += Loader::getAssetsSize(QDir(settings.soundsPath, "*.wav", QDir::Name,
                                                       QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
   
-  totalAssetsSize += Loader::getAssetsSize(QDir(settings.behavsPath, "*.png", QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
+  totalAssetsSize += Loader::getAssetsSize(QDir(settings.behavioursPath, "*.png", QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
 
   totalAssetsSize += Loader::getAssetsSize(QDir(settings.weathersPath, "*.png", QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
 
@@ -306,7 +292,7 @@ void MainWindow::loadAssets()
     qInfo("Error when loading some sounds, please check your wav files\n");
   }
 
-  if(Loader::loadBehaviours(settings, settings.behavsPath, behaviours, soundMixer.soundFxs, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.behavioursPath, behaviours, soundMixer.soundFxs, progressBar)) {
     qInfo("Behaviours loaded ok... :)\n");
   } else {
     qInfo("Error when loading some behaviours, please check your png and dat files\n");
@@ -330,7 +316,7 @@ void MainWindow::loadAssets()
     qInfo("Error when loading sprites...\n");
   }
 
-  if(Loader::loadFont(pixelFont)) {
+  if(Loader::loadFont(settings.graphicsPath, pixelFont)) {
     qInfo("Font loaded ok... :)\n");
   } else {
     qInfo("Error when loading font...\n");
@@ -386,12 +372,12 @@ void MainWindow::removeBoris(int clones)
 void MainWindow::createActions()
 {
   earthquakeAction = new QAction(tr("&Earthquake!!!"), this);
-  earthquakeAction->setIcon(QIcon(":earthquake.png"));
+  earthquakeAction->setIcon(QIcon(settings.graphicsPath + "/earthquake.png"));
 
   weatherAction = new QAction(tr("Updating weather..."), this);
 
   coinsAction = new QAction(QString::number(settings.coins) + tr(" coins"), this);
-  coinsAction->setIcon(QIcon(":icon_coins.png"));
+  coinsAction->setIcon(QIcon(settings.graphicsPath + "/coin.png"));
 }
 
 void MainWindow::createTrayIcon()
@@ -399,7 +385,7 @@ void MainWindow::createTrayIcon()
   trayIcon = new QSystemTrayIcon;
 
   trayIconMenu = new QMenu;
-  trayIconMenu->addAction(QIcon(":icon_about.png"), tr("&Config / about..."), this, &MainWindow::aboutBox);
+  trayIconMenu->addAction(QIcon(settings.graphicsPath + "/about.png"), tr("&Config / about..."), this, &MainWindow::aboutBox);
   trayIconMenu->addSeparator();
   trayIconMenu->addMenu(behavioursMenu);
   trayIconMenu->addAction(coinsAction);
@@ -409,9 +395,9 @@ void MainWindow::createTrayIcon()
   trayIconMenu->addAction(earthquakeAction);
   trayIconMenu->addAction(weatherAction);
   trayIconMenu->addSeparator();
-  trayIconMenu->addAction(QIcon(":icon_quit.png"), tr("&Quit"), this, &MainWindow::killAll);
+  trayIconMenu->addAction(QIcon(settings.graphicsPath + "/quit.png"), tr("&Quit"), this, &MainWindow::killAll);
 
-  coinIcon = new QIcon(QPixmap::fromImage(QImage(":icon_coins.png")));
+  coinIcon = new QIcon(QPixmap::fromImage(QImage(settings.graphicsPath + "/coin.png")));
 
   QImage iconImage(":icon.png");
   Loader::setClothesColor(settings, iconImage);
@@ -475,144 +461,71 @@ void MainWindow::updateWeather()
   } else {
     weatherAction->setText(tr("Couldn't find city"));
   }
-  weatherAction->setIcon(QIcon(":" + settings.weatherType + ".png"));
+  weatherAction->setIcon(QIcon(settings.graphicsPath + "/weather/" + settings.weatherType + ".png"));
 }
 
 void MainWindow::updateBehavioursMenu()
 {
   behavioursMenu->clear();
-  QMenu *healthMenu = new QMenu(tr("Health"), behavioursMenu);
-  healthMenu->setIcon(QIcon(":health.png"));
-  QMenu *energyMenu = new QMenu(tr("Energy"), behavioursMenu);
-  energyMenu->setIcon(QIcon(":energy.png"));
-  QMenu *hungerMenu = new QMenu(tr("Food"), behavioursMenu);
-  hungerMenu->setIcon(QIcon(":hunger.png"));
-  QMenu *toiletMenu = new QMenu(tr("Toilet"), behavioursMenu);
-  toiletMenu->setIcon(QIcon(":toilet.png"));
-  QMenu *hygieneMenu = new QMenu(tr("Hygiene"), behavioursMenu);
-  hygieneMenu->setIcon(QIcon(":hygiene.png"));
-  QMenu *socialMenu = new QMenu(tr("Social"), behavioursMenu);
-  socialMenu->setIcon(QIcon(":social.png"));
-  QMenu *funMenu = new QMenu(tr("Fun"), behavioursMenu);
-  funMenu->setIcon(QIcon(":fun.png"));
-  QMenu *movementMenu = new QMenu(tr("Movement"), behavioursMenu);
-  movementMenu->setIcon(QIcon(":movement.png"));
-  QMenu *idleMenu = new QMenu(tr("Idle"), behavioursMenu);
-  idleMenu->setIcon(QIcon(":movement.png"));
+
+  QList<QMenu*> subMenus;
+
   QMenu *idkfaMenu = new QMenu(tr("Idkfa"), behavioursMenu);
-  idkfaMenu->setIcon(QIcon(":idkfa.png"));
+  idkfaMenu->setIcon(QIcon(settings.graphicsPath + "/idkfa.png"));
+
   for(const auto &behaviour: behaviours) {
+    QMenu *tempMenu = nullptr;
+    for(auto &subMenu: subMenus) {
+      if(subMenu->title() == behaviour.category) {
+        tempMenu = subMenu;
+        break;
+      }
+    }
+    if(tempMenu == nullptr) {
+      tempMenu = new QMenu(behaviour.category, behavioursMenu);
+      subMenus.append(tempMenu);
+    }
     if(settings.unlocked.contains(behaviour.file)) {
-      if(behaviour.category.toLower() == "energy") {
-        energyMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                              behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "hunger") {
-        hungerMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                              behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "toilet") {
-        toiletMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                              behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "social") {
-        socialMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                              behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "fun") {
-        funMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                           behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "movement") {
-        movementMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                                behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "idle") {
-        idleMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                            behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "hygiene") {
-        hygieneMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                               behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "health") {
-        healthMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                              behaviour.title)->setData(behaviour.file);
-      }
+      tempMenu->addAction(QIcon(settings.graphicsPath + "/" +
+                                behaviour.category.toLower() + ".png"),
+                          behaviour.title)->setData(behaviour.file);
     } else if(behaviour.file.left(1) != "_" || behaviour.category.toLower() != "hidden") {
-      if(behaviour.category.toLower() == "energy") {
-        energyMenu->addAction(QIcon(*coinIcon),
-                              behaviour.title + " (" + QString::number(behaviour.coins) + "c)")->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "hunger") {
-        hungerMenu->addAction(QIcon(*coinIcon),
-                              behaviour.title + " (" + QString::number(behaviour.coins) + "c)")->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "toilet") {
-        toiletMenu->addAction(QIcon(*coinIcon),
-                              behaviour.title + " (" + QString::number(behaviour.coins) + "c)")->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "social") {
-        socialMenu->addAction(QIcon(*coinIcon),
-                              behaviour.title + " (" + QString::number(behaviour.coins) + "c)")->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "fun") {
-        funMenu->addAction(QIcon(*coinIcon),
-                           behaviour.title + " (" + QString::number(behaviour.coins) + "c)")->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "movement") {
-        movementMenu->addAction(QIcon(*coinIcon),
-                                behaviour.title + " (" + QString::number(behaviour.coins) + "c)")->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "idle") {
-        idleMenu->addAction(QIcon(*coinIcon),
+      tempMenu->addAction(QIcon(*coinIcon),
                             behaviour.title + " (" + QString::number(behaviour.coins) + "c)")->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "hygiene") {
-        hygieneMenu->addAction(QIcon(*coinIcon),
-                               behaviour.title + " (" + QString::number(behaviour.coins) + "c)")->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "health") {
-        healthMenu->addAction(QIcon(*coinIcon),
-                              behaviour.title + " (" + QString::number(behaviour.coins) + "c)")->setData(behaviour.file);
-      }
     } else {
-      idkfaMenu->addAction(QIcon(":idkfa.png"),
-                           behaviour.title)->setData(behaviour.file);
+      tempMenu = idkfaMenu;
     }
   }
-  if(!healthMenu->isEmpty()) {
-    behavioursMenu->addMenu(healthMenu);
+  for(auto &subMenu: subMenus) {
+    if(!subMenu->isEmpty()) {
+      behavioursMenu->addMenu(subMenu);
+    }
   }
-  if(!energyMenu->isEmpty()) {
-    behavioursMenu->addMenu(energyMenu);
-  }
-  if(!hungerMenu->isEmpty()) {
-    behavioursMenu->addMenu(hungerMenu);
-  }
-  if(!toiletMenu->isEmpty()) {
-    behavioursMenu->addMenu(toiletMenu);
-  }
-  if(!hygieneMenu->isEmpty()) {
-    behavioursMenu->addMenu(hygieneMenu);
-  }
-  if(!socialMenu->isEmpty()) {
-    behavioursMenu->addMenu(socialMenu);
-  }
-  if(!funMenu->isEmpty()) {
-    behavioursMenu->addMenu(funMenu);
-  }
-  if(!movementMenu->isEmpty()) {
-    behavioursMenu->addMenu(movementMenu);
-  }
-  if(!idleMenu->isEmpty()) {
-    behavioursMenu->addMenu(idleMenu);
-  }
-  if(settings.idkfa) {
+  if(settings.idkfa && !idkfaMenu->isEmpty()) {
     behavioursMenu->addMenu(idkfaMenu);
+  }
+
+  if(behavioursMenu->isEmpty()) {
+    behavioursMenu->addAction(QIcon(settings.graphicsPath + "/idkfa.png"), tr("No behaviours unlocked!"));
   }
 }
 
 void MainWindow::createItemsMenu()
 {
   QMenu *healthMenu = new QMenu(tr("Health"), itemsMenu);
-  healthMenu->setIcon(QIcon(":health.png"));
+  healthMenu->setIcon(QIcon(settings.graphicsPath + "/health.png"));
   QMenu *energyMenu = new QMenu(tr("Energy"), itemsMenu);
-  energyMenu->setIcon(QIcon(":energy.png"));
+  energyMenu->setIcon(QIcon(settings.graphicsPath + "/energy.png"));
   QMenu *hungerMenu = new QMenu(tr("Food"), itemsMenu);
-  hungerMenu->setIcon(QIcon(":hunger.png"));
+  hungerMenu->setIcon(QIcon(settings.graphicsPath + "/hunger.png"));
   QMenu *toiletMenu = new QMenu(tr("Toilet"), itemsMenu);
-  toiletMenu->setIcon(QIcon(":toilet.png"));
+  toiletMenu->setIcon(QIcon(settings.graphicsPath + "/toilet.png"));
   QMenu *hygieneMenu = new QMenu(tr("Hygiene"), itemsMenu);
-  hygieneMenu->setIcon(QIcon(":hygiene.png"));
+  hygieneMenu->setIcon(QIcon(settings.graphicsPath + "/hygiene.png"));
   QMenu *socialMenu = new QMenu(tr("Social"), itemsMenu);
-  socialMenu->setIcon(QIcon(":social.png"));
+  socialMenu->setIcon(QIcon(settings.graphicsPath + "/social.png"));
   QMenu *funMenu = new QMenu(tr("Fun"), itemsMenu);
-  funMenu->setIcon(QIcon(":fun.png"));
+  funMenu->setIcon(QIcon(settings.graphicsPath + "/fun.png"));
   connect(itemsMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
   for(const auto &item: itemBehaviours) {
     if(item.file.left(1) != "_" && !item.reactions.isEmpty()) {
@@ -696,7 +609,7 @@ void MainWindow::triggerBehaviour(QAction* a)
             emit updateBorisBehavioursMenu();
           }
         } else {
-          soundMixer.playSound(&soundMixer.soundFxs["data/sfx/nocoin.wav"], 0, 1);
+          soundMixer.playSound(&soundMixer.soundFxs["nocoin.wav"], 0, 1);
           QMessageBox::information(nullptr, tr("Not enough coins!"), tr("You can't afford the '") + " " + behaviour.title + "' " + tr("behaviour.\n\nPlace items that corresponds to Boris' needs to earn coins. You can then use those coins to unlock new right-click behaviours."));
         }
       }
@@ -742,7 +655,7 @@ void MainWindow::spawnItem(QAction* a)
 
 void MainWindow::addCoins(const QString &message, const int &coins)
 {
-  soundMixer.playSound(&soundMixer.soundFxs["data/sfx/coinup.wav"], 0, 1);
+  soundMixer.playSound(&soundMixer.soundFxs["coinup.wav"], 0, 1);
   settings.coins += coins;
   coinsAction->setText(QString::number(settings.coins) + " " + tr("coins") + " (" + message + ")");
   trayIcon->setIcon(*coinIcon);

@@ -97,9 +97,9 @@ int Bubble::initBubble(const int x, const int y,
   }
   painter.end();
 
-  QImage bubbleAtlas(":bubble.png");
-  QImage bubbleSpeech(":bubble_speech.png");
-  QImage bubbleThought(":bubble_thought.png");
+  QImage bubbleAtlas(settings.graphicsPath + "/bubble.png");
+  QImage bubbleSpeech(settings.graphicsPath + "/bubble_speech.png");
+  QImage bubbleThought(settings.graphicsPath + "/bubble_thought.png");
   QImage bubbleImage(textImage.width() + bubbleAtlas.width() - 1 - 2,
                      textImage.height() + bubbleAtlas.height() - 1 + bubbleSpeech.height() - 2,
                      QImage::Format_ARGB32_Premultiplied);

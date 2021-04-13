@@ -1,0 +1,7 @@
+fun=-3
+#Frames
+0;75;0;0;dropped.wav;
+1;75;0;0;;
+2;75;0;0;;
+3;75;0;0;;label flail
+4;75;0;0;;goto flail

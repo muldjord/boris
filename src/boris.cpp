@@ -74,7 +74,7 @@ Boris::Boris(Settings &settings) : settings(settings)
   // Set the scene size for correct scaling when changing Boris' size through updateBoris()
   scene()->setSceneRect(0.0, 0.0, 32, 48);
 
-  origShadow.load(":shadow.png");
+  origShadow.load(settings.graphicsPath + "/shadow.png");
   shadowSprite = this->scene()->addPixmap(origShadow);
   shadowSprite->setOpacity(0.35);
 
@@ -84,12 +84,12 @@ Boris::Boris(Settings &settings) : settings(settings)
   scriptSprite = this->scene()->addPixmap(QPixmap());
   scriptSprite->setPos(0, 15); // To make room for shadow
 
-  origDirt.load(":dirt.png");
+  origDirt.load(settings.graphicsPath + "/dirt.png");
   dirtSprite = this->scene()->addPixmap(origDirt);
   dirtSprite->setOpacity(0.0);
   dirtSprite->setPos(0, 15); // To make room for shadow
 
-  origBruises.load(":bruises.png");
+  origBruises.load(settings.graphicsPath + "/bruises.png");
   bruisesSprite = this->scene()->addPixmap(origBruises);
   bruisesSprite->setOpacity(0.0);
   bruisesSprite->setPos(0, 15); // To make room for shadow
@@ -123,11 +123,11 @@ Boris::Boris(Settings &settings) : settings(settings)
   stats = new Stats(settings, hyper, health, energy, hunger, toilet, social, fun, hygiene, this);
   bubble = new Bubble(settings);
   
-  staticBehavs = 0;
+  staticBehaviours = 0;
   // Figure out how many static behaviours there are
   for(const auto &behaviour: behaviours) {
     if(behaviour.file.left(1) == "_") {
-      staticBehavs++;
+      staticBehaviours++;
     }
   }
 
@@ -181,94 +181,41 @@ void Boris::updateBehavioursMenu()
 {
   behavioursMenu->clear();
 
-  QMenu *healthMenu = new QMenu(tr("Health"), behavioursMenu);
-  healthMenu->setIcon(QIcon(":health.png"));
-  QMenu *energyMenu = new QMenu(tr("Energy"), behavioursMenu);
-  energyMenu->setIcon(QIcon(":energy.png"));
-  QMenu *hungerMenu = new QMenu(tr("Food"), behavioursMenu);
-  hungerMenu->setIcon(QIcon(":hunger.png"));
-  QMenu *toiletMenu = new QMenu(tr("Toilet"), behavioursMenu);
-  toiletMenu->setIcon(QIcon(":toilet.png"));
-  QMenu *hygieneMenu = new QMenu(tr("Hygiene"), behavioursMenu);
-  hygieneMenu->setIcon(QIcon(":hygiene.png"));
-  QMenu *socialMenu = new QMenu(tr("Social"), behavioursMenu);
-  socialMenu->setIcon(QIcon(":social.png"));
-  QMenu *funMenu = new QMenu(tr("Fun"), behavioursMenu);
-  funMenu->setIcon(QIcon(":fun.png"));
-  QMenu *movementMenu = new QMenu(tr("Movement"), behavioursMenu);
-  movementMenu->setIcon(QIcon(":movement.png"));
-  QMenu *idleMenu = new QMenu(tr("Idle"), behavioursMenu);
-  idleMenu->setIcon(QIcon(":idle.png"));
+  QList<QMenu*> subMenus;
+  
   QMenu *idkfaMenu = new QMenu(tr("Idkfa"), behavioursMenu);
-  idkfaMenu->setIcon(QIcon(":idkfa.png"));
+  idkfaMenu->setIcon(QIcon(settings.graphicsPath + "/idkfa.png"));
+
   for(const auto &behaviour: behaviours) {
-    if(settings.unlocked.contains(behaviour.file)) {
-      if(behaviour.category.toLower() == "energy") {
-        energyMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                              behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "hunger") {
-        hungerMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                              behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "toilet") {
-        toiletMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                              behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "social") {
-        socialMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                              behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "fun") {
-        funMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                           behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "movement") {
-        movementMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                                behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "idle") {
-        idleMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                            behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "hygiene") {
-        hygieneMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                               behaviour.title)->setData(behaviour.file);
-      } else if(behaviour.category.toLower() == "health") {
-        healthMenu->addAction(QIcon(":" + behaviour.category.toLower() + ".png"),
-                              behaviour.title)->setData(behaviour.file);
+    QMenu *tempMenu = nullptr;
+    for(auto &subMenu: subMenus) {
+      if(subMenu->title() == behaviour.category) {
+        tempMenu = subMenu;
+        break;
       }
-    } else {
-      idkfaMenu->addAction(QIcon(":idkfa.png"),
-                           behaviour.title)->setData(behaviour.file);
+    }
+    if(tempMenu == nullptr) {
+      tempMenu = new QMenu(behaviour.category, behavioursMenu);
+      subMenus.append(tempMenu);
+    }
+    if(!settings.unlocked.contains(behaviour.file)) {
+      tempMenu = idkfaMenu;
+    }
+    tempMenu->addAction(QIcon(settings.graphicsPath + "/" +
+                              behaviour.category.toLower() + ".png"),
+                        behaviour.title)->setData(behaviour.file);
+  }
+  for(auto &subMenu: subMenus) {
+    if(!subMenu->isEmpty()) {
+      behavioursMenu->addMenu(subMenu);
     }
   }
-  if(!healthMenu->isEmpty()) {
-    behavioursMenu->addMenu(healthMenu);
-  }
-  if(!energyMenu->isEmpty()) {
-    behavioursMenu->addMenu(energyMenu);
-  }
-  if(!hungerMenu->isEmpty()) {
-    behavioursMenu->addMenu(hungerMenu);
-  }
-  if(!toiletMenu->isEmpty()) {
-    behavioursMenu->addMenu(toiletMenu);
-  }
-  if(!hygieneMenu->isEmpty()) {
-    behavioursMenu->addMenu(hygieneMenu);
-  }
-  if(!socialMenu->isEmpty()) {
-    behavioursMenu->addMenu(socialMenu);
-  }
-  if(!funMenu->isEmpty()) {
-    behavioursMenu->addMenu(funMenu);
-  }
-  if(!movementMenu->isEmpty()) {
-    behavioursMenu->addMenu(movementMenu);
-  }
-  if(!idleMenu->isEmpty()) {
-    behavioursMenu->addMenu(idleMenu);
-  }
-  if(settings.idkfa) {
+  if(settings.idkfa && !idkfaMenu->isEmpty()) {
     behavioursMenu->addMenu(idkfaMenu);
   }
 
   if(behavioursMenu->isEmpty()) {
-    behavioursMenu->addAction(QIcon(":idkfa.png"), tr("No behaviours unlocked!"));
+    behavioursMenu->addAction(QIcon(settings.graphicsPath + "/idkfa.png"), tr("No behaviours unlocked!"));
   }
 }
 
@@ -340,15 +287,15 @@ void Boris::changeBehaviour(QString behav, int time)
     processAi(behav);
   }
   
-  // Bias towards behavs from 'Idle' and 'Locomotion' categories to make Boris less erratic
+  // Bias towards behaviours from 'Idle' and 'Locomotion' categories to make Boris less erratic
   if(QRandomGenerator::global()->bounded(10) >= 3) {
     if(QRandomGenerator::global()->bounded(70) >= stats->getEnergy()) {
       curBehav = getIdxFromCategory("Idle");
     } else {
-      curBehav = getIdxFromCategory("Locomotion"); // This category DOES exist. See data/behavs/README.md
+      curBehav = getIdxFromCategory("Locomotion"); // This category DOES exist. See data/behaviours/README.md
     }
   } else {
-    curBehav = QRandomGenerator::global()->bounded(behaviours.size() - staticBehavs) + staticBehavs;
+    curBehav = QRandomGenerator::global()->bounded(behaviours.size() - staticBehaviours) + staticBehaviours;
   }
 
   // If a specific behaviour is requested, use that
@@ -908,7 +855,7 @@ void Boris::teleport()
 void Boris::statProgress()
 {
   // If it's late decrease energy to make Boris tired
-  // Other than that energy decreases are mainly controlled by walking behavs
+  // Other than that energy decreases are mainly controlled by walking behaviours
   if(QTime::currentTime().hour() >= 21 && QTime::currentTime().hour() < 23) {
     energyQueue -= 1;
   } else if(QTime::currentTime().hour() >= 23) {

@@ -50,8 +50,9 @@ struct Settings {
   bool vision = false;
   
   // Asset folders
-  QString soundsPath = "data/sfx";
-  QString behavsPath = "data/behavs";
+  QString graphicsPath = "data/graphics";
+  QString soundsPath = "data/sounds";
+  QString behavioursPath = "data/behaviours";
   QString weathersPath = "data/weathers";
   QString itemsPath = "data/items";
   QString spritesPath = "data/sprites";

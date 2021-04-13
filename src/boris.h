@@ -122,7 +122,7 @@ private:
   bool grabbed = false;
   void showWeather(QString &behav);
   void runScript(int &stop, const bool &init = false);
-  int staticBehavs;
+  int staticBehaviours;
   int independence;
   
   QMenu* behavioursMenu;

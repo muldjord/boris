@@ -1,0 +1,16 @@
+oneShot
+allowFlip
+#Frames
+0;50;0;0;;
+1;75;0;0;;var rand = @4,if rand = 1 sound tickle1.wav,if rand = 2 sound tickle2.wav,if rand = 3 sound tickle3.wav,if rand = 4 sound tickle4.wav,if @8 = 1 stat energy -= 1,stat fun += 1,stat social += 1
+2;75;0;0;;
+1;75;0;0;;
+2;75;0;0;;
+1;75;0;0;;
+2;75;0;0;;
+1;75;0;0;;
+2;95;0;0;;
+0;100;0;0;;
+3;100;0;0;;
+4;100;0;0;;
+5;100;0;0;;

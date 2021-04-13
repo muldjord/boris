@@ -45,11 +45,11 @@ qint64 Loader::getAssetsSize(const QDir &dir)
   return assetsSize;
 }
 
-bool Loader::loadSoundFxs(const QString &dataDir,
+bool Loader::loadSoundFxs(const QString &soundsPath,
                           QMap<QString, sf::SoundBuffer> &soundFxs,
                           QProgressBar *progressBar)
 {
-  QDir d(dataDir,
+  QDir d(soundsPath,
          "*.wav",
          QDir::Name,
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
@@ -58,7 +58,7 @@ bool Loader::loadSoundFxs(const QString &dataDir,
   for(const auto &info: infoList) {
     sf::SoundBuffer soundFx;
     if(soundFx.loadFromFile(info.absoluteFilePath().toStdString())) {
-      soundFxs[dataDir + (dataDir.right(1) == "/"?"":"/") + info.fileName()] = soundFx;
+      soundFxs[info.fileName()] = soundFx;
       qInfo("  Added sound: %s\n", info.fileName().toStdString().c_str());
     } else {
       noErrors = false;
@@ -70,12 +70,12 @@ bool Loader::loadSoundFxs(const QString &dataDir,
 }
 
 bool Loader::loadBehaviours(const Settings &settings,
-                            const QString &dataDir,
+                            const QString &behavioursPath,
                             QList<Behaviour> &behaviours,
                             QMap<QString, sf::SoundBuffer> &soundFxs,
                             QProgressBar *progressBar)
 {
-  QDir d(dataDir,
+  QDir d(behavioursPath,
          "*.png",
          QDir::Name,
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
@@ -308,9 +308,9 @@ Script Loader::parseScript(const QString &script)
   return returnScript;
 }
 
-bool Loader::loadFont(QMap<QString, QImage> &pixelFont)
+bool Loader::loadFont(const QString &graphicsPath, QMap<QString, QImage> &pixelFont)
 {
-  QImage fontSheet(":pfont.png");
+  QImage fontSheet(graphicsPath + "/pfont.png");
   if(!fontSheet.isNull()) {
     QList<QString> fontChars({"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "æ", "ø", "å", " ", ".", ",", ":", ";", "!", "?", "\"", "\'", "_", "+", "-", "*", "/", "<", ">", "="});
     int w = fontSheet.width();
@@ -336,11 +336,11 @@ bool Loader::loadFont(QMap<QString, QImage> &pixelFont)
   return true;
 }
 
-bool Loader::loadSprites(const QString &spritesDir,
+bool Loader::loadSprites(const QString &spritesPath,
                          QMap<QString, Sprite> &sprites)
 {
   bool allGood = true;
-  QDir d(spritesDir,
+  QDir d(spritesPath,
          "*.png",
          QDir::Name,
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
