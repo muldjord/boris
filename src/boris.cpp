@@ -196,6 +196,8 @@ void Boris::updateBehavioursMenu()
     }
     if(tempMenu == nullptr) {
       tempMenu = new QMenu(behaviour.category, behavioursMenu);
+      tempMenu->setIcon(QIcon(settings.graphicsPath + "/" +
+                              behaviour.category.toLower() + ".png"));
       subMenus.append(tempMenu);
     }
     if(!settings.unlocked.contains(behaviour.file)) {
