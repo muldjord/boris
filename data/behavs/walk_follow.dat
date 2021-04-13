@@ -1,5 +1,6 @@
 title=Follow mouse
 category=Social
+coins=12
 oneShot
 define progress:var steps -= 1,if mdist < bsize * 4 stat social += 2,if mdist < bsize * 2 and @6 = 1 behav place_gift
 define nextfollow:if msec = 0 goto north else if msec = 1 goto northeast else if msec = 2 goto east else if msec = 3 goto southeast else if msec = 4 goto south else if msec = 5 goto southwest else if msec = 6 goto west else if msec = 7 goto northwest

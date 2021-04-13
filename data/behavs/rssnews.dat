@@ -1,4 +1,5 @@
 title=Tell me the news
 category=Social
+coins=10
 #Frames
 0;50;0;0;;say rss,behav _chat

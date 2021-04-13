@@ -20,7 +20,6 @@
     <file alias="bruises.png">data/gfx/bruises.png</file>
     <file alias="dirt.png">data/gfx/dirt.png</file>
     <file alias="shadow.png">data/gfx/shadow.png</file>
-    <file alias="movement.png">data/gfx/movement.png</file>
     <file alias="idkfa.png">data/gfx/idkfa.png</file>
     <file alias="health.png">data/gfx/health.png</file>
     <file alias="energy.png">data/gfx/energy.png</file>
@@ -28,6 +27,8 @@
     <file alias="toilet.png">data/gfx/toilet.png</file>
     <file alias="social.png">data/gfx/social.png</file>
     <file alias="fun.png">data/gfx/fun.png</file>
+    <file alias="movement.png">data/gfx/movement.png</file>
+    <file alias="idle.png">data/gfx/idle.png</file>
     <file alias="hygiene.png">data/gfx/hygiene.png</file>
     <file alias="01d.png">data/gfx/weather/01d.png</file>
     <file alias="01n.png">data/gfx/weather/01n.png</file>

@@ -1,5 +1,6 @@
 title=How are you?
 category=Social
+coins=15
 
 define init:var tried = 0
 

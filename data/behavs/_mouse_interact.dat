@@ -1,5 +1,6 @@
 title=Watching the mouse
 category=Idle
+coins=5
 fun=-2
 
 define init:var mouseover = 0,call nextsec
@@ -8,12 +9,13 @@ define nextsec:if mouseover = 0 and mdist < bsize call actonmouse,if mouseover =
 
 define actonmouse:stat social += 2,
 var mouseover = 1,
-var rand = @8,
+var rand = @10,
 if rand = 1 behav tongue_out,
 if rand = 2 behav wave,
 if rand = 3 behav scare,
 if rand = 4 think "Well, hello there.",
-if rand = 5 think "What's this then?"
+if rand = 5 think "What's this then?",
+if rand = 6 think "What's up?"
 
 #Frames
 0;50;0;0;;label north,draw black pixel 15 9,draw black pixel 19 9,call nextsec

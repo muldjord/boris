@@ -1,5 +1,6 @@
 title=Play 'Pong'
 category=Fun
+coins=15
 energy=-3
 hunger=1
 social=-8
