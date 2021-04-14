@@ -2,6 +2,7 @@ fun=5
 energy=-3
 social=20
 oneShot
+allowFlip
 #Frames
 0;50;0;0;highfive.wav;say "Highfive!"
 1;75;0;0;win2.wav;
