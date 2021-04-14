@@ -11,6 +11,7 @@ LIBS += -lsfml-audio
 
 # Input
 HEADERS += src/mainwindow.h \
+           src/settings.h \
            src/soundmixer.h \
            src/about.h \
            src/boris.h \
@@ -25,6 +26,7 @@ HEADERS += src/mainwindow.h \
            src/tinyexpr.h
 
 SOURCES += src/mainwindow.cpp \
+           src/settings.cpp \
            src/soundmixer.cpp \
            src/about.cpp \
            src/boris.cpp \

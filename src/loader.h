@@ -52,6 +52,7 @@ public:
                              QProgressBar *progressBar);
   static bool loadFont(Settings &settings);
   static bool loadSprites(Settings &settings);
+  static bool loadImages(const QString &path, QMap<QString, QPixmap> &images);
   static Script parseScript(const QString &script);
   static void setClothesColor(const Settings &settings, QImage &image);
 };

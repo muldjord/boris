@@ -33,6 +33,7 @@
 #include "boris.h"
 #include "soundmixer.h"
 
+#include <QObject>
 #include <QUrl>
 #include <QMap>
 #include <QString>
@@ -52,7 +53,11 @@ struct RssLine
 class Item;
 class Boris;
 
-struct Settings {
+class Settings : public QObject
+{
+  Q_OBJECT;
+public:  
+  Settings();
   bool showWelcome = true;
   bool statLogging = false;
   int desktopWidth = 1920;
@@ -68,6 +73,7 @@ struct Settings {
   QString weathersPath = "data/weathers";
   QString itemsPath = "data/items";
   QString spritesPath = "data/sprites";
+  QString cursorsPath = "data/cursors";
 
   // Boris related
   int borisX = 64;
@@ -115,11 +121,17 @@ struct Settings {
   
   QList<Item*> itemList;
   QList<Behaviour> itemBehaviours;
-  
+ 
   QList<Behaviour> weathers;
 
-  QMap<QString, QImage> pixelFont;
   QMap<QString, Sprite> sprites;
+
+  QMap<QString, QImage> pixelFont;
+
+  QMap<QString, QPixmap> graphics;
+  QMap<QString, QPixmap> cursors;
+
+  QPixmap getPixmap(const QString &name);
 };
 
 #endif // SETTINGS_H

@@ -345,7 +345,7 @@ bool Loader::loadSprites(Settings &settings)
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
   QFileInfoList infoList = d.entryInfoList();
   for(const auto &info: infoList) {
-    if(!QRegularExpression("^[a-z]{0,42}$").match(info.baseName()).hasMatch()) {
+    if(!QRegularExpression("^[a-z_]{0,42}$").match(info.baseName()).hasMatch()) {
       qWarning("  Sprite file '%s' contains illegal characters, skipping...\n", info.baseName().toStdString().c_str());
       allGood = false;
       continue;
@@ -375,6 +375,28 @@ bool Loader::loadSprites(Settings &settings)
     }
     qInfo("  Added sprite: %s (%d frames)\n", info.baseName().toStdString().c_str(), sprite.count());
     settings.sprites[info.baseName()] = sprite;
+  }
+  return allGood;
+}
+
+bool Loader::loadImages(const QString &path, QMap<QString, QPixmap> &images)
+{
+  bool allGood = true;
+  QDir d(path,
+         "*.png",
+         QDir::Name,
+         QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
+  QFileInfoList infoList = d.entryInfoList();
+  for(const auto &info: infoList) {
+    if(!QRegularExpression("^[a-z_]{0,42}$").match(info.baseName()).hasMatch()) {
+      qWarning("  Image file '%s' contains illegal characters, skipping...\n",
+               info.baseName().toStdString().c_str());
+      allGood = false;
+      continue;
+    }
+    images[info.fileName()] =
+      QPixmap(info.absoluteFilePath());
+    qInfo("  Added image: %s\n", info.fileName().toStdString().c_str());
   }
   return allGood;
 }

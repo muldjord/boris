@@ -84,6 +84,7 @@ MainWindow::MainWindow()
   settings.soundsPath = dataPath + "/sounds";
   settings.spritesPath = dataPath + "/sprites";
   settings.weathersPath = dataPath + "/weathers";
+  settings.cursorsPath = dataPath + "/cursors";
 
   if(!iniSettings->contains("unlocked")) {
     iniSettings->setValue("unlocked", "whistle");
@@ -301,6 +302,18 @@ void MainWindow::loadAssets()
     qInfo("Error when loading some items, please check your png and dat files\n");
   }
 
+  if(Loader::loadImages(settings.graphicsPath, settings.graphics)) {
+    qInfo("Graphics loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading graphics...\n");
+  }
+
+  if(Loader::loadImages(settings.cursorsPath, settings.cursors)) {
+    qInfo("Cursors loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading cursors...\n");
+  }
+
   if(Loader::loadSprites(settings)) {
     qInfo("Sprites loaded ok... :)\n");
   } else {
@@ -462,26 +475,13 @@ void MainWindow::updateBehavioursMenu()
   QList<QMenu*> subMenus;
 
   QMenu *idkfaMenu = new QMenu(tr("Idkfa"), behavioursMenu);
-  idkfaMenu->setIcon(QIcon(settings.graphicsPath + "/idkfa.png"));
+  idkfaMenu->setIcon(QIcon(settings.getPixmap("idkfa.png")));
 
   for(const auto &behaviour: settings.behaviours) {
     QString title = behaviour.title;
-    QString iconFile(settings.graphicsPath + "/" + behaviour.category.toLower() + ".png");
+    QPixmap iconPixmap(settings.getPixmap(behaviour.category.toLower() + ".png"));
     QMenu *menu = nullptr;
       
-    // Set correct title
-    if(!settings.unlocked.contains(behaviour.file)) {
-      title.append(" (" + QString::number(behaviour.coins) + "c)");
-    }
-
-    // Set correct icon file
-    if(!settings.unlocked.contains(behaviour.file)) {
-      iconFile = settings.graphicsPath + "/coin.png";
-    }
-    if(!QFile::exists(iconFile)) {
-      iconFile = ":missing.png";
-    }
-
     // Find correct menu to put behaviour into
     if((behaviour.file.left(1) == "_" && behaviour.category.isEmpty()) ||
        behaviour.category == "Hidden" ||
@@ -498,11 +498,21 @@ void MainWindow::updateBehavioursMenu()
     }
     if(menu == nullptr) {
       menu = new QMenu(behaviour.category, behavioursMenu);
-      menu->setIcon(QIcon(iconFile));
+      menu->setIcon(QIcon(iconPixmap));
       subMenus.append(menu);
     }
 
-    menu->addAction(QIcon(iconFile), title)->setData(behaviour.file);
+    // Append coin price to title if it's not already unlocked
+    if(!settings.unlocked.contains(behaviour.file)) {
+      title.append(" (" + QString::number(behaviour.coins) + "c)");
+    }
+
+    // Set correct icon file
+    if(!settings.unlocked.contains(behaviour.file)) {
+      iconPixmap = settings.getPixmap("coin.png");
+    }
+
+    menu->addAction(QIcon(iconPixmap), title)->setData(behaviour.file);
   }
   
   for(auto &subMenu: subMenus) {
