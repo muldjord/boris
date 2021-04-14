@@ -485,7 +485,7 @@ void MainWindow::updateBehavioursMenu()
       
     // Find correct menu to put behaviour into
     if((behaviour.file.left(1) == "_" && behaviour.category.isEmpty()) ||
-       behaviour.category == "Hidden" ||
+       behaviour.category == "Other" ||
        behaviour.category == "Locomotion") {
       menu = idkfaMenu;
     }

@@ -1,5 +1,4 @@
 title=Chicken
-category=Social
 allowFlip
 
 define jumpdecide:var rand = @8,if rand = 1 goto jumpnorth,if rand = 2 goto jumpnortheast,if rand = 3 goto jumpeast,if rand = 4 goto jumpsoutheast,if rand = 5 goto jumpsouth,if rand = 6 goto jumpsouthwest,if rand = 7 goto jumpwest,if rand = 8 goto jumpnorthwest

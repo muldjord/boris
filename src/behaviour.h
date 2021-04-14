@@ -71,7 +71,7 @@ public:
   QString absoluteFilePath;
   QString file;
   QString title;
-  QString category = "Hidden";
+  QString category = "Other";
   QList<QString> reactions;
   int hyper = 0;
   int health = 0;
