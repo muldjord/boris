@@ -180,29 +180,13 @@ void Boris::updateBehavioursMenu()
   QList<QMenu*> subMenus;
 
   QMenu *idkfaMenu = new QMenu(tr("Idkfa"), behavioursMenu);
-  idkfaMenu->setIcon(QIcon(settings.graphicsPath + "/idkfa.png"));
+  idkfaMenu->setIcon(QIcon(settings.getPixmap("idkfa.png")));
 
   for(const auto &behaviour: settings.behaviours) {
     QString title = behaviour.title;
-    QString iconFile(":missing.png");
-    //QString iconFile(settings.graphicsPath + "/" + behaviour.category.toLower() + ".png");
+    QPixmap iconPixmap(settings.getPixmap(behaviour.category.toLower() + ".png"));
     QMenu *menu = nullptr;
       
-    // Add price to title if not yet unlocked
-    if(!settings.unlocked.contains(behaviour.file)) {
-      title.append(" (" + QString::number(behaviour.coins) + "c)");
-    }
-
-    // Replace icon file if a more suitable one is found
-
-    if((behaviour.file.left(1) == "_" && behaviour.category.isEmpty()) ||
-       behaviour.category == "Hidden" ||
-       behaviour.category == "Locomotion") {
-      iconFile = settings.graphicsPath + "/idkfa.png";
-    } else if(!settings.unlocked.contains(behaviour.file)) {
-      iconFile = settings.graphicsPath + "/coin.png";
-    }
-
     // Find correct menu to put behaviour into
     if((behaviour.file.left(1) == "_" && behaviour.category.isEmpty()) ||
        behaviour.category == "Hidden" ||
@@ -219,11 +203,15 @@ void Boris::updateBehavioursMenu()
     }
     if(menu == nullptr) {
       menu = new QMenu(behaviour.category, behavioursMenu);
-      menu->setIcon(QIcon(iconFile));
+      menu->setIcon(QIcon(iconPixmap));
       subMenus.append(menu);
     }
 
-    menu->addAction(QIcon(iconFile), title)->setData(behaviour.file);
+    if(!settings.unlocked.contains(behaviour.file)) {
+      continue;
+    }
+
+    menu->addAction(QIcon(iconPixmap), title)->setData(behaviour.file);
   }
   
   for(auto &subMenu: subMenus) {
@@ -237,7 +225,7 @@ void Boris::updateBehavioursMenu()
   }
 
   if(behavioursMenu->isEmpty()) {
-    behavioursMenu->addAction(QIcon(settings.graphicsPath + "/idkfa.png"), tr("No behaviours unlocked!"));
+    behavioursMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), tr("No behaviours unlocked!"));
   }
 }
 
