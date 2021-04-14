@@ -1,0 +1,6 @@
+title=Teleporter
+category=Technology
+reaction=teleport
+destroy=false
+#Frames
+0;1000;0;0;;stop
