@@ -44,10 +44,8 @@
 
 extern SoundMixer soundMixer;
 
-Item::Item(const int &x, const int &y, const int &size, const QString &item, Settings &settings, const bool &ignore) : settings(settings), size(size)
+Item::Item(const int &x, const int &y, const int &size, const QString &item, Settings &settings, const bool &ignore) : ignore(ignore), settings(settings), size(size)
 {
-  this->ignore = ignore;
-  
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
   setFrameShape(QFrame::NoFrame);
