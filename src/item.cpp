@@ -65,7 +65,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   setScene(new QGraphicsScene);
   scene()->setSceneRect(0.0, 0.0, 32, 32 + 1); // + 1 to make room for shadow
 
-  origShadow.load(settings.graphicsPath + "/shadow.png");
+  origShadow = settings.getPixmap("shadow.png");
   shadowSprite = this->scene()->addPixmap(origShadow);
   shadowSprite->setOpacity(0.35);
 

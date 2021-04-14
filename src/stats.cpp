@@ -52,13 +52,13 @@ Stats::Stats(Settings &settings, int hyper, int health, int energy, int hunger, 
 
   QGraphicsScene *scene = new QGraphicsScene();
   setScene(scene);
-  scene->addPixmap(QPixmap(settings.graphicsPath + "/stats.png"));
+  scene->addPixmap(settings.getPixmap("stats.png"));
   energyBar = scene->addRect(17, 7, 60, 2);
   hungerBar = scene->addRect(17, 23, 60, 2);
   toiletBar = scene->addRect(17, 39, 60, 2);
   socialBar = scene->addRect(17, 55, 60, 2);
   funBar = scene->addRect(17, 71, 60, 2);
-  flashIcon = scene->addPixmap(QPixmap(settings.graphicsPath + "/flash_icon.png"));
+  flashIcon = scene->addPixmap(settings.getPixmap("flash_icon.png"));
   flashIcon->setVisible(false);
   
   flashes = 0;

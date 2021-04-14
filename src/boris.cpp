@@ -70,7 +70,7 @@ Boris::Boris(Settings &settings) : settings(settings)
   // Set the scene size for correct scaling when changing Boris' size through updateBoris()
   scene()->setSceneRect(0.0, 0.0, 32, 48);
 
-  origShadow.load(settings.graphicsPath + "/shadow.png");
+  origShadow = settings.getPixmap("shadow.png");
   shadowSprite = this->scene()->addPixmap(origShadow);
   shadowSprite->setOpacity(0.35);
 
@@ -80,12 +80,12 @@ Boris::Boris(Settings &settings) : settings(settings)
   scriptSprite = this->scene()->addPixmap(QPixmap());
   scriptSprite->setPos(0, 15); // To make room for shadow
 
-  origDirt.load(settings.graphicsPath + "/dirt.png");
+  origDirt = settings.getPixmap("dirt.png");
   dirtSprite = this->scene()->addPixmap(origDirt);
   dirtSprite->setOpacity(0.0);
   dirtSprite->setPos(0, 15); // To make room for shadow
 
-  origBruises.load(settings.graphicsPath + "/bruises.png");
+  origBruises = settings.getPixmap("bruises.png");
   bruisesSprite = this->scene()->addPixmap(origBruises);
   bruisesSprite->setOpacity(0.0);
   bruisesSprite->setPos(0, 15); // To make room for shadow
@@ -161,7 +161,7 @@ Boris::Boris(Settings &settings) : settings(settings)
   connect(&interactionsTimer, &QTimer::timeout, this, &Boris::checkInteractions);
   interactionsTimer.start();
 
-  setCursor(Qt::OpenHandCursor);
+  setCursor(settings.getCursor("hover.png"));
 
   updateBoris();
 }
@@ -713,7 +713,7 @@ void Boris::mousePressEvent(QMouseEvent* event)
       energyQueue -= 25;
       funQueue -= 20;
     }
-    setCursor(Qt::ClosedHandCursor);
+    setCursor(settings.getCursor("grab.png"));
     grabbed = true;
     changeBehaviour("_grabbed");
     mMoving = true;
@@ -740,7 +740,7 @@ void Boris::mouseMoveEvent(QMouseEvent* event)
 void Boris::mouseReleaseEvent(QMouseEvent* event)
 {
   if(event->button() == Qt::LeftButton) {
-    setCursor(Qt::OpenHandCursor);
+    setCursor(settings.getCursor("hover.png"));
     grabbed = false;
     mMoving = false;
     settings.borisX = pos().x();

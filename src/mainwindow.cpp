@@ -216,6 +216,13 @@ MainWindow::MainWindow()
   }
   settings.key = iniSettings->value("weather_key").toString();
 
+  // Load all graphics before loading rest of assets, as these are used as icons too
+  if(Loader::loadImages(settings.graphicsPath, settings.graphics)) {
+    qInfo("Graphics loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading graphics...\n");
+  }
+
   createActions();
   behavioursMenu = new QMenu();
   behavioursMenu->setTitle(tr("Behaviours"));
@@ -302,12 +309,6 @@ void MainWindow::loadAssets()
     qInfo("Error when loading some items, please check your png and dat files\n");
   }
 
-  if(Loader::loadImages(settings.graphicsPath, settings.graphics)) {
-    qInfo("Graphics loaded ok... :)\n");
-  } else {
-    qInfo("Error when loading graphics...\n");
-  }
-
   if(Loader::loadImages(settings.cursorsPath, settings.cursors)) {
     qInfo("Cursors loaded ok... :)\n");
   } else {
@@ -376,12 +377,12 @@ void MainWindow::removeBoris(int clones)
 void MainWindow::createActions()
 {
   earthquakeAction = new QAction(tr("&Earthquake!!!"), this);
-  earthquakeAction->setIcon(QIcon(settings.graphicsPath + "/earthquake.png"));
+  earthquakeAction->setIcon(QIcon(settings.getPixmap("earthquake.png")));
 
   weatherAction = new QAction(tr("Updating weather..."), this);
 
   coinsAction = new QAction(QString::number(settings.coins) + tr(" coins"), this);
-  coinsAction->setIcon(QIcon(settings.graphicsPath + "/coin.png"));
+  coinsAction->setIcon(QIcon(settings.getPixmap("coin.png")));
 }
 
 void MainWindow::createTrayIcon()
@@ -389,7 +390,7 @@ void MainWindow::createTrayIcon()
   trayIcon = new QSystemTrayIcon;
 
   trayIconMenu = new QMenu;
-  trayIconMenu->addAction(QIcon(settings.graphicsPath + "/about.png"), tr("&Config / about..."), this, &MainWindow::aboutBox);
+  trayIconMenu->addAction(QIcon(settings.getPixmap("about.png")), tr("&Config / about..."), this, &MainWindow::aboutBox);
   trayIconMenu->addSeparator();
   trayIconMenu->addMenu(behavioursMenu);
   trayIconMenu->addAction(coinsAction);
@@ -399,9 +400,9 @@ void MainWindow::createTrayIcon()
   trayIconMenu->addAction(earthquakeAction);
   trayIconMenu->addAction(weatherAction);
   trayIconMenu->addSeparator();
-  trayIconMenu->addAction(QIcon(settings.graphicsPath + "/quit.png"), tr("&Quit"), this, &MainWindow::killAll);
+  trayIconMenu->addAction(QIcon(settings.getPixmap("quit.png")), tr("&Quit"), this, &MainWindow::killAll);
 
-  coinIcon = new QIcon(QPixmap::fromImage(QImage(settings.graphicsPath + "/coin.png")));
+  coinIcon = new QIcon(settings.getPixmap("coin.png"));
 
   QImage iconImage(":icon.png");
   Loader::setClothesColor(settings, iconImage);
@@ -465,7 +466,7 @@ void MainWindow::updateWeather()
   } else {
     weatherAction->setText(tr("Couldn't find city"));
   }
-  weatherAction->setIcon(QIcon(settings.graphicsPath + "/weather/" + settings.weatherType + ".png"));
+  weatherAction->setIcon(QIcon(settings.getPixmap(settings.weatherType + ".png")));
 }
 
 void MainWindow::updateBehavioursMenu()
@@ -526,7 +527,7 @@ void MainWindow::updateBehavioursMenu()
   }
 
   if(behavioursMenu->isEmpty()) {
-    behavioursMenu->addAction(QIcon(settings.graphicsPath + "/idkfa.png"), tr("No behaviours unlocked!"));
+    behavioursMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), tr("No behaviours unlocked!"));
   }
 }
 
@@ -544,8 +545,7 @@ void MainWindow::createItemsMenu()
     }
     if(tempMenu == nullptr) {
       tempMenu = new QMenu(item.category, itemsMenu);
-      tempMenu->setIcon(QIcon(settings.graphicsPath + "/" +
-                              item.category.toLower() + ".png"));
+      tempMenu->setIcon(QIcon(settings.getPixmap(item.category.toLower() + ".png")));
       connect(tempMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
       subMenus.append(tempMenu);
     }

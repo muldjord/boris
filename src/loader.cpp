@@ -345,7 +345,7 @@ bool Loader::loadSprites(Settings &settings)
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
   QFileInfoList infoList = d.entryInfoList();
   for(const auto &info: infoList) {
-    if(!QRegularExpression("^[a-z_]{0,42}$").match(info.baseName()).hasMatch()) {
+    if(!QRegularExpression("^[0-9a-z_]{0,42}$").match(info.baseName()).hasMatch()) {
       qWarning("  Sprite file '%s' contains illegal characters, skipping...\n", info.baseName().toStdString().c_str());
       allGood = false;
       continue;
@@ -388,7 +388,7 @@ bool Loader::loadImages(const QString &path, QMap<QString, QPixmap> &images)
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
   QFileInfoList infoList = d.entryInfoList();
   for(const auto &info: infoList) {
-    if(!QRegularExpression("^[a-z_]{0,42}$").match(info.baseName()).hasMatch()) {
+    if(!QRegularExpression("^[0-9a-z_]{0,42}$").match(info.baseName()).hasMatch()) {
       qWarning("  Image file '%s' contains illegal characters, skipping...\n",
                info.baseName().toStdString().c_str());
       allGood = false;

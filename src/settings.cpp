@@ -30,12 +30,21 @@
 
 Settings::Settings()
 {
+  missingPixmap.load(":missing.png");
 }
 
-QPixmap Settings::getPixmap(const QString &name)
+QPixmap& Settings::getPixmap(const QString &name)
 {
   if(graphics.contains(name)) {
     return graphics[name];
   }
-  return QPixmap(":missing.png");
+  return missingPixmap;
+}
+
+QCursor Settings::getCursor(const QString &name)
+{
+  if(cursors.contains(name)) {
+    return QCursor(cursors[name]);
+  }
+  return QCursor(missingPixmap);
 }

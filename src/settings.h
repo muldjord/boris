@@ -116,6 +116,8 @@ public:
   QList<QString> unlocked;
 
   // Resources
+  QPixmap missingPixmap;
+  
   QList<Boris*> borisList;
   QList<Behaviour> behaviours;
   
@@ -131,7 +133,8 @@ public:
   QMap<QString, QPixmap> graphics;
   QMap<QString, QPixmap> cursors;
 
-  QPixmap getPixmap(const QString &name);
+  QPixmap& getPixmap(const QString &name);
+  QCursor getCursor(const QString &name);
 };
 
 #endif // SETTINGS_H
