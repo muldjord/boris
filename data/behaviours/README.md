@@ -424,5 +424,15 @@ The following variables are reserved and hardcoded. You should not try to set th
 * hour: The current hour (0-23)
 * minute: The current minute within the hour
 * second: The current second within the current minute
+* weather: The current weather type
+** 1: Clear sky
+** 2: Few clouds
+** 3: Scattered clouds
+** 4: Broken clouds
+** 9: Shower rain
+** 10: Rain
+** 11: Thunderstorm
+** 13: Snow
+** 50: Mist
 * wind: The current wind speed in meters per second
 * temp: The current temperature in celsius
