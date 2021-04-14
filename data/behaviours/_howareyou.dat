@@ -75,8 +75,8 @@ call checkup
 # Feeling good
 5;50;0;0;;label feelinggood,
 var rand = @4,
-if rand = 1 say "I'm fine, thank you for asking.",
-if rand = 2 say "I'm good, how are you?",
-if rand = 3 say "Nothing to complain about, doing great!",
-if rand = 4 say "I'm great! How are you?",
+if rand = 1 say "I'm feeling pretty good.",
+if rand = 2 say "All a-okay over here.",
+if rand = 3 say "I feel strong as an ox.",
+if rand = 4 say "I'm batman!",
 behav _chat
