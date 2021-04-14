@@ -423,6 +423,7 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["hour"] = time.hour();
   scriptVars["minute"] = time.minute();
   scriptVars["second"] = time.second();
+  scriptVars["weather"] = settings.weatherType.left(2).toInt();
   scriptVars["wind"] = settings.windSpeed;
   scriptVars["temp"] = settings.temperature;
 
@@ -1469,6 +1470,15 @@ void Boris::itemInteract(Item * item)
     }
     coins /= 20;
     
+    if(coins >= 5) {
+      bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "This is perfect!", "_thought");
+    } else if(coins >= 3) {
+      bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Just what I needed.", "_thought");
+    } else if(coins >= 1) {
+      bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Not bad...", "_thought");
+    } else if(coins >= 0) {
+      bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Sure, why not.", "_thought");
+    }
     item->destroy();
     if(coins) {
       emit addCoins("+" + QString::number(coins), coins);
