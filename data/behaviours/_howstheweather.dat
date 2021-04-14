@@ -1,0 +1,49 @@
+title=How's the weather?
+category=Social
+coins=15
+
+#Frames
+# Health
+0;50;0;0;;
+1;50;0;0;;
+2;50;0;0;;
+3;50;0;0;;
+4;50;0;0;;
+5;1200;0;0;;if weather = 1 say "It's sunny...",
+if weather = 2 say "A cloud or two...",
+if weather = 3 say "Quite cloudy...",
+if weather = 4 say "It's grey and depressing...",
+if weather = 9 say "It's raining a bit, not much though...",
+if weather = 10 say "It's raining cats and dogs...",
+if weather = 11 say "Thor is on the loose...",
+if weather = 13 say "It's time to built a snowman...",
+if weather = 50 say "It's misty..."
+
+5;1200;0;0;;if temp < 0 { say "...freezingly cold...",goto celsius },
+if temp < 5 { say "...very cold...",goto celsius },
+if temp < 10 { say "...quite cold...",goto celsius },
+if temp < 15 { say "...slightly cold...",goto celsius },
+if temp < 20 { say "...comfortable temperature...",goto celsius },
+if temp < 25 { say "...slightly hot...",goto celsius },
+if temp < 30 { say "...quite hot...",goto celsius },
+if temp < 35 { say "...steaming hot...",goto celsius },
+if temp < 40 { say "...melting hot...",goto celsius },
+if temp >= 40 { say "...crazy hot!...",goto celsius }
+5;1500;0;0;;label celsius,say "...$temp degrees celsius..."
+
+
+5;1800;0;0;;if wind < 2 { say "...and there's almost no wind.",goto conclusion },
+if wind <= 5 { say "...and there's a slight breeze.",goto conclusion },
+if wind <= 10 { say "...and there's a decent wind.",goto conclusion },
+if wind <= 15 { say "...and the wind is quite strong!",goto conclusion },
+if wind <= 20 { say "...and it's storming!",goto conclusion },
+if wind > 20 { say "...and is that a hurricane outside?",goto conclusion }
+
+5;3500;0;0;;label conclusion,
+if wind < 5 and temp > 15 and temp < 30 and weather = 1 or weather = 2 { say "I should go outside and enjoy the sun.",break },
+if wind < 5 and temp >= 30 and weather = 1 or weather = 2 { say "I wanna go outside, but it's too hot.",break },
+if wind < 10 and temp >= 30 and weather = 3 or weather = 4 { say "I could go outside, just stay in the shadow.",break },
+if wind < 5 and temp < 0 and weather = 13 { say "I wanna go outside and build a snowman.",break },
+if wind > 15 and temp < 0 and weather = 13 { say "I want to build a snowman, but it's too windy.",break },
+if wind > 15 and weather > 3 { say "I think I'll stay inside.",break },
+if weather = 13 { say "Noway I'm going outside in that.",break }
