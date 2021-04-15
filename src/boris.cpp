@@ -879,7 +879,7 @@ void Boris::statProgress()
     energyQueue -= 1;
   }
   hyperQueue -= QRandomGenerator::global()->bounded(7);
-  hungerQueue -= QRandomGenerator::global()->bounded(2);
+  hungerQueue += QRandomGenerator::global()->bounded(2); // This one is opposite in the stats overview
   socialQueue -= QRandomGenerator::global()->bounded(2);
   hygieneQueue -= QRandomGenerator::global()->bounded(1);
   funQueue -= QRandomGenerator::global()->bounded(3);
