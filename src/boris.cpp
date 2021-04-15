@@ -1452,32 +1452,42 @@ void Boris::itemInteract(Item * item)
   if(!item->getReactionBehaviour().isEmpty()) {
     changeBehaviour(item->getReactionBehaviour());
     int coins = 0;
+    bool catMatch = 0;
     QString category = item->getCategory();
     if(category.toLower() == "health") {
       coins = (100 - stats->getHealth());
+      catMatch = true;
     } else if(category.toLower() == "energy") {
       coins = (100 - stats->getEnergy());
+      catMatch = true;
     } else if(category.toLower() == "hunger") {
       coins = (100 - stats->getHunger());
+      catMatch = true;
     } else if(category.toLower() == "toilet") {
       coins = (100 - stats->getToilet());
+      catMatch = true;
     } else if(category.toLower() == "social") {
       coins = (100 - stats->getSocial());
+      catMatch = true;
     } else if(category.toLower() == "fun") {
       coins = (100 - stats->getFun());
+      catMatch = true;
     } else if(category.toLower() == "hygiene") {
       coins = (100 - stats->getHygiene());
+      catMatch = true;
     }
     coins /= 20;
-    
-    if(coins >= 5) {
-      bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "This is perfect!", "_thought");
-    } else if(coins >= 3) {
-      bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Just what I needed.", "_thought");
-    } else if(coins >= 1) {
-      bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Not bad...", "_thought");
-    } else if(coins >= 0) {
-      bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Sure, why not.", "_thought");
+      
+    if(catMatch) {
+      if(coins >= 5) {
+        bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "This is perfect!", "_thought");
+      } else if(coins >= 3) {
+        bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Just what I needed.", "_thought");
+      } else if(coins >= 1) {
+        bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Not bad...", "_thought");
+      } else if(coins >= 0) {
+        bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Sure, why not.", "_thought");
+      }
     }
     item->destroy();
     if(coins) {
