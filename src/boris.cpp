@@ -640,12 +640,7 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
   move(dX, dY);
   bubble->moveBubble(pos().x(), pos().y(), size);
   stats->move(pos().x() + (size / 2) - (stats->width() / 2),
-              pos().y() - stats->height() + (size / 3));
-  // Move stats below Boris when he's at the top of the screen
-  if(stats->pos().y() < 0) {
-    stats->move(pos().x() + (size / 2) - (stats->width() / 2),
-                pos().y() + size + size / 3);
-  }
+              pos().y() + size + (size * 0.6));
   // if Boris is outside borders
   if(pos().y() > maxY || pos().y() < minY) {
     if(falling) {
@@ -717,10 +712,8 @@ void Boris::mouseMoveEvent(QMouseEvent* event)
   if(event->buttons().testFlag(Qt::LeftButton) && mMoving) {
     this->move(event->globalPos().x() - size / 32.0 * 17.0, 
                event->globalPos().y() - size / 32.0 * 16.0);
-    stats->move(pos().x() + (size / 2) - (stats->width() / 2), pos().y() - stats->height());
-    if(stats->pos().y() < 0) {
-      stats->move(pos().x() + (size / 2) - (stats->width() / 2), pos().y() + size + size / 3);
-    }
+    stats->move(pos().x() + (size / 2) - (stats->width() / 2),
+                pos().y() + size + (size / 2));
     bubble->moveBubble(pos().x(), pos().y(), size);
   }
 
