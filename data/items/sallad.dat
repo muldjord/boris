@@ -1,5 +1,5 @@
 title=Sallad
-category=Food
+category=Hunger
 reaction=eat_sallad
 #Frames
 0;1000;0;0;;stop
