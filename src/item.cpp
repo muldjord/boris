@@ -73,7 +73,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   scriptSprite = this->scene()->addPixmap(QPixmap());
   scriptSprite->setPos(0, 0); // To make room for shadow
 
-  setCursor(Qt::OpenHandCursor);
+  setCursor(settings.getCursor("hover.png"));
 
   setFixedSize(size, size + (size / 32)); // To make room for shadow
   scale(size / 32.0, size / 32.0);
@@ -374,7 +374,7 @@ void Item::mousePressEvent(QMouseEvent* event)
   if(event->button() == Qt::LeftButton) {
     grabbed = true;
     ignore = false;
-    setCursor(Qt::ClosedHandCursor);
+    setCursor(settings.getCursor("grab.png"));
   } else if(event->button() == Qt::MiddleButton) {
     destroy();
   }
@@ -394,7 +394,7 @@ void Item::mouseReleaseEvent(QMouseEvent* event)
 {
   grabbed = false;
   if(event->button() == Qt::LeftButton) {
-    setCursor(Qt::OpenHandCursor);
+    setCursor(settings.getCursor("hover.png"));
   }
 }
 
