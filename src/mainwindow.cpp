@@ -455,7 +455,7 @@ void MainWindow::killAll()
   iniSettings->setValue("boris_y", settings.borisY);
   QTimer::singleShot(2000, qApp, SLOT(quit()));
   for(auto &boris: settings.borisList) {
-    boris->changeBehaviour("wave");
+    boris->changeBehaviour("_wave");
   }
 }
 

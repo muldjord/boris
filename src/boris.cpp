@@ -415,6 +415,11 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["mousey"] = p.y();
   scriptVars["mdist"] = getDistance(QCursor::pos());
   scriptVars["msec"] = getSector(QCursor::pos());
+  if(borisFriend != nullptr) {
+    scriptVars["fsec"] = getSector(QPoint(borisFriend->pos().x() + (size / 2), borisFriend->pos().y() + size));
+  } else {
+    scriptVars["fsec"] = -1;
+  }
   QDate date = QDate::currentDate();
   QTime time = QTime::currentTime();
   scriptVars["day"] = date.day();
@@ -791,25 +796,7 @@ void Boris::handlePhysics()
         interactions++;
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
           if(fabs(mouseHVel) > 35.0 || fabs(mouseVVel) > 35.0) {
-            int mouseSector = getSector(QCursor::pos());
-            int timeout = QRandomGenerator::global()->bounded(2000) + 1000;
-            if(mouseSector == 2) {
-              changeBehaviour("_flee_w", timeout);
-            } else if(mouseSector == 1) {
-              changeBehaviour("_flee_sw", timeout);
-            } else if(mouseSector == 0) {
-              changeBehaviour("_flee_s", timeout);
-            } else if(mouseSector == 7) {
-              changeBehaviour("_flee_se", timeout);
-            } else if(mouseSector == 6) {
-              changeBehaviour("_flee_e", timeout);
-            } else if(mouseSector == 5) {
-              changeBehaviour("_flee_ne", timeout);
-            } else if(mouseSector == 4) {
-              changeBehaviour("_flee_n", timeout);
-            } else if(mouseSector == 3) {
-              changeBehaviour("_flee_nw", timeout);
-            }
+            changeBehaviour("_flee");
           } else if(stats->getFun() > 10 &&
                     stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 40)) {
             changeBehaviour("_mouse_interact");
@@ -1044,56 +1031,14 @@ void Boris::collide(Boris *boris)
   borisFriend = boris;
   // Queue current behaviour so it isn't 'forgotten'
   behavQueue.prepend(settings.behaviours.at(curBehav).file);
-  int friendAt = getSector(QPoint(boris->pos().x() + (size / 2), boris->pos().y() + size));
 
   if(settings.behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
-    if(friendAt == Direction::South ||
-       friendAt == Direction::SouthEast ||
-       friendAt == Direction::East ||
-       friendAt == Direction::NorthEast) {
-      changeBehaviour("_sad_e");
-    } else if(friendAt == Direction::North ||
-       friendAt == Direction::NorthWest ||
-       friendAt == Direction::West ||
-       friendAt == Direction::SouthWest) {
-      changeBehaviour("_sad_w");
-    }
+    changeBehaviour("_sad");
   } else if(borisFriend->getHygiene() <= 22) {
-    if(friendAt == Direction::South) {
-      changeBehaviour("_flee_s", QRandomGenerator::global()->bounded(2000) + 1500);
-    } else if(friendAt == Direction::SouthEast) {
-      changeBehaviour("_flee_se", QRandomGenerator::global()->bounded(2000) + 1500);
-    } else if(friendAt == Direction::East) {
-      changeBehaviour("_flee_e", QRandomGenerator::global()->bounded(2000) + 1500);
-    } else if(friendAt == Direction::NorthEast) {
-      changeBehaviour("_flee_ne", QRandomGenerator::global()->bounded(2000) + 1500);
-    } else if(friendAt == Direction::North) {
-      changeBehaviour("_flee_n", QRandomGenerator::global()->bounded(2000) + 1500);
-    } else if(friendAt == Direction::NorthWest) {
-      changeBehaviour("_flee_nw", QRandomGenerator::global()->bounded(2000) + 1500);
-    } else if(friendAt == Direction::West) {
-      changeBehaviour("_flee_w", QRandomGenerator::global()->bounded(2000) + 1500);
-    } else if(friendAt == Direction::SouthWest) {
-      changeBehaviour("_flee_sw", QRandomGenerator::global()->bounded(2000) + 1500);
-    }
+    bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Wow, he stinks...", "_thought");
+    changeBehaviour("_hygiene");
   } else {
-    if(friendAt == Direction::South) {
-      changeBehaviour("_wave_s");
-    } else if(friendAt == Direction::SouthEast) {
-      changeBehaviour("_wave_se");
-    } else if(friendAt == Direction::East) {
-      changeBehaviour("_wave_e");
-    } else if(friendAt == Direction::NorthEast) {
-      changeBehaviour("_wave_ne");
-    } else if(friendAt == Direction::North) {
-      changeBehaviour("_wave_n");
-    } else if(friendAt == Direction::NorthWest) {
-      changeBehaviour("_wave_nw");
-    } else if(friendAt == Direction::West) {
-      changeBehaviour("_wave_w");
-    } else if(friendAt == Direction::SouthWest) {
-      changeBehaviour("_wave_sw");
-    }
+    changeBehaviour("_wave");
   }
   QTimer::singleShot(QRandomGenerator::global()->bounded(5000) + 15000, this, &Boris::readyForFriend);
 }
