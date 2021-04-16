@@ -419,6 +419,7 @@ The following variables are reserved and hardcoded. You should not try to set th
 * mdist: The current pixel distance from Boris to the mouse cursor
 * bsize: The current size of Boris in pixels
 * msec: The direction sector the mouse is within relative to Boris. Sectors are 0-7 clockwise where 0 is north. 1 is northeast and so on.
+* fsec: The direction sector a close Boris friend is located at relative to Boris. If no Boris is close by it will be -1. Otherwise sectors are 0-7 clockwise where 0 is north. 1 is northeast and so on.
 * day: The day (1-31)
 * month: The month (1-12)
 * year: The year
