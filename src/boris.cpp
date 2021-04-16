@@ -102,12 +102,12 @@ Boris::Boris(Settings &settings) : settings(settings)
   // Set initial stats with some randomization
   int hyper = 0;
   int health = 100;
-  int energy = 50 + QRandomGenerator::global()->bounded(25);
-  int hunger = 50 + QRandomGenerator::global()->bounded(25);
-  int toilet = 50 + QRandomGenerator::global()->bounded(25);
+  int energy = 40 + QRandomGenerator::global()->bounded(25);
+  int hunger = 40 + QRandomGenerator::global()->bounded(25);
+  int toilet = 40 + QRandomGenerator::global()->bounded(25);
   int hygiene = 100;
-  int social = 15 + QRandomGenerator::global()->bounded(25);
-  int fun = 50 + QRandomGenerator::global()->bounded(25);
+  int social = 40 + QRandomGenerator::global()->bounded(25);
+  int fun = 40 + QRandomGenerator::global()->bounded(25);
   hyperQueue = 0;
   healthQueue = 0;
   energyQueue = 0;
