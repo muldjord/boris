@@ -34,6 +34,9 @@ $ ./Boris
 ```
 
 ## Release notes
+#### Version x.x.x, Roadmap:
+* Move all '_flee' behaviours into a single behaviour that checks mseg to determine direction
+* Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
 
 #### Version 3.5.0 (In progress, unreleased):
 * Reworked chatter / speech bubble class
@@ -61,6 +64,7 @@ $ ./Boris
 * Added random item spawn interval to about box
 * Now always runs code from 'define init' before first frame is shown from a behaviour
 * Added 'Coins' that can be spend on unlocking behaviours (no real money involved, it's just to add a sense of progression)
+* Added 'queued' script variable that tells how many behaviours are currently queued
 
 #### Version 3.0.1 (15th September 2020):
 * Boris now sometimes farts in his sleep, a very important feature
