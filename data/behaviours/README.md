@@ -409,6 +409,7 @@ The following variables are reserved and hardcoded. You should not try to set th
 * social: Boris' current social level (0-100, 0 means Boris will seek your attention)
 * fun: Boris' current fun level (0-100, 100 means Boris has been having a lot of fun)
 * hygiene: Boris' current hygiene level (0-100, 100 means he's clean)
+* queue: Tells how many behaviours are currently in behaviour queue. This is useful for creating breaking points in long behaviours if a new behaviour is waiting activation
 * yvel: The delta movement of the mouse on the x axis (0-n, 0 means no movement)
 * xvel: The delta movement of the mouse on the y axis (0-n, 0 means no movement)
 * borisx: Current Boris x center coordinate
