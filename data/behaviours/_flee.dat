@@ -1,0 +1,144 @@
+social=-5
+oneShot
+
+define init:var steps = @3 + 5,
+if @2 = 1 sound flee1.wav else sound flee2.wav,
+if msec = 0 goto south,
+if msec = 1 goto southwest,
+if msec = 2 goto west,
+if msec = 3 goto northwest,
+if msec = 4 goto north,
+if msec = 5 goto northeast,
+if msec = 6 goto east,
+if msec = 7 goto southeast
+
+define progress:var steps -= 1,stat fun -= 1,if @2 = 1 stat energy -= 1
+
+#Frames
+# Flee east
+0;50;3;0;;label east
+1;50;3;0;;call progress
+2;50;3;0;;
+3;50;3;0;;
+4;50;3;0;;
+5;50;3;0;;
+6;50;3;0;;
+7;50;3;0;;
+8;50;3;0;;
+9;50;3;0;;if steps <= 0 break,
+var direction = @6,
+if direction = 1 goto northeast,
+if direction > 1 and direction < 6 goto east,
+if directions = 6 goto southeast
+
+# Flee south-east
+10;50;3;2;;label southeast
+11;50;3;2;;call progress
+12;50;3;2;;
+13;50;3;2;;
+14;50;3;2;;
+15;50;3;2;;
+16;50;3;2;;
+17;50;3;2;;
+18;50;3;2;;
+19;50;3;2;;if steps <= 0 break,
+var direction = @6,
+if direction = 1 goto east,
+if direction > 1 and direction < 6 goto southeast,
+if directions = 6 goto south
+
+# Flee south
+20;50;0;2;;label south
+21;50;0;2;;call progress
+22;50;0;2;;
+23;50;0;2;;
+24;50;0;2;;
+25;50;0;2;;
+26;50;0;2;;
+27;50;0;2;;
+28;50;0;2;;
+29;50;0;2;;if steps <= 0 break,
+var direction = @6,
+if direction = 1 goto southeast,
+if direction > 1 and direction < 6 goto south,
+if directions = 6 goto southwest
+
+# Flee south-west
+30;50;-3;2;;label southwest
+31;50;-3;2;;call progress
+32;50;-3;2;;
+33;50;-3;2;;
+34;50;-3;2;;
+35;50;-3;2;;
+36;50;-3;2;;
+37;50;-3;2;;
+38;50;-3;2;;
+39;50;-3;2;;if steps <= 0 break,
+var direction = @6,
+if direction = 1 goto south,
+if direction > 1 and direction < 6 goto southwest,
+if directions = 6 goto west
+
+# Flee west
+40;50;-3;0;;label west
+41;50;-3;0;;call progress
+42;50;-3;0;;
+43;50;-3;0;;
+44;50;-3;0;;
+45;50;-3;0;;
+46;50;-3;0;;
+47;50;-3;0;;
+48;50;-3;0;;
+49;50;-3;0;;if steps <= 0 break,
+var direction = @6,
+if direction = 1 goto southwest,
+if direction > 1 and direction < 6 goto west,
+if directions = 6 goto northwest
+
+# Flee north-west
+50;50;-3;-2;;label northwest
+51;50;-3;-2;;call progress
+52;50;-3;-2;;
+53;50;-3;-2;;
+54;50;-3;-2;;
+55;50;-3;-2;;
+56;50;-3;-2;;
+57;50;-3;-2;;
+58;50;-3;-2;;
+59;50;-3;-2;;if steps <= 0 break,
+var direction = @6,
+if direction = 1 goto west,
+if direction > 1 and direction < 6 goto northwest,
+if directions = 6 goto north
+
+# Flee north
+60;50;0;-2;;label north
+61;50;0;-2;;call progress
+62;50;0;-2;;
+63;50;0;-2;;
+64;50;0;-2;;
+65;50;0;-2;;
+66;50;0;-2;;
+67;50;0;-2;;
+68;50;0;-2;;
+69;50;0;-2;;if steps <= 0 break,
+var direction = @6,
+if direction = 1 goto northwest,
+if direction > 1 and direction < 6 goto north,
+if directions = 6 goto northeast
+
+# Flee north-east
+70;50;3;-2;;label northeast
+71;50;3;-2;;call progress
+72;50;3;-2;;
+73;50;3;-2;;
+74;50;3;-2;;
+75;50;3;-2;;
+76;50;3;-2;;
+77;50;3;-2;;
+78;50;3;-2;;
+79;50;3;-2;;if steps <= 0 break,
+var direction = @6,
+if direction = 1 goto north,
+if direction > 1 and direction < 6 goto northeast,
+if directions = 6 goto east
