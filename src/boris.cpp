@@ -426,6 +426,7 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["weather"] = settings.weatherType.left(2).toInt();
   scriptVars["wind"] = settings.windSpeed;
   scriptVars["temp"] = settings.temperature;
+  scriptVars["queued"] = behavQueue.count();
 
   ScriptHandler scriptHandler(&scriptImage, &drawing, settings, bubble, settings.behaviours.at(curBehav).labels, settings.behaviours.at(curBehav).defines, scriptVars, QPoint(pos().x(), pos().y()), size);
   connect(&scriptHandler, &ScriptHandler::behavFromFile, this, &Boris::behavFromFile);
@@ -749,21 +750,6 @@ void Boris::wheelEvent(QWheelEvent *)
 
 void Boris::handlePhysics()
 {
-  if(!grabbed && weatherSprite->isVisible()) {
-    sinVal += QRandomGenerator::global()->bounded(2000) / 20000.0;
-    if(sinVal > PI) {
-      sinVal = 0.0;
-    }
-    if(settings.windDirection.contains("W")) {
-      moveBoris(round(-(sin(sinVal) + 0.25) * settings.windSpeed * 0.05), 0);
-    } else if(settings.windDirection.contains("E")) {
-      moveBoris(round((sin(sinVal) + 0.25) * settings.windSpeed * 0.05), 0);
-    }
-    if(bubble->isVisible()) {
-      bubble->moveBubble(pos().x(), pos().y(), size);
-    }
-  }
-  
   if(falling && !grabbed) {
     moveBoris(hVel, vVel);
     vVel += 0.5;
@@ -1342,9 +1328,6 @@ void Boris::triggerWeather()
 
 void Boris::showWeather(QString &behav)
 {
-  // Reset sine wave for wind
-  sinVal = 0.0;
-  
   for(int a = 0; a < settings.weathers.count(); ++a) {
     if(settings.weathers.at(a).file == settings.weatherType) {
       curWeather = a;
