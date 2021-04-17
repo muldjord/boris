@@ -5,7 +5,7 @@ allowFlip
 1;75;0;0;;
 2;75;0;0;;
 3;75;0;0;;
-4;75;0;0;;think "I smell terrible..."
+4;75;0;0;;if fsec = -1 think "I smell terrible..." else think "Wow, he stinks..."
 5;75;0;0;;
 6;75;0;0;;
 7;75;0;0;;
