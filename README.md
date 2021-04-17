@@ -38,9 +38,9 @@ $ ./Boris
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
 * Add a 'usec' that points towards any direction the arrow keys are currently pressed
 * Spawn a puddle when '_too_late' happens
-* Consider 'reversing' hunger and toilet stats again. It confuses me more often than not that they are opposite of what the stats show
 
-#### Version 3.5.0 (In progress, unreleased):
+#### Version 3.5.0 (17th April 2021):
+* A LOT of code refactoring and optimizations
 * Reworked chatter / speech bubble class
 * Boris will now think about how he feels when stats are down
 * Added 'script_output' variable to config.ini to allow disabling script output in terminal
@@ -70,6 +70,7 @@ $ ./Boris
 * Moved all '_flee' behaviours into a single behaviour that checks 'msec' variable to determine direction
 * Moved all '_sad' behaviours into a single behaviour that checks 'fsec' variable to determine direction
 * Moved all '_wave' behaviours into a single behaviour that checks 'fsec' and 'msec' variables to determine direction
+* Reversed hunger and toilet stats visually to avoid confusion in connection with behaviours which check or manipulate those stats
 
 #### Version 3.0.1 (15th September 2020):
 * Boris now sometimes farts in his sleep, a very important feature
