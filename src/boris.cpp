@@ -40,7 +40,6 @@
 #include <QBitmap>
 #include <QScreen>
 #include <QTime>
-#include <QElapsedTimer>
 #include <QRandomGenerator>
 
 constexpr int STATTIMER = 200;
