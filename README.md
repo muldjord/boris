@@ -38,6 +38,7 @@ $ ./Boris
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
 * Add a 'usec' that points towards any direction the arrow keys are currently pressed
 * Spawn a puddle when '_too_late' happens
+* Add Boris 'memory'. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
 
 #### Version 3.5.0 (17th April 2021):
 * A LOT of code refactoring and optimizations
