@@ -41,7 +41,7 @@ class Bubble : public QGraphicsView
   Q_OBJECT;
 
 public:
-  Bubble(Settings &settings);
+  explicit Bubble(Settings &settings);
   ~Bubble();
   int initBubble(const int x, const int y,
                  const int &borisSize,

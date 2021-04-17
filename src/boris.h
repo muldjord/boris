@@ -39,7 +39,6 @@
 #include <QBasicTimer>
 #include <QAction>
 #include <QMouseEvent>
-#include <QKeyEvent>
 #include <QMenu>
 
 namespace Direction {
@@ -62,7 +61,7 @@ class Boris : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Boris(Settings &settings);
+  explicit Boris(Settings &settings);
   ~Boris();
   void collide(Boris *boris);
   Boris *borisFriend;
@@ -86,7 +85,6 @@ public:
                                                         
 public slots:
   void earthquake();
-  void teleport();
   void triggerWeather();
   void nextBehaviour();
   void updateBoris();

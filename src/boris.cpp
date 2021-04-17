@@ -486,7 +486,7 @@ int Boris::getSector(const QPoint &p)
     xSeg = 0;
   } else if(p.x() < xZero + (xScaleSeg * 2)) {
     xSeg = 1;
-  } else if(p.x() >= xZero + (xScaleSeg * 2)) {
+  } else {
     xSeg = 2;
   }
   // Then find seg coordinate on y
@@ -498,7 +498,7 @@ int Boris::getSector(const QPoint &p)
     ySeg = 0;
   } else if(p.y() < yZero + (yScaleSeg * 2)) {
     ySeg = 1;
-  } else if(p.y() >= yZero + (yScaleSeg * 2)) {
+  } else {
     ySeg = 2;
   }
   int pointSector = -1;
@@ -823,13 +823,6 @@ void Boris::earthquake()
   }
 }
 
-void Boris::teleport()
-{
-  if(!falling && !grabbed) {
-    changeBehaviour("teleport");
-  }
-}
-
 void Boris::statProgress()
 {
   // If it's late decrease energy to make Boris tired
@@ -1137,7 +1130,7 @@ void Boris::processAi(QString &behav)
 
   // Check if it is time to show the weather again
   timeForWeather++;
-  if(timeForWeather >= 50 || timeForWeather == 666) {
+  if(timeForWeather >= 50) {
     timeForWeather = 0;
     showWeather(behav);
   }

@@ -38,7 +38,7 @@ class SoundMixer : public QObject
   Q_OBJECT;
 
 public:
-  SoundMixer(const int channels);
+  explicit SoundMixer(const int channels);
   QMap<QString, sf::SoundBuffer> soundFxs;
   void playSoundFile(const QString &fileName,
                      const float &panning,

@@ -53,9 +53,9 @@ public:
   void operator=(const Frame &frame);
   Frame();
   QPixmap sprite;
-  int time;
-  int dx;
-  int dy;
+  int time = 0;
+  int dx = 0;
+  int dy = 0;
   sf::SoundBuffer *soundBuffer = nullptr;
   Script script;
 };

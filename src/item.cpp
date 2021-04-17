@@ -318,7 +318,7 @@ int Item::getSector(const QPoint &p)
     xSeg = 0;
   } else if(p.x() < xZero + (xScaleSeg * 2)) {
     xSeg = 1;
-  } else if(p.x() >= xZero + (xScaleSeg * 2)) {
+  } else {
     xSeg = 2;
   }
   // Then find seg coordinate on y
@@ -330,7 +330,7 @@ int Item::getSector(const QPoint &p)
     ySeg = 0;
   } else if(p.y() < yZero + (yScaleSeg * 2)) {
     ySeg = 1;
-  } else if(p.y() >= yZero + (yScaleSeg * 2)) {
+  } else {
     ySeg = 2;
   }
   int pointSector = -1;

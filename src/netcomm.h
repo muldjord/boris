@@ -37,7 +37,7 @@ class NetComm : public QNetworkAccessManager
 {
   Q_OBJECT;
 public:
-  NetComm(Settings &settings);
+  explicit NetComm(Settings &settings);
   ~NetComm();
 
 public slots:
