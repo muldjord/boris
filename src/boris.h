@@ -72,14 +72,14 @@ public:
   QPoint getGlobalCenter();
   int size = 64;
   QMap<QString, int> scriptVars;
-  int hyperQueue;
-  int healthQueue;
-  int energyQueue;
-  int hungerQueue;
-  int toiletQueue;
-  int socialQueue;
-  int funQueue;
-  int hygieneQueue;
+  int hyperQueue = 0;
+  int healthQueue = 0;
+  int energyQueue = 0;
+  int hungerQueue = 0;
+  int toiletQueue = 0;
+  int socialQueue = 0;
+  int funQueue = 0;
+  int hygieneQueue = 0;
   int curFrame = 0;
   int curBehav = 0;
                                                         
