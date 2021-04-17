@@ -1029,7 +1029,6 @@ void Boris::collide(Boris *boris)
   if(settings.behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
     changeBehaviour("_sad");
   } else if(borisFriend->getHygiene() <= 22) {
-    bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Wow, he stinks...", "_thought");
     changeBehaviour("_hygiene");
   } else {
     changeBehaviour("_wave");
