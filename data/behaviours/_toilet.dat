@@ -2,7 +2,7 @@ oneShot
 allowFlip
 #Frames
 0;75;0;0;;
-1;75;0;0;;if toilet =< 1 and @3 = 1 behav _too_late else if toilet < 5 think "I'm gonna poop my pants!" else if toilet < 15 "I almost can't hold it!" else if toilet < 25 think "I really should go to the bathroom!" else if toilet < 35 think "Maybe I should go to the bathroom."
+1;75;0;0;;if toilet =< 3 and @3 = 1 behav _too_late else if toilet < 5 think "I'm gonna poop my pants!" else if toilet < 15 "I almost can't hold it!" else if toilet < 25 think "I really should go to the bathroom!" else if toilet < 35 think "Maybe I should go to the bathroom."
 2;75;0;0;;
 3;75;0;0;;
 4;75;0;0;;
