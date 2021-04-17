@@ -46,8 +46,8 @@ public:
   int initBubble(const int x, const int y,
                  const int &borisSize,
                  const int &hyper,
-                 const QString &bubbleText,
-                 const QString &bubbleType = "_chat",
+                 const QString &text,
+                 const QString &type = "_chat",
                  const QUrl &rssUrl = QUrl());
   void moveBubble(const int &x, const int &y, const int &borisSize);
   
@@ -56,7 +56,19 @@ protected:
   
 private:
   Settings &settings;
-  QGraphicsPixmapItem *bubbleSprite;
+  QGraphicsPixmapItem *bubbleTopLeft;
+  QGraphicsPixmapItem *bubbleTop;
+  QGraphicsPixmapItem *bubbleTopRight;
+  QGraphicsPixmapItem *bubbleLeft;
+  QGraphicsPixmapItem *bubbleRight;
+  QGraphicsPixmapItem *bubbleBottomLeft;
+  QGraphicsPixmapItem *bubbleBottom;
+  QGraphicsPixmapItem *bubbleBottomRight;
+
+  QGraphicsPixmapItem *bubbleThought;
+  QGraphicsPixmapItem *bubbleSpeech;
+  
+  QGraphicsPixmapItem *bubbleText;
   QUrl rssUrl = QUrl();
   QTimer hideTimer;
 };

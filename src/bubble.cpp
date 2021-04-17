@@ -45,9 +45,26 @@ Bubble::Bubble(Settings &settings) : settings(settings)
   QGraphicsScene *scene = new QGraphicsScene();
   setScene(scene);
 
-  bubbleSprite = this->scene()->addPixmap(QPixmap());
-  bubbleSprite->setPos(0, 0);
+  bubbleText = this->scene()->addPixmap(QPixmap());
+  bubbleText->setPos(6, 6);
 
+  bubbleTopLeft = this->scene()->addPixmap(settings.getPixmap("bubble.png").copy(0, 0, 6, 6));
+  bubbleTopLeft->setPos(0, 0);
+  bubbleTop = this->scene()->addPixmap(settings.getPixmap("bubble.png").copy(6, 0, 1, 6));
+  bubbleTop->setPos(6, 0);
+  bubbleTopRight = this->scene()->addPixmap(settings.getPixmap("bubble.png").copy(7, 0, 6, 6));
+  bubbleLeft = this->scene()->addPixmap(settings.getPixmap("bubble.png").copy(0, 6, 6, 1));
+  bubbleLeft->setPos(0, 6);
+  bubbleRight = this->scene()->addPixmap(settings.getPixmap("bubble.png").copy(7, 6, 6, 1));
+  bubbleBottomLeft = this->scene()->addPixmap(settings.getPixmap("bubble.png").copy(0, 7, 6, 6));
+  bubbleBottom = this->scene()->addPixmap(settings.getPixmap("bubble.png").copy(6, 7, 1, 6));
+  bubbleBottomRight = this->scene()->addPixmap(settings.getPixmap("bubble.png").copy(7, 7, 6, 6));
+
+  bubbleSpeech = this->scene()->addPixmap(settings.getPixmap("bubble_speech.png"));
+  bubbleSpeech->setZValue(1.0);
+  bubbleThought = this->scene()->addPixmap(settings.getPixmap("bubble_thought.png"));
+  bubbleThought->setZValue(1.0);
+  
   hideTimer.setSingleShot(true);
   connect(&hideTimer, &QTimer::timeout, this, &Bubble::hide);
 }
@@ -59,8 +76,8 @@ Bubble::~Bubble()
 int Bubble::initBubble(const int x, const int y,
                        const int &borisSize,
                        const int &hyper,
-                       const QString &bubbleText,
-                       const QString &bubbleType,
+                       const QString &text,
+                       const QString &type,
                        const QUrl &rssUrl)
 {
   if(rssUrl.isValid()) {
@@ -70,7 +87,7 @@ int Bubble::initBubble(const int x, const int y,
   }
   int textWidth = 0;
   int textHeight = 0;
-  for(const auto &ch: bubbleText) {
+  for(const auto &ch: text.split("")) {
     if(settings.pixelFont.contains(ch)) {
       textWidth += settings.pixelFont[ch].width();
       if(settings.pixelFont[ch].height() > textHeight) {
@@ -83,7 +100,7 @@ int Bubble::initBubble(const int x, const int y,
   QPainter painter;
   painter.begin(&textImage);
   int idx = 0;
-  for(const auto &ch: bubbleText.split("")) {
+  for(const auto &ch: text.split("")) {
     QImage charImage;
     if(settings.pixelFont.contains(ch)) {
       charImage = settings.pixelFont[ch];
@@ -95,37 +112,39 @@ int Bubble::initBubble(const int x, const int y,
   }
   painter.end();
 
-  QImage bubbleAtlas(settings.getPixmap("bubble.png").toImage());
-  QImage bubbleSpeech(settings.getPixmap("bubble_speech.png").toImage());
-  QImage bubbleThought(settings.getPixmap("bubble_thought.png").toImage());
-  QImage bubbleImage(textImage.width() + bubbleAtlas.width() - 1 - 2,
-                     textImage.height() + bubbleAtlas.height() - 1 + bubbleSpeech.height() - 2,
-                     QImage::Format_ARGB32_Premultiplied);
-  bubbleImage.fill(Qt::transparent);
-  painter.begin(&bubbleImage);
-  painter.drawImage(0, 0, bubbleAtlas.copy(0, 0, 6, 6));
-  painter.drawImage(6, 0, bubbleAtlas.copy(6, 0, 1, 6).scaled(textImage.width() - 2, 6));
-  painter.drawImage(6 + textImage.width() - 2, 0, bubbleAtlas.copy(7, 0, 6, 6));
-  painter.drawImage(0, 6, bubbleAtlas.copy(0, 6, 6, 1).scaled(6, textImage.height() - 2));
-  painter.drawImage(6 + textImage.width() - 2, 6, bubbleAtlas.copy(7, 6, 6, 1).scaled(6, textImage.height() - 2));
-  painter.drawImage(0, 6 + textImage.height() - 2, bubbleAtlas.copy(0, 7, 6, 6));
-  painter.drawImage(6, 6 + textImage.height() - 2, bubbleAtlas.copy(6, 7, 1, 6).scaled(textImage.width() - 2, 6));
-  painter.drawImage(6 + textImage.width() - 2, 6 + textImage.height() - 2, bubbleAtlas.copy(7, 7, 6, 6));
-  if(bubbleType == "_thought") {
-    painter.drawImage(bubbleImage.width() / 2, 6 + 6 + textImage.height() - 4, bubbleThought);
-  } else {
-    painter.drawImage(bubbleImage.width() / 2, 6 + 6 + textImage.height() - 4, bubbleSpeech);
-  }
-  // Draw actual text last, to make sure borders don't overlap it
-  painter.drawImage(6, 6, textImage);
-  painter.end();
+  bubbleText->setPixmap(QPixmap::fromImage(textImage));
 
-  bubbleSprite->setPixmap(QPixmap::fromImage(bubbleImage));
-  scene()->setSceneRect(0.0, 0.0, bubbleImage.width(), bubbleImage.height());
-  setFixedSize(bubbleImage.width() * borisSize / 32.0, bubbleImage.height() * borisSize / 32.0);
+  int width = 6 + textImage.width() + 6;
+  int height = 6 + textImage.height() + 6 + 6;
+  
+  if(type == "_thought") {
+    bubbleSpeech->hide();
+    bubbleThought->setPos(width / 2, height - 8);
+    bubbleThought->show();
+  } else {
+    bubbleThought->hide();
+    bubbleSpeech->setPos(width / 2, height - 8);
+    bubbleSpeech->show();
+  }
+
+  QTransform scaleHorizontal(textImage.width(), 0.0, 0.0, 1.0, 0.0, 0.0);
+  QTransform scaleVertical(1.0, 0.0, 0.0, textImage.height(), 0.0, 0.0);
+  bubbleTop->setTransform(scaleHorizontal);
+  bubbleBottom->setTransform(scaleHorizontal);
+  bubbleLeft->setTransform(scaleVertical);
+  bubbleRight->setTransform(scaleVertical);
+
+  bubbleTopRight->setPos(textImage.width() + 6, 0);
+  bubbleRight->setPos(textImage.width() + 6, 6);
+  bubbleBottomLeft->setPos(0, textImage.height() + 6);
+  bubbleBottom->setPos(6, textImage.height() + 6);
+  bubbleBottomRight->setPos(textImage.width() + 6, textImage.height() + 6);
+
   resetTransform();
   scale(borisSize / 32.0, borisSize / 32.0);
-  int duration = 1000 + (bubbleText.length() * 100);
+  scene()->setSceneRect(0, 0, width * (borisSize / 32), height * (borisSize / 32));
+  setFixedSize(width * (borisSize / 32), height * (borisSize / 32));
+  int duration = 1000 + (text.length() * 100);
   duration = duration - (duration / 100.0 * hyper);
   if(settings.bubbles) {
     show();
