@@ -41,15 +41,13 @@
 #include <QHostInfo>
 #include <QFileInfo>
 
-About::About(QSettings *iniSettings, Settings &settings) : settings(settings)
+About::About(QSettings *iniSettings, Settings &settings) : settings(settings), iniSettings(iniSettings)
 {
-  this->iniSettings = iniSettings;
-  
   setFixedSize(900, 700);
   move((settings.desktopWidth / 2) - (width() / 2), 256);
   setWindowIcon(QIcon(":icon.png"));
   setWindowTitle("Boris v" VERSION);
-
+  
   // About tab
   QWidget *aboutWidget = new QWidget;
   QLabel *aboutText = new QLabel(tr("<strong>Boris bids you welcome!</strong><br/>He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye on him!<br/><br/>"
@@ -57,7 +55,8 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings)
                                     "<ul>"
                                     "<li>You can pick Boris up if he is in your way by holding down the left mouse button while the pointer is on top of him.</li>"
                                     "<li>Right-clicking Boris brings up a menu where you can select any of the behaviours you have unlocked using coins. Each behaviour is added to a queue and performed in the order you select them.</li>"
-                                    "<li>Right-clicking the Boris system tray icon gives you access to information and important functions that will enable you to take care of Boris. This menu also contains the 'Config / about...' dialog option which allows you to configure Boris to your liking.</li>"
+                                    "<li>Using the mouse scroll-wheel on Boris will tickle him if he's not busy.</li>"
+                                    "<li>Right-clicking the Boris system tray icon brings up a menu that gives you access to information and important functions that will help you configure and take care of Boris.</li>"
                                     "</ul>"
                                     "<strong>Health stats:</strong>"
                                     "<ul>"
@@ -69,13 +68,14 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings)
                                     "</ul>"
                                     "<strong>Other stats:</strong>"
                                     "<ul>"
-                                    "<li>Boris can also get dirty if he eats messy food or goes to the toilet without washing his hands.</li>"
+                                    "<li>Boris can get dirty if he eats messy food or goes to the toilet without washing his hands.</li>"
                                     "<li>He can also get bruised if you thrown him around too much.</li>"
                                     "</ul>"
                                     "<strong>How to get coins:</strong>"
-                                    "<br/>It's just for fun! No real money involved. You can earn Boris coins by right-clicking the Boris system tray icon, selecting the 'Items' submenu, and choosing an item that corresponds to the current needs of Boris. The more needy Boris is for the particular thing you select, the more coins you receive. Drag the item on top of him to give it to him.<br/>"
+                                    "<br/>It's just for fun! No real money involved. You can earn Boris coins by right-clicking the Boris system tray icon, selecting the 'Items' submenu, and choosing an item that corresponds to the current needs of Boris. The more needy Boris is for the particular item you select, the more coins you receive. Drag the item on top of him to give it to him or wait for him to find it on his own.<br/>"
                                     "You can then spend the coins by selecting the 'Behaviours' submenu and choosing the behaviour you want to buy. The behaviour then becomes unlocked and can be selected anytime you want from the Boris right-click menu or Boris system tray icon 'Behaviours' submenu.<br/>"
                                     "<br/>"
+                                    "<strong>Where to get Boris:</strong><br/>"
                                     "If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit https://github.com/muldjord/boris/releases and download it. He is completely free and open source. You can also download the full source code (GPLv3) in there if you like."));
   aboutText->setWordWrap(true);
   aboutText->setMaximumWidth(400);

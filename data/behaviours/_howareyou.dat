@@ -47,15 +47,15 @@ call checkup
 # Hunger
 5;50;0;0;;label hunger,
 var tried += 1,
-if hunger < 15 {say "I'm starving! Please feed me!",behav _complain},
-if hunger < 30 {say "I'm a bit peckish, I could go for a snack.",behav _chat},
+if hunger > 85 {say "I'm starving! Please feed me!",behav _complain},
+if hunger > 70 {say "I'm a bit peckish, I could go for a snack.",behav _chat},
 call checkup
 
 # Toilet
 5;50;0;0;;label toilet,
 var tried += 1,
-if toilet < 15 {say "Pst... I'm about to poop my pants.",behav _whisper},
-if toilet < 30 {say "It's soon time for a bathroom break.",behav _chat},
+if toilet > 85 {say "Pst... I'm about to poop my pants.",behav _whisper},
+if toilet > 70 {say "It's soon time for a bathroom break.",behav _chat},
 call checkup
 
 # Social

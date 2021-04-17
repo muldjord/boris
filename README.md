@@ -38,6 +38,7 @@ $ ./Boris
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
 * Add a 'usec' that points towards any direction the arrow keys are currently pressed
 * Spawn a puddle when '_too_late' happens
+* Consider 'reversing' hunger and toilet stats again. It confuses me more often than not that they are opposite of what the stats show
 
 #### Version 3.5.0 (In progress, unreleased):
 * Reworked chatter / speech bubble class

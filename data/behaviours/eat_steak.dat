@@ -6,7 +6,7 @@ allowFlip
 oneShot
 #Frames
 0;75;0;0;;var bites = @4 + 1
-0;75;0;0;;label bite,var bites -= 1,if hunger >= 100 goto imfull
+0;75;0;0;;label bite,var bites -= 1,if hunger <= 0 goto imfull
 1;75;0;0;;
 2;75;0;0;steak_bite.wav;
 3;75;0;0;;

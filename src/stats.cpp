@@ -31,17 +31,27 @@
 #include <math.h>
 #include <QUuid>
 
-Stats::Stats(Settings &settings, int hyper, int health, int energy, int hunger, int toilet, int social, int fun, int hygiene, QWidget *parent) : QGraphicsView(parent), settings(settings)
+Stats::Stats(Settings &settings,
+             const int &hyper,
+             const int &health,
+             const int &energy,
+             const int &hunger,
+             const int &toilet,
+             const int &social,
+             const int &fun,
+             const int &hygiene,
+             QWidget *parent) :
+  QGraphicsView(parent),
+  settings(settings),
+  hyper(hyper),
+  health(health),
+  energy(energy),
+  hunger(hunger),
+  toilet(toilet),
+  social(social),
+  fun(fun),
+  hygiene(hygiene)
 {
-  this->hyper = hyper;
-  this->health = health;
-  this->energy = energy;
-  this->hunger = hunger;
-  this->toilet = toilet;
-  this->social = social;
-  this->fun = fun;
-  this->hygiene = hygiene;
-  
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
   setFrameShape(QFrame::NoFrame);
@@ -228,18 +238,18 @@ void Stats::updateStats()
 {
   QColor energyColor((5.1 * (energy - 100) * -1 > 255 ? 255 : round(5.1 * (energy - 100) * -1)),
                      (5.1 * energy > 255 ? 255 : round(5.1 * energy)), 0);
+  /*
   QColor hungerColor((5.1 * (hunger - 100) * -1 > 255 ? 255 : round(5.1 * (hunger - 100) * -1)),
                      (5.1 * hunger > 255 ? 255 : round(5.1 * hunger)), 0);
-  /*
+  */
   QColor hungerColor((5.1 * hunger > 255 ? 255 : round(5.1 * hunger)),
                      (5.1 * (hunger - 100) * -1 > 255 ? 255 : round(5.1 * (hunger - 100) * -1)), 0);
-  */
+  /*
   QColor toiletColor((5.1 * (toilet - 100) * -1 > 255 ? 255 : round(5.1 * (toilet - 100) * -1)),
                      (5.1 * toilet > 255 ? 255 : round(5.1 * toilet)), 0);
-  /*
+  */
   QColor toiletColor((5.1 * toilet > 255 ? 255 : round(5.1 * toilet)),
                      (5.1 * (toilet - 100) * -1 > 255 ? 255 : round(5.1 * (toilet - 100) * -1)), 0);
-  */
   QColor socialColor((5.1 * (social - 100) * -1 > 255 ? 255 : round(5.1 * (social - 100) * -1)),
                      (5.1 * social > 255 ? 255 : round(5.1 * social)), 0);
   QColor funColor((5.1 * (fun - 100) * -1 > 255 ? 255 : round(5.1 * (fun - 100) * -1)),

@@ -32,7 +32,7 @@ allowFlip
 17;50;0;0;;
 18;50;0;0;;
 17;50;0;0;;
-18;50;0;0;;if toilet > 95 goto end else goto weewee
+18;50;0;0;;if toilet < 5 goto end else goto weewee
 19;50;0;0;weewee3.wav;label end
 20;50;0;0;;
 21;50;0;0;;

@@ -42,7 +42,16 @@ class Stats : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  Stats(Settings &settings, int hyper, int health, int energy, int hunger, int toilet, int social, int fun, int hygiene, QWidget *parent);
+  Stats(Settings &settings,
+             const int &hyper,
+             const int &health,
+             const int &energy,
+             const int &hunger,
+             const int &toilet,
+             const int &social,
+             const int &fun,
+             const int &hygiene,
+             QWidget *parent);
   ~Stats();
   void flashStat(QString stat = "none");
   int getHyper();

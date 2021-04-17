@@ -405,7 +405,7 @@ The following variables are reserved and hardcoded. You should not try to set th
 * health: Boris' current health level (0-100, 100 means he's doing well)
 * hyper: Boris' current hyper level (0-100, 100 means he will speed around the desktop like crazy)
 * hunger: Boris' current hunger level (0-100, 100 means he's VERY hungry)
-* toilet: Boris' current toilet need level (0-100, 100 means he need to go NOW!)
+* toilet: Boris' current toilet need level (0-100, 100 means he needs to go NOW!)
 * social: Boris' current social level (0-100, 0 means Boris will seek your attention)
 * fun: Boris' current fun level (0-100, 100 means Boris has been having a lot of fun)
 * hygiene: Boris' current hygiene level (0-100, 100 means he's clean)
