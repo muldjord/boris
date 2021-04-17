@@ -1,3 +1,5 @@
+title=Zombie walk
+category=Movement
 oneShot
 
 define init:var steps = @3 + 7,
@@ -9,44 +11,44 @@ if direction = 4 goto north
 
 #Frames
 # Zombie walk east
-0;150;5;0;;label east
-1;150;5;0;;
-2;150;5;0;;
-3;150;5;0;;var steps -= 1,if steps <= 0 goto endeast,
-var direction = @4,
+0;225;6;0;;label east
+1;225;6;0;;
+2;225;6;0;;
+3;225;6;0;;var steps -= 1,if steps <= 0 goto endeast,
+var direction = @6,
 if direction = 1 goto north,
-if direction > 1 and direction < 4 goto east,
-if direction = 4 goto south
+if direction > 1 and direction < 6 goto east,
+if direction = 6 goto south
 
 # Zombie walk south
-4;150;5;0;;label south
-5;150;5;0;;
-6;150;5;0;;
-7;150;5;0;;var steps -= 1,if steps <= 0 goto endeast,
-var direction = @4,
+4;225;0;3;;label south
+5;225;0;3;;
+6;225;0;3;;
+7;225;0;3;;var steps -= 1,if steps <= 0 goto endeast,
+var direction = @6,
 if direction = 1 goto east,
-if direction > 1 and direction < 4 goto south,
-if direction = 4 goto west
+if direction > 1 and direction < 6 goto south,
+if direction = 6 goto west
 
 # Zombie walk west
-8;150;5;0;;label west
-9;150;5;0;;
-10;150;5;0;;
-11;150;5;0;;var steps -= 1,if steps <= 0 goto endwest,
-var direction = @4,
+8;225;-6;0;;label west
+9;225;-6;0;;
+10;225;-6;0;;
+11;225;-6;0;;var steps -= 1,if steps <= 0 goto endwest,
+var direction = @6,
 if direction = 1 goto south,
-if direction > 1 and direction < 4 goto west,
-if direction = 4 goto north
+if direction > 1 and direction < 6 goto west,
+if direction = 6 goto north
 
 # Zombie walk north
-12;150;5;0;;label north
-13;150;5;0;;
-14;150;5;0;;
-15;150;5;0;;var steps -= 1,if steps <= 0 goto endwest,
-var direction = @4,
+12;225;0;-3;;label north
+13;225;0;-3;;
+14;225;0;-3;;
+15;225;0;-3;;var steps -= 1,if steps <= 0 goto endwest,
+var direction = @6,
 if direction = 1 goto west,
-if direction > 1 and direction < 4 goto north,
-if direction = 4 goto east
+if direction > 1 and direction < 6 goto north,
+if direction = 6 goto east
 
 # End pointing towards east
 16;500;0;0;;label endeast
@@ -57,15 +59,15 @@ if direction = 4 goto east
 18;75;0;0;;
 19;75;0;0;;
 20;75;0;0;;
-21;75;0;0;;
-22;75;0;0;;
-21;75;0;0;;
-22;75;0;0;;
-21;75;0;0;;
-22;75;0;0;;
-21;75;0;0;;
-22;75;0;0;;
-21;75;0;0;;
+21;120;0;0;;
+22;120;0;0;;
+21;120;0;0;;
+22;120;0;0;;
+21;120;0;0;;
+22;120;0;0;;
+21;120;0;0;;
+22;120;0;0;;
+21;120;0;0;;
 20;75;0;0;;
 19;75;0;0;;
 18;75;0;0;;
@@ -84,15 +86,15 @@ if direction = 4 goto east
 27;75;0;0;;
 28;75;0;0;;
 29;75;0;0;;
-30;75;0;0;;
-31;75;0;0;;
-30;75;0;0;;
-31;75;0;0;;
-30;75;0;0;;
-31;75;0;0;;
-30;75;0;0;;
-31;75;0;0;;
-30;75;0;0;;
+30;120;0;0;;
+31;120;0;0;;
+30;120;0;0;;
+31;120;0;0;;
+30;120;0;0;;
+31;120;0;0;;
+30;120;0;0;;
+31;120;0;0;;
+30;120;0;0;;
 29;75;0;0;;
 28;75;0;0;;
 27;75;0;0;;
