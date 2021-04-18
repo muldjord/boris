@@ -36,7 +36,6 @@ $ ./Boris
 ## Release notes
 #### Known issues:
 * When kicking the football, Boris will be out of sync with the ball animation if he has been drinking coffee
-* When Boris kicks the football and a new ball is spawned after the animation is done, the spawnewd ball should be active right away to allow another Boris to kick the ball further. A way to make certain items instantly active should be implemented
 
 #### Version x.x.x, Roadmap:
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
