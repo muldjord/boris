@@ -85,6 +85,7 @@ public:
   bool doNotDisturb = false;
   bool allowFlip = false;
   bool pitchLock = false;
+  bool noIgnore = false; // For Item: Tells whether it should be instantly active when spawned
   int coins = 10;
   QList<Frame> frames;
   QMap<QString, int> labels; // Used for scripts when goto'ing

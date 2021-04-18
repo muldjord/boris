@@ -53,6 +53,9 @@ The line `#Frames` must be there so the software knows when the frame definition
 * oneShot: This behaviour will be played from start to finish and then switch to a new behaviour
 * doNotDisturb: If this exists, Boris will not be disturbed by the mouse or other Borises while this behaviour is in progress
 
+#### Flags specific to item behaviours
+* noIgnore: By default all items will be ignored by Boris for 60 seconds after it spawns to avoid him interacting with it right away. This flag disables that ignore period and makes it immediately active.
+
 ### Code defines
 The scripting language supports very basic code block defines. These are not functions, but rather blocks of code that can then be reused throughout a behaviour by using the `call <DEFINE>` command.
 

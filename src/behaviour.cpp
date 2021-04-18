@@ -91,6 +91,7 @@ Behaviour::Behaviour(const Behaviour &behaviour) : QObject()
   this->doNotDisturb = behaviour.doNotDisturb;
   this->allowFlip = behaviour.allowFlip;
   this->pitchLock = behaviour.pitchLock;
+  this->noIgnore = behaviour.noIgnore;
   this->frames = behaviour.frames;
   this->labels = behaviour.labels;
   this->defines = behaviour.defines;
@@ -116,6 +117,7 @@ void Behaviour::operator=(const Behaviour &behaviour)
   this->doNotDisturb = behaviour.doNotDisturb;
   this->allowFlip = behaviour.allowFlip;
   this->pitchLock = behaviour.pitchLock;
+  this->noIgnore = behaviour.noIgnore;
   this->frames = behaviour.frames;
   this->labels = behaviour.labels;
   this->defines = behaviour.defines;

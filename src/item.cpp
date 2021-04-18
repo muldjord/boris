@@ -103,7 +103,11 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
 
   animTimer.start(0, Qt::PreciseTimer, this);
 
-  QTimer::singleShot(60000, this, &Item::dontIgnore);
+  if(settings.itemBehaviours.at(curItem).noIgnore) {
+    this->ignore = false;
+  } else {
+    QTimer::singleShot(60000, this, &Item::dontIgnore);
+  }
   show();
 }
 
