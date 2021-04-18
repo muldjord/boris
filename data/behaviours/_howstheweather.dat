@@ -8,7 +8,7 @@ coins=15
 1;50;0;0;;
 2;50;0;0;;
 3;50;0;0;;
-4;50;0;0;;
+4;50;0;0;;stat social += 4
 5;1200;0;0;;if weather = 1 say "It's sunny...",
 if weather = 2 say "A cloud or two...",
 if weather = 3 say "Quite cloudy...",
@@ -19,7 +19,7 @@ if weather = 11 say "Thor is on the loose...",
 if weather = 13 say "It's time to built a snowman...",
 if weather = 50 say "It's misty..."
 
-5;1200;0;0;;if temp < 0 { say "...freezingly cold...",goto celsius },
+5;1200;0;0;;stat social += 4,if temp < 0 { say "...freezingly cold...",goto celsius },
 if temp < 5 { say "...very cold...",goto celsius },
 if temp < 10 { say "...quite cold...",goto celsius },
 if temp < 15 { say "...slightly cold...",goto celsius },
@@ -32,7 +32,7 @@ if temp >= 40 { say "...crazy hot!...",goto celsius }
 5;1500;0;0;;label celsius,say "...$temp degrees celsius..."
 
 
-5;1800;0;0;;if wind < 2 { say "...and there's almost no wind.",goto conclusion },
+5;1800;0;0;;stat social += 4,if wind < 2 { say "...and there's almost no wind.",goto conclusion },
 if wind <= 5 { say "...and there's a slight breeze.",goto conclusion },
 if wind <= 10 { say "...and there's a decent wind.",goto conclusion },
 if wind <= 15 { say "...and the wind is quite strong!",goto conclusion },
