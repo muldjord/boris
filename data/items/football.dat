@@ -1,5 +1,6 @@
 title=Football
 category=Fun
+reaction=_kickball
 allowFlip
 #Frames
 0;1000;0;0;;stop
