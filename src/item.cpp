@@ -105,12 +105,16 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   connect(&physicsTimer, &QTimer::timeout, this, &Item::handlePhysics);
   physicsTimer.start();
 
+  ignoreTimer.setInterval(60000);
+  ignoreTimer.setSingleShot(true);
+  connect(&ignoreTimer, &QTimer::timeout, this, &Item::dontIgnore);
+  
   animTimer.start(0, Qt::PreciseTimer, this);
 
   if(settings.itemBehaviours.at(curItem).noIgnore) {
     this->ignore = false;
   } else {
-    QTimer::singleShot(60000, this, &Item::dontIgnore);
+    ignoreTimer.start();
   }
   show();
 }
@@ -402,7 +406,6 @@ void Item::mousePressEvent(QMouseEvent* event)
   } else if(event->button() == Qt::MiddleButton) {
     destroy();
   }
-
 }
 
 void Item::mouseMoveEvent(QMouseEvent* event)
@@ -495,6 +498,10 @@ void Item::handlePhysics()
 
 void Item::interact(const Boris *boris)
 {
+  if(settings.itemBehaviours.at(curItem).interactLabel.isEmpty()) {
+    destroy();
+    return;
+  }
   move(boris->pos().x() + settings.itemBehaviours.at(curItem).moveTo.x() * (size / 32),
        boris->pos().y() + settings.itemBehaviours.at(curItem).moveTo.y() * (size / 32));
   curFrame = settings.itemBehaviours.at(curItem).labels[settings.itemBehaviours.at(curItem).interactLabel];
@@ -505,5 +512,5 @@ void Item::interact(const Boris *boris)
   hVel = 0.0;
   vVel = 0.0;
   ignore = true;
-  QTimer::singleShot(10000, this, &Item::dontIgnore);
+  ignoreTimer.start();
 }

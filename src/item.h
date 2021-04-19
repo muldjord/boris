@@ -87,6 +87,7 @@ private:
   int size = 64;
 
   QTimer physicsTimer;
+  QTimer ignoreTimer;
   double vVel = 0.0;
   double hVel = 0.0;
   double mouseVVel = 0.0;
