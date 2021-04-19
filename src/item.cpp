@@ -401,6 +401,7 @@ void Item::mousePressEvent(QMouseEvent* event)
   if(event->button() == Qt::LeftButton) {
     grabbed = true;
     ignore = false;
+    ignoreTimer.stop();
     setCursor(settings.getCursor("grab.png"));
     oldCursor = QCursor::pos();
   } else if(event->button() == Qt::MiddleButton) {
