@@ -42,7 +42,8 @@ $ ./Boris
 * Add a 'usec' that points towards any direction the arrow keys are currently pressed
 * Spawn a puddle when '_too_late' happens
 * Add Boris 'memory'. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
-* Add synchronization points between items and behaviours in cases where they are interacting
+* Add a way to add physics to items at a specific time, to send a ball up in the air in a direction
+* Allow a Boris behaviour interacting with an item to manipulate the item "hyper" so they stay synchronized
 
 #### Version 3.5.1 (In progress, unreleased):
 * Boris will now kick the football
