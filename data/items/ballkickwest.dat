@@ -1,5 +1,0 @@
-reaction=_kickball
-oneShot
-#Frames
-0;3600;0;0;;
-0;50;0;0;kick.wav;var xvel = -5 - @10,var yvel = -2 - @5,stop
