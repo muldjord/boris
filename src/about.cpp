@@ -135,9 +135,9 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
   QPushButton *okButton = new QPushButton(tr("Close and save"));
   connect(okButton, &QPushButton::clicked, this, &About::saveAll);
 
-  QLabel *sizeLabel = new QLabel(tr("Boris size in pixels (8-256 or 0 for random):"));
+  QLabel *sizeLabel = new QLabel(tr("Boris size in pixels (32-256):"));
   sizeLineEdit = new QLineEdit();
-  QIntValidator *sizeValidator = new QIntValidator(0, 256, this);
+  QIntValidator *sizeValidator = new QIntValidator(32, 256, this);
   sizeLineEdit->setValidator(sizeValidator);
   sizeLineEdit->setText(QString::number(settings.size));
 
@@ -272,15 +272,15 @@ void About::saveAll()
     settings.showWelcome = false;
   }
   if(sizeLineEdit->text().toInt() != 0) {
-    if(sizeLineEdit->text().toInt() < 8) {
-      sizeLineEdit->setText("8");
+    if(sizeLineEdit->text().toInt() < 32) {
+      sizeLineEdit->setText("32");
     }
     if(sizeLineEdit->text().toInt() > 256) {
       sizeLineEdit->setText("256");
     }
     settings.size = sizeLineEdit->text().toInt();
   } else {
-    settings.size = 0;
+    settings.size = 64;
   }
   if(clonesLineEdit->text().toInt() != 0) {
     if(clonesLineEdit->text().toInt() < 1) {
