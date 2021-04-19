@@ -63,7 +63,6 @@ class Boris : public QGraphicsView
 public:
   explicit Boris(Settings &settings);
   ~Boris();
-  void collide(Boris *boris);
   Boris *borisFriend;
   int getHygiene();
   void moveBoris(int dX, int dY, const bool &flipped = false, const bool &vision = true);
@@ -111,7 +110,7 @@ private slots:
   QPixmap getShadow(const QPixmap &sprite);
   void nextWeatherFrame();
   void hideWeather();
-  void readyForFriend();
+  void enableInteract();
   void checkInteractions();
   void statChange(const QString &type, const int &amount);
   void behavFromFile(const QString &file);
@@ -122,6 +121,7 @@ private:
 
   bool falling = false;
   bool grabbed = false;
+  bool interact = true;
   void showWeather(QString &behav);
   void runScript(int &stop, const bool &init = false);
   int staticBehaviours;
@@ -170,6 +170,7 @@ private:
   void processAi(QString &behav);
   int getDistance(const QPoint &p);
   int getSector(const QPoint &p);
+  void borisInteract(Boris *boris);
   void itemInteract(Item *item);
   int curWeather = 0;
   int curWeatherFrame = 0;

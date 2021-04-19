@@ -1009,31 +1009,6 @@ int Boris::getHygiene()
   return stats->getHygiene();
 }
 
-void Boris::collide(Boris *boris)
-{
-  if(pos().y() > boris->pos().y()) {
-    // Bring this Boris to the front, because he is considered closer in 3D space
-    raise();
-    setFocus();
-  }
-  
-  if(borisFriend != nullptr || falling || grabbed || settings.behaviours.at(curBehav).doNotDisturb) {
-    return;
-  }
-  borisFriend = boris;
-  // Queue current behaviour so it isn't 'forgotten'
-  behavQueue.prepend(settings.behaviours.at(curBehav).file);
-
-  if(settings.behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
-    changeBehaviour("_sad");
-  } else if(borisFriend->getHygiene() <= 22) {
-    changeBehaviour("_hygiene");
-  } else {
-    changeBehaviour("_wave");
-  }
-  QTimer::singleShot(QRandomGenerator::global()->bounded(5000) + 15000, this, &Boris::readyForFriend);
-}
-
 void Boris::processVision()
 {
   int border = 4;
@@ -1307,9 +1282,10 @@ int Boris::getCurBehav()
   return curBehav;
 }
 
-void Boris::readyForFriend()
+void Boris::enableInteract()
 {
   borisFriend = nullptr;
+  interact = true;
 }
 
 void Boris::checkInteractions()
@@ -1318,7 +1294,7 @@ void Boris::checkInteractions()
   for(auto &boris: settings.borisList) {
     if(boris != this) {
       if(getDistance(boris->getGlobalCenter()) < size * 2) {
-        collide(boris);
+        borisInteract(boris);
         break;
       }
     }
@@ -1326,7 +1302,7 @@ void Boris::checkInteractions()
 
   // Check if user is dragging any items close by
   for(auto &item: settings.itemList) {
-    if(!falling && !grabbed && !settings.behaviours.at(curBehav).doNotDisturb &&
+    if(interact && !falling && !grabbed && !settings.behaviours.at(curBehav).doNotDisturb &&
        (!item->ignore || item->grabbed) &&
        getDistance(item->getGlobalCenter()) < size) {
       itemInteract(item);
@@ -1358,8 +1334,36 @@ void Boris::checkInteractions()
   interactionsTimer.start();
 }
 
+void Boris::borisInteract(Boris *boris)
+{
+  if(pos().y() > boris->pos().y()) {
+    // Bring this Boris to the front, because he is considered closer in 3D space
+    raise();
+    setFocus();
+  }
+  
+  if(borisFriend != nullptr || falling || grabbed || settings.behaviours.at(curBehav).doNotDisturb) {
+    return;
+  }
+  borisFriend = boris;
+  // Queue current behaviour so it isn't 'forgotten'
+  behavQueue.prepend(settings.behaviours.at(curBehav).file);
+
+  if(settings.behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
+    changeBehaviour("_sad");
+  } else if(borisFriend->getHygiene() <= 22) {
+    changeBehaviour("_hygiene");
+  } else {
+    changeBehaviour("_wave");
+  }
+  QTimer::singleShot(QRandomGenerator::global()->bounded(17000), this, &Boris::enableInteract);
+}
+
 void Boris::itemInteract(Item * item)
 {
+  // Disable interactions for a while
+  interact = false;
+  
   if(!item->getReactionBehaviour().isEmpty()) {
     changeBehaviour(item->getReactionBehaviour());
     int coins = 0;
@@ -1407,6 +1411,7 @@ void Boris::itemInteract(Item * item)
   } else if(item->grabbed) {
     bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "I don't know what to do with that.", "_thought");
   }
+  QTimer::singleShot(10000, this, &Boris::enableInteract);
 }
 
 void Boris::statChange(const QString &type, const int &amount)
