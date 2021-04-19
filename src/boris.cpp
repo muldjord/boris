@@ -997,16 +997,44 @@ void Boris::statQueueProgress()
   statQueueTimer.start();
 }
 
-// Used by 'other Boris' to determine whether to flee or greet
-int Boris::getHygiene()
+int Boris::getEnergy() const
 {
-  return stats->getHygiene();
+  return stats->getEnergy();
 }
 
-// Used by item interactions to ensure synchronized animation
+int Boris::getHealth() const
+{
+  return stats->getHealth();
+}
+
 int Boris::getHyper() const
 {
   return stats->getHyper();
+}
+
+int Boris::getHunger() const
+{
+  return stats->getHunger();
+}
+
+int Boris::getToilet() const
+{
+  return stats->getToilet();
+}
+
+int Boris::getSocial() const
+{
+  return stats->getSocial();
+}
+
+int Boris::getFun() const
+{
+  return stats->getFun();
+}
+
+int Boris::getHygiene() const
+{
+  return stats->getHygiene();
 }
 
 void Boris::processVision()

@@ -501,6 +501,15 @@ void Item::handlePhysics()
 
 void Item::interact(const Boris *boris)
 {
+  scriptVars["energy"] = boris->getEnergy();
+  scriptVars["health"] = boris->getHealth();
+  scriptVars["hyper"] = boris->getHyper();
+  scriptVars["hunger"] = boris->getHunger();
+  scriptVars["toilet"] = boris->getToilet();
+  scriptVars["social"] = boris->getSocial();
+  scriptVars["fun"] = boris->getFun();
+  scriptVars["hygiene"] = boris->getHygiene();
+  
   borisHyper = boris->getHyper();
   if(settings.itemBehaviours.at(curItem).interactLabel.isEmpty()) {
     destroy();

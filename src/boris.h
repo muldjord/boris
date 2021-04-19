@@ -65,8 +65,14 @@ public:
   explicit Boris(Settings &settings);
   ~Boris();
   Boris *borisFriend;
-  int getHygiene();
+  int getEnergy() const;
+  int getHealth() const;
   int getHyper() const;
+  int getHunger() const;
+  int getToilet() const;
+  int getSocial() const;
+  int getFun() const;
+  int getHygiene() const;
   void moveBoris(int dX, int dY, const bool &flipped = false, const bool &vision = true);
   int getCurBehav();
   void changeBehaviour(QString behav = "", int time = -1);
