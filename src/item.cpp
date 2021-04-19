@@ -101,6 +101,10 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
     runScript(stop, true);
   }
 
+  physicsTimer.setInterval(30);
+  connect(&physicsTimer, &QTimer::timeout, this, &Item::handlePhysics);
+  physicsTimer.start();
+
   animTimer.start(0, Qt::PreciseTimer, this);
 
   if(settings.itemBehaviours.at(curItem).noIgnore) {
@@ -257,6 +261,7 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
   sanityCheck();
   
   int maxX = QApplication::desktop()->width() - size;
+  int minY = 0;
   int maxY = QApplication::desktop()->height() - size;
 
   if(dX == 666) {
@@ -274,13 +279,18 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
   }
   
   move(dX, dY);
+  // if item is outside borders
+  if(falling && (pos().y() > maxY || pos().y() < minY)) {
+    hVel *= 0.2;
+    vVel = 0.0;
+  }
 }
 
 void Item::sanityCheck()
 {
   int minX = - size;
   int maxX = QApplication::desktop()->width();
-  int minY = 0 - (size / 2);
+  int minY = 0;
   int maxY = QApplication::desktop()->height() - height();
 
   // Make sure Item is not located outside boundaries
@@ -379,6 +389,7 @@ void Item::mousePressEvent(QMouseEvent* event)
     grabbed = true;
     ignore = false;
     setCursor(settings.getCursor("grab.png"));
+    oldCursor = QCursor::pos();
   } else if(event->button() == Qt::MiddleButton) {
     destroy();
   }
@@ -396,9 +407,13 @@ void Item::mouseMoveEvent(QMouseEvent* event)
 
 void Item::mouseReleaseEvent(QMouseEvent* event)
 {
-  grabbed = false;
   if(event->button() == Qt::LeftButton) {
     setCursor(settings.getCursor("hover.png"));
+    grabbed = false;
+    falling = true;
+    hVel = mouseHVel;
+    vVel = mouseVVel;
+    altitude = QCursor::pos().y();
   }
 }
 
@@ -440,4 +455,31 @@ void Item::destroy()
 void Item::dontIgnore()
 {
   ignore = false;
+}
+
+void Item::handlePhysics()
+{
+  if(falling && !grabbed) {
+    if(shadowSprite->isVisible()) {
+      shadowSprite->hide();
+    }
+    moveItem(hVel, vVel);
+    vVel += 0.5;
+    if(pos().y() >= altitude) {
+      move(pos().x(), altitude);
+      if(vVel < 5.0) {
+        falling = false;
+      } else {
+        hVel *= 0.5;
+        vVel = (vVel * 0.5) * -1;
+      }
+    }
+  } else {
+    if(!shadowSprite->isVisible()) {
+      shadowSprite->show();
+    }
+  }
+  mouseHVel = (QCursor::pos().x() - oldCursor.x()) / 4.0;
+  mouseVVel = (QCursor::pos().y() - oldCursor.y()) / 4.0;
+  oldCursor = QCursor::pos();
 }

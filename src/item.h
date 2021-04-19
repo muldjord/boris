@@ -66,6 +66,7 @@ private slots:
   QPixmap getShadow(const QPixmap &sprite);
   void setCurFrame(const int &frame);
   void dontIgnore();
+  void handlePhysics();
   
 private:
   Settings &settings;
@@ -80,6 +81,16 @@ private:
   int curFrame = 0;
   int curItem = 0;
   int size = 64;
+
+  QTimer physicsTimer;
+  double vVel = 0.0;
+  double hVel = 0.0;
+  double mouseVVel = 0.0;
+  double mouseHVel = 0.0;
+  int altitude = 0;
+  QPoint oldCursor;
+  bool falling = false;
+
   void runScript(int &stop, const bool &init = false);
   void sanityCheck();
   int getDistance(const QPoint &p);
