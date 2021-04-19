@@ -85,7 +85,8 @@ private:
   int curFrame = 0;
   int curItem = 0;
   int size = 64;
-
+  int borisHyper = 0;
+  
   QTimer physicsTimer;
   QTimer ignoreTimer;
   double vVel = 0.0;

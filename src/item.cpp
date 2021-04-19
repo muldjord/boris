@@ -247,6 +247,7 @@ void Item::timerEvent(QTimerEvent *)
   }
 
   int frameTime = settings.itemBehaviours.at(curItem).frames.at(curFrame).time;
+  frameTime -= (frameTime / 100.0 * borisHyper);
   if(frameTime <= 5) {
     frameTime = 5;
   }
@@ -468,6 +469,7 @@ void Item::destroy()
 void Item::dontIgnore()
 {
   ignore = false;
+  borisHyper = 0;
 }
 
 void Item::handlePhysics()
@@ -499,6 +501,7 @@ void Item::handlePhysics()
 
 void Item::interact(const Boris *boris)
 {
+  borisHyper = boris->getHyper();
   if(settings.itemBehaviours.at(curItem).interactLabel.isEmpty()) {
     destroy();
     return;

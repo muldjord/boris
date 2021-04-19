@@ -1003,6 +1003,12 @@ int Boris::getHygiene()
   return stats->getHygiene();
 }
 
+// Used by item interactions to ensure synchronized animation
+int Boris::getHyper() const
+{
+  return stats->getHyper();
+}
+
 void Boris::processVision()
 {
   int border = 4;
