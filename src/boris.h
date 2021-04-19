@@ -137,7 +137,6 @@ private:
   QTimer interactionsTimer;
   int interactions = 0;
   int annoyance = 0;
-  bool mMoving;
   QPoint mLastMousePosition;
   bool mouseHovering = false;
 
@@ -155,10 +154,9 @@ private:
   
   double vVel = 0.0;
   double hVel = 0.0;
-  double sinVal = 0.0;
   double mouseVVel = 0.0;
   double mouseHVel = 0.0;
-  int alt;
+  int altitude = 0;
   QPoint oldCursor;
   void sanityCheck();
   Stats *stats;

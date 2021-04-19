@@ -129,17 +129,9 @@ Boris::Boris(Settings &settings) : settings(settings)
   behavTimer.setSingleShot(true);
   connect(&behavTimer, &QTimer::timeout, this, &Boris::nextBehaviour);
 
-  // QBasicTimer for better accuracy
   physicsTimer.setInterval(30);
   connect(&physicsTimer, &QTimer::timeout, this, &Boris::handlePhysics);
   physicsTimer.start();
-  //physicsTimer.start(30, this);
-
-  /*
-  animTimer.setInterval(0);
-  connect(&animTimer, &QTimer::timeout, this, &Boris::nextFrame);
-  animTimer.start();
-  */
 
   animTimer.start(0, Qt::PreciseTimer, this);
 
@@ -555,13 +547,6 @@ void Boris::timerEvent(QTimerEvent *)
   QPixmap bruisesPixmap(origBruises);
   bruisesPixmap.setMask(mask);
 
-  if(falling) {
-    if(shadowSprite->isVisible()) {
-      shadowSprite->hide();
-    }
-  } else {
-    shadowSprite->show();
-  }
   if(flipFrames) {
     QImage flipped = settings.behaviours.at(curBehav).frames.at(curFrame).sprite.toImage().mirrored(true, false);
     borisSprite->setPixmap(QPixmap::fromImage(flipped));
@@ -623,7 +608,6 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
 {
   sanityCheck();
   
-  int minX = 0;
   int maxX = QApplication::desktop()->width() - size;
   int minY = 0 - (size / 2);
   int maxY = QApplication::desktop()->height() - height();
@@ -651,13 +635,8 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
     if(falling) {
       healthQueue -= 5; // It hurts to hit the borders
       // Physics velocity when hitting borders
-      if(pos().x() + dX > maxX || pos().x() + dX < minX) {
-        hVel *= -0.4;
-        vVel *= 0.4;
-      } else {
-        hVel *= 0.2;
-        vVel = 0.0;
-      }
+      hVel *= 0.2;
+      vVel = 0.0;
     } else if(!grabbed) {
       changeBehaviour();
     }
@@ -705,7 +684,6 @@ void Boris::mousePressEvent(QMouseEvent* event)
     setCursor(settings.getCursor("grab.png"));
     grabbed = true;
     changeBehaviour("_grabbed");
-    mMoving = true;
     this->move(event->globalPos().x() - size / 32.0 * 17.0, 
                event->globalPos().y() - size / 32.0 * 16.0);
     oldCursor = QCursor::pos();
@@ -714,7 +692,7 @@ void Boris::mousePressEvent(QMouseEvent* event)
 
 void Boris::mouseMoveEvent(QMouseEvent* event)
 {
-  if(event->buttons().testFlag(Qt::LeftButton) && mMoving) {
+  if(event->buttons().testFlag(Qt::LeftButton)) {
     this->move(event->globalPos().x() - size / 32.0 * 17.0, 
                event->globalPos().y() - size / 32.0 * 16.0);
     stats->move(pos().x() + (size / 2) - (stats->width() / 2),
@@ -729,14 +707,13 @@ void Boris::mouseReleaseEvent(QMouseEvent* event)
   if(event->button() == Qt::LeftButton) {
     setCursor(settings.getCursor("hover.png"));
     grabbed = false;
-    mMoving = false;
     settings.borisX = pos().x();
     settings.borisY = pos().y();
     changeBehaviour("_falling");
     falling = true;
     hVel = mouseHVel;
     vVel = mouseVVel;
-    alt = QCursor::pos().y();
+    altitude = QCursor::pos().y();
   }
 }
 
@@ -755,6 +732,9 @@ void Boris::wheelEvent(QWheelEvent *)
 void Boris::handlePhysics()
 {
   if(falling && !grabbed) {
+    if(shadowSprite->isVisible()) {
+      shadowSprite->hide();
+    }
     moveBoris(hVel, vVel);
     vVel += 0.5;
     if(settings.behaviours.at(curBehav).file != "_umbrella_falling") {
@@ -769,8 +749,8 @@ void Boris::handlePhysics()
       }
       hVel *= 0.9;
     }
-    if(pos().y() >= alt) {
-      move(pos().x(), alt);
+    if(pos().y() >= altitude) {
+      move(pos().x(), altitude);
       if(vVel < 5.0) {
         if(settings.behaviours.at(curBehav).file != "_umbrella_falling") {
           changeBehaviour("_landing");
@@ -783,6 +763,10 @@ void Boris::handlePhysics()
         vVel = (vVel * 0.5) * -1;
         changeBehaviour("_bounce");
       }
+    }
+  } else {
+    if(!shadowSprite->isVisible()) {
+      shadowSprite->show();
     }
   }
   mouseHVel = (QCursor::pos().x() - oldCursor.x()) / 4.0;
@@ -817,7 +801,7 @@ void Boris::earthquake()
     falling = true;
     vVel = (QRandomGenerator::global()->bounded(12) * -1) - 5;
     hVel = QRandomGenerator::global()->bounded(11) - 5;
-    alt = pos().y();
+    altitude = pos().y();
   }
 }
 
@@ -866,8 +850,8 @@ void Boris::sanityCheck()
   }
 
   // Make sure Boris altitude is not outside bottom boundary
-  if(alt > maxY) {
-    alt = maxY;
+  if(altitude > maxY) {
+    altitude = maxY;
   }
 
   // Check if Boris is dying or is already dead
