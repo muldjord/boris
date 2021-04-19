@@ -411,6 +411,9 @@ void Boris::runScript(int &stop, const bool &init)
   } else {
     scriptVars["fsec"] = -1;
   }
+  scriptVars["xvel"] = 0;
+  scriptVars["yvel"] = 0;
+  
   QDate date = QDate::currentDate();
   QTime time = QTime::currentTime();
   scriptVars["day"] = date.day();
@@ -442,6 +445,13 @@ void Boris::runScript(int &stop, const bool &init)
   }
   if(!drawing) {
     scriptImage.fill(Qt::transparent);
+  }
+  if(scriptVars["xvel"] != 0 &&
+     scriptVars["yvel"] != 0) {
+    falling = true;
+    hVel = scriptVars["xvel"];
+    vVel = scriptVars["yvel"];
+    altitude = pos().y();
   }
 }
 
@@ -1340,14 +1350,14 @@ void Boris::borisInteract(Boris *boris)
   } else {
     changeBehaviour("_wave");
   }
-  QTimer::singleShot(QRandomGenerator::global()->bounded(17000), this, &Boris::enableInteract);
+  QTimer::singleShot(QRandomGenerator::global()->bounded(5000) + 17000, this, &Boris::enableInteract);
 }
 
 void Boris::itemInteract(Item * item)
 {
   // Disable interactions for a while
   interact = false;
-  
+
   if(!item->getReactionBehaviour().isEmpty()) {
     changeBehaviour(item->getReactionBehaviour());
     int coins = 0;
@@ -1376,7 +1386,7 @@ void Boris::itemInteract(Item * item)
       catMatch = true;
     }
     coins /= 20;
-      
+
     if(catMatch) {
       if(coins >= 5) {
         bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "This is perfect!", "_thought");
@@ -1384,11 +1394,9 @@ void Boris::itemInteract(Item * item)
         bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Just what I needed.", "_thought");
       } else if(coins >= 1) {
         bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Not bad...", "_thought");
-      } else if(coins >= 0) {
-        bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Sure, why not.", "_thought");
       }
     }
-    item->destroy();
+    item->interact(this);
     if(coins) {
       emit addCoins("+" + QString::number(coins), coins);
     }

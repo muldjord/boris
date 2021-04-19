@@ -1,8 +1,6 @@
 oneShot
 doNotDisturb
 fun=10
-define init:spawn kickballwest -8 0
-
 #Frames
 0;75;1;0;;
 1;75;1;0;;

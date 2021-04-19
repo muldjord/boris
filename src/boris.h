@@ -56,6 +56,7 @@ namespace Direction {
 class Stats;
 class Bubble;
 class Item;
+class Settings;
 
 class Boris : public QGraphicsView
 {

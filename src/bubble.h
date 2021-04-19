@@ -36,6 +36,8 @@
 #include <QUrl>
 #include <QTimer>
 
+class Settings;
+
 class Bubble : public QGraphicsView
 {
   Q_OBJECT;

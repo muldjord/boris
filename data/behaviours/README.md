@@ -413,8 +413,12 @@ The following variables are reserved and hardcoded. You should not try to set th
 * fun: Boris' current fun level (0-100, 100 means Boris has been having a lot of fun)
 * hygiene: Boris' current hygiene level (0-100, 100 means he's clean)
 * queue: Tells how many behaviours are currently in behaviour queue. This is useful for creating breaking points in long behaviours if a new behaviour is waiting activation
-* yvel: The delta movement of the mouse on the x axis (0-n, 0 means no movement)
-* xvel: The delta movement of the mouse on the y axis (0-n, 0 means no movement)
+* mxvel: The velocity of the mouse on the y axis during the last 30 ms
+* myvel: The velocity of the mouse on the x axis during the last 30 ms
+* xvel: The velocity of the item on the y axis during the last 30 ms
+** This variable can be set with `var xvel = n` to put the item in motion
+* yvel: The velocity of the item on the x axis during the last 30 ms
+** This variable can be set with `var yvel = n` to put the item in motion
 * borisx: Current Boris x center coordinate
 * borisy: Current Boris y center coordinate
 * mousex: Current mouse pointer x coordinate

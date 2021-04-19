@@ -153,7 +153,20 @@ bool Loader::loadBehaviours(const Settings &settings,
           continue;
         }
         if(line.left(8) == "reaction") {
-          b.reactions = QString::fromUtf8(line.mid(9,line.length())).replace(" ", "").split(',');
+          QList<QByteArray> snippets = line.mid(9,line.length()).split(';');
+          for(int a = 0; a < snippets.length(); ++a) {
+            QString snippet = QString::fromUtf8(snippets.at(a)).replace(" ", "");
+            if(snippet.replace(" ", "").isEmpty()) {
+              continue;
+            }
+            if(a == 0) {
+              b.reactions = snippet.split(",");
+            } else if(a == 1) {
+              b.moveTo = QPoint(snippet.split(",").first().toInt(), snippet.split(",").last().toInt());
+            } else if(a == 2) {
+              b.interactLabel = snippet;
+            }
+          }
           continue;
         }
         if(line.left(5) == "coins") {

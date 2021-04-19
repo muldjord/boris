@@ -89,6 +89,7 @@ private:
   void handleSound(QList<QString> &parameters);
   void handleSay(QList<QString> &parameters);
   void handleThink(QList<QString> &parameters);
+  void handleThrow(QList<QString> &parameters);
 
   // Helpers
   void condition(QList<QString> &parameters, bool &isTrue, bool &compare);

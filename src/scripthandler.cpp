@@ -102,6 +102,8 @@ void ScriptHandler::runCommand(QList<QString> &parameters, int &stop, const Scri
     handleSay(parameters);
   } else if(parameters.first() == "think") {
     handleThink(parameters);
+  } else if(parameters.first() == "throw") {
+    handleThrow(parameters);
   }
   // IMPORTANT!!! When adding new commands, REMEMBER TO ALSO ADD THEM TO 'getValue()'!!!
 }
@@ -633,6 +635,13 @@ void ScriptHandler::handleThink(QList<QString> &parameters)
       printf("Thinking '%s'\n", bubbleText.toStdString().c_str());
     }
   }
+}
+
+void ScriptHandler::handleThrow(QList<QString> &parameters)
+{
+  parameters.removeFirst(); // Remove 'throw'
+  scriptVars["xvel"] = getValue(parameters);
+  scriptVars["yvel"] = getValue(parameters);
 }
 
 int ScriptHandler::getValue(QList<QString> &parameters)

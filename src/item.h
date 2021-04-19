@@ -27,6 +27,7 @@
 #ifndef _ITEM_H
 #define _ITEM_H
 
+#include "boris.h"
 #include "behaviour.h"
 #include "settings.h"
 
@@ -38,6 +39,8 @@
 
 struct Settings;
 
+class Boris;
+
 class Item : public QGraphicsView
 {
   Q_OBJECT;
@@ -48,6 +51,7 @@ public:
   QPoint getGlobalCenter();
   QString getReactionBehaviour();
   QString getCategory();
+  void interact(const Boris *boris);
   QMap<QString, int> scriptVars;
   bool grabbed = false;
   bool ignore;

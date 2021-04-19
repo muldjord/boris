@@ -73,6 +73,8 @@ public:
   QString title;
   QString category = "Other";
   QList<QString> reactions;
+  QPoint moveTo;
+  QString interactLabel;
   int hyper = 0;
   int health = 0;
   int energy = 0;

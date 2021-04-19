@@ -36,6 +36,7 @@ $ ./Boris
 ## Release notes
 #### Known issues:
 * When kicking the football, Boris will be out of sync with the ball animation if he has been drinking coffee
+* Speech bubbles are broken if Boris is resized
 
 #### Version x.x.x, Roadmap:
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
@@ -44,6 +45,10 @@ $ ./Boris
 * Add Boris 'memory'. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
 * Add a way to add physics to items at a specific time, to send a ball up in the air in a direction
 * Allow a Boris behaviour interacting with an item to manipulate the item "hyper" so they stay synchronized
+* When a Boris behaviour spawns an item, it should be linked to that Boris
+** It should allow the parent Boris to 'goto' a label inside the item
+** It should allow moving the item to a specific position to sync animations
+** It should allow the parent Boris to destroy the item
 
 #### Version 3.5.1 (In progress, unreleased):
 * Boris will now kick the football

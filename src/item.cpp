@@ -176,6 +176,8 @@ void Item::runScript(int &stop, const bool &init)
   scriptVars["hour"] = time.hour();
   scriptVars["minute"] = time.minute();
   scriptVars["second"] = time.second();
+  scriptVars["xvel"] = 0;
+  scriptVars["yvel"] = 0;
 
   if(!drawing) {
     scriptImage.fill(Qt::transparent);
@@ -190,6 +192,13 @@ void Item::runScript(int &stop, const bool &init)
   }
 
   scriptSprite->setPixmap(QPixmap::fromImage(scriptImage));
+  if(scriptVars["xvel"] != 0 &&
+     scriptVars["yvel"] != 0) {
+    falling = true;
+    hVel = scriptVars["xvel"];
+    vVel = scriptVars["yvel"];
+    altitude = pos().y();
+  }
 }
 
 void Item::timerEvent(QTimerEvent *)
@@ -398,7 +407,7 @@ void Item::mousePressEvent(QMouseEvent* event)
 
 void Item::mouseMoveEvent(QMouseEvent* event)
 {
-  if(event->buttons().testFlag(Qt::LeftButton)) {
+  if(grabbed && event->buttons().testFlag(Qt::LeftButton)) {
     this->move(event->globalPos().x() - size / 32.0 * 16.0, 
                event->globalPos().y() - size / 32.0 * 20.0);
   }
@@ -407,7 +416,7 @@ void Item::mouseMoveEvent(QMouseEvent* event)
 
 void Item::mouseReleaseEvent(QMouseEvent* event)
 {
-  if(event->button() == Qt::LeftButton) {
+  if(grabbed && event->button() == Qt::LeftButton) {
     setCursor(settings.getCursor("hover.png"));
     grabbed = false;
     falling = true;
@@ -467,7 +476,7 @@ void Item::handlePhysics()
     vVel += 0.5;
     if(pos().y() >= altitude) {
       move(pos().x(), altitude);
-      if(vVel < 5.0) {
+      if(vVel < 1.0) {
         falling = false;
       } else {
         hVel *= 0.5;
@@ -482,4 +491,19 @@ void Item::handlePhysics()
   mouseHVel = (QCursor::pos().x() - oldCursor.x()) / 4.0;
   mouseVVel = (QCursor::pos().y() - oldCursor.y()) / 4.0;
   oldCursor = QCursor::pos();
+}
+
+void Item::interact(const Boris *boris)
+{
+  move(boris->pos().x() + settings.itemBehaviours.at(curItem).moveTo.x() * (size / 32),
+       boris->pos().y() + settings.itemBehaviours.at(curItem).moveTo.y() * (size / 32));
+  curFrame = settings.itemBehaviours.at(curItem).labels[settings.itemBehaviours.at(curItem).interactLabel];
+  animTimer.start(0, Qt::PreciseTimer, this);
+  setCursor(settings.getCursor("hover.png"));
+  falling = false;
+  grabbed = false;
+  hVel = 0.0;
+  vVel = 0.0;
+  ignore = true;
+  QTimer::singleShot(10000, this, &Item::dontIgnore);
 }
