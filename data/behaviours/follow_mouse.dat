@@ -1,6 +1,5 @@
 title=Follow mouse
 category=Social
-coins=12
 oneShot
 
 define init:var steps = 24 + @16,call nextfollow

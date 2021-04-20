@@ -1,6 +1,5 @@
 title=Watch the mouse
 category=Idle
-coins=5
 fun=-2
 
 define init:var mouseover = 0,call nextsec
