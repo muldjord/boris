@@ -479,7 +479,7 @@ void Item::handlePhysics()
     if(shadowSprite->isVisible()) {
       shadowSprite->hide();
     }
-    if(pos().y() + vVel <= altitude) {
+    if(pos().y() + (vVel * ceil(size / 32.0)) <= altitude) {
       moveItem(hVel, vVel);
       vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
     } else {
