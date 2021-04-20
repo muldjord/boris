@@ -175,10 +175,20 @@ bool Loader::loadBehaviours(const Settings &settings,
         }
         if(line.left(6) == "weight") {
           b.weight = line.mid(7,line.length()).toInt();
+          if(b.weight > 10) {
+            b.weight = 10;
+          } else if(b.weight < 0) {
+            b.weight = 0;
+          }
           continue;
         }
         if(line.left(6) == "bounce") {
           b.bounce = line.mid(7,line.length()).toInt();
+          if(b.bounce > 10) {
+            b.bounce = 10;
+          } else if(b.bounce < 0) {
+            b.bounce = 0;
+          }
           continue;
         }
         if(line.left(5) == "hyper") {

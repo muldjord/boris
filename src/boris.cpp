@@ -760,7 +760,7 @@ void Boris::handlePhysics()
       hVel *= 0.9;
     }
     if(pos().y() >= altitude) {
-      move(pos().x(), altitude);
+      move(pos().x(), altitude - (pos().y() - altitude));
       if(vVel < 5.0) {
         if(settings.behaviours.at(curBehav).file != "_umbrella_falling") {
           changeBehaviour("_landing");

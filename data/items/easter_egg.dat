@@ -1,4 +1,6 @@
 title=Easter eggs
+weight=5
+bounce=1
 allowFlip
 #Frames
 0;50;0;0;;var fertile = @2,var incubate = @35 + 35,var rand = @6,if rand = 1 goto egg1,if rand = 2 goto egg2,if rand = 3 goto egg3,if rand = 4 goto egg4,if rand = 5 goto egg5,if rand = 6 goto egg6

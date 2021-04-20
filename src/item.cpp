@@ -479,17 +479,19 @@ void Item::handlePhysics()
     if(shadowSprite->isVisible()) {
       shadowSprite->hide();
     }
-    moveItem(hVel, vVel);
-    vVel += settings.itemBehaviours.at(curItem).weight * 0.01;
-    if(pos().y() >= altitude) {
+    if(pos().y() + vVel <= altitude) {
+      moveItem(hVel, vVel);
+      vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
+    } else {
       move(pos().x(), altitude);
-      if(vVel < 3.0) {
+      if(vVel < 2.1) { // Has to be at least 2 due to lowest velocity being 1 and it can bounce back equaling 2 in total as minimum
         falling = false;
       } else {
+        hVel *= settings.itemBehaviours.at(curItem).bounce * 0.1;
         soundMixer.playSound(&soundMixer.soundFxs["bounce.wav"],
                              (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0, 1.0);
-        hVel *= 0.5;
-        vVel = (vVel * (settings.itemBehaviours.at(curItem).bounce * 0.01)) * -1;
+        vVel = (vVel * (settings.itemBehaviours.at(curItem).bounce * 0.1)) * -1;
+        vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
       }
     }
   } else {

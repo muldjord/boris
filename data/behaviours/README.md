@@ -44,6 +44,8 @@ The line `#Frames` must be there so the software knows when the frame definition
 
 #### Options specific to item behaviours
 * reaction=REACTION,LABEL,XCOORD,YCOORD;...: Each REACTION,LABEL,COORDINATE set specifies a Boris behaviour to initiate, what label to goto inside this item when it is initiated, and where to move the item relative to Boris when it is initiated.
+* weight=INTEGER: Set the weight of the item. Value can be from 0-10. 0 means floating. 10 means really heavy.
+* bounce=INTEGER: Sets the bounce factor of the object. Value can be from 0-10. 0 means no bounce. 10 means bounce forever.
 
 ### Behaviour flags
 * allowFlip: If this line exists there is a 50% chance the behaviour will be mirrored horizontally when initiated

@@ -1,6 +1,8 @@
 title=Football
 category=Fun
 reaction=_kickball_w,kickballw,-12,16;_kickball_e,kickballe,12,16
+weight=5
+bounce=7
 noIgnore
 doNotDisturb
 #Frames

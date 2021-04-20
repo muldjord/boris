@@ -2,5 +2,7 @@ title=Balloon
 category=Fun
 reaction=balloon_pop
 allowFlip
+weight=6
+bounce=2
 #Frames
 0;1000;0;0;;stop
