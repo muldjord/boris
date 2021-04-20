@@ -173,6 +173,14 @@ bool Loader::loadBehaviours(const Settings &settings,
           b.coins = line.mid(6,line.length()).toInt();
           continue;
         }
+        if(line.left(6) == "weight") {
+          b.weight = line.mid(7,line.length()).toInt();
+          continue;
+        }
+        if(line.left(6) == "bounce") {
+          b.bounce = line.mid(7,line.length()).toInt();
+          continue;
+        }
         if(line.left(5) == "hyper") {
           b.hyper = line.mid(6,line.length()).toInt();
           continue;

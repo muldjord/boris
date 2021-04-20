@@ -108,6 +108,8 @@ public:
   bool pitchLock = false;
   bool noIgnore = false; // For Item: Tells whether it should be instantly active when spawned
   int coins = 10;
+  int weight = 50;
+  int bounce = 50;
   QList<Frame> frames;
   QMap<QString, int> labels; // Used for scripts when goto'ing
   QMap<QString, Script> defines; // Used for defines of reusable scripting blocks

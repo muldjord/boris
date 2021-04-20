@@ -126,6 +126,8 @@ Behaviour::Behaviour(const Behaviour &behaviour) : QObject()
   this->category = behaviour.category;
   this->reactions = behaviour.reactions;
   this->coins = behaviour.coins;
+  this->weight = behaviour.weight;
+  this->bounce = behaviour.bounce;
   this->hyper = behaviour.hyper;
   this->health = behaviour.health;
   this->energy = behaviour.energy;
@@ -152,6 +154,8 @@ void Behaviour::operator=(const Behaviour &behaviour)
   this->category = behaviour.category;
   this->reactions = behaviour.reactions;
   this->coins = behaviour.coins;
+  this->weight = behaviour.weight;
+  this->bounce = behaviour.bounce;
   this->hyper = behaviour.hyper;
   this->health = behaviour.health;
   this->energy = behaviour.energy;

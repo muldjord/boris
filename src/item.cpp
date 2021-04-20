@@ -480,14 +480,16 @@ void Item::handlePhysics()
       shadowSprite->hide();
     }
     moveItem(hVel, vVel);
-    vVel += 0.5;
+    vVel += settings.itemBehaviours.at(curItem).weight * 0.01;
     if(pos().y() >= altitude) {
       move(pos().x(), altitude);
-      if(vVel < 1.0) {
+      if(vVel < 3.0) {
         falling = false;
       } else {
+        soundMixer.playSound(&soundMixer.soundFxs["bounce.wav"],
+                             (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0, 1.0);
         hVel *= 0.5;
-        vVel = (vVel * 0.5) * -1;
+        vVel = (vVel * (settings.itemBehaviours.at(curItem).bounce * 0.01)) * -1;
       }
     }
   } else {
