@@ -198,7 +198,7 @@ void Boris::createBehavioursMenu()
 
     menu->addAction(QIcon(iconPixmap), title)->setData(behaviour.file);
   }
-  
+
   for(auto &subMenu: subMenus) {
     if(!subMenu->isEmpty()) {
       behavioursMenu->addMenu(subMenu);
@@ -656,6 +656,27 @@ void Boris::handleBehaviourChange(QAction* a)
   for(const auto &behaviour: settings.behaviours) {
     if(behaviour.file == behavFile) {
       behavQueue.append(behaviour.file);
+      int coins = 0;
+      if(behaviour.category.toLower() == "health") {
+        coins = (100 - stats->getHealth());
+      } else if(behaviour.category.toLower() == "energy") {
+        coins = (100 - stats->getEnergy());
+      } else if(behaviour.category.toLower() == "hunger") {
+        coins = (100 - stats->getHunger());
+      } else if(behaviour.category.toLower() == "toilet") {
+        coins = (100 - stats->getToilet());
+      } else if(behaviour.category.toLower() == "social") {
+        coins = (100 - stats->getSocial());
+      } else if(behaviour.category.toLower() == "fun") {
+        coins = (100 - stats->getFun());
+      } else if(behaviour.category.toLower() == "hygiene") {
+        coins = (100 - stats->getHygiene());
+      }
+      coins /= 20;
+          
+      if(coins) {
+        emit addCoins("+" + QString::number(coins), coins);
+      }
     }
   }
 }
@@ -1388,46 +1409,7 @@ void Boris::itemInteract(Item * item)
 
   if(!item->getReactionBehaviour().isEmpty()) {
     changeBehaviour(item->getReactionBehaviour());
-    int coins = 0;
-    bool catMatch = 0;
-    QString category = item->getCategory();
-    if(category.toLower() == "health") {
-      coins = (100 - stats->getHealth());
-      catMatch = true;
-    } else if(category.toLower() == "energy") {
-      coins = (100 - stats->getEnergy());
-      catMatch = true;
-    } else if(category.toLower() == "hunger") {
-      coins = (100 - stats->getHunger());
-      catMatch = true;
-    } else if(category.toLower() == "toilet") {
-      coins = (100 - stats->getToilet());
-      catMatch = true;
-    } else if(category.toLower() == "social") {
-      coins = (100 - stats->getSocial());
-      catMatch = true;
-    } else if(category.toLower() == "fun") {
-      coins = (100 - stats->getFun());
-      catMatch = true;
-    } else if(category.toLower() == "hygiene") {
-      coins = (100 - stats->getHygiene());
-      catMatch = true;
-    }
-    coins /= 20;
-
-    if(catMatch) {
-      if(coins >= 5) {
-        bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "This is perfect!", "_thought");
-      } else if(coins >= 3) {
-        bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Just what I needed.", "_thought");
-      } else if(coins >= 1) {
-        bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "Not bad...", "_thought");
-      }
-    }
     item->interact(this);
-    if(coins) {
-      emit addCoins("+" + QString::number(coins), coins);
-    }
   } else if(item->grabbed) {
     bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "I don't know what to do with that.", "_thought");
   }
