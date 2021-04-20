@@ -107,7 +107,7 @@ public:
   bool allowFlip = false;
   bool pitchLock = false;
   bool noIgnore = false; // For Item: Tells whether it should be instantly active when spawned
-  int coins = 10;
+  int coins = 50;
   int weight = 50;
   int bounce = 50;
   QList<Frame> frames;
