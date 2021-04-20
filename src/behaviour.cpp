@@ -27,6 +27,53 @@
 
 #include "behaviour.h"
 
+Reaction::Reaction(const Reaction &reaction) : QObject()
+{
+  this->borisBehaviour = reaction.borisBehaviour;
+  this->itemLabel = reaction.itemLabel;
+  this->xCoord = reaction.xCoord;
+  this->yCoord = reaction.yCoord;
+}
+
+void Reaction::operator=(const Reaction &reaction)
+{
+  this->borisBehaviour = reaction.borisBehaviour;
+  this->itemLabel = reaction.itemLabel;
+  this->xCoord = reaction.xCoord;
+  this->yCoord = reaction.yCoord;
+}
+
+Reaction::Reaction(const QString &borisBehaviour,
+                   const QString &itemLabel,
+                   const int &xCoord,
+                   const int &yCoord)
+{
+  this->borisBehaviour = borisBehaviour;
+  this->itemLabel = itemLabel;
+  this->xCoord = xCoord;
+  this->yCoord = yCoord;
+}
+
+QString Reaction::getBehaviour() const
+{
+  return borisBehaviour;
+}
+
+QString Reaction::getLabel() const
+{
+  return itemLabel;
+}
+
+int Reaction::getXCoord() const
+{
+  return xCoord;
+}
+
+int Reaction::getYCoord() const
+{
+  return yCoord;
+}
+
 Script::Script(const Script &script) : QObject()
 {
   this->commands = script.commands;
@@ -78,8 +125,6 @@ Behaviour::Behaviour(const Behaviour &behaviour) : QObject()
   this->title = behaviour.title;
   this->category = behaviour.category;
   this->reactions = behaviour.reactions;
-  this->moveTo = behaviour.moveTo;
-  this->interactLabel = behaviour.interactLabel;
   this->coins = behaviour.coins;
   this->hyper = behaviour.hyper;
   this->health = behaviour.health;
@@ -106,8 +151,6 @@ void Behaviour::operator=(const Behaviour &behaviour)
   this->title = behaviour.title;
   this->category = behaviour.category;
   this->reactions = behaviour.reactions;
-  this->moveTo = behaviour.moveTo;
-  this->interactLabel = behaviour.interactLabel;
   this->coins = behaviour.coins;
   this->hyper = behaviour.hyper;
   this->health = behaviour.health;

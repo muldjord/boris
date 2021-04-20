@@ -1,10 +1,13 @@
 title=Football
 category=Fun
-reaction=_kickball;-12,16;kickball
+reaction=_kickball_w,kickballw,-12,16;_kickball_e,kickballe,12,16
 noIgnore
 doNotDisturb
 #Frames
 0;1000;0;0;;stop
 
-0;3600;0;0;;label kickball
+0;3600;0;0;;label kickballw
 0;50;0;0;kick.wav;var xvel = -5 - energy / 10,var yvel = -2 - energy / 15,stop
+
+0;3600;0;0;;label kickballe
+0;50;0;0;kick.wav;var xvel = 5 + energy / 10,var yvel = -2 - energy / 15,stop

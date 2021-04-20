@@ -33,6 +33,27 @@
 #include <QPixmap>
 #include <QMap>
 
+class Reaction: public QObject
+{
+public:
+  Reaction(const Reaction &reaction);
+  void operator=(const Reaction &reaction);
+  explicit Reaction(const QString &borisBehaviour,
+                    const QString &itemLabel = "",
+                    const int &xCoord = 0,
+                    const int &yCoord = 0);
+  QString getBehaviour() const;
+  QString getLabel() const;
+  int getXCoord() const;
+  int getYCoord() const;
+
+private:
+  QString borisBehaviour = "";
+  QString itemLabel = "";
+  int xCoord = 0;
+  int yCoord = 0;
+};
+
 // All single commands stored in the list with all children blocks replaced by '##1##', '##2##'
 class Script: public QObject
 {
@@ -72,9 +93,7 @@ public:
   QString file;
   QString title;
   QString category = "Other";
-  QList<QString> reactions;
-  QPoint moveTo;
-  QString interactLabel;
+  QList<Reaction> reactions;
   int hyper = 0;
   int health = 0;
   int energy = 0;

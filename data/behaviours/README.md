@@ -18,11 +18,11 @@ The format of the dat files is as follows:
 The line `#Frames` must be there so the software knows when the frame definitions begin.
 
 ### Behaviour options
-* title=&lt;STRING&gt;: The title used by the behaviour. This is the title shown in the system tray menus.
+* title=STRING: The title used by the behaviour. This is the title shown in the system tray menus.
 
 #### Options specific to Boris behaviours
-* coins=&lt;INTEGER&gt;: The price in Boris coins it costs to unlock this behaviour. If undefined, it defaults to 10c.
-* category=&lt;STRING&gt;: The category this behaviour is categorically categorized into:
+* coins=INTEGER: The price in Boris coins it costs to unlock this behaviour. If undefined, it defaults to 10c.
+* category=STRING: The category this behaviour is categorically categorized into:
   * Health: Used for behaviours that heal Boris. He will not choose these on his own
   * Energy: Boris will choose from this category when he is low on energy / sleepy
   * Hunger: Boris will choose from this category when he is hungry
@@ -33,17 +33,17 @@ The line `#Frames` must be there so the software knows when the frame definition
   * Movement: These are only used entirely at random when Boris is feeling well and satisfied
   * Idle: When Boris is feeling well and satisfied he will often choose from this category when idling about
   * Locomotion: These behaviours are fully scripted 360 degree locomotion behaviours used to move Boris around the desktop (eg. when Boris walks around)
-* health=&lt;INTEGER&gt;: The amount of Boris' health this behaviour will increase or decrease when starting the behaviour
-* energy=&lt;INTEGER&gt;: The amount of Boris' energy this behaviour will increase or decrease when starting the behaviour
-* hyper=&lt;INTEGER&gt;: The amount of Boris' hyperactivity level this behaviour will increase or decrease when starting the behaviour
-* hunger=&lt;INTEGER&gt;: The amount of Boris' hunger this behaviour will increase or decrease when starting the behaviour
-* toilet=&lt;INTEGER&gt;: The amount of Boris' need for a toilet this behaviour will increase or decrease when starting the behaviour
-* social=&lt;INTEGER&gt;: The amount of Boris' social needs this behaviour will increase or decrease when starting the behaviour
-* fun=&lt;INTEGER&gt;: The amount of Boris' fun level this behaviour will increase or decrease when starting the behaviour
-* hygiene=&lt;INTEGER&gt;: The amount of Boris' filth level this behaviour will increase or decrease when starting the behaviour
+* health=INTEGER: The amount of Boris' health this behaviour will increase or decrease when starting the behaviour
+* energy=INTEGER: The amount of Boris' energy this behaviour will increase or decrease when starting the behaviour
+* hyper=INTEGER: The amount of Boris' hyperactivity level this behaviour will increase or decrease when starting the behaviour
+* hunger=INTEGER: The amount of Boris' hunger this behaviour will increase or decrease when starting the behaviour
+* toilet=INTEGER: The amount of Boris' need for a toilet this behaviour will increase or decrease when starting the behaviour
+* social=INTEGER: The amount of Boris' social needs this behaviour will increase or decrease when starting the behaviour
+* fun=INTEGER: The amount of Boris' fun level this behaviour will increase or decrease when starting the behaviour
+* hygiene=INTEGER: The amount of Boris' filth level this behaviour will increase or decrease when starting the behaviour
 
 #### Options specific to item behaviours
-* reaction=&lt;STRING&gt;: This tells Boris what behaviour he should react with when user drags the item on top of him, or when he walks into it while roaming the desktop. You can add as many as you like separated by commas (eg. 'reaction=play_piano,play_drums').
+* reaction=REACTION,LABEL,XCOORD,YCOORD;...: Each REACTION,LABEL,COORDINATE set specifies a Boris behaviour to initiate, what label to goto inside this item when it is initiated, and where to move the item relative to Boris when it is initiated.
 
 ### Behaviour flags
 * allowFlip: If this line exists there is a 50% chance the behaviour will be mirrored horizontally when initiated

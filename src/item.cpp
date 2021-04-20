@@ -445,7 +445,8 @@ QPoint Item::getGlobalCenter()
 QString Item::getReactionBehaviour()
 {
   if(!settings.itemBehaviours.at(curItem).reactions.isEmpty()) {
-    return settings.itemBehaviours.at(curItem).reactions.at(QRandomGenerator::global()->bounded(settings.itemBehaviours.at(curItem).reactions.count()));
+    interactReaction = QRandomGenerator::global()->bounded(settings.itemBehaviours.at(curItem).reactions.count());
+    return settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getBehaviour();
   }
   return QString();
 }
@@ -511,13 +512,13 @@ void Item::interact(const Boris *boris)
   scriptVars["hygiene"] = boris->getHygiene();
   
   borisHyper = boris->getHyper();
-  if(settings.itemBehaviours.at(curItem).interactLabel.isEmpty()) {
+  if(settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel().isEmpty()) {
     destroy();
     return;
   }
-  move(boris->pos().x() + settings.itemBehaviours.at(curItem).moveTo.x() * (size / 32),
-       boris->pos().y() + settings.itemBehaviours.at(curItem).moveTo.y() * (size / 32));
-  curFrame = settings.itemBehaviours.at(curItem).labels[settings.itemBehaviours.at(curItem).interactLabel];
+  move(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * (size / 32),
+       boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * (size / 32));
+  curFrame = settings.itemBehaviours.at(curItem).labels[settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel()];
   animTimer.start(0, Qt::PreciseTimer, this);
   setCursor(settings.getCursor("hover.png"));
   falling = false;

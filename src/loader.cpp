@@ -153,18 +153,18 @@ bool Loader::loadBehaviours(const Settings &settings,
           continue;
         }
         if(line.left(8) == "reaction") {
-          QList<QByteArray> snippets = line.mid(9,line.length()).split(';');
-          for(int a = 0; a < snippets.length(); ++a) {
-            QString snippet = QString::fromUtf8(snippets.at(a)).replace(" ", "");
-            if(snippet.replace(" ", "").isEmpty()) {
-              continue;
-            }
-            if(a == 0) {
-              b.reactions = snippet.split(",");
-            } else if(a == 1) {
-              b.moveTo = QPoint(snippet.split(",").first().toInt(), snippet.split(",").last().toInt());
-            } else if(a == 2) {
-              b.interactLabel = snippet;
+          QList<QByteArray> reactions = line.mid(9,line.length()).split(';');
+          for(const auto &reactionString: reactions) {
+            QList<QByteArray> reactionSnippets = reactionString.split(',');
+            if(reactionSnippets.count() == 1) {
+              Reaction reaction(reactionSnippets.at(0));
+              b.reactions.append(reaction);
+            } else if(reactionSnippets.count() == 4) {
+              Reaction reaction(reactionSnippets.at(0),
+                                reactionSnippets.at(1),
+                                reactionSnippets.at(2).toInt(),
+                                reactionSnippets.at(3).toInt());
+              b.reactions.append(reaction);
             }
           }
           continue;
