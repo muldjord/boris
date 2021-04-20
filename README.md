@@ -43,15 +43,16 @@ $ ./Boris
 * Add a 'usec' that points towards any direction the arrow keys are currently pressed
 * Spawn a puddle when '_too_late' happens
 * Add Boris 'memory'. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
-* Add a way to add physics to items at a specific time, to send a ball up in the air in a direction
-* Allow a Boris behaviour interacting with an item to manipulate the item "hyper" so they stay synchronized
-* When a Boris behaviour spawns an item, it should be linked to that Boris
-** It should allow the parent Boris to 'goto' a label inside the item
-** It should allow moving the item to a specific position to sync animations
-** It should allow the parent Boris to destroy the item
 
-#### Version 3.5.1 (In progress, unreleased):
+#### Version 3.6.0 (In progress, unreleased):
+* Reversed coin concept. You now buy items instead of behaviours
 * Boris will now kick the football
+* Items are now linked to the Boris that interacts with it, allowing for interesting synchronized animations
+** Boris 'hyper' is applied to the item when an interaction occurs to ensure sync between animations
+** It is possible to set several reaction behaviours each containing x and y coordinates for moving the item into position before initiating the interaction. Each reaction also contains a label that tells the item where to 'goto' inside the item frames when the interaction is initiated
+** If only a reaction behaviour file is defined the item will simply be destroyed when the interaction initiates
+* Items now have physics and can be thrown using Boris script by using 'throw' or by manipulating variables 'xvel' and 'yvel'
+* Items now have 'weight' and 'bounce' variables
 
 #### Version 3.5.0 (17th April 2021):
 * A LOT of code refactoring and optimizations

@@ -82,8 +82,8 @@ private:
   QList<QString> extractSnippets(QString line);
   QString *aboutText;
   void createTrayIcon();
-  void updateBehavioursMenu();
-  void createItemsMenu();
+  void createBehavioursMenu();
+  void updateItemsMenu();
   void createActions();
   QAction *earthquakeAction;
   //QAction *behavioursAction;

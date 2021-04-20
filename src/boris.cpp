@@ -96,7 +96,7 @@ Boris::Boris(Settings &settings) : settings(settings)
   behavioursMenu = new QMenu();
   behavioursMenu->setTitle(tr("Behaviours"));
   connect(behavioursMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
-  updateBehavioursMenu();
+  createBehavioursMenu();
 
   // Set initial stats with some randomization
   int hyper = 0;
@@ -164,10 +164,8 @@ Boris::~Boris()
   delete behavioursMenu;
 }
 
-void Boris::updateBehavioursMenu()
+void Boris::createBehavioursMenu()
 {
-  behavioursMenu->clear();
-
   QList<QMenu*> subMenus;
 
   QMenu *idkfaMenu = new QMenu(tr("Idkfa"), behavioursMenu);
@@ -180,7 +178,7 @@ void Boris::updateBehavioursMenu()
       
     // Find correct menu to put behaviour into
     if((behaviour.file.left(1) == "_" && behaviour.category.isEmpty()) ||
-       behaviour.category == "Hidden" ||
+       behaviour.category == "Other" ||
        behaviour.category == "Locomotion") {
       menu = idkfaMenu;
     }
@@ -198,10 +196,6 @@ void Boris::updateBehavioursMenu()
       subMenus.append(menu);
     }
 
-    if(!settings.unlocked.contains(behaviour.file)) {
-      continue;
-    }
-
     menu->addAction(QIcon(iconPixmap), title)->setData(behaviour.file);
   }
   
@@ -216,7 +210,7 @@ void Boris::updateBehavioursMenu()
   }
 
   if(behavioursMenu->isEmpty()) {
-    behavioursMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), tr("No behaviours unlocked!"));
+    behavioursMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), tr("No behaviours!"));
   }
 }
 

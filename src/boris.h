@@ -95,7 +95,7 @@ public slots:
   void triggerWeather();
   void nextBehaviour();
   void updateBoris();
-  void updateBehavioursMenu();
+  void createBehavioursMenu();
   void queueBehavFromFile(const QString &file);
   
 protected:

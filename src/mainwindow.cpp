@@ -87,7 +87,7 @@ MainWindow::MainWindow()
   settings.cursorsPath = dataPath + "/cursors";
 
   if(!iniSettings->contains("unlocked")) {
-    iniSettings->setValue("unlocked", "whistle");
+    iniSettings->setValue("unlocked", "balloon");
   }
   settings.unlocked = iniSettings->value("unlocked").toString().split(",");
 
@@ -229,6 +229,7 @@ MainWindow::MainWindow()
   connect(behavioursMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
   itemsMenu = new QMenu();
   itemsMenu->setTitle(tr("Items"));
+  connect(itemsMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
   createTrayIcon();
   trayIcon->show();
 
@@ -343,8 +344,8 @@ void MainWindow::loadAssets()
   delete progressBar;
   delete loadWidget;
 
-  updateBehavioursMenu();
-  createItemsMenu();
+  createBehavioursMenu();
+  updateItemsMenu();
 }
 
 void MainWindow::addBoris(int clones)
@@ -353,7 +354,7 @@ void MainWindow::addBoris(int clones)
   while(clones--) {
     settings.borisList.append(new Boris(settings));
     connect(this, &MainWindow::updateBoris, settings.borisList.last(), &Boris::updateBoris);
-    connect(this, &MainWindow::updateBorisBehavioursMenu, settings.borisList.last(), &Boris::updateBehavioursMenu);
+    connect(this, &MainWindow::updateBorisBehavioursMenu, settings.borisList.last(), &Boris::createBehavioursMenu);
     connect(earthquakeAction, &QAction::triggered, settings.borisList.last(), &Boris::earthquake);
     connect(this, &MainWindow::queueBehavFromFile, settings.borisList.last(), &Boris::queueBehavFromFile);
     connect(weatherAction, &QAction::triggered, settings.borisList.last(), &Boris::triggerWeather);
@@ -393,9 +394,9 @@ void MainWindow::createTrayIcon()
   trayIconMenu->addAction(QIcon(settings.getPixmap("about.png")), tr("&Config / about..."), this, &MainWindow::aboutBox);
   trayIconMenu->addSeparator();
   trayIconMenu->addMenu(behavioursMenu);
-  trayIconMenu->addAction(coinsAction);
   trayIconMenu->addSeparator();
   trayIconMenu->addMenu(itemsMenu);
+  trayIconMenu->addAction(coinsAction);
   trayIconMenu->addSeparator();
   trayIconMenu->addAction(earthquakeAction);
   trayIconMenu->addAction(weatherAction);
@@ -469,10 +470,8 @@ void MainWindow::updateWeather()
   weatherAction->setIcon(QIcon(settings.getPixmap(settings.weatherType + ".png")));
 }
 
-void MainWindow::updateBehavioursMenu()
+void MainWindow::createBehavioursMenu()
 {
-  behavioursMenu->clear();
-
   QList<QMenu*> subMenus;
 
   QMenu *idkfaMenu = new QMenu(tr("Idkfa"), behavioursMenu);
@@ -503,16 +502,6 @@ void MainWindow::updateBehavioursMenu()
       subMenus.append(menu);
     }
 
-    // Append coin price to title if it's not already unlocked
-    if(!settings.unlocked.contains(behaviour.file)) {
-      title.append(" (" + QString::number(behaviour.coins) + "c)");
-    }
-
-    // Set correct icon file
-    if(!settings.unlocked.contains(behaviour.file)) {
-      iconPixmap = settings.getPixmap("coin.png");
-    }
-
     menu->addAction(QIcon(iconPixmap), title)->setData(behaviour.file);
   }
   
@@ -527,65 +516,60 @@ void MainWindow::updateBehavioursMenu()
   }
 
   if(behavioursMenu->isEmpty()) {
-    behavioursMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), tr("No behaviours unlocked!"));
+    behavioursMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), tr("No behaviours!"));
   }
 }
 
-void MainWindow::createItemsMenu()
+void MainWindow::updateItemsMenu()
 {
+  itemsMenu->clear();
+
   QList<QMenu*> subMenus;
 
   for(const auto &item: settings.itemBehaviours) {
-    QMenu *tempMenu = nullptr;
+    QString title = item.title;
+    QPixmap iconPixmap(settings.getPixmap(item.category.toLower() + ".png"));
+    QMenu *menu = nullptr;
+      
+    // Find correct menu to put item into
     for(auto &subMenu: subMenus) {
-      if(subMenu->title() == item.category) {
-        tempMenu = subMenu;
+      if(subMenu->title() == item.category && item.category != "Hidden") {
+        menu = subMenu;
         break;
       }
     }
-    if(tempMenu == nullptr) {
-      tempMenu = new QMenu(item.category, itemsMenu);
-      tempMenu->setIcon(QIcon(settings.getPixmap(item.category.toLower() + ".png")));
-      connect(tempMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
-      subMenus.append(tempMenu);
+    if(menu == nullptr) {
+      menu = new QMenu(item.category, itemsMenu);
+      menu->setIcon(QIcon(iconPixmap));
+      subMenus.append(menu);
     }
-    if(item.file.left(1) != "_" && !item.reactions.isEmpty()) {
-      tempMenu->addAction(QIcon(QPixmap::fromImage(QImage(item.absoluteFilePath).copy(0, 0, 32, 32))), item.title)->setData(item.file);
+
+    // Append coin price to title if it's not already unlocked
+    if(!settings.unlocked.contains(item.file)) {
+      title.append(" (" + QString::number(item.coins) + "c)");
+      iconPixmap = settings.getPixmap("coin.png");
     }
+
+    menu->addAction(QIcon(iconPixmap), title)->setData(item.file);
   }
+  
   for(auto &subMenu: subMenus) {
     if(!subMenu->isEmpty()) {
       itemsMenu->addMenu(subMenu);
     }
   }
+
+  if(itemsMenu->isEmpty()) {
+    itemsMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), tr("No items unlocked!"));
+  }
 }
 
 void MainWindow::triggerBehaviour(QAction* a)
 {
-  QString itemFile = a->data().toString();
+  QString behaviourFile = a->data().toString();
   for(const auto &behaviour: settings.behaviours) {
-    if(behaviour.file == itemFile) {
-      if(settings.unlocked.contains(behaviour.file)) {
-        emit queueBehavFromFile(behaviour.file);
-      } else {
-        if(settings.coins - behaviour.coins >= 0) {
-          if(QMessageBox::question(nullptr, tr("Buy?"), tr("Do you want to buy '") + " " + behaviour.title + "' " + tr("for ") + QString::number(behaviour.coins) + tr(" coins?")) == QMessageBox::Yes) {
-            addCoins("-" + QString::number(behaviour.coins), - behaviour.coins);
-            settings.unlocked.append(behaviour.file);
-            QString unlocked = "";
-            for(const auto &unlock: settings.unlocked) {
-              unlocked.append(unlock + ",");
-            }
-            unlocked = unlocked.left(unlocked.length() - 1);
-            iniSettings->setValue("unlocked", unlocked);
-            updateBehavioursMenu();
-            emit updateBorisBehavioursMenu();
-          }
-        } else {
-          soundMixer.playSound(&soundMixer.soundFxs["nocoin.wav"], 0, 1);
-          QMessageBox::information(nullptr, tr("Not enough coins!"), tr("You can't afford the '") + " " + behaviour.title + "' " + tr("behaviour.\n\nPlace items that corresponds to Boris' needs to earn coins. You can then use those coins to unlock new right-click behaviours."));
-        }
-      }
+    if(behaviour.file == behaviourFile) {
+      emit queueBehavFromFile(behaviour.file);
       break;
     }
   }
@@ -615,12 +599,31 @@ void MainWindow::spawnItem(QAction* a)
   QString itemFile = a->data().toString();
   for(const auto &item: settings.itemBehaviours) {
     if(item.file == itemFile) {
-      settings.itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::desktop()->width()),
-                               QRandomGenerator::global()->bounded(QApplication::desktop()->height()),
-                               settings.size,
-                               item.file,
-                               settings,
-                               false));
+      if(settings.unlocked.contains(item.file)) {
+        settings.itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::desktop()->width()),
+                                          QRandomGenerator::global()->bounded(QApplication::desktop()->height()),
+                                          settings.size,
+                                          item.file,
+                                          settings,
+                                          false));
+      } else {
+        if(settings.coins - item.coins >= 0) {
+          if(QMessageBox::question(nullptr, tr("Buy?"), tr("Do you want to buy '") + " " + item.title + "' " + tr("for ") + QString::number(item.coins) + tr(" coins?")) == QMessageBox::Yes) {
+            addCoins("-" + QString::number(item.coins), - item.coins);
+            settings.unlocked.append(item.file);
+            QString unlocked = "";
+            for(const auto &unlock: settings.unlocked) {
+              unlocked.append(unlock + ",");
+            }
+            unlocked = unlocked.left(unlocked.length() - 1);
+            iniSettings->setValue("unlocked", unlocked);
+            updateItemsMenu();
+          }
+        } else {
+          soundMixer.playSound(&soundMixer.soundFxs["nocoin.wav"], 0, 1);
+          QMessageBox::information(nullptr, tr("Not enough coins!"), tr("You can't afford the '") + " " + item.title + "' " + tr("behaviour.\n\nInitiate behaviours that corresponds to Boris' needs to earn coins. You can then use those coins to unlock new items."));
+        }
+      }
       break;
     }
   }
