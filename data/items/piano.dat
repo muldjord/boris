@@ -1,6 +1,8 @@
 title=Piano
 category=Fun
 reaction=play_piano
+weight=200
+bounce=0
 allowFlip
 #Frames
 0;1000;0;0;;stop
