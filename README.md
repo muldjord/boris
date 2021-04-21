@@ -43,6 +43,9 @@ $ ./Boris
 * Add a 'usec' that points towards any direction the arrow keys are currently pressed
 * Spawn a puddle when '_too_late' happens
 * Add Boris 'memory'. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
+* Rewrite about text to reflect the changes to the coin system
+* Make a 'bowling' behaviour with a 'bowlingball' item and spawned 'pin' items (which might need syncronization as well?)
+* Make a 'tennis' behaviour with a 'tennisball' item
 
 #### Version 3.6.0 (In progress, unreleased):
 * Reversed coin concept. You now buy items instead of behaviours
