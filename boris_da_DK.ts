@@ -67,8 +67,9 @@
     </message>
     <message>
         <location filename="src/about.cpp" line="138"/>
-        <source>Boris size in pixels (8-256 or 0 for random):</source>
-        <translation>Boris størrelse i pixels (8-256 eller 0 for tilfældig):</translation>
+        <source>Boris size in pixels (32-256):</source>
+        <oldsource>Boris size in pixels (8-256 or 0 for random):</oldsource>
+        <translation>Boris størrelse i pixels (32-256):</translation>
     </message>
     <message>
         <location filename="src/about.cpp" line="144"/>
@@ -77,8 +78,9 @@
     </message>
     <message>
         <location filename="src/about.cpp" line="53"/>
-        <source>&lt;strong&gt;Boris bids you welcome!&lt;/strong&gt;&lt;br/&gt;He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye on him!&lt;br/&gt;&lt;br/&gt;&lt;strong&gt;Good to know:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;You can pick Boris up if he is in your way by holding down the left mouse button while the pointer is on top of him.&lt;/li&gt;&lt;li&gt;Right-clicking Boris brings up a menu where you can select any of the behaviours you have unlocked using coins. Each behaviour is added to a queue and performed in the order you select them.&lt;/li&gt;&lt;li&gt;Using the mouse scroll-wheel on Boris will tickle him if he&apos;s not busy.&lt;/li&gt;&lt;li&gt;Right-clicking the Boris system tray icon brings up a menu that gives you access to information and important functions that will help you configure and take care of Boris.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Health stats:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;The &apos;Zz&apos; icon signifies Boris&apos; energy level.&lt;/li&gt;&lt;li&gt;The &apos;Knife and fork&apos; icon shows how hungry Boris currently is.&lt;/li&gt;&lt;li&gt;The &apos;Toilet&apos; icon is an indicator of Boris&apos; need to go to the bathroom.&lt;/li&gt;&lt;li&gt;The &apos;Speech bubble&apos; icon shows Boris&apos; need for social interaction.&lt;/li&gt;&lt;li&gt;The &apos;Smiley&apos; icon indicates whether Boris is in a good mood and having fun.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Other stats:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;Boris can get dirty if he eats messy food or goes to the toilet without washing his hands.&lt;/li&gt;&lt;li&gt;He can also get bruised if you thrown him around too much.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;How to get coins:&lt;/strong&gt;&lt;br/&gt;It&apos;s just for fun! No real money involved. You can earn Boris coins by right-clicking the Boris system tray icon, selecting the &apos;Items&apos; submenu, and choosing an item that corresponds to the current needs of Boris. The more needy Boris is for the particular item you select, the more coins you receive. Drag the item on top of him to give it to him or wait for him to find it on his own.&lt;br/&gt;You can then spend the coins by selecting the &apos;Behaviours&apos; submenu and choosing the behaviour you want to buy. The behaviour then becomes unlocked and can be selected anytime you want from the Boris right-click menu or Boris system tray icon &apos;Behaviours&apos; submenu.&lt;br/&gt;&lt;br/&gt;&lt;strong&gt;Where to get Boris:&lt;/strong&gt;&lt;br/&gt;If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit https://github.com/muldjord/boris/releases and download it. He is completely free and open source. You can also download the full source code (GPLv3) in there if you like.</source>
-        <translation>&lt;strong&gt;Boris byder dig velkommen!&lt;/strong&gt;&lt;br/&gt;Han vil holde dig med selskab hele året rundt. Han er lidt af en drillepind, så hold godt øje med ham!&lt;br/&gt;&lt;br/&gt;&lt;strong&gt;Godt at vide:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;Du kan samle Boris op hvis han er i vejen, ved at holde venstre museknap inde mens markøren er over ham.&lt;/li&gt;&lt;li&gt;Højre-klik på Boris for at frembringe en menu, hvor du kan vælge mellem de opførsler du har låst op med mønter. Hver opførsel sættes i kø og Boris vil udføre dem i den rækkefølge du har valgt dem.&lt;/li&gt;&lt;li&gt;Du kan bruge musehjulet til at kilde Boris, når han ikke er travlt beskæftige med andre ting.&lt;/li&gt;&lt;li&gt;Højre-klik på Boris systemikonet frembringer en menu, som giver dig adgang til informationer og vigtige funktioner, som vil hjælpe dig med at konfigurere og passe på Boris.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Helbredstal:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;&apos;Zz&apos; ikonet viser Boris&apos; energiniveau.&lt;/li&gt;&lt;li&gt;&apos;Kniv og gaffel&apos; ikonet viser hvor sulten Boris er.&lt;/li&gt;&lt;li&gt;&apos;Toilet&apos; ikonet viser Boris&apos; behov for at komme på toilettet.&lt;/li&gt;&lt;li&gt;&apos;Taleboble&apos; ikonet viser Boris&apos; behov for socialt samvær.&lt;/li&gt;&lt;li&gt;&apos;Smiley&apos;ikonet viser om Boris er i godt eller dårligt humør.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Andre ting:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;Boris kan blive beskidt, hvis han spiser snasket mad, eller hvis han går på toilettet uden at vaske hænder bagefter.&lt;/li&gt;&lt;li&gt;Han kan også få blå mærker, hvis du kaster ham for meget rundt.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Sådan tjener du mønter:&lt;/strong&gt;&lt;br/&gt;Det er kun for sjovt! Der er ingen rigtig penge involveret. Du kan tjene Borismønter ved at højreklikke på Boris systemikonet, vælge &apos;Genstande&apos;-menuen og vælge genstande som tilsvarer Boris&apos; nuværende behov. Jo større behov, jo flere mønter får du. Træk genstanden hen ovenpå Boris, eller vent på at han selv finder den.&lt;br/&gt;Du kan derefter bruge mønterne på at låse opførsler op via &apos;Opførsler&apos; menuen. Herefter bliver opførslen låst op og kan vælges når det passer di,g ved at højre-klikke Boris eller via &apos;Opførsler&apos; menuen under Boris systemikonet.&lt;br/&gt;&lt;br/&gt;&lt;strong&gt;Hvor finder jeg Boris:&lt;/strong&gt;&lt;br/&gt;Hvis dine venner eller kollegaer bliver misundelige og vil have deres egen Boris, skal du blot bede dem besøge https://github.com/muldjord/boris/releases og hente ham. Han er helt gratis og med åben kildekode. Du kan også hente den fulde kildekode (GPLv3) hvis du har lyst.</translation>
+        <source>&lt;strong&gt;Boris bids you welcome!&lt;/strong&gt;&lt;br/&gt;He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye on him!&lt;br/&gt;&lt;br/&gt;&lt;strong&gt;Good to know:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;You can pick Boris up if he is in your way by holding down the left mouse button while the pointer is on top of him.&lt;/li&gt;&lt;li&gt;Right-clicking Boris brings up a menu where you can select any of the behaviours you have unlocked using coins. Each behaviour is added to a queue and performed in the order you select them.&lt;/li&gt;&lt;li&gt;Using the mouse scroll-wheel on Boris will tickle him if he&apos;s not busy.&lt;/li&gt;&lt;li&gt;Right-clicking the Boris system tray icon brings up a menu that gives you access to information and important functions that will help you configure and take care of Boris.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Health stats:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;The &apos;Zz&apos; icon signifies Boris&apos; energy level.&lt;/li&gt;&lt;li&gt;The &apos;Knife and fork&apos; icon shows how hungry Boris currently is.&lt;/li&gt;&lt;li&gt;The &apos;Toilet&apos; icon is an indicator of Boris&apos; need to go to the bathroom.&lt;/li&gt;&lt;li&gt;The &apos;Speech bubble&apos; icon shows Boris&apos; need for social interaction.&lt;/li&gt;&lt;li&gt;The &apos;Smiley&apos; icon indicates whether Boris is in a good mood and having fun.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Other stats:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;Boris can get dirty if he eats messy food or goes to the toilet without washing his hands.&lt;/li&gt;&lt;li&gt;He can also get bruised if you thrown him around too much.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;How to get coins:&lt;/strong&gt;&lt;br/&gt;It&apos;s just for fun! No real money involved. You can earn Boris coins by right-clicking Boris and choosing an behaviour from a category that corresponds to Boris&apos; current needs. The more needy Boris is for the particular category you select, the more coins you receive.&lt;br/&gt;You can then spend the coins by selecting the &apos;Items&apos; submenu and choosing the item you want to buy. The item then becomes unlocked and can be selected anytime you want.&lt;br/&gt;&lt;br/&gt;&lt;strong&gt;Where to get Boris:&lt;/strong&gt;&lt;br/&gt;If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit https://github.com/muldjord/boris/releases and download it. He is completely free and open source. You can also download the full source code (GPLv3) in there if you like.</source>
+        <oldsource>&lt;strong&gt;Boris bids you welcome!&lt;/strong&gt;&lt;br/&gt;He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye on him!&lt;br/&gt;&lt;br/&gt;&lt;strong&gt;Good to know:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;You can pick Boris up if he is in your way by holding down the left mouse button while the pointer is on top of him.&lt;/li&gt;&lt;li&gt;Right-clicking Boris brings up a menu where you can select any of the behaviours you have unlocked using coins. Each behaviour is added to a queue and performed in the order you select them.&lt;/li&gt;&lt;li&gt;Using the mouse scroll-wheel on Boris will tickle him if he&apos;s not busy.&lt;/li&gt;&lt;li&gt;Right-clicking the Boris system tray icon brings up a menu that gives you access to information and important functions that will help you configure and take care of Boris.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Health stats:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;The &apos;Zz&apos; icon signifies Boris&apos; energy level.&lt;/li&gt;&lt;li&gt;The &apos;Knife and fork&apos; icon shows how hungry Boris currently is.&lt;/li&gt;&lt;li&gt;The &apos;Toilet&apos; icon is an indicator of Boris&apos; need to go to the bathroom.&lt;/li&gt;&lt;li&gt;The &apos;Speech bubble&apos; icon shows Boris&apos; need for social interaction.&lt;/li&gt;&lt;li&gt;The &apos;Smiley&apos; icon indicates whether Boris is in a good mood and having fun.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Other stats:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;Boris can get dirty if he eats messy food or goes to the toilet without washing his hands.&lt;/li&gt;&lt;li&gt;He can also get bruised if you thrown him around too much.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;How to get coins:&lt;/strong&gt;&lt;br/&gt;It&apos;s just for fun! No real money involved. You can earn Boris coins by right-clicking the Boris system tray icon, selecting the &apos;Items&apos; submenu, and choosing an item that corresponds to the current needs of Boris. The more needy Boris is for the particular item you select, the more coins you receive. Drag the item on top of him to give it to him or wait for him to find it on his own.&lt;br/&gt;You can then spend the coins by selecting the &apos;Behaviours&apos; submenu and choosing the behaviour you want to buy. The behaviour then becomes unlocked and can be selected anytime you want from the Boris right-click menu or Boris system tray icon &apos;Behaviours&apos; submenu.&lt;br/&gt;&lt;br/&gt;&lt;strong&gt;Where to get Boris:&lt;/strong&gt;&lt;br/&gt;If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit https://github.com/muldjord/boris/releases and download it. He is completely free and open source. You can also download the full source code (GPLv3) in there if you like.</oldsource>
+        <translation>&lt;strong&gt;Boris byder dig velkommen!&lt;/strong&gt;&lt;br/&gt;Han vil holde dig med selskab hele året rundt. Han er lidt af en drillepind, så hold godt øje med ham!&lt;br/&gt;&lt;br/&gt;&lt;strong&gt;Godt at vide:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;Du kan samle Boris op hvis han er i vejen, ved at holde venstre museknap inde mens markøren er over ham.&lt;/li&gt;&lt;li&gt;Højre-klik på Boris for at frembringe en menu, hvor du kan vælge mellem de opførsler du har låst op med mønter. Hver opførsel sættes i kø og Boris vil udføre dem i den rækkefølge du har valgt dem.&lt;/li&gt;&lt;li&gt;Du kan bruge musehjulet til at kilde Boris, når han ikke er travlt beskæftige med andre ting.&lt;/li&gt;&lt;li&gt;Højre-klik på Boris systemikonet frembringer en menu, som giver dig adgang til informationer og vigtige funktioner, som vil hjælpe dig med at konfigurere og passe på Boris.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Helbredstal:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;&apos;Zz&apos; ikonet viser Boris&apos; energiniveau.&lt;/li&gt;&lt;li&gt;&apos;Kniv og gaffel&apos; ikonet viser hvor sulten Boris er.&lt;/li&gt;&lt;li&gt;&apos;Toilet&apos; ikonet viser Boris&apos; behov for at komme på toilettet.&lt;/li&gt;&lt;li&gt;&apos;Taleboble&apos; ikonet viser Boris&apos; behov for socialt samvær.&lt;/li&gt;&lt;li&gt;&apos;Smiley&apos;ikonet viser om Boris er i godt eller dårligt humør.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Andre ting:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;Boris kan blive beskidt, hvis han spiser snasket mad, eller hvis han går på toilettet uden at vaske hænder bagefter.&lt;/li&gt;&lt;li&gt;Han kan også få blå mærker, hvis du kaster ham for meget rundt.&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Sådan tjener du mønter:&lt;/strong&gt;&lt;br/&gt;Det er kun for sjovt! Der er ingen rigtige penge involveret. Du kan tjene Boris mønter ved at højreklikke på Boris og vælge noget fra en kategori der tilsvarer Boris&apos; nuværende behov. Jo større behovet er, jo flere mønter får du.&lt;br/&gt;Du kan derefter bruge mønterne på at låse genstande op via &apos;Genstande&apos; menuen. Herefter bliver genstanden låst op og kan vælges når det passer dig.&lt;br/&gt;&lt;br/&gt;&lt;strong&gt;Hvor finder jeg Boris:&lt;/strong&gt;&lt;br/&gt;Hvis dine venner eller kollegaer bliver misundelige og vil have deres egen Boris, skal du blot bede dem besøge https://github.com/muldjord/boris/releases og hente ham. Han er helt gratis og med åben kildekode. Du kan også hente den fulde kildekode (GPLv3) hvis du har lyst.</translation>
     </message>
     <message>
         <location filename="src/about.cpp" line="93"/>
@@ -159,19 +161,19 @@
 <context>
     <name>Boris</name>
     <message>
-        <location filename="src/boris.cpp" line="98"/>
+        <location filename="src/boris.cpp" line="97"/>
         <source>Behaviours</source>
         <translation>Opførsler</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="183"/>
+        <location filename="src/boris.cpp" line="171"/>
         <source>Idkfa</source>
         <translation>Idkfa</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="229"/>
-        <source>No behaviours unlocked!</source>
-        <translation>Ingen opførsler er låst op!</translation>
+        <location filename="src/boris.cpp" line="213"/>
+        <source>No behaviours!</source>
+        <translation>Ingen opførsler!</translation>
     </message>
 </context>
 <context>
@@ -187,95 +189,100 @@
         <translation>Genstande</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="241"/>
+        <location filename="src/mainwindow.cpp" line="242"/>
         <source>Looking for Boris, please wait...
 </source>
         <translation>Leder efter Boris, vent et øjeblik...
 </translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="384"/>
-        <location filename="src/mainwindow.cpp" line="641"/>
+        <location filename="src/mainwindow.cpp" line="385"/>
+        <location filename="src/mainwindow.cpp" line="644"/>
         <source> coins</source>
         <translation> mønter</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="393"/>
+        <location filename="src/mainwindow.cpp" line="394"/>
         <source>&amp;Config / about...</source>
         <translation>&amp;Konfigurér / om...</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="478"/>
+        <location filename="src/mainwindow.cpp" line="477"/>
         <source>Idkfa</source>
         <translation>Idkfa</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="530"/>
-        <source>No behaviours unlocked!</source>
-        <translation>Ingen opførsler er låst op!</translation>
+        <location filename="src/mainwindow.cpp" line="519"/>
+        <source>No behaviours!</source>
+        <translation>Ingen opførsler!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="572"/>
+        <location filename="src/mainwindow.cpp" line="563"/>
+        <source>No items unlocked!</source>
+        <translation>Ingen genstande låst op!</translation>
+    </message>
+    <message>
+        <location filename="src/mainwindow.cpp" line="611"/>
         <source>Buy?</source>
         <translation>Køb?</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="572"/>
+        <location filename="src/mainwindow.cpp" line="611"/>
         <source>Do you want to buy &apos;</source>
         <translation>Vil du købe &apos;</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="572"/>
+        <location filename="src/mainwindow.cpp" line="611"/>
         <source>for </source>
         <translation>for </translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="572"/>
+        <location filename="src/mainwindow.cpp" line="611"/>
         <source> coins?</source>
         <translation> mønter?</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="586"/>
+        <location filename="src/mainwindow.cpp" line="624"/>
         <source>Not enough coins!</source>
         <translation>Ikke mønter nok!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="586"/>
+        <location filename="src/mainwindow.cpp" line="624"/>
         <source>You can&apos;t afford the &apos;</source>
         <translation>Du har ikke råd til &apos;</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="586"/>
-        <source>behaviour.
+        <location filename="src/mainwindow.cpp" line="624"/>
+        <source>item.
 
-Place items that corresponds to Boris&apos; needs to earn coins. You can then use those coins to unlock new right-click behaviours.</source>
-        <translation>opførslen.
+Initiate behaviours that corresponds to Boris&apos; needs to earn coins. You can then use those coins to unlock new items.</source>
+        <translation>genstanden.
 
-Placér genstande på skrivebordet som tilsvarer Boris&apos; behov for at tjene mønter. Du kan derefter bruge disse mønter på at låse opførsler op.</translation>
+Vælg opførsler der tilsvarer Boris´&apos; behov for at tjene mønter. Du kan derefter bruge dem på at låse nye genstande op.</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="633"/>
+        <location filename="src/mainwindow.cpp" line="636"/>
         <source>coins</source>
         <translation>mønter</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="379"/>
+        <location filename="src/mainwindow.cpp" line="380"/>
         <source>&amp;Earthquake!!!</source>
         <oldsource>&amp;Earthquake</oldsource>
         <translation>&amp;Jordskælv!!!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="382"/>
+        <location filename="src/mainwindow.cpp" line="383"/>
         <source>Updating weather...</source>
         <translation>Opdaterer vejr...</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="467"/>
+        <location filename="src/mainwindow.cpp" line="468"/>
         <source>Couldn&apos;t find city</source>
         <translation>Kunne ikke finde by</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="403"/>
+        <location filename="src/mainwindow.cpp" line="404"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>
