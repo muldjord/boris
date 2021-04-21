@@ -72,8 +72,8 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
                                     "<li>He can also get bruised if you thrown him around too much.</li>"
                                     "</ul>"
                                     "<strong>How to get coins:</strong>"
-                                    "<br/>It's just for fun! No real money involved. You can earn Boris coins by right-clicking the Boris system tray icon, selecting the 'Items' submenu, and choosing an item that corresponds to the current needs of Boris. The more needy Boris is for the particular item you select, the more coins you receive. Drag the item on top of him to give it to him or wait for him to find it on his own.<br/>"
-                                    "You can then spend the coins by selecting the 'Behaviours' submenu and choosing the behaviour you want to buy. The behaviour then becomes unlocked and can be selected anytime you want from the Boris right-click menu or Boris system tray icon 'Behaviours' submenu.<br/>"
+                                    "<br/>It's just for fun! No real money involved. You can earn Boris coins by right-clicking Boris and choosing an behaviour from a category that corresponds to Boris' current needs. The more needy Boris is for the particular category you select, the more coins you receive.<br/>"
+                                    "You can then spend the coins by selecting the 'Items' submenu and choosing the item you want to buy. The item then becomes unlocked and can be selected anytime you want.<br/>"
                                     "<br/>"
                                     "<strong>Where to get Boris:</strong><br/>"
                                     "If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit https://github.com/muldjord/boris/releases and download it. He is completely free and open source. You can also download the full source code (GPLv3) in there if you like."));
