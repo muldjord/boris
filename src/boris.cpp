@@ -272,9 +272,11 @@ void Boris::changeBehaviour(QString behav, int time)
   scriptImage.fill(Qt::transparent);
   drawing = false;
   
+  bool coinCheck = false;
   // Check if there are behaviours in queue, these are prioritized
   if(behav == "" && !behavQueue.isEmpty()) {
     behav = behavQueue.takeFirst();
+    coinCheck = true;
   }
 
   // Process the AI if no forced behaviour is set
@@ -298,6 +300,29 @@ void Boris::changeBehaviour(QString behav, int time)
     for(int a = 0; a < settings.behaviours.size(); ++a) {
       if(settings.behaviours.at(a).file == behav) {
         curBehav = a;
+        if(coinCheck) {
+          int coins = 0;
+          if(settings.behaviours.at(curBehav).category.toLower() == "health") {
+            coins = (100 - stats->getHealth());
+          } else if(settings.behaviours.at(curBehav).category.toLower() == "energy") {
+            coins = (100 - stats->getEnergy());
+          } else if(settings.behaviours.at(curBehav).category.toLower() == "hunger") {
+            coins = stats->getHunger();
+          } else if(settings.behaviours.at(curBehav).category.toLower() == "toilet") {
+            coins = stats->getToilet();
+          } else if(settings.behaviours.at(curBehav).category.toLower() == "social") {
+            coins = (100 - stats->getSocial());
+          } else if(settings.behaviours.at(curBehav).category.toLower() == "fun") {
+            coins = (100 - stats->getFun());
+          } else if(settings.behaviours.at(curBehav).category.toLower() == "hygiene") {
+            coins = (100 - stats->getHygiene());
+          }
+          coins /= 20;
+
+          if(coins) {
+            emit addCoins("+" + QString::number(coins), coins);
+          }
+        }
         break;
       }
     }
@@ -656,27 +681,6 @@ void Boris::handleBehaviourChange(QAction* a)
   for(const auto &behaviour: settings.behaviours) {
     if(behaviour.file == behavFile) {
       behavQueue.append(behaviour.file);
-      int coins = 0;
-      if(behaviour.category.toLower() == "health") {
-        coins = (100 - stats->getHealth());
-      } else if(behaviour.category.toLower() == "energy") {
-        coins = (100 - stats->getEnergy());
-      } else if(behaviour.category.toLower() == "hunger") {
-        coins = stats->getHunger();
-      } else if(behaviour.category.toLower() == "toilet") {
-        coins = stats->getToilet();
-      } else if(behaviour.category.toLower() == "social") {
-        coins = (100 - stats->getSocial());
-      } else if(behaviour.category.toLower() == "fun") {
-        coins = (100 - stats->getFun());
-      } else if(behaviour.category.toLower() == "hygiene") {
-        coins = (100 - stats->getHygiene());
-      }
-      coins /= 20;
-          
-      if(coins) {
-        emit addCoins("+" + QString::number(coins), coins);
-      }
     }
   }
 }
