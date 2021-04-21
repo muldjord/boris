@@ -662,9 +662,9 @@ void Boris::handleBehaviourChange(QAction* a)
       } else if(behaviour.category.toLower() == "energy") {
         coins = (100 - stats->getEnergy());
       } else if(behaviour.category.toLower() == "hunger") {
-        coins = (100 - stats->getHunger());
+        coins = stats->getHunger();
       } else if(behaviour.category.toLower() == "toilet") {
-        coins = (100 - stats->getToilet());
+        coins = stats->getToilet();
       } else if(behaviour.category.toLower() == "social") {
         coins = (100 - stats->getSocial());
       } else if(behaviour.category.toLower() == "fun") {
