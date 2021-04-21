@@ -1,0 +1,15 @@
+title=Tennisball
+category=Fun
+reaction=_hitball_w,hitballw,-12,16;_hitball_e,hitballe,12,16
+weight=4
+bounce=7
+noIgnore
+doNotDisturb
+#Frames
+0;1000;0;0;;stop
+
+1;3600;0;0;;label hitballw
+0;50;0;0;kick.wav;var xvel = -5 - energy / 5,var yvel = -2 - energy / 10,stop
+
+1;3600;0;0;;label hitballe
+0;50;0;0;kick.wav;var xvel = 5 + energy / 5,var yvel = -2 - energy / 10,stop
