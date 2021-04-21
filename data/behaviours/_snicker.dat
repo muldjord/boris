@@ -3,8 +3,10 @@ social=15
 toilet=2
 oneShot
 allowFlip
+define init:var chats = 2,call nextchat
+define nextchat:var chats -= 1,if chats < 0 goto chat3,var rand = @2,if rand = 1 goto chat1,if rand = 2 goto chat2
 #Frames
-0;100;0;0;joking1.wav;
+0;100;0;0;joking1.wav;label chat1
 1;100;0;0;;
 2;100;0;0;;
 3;100;0;0;;
@@ -16,8 +18,8 @@ allowFlip
 0;100;0;0;;
 4;100;0;0;;
 5;100;0;0;;
-2;200;0;0;;
-3;100;0;0;joking2.wav;
+2;200;0;0;;call nextchat
+3;100;0;0;joking2.wav;label chat2
 4;100;0;0;;
 0;100;0;0;;
 5;100;0;0;;
@@ -28,8 +30,8 @@ allowFlip
 5;100;0;0;;
 2;100;0;0;;
 0;100;0;0;;
-0;200;0;0;;
-2;100;0;0;joking3.wav;
+0;200;0;0;;call nextchat
+2;100;0;0;joking3.wav;label chat3
 1;100;0;0;;
 5;100;0;0;;
 4;100;0;0;;
@@ -62,4 +64,4 @@ allowFlip
 14;75;0;0;;
 15;75;0;0;;
 16;75;0;0;;
-17;75;0;0;;
+17;75;0;0;;break

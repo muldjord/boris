@@ -2,8 +2,10 @@ fun=5
 social=15
 oneShot
 allowFlip
+define init:var chats = 3,call nextchat
+define nextchat:var chats -= 1,if chats < 0 break,var rand = @4,if rand = 1 goto chat1,if rand = 2 goto chat2,if rand = 3 goto chat3,if rand = 4 goto chat4
 #Frames
-0;110;0;0;whisper1.wav;
+0;110;0;0;whisper1.wav;label chat1
 2;130;0;0;;
 1;160;0;0;;
 3;190;0;0;;
@@ -16,8 +18,8 @@ allowFlip
 6;150;0;0;;
 7;170;0;0;;
 0;110;0;0;;
-2;130;0;0;;
-1;160;0;0;whisper2.wav;
+2;130;0;0;;call nextchat
+1;160;0;0;whisper2.wav;label chat2
 3;190;0;0;;
 1;130;0;0;;
 2;100;0;0;;
@@ -32,8 +34,8 @@ allowFlip
 1;160;0;0;;
 3;190;0;0;;
 1;130;0;0;;
-2;100;0;0;;
-0;200;0;0;whisper3.wav;
+2;100;0;0;;call nextchat
+0;200;0;0;whisper3.wav;label chat3
 3;60;0;0;;
 4;100;0;0;;
 5;80;0;0;;
@@ -45,8 +47,8 @@ allowFlip
 3;190;0;0;;
 1;130;0;0;;
 2;100;0;0;;
-0;200;0;0;;
-3;60;0;0;whisper4.wav;
+0;200;0;0;;call nextchat
+3;60;0;0;whisper4.wav;label chat4
 4;100;0;0;;
 5;80;0;0;;
 6;150;0;0;;
@@ -58,4 +60,4 @@ allowFlip
 1;130;0;0;;
 2;100;0;0;;
 0;200;0;0;;
-3;60;0;0;;
+3;60;0;0;;call nextchat
