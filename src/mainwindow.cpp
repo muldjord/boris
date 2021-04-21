@@ -621,7 +621,7 @@ void MainWindow::spawnItem(QAction* a)
           }
         } else {
           soundMixer.playSound(&soundMixer.soundFxs["nocoin.wav"], 0, 1);
-          QMessageBox::information(nullptr, tr("Not enough coins!"), tr("You can't afford the '") + " " + item.title + "' " + tr("behaviour.\n\nInitiate behaviours that corresponds to Boris' needs to earn coins. You can then use those coins to unlock new items."));
+          QMessageBox::information(nullptr, tr("Not enough coins!"), tr("You can't afford the '") + " " + item.title + "' " + tr("item.\n\nInitiate behaviours that corresponds to Boris' needs to earn coins. You can then use those coins to unlock new items."));
         }
       }
       break;
