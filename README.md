@@ -46,6 +46,7 @@ $ ./Boris
 * Rewrite about text to reflect the changes to the coin system
 * Make a 'bowling' behaviour with a 'bowlingball' item and spawned 'pin' items (which might need syncronization as well?)
 * Make a 'tennis' behaviour with a 'tennisball' item
+* Rework coin adding so it doesn't happen until the behaviour initiates. You can cheat by simply adding the same behaviour many times in a row as it is right now, because the behaviour (and thereby stat changes) doesn't start until later
 
 #### Version 3.6.0 (In progress, unreleased):
 * Reversed coin concept. You now buy items instead of behaviours
