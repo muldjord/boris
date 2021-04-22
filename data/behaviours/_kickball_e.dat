@@ -1,6 +1,7 @@
 oneShot
 doNotDisturb
-fun=10
+fun=15
+energy=-4
 #Frames
 0;75;-1;0;;
 1;75;-1;0;;
