@@ -152,6 +152,10 @@ Boris::Boris(Settings &settings) : settings(settings)
   connect(&interactionsTimer, &QTimer::timeout, this, &Boris::checkInteractions);
   interactionsTimer.start();
 
+  enableInteractTimer.setInterval(2000);
+  enableInteractTimer.setSingleShot(true);
+  connect(&enableInteractTimer, &QTimer::timeout, this, &Boris::enableInteract);
+
   setCursor(settings.getCursor("hover.png"));
 
   updateBoris();
@@ -1403,7 +1407,8 @@ void Boris::borisInteract(Boris *boris)
   } else {
     changeBehaviour("_wave");
   }
-  QTimer::singleShot(QRandomGenerator::global()->bounded(5000) + 17000, this, &Boris::enableInteract);
+  enableInteractTimer.setInterval(QRandomGenerator::global()->bounded(5000) + 17000);
+  enableInteractTimer.start();
 }
 
 void Boris::itemInteract(Item * item)
@@ -1417,7 +1422,8 @@ void Boris::itemInteract(Item * item)
   } else if(item->grabbed) {
     bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "I don't know what to do with that.", "_thought");
   }
-  QTimer::singleShot(10000, this, &Boris::enableInteract);
+  enableInteractTimer.setInterval(10000);
+  enableInteractTimer.start();
 }
 
 void Boris::statChange(const QString &type, const int &amount)

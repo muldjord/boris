@@ -143,6 +143,7 @@ private:
   QTimer statTimer;
   QTimer statQueueTimer;
   QTimer interactionsTimer;
+  QTimer enableInteractTimer;
   int interactions = 0;
   int annoyance = 0;
   QPoint mLastMousePosition;
