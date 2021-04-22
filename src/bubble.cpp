@@ -28,6 +28,8 @@
 #include "bubble.h"
 
 #include <stdio.h>
+
+#include <QApplication>
 #include <QHBoxLayout>
 #include <QFile>
 #include <QDesktopServices>
@@ -141,9 +143,11 @@ int Bubble::initBubble(const int x, const int y,
   bubbleBottomRight->setPos(textImage.width() + 6, textImage.height() + 6);
 
   resetTransform();
-  scale(borisSize / 32.0, borisSize / 32.0);
-  scene()->setSceneRect(0, 0, width * (borisSize / 32), height * (borisSize / 32));
-  setFixedSize(width * (borisSize / 32), height * (borisSize / 32));
+
+  double scaleFactor = borisSize / 32.0;
+  scale(scaleFactor, scaleFactor);
+  scene()->setSceneRect(0, 0, width * scaleFactor, height * scaleFactor);
+  setFixedSize(width * scaleFactor, height * scaleFactor);
   int duration = 1000 + (text.length() * 100);
   duration = duration - (duration / 100.0 * hyper);
   if(settings.bubbles) {
