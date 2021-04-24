@@ -1268,6 +1268,7 @@ void Boris::updateBoris()
   } else {
     stats->hide();
   }
+  moveBoris(0, 0);
 }
 
 void Boris::nextWeatherFrame()
@@ -1335,8 +1336,8 @@ int Boris::getCurBehav()
 
 void Boris::enableInteract()
 {
-  borisFriend = nullptr;
   interact = true;
+  borisFriend = nullptr;
 }
 
 void Boris::checkInteractions()
