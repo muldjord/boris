@@ -692,6 +692,9 @@ void Boris::handleBehaviourChange(QAction* a)
 void Boris::enterEvent(QEvent *event)
 {
   event->accept();
+  if(settings.stats == STATS_MOUSEOVER || settings.stats == STATS_CRITICAL) {
+    stats->show();
+  }
   stats->underMouse = true;
 }
 
@@ -699,7 +702,7 @@ void Boris::leaveEvent(QEvent *event)
 {
   event->accept();
   if(settings.stats == STATS_MOUSEOVER || settings.stats == STATS_CRITICAL) {
-    stats->hide(); 
+    stats->hide();
   }
   stats->underMouse = false;
 }
