@@ -11,30 +11,30 @@ oneShot
 5;1200;0;0;;if weather = 1 { say "It's sunny...",var conclusion += 1 },
 if weather = 2 { say "A cloud or two...",var conclusion += 1 },
 if weather = 3 { say "Quite cloudy...",var conclusion += 1 },
-if weather = 4 say "It's grey and depressing...",
-if weather = 9 say "It's raining a bit, not much though...",
-if weather = 10 say "It's raining cats and dogs...",
+if weather = 4 say "There's lots of clouds...",
+if weather = 9 say "We might get a drop or two...",
+if weather = 10 say "It looks like quite a bit of rain...",
 if weather = 11 say "Thor is on the loose...",
 if weather = 13 say { "It's time to built a snowman...",var conclusion += 1 },
 if weather = 50 say "It's misty..."
 
 5;1200;0;0;;stat social += 4,if temp < 0 { say "...freezingly cold...",goto celsius },
-if temp < 5 { say "...very cold...",goto celsius,var conclusion += 1 },
-if temp < 10 { say "...quite cold...",goto celsius,var conclusion += 1 },
-if temp < 15 { say "...slightly cold...",goto celsius,var conclusion += 1 },
-if temp < 20 { say "...comfortable temperature...",goto celsius,var conclusion += 1 },
-if temp < 25 { say "...slightly hot...",goto celsius,var conclusion += 1 },
-if temp < 30 { say "...quite hot...",goto celsius,var conclusion += 1 },
+if temp < 5 { say "...very cold...",var conclusion += 1,goto celsius },
+if temp < 10 { say "...slightly cold...",var conclusion += 1,goto celsius },
+if temp < 15 { say "...a bit on the cool side...",var conclusion += 1,goto celsius },
+if temp < 20 { say "...temperature is comfortable...",var conclusion += 1,goto celsius },
+if temp < 25 { say "...slightly hot...",var conclusion += 1,goto celsius },
+if temp < 30 { say "...quite hot...",var conclusion += 1,goto celsius },
 if temp < 35 { say "...steaming hot...",goto celsius },
 if temp < 40 { say "...melting hot...",goto celsius },
 if temp >= 40 { say "...crazy hot!...",goto celsius }
 5;1500;0;0;;label celsius,say "...$temp degrees celsius..."
 
 
-5;1800;0;0;;stat social += 4,if wind < 2 { say "...and there's almost no wind.",var conclusion += 1,goto decide },
-if wind <= 5 { say "...and there's a slight breeze.",var conclusion += 1,goto decide },
-if wind <= 10 { say "...and there's a decent wind.",var conclusion += 1,goto decide },
-if wind <= 15 { say "...and the wind is quite strong!",goto decide },
+5;1800;0;0;;stat social += 4,
+if wind <= 5 { say "...and there's almost no wind.",var conclusion += 1,goto decide },
+if wind <= 10 { say "...and there's a decent breeze.",var conclusion += 1,goto decide },
+if wind <= 15 { say "...and quite windy!",goto decide },
 if wind <= 20 { say "...and it's storming!",goto decide },
 if wind > 20 { say "...and is that a hurricane outside?",goto decide }
 
