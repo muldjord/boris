@@ -39,4 +39,4 @@ if wind <= 20 { say "...and it's storming!",goto decide },
 if wind > 20 { say "...and is that a hurricane outside?",goto decide }
 
 5;3500;0;0;;label decide,
-if conclusion >= 3 say "I should go outside." else say "I think I'll stay inside.",break
+if hour >= 9 and hour <= 18 and conclusion >= 3 say "I should go outside." else say "I think I'll stay inside.",break
