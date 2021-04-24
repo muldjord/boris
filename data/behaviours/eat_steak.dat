@@ -13,7 +13,7 @@ oneShot
 5;50;0;0;;
 6;50;0;0;;
 7;200;0;0;;
-8;50;0;0;;if @4 = 1 {if @2 = 1 say "Yummy!" else say "Delicious!"}
+8;50;0;0;;if @4 = 1 {if @2 = 1 think "Yummy!" else think "Delicious!"}
 9;50;0;0;;stat hygience -= 5
 8;50;0;0;;stat toilet += 2
 9;50;0;0;;
@@ -30,6 +30,6 @@ oneShot
 14;100;0;0;;
 15;100;0;0;;if @8 > 1 goto munch else if bites = 0 goto hadenough else goto bite
 
-0;2000;0;0;;label imfull,say "I'm stuffed.",break
+0;2000;0;0;;label imfull,think "I'm stuffed.",break
 
-0;2000;0;0;;label hadenough,say "That's enough for now.",break
+0;2000;0;0;;label hadenough,think "That's enough for now.",break
