@@ -43,6 +43,8 @@ $ ./Boris
 * Add Boris 'memory'. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
 * Make a 'bowling' behaviour with a 'bowlingball' item and spawned 'pin' items (which might need syncronization as well?)
 * Make it so Boris only interacts with items he is interested in (those that match his current needs)
+* Make a 'banana' item for Boris to step on
+* Make a 'candycane' item for Boris to eat. It should be 'energy' category. He will get a significant energy boost and get very hyper
 
 #### Version 3.6.0 (In progress, unreleased):
 * Reversed coin concept. You now buy items instead of behaviours
