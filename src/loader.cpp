@@ -208,7 +208,7 @@ bool Loader::loadBehaviours(const Settings &settings,
           continue;
         }
         if(line.left(6) == "toilet") {
-          b.toilet = line.mid(8,line.length()).toInt();
+          b.toilet = line.mid(7,line.length()).toInt();
           continue;
         }
         if(line.left(6) == "social") {
