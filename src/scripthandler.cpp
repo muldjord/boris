@@ -641,7 +641,7 @@ void ScriptHandler::handleThrow(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'throw'
   scriptVars["xvel"] = getValue(parameters);
-  scriptVars["yvel"] = getValue(parameters);
+  scriptVars["yvel"] = getValue(parameters) * -1; // Reverse it
 }
 
 int ScriptHandler::getValue(QList<QString> &parameters)
