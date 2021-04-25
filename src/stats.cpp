@@ -64,10 +64,10 @@ Stats::Stats(Settings &settings,
   setScene(scene);
   scene->addPixmap(settings.getPixmap("stats.png"));
   energyBar = scene->addRect(17, 7, 60, 2);
-  hungerBar = scene->addRect(17, 23, 60, 2);
-  toiletBar = scene->addRect(17, 39, 60, 2);
-  socialBar = scene->addRect(17, 55, 60, 2);
-  funBar = scene->addRect(17, 71, 60, 2);
+  socialBar = scene->addRect(17, 23, 60, 2);
+  funBar = scene->addRect(17, 39, 60, 2);
+  hungerBar = scene->addRect(3, 55, 60, 2);
+  toiletBar = scene->addRect(3, 71, 60, 2);
   flashIcon = scene->addPixmap(settings.getPixmap("flash_icon.png"));
   flashIcon->setVisible(false);
   
@@ -267,10 +267,10 @@ void Stats::updateStats()
   funBar->setBrush(QBrush(funColor));
 
   energyBar->setRect(17, 7, 0.6 * energy, 1);
-  hungerBar->setRect(17, 23, 0.6 * hunger, 1);
-  toiletBar->setRect(17, 39, 0.6 * toilet, 1);
-  socialBar->setRect(17, 55, 0.6 * social, 1);
-  funBar->setRect(17, 71, 0.6 * fun, 1);
+  socialBar->setRect(17, 23, 0.6 * social, 1);
+  funBar->setRect(17, 39, 0.6 * fun, 1);
+  hungerBar->setRect(3, 55, 0.6 * hunger, 1);
+  toiletBar->setRect(3, 71, 0.6 * toilet, 1);
 
   if(flashes > 0) {
     flashIcon->setVisible(!flashIcon->isVisible());
