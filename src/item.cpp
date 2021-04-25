@@ -71,11 +71,11 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   itemSprite->setPos(0, 0);
 
   scriptSprite = this->scene()->addPixmap(QPixmap());
-  scriptSprite->setPos(0, 0); // To make room for shadow
+  scriptSprite->setPos(0, 0);
 
   setCursor(settings.getCursor("hover.png"));
 
-  setFixedSize(size, size); // To make room for shadow
+  setFixedSize(size, size + (size / 32.0));
   scale(size / 32.0, size / 32.0);
   move(x, y);
   if(settings.itemTimeout > 0) {
