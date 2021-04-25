@@ -4,16 +4,16 @@ The files in this folder defines the behaviours of Boris. You can add new behavi
 Note: All behaviour filenames that start with `_` (underscore) MUST NOT be deleted. These are hardcoded behaviours. Deleting any of them will make Boris crash eventually. Any behaviour filename beginning with an underscore will also be ignored whenever Boris chooses random behaviours, so this is useful for test behaviours when the `idkfa=true` setting is set in `config.ini`. This enables the Boris right-click `idkfa` behaviour menu that allows you to select and queue any available behaviour.
 
 ## PNG sprite sheets
-The png files are horizontal sets of sprites that are loaded together with the `<FILENAME>.dat` files. The dimensions of each sprite inside the sprite sheet must be 32x32 pixels. The color format of the pngs are not important as long as they are pngs. Alpha channel / transparency is supported.
+The png files are horizontal sets of sprites that are loaded together with the `FILENAME.dat` files. The dimensions of each sprite inside the sprite sheet must be 32x32 pixels. The color format of the pngs are not important as long as they are pngs. Alpha channel / transparency is supported.
 
 ## DAT behaviour definition files
 The format of the dat files is as follows:
 ```
-<Behaviour options>
-<Behaviour flags>
-<Code defines>
+BEHAVIOUR OPTIONS
+BEHAVIOUR FLAGS
+CODE DEFINES
 #Frames
-<Frame definitions>
+FRAME DEFINITIONS
 ```
 The line `#Frames` must be there so the software knows when the frame definitions begin.
 
@@ -59,7 +59,7 @@ The line `#Frames` must be there so the software knows when the frame definition
 * noIgnore: By default all items will be ignored by Boris for 60 seconds after it spawns to avoid him interacting with it right away. This flag disables that ignore period and makes it immediately active.
 
 ### Code defines
-The scripting language supports very basic code block defines. These are not functions, but rather blocks of code that can then be reused throughout a behaviour by using the `call <DEFINE>` command.
+The scripting language supports very basic code block defines. These are not functions, but rather blocks of code that can then be reused throughout a behaviour by using the `call DEFINE` command.
 
 NOTE! Anything defined in the hardcoded 'init' define will always be run first thing when a behaviour is started. See example.
 
@@ -116,7 +116,7 @@ The Boris scripting language allows for the following commands to be used:
 ##### var
 Use this command to create and assign values to variables for later use inside the behaviour. All variables are local to this behaviour and are reset / deleted whenever a new behaviour is started.
 * Definition:
-`var <VARIABLE> =|+=|-=|*=|/= <VARIABLE or VALUE>`
+`var VARIABLE =|+=|-=|*=|/= VARIABLE or VALUE`
 * Examples:
 ```
 var a = 1
@@ -131,20 +131,20 @@ The `@` results in a random value from 1 to the number following the `@`. You ca
 ##### stat
 Use this to dynamically change any supported Boris stat while the behaviour is running.
 * Definition:
-`stat <STAT> +=|-= <VARIABLE or VALUE>`
+`stat STAT +=|-= VARIABLE or VALUE`
 * Examples:
 ```
 stat energy += 5
 stat hyper -= 20
-stat fun += <VARIABLE>
+stat fun += VARIABLE
 stat toilet += @4
 ```
-The `@` results in a random value from 1 to the number following the `@`. The `<VARIABLE>` can be any previously defined variable (see `var` command).
+The `@` results in a random value from 1 to the number following the `@`. The `VARIABLE` can be any previously defined variable (see `var` command).
 
 ##### label
 Defines a `goto` point you can go to using `goto`.
 * Definition:
-`label <NAME>`
+`label NAME`
 * Examples:
 ```
 label youcangoherewithgoto
@@ -157,9 +157,9 @@ As you can see a label can be named pretty much anything. Do not use any of the 
 ##### if
 Good old if sentence. This is probably the most important of all the commands as it allows for conditions to be tested and acted upon.
 * Definition:
-`if <EXPRESSION> [then if ...] [{] <COMMANDs> [}] else [{] <COMMAND(s)> [}]`
+`if EXPRESSION [then if ...] [{] COMMANDs [}] else [{] COMMAND(s) [}]`
 * Expression definition:
-`<VARIABLE or VALUE> =|==|<|>|<=|>= <VARIABLE or VALUE>`
+`VARIABLE or VALUE =|==|<|>|<=|>= VARIABLE or VALUE`
 * Expression examples:
 ```
 this = 1
@@ -196,7 +196,7 @@ With this `if` command available you can do some pretty fun stuff. Just check ou
 ##### goto
 A simple `goto` command that let's you go to any previously defined label.
 * Definition:
-`goto <LABEL>`
+`goto LABEL`
 * Examples:
 ```
 goto here
@@ -206,7 +206,7 @@ goto there
 ##### print
 Prints any variable to the terminal. Useful for debugging.
 * Definition:
-`print <VARIABLE>`
+`print VARIABLE`
 * Examples
 ```
 print this
@@ -235,16 +235,25 @@ if a = 1 goto dostuff else stop
 ##### behav
 Changes the current behaviour to the behaviour with the requested behaviour filename (without the .dat suffix). NOTE! You cannot use spaces in the filename.
 * Definition:
-`behav <FILENAME>`
+`behav FILENAME`
 * Example:
 ```
 behav play_piano
 ```
 
+##### throw
+Throws the object up in the air at xvelocity and yvelocity speed. This will enable the physics engine and make it bounce when it lands according to the 'weight' and 'bounce' option values.
+* Definition:
+`throw XVELOCITY YVELOCITY`
+* Example:
+```
+throw 10 4
+```
+
 ##### call
 Calls and runs a block of code from a define (documented further up).
 * Definition:
-`call <DEFINE>`
+`call DEFINE`
 * Example:
 ```
 call mainblock
@@ -254,7 +263,7 @@ This will replace the call with the code from the define and run it. Very useful
 ##### sound
 Plays a sound from the sound effect folder.
 * Definition:
-`sound <FILENAME>`
+`sound FILENAME`
 * Example:
 ```
 sound data/sounds/soundfile.wav
@@ -267,7 +276,7 @@ Spawns a speech bubble containing the specified text. Alternatively you can use 
 The length of the text will determine how long it is shown for.
 
 * Definition:
-`say "<TEXT>"|rss`
+`say "TEXT"|rss`
 * Examples:
 ```
 say "This is the text that will be shown in the speech bubble!"
@@ -283,7 +292,7 @@ Spawns a thought bubble containing the specified text. Alternatively you can use
 The length of the text will determine how long it is shown for.
 
 * Definition:
-`think "<TEXT>"|rss`
+`think "TEXT"|rss`
 * Examples:
 ```
 think "This is the text that will be shown in the thought bubble!"
@@ -319,7 +328,7 @@ Drawing on Boris have hardcoded colors. These are specified as below:
 
 ###### pixel
 * Definition:
-`draw <COLOR> pixel x y`
+`draw COLOR pixel x y`
 * Example:
 ```
 draw yellow pixel 6 5
@@ -328,7 +337,7 @@ This will draw a single yellow pixel at 6, 5.
 
 ###### line
 * Definition:
-`draw <COLOR> line x1 y1 x2 y2`
+`draw COLOR line x1 y1 x2 y2`
 * Example:
 ```
 draw blue line 0 2 7 8
@@ -337,7 +346,7 @@ This will draw a blue line from 0, 2 to 7, 8.
 
 ###### ellipse
 * Definition:
-`draw <COLOR> ellipse x y w h`
+`draw COLOR ellipse x y w h`
 * Example:
 ```
 draw red ellipse 3 4 5 5
@@ -346,7 +355,7 @@ This will draw a red ellipse at 3, 4 with a width and height of 5.
 
 ###### rectangle
 * Definition:
-`draw <COLOR> rectangle x y w h`
+`draw COLOR rectangle x y w h`
 * Example:
 ```
 draw red rectangle 3 4 5 5
@@ -355,7 +364,7 @@ This will draw a red rectangle at 3, 4 with a width and height of 5.
 
 ###### text
 * Definition:
-`draw <COLOR> text x y this_is_the_text`
+`draw COLOR text x y this_is_the_text`
 * Example:
 ```
 draw yellow text 2 2 sometext
@@ -364,7 +373,7 @@ This will draw the yellow text `sometext` at 2, 2 using the internal minimal pix
 
 ###### sprite
 * Definition:
-`draw sprite <NAME> frame x y`
+`draw sprite NAME frame x y`
 * Example:
 ```
 draw sprite test 0 8 4
@@ -375,7 +384,7 @@ NOTE! The 'draw sprite' command is very useful if you want to have different fac
 
 ###### value
 * Definition:
-`draw <COLOR> value x y <VARIABLE or VALUE>`
+`draw COLOR value x y VARIABLE or VALUE`
 * Example:
 ```
 draw yellow value 2 2 somevariable
@@ -396,7 +405,7 @@ Per default all drawing routines are performed on the current frame sprite and c
 ##### spawn
 Spawn an item from the items folder (default is `data/items`). The item name is the name of the corresponding dat+png file pair without a suffix. Items can be animated and scripted mostly the same way Boris behaviours can.
 * Definition:
-`spawn <ITEM FILENAME> x y`
+`spawn ITEM FILENAME x y`
 * Example:
 ```
 spawn christmas_tree 10 2
