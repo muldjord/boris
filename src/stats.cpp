@@ -287,14 +287,14 @@ void Stats::flashStat(QString stat)
 {
   if(stat == "energy") {
     flashIcon->setPos(7, 0);
-  } else if(stat == "hunger") {
-    flashIcon->setPos(7, 16);
-  } else if(stat == "toilet") {
-    flashIcon->setPos(7, 32);
   } else if(stat == "social") {
-    flashIcon->setPos(7, 48);
+    flashIcon->setPos(7, 16);
   } else if(stat == "fun") {
-    flashIcon->setPos(7, 64);
+    flashIcon->setPos(7, 32);
+  } else if(stat == "hunger") {
+    flashIcon->setPos(57, 48);
+  } else if(stat == "toilet") {
+    flashIcon->setPos(57, 80);
   }
   flashes = 15;
   flashIcon->setVisible(true);
