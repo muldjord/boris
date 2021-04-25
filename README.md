@@ -35,6 +35,7 @@ $ ./Boris
 
 ## Release notes
 #### Known issues:
+* Critical need behaviours added to the queue chosen by Boris himself also gives out coins
 
 #### Version x.x.x, Roadmap:
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
@@ -43,7 +44,6 @@ $ ./Boris
 * Add Boris 'memory'. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
 * Make a 'bowling' behaviour with a 'bowlingball' item and spawned 'pin' items (which might need syncronization as well?)
 * Make it so Boris only interacts with items he is interested in (those that match his current needs)
-* Make a 'banana' item for Boris to step on
 * Make a 'candycane' item for Boris to eat. It should be 'energy' category. He will get a significant energy boost and get very hyper
 
 #### Version 3.6.0 (In progress, unreleased):
@@ -58,6 +58,7 @@ $ ./Boris
 * Items now have 'weight' and 'bounce' variables
 * Added 'tennisball' item
 * Changed visual stat layout to make it less confusing
+* Added 'banana' item
 
 #### Version 3.5.0 (17th April 2021):
 * A LOT of code refactoring and optimizations
