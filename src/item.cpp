@@ -75,7 +75,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
 
   setCursor(settings.getCursor("hover.png"));
 
-  setFixedSize(size, size + (size / 32)); // To make room for shadow
+  setFixedSize(size, size); // To make room for shadow
   scale(size / 32.0, size / 32.0);
   move(x, y);
   if(settings.itemTimeout > 0) {
