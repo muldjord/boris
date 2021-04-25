@@ -294,7 +294,7 @@ void Stats::flashStat(QString stat)
   } else if(stat == "hunger") {
     flashIcon->setPos(57, 48);
   } else if(stat == "toilet") {
-    flashIcon->setPos(57, 80);
+    flashIcon->setPos(57, 64);
   }
   flashes = 15;
   flashIcon->setVisible(true);
