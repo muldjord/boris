@@ -1,6 +1,6 @@
 title=Football
 category=Fun
-reaction=_kickball_w,kickballw,-12,21;_kickball_e,kickballe,12,21
+reaction=_kickball_w,kickballw,-12,7;_kickball_e,kickballe,12,7
 weight=5
 bounce=7
 noIgnore

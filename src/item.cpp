@@ -520,7 +520,7 @@ void Item::interact(Boris *boris)
   double sizeFactor = size / 32.0;
 
   boris->move(pos().x() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * sizeFactor * -1),
-              pos().y() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * sizeFactor * -1));
+              pos().y() - (size / 2.0) + (1 * sizeFactor) + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * sizeFactor * -1));
   /*
   move(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * (size / 32),
        boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * (size / 32));
