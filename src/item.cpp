@@ -504,7 +504,7 @@ void Item::handlePhysics()
   oldCursor = QCursor::pos();
 }
 
-void Item::interact(const Boris *boris)
+void Item::interact(Boris *boris)
 {
   scriptVars["energy"] = boris->getEnergy();
   scriptVars["health"] = boris->getHealth();
@@ -516,12 +516,19 @@ void Item::interact(const Boris *boris)
   scriptVars["hygiene"] = boris->getHygiene();
   
   borisHyper = boris->getHyper();
+
+  double sizeFactor = size / 32.0;
+
+  boris->move(pos().x() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * sizeFactor * -1),
+              pos().y() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * sizeFactor * -1));
+  /*
+  move(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * (size / 32),
+       boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * (size / 32));
+  */
   if(settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel().isEmpty()) {
     destroy();
     return;
   }
-  move(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * (size / 32),
-       boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * (size / 32));
   curFrame = settings.itemBehaviours.at(curItem).labels[settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel()];
   animTimer.start(0, Qt::PreciseTimer, this);
   setCursor(settings.getCursor("hover.png"));

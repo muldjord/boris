@@ -51,7 +51,7 @@ public:
   QPoint getGlobalCenter();
   QString getReactionBehaviour();
   QString getCategory();
-  void interact(const Boris *boris);
+  void interact(Boris *boris);
   QMap<QString, int> scriptVars;
   bool grabbed = false;
   bool ignore;
