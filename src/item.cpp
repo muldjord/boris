@@ -405,6 +405,8 @@ void Item::mousePressEvent(QMouseEvent* event)
     ignoreTimer.stop();
     setCursor(settings.getCursor("grab.png"));
     oldCursor = QCursor::pos();
+    curFrame = 0;
+    animTimer.start(0, Qt::PreciseTimer, this);
   } else if(event->button() == Qt::MiddleButton) {
     destroy();
   }
