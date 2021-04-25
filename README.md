@@ -46,6 +46,7 @@ $ ./Boris
 
 #### Version 3.6.0 (In progress, unreleased):
 * Reversed coin concept. You now buy items instead of behaviours
+* About text adjusted to reflect changes in coin system
 * Boris will now kick the football
 * Items are now linked to the Boris that interacts with it, allowing for interesting synchronized animations
 ** Boris 'hyper' is applied to the item when an interaction occurs to ensure sync between animations
@@ -54,7 +55,7 @@ $ ./Boris
 * Items now have physics and can be thrown using Boris script by using 'throw' or by manipulating variables 'xvel' and 'yvel'
 * Items now have 'weight' and 'bounce' variables
 * Added 'tennisball' item
-* About text adjusted to reflect changes in coin system
+* Changed visual stat layout to make it less confusing
 
 #### Version 3.5.0 (17th April 2021):
 * A LOT of code refactoring and optimizations
