@@ -35,18 +35,13 @@ $ ./Boris
 
 ## Release notes
 #### Known issues:
-* When kicking the football, Boris will be out of sync with the ball animation if he has been drinking coffee
-* Speech bubbles are broken if Boris is resized
 
 #### Version x.x.x, Roadmap:
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
 * Add a 'usec' that points towards any direction the arrow keys are currently pressed
 * Spawn a puddle when '_too_late' happens
 * Add Boris 'memory'. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
-* Rewrite about text to reflect the changes to the coin system
 * Make a 'bowling' behaviour with a 'bowlingball' item and spawned 'pin' items (which might need syncronization as well?)
-* Make a 'tennis' behaviour with a 'tennisball' item
-* Rework coin adding so it doesn't happen until the behaviour initiates. You can cheat by simply adding the same behaviour many times in a row as it is right now, because the behaviour (and thereby stat changes) doesn't start until later
 * Make it so Boris only interacts with items he is interested in (those that match his current needs)
 
 #### Version 3.6.0 (In progress, unreleased):
@@ -58,6 +53,8 @@ $ ./Boris
 ** If only a reaction behaviour file is defined the item will simply be destroyed when the interaction initiates
 * Items now have physics and can be thrown using Boris script by using 'throw' or by manipulating variables 'xvel' and 'yvel'
 * Items now have 'weight' and 'bounce' variables
+* Added 'tennisball' item
+* About text adjusted to reflect changes in coin system
 
 #### Version 3.5.0 (17th April 2021):
 * A LOT of code refactoring and optimizations
