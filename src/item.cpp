@@ -483,7 +483,7 @@ void Item::handlePhysics()
       moveItem(hVel, vVel);
       vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
     } else {
-      move(pos().x(), altitude);
+      move(pos().x() + hVel, altitude - (vVel - (altitude - pos().y())));
       if(vVel < 2.1) { // Has to be at least 2 due to lowest velocity being 1 and it can bounce back equaling 2 in total as minimum
         falling = false;
       } else {
