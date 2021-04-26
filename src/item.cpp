@@ -485,7 +485,7 @@ void Item::handlePhysics()
       moveItem(hVel, vVel); // moveItem scales hVel and vVel inside the function according to current item size
       vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
     } else {
-      moveItem(hVel, vVel - (((pos().y() + (vVel * settings.sizeFactor) - altitude) / settings.sizeFactor) * 2.0));
+      //moveItem(hVel, vVel - (((pos().y() + (vVel * settings.sizeFactor) - altitude) / settings.sizeFactor) * 2.0));
       if(vVel < 2.01) {
         falling = false;
       } else {
