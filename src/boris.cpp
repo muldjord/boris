@@ -651,12 +651,12 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
     if(flipped) {
       dX *= -1;
     }
-    dX = pos().x() + (dX * ceil(size / 32.0));
+    dX = pos().x() + (dX * settings.sizeFactor);
   }
   if(dY == 666) {
     dY = QRandomGenerator::global()->bounded(maxY);
   } else {
-    dY = pos().y() + (dY * ceil(size / 32.0));
+    dY = pos().y() + (dY * settings.sizeFactor);
   }
   
   move(dX, dY);
@@ -720,8 +720,8 @@ void Boris::mousePressEvent(QMouseEvent* event)
     setCursor(settings.getCursor("grab.png"));
     grabbed = true;
     changeBehaviour("_grabbed");
-    this->move(event->globalPos().x() - size / 32.0 * 17.0, 
-               event->globalPos().y() - size / 32.0 * 16.0);
+    this->move(event->globalPos().x() - settings.sizeFactor * 17.0, 
+               event->globalPos().y() - settings.sizeFactor * 16.0);
     oldCursor = QCursor::pos();
   }
 }
@@ -729,8 +729,8 @@ void Boris::mousePressEvent(QMouseEvent* event)
 void Boris::mouseMoveEvent(QMouseEvent* event)
 {
   if(event->buttons().testFlag(Qt::LeftButton)) {
-    this->move(event->globalPos().x() - size / 32.0 * 17.0, 
-               event->globalPos().y() - size / 32.0 * 16.0);
+    this->move(event->globalPos().x() - settings.sizeFactor * 17.0, 
+               event->globalPos().y() - settings.sizeFactor * 16.0);
     stats->move(pos().x() + (size / 2) - (stats->width() / 2),
                 pos().y() + size + (size / 2));
     bubble->moveBubble(pos().x(), pos().y(), size);
@@ -1260,7 +1260,7 @@ void Boris::updateBoris()
   }
   setFixedSize(size, size + (size / 2.0));
   resetTransform();
-  scale(size / 32.0, size / 32.0);
+  scale(settings.sizeFactor, settings.sizeFactor);
 
   // Set new independence value
   independence = settings.independence;
