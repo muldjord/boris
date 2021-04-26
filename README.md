@@ -36,6 +36,7 @@ $ ./Boris
 ## Release notes
 #### Known issues:
 * Critical need behaviours added to the queue chosen by Boris himself also gives out coins
+* Spawned items spawn outside desktop more often than is statistically sane
 * Bounce is broken for items with low bounce value
 
 #### Version x.x.x, Roadmap:
