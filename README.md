@@ -36,6 +36,7 @@ $ ./Boris
 ## Release notes
 #### Known issues:
 * Critical need behaviours added to the queue chosen by Boris himself also gives out coins
+* Bounce is broken for items with low bounce value
 
 #### Version x.x.x, Roadmap:
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
