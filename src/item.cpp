@@ -483,9 +483,9 @@ void Item::handlePhysics()
     }
     if(pos().y() + (vVel * settings.sizeFactor) <= altitude) {
       moveItem(hVel, vVel); // moveItem scales hVel and vVel inside the function according to current item size
-      vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
     } else {
-      //moveItem(hVel, vVel - (((pos().y() + (vVel * settings.sizeFactor) - altitude) / settings.sizeFactor) * 2.0));
+      int distanceLeft = (altitude - pos().y()) / settings.sizeFactor;
+      moveItem(hVel, vVel - ((vVel - distanceLeft) * 2));
       if(vVel <= 2.0) {
         falling = false;
       } else {
@@ -493,9 +493,9 @@ void Item::handlePhysics()
         soundMixer.playSound(&soundMixer.soundFxs["bounce.wav"],
                              (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0, 1.0);
         vVel = (vVel * (settings.itemBehaviours.at(curItem).bounce * 0.1)) * -1;
-        vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
       }
     }
+    vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
   } else {
     if(!shadowSprite->isVisible()) {
       shadowSprite->show();
