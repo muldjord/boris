@@ -481,12 +481,12 @@ void Item::handlePhysics()
     if(shadowSprite->isVisible()) {
       shadowSprite->hide();
     }
-    if(pos().y() + (vVel * settings.sizeFactor) <= altitude) {
-      moveItem(hVel, vVel);
+    if(pos().y() + vVel * settings.sizeFactor <= altitude) {
+      moveItem(hVel, vVel); // moveItem scales hVel and vVel inside the function according to current item size
       vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
     } else {
-      moveItem(hVel, vVel - (((pos().y() + (vVel * settings.sizeFactor)) - altitude) * 2));
-      if(vVel < 2.1) { // Has to be at least 2 due to lowest velocity being 1 and it can bounce back equaling 2 in total as minimum
+      moveItem(hVel, vVel - (((pos().y() + (vVel * settings.sizeFactor) - altitude) / settings.sizeFactor) * 2.0));
+      if(vVel < 2.01) {
         falling = false;
       } else {
         hVel *= settings.itemBehaviours.at(curItem).bounce * 0.1;
