@@ -141,6 +141,7 @@ MainWindow::MainWindow()
     iniSettings->setValue("size", 64);
   }
   settings.size = iniSettings->value("size").toInt();
+  settings.sizeFactor = settings.size / 32.0;
 
   if(!iniSettings->contains("independence")) {
     iniSettings->setValue("independence", 75);

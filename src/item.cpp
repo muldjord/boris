@@ -75,8 +75,8 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
 
   setCursor(settings.getCursor("hover.png"));
 
-  setFixedSize(size, size + (size / 32.0));
-  scale(size / 32.0, size / 32.0);
+  setFixedSize(size, size + settings.sizeFactor);
+  scale(settings.sizeFactor, settings.sizeFactor);
   move(x, y);
   if(settings.itemTimeout > 0) {
     QTimer::singleShot(settings.itemTimeout * 1000, this, &Item::destroy);
@@ -284,12 +284,12 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
     if(flipped) {
       dX *= -1;
     }
-    dX = pos().x() + (dX * ceil(size / 32.0));
+    dX = pos().x() + (dX * settings.sizeFactor);
   }
   if(dY == 666) {
     dY = QRandomGenerator::global()->bounded(maxY);
   } else {
-    dY = pos().y() + (dY * ceil(size / 32.0));
+    dY = pos().y() + (dY * settings.sizeFactor);
   }
   
   move(dX, dY);
@@ -415,8 +415,8 @@ void Item::mousePressEvent(QMouseEvent* event)
 void Item::mouseMoveEvent(QMouseEvent* event)
 {
   if(grabbed && event->buttons().testFlag(Qt::LeftButton)) {
-    this->move(event->globalPos().x() - size / 32.0 * 16.0, 
-               event->globalPos().y() - size / 32.0 * 20.0);
+    this->move(event->globalPos().x() - settings.sizeFactor * 16.0, 
+               event->globalPos().y() - settings.sizeFactor * 20.0);
   }
 
 }
@@ -481,11 +481,11 @@ void Item::handlePhysics()
     if(shadowSprite->isVisible()) {
       shadowSprite->hide();
     }
-    if(pos().y() + (vVel * ceil(size / 32.0)) <= altitude) {
+    if(pos().y() + (vVel * settings.sizeFactor) <= altitude) {
       moveItem(hVel, vVel);
       vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
     } else {
-      move(pos().x() + hVel, altitude - (vVel - (altitude - pos().y())));
+      moveItem(hVel, vVel - (((pos().y() + (vVel * settings.sizeFactor)) - altitude) * 2));
       if(vVel < 2.1) { // Has to be at least 2 due to lowest velocity being 1 and it can bounce back equaling 2 in total as minimum
         falling = false;
       } else {
@@ -519,10 +519,8 @@ void Item::interact(Boris *boris)
   
   borisHyper = boris->getHyper();
 
-  double sizeFactor = size / 32.0;
-
-  boris->move(pos().x() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * sizeFactor * -1),
-              pos().y() - (size / 2.0) + (1 * sizeFactor) + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * sizeFactor * -1));
+  boris->move(pos().x() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * settings.sizeFactor * -1),
+              pos().y() - (size / 2.0) + (1 * settings.sizeFactor) + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * settings.sizeFactor * -1));
   /*
   move(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * (size / 32),
        boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * (size / 32));

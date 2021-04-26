@@ -282,6 +282,8 @@ void About::saveAll()
   } else {
     settings.size = 64;
   }
+  settings.sizeFactor = settings.size / 32.0;
+  
   if(clonesLineEdit->text().toInt() != 0) {
     if(clonesLineEdit->text().toInt() < 1) {
       clonesLineEdit->setText("1");

@@ -80,6 +80,7 @@ public:
   int borisY = 64;
   int clones = 2;
   int size = 64;
+  double sizeFactor = 2.0;
   int independence = 75;
   int stats = STATS_CRITICAL;
   bool sound = true;

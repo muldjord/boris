@@ -145,7 +145,7 @@ int Bubble::initBubble(const int x, const int y,
   bubbleBottom->setPos(6, textImage.height() + 6);
   bubbleBottomRight->setPos(textImage.width() + 6, textImage.height() + 6);
 
-  double scaleFactor = borisSize / 32.0;
+  double scaleFactor = settings.sizeFactor;
   resetTransform();
   scale(scaleFactor, scaleFactor);
   scene()->setSceneRect(0, 0, width * scaleFactor, height * scaleFactor);
