@@ -171,8 +171,8 @@ private:
   Stats *stats;
   Bubble *bubble;
   QList<QString> behavQueue;
-  QString getFileFromCategory(QString category);
-  int getIdxFromCategory(QString category);
+  QString getFileFromCategory(const QString &category);
+  int getIdxFromCategory(const QString &category);
   void processVision();
   void processAi(QString &behav);
   int getDistance(const QPoint &p);

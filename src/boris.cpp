@@ -218,7 +218,7 @@ void Boris::createBehavioursMenu()
   }
 }
 
-QString Boris::getFileFromCategory(QString category)
+QString Boris::getFileFromCategory(const QString &category)
 {
   QList<QString> b;
   for(const auto &behaviour: settings.behaviours) {
@@ -236,7 +236,7 @@ QString Boris::getFileFromCategory(QString category)
   return settings.behaviours.at(chosen).file;
 }
 
-int Boris::getIdxFromCategory(QString category)
+int Boris::getIdxFromCategory(const QString &category)
 {
   QList<QString> b;
   for(const auto &behav: settings.behaviours) {
