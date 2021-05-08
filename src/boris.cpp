@@ -103,7 +103,8 @@ Boris::Boris(Settings &settings) : settings(settings)
   int health = 100;
   int energy = 40 + QRandomGenerator::global()->bounded(25);
   int hunger = 40 + QRandomGenerator::global()->bounded(25);
-  int toilet = 40 + QRandomGenerator::global()->bounded(25);
+  //int toilet = 40 + QRandomGenerator::global()->bounded(25);
+  int toilet = 100;
   int hygiene = 100;
   int social = 40 + QRandomGenerator::global()->bounded(25);
   int fun = 40 + QRandomGenerator::global()->bounded(25);
@@ -1165,64 +1166,52 @@ void Boris::processAi(QString &behav)
     // Stat check
     QList<QString> potentials;
     if(stats->getFun() <= 50) {
-      if(QRandomGenerator::global()->bounded(100 - stats->getFun()) > independence) {
-        if(QRandomGenerator::global()->bounded(100) > independence) {
-          potentials.append("_fun");
-        } else {
-          potentials.append(getFileFromCategory("Fun"));
-        }
+      if(QRandomGenerator::global()->bounded(stats->getFun()) > independence) {
+        potentials.append("_fun");
+      } else {
+        potentials.append(getFileFromCategory("Fun"));
       }
     }
     if(stats->getEnergy() <= 50) {
-      if(QRandomGenerator::global()->bounded(100 - stats->getEnergy()) > independence) {
-        if(QRandomGenerator::global()->bounded(100) > independence) {
-          potentials.append("_energy");
-        } else {
-          potentials.append(getFileFromCategory("Energy"));
-        }
+      if(QRandomGenerator::global()->bounded(100) > independence) {
+        potentials.append("_energy");
+      } else {
+        potentials.append(getFileFromCategory("Energy"));
+      }
+    }
+    if(stats->getSocial() <= 50) {
+      if(QRandomGenerator::global()->bounded(100) > independence) {
+        potentials.append("_social");
+      } else {
+        potentials.append(getFileFromCategory("Social"));
+      }
+    }
+    if(stats->getHygiene() <= 50) {
+      if(QRandomGenerator::global()->bounded(100) > independence) {
+        potentials.append("_hygiene");
+      } else {
+        potentials.append(getFileFromCategory("Hygiene"));
+      }
+    }
+    if(stats->getHealth() <= 50) {
+      if(QRandomGenerator::global()->bounded(150 - stats->getHealth()) < independence) {
+        potentials.append("_health");
       }
     }
     // This one is 'inverted' compared to the others. High 'hunger' means Boris is starving.
     if(stats->getHunger() >= 50) {
-      if(QRandomGenerator::global()->bounded(stats->getHunger()) > independence) {
-        if(QRandomGenerator::global()->bounded(100) > independence) {
-          potentials.append("_hunger");
-        } else {
-          potentials.append(getFileFromCategory("Hunger"));
-        }
+      if(QRandomGenerator::global()->bounded(100) > independence) {
+        potentials.append("_hunger");
+      } else {
+        potentials.append(getFileFromCategory("Hunger"));
       }
     }
     // This one is 'inverted' compared to the others. High 'toilet' means Boris has to go to the bathroom.
     if(stats->getToilet() >= 50) {
-      if(QRandomGenerator::global()->bounded(stats->getToilet()) > independence) {
-        if(QRandomGenerator::global()->bounded(100) > independence) {
-          potentials.append("_toilet");
-        } else {
-          potentials.append(getFileFromCategory("Toilet"));
-        }
-      }
-    }
-    if(stats->getSocial() <= 50) {
-      if(QRandomGenerator::global()->bounded(100 - stats->getSocial()) > independence) {
-        if(QRandomGenerator::global()->bounded(100) > independence) {
-          potentials.append("_social");
-        } else {
-          potentials.append(getFileFromCategory("Social"));
-        }
-      }
-    }
-    if(stats->getHygiene() <= 50) {
-      if(QRandomGenerator::global()->bounded(100 - stats->getHygiene()) > independence) {
-        if(QRandomGenerator::global()->bounded(100) > independence) {
-          potentials.append("_hygiene");
-        } else {
-          potentials.append(getFileFromCategory("Hygiene"));
-        }
-      }
-    }
-    if(stats->getHealth() <= 50) {
-      if(QRandomGenerator::global()->bounded(150 - stats->getHealth()) > independence) {
-        potentials.append("_health");
+      if(QRandomGenerator::global()->bounded(100) > independence) {
+        potentials.append("_toilet");
+      } else {
+        potentials.append(getFileFromCategory("Toilet"));
       }
     }
     // Now choose one from the potentials
