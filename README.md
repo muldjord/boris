@@ -37,7 +37,6 @@ $ ./Boris
 #### Known issues:
 * Critical need behaviours added to the queue chosen by Boris himself also gives out coins
 * Spawned items seemingly spawn outside desktop more often than they should
-* Independence seems to be somewhat broken when independence is high for 'toilet'. Rarely will Boris relieve himself automatically
 
 #### Version x.x.x, Roadmap:
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
