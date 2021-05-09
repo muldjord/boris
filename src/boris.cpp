@@ -103,8 +103,7 @@ Boris::Boris(Settings &settings) : settings(settings)
   int health = 100;
   int energy = 40 + QRandomGenerator::global()->bounded(25);
   int hunger = 40 + QRandomGenerator::global()->bounded(25);
-  //int toilet = 40 + QRandomGenerator::global()->bounded(25);
-  int toilet = 100;
+  int toilet = 40 + QRandomGenerator::global()->bounded(25);
   int hygiene = 100;
   int social = 40 + QRandomGenerator::global()->bounded(25);
   int fun = 40 + QRandomGenerator::global()->bounded(25);
