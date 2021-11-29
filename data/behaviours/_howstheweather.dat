@@ -15,7 +15,7 @@ if weather = 4 say "There's lots of clouds...",
 if weather = 9 say "We might get a drop or two...",
 if weather = 10 say "It looks like quite a bit of rain...",
 if weather = 11 say "Thor is on the loose...",
-if weather = 13 say { "It's time to built a snowman...",var conclusion += 1 },
+if weather = 13 { say "It's time to built a snowman...",var conclusion += 1 },
 if weather = 50 say "It's misty..."
 
 5;1200;0;0;;stat social += 4,if temp < 0 { say "...freezingly cold...",goto celsius },
