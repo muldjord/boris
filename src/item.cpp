@@ -521,12 +521,9 @@ void Item::interact(Boris *boris)
   
   borisHyper = boris->getHyper();
 
-  boris->move(pos().x() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * settings.sizeFactor * -1),
-              pos().y() - (size / 2.0) + (1 * settings.sizeFactor) + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * settings.sizeFactor * -1));
-  /*
-  move(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * (size / 32),
-       boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * (size / 32));
-  */
+  move(boris->pos().x() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * settings.sizeFactor), boris->pos().y() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * settings.sizeFactor) + (size * 0.5));
+  //boris->move(pos().x() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * settings.sizeFactor * -1), pos().y() - (size / 2.0) + (1 * settings.sizeFactor) + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * settings.sizeFactor * -1));
+
   if(settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel().isEmpty()) {
     destroy();
     return;
