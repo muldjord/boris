@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Zlib
 /*
  * TINYEXPR - Tiny recursive descent parser and evaluation engine in C
  *
@@ -149,6 +150,11 @@ static double ncr(double n, double r) {
     return result;
 }
 static double npr(double n, double r) {return ncr(n, r) * fac(r);}
+
+#ifdef _MSC_VER
+#pragma function (ceil)
+#pragma function (floor)
+#endif
 
 static const te_variable functions[] = {
     /* must be in alphabetical order */

@@ -60,6 +60,8 @@ $ ./Boris
 * Added 'tennisball' item
 * Changed visual stat layout to make it less confusing
 * Added 'banana' item
+* Fixed mouse scriptVars
+
 
 #### Version 3.5.0 (17th April 2021):
 * A LOT of code refactoring and optimizations

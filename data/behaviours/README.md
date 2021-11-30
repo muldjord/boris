@@ -424,19 +424,19 @@ The following variables are reserved and hardcoded. You should not try to set th
 * fun: Boris' current fun level (0-100, 100 means Boris has been having a lot of fun)
 * hygiene: Boris' current hygiene level (0-100, 100 means he's clean)
 * queue: Tells how many behaviours are currently in behaviour queue. This is useful for creating breaking points in long behaviours if a new behaviour is waiting activation
-* mxvel: The velocity of the mouse on the y axis during the last 30 ms
-* myvel: The velocity of the mouse on the x axis during the last 30 ms
 * xvel: The velocity of the item on the y axis during the last 30 ms
 ** This variable can be set with `var xvel = n` to put the item in motion
 * yvel: The velocity of the item on the x axis during the last 30 ms
 ** This variable can be set with `var yvel = n` to put the item in motion
 * borisx: Current Boris x center coordinate
 * borisy: Current Boris y center coordinate
-* mousex: Current mouse pointer x coordinate
-* mousey: Current mouse pointer x coordinate
+* mx: Current mouse pointer x coordinate
+* my: Current mouse pointer x coordinate
+* mxvel: The velocity of the mouse on the y axis during the last 30 ms
+* myvel: The velocity of the mouse on the x axis during the last 30 ms
 * mdist: The current pixel distance from Boris to the mouse cursor
-* bsize: The current size of Boris in pixels
 * msec: The direction sector the mouse is within relative to Boris. Sectors are 0-7 clockwise where 0 is north. 1 is northeast and so on.
+* bsize: The current size of Boris in pixels
 * fsec: The direction sector a close Boris friend is located at relative to Boris. If no Boris is close by it will be -1. Otherwise sectors are 0-7 clockwise where 0 is north. 1 is northeast and so on.
 * day: The day (1-31)
 * month: The month (1-12)

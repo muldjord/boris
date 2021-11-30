@@ -168,8 +168,10 @@ void Item::runScript(int &stop, const bool &init)
 {
   // Update current stat variables for scripting use
   QPoint p = QCursor::pos();
-  scriptVars["mousex"] = p.x();
-  scriptVars["mousey"] = p.y();
+  scriptVars["mx"] = p.x();
+  scriptVars["my"] = p.y();
+  scriptVars["mxvel"] = mouseHVel;
+  scriptVars["myvel"] = mouseVVel;
   scriptVars["mdist"] = getDistance(QCursor::pos());
   scriptVars["msec"] = getSector(QCursor::pos());
   QDate date = QDate::currentDate();

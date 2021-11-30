@@ -290,9 +290,7 @@ void ScriptHandler::handleStat(QList<QString> &parameters)
 void ScriptHandler::handlePrint(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'print'
-  if(settings.scriptOutput) {
-    printf("%d\n", getValue(parameters));
-  }
+  printf("%d\n", getValue(parameters));
 }
 
 void ScriptHandler::handleSpawn(QList<QString> &parameters)

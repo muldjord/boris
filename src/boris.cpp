@@ -43,7 +43,6 @@
 #include <QRandomGenerator>
 
 constexpr int STATTIMER = 200;
-constexpr double PI = 3.1415927;
 constexpr int ANNOYMAX = 42;
 
 extern SoundMixer soundMixer;
@@ -147,7 +146,7 @@ Boris::Boris(Settings &settings) : settings(settings)
   connect(&statQueueTimer, &QTimer::timeout, this, &Boris::statQueueProgress);
   statQueueTimer.start();
   
-  interactionsTimer.setInterval(2000);
+  interactionsTimer.setInterval(1000);
   interactionsTimer.setSingleShot(true);
   connect(&interactionsTimer, &QTimer::timeout, this, &Boris::checkInteractions);
   interactionsTimer.start();
@@ -420,13 +419,13 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["social"] = stats->getSocial();
   scriptVars["fun"] = stats->getFun();
   scriptVars["hygiene"] = stats->getHygiene();
-  scriptVars["xvel"] = mouseHVel;
-  scriptVars["yvel"] = mouseVVel;
   scriptVars["borisx"] = pos().x() + (size / 2);
   scriptVars["borisy"] = pos().y() + size;
   QPoint p = QCursor::pos();
-  scriptVars["mousex"] = p.x();
-  scriptVars["mousey"] = p.y();
+  scriptVars["mx"] = p.x();
+  scriptVars["my"] = p.y();
+  scriptVars["mxvel"] = mouseHVel;
+  scriptVars["myvel"] = mouseVVel;
   scriptVars["mdist"] = getDistance(QCursor::pos());
   scriptVars["msec"] = getSector(QCursor::pos());
   if(borisFriend != nullptr) {
@@ -805,14 +804,14 @@ void Boris::handlePhysics()
       shadowSprite->show();
     }
   }
-  mouseHVel = (QCursor::pos().x() - oldCursor.x()) / 4.0;
-  mouseVVel = (QCursor::pos().y() - oldCursor.y()) / 4.0;
+  mouseHVel = (QCursor::pos().x() - oldCursor.x()) * 0.25; // 0.25 is just an abstract factor that relates well to the 30 fps physics
+  mouseVVel = (QCursor::pos().y() - oldCursor.y()) * 0.25;
   oldCursor = QCursor::pos();
 
   if(!falling && !grabbed) {
     if(getDistance(QCursor::pos()) < size * 3) {
       if(!mouseHovering) {
-        interactions++;
+        interactions += 2; // Should be 2 due to checkInteractions now run every 1 second instead of 2
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
           if(fabs(mouseHVel) > 35.0 || fabs(mouseVVel) > 35.0) {
             changeBehaviour("_flee");
@@ -1369,7 +1368,7 @@ void Boris::checkInteractions()
   if(annoyance > ANNOYMAX) {
     annoyance = ANNOYMAX;
   }
-  annoyance = annoyance - 4;
+  annoyance = annoyance - 2;
   if(annoyance < 0) {
     annoyance = 0;
   }
@@ -1414,7 +1413,7 @@ void Boris::itemInteract(Item * item)
   } else if(item->grabbed) {
     bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "I don't know what to do with that.", "_thought");
   }
-  enableInteractTimer.setInterval(10000);
+  enableInteractTimer.setInterval(5000);
   enableInteractTimer.start();
 }
 
