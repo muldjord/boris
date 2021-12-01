@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Boris
+Exec=/home/muldjord/programming/boris/Boris
+Path=/home/muldjord/programming/boris
+StartupNotify=true
+Terminal=false
+Type=Application
+Icon=/home/muldjord/programming/boris/icons/icon.png
+Categories=Graphics;
