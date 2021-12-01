@@ -1346,7 +1346,7 @@ void Boris::checkInteractions()
   for(auto &item: settings.itemList) {
     if(interact && !falling && !grabbed && !settings.behaviours.at(curBehav).doNotDisturb &&
        (!item->ignore || item->grabbed) &&
-       getDistance(item->getGlobalCenter()) < (size / 2.0)) {
+       getDistance(item->getGlobalCenter()) < (size * 0.75)) {
       itemInteract(item);
       break;
     }
