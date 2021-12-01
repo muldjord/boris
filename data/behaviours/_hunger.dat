@@ -4,7 +4,10 @@ allowFlip
 0;75;0;0;;
 1;75;0;0;;
 2;75;0;0;;
-3;75;0;0;;think "Oh boy, I'm feeling hungry..."
+3;75;0;0;;var thought = @3,
+if thought = 1 think "Oh boy, I'm feeling hungry...",
+if thought = 2 think "I could eat a horse...",
+if thought = 3 think "I'm starving..."
 4;75;0;0;;
 5;75;0;0;;
 6;100;0;0;hunger.wav;

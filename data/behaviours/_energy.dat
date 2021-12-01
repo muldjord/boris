@@ -4,7 +4,10 @@ allowFlip
 0;75;0;0;;
 1;75;0;0;;
 2;75;0;0;energy.wav;
-3;75;0;0;;think "I'm feeling drowsy..."
+3;75;0;0;;var thought = @3,
+if thought = 1 think "I'm feeling drowsy...",
+if thought = 2 think "Boy, am I tired...",
+if thought = 3 think "I could use some shut-eye..."
 4;75;0;0;;
 5;75;0;0;;
 6;100;0;0;;
