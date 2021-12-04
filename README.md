@@ -47,7 +47,7 @@ $ ./Boris
 * Make it so Boris only interacts with items he is interested in (those that match his current needs)
 * Make a 'candycane' item for Boris to eat. It should be 'energy' category. He will get a significant energy boost and get very hyper
 
-#### Version 3.6.0 (In progress, unreleased):
+#### Version 3.6.0 (4th December 2021):
 * Reversed coin concept. You now buy items instead of behaviours
 * About text adjusted to reflect changes in coin system
 * Boris will now kick the football
@@ -61,7 +61,8 @@ $ ./Boris
 * Changed visual stat layout to make it less confusing
 * Added 'banana' item
 * Fixed mouse scriptVars
-
+* Various bugfixes
+* Improved the graphics for a number of behaviours
 
 #### Version 3.5.0 (17th April 2021):
 * A LOT of code refactoring and optimizations
