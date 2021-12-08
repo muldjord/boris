@@ -1,7 +1,7 @@
 # Boris
 A scriptable desktop screenmate written in Qt (for graphics) and SFML (for sound). Boris will keep you company while you work. He has a bit of a prankster personality and needs to be cared for in order to stay alive. Move your mouse over him to check on his health stats.
 
-* All behaviours are fully scriptable using [BorisScript](https://github.com/muldjord/boris/blob/master/data/behavs/README.md)
+* All behaviours are fully scriptable using [BorisScript](data/behaviours/README.md)
 * Supports weather visualization using the OpenWeatherMap API
 * Supports RSS feed speech bubbles using custom RSS feeds
 
