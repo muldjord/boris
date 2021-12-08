@@ -21,7 +21,6 @@ The line `#Frames` must be there so the software knows when the frame definition
 * title=STRING: The title used by the behaviour. This is the title shown in the system tray menus.
 
 #### Options specific to Boris behaviours
-* coins=INTEGER: The price in Boris coins it costs to unlock this behaviour. If undefined, it defaults to 10c.
 * category=STRING: The category this behaviour is categorically categorized into:
   * Health: Used for behaviours that heal Boris. He will not choose these on his own
   * Energy: Boris will choose from this category when he is low on energy / sleepy
