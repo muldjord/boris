@@ -14,9 +14,7 @@ var notes += @4,
 var notes += notes % 2,
 var quicks = 2,
 var quicks += @2,
-var quicks += quicks % 2,
-print notes,
-print quicks
+var quicks += quicks % 2
 
 define noteprogress:var song -= 1,
 var notes -= 1,
