@@ -9,7 +9,7 @@ doNotDisturb
 0;1000;0;0;;stop
 
 0;3600;0;0;;label kickballw
-0;50;0;0;kick.wav;var xvel = -5 - energy / 10,var yvel = -2 - energy / 15,stop
+0;50;0;0;kick.wav;var xvel = (@2 + 5 + (energy / 10)) * -1,var yvel = (@2 + 1 + (energy / 15)) * -1,stop
 
 0;3600;0;0;;label kickballe
-0;50;0;0;kick.wav;var xvel = 5 + energy / 10,var yvel = -2 - energy / 15,stop
+0;50;0;0;kick.wav;var xvel = @2 + 5 + (energy / 10),var yvel = (@2 + 1 + (energy / 15)) * -1,stop
