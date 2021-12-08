@@ -53,7 +53,7 @@ The line `#Frames` must be there so the software knows when the frame definition
 
 #### Flags specific to Boris behaviours
 * oneShot: This behaviour will be played from start to finish and then switch to a new behaviour. If this isn't defined it will simply loop to the beginning when it reaches the end of the behaviour frames
-* doNotDisturb: If this exists, Boris will not be disturbed by the mouse or other Borises while this behaviour is in progress
+* doNotDisturb: If this is defined Boris will not be disturbed by the mouse or other Borises while this behaviour is in progress
 
 #### Flags specific to item behaviours
 * noIgnore: By default all items will be ignored by Boris for 60 seconds after it spawns to avoid him interacting with it right away. This flag disables that ignore period and makes it immediately active.
