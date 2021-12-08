@@ -52,7 +52,7 @@ The line `#Frames` must be there so the software knows when the frame definition
 * pitchLock: Disable the minute pitch randomness otherwise used when playing sounds from this behaviour
 
 #### Flags specific to Boris behaviours
-* oneShot: This behaviour will be played from start to finish and then switch to a new behaviour
+* oneShot: This behaviour will be played from start to finish and then switch to a new behaviour. If this isn't defined it will simply loop to the beginning when it reaches the end of the behaviour frames
 * doNotDisturb: If this exists, Boris will not be disturbed by the mouse or other Borises while this behaviour is in progress
 
 #### Flags specific to item behaviours
