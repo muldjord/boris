@@ -42,6 +42,7 @@ The line `#Frames` must be there so the software knows when the frame definition
 * hygiene=INTEGER: The amount of Boris' filth level this behaviour will increase or decrease when starting the behaviour
 
 #### Options specific to item behaviours
+* coins=PRICE: The amount of coins this item costs to unlock before it can be used.
 * reaction=REACTION,LABEL,XCOORD,YCOORD;...: Each REACTION,LABEL,COORDINATE set specifies a Boris behaviour to initiate, what label to goto inside this item when it is initiated, and where to move the item relative to Boris when it is initiated.
 * weight=INTEGER: Set the weight of the item. Value can be from 0-10. 0 means floating. 10 means really heavy.
 * bounce=INTEGER: Sets the bounce factor of the object. Value can be from 0-10. 0 means no bounce. 10 means bounce forever.
