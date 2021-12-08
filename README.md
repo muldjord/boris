@@ -23,7 +23,7 @@ Copyright 2021 Lars Muldjord. This program is distributed under the terms of the
 Boris requires Qt 5.10 or later. Install all prerequisites with the following commands:
 ```
 $ sudo apt update
-$ sudo apt install build-essential qtbase5-dev qtmultimedia5-dev libsfml-dev
+$ sudo apt install build-essential qt5-default qtmultimedia5-dev libsfml-dev
 ```
 
 ### Build commands
