@@ -261,12 +261,12 @@ call mainblock
 This will replace the call with the code from the define and run it. Very useful if you have the same piece of code several times throughout. Then just create a single define for the block instead and call it.
 
 ##### sound
-Plays a sound from the sound effect folder.
+Plays a sound from the sound effect folder (usually data/sounds/).
 * Definition:
 `sound FILENAME`
 * Example:
 ```
-sound data/sounds/soundfile.wav
+sound soundfile.wav
 ```
 Keep in mind that this command DOES NOT allow spaces in the filename. So a file called `sound file.wav` will not work. Rename it to `soundfile.wav` instead. Filename and path is relative to the 'data/sounds' path (eg. 'data/sounds/soundfile.wav' should be typed in as simply 'soundfile.wav').
 
