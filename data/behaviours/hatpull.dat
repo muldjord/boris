@@ -21,17 +21,29 @@ allowFlip
 12;75;0;0;;
 13;75;0;0;;
 14;75;0;0;;
-15;75;0;0;;
-16;750;0;0;;
+15;75;0;0;;var loops = @4 + 2,if @2 = 1 goto rtom else goto rtol
+
+16;750;0;0;;label rtol,var loops -= 1
 17;125;0;0;;
-18;950;0;0;;
+18;950;0;0;;if loops <= 0 goto endloop,if @2 = 1 goto ltom else goto ltor
+
+16;750;0;0;;label rtom,var loops -= 1
+17;700;0;0;;if loops <= 0 goto endloop,if @2 = 1 goto mtor else goto mtol
+
+17;750;0;0;;label mtor,var loops -= 1
+16;950;0;0;;if loops <= 0 goto endloop,if @2 = 1 goto rtom else goto rtol
+
+17;750;0;0;;label mtol,var loops -= 1
+18;950;0;0;;if loops <= 0 goto endloop,if @2 = 1 goto ltom else goto ltor
+
+18;750;0;0;;label ltor,var loops -= 1
 17;125;0;0;;
-16;1100;0;0;;
-17;125;0;0;;
-18;750;0;0;;
-17;125;0;0;;
-16;950;0;0;;
-15;75;0;0;;
+16;950;0;0;;if loops <= 0 goto endloop,if @2 = 1 goto rtom else goto rtol
+
+18;750;0;0;;label ltom,var loops -= 1
+17;950;0;0;;if loops <= 0 goto endloop,if @2 = 1 goto mtor else goto mtol
+
+15;75;0;0;;label endloop
 14;75;0;0;;
 13;75;0;0;;
 12;75;0;0;;
