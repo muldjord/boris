@@ -1,0 +1,75 @@
+title=Play 'MazeGame'
+category=Fun
+energy=-3
+hunger=1
+social=-8
+hygiene=-3
+oneShot
+doNotDisturb
+
+define init:var lvl = 0
+
+define moveup:if pixel nx ny = 12 var dir = 3
+define moveright:if pixel nx ny = 12 var dir = 4
+define movedown:if pixel nx ny = 12 var dir = 1
+define moveleft:if pixel nx ny = 12 var dir = 2
+
+define moveboris:if pixel nx ny = 4 pellets -= 1,
+print bx,
+print by,
+print nx,
+print ny,
+print pixel nx ny,
+if pixel nx ny = 12 call changedir else {draw black pixel nx ny,bx = nx,by = ny}
+
+define changedir:var dir = @4
+
+#Frames
+0;75;0;0;;
+1;75;0;0;;
+2;75;0;0;;
+3;75;0;0;;
+4;75;0;0;;
+5;75;0;0;;
+6;75;0;0;;
+7;75;0;0;;
+8;75;0;0;;
+9;2000;0;0;game_boot.wav;
+
+10;2000;0;0;;label nextround,
+draw end,
+draw begin,
+draw sprite mazegame lvl 17 4,
+var lvl += 1,
+var dir = @4,
+var bx = 23,
+var by = 7,
+var pellets = 8,
+var time = 130
+
+10;75;0;0;;label gameloop,
+draw yellow pixel bx by,
+if dir = 1 {var nx = bx,var ny = by - 1,call moveup} else if dir = 2 {var nx = bx + 1,var ny = by,call moveright} else if dir = 3 {var nx = bx,var ny = by + 1,call movedown} else if dir = 4 {var nx = bx - 1,var ny = by,call moveleft}
+
+10;5;0;0;;draw black pixel bx by,
+var bx = nx,
+var by = ny,
+if pellets = 0 goto winround,
+if time = 0 goto looseround,
+goto gameloop
+
+10;500;0;0;game_win.wav;label winround,sound win2.wav,stat fun += 6,var level += 1,if level <= 9 goto nextround else goto wingame
+
+11;500;0;0;game_loose.wav;label looseround,sound grumpy2.wav,stat fun -= 2,var lives -= 1,if lives < 0 goto gameover else goto nextround
+
+12;3000;0;0;;label gameover,goto end
+13;3000;0;0;;label wingame
+8;75;0;0;;label end
+7;75;0;0;;
+6;75;0;0;;
+5;75;0;0;;
+4;75;0;0;;
+3;75;0;0;;
+2;75;0;0;;
+1;75;0;0;;
+0;75;0;0;;
