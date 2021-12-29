@@ -660,14 +660,65 @@ int ScriptHandler::getValue(QList<QString> &parameters)
     parameters.first().toInt(&isInt);
     if(isInt ||
        parameters.first().left(1) == "@" ||
-       scriptVars.contains(parameters.first())) {
+       scriptVars.contains(parameters.first()) ||
+       parameters.first() == "pixel") {
       if(parameters.first().left(1) == "@") {
-        parameters.first() = QString::number(QRandomGenerator::global()->bounded(parameters.first().mid(1).toInt()) + 1);
+        code.append(startPars +
+                    QString::number(QRandomGenerator::global()->bounded(parameters.first().mid(1).toInt()) + 1) +
+                    endPars);
+        parameters.removeFirst();
       } else if(scriptVars.contains(parameters.first())) {
-        parameters.first() = QString::number(scriptVars[parameters.first()]);
+        code.append(startPars + QString::number(scriptVars[parameters.first()]) + endPars);
+        parameters.removeFirst();
+      } else if(parameters.first() == "pixel" && parameters.length() >= 3) {
+        parameters.removeFirst();
+        QString colorValue = "0";
+        int xCoord = getValue(parameters);
+        int yCoord = getValue(parameters);
+        QColor pixelColor = image->pixelColor(xCoord, yCoord);
+        printf("Color name: '%s'\n", pixelColor.name(QColor::HexRgb).toStdString().c_str());
+        if(pixelColor.name(QColor::HexRgb) == "#000000") {
+          colorValue = "0";
+        } else if(pixelColor.name(QColor::HexRgb) == "#ffffff") {
+          colorValue = "1";
+        } else if(pixelColor.name(QColor::HexRgb) == "#00ffff") {
+          colorValue = "2";
+        } else if(pixelColor.name(QColor::HexRgb) == "#008080") {
+          colorValue = "3";
+        } else if(pixelColor.name(QColor::HexRgb) == "#ff0000") {
+          colorValue = "4";
+        } else if(pixelColor.name(QColor::HexRgb) == "#800000") {
+          colorValue = "5";
+        } else if(pixelColor.name(QColor::HexRgb) == "#ff00ff") {
+          colorValue = "6";
+        } else if(pixelColor.name(QColor::HexRgb) == "#800080") {
+          colorValue = "7";
+        } else if(pixelColor.name(QColor::HexRgb) == "#00ff00") {
+          colorValue = "8";
+        } else if(pixelColor.name(QColor::HexRgb) == "#008000") {
+          colorValue = "9";
+        } else if(pixelColor.name(QColor::HexRgb) == "#ffff00") {
+          colorValue = "10";
+        } else if(pixelColor.name(QColor::HexRgb) == "#808000") {
+          colorValue = "11";
+        } else if(pixelColor.name(QColor::HexRgb) == "#0000ff") {
+          colorValue = "12";
+        } else if(pixelColor.name(QColor::HexRgb) == "#000080") {
+          colorValue = "13";
+        } else if(pixelColor.name(QColor::HexRgb) == "#a0a0a4") {
+          colorValue = "14";
+        } else if(pixelColor.name(QColor::HexRgb) == "#808080") {
+          colorValue = "15";
+        } else if(pixelColor.name(QColor::HexRgb) == "#c0c0c0") {
+          colorValue = "16";
+        } else {
+          colorValue = "0";
+        }
+        code.append(startPars + colorValue + endPars);
+      } else {
+        code.append(startPars + parameters.first() + endPars);
+        parameters.removeFirst();
       }
-      code.append(startPars + parameters.first() + endPars);
-      parameters.removeFirst();
       if(parameters.count() >= 1) {
         if(parameters.first() != "+" &&
            parameters.first() != "-" &&
