@@ -166,8 +166,32 @@ this = 1
 @4 = that and 4 = @7
 that = 1 or @5 = this or @2 = 1
 ((45 - 3 * d) + 4) % 2 = 5
+pixel 10 2 = 4
 ```
 You can also combine `and` and `or` expressions but as this is a very rudimentary language I only implemented it in a very basic manner so I would strongly suggest sticking to only using `or` or `and` within one call to `if`.
+
+###### pixel
+Returns an integer corresponding to the pixel color located at the specified coordinate.
+
+* 0: Black, #000000
+* 1: White, #ffffff
+* 2: Cyan, #00ffff
+* 3: Darkcyan, #008080
+* 4: Red, #ff0000
+* 5: Darkred, #800000
+* 6: Magenta, #ff00ff
+* 7: Darkmagenta, #800080
+* 8: Green, #00ff00
+* 9: Darkgreen, #008000
+* 10: Yellow, #ffff00b
+* 11: Darkyellow, #808000
+* 12: Blue, #0000ff
+* 13: Darkblue, #000080
+* 14: Grey / gray, #a0a0a4
+* 15: Darkgrey / darkgray, #808080
+* 16: Lightgrey / lightgray, #c0c0c0
+
+ONLY these colors can be returned. If the pixel has any other color it will return 0.
 
 ###### Scoped if's
 For advanced scripting it is also possible to scope the if sentence like so:
@@ -309,6 +333,7 @@ Most drawing commands consist of the color, then the type and lastly the paramet
 
 ###### Colors
 Drawing on Boris have hardcoded colors. These are specified as below:
+* black
 * white
 * cyan
 * darkcyan
@@ -381,6 +406,26 @@ draw sprite test 0 8 4
 This will draw frame 0 from the sprite `test` at the coordinates 8, 4. All sprites are loaded from the `data/sprites` folder. The sprite names are the basename of the files contained within that folder (only lower case letters allowed and spaces *not* allowed). Each frame is cut from horizontal sprite sheets separated by the *exact* color R:255, G:0, B:0(known as magenta). See the example sprites in the folder.
 
 NOTE! The 'draw sprite' command is very useful if you want to have different facial expressions for Boris within a single behaviour. Then you can simply have the base Boris frame in the behaviour, and use sprites to apply different facial expressions to that same base frame.
+
+###### value
+* Definition:
+`draw COLOR value x y VARIABLE or VALUE`
+* Example:
+```
+draw yellow value 2 2 somevariable
+draw red value 2 2 42
+```
+The first example will draw the value of the `somevariable` variable at 2, 2 using a yellow color. The second example will draw the value `42` at 2, 2 using a red color.
+
+###### Additive drawing
+Per default all drawing routines are performed on the current frame sprite and cleared when moving on to the next. By using additive drawing you can begin drawing on one frame, then draw more stuff on subsequent frames, and end the drawing routine on a frame later on. It is only after the drawing routine has been ended it will be cleared upon moving on to the next frame.
+* Example:
+```
+10;75;0;0;;draw begin,draw red point 5 6
+11;75;0;0;;draw blue line 3 5 8 7
+12;75;0;0;;draw yellow ellipse 3 4 5 5
+15;75;0;0;;draw end
+```
 
 ###### value
 * Definition:
