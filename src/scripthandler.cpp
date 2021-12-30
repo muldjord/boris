@@ -88,6 +88,8 @@ void ScriptHandler::runCommand(QList<QString> &parameters, int &stop, const Scri
     handleSpawn(parameters);
   } else if(parameters.first() == "draw") {
     handleDraw(parameters);
+  } else if(parameters.first() == "return") {
+    handleReturn(parameters);
   } else if(parameters.first() == "break") {
     handleBreak(stop);
   } else if(parameters.first() == "stop") {
@@ -342,7 +344,9 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
         if(settings.scriptOutput) {
           printf("Drawing frame %d from sprite '%s' at %d,%d\n", f, sprite.toStdString().c_str(), x, y);
         }
-        painter.drawImage(x, y, settings.sprites[sprite].at(f));
+        if(settings.sprites[sprite].length() - 1 >= f) {
+          painter.drawImage(x, y, settings.sprites[sprite].at(f));
+        }
       }        
       return;
     }
@@ -500,6 +504,11 @@ void ScriptHandler::drawText(QPainter &painter, const int &x, const int &y, cons
     painter.drawImage(idx, y, charImage);
     idx += charImage.width();
   }
+}
+
+void ScriptHandler::handleReturn(QList<QString> &parameters)
+{
+  parameters.clear(); // Remove all remaining instructions
 }
 
 void ScriptHandler::handleBreak(int &stop)
@@ -676,7 +685,6 @@ int ScriptHandler::getValue(QList<QString> &parameters)
         int xCoord = getValue(parameters);
         int yCoord = getValue(parameters);
         QColor pixelColor = image->pixelColor(xCoord, yCoord);
-        printf("Color name: '%s'\n", pixelColor.name(QColor::HexRgb).toStdString().c_str());
         if(pixelColor.name(QColor::HexRgb) == "#000000") {
           colorValue = "0";
         } else if(pixelColor.name(QColor::HexRgb) == "#ffffff") {
