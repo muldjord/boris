@@ -247,6 +247,15 @@ if a = 0 break
 break
 ```
 
+##### return
+Returns from the current script, thus skipping all remaining code in the frame or define.
+* Definition:
+`return`
+* Example:
+```
+if a = 0 return,var notbeingsetaswehavealreadyreturned = 42
+```
+
 ##### stop
 Similar to 'break' but doesn't change the behaviour. It simply stops the frame timer so all progression within the current behaviour is stalled completely. This is useful for behaviours that have a last frame you wish to stop at and stay there.
 * Definition:
