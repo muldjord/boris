@@ -1,6 +1,6 @@
 title=C64
 category=Fun
-reaction=pong;invaders;speed_race
+reaction=pong;invaders;speed_race;mazegame
 weight=7
 bounce=2
 #Frames
