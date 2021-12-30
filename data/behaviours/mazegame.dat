@@ -7,26 +7,37 @@ hygiene=-3
 oneShot
 doNotDisturb
 
-define init:var lvl = 0
+define moveup:if pixel nx ny = 12 {var dir = 3,var move = 0,return},
+if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,return},
+var checkleft = nx - 1,
+var checkright = nx + 1,
+if pixel checkleft ny != 12 {if @2 = 1 var dir = 4,sound game_move.wav},
+if pixel checkright ny != 12 {if @2 = 1 var dir = 2,sound game_move.wav}
 
-define moveup:if pixel nx ny = 12 var dir = 3
-define moveright:if pixel nx ny = 12 var dir = 4
-define movedown:if pixel nx ny = 12 var dir = 1
-define moveleft:if pixel nx ny = 12 var dir = 2
+define moveright:if pixel nx ny = 12 {var dir = 4,var move = 0,return},
+if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,return},
+var checkup = ny - 1,
+var checkdown = ny + 1,
+if pixel nx checkup != 12 {if @2 = 1 var dir = 1,sound game_move.wav},
+if pixel nx checkdown != 12 {if @2 = 1 var dir = 3,sound game_move.wav}
 
-define moveboris:if pixel nx ny = 4 pellets -= 1,
-print bx,
-print by,
-print nx,
-print ny,
-print pixel nx ny,
-if pixel nx ny = 12 call changedir else {draw black pixel nx ny,bx = nx,by = ny}
+define movedown:if pixel nx ny = 12 {var dir = 1,var move = 0,return},
+if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,return},
+var checkleft = nx - 1,
+var checkright = nx + 1,
+if pixel checkleft ny != 12 {if @2 = 1 var dir = 4,sound game_move.wav},
+if pixel checkright ny != 12 {if @2 = 1 var dir = 2,sound game_move.wav}
 
-define changedir:var dir = @4
+define moveleft:if pixel nx ny = 12 {var dir = 2,var move = 0,return},
+if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,return},
+var checkup = ny - 1,
+var checkdown = ny + 1,
+if pixel nx checkup != 12 {if @2 = 1 var dir = 1,sound game_move.wav},
+if pixel nx checkdown != 12 {if @2 = 1 var dir = 3,sound game_move.wav}
 
 #Frames
-0;75;0;0;;
-1;75;0;0;;
+0;75;0;0;;var level = 1
+1;75;0;0;;var lives = 3
 2;75;0;0;;
 3;75;0;0;;
 4;75;0;0;;
@@ -34,33 +45,43 @@ define changedir:var dir = @4
 6;75;0;0;;
 7;75;0;0;;
 8;75;0;0;;
-9;2000;0;0;game_boot.wav;
+9;1000;0;0;game_boot.wav;
+14;2000;0;0;;
 
 10;2000;0;0;;label nextround,
-draw end,
-draw begin,
-draw sprite mazegame lvl 17 4,
-var lvl += 1,
+draw red text 18 4 lvl,
+draw red value 26 4 level,
+if lives >= 1 draw yellow rectangle 19 11 1 1,
+if lives >= 2 draw yellow rectangle 22 11 1 1,
+if lives >= 3 draw yellow rectangle 25 11 1 1,
 var dir = @4,
 var bx = 23,
 var by = 7,
-var pellets = 8,
-var time = 130
+var pellets = 0,
+var time = 240
 
-10;75;0;0;;label gameloop,
+10;500;0;0;;draw begin,
+var sprlvl = level - 1,
+draw sprite mazegame sprlvl 17 4
+
+10;50;0;0;;label gameloop,
+var move = 1,
 draw yellow pixel bx by,
+var pixeltime = 17 + (time / 20),
+if time > 175 draw green line 17 12 pixeltime 12 else if time > 100 draw yellow line 17 12 pixeltime 12 else if time <= 100 draw red line 17 12 pixeltime 12,
+var time -= 1,
 if dir = 1 {var nx = bx,var ny = by - 1,call moveup} else if dir = 2 {var nx = bx + 1,var ny = by,call moveright} else if dir = 3 {var nx = bx,var ny = by + 1,call movedown} else if dir = 4 {var nx = bx - 1,var ny = by,call moveleft}
 
-10;5;0;0;;draw black pixel bx by,
-var bx = nx,
-var by = ny,
-if pellets = 0 goto winround,
-if time = 0 goto looseround,
+10;0;0;0;;draw black pixel bx by,
+draw black line 17 12 29 12,
+if move = 1 {var bx = nx,var by = ny},
+if pellets = 8 {draw end,goto winround},
+if time = 0 {draw end,goto looseround},
 goto gameloop
 
-10;500;0;0;game_win.wav;label winround,sound win2.wav,stat fun += 6,var level += 1,if level <= 9 goto nextround else goto wingame
+15;1000;0;0;game_win.wav;label winround,sound win2.wav,stat fun += 10,var level += 1,if level < 6 goto nextround else goto wingame
 
-11;500;0;0;game_loose.wav;label looseround,sound grumpy2.wav,stat fun -= 2,var lives -= 1,if lives < 0 goto gameover else goto nextround
+16;1000;0;0;game_loose.wav;label looseround,sound grumpy2.wav,stat fun -= 2,var lives -= 1,if lives < 0 goto gameover else goto nextround
 
 12;3000;0;0;;label gameover,goto end
 13;3000;0;0;;label wingame
