@@ -248,6 +248,8 @@ break
 ```
 
 ##### return
+THIS IS CURRENTLY BROKEN! Don't use!!!
+
 Returns from the current script, thus skipping all remaining code in the frame or define.
 * Definition:
 `return`
