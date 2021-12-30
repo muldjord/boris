@@ -81,7 +81,7 @@ goto gameloop
 
 15;1000;0;0;game_win.wav;label winround,sound win2.wav,stat fun += 10,var level += 1,if level < 6 goto nextround else goto wingame
 
-16;1000;0;0;game_loose.wav;label looseround,sound grumpy2.wav,stat fun -= 2,var lives -= 1,if lives < 0 goto gameover else goto nextround
+16;1000;0;0;game_loose.wav;label looseround,sound grumpy2.wav,stat fun -= 2,var lives -= 1,if lives <= 0 goto gameover else goto nextround
 
 12;3000;0;0;;label gameover,goto end
 13;3000;0;0;;label wingame

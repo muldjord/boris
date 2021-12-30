@@ -612,12 +612,12 @@ void Boris::timerEvent(QTimerEvent *)
   }
 
   int frameTime = settings.behaviours.at(curBehav).frames.at(curFrame).time;
-  frameTime -= (frameTime / 100.0 * stats->getHyper());
-  /*
-  if(frameTime <= 5) {
-    frameTime = 5;
+  if(frameTime != 0) { // Allow frameTime at 0 if it is specifically set in the script frame. This is to allow 'invisible' frames, such as used in 'mazegame'
+    frameTime -= (frameTime / 100.0 * stats->getHyper());
+    if(frameTime <= 5) {
+      frameTime = 5;
+    }
   }
-  */
 
   int stop = 0; // Will be > 0 if a goto, behav or break command is run
   runScript(stop);
