@@ -237,6 +237,15 @@ print this
 print that
 ```
 
+##### return
+Stops processing the script on the current frame and advances to the next frame.
+* Definition:
+`return`
+* Example:
+```
+if a = 0 return,var notbeingsetaswehavealreadyreturned = 42
+```
+
 ##### break
 Forces the behaviour to exit entirely and change to the next behaviour. Can be used by itself or in if sentences.
 * Definition:
@@ -247,19 +256,8 @@ if a = 0 break
 break
 ```
 
-##### return
-THIS IS CURRENTLY BROKEN! Don't use!!!
-
-Returns from the current script, thus skipping all remaining code in the frame or define.
-* Definition:
-`return`
-* Example:
-```
-if a = 0 return,var notbeingsetaswehavealreadyreturned = 42
-```
-
 ##### stop
-Similar to 'break' but doesn't change the behaviour. It simply stops the frame timer so all progression within the current behaviour is stalled completely. This is useful for behaviours that have a last frame you wish to stop at and stay there.
+Similar to 'break' but doesn't change the behaviour. It simply stops the frame timer so all progression within the current behaviour is stalled completely. This is useful for behaviours that don't use the "oneShot" where you have a last frame you wish to stop at and stay there until it changes to the next behaviour.
 * Definition:
 `stop`
 * Example:
