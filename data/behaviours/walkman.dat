@@ -27,7 +27,7 @@ pitchLock
 20;75;0;0;;
 21;75;0;0;;
 22;75;0;0;;
-23;75;0;0;;var loops = 19,if @2 = 1 sound zamzara-charles_deenen.wav else sound commando-rob_hubbard.wav
+23;75;0;0;;var loops = 19,if @2 = 1 {think "Love this song! Zamzara by Charles Deenen",sound zamzara-charles_deenen.wav} else {think "One of my faves! Commando by Rob Hubbard",sound commando-rob_hubbard.wav}
 
 24;75;0;0;;var rand = @6,if rand = 1 goto open1,if rand = 2 goto open2,if rand = 3 goto open3,if rand = 4 goto closed1,if rand = 5 goto closed2,if rand = 6 goto closed3
 
