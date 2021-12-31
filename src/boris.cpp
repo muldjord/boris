@@ -624,6 +624,7 @@ void Boris::timerEvent(QTimerEvent *)
   if(stop == 1) {
     // In case of 'goto' curFrame has been set in scriptHandler
     // In case of 'behav' behavFromFile has been emitted
+    // In case of 'return' will simply advance to the next frame
   } else if(stop == 2) {
     // In case of 'break' it will change to the next behaviour when the frame times out
     stopNextBehaviour = true;

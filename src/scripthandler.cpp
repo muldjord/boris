@@ -89,7 +89,7 @@ void ScriptHandler::runCommand(QList<QString> &parameters, int &stop, const Scri
   } else if(parameters.first() == "draw") {
     handleDraw(parameters);
   } else if(parameters.first() == "return") {
-    handleReturn(parameters);
+    handleReturn(stop);
   } else if(parameters.first() == "break") {
     handleBreak(stop);
   } else if(parameters.first() == "stop") {
@@ -506,9 +506,9 @@ void ScriptHandler::drawText(QPainter &painter, const int &x, const int &y, cons
   }
 }
 
-void ScriptHandler::handleReturn(QList<QString> &parameters)
+void ScriptHandler::handleReturn(int &stop)
 {
-  parameters.clear(); // Remove all remaining instructions
+  stop = 1; // Will stop processing script on current frame and advance to next frame
 }
 
 void ScriptHandler::handleBreak(int &stop)

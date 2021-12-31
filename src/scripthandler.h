@@ -83,7 +83,7 @@ private:
   void handlePrint(QList<QString> &parameters);
   void handleSpawn(QList<QString> &parameters);
   void handleDraw(QList<QString> &parameters);
-  void handleReturn(QList<QString> &parameters);
+  void handleReturn(int &stop);
   void handleBreak(int &stop);
   void handleStop(int &stop);
   void handleBehav(QList<QString> &parameters, int &stop);
