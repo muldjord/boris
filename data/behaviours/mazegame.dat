@@ -7,29 +7,29 @@ hygiene=-3
 oneShot
 doNotDisturb
 
-define moveup:if pixel nx ny = 12 {var dir = 3,var move = 0,return},
-if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,return},
+define moveup:if pixel nx ny = 12 {var dir = 3,var move = 0},
+if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav},
 var checkleft = nx - 1,
 var checkright = nx + 1,
 if pixel checkleft ny != 12 {if @2 = 1 var dir = 4,sound game_move.wav},
 if pixel checkright ny != 12 {if @2 = 1 var dir = 2,sound game_move.wav}
 
-define moveright:if pixel nx ny = 12 {var dir = 4,var move = 0,return},
-if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,return},
+define moveright:if pixel nx ny = 12 {var dir = 4,var move = 0},
+if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav},
 var checkup = ny - 1,
 var checkdown = ny + 1,
 if pixel nx checkup != 12 {if @2 = 1 var dir = 1,sound game_move.wav},
 if pixel nx checkdown != 12 {if @2 = 1 var dir = 3,sound game_move.wav}
 
-define movedown:if pixel nx ny = 12 {var dir = 1,var move = 0,return},
-if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,return},
+define movedown:if pixel nx ny = 12 {var dir = 1,var move = 0},
+if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav},
 var checkleft = nx - 1,
 var checkright = nx + 1,
 if pixel checkleft ny != 12 {if @2 = 1 var dir = 4,sound game_move.wav},
 if pixel checkright ny != 12 {if @2 = 1 var dir = 2,sound game_move.wav}
 
-define moveleft:if pixel nx ny = 12 {var dir = 2,var move = 0,return},
-if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,return},
+define moveleft:if pixel nx ny = 12 {var dir = 2,var move = 0},
+if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav},
 var checkup = ny - 1,
 var checkdown = ny + 1,
 if pixel nx checkup != 12 {if @2 = 1 var dir = 1,sound game_move.wav},
