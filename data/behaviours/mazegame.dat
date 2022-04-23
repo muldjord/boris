@@ -7,34 +7,6 @@ hygiene=-3
 oneShot
 doNotDisturb
 
-define moveup:if pixel nx ny = 12 {var dir = 3,var move = 0},
-if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav},
-var checkleft = nx - 1,
-var checkright = nx + 1,
-if pixel checkleft ny != 12 {if @2 = 1 var dir = 4,sound game_move.wav},
-if pixel checkright ny != 12 {if @2 = 1 var dir = 2,sound game_move.wav}
-
-define moveright:if pixel nx ny = 12 {var dir = 4,var move = 0},
-if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav},
-var checkup = ny - 1,
-var checkdown = ny + 1,
-if pixel nx checkup != 12 {if @2 = 1 var dir = 1,sound game_move.wav},
-if pixel nx checkdown != 12 {if @2 = 1 var dir = 3,sound game_move.wav}
-
-define movedown:if pixel nx ny = 12 {var dir = 1,var move = 0},
-if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav},
-var checkleft = nx - 1,
-var checkright = nx + 1,
-if pixel checkleft ny != 12 {if @2 = 1 var dir = 4,sound game_move.wav},
-if pixel checkright ny != 12 {if @2 = 1 var dir = 2,sound game_move.wav}
-
-define moveleft:if pixel nx ny = 12 {var dir = 2,var move = 0},
-if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav},
-var checkup = ny - 1,
-var checkdown = ny + 1,
-if pixel nx checkup != 12 {if @2 = 1 var dir = 1,sound game_move.wav},
-if pixel nx checkdown != 12 {if @2 = 1 var dir = 3,sound game_move.wav}
-
 #Frames
 0;75;0;0;;var level = 1
 1;75;0;0;;var lives = 3
@@ -54,7 +26,8 @@ draw red value 26 4 level,
 if lives >= 1 draw yellow rectangle 19 11 1 1,
 if lives >= 2 draw yellow rectangle 22 11 1 1,
 if lives >= 3 draw yellow rectangle 25 11 1 1,
-var dir = @4,
+var dir = @2,
+if dir = 1 var dir = 2 else if dir = 2 var dir = 4,
 var bx = 23,
 var by = 7,
 var pellets = 0,
@@ -70,9 +43,46 @@ draw yellow pixel bx by,
 var pixeltime = 17 + (time / 20),
 if time > 175 draw green line 17 12 pixeltime 12 else if time > 100 draw yellow line 17 12 pixeltime 12 else if time <= 100 draw red line 17 12 pixeltime 12,
 var time -= 1,
-if dir = 1 {var nx = bx,var ny = by - 1,call moveup} else if dir = 2 {var nx = bx + 1,var ny = by,call moveright} else if dir = 3 {var nx = bx,var ny = by + 1,call movedown} else if dir = 4 {var nx = bx - 1,var ny = by,call moveleft}
+if dir = 1 {var nx = bx,var ny = by - 1,goto moveup} else if dir = 2 {var nx = bx + 1,var ny = by,goto moveright} else if dir = 3 {var nx = bx,var ny = by + 1,goto movedown} else if dir = 4 {var nx = bx - 1,var ny = by,goto moveleft}
 
-10;0;0;0;;draw black pixel bx by,
+10;0;0;0;;label moveup,
+if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,goto endmove},
+if pixel nx ny = 12 {var dir = 3,var move = 0,goto endmove},
+var checkleft = nx - 1,
+var checkright = nx + 1,
+if pixel checkleft ny != 12 {if @2 = 1 var dir = 4,sound game_move.wav},
+if pixel checkright ny != 12 {if @2 = 1 var dir = 2,sound game_move.wav},
+goto endmove
+
+10;0;0;0;;label moveright,
+if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,goto endmove},
+if pixel nx ny = 12 {var dir = 4,var move = 0,goto endmove},
+var checkup = ny - 1,
+var checkdown = ny + 1,
+if pixel nx checkup != 12 {if @2 = 1 var dir = 1,sound game_move.wav},
+if pixel nx checkdown != 12 {if @2 = 1 var dir = 3,sound game_move.wav},
+goto endmove
+
+10;0;0;0;;label movedown,
+if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,goto endmove},
+if pixel nx ny = 12 {var dir = 1,var move = 0,goto endmove},
+var checkleft = nx - 1,
+var checkright = nx + 1,
+if pixel checkleft ny != 12 {if @2 = 1 var dir = 4,sound game_move.wav},
+if pixel checkright ny != 12 {if @2 = 1 var dir = 2,sound game_move.wav},
+goto endmove
+
+10;0;0;0;;label moveleft,
+if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,goto endmove},
+if pixel nx ny = 12 {var dir = 2,var move = 0,goto endmove},
+var checkup = ny - 1,
+var checkdown = ny + 1,
+if pixel nx checkup != 12 {if @2 = 1 var dir = 1,sound game_move.wav},
+if pixel nx checkdown != 12 {if @2 = 1 var dir = 3,sound game_move.wav},
+goto endmove
+
+10;0;0;0;;label endmove,
+draw black pixel bx by,
 draw black line 17 12 29 12,
 if move = 1 {var bx = nx,var by = ny},
 if pellets = 8 {draw end,goto winround},
