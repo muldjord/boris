@@ -73,6 +73,7 @@ public:
   int getSocial() const;
   int getFun() const;
   int getHygiene() const;
+  int getAnxiety() const;
   void moveBoris(int dX, int dY, const bool &flipped = false, const bool &vision = true);
   int getCurBehav();
   void changeBehaviour(QString behav = "", int time = -1);
@@ -87,6 +88,7 @@ public:
   int socialQueue = 0;
   int funQueue = 0;
   int hygieneQueue = 0;
+  int anxietyQueue = 0;
   int curFrame = 0;
   int curBehav = 0;
                                                         

@@ -40,6 +40,7 @@ Stats::Stats(Settings &settings,
              const int &social,
              const int &fun,
              const int &hygiene,
+             const int &anxiety,
              QWidget *parent) :
   QGraphicsView(parent),
   settings(settings),
@@ -50,7 +51,8 @@ Stats::Stats(Settings &settings,
   toilet(toilet),
   social(social),
   fun(fun),
-  hygiene(hygiene)
+  hygiene(hygiene),
+  anxiety(anxiety)
 {
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
@@ -146,6 +148,11 @@ int Stats::getHygiene()
   return hygiene;
 }
 
+int Stats::getAnxiety()
+{
+  return anxiety;
+}
+
 void Stats::deltaHyper(int value)
 {
   if(hyper + value > 100) {
@@ -231,6 +238,17 @@ void Stats::deltaHygiene(int value)
     hygiene = 0;
   } else {
     hygiene += value;
+  }
+}
+
+void Stats::deltaAnxiety(int value)
+{
+  if(anxiety + value > 100) {
+    anxiety = 100;
+  } else if(anxiety + value < 0) {
+    anxiety = 0;
+  } else {
+    anxiety += value;
   }
 }
 

@@ -223,6 +223,10 @@ bool Loader::loadBehaviours(const Settings &settings,
           b.hygiene = line.mid(8,line.length()).toInt();
           continue;
         }
+        if(line.left(7) == "anxiety") {
+          b.anxiety = line.mid(8,line.length()).toInt();
+          continue;
+        }
       }
       int frames = 0;
       while(!dat.atEnd()) {

@@ -51,6 +51,7 @@ public:
              const int &social,
              const int &fun,
              const int &hygiene,
+             const int &anxiety,
              QWidget *parent);
   ~Stats();
   void flashStat(QString stat = "none");
@@ -62,6 +63,7 @@ public:
   int getSocial();
   int getFun();
   int getHygiene();
+  int getAnxiety();
   void deltaHyper(int value);
   void deltaHealth(int value);
   void deltaEnergy(int value);
@@ -70,6 +72,7 @@ public:
   void deltaSocial(int value);
   void deltaFun(int value);
   void deltaHygiene(int value);
+  void deltaAnxiety(int value);
   void updateStats();
   bool underMouse;
                     
@@ -97,6 +100,7 @@ private:
   int social;
   int fun;
   int hygiene;
+  int anxiety;
   
   QFile statLog;
   QTimer statTimer;

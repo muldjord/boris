@@ -136,6 +136,7 @@ Behaviour::Behaviour(const Behaviour &behaviour) : QObject()
   this->social = behaviour.social;
   this->fun = behaviour.fun;
   this->hygiene = behaviour.hygiene;
+  this->anxiety = behaviour.anxiety;
   this->oneShot = behaviour.oneShot;
   this->doNotDisturb = behaviour.doNotDisturb;
   this->allowFlip = behaviour.allowFlip;
@@ -164,6 +165,7 @@ void Behaviour::operator=(const Behaviour &behaviour)
   this->social = behaviour.social;
   this->fun = behaviour.fun;
   this->hygiene = behaviour.hygiene;
+  this->anxiety = behaviour.anxiety;
   this->oneShot = behaviour.oneShot;
   this->doNotDisturb = behaviour.doNotDisturb;
   this->allowFlip = behaviour.allowFlip;

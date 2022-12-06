@@ -104,6 +104,7 @@ Boris::Boris(Settings &settings) : settings(settings)
   int hunger = 40 + QRandomGenerator::global()->bounded(25);
   int toilet = 40 + QRandomGenerator::global()->bounded(25);
   int hygiene = 100;
+  int anxiety = 0;
   int social = 40 + QRandomGenerator::global()->bounded(25);
   int fun = 40 + QRandomGenerator::global()->bounded(25);
   hyperQueue = 0;
@@ -114,7 +115,8 @@ Boris::Boris(Settings &settings) : settings(settings)
   socialQueue = 0;
   funQueue = 0;
   hygieneQueue = 0;
-  stats = new Stats(settings, hyper, health, energy, hunger, toilet, social, fun, hygiene, this);
+  anxietyQueue = 0;
+  stats = new Stats(settings, hyper, health, energy, hunger, toilet, social, fun, hygiene, anxiety, this);
   bubble = new Bubble(settings);
   
   staticBehaviours = 0;
@@ -340,6 +342,7 @@ void Boris::changeBehaviour(QString behav, int time)
   socialQueue += settings.behaviours.at(curBehav).social;
   funQueue += settings.behaviours.at(curBehav).fun;
   hygieneQueue += settings.behaviours.at(curBehav).hygiene;
+  anxietyQueue += settings.behaviours.at(curBehav).anxiety;
   
   if(settings.behaviours.at(curBehav).allowFlip && QRandomGenerator::global()->bounded(2)) {
     flipFrames = true;
@@ -419,6 +422,7 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["social"] = stats->getSocial();
   scriptVars["fun"] = stats->getFun();
   scriptVars["hygiene"] = stats->getHygiene();
+  scriptVars["anxiety"] = stats->getAnxiety();
   scriptVars["borisx"] = pos().x() + (size / 2);
   scriptVars["borisy"] = pos().y() + size;
   QPoint p = QCursor::pos();
@@ -816,7 +820,7 @@ void Boris::handlePhysics()
       if(!mouseHovering) {
         interactions += 2; // Should be 2 due to checkInteractions now run every 1 second instead of 2
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
-          if(fabs(mouseHVel) > 35.0 || fabs(mouseVVel) > 35.0) {
+          if(stats->getAnxiety() >= QRandomGenerator::global()->bounded(25)) {
             changeBehaviour("_flee");
           } else if(stats->getFun() > 10 &&
                     stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 40)) {
@@ -862,6 +866,7 @@ void Boris::statProgress()
   hungerQueue += QRandomGenerator::global()->bounded(2); // This one is opposite in the stats overview
   socialQueue -= QRandomGenerator::global()->bounded(2);
   hygieneQueue -= QRandomGenerator::global()->bounded(1);
+  anxietyQueue -= QRandomGenerator::global()->bounded(7);
   funQueue -= QRandomGenerator::global()->bounded(3);
   // Nothing needed for 'health' and 'toilet'
 }
@@ -935,6 +940,8 @@ void Boris::statQueueProgress()
     funQueue = 100;
   if(hygieneQueue > 100)
     hygieneQueue = 100;
+  if(anxietyQueue > 100)
+    anxietyQueue = 100;
 
   if(hyperQueue < -100)
     hyperQueue = -100;
@@ -952,6 +959,8 @@ void Boris::statQueueProgress()
     funQueue = -100;
   if(hygieneQueue < -100)
     hygieneQueue = -100;
+  if(anxietyQueue < -100)
+    anxietyQueue = -100;
 
   if(hyperQueue > 0) {
     hyperQueue--;
@@ -1017,6 +1026,14 @@ void Boris::statQueueProgress()
     hygieneQueue++;
     stats->deltaHygiene(-1);
   }
+  if(anxietyQueue > 0) {
+    anxietyQueue -= 2;
+    stats->deltaAnxiety(2);
+  }
+  if(anxietyQueue < 0) {
+    anxietyQueue++;
+    stats->deltaAnxiety(-1);
+  }
 
   dirtSprite->setOpacity(0.50 - ((qreal)stats->getHygiene()) * 0.01);
   bruisesSprite->setOpacity(0.75 - ((qreal)stats->getHealth()) * 0.01);
@@ -1063,6 +1080,11 @@ int Boris::getFun() const
 int Boris::getHygiene() const
 {
   return stats->getHygiene();
+}
+
+int Boris::getAnxiety() const
+{
+  return stats->getAnxiety();
 }
 
 void Boris::processVision()

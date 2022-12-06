@@ -102,6 +102,7 @@ public:
   int social = 0;
   int fun = 0;
   int hygiene = 0;
+  int anxiety = 0;
   bool oneShot = false;
   bool doNotDisturb = false;
   bool allowFlip = false;
