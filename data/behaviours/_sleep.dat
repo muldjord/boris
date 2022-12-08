@@ -1,6 +1,7 @@
 title=Take a nap
 category=Energy
 hyper=-100
+anxiety=-100
 oneShot
 doNotDisturb
 #Frames
