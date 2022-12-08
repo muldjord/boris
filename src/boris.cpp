@@ -820,7 +820,7 @@ void Boris::handlePhysics()
       if(!mouseHovering) {
         interactions += 2; // Should be 2 due to checkInteractions now run every 1 second instead of 2
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
-          if(stats->getAnxiety() >= QRandomGenerator::global()->bounded(25)) {
+          if(stats->getAnxiety() >= QRandomGenerator::global()->bounded(20) + 5) {
             changeBehaviour("_flee");
           } else if(stats->getFun() > 10 &&
                     stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 40)) {

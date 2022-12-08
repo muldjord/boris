@@ -79,8 +79,8 @@ Stats::Stats(Settings &settings,
   if(settings.statLogging) {
     statLog.setFileName("stats_" + QUuid::createUuid().toString().replace("{", "").replace("}", "") + ".csv");
     if(statLog.open(QIODevice::WriteOnly)) {
-      statLog.write("hyper;health;energy;hunger;toilet;hygiene;social;fun\n");
-      statTimer.setInterval(30000);
+      statLog.write("hyper;health;energy;hunger;toilet;hygiene;anxiety;social;fun\n");
+      statTimer.setInterval(10000);
       statTimer.setSingleShot(false);
       connect(&statTimer, &QTimer::timeout, this, &Stats::logStats);
       statTimer.start();
@@ -98,14 +98,26 @@ Stats::~Stats()
 void Stats::logStats()
 {
   qInfo("Logging stats\n");
-  statLog.write(QByteArray::number(hyper) + ";" +
-                QByteArray::number(health) + ";" +
+  statLog.write(
+                QByteArray::number(anxiety) + ";" +
                 QByteArray::number(energy) + ";" +
+                QByteArray::number(fun) + ";" +
+                QByteArray::number(health) + ";" +
                 QByteArray::number(hunger) + ";" +
-                QByteArray::number(toilet) + ";" +
                 QByteArray::number(hygiene) + ";" +
+                QByteArray::number(hyper) + ";" +
                 QByteArray::number(social) + ";" +
-                QByteArray::number(fun) + "\n");
+                QByteArray::number(toilet) + "\n");
+  printf("Stats:\n");
+  printf("  anxiety : %d\n", anxiety);
+  printf("  energy  : %d\n", energy);
+  printf("  fun     : %d\n", fun);
+  printf("  health  : %d\n", health);
+  printf("  hunger  : %d\n", hunger);
+  printf("  hygiene : %d\n", hygiene);
+  printf("  hyper   : %d\n", hyper);
+  printf("  social  : %d\n", social);
+  printf("  toilet  : %d\n", toilet);
 }
 
 int Stats::getHyper()
