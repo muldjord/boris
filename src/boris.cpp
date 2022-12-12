@@ -321,6 +321,8 @@ void Boris::changeBehaviour(QString behav, int time)
             coins = (100 - stats->getFun());
           } else if(settings.behaviours.at(curBehav).category.toLower() == "hygiene") {
             coins = (100 - stats->getHygiene());
+          } else if(settings.behaviours.at(curBehav).category.toLower() == "anxiety") {
+            coins = stats->getAnxiety();
           }
           coins /= 20;
 
@@ -942,7 +944,6 @@ void Boris::statQueueProgress()
     hygieneQueue = 100;
   if(anxietyQueue > 100)
     anxietyQueue = 100;
-
   if(hyperQueue < -100)
     hyperQueue = -100;
   if(healthQueue < -100)
@@ -1460,6 +1461,8 @@ void Boris::statChange(const QString &type, const int &amount)
     funQueue += amount;
   } else if(type == "hygiene") {
     hygieneQueue += amount;
+  } else if(type == "anxiety") {
+    anxietyQueue += amount;
   }
 }
 
