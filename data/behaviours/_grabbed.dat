@@ -1,6 +1,7 @@
 fun=-10
 social=5
 toilet=10
+anxiety=10
 oneShot
 #Frames
 0;50;0;0;grabbed.wav;
