@@ -21,11 +21,11 @@ oneShot
 13;75;0;0;;
 14;75;0;0;;
 15;75;0;0;;
-16;75;0;0;;
+16;125;0;0;;
 17;75;0;0;;
 14;75;0;0;;label munch
 15;75;0;0;;stat hunger -= 4
-16;75;0;0;;
+16;125;0;0;;
 17;75;0;0;;if @8 > 1 goto munch else if bites = 0 goto hadenough else goto bite
 
 2;2000;0;0;;label imfull,think "I'm done!",break
