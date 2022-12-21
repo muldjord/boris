@@ -70,6 +70,7 @@ Boris::Boris(Settings &settings) : settings(settings)
 
   origShadow = settings.getPixmap("shadow.png");
   shadowSprite = this->scene()->addPixmap(origShadow);
+  shadowSprite->setPos(0, 16);
   shadowSprite->setOpacity(0.35);
 
   borisSprite = this->scene()->addPixmap(QPixmap());
@@ -374,41 +375,44 @@ void Boris::changeBehaviour(QString behav, int time)
 QPixmap Boris::getShadow(const QPixmap &sprite)
 {
   QImage image = sprite.toImage();
-  int firstLeft = sprite.width();
-  int bottom = 0;
-  for(int row = 0; row < sprite.height(); ++row) {
-    QRgb *rowBits = (QRgb *)image.constScanLine(row);
-    for(int col = 0; col < sprite.width(); ++col) {
-      if(qAlpha(rowBits[col]) != 0) {
-        if(bottom < row) {
-          bottom = row;
-        }
-        if(firstLeft > col) {
-          firstLeft = col;
-          break;
-        }
-      }
+  int bottom = image.height() - 1;
+  QRgb *pixelBits = (QRgb *)image.constBits();
+  for(int pixel = (image.width() * image.height()) - 1; pixel >= 0; --pixel) {
+    if(qAlpha(pixelBits[pixel]) != 0) {
+      bottom = (pixel / sprite.width());
+      break;
     }
   }
-  shadowSprite->setPos(firstLeft, bottom - 15);
-  int firstRight = 0;
-  for(int row = 0; row < sprite.height(); ++row) {
-    QRgb *rowBits = (QRgb *)image.constScanLine(row);
-    for(int col = sprite.width() - 1; col >= 0; --col) {
-      if(qAlpha(rowBits[col]) != 0 && firstRight < col) {
-        firstRight = col;
-        break;
+
+  int firstX = image.width();
+  int lastX = 0;
+  int shadowYDelta = 4;
+  for(int y = (bottom - shadowYDelta + 1 < 0?0:bottom - shadowYDelta + 1); y <= bottom; ++y) {
+    QRgb *yBits = (QRgb *)image.constScanLine(y);
+    int rowLastX = 0;
+    for(int x = 0; x < sprite.width(); ++x) {
+      if(qAlpha(yBits[x]) != 0) {
+        if(x < firstX) {
+          firstX = x;
+        }
+        rowLastX = x;
       }
     }
+    if(rowLastX > lastX) {
+      lastX = rowLastX;
+    }
   }
-  if(firstRight == 0) {
-    firstRight = sprite.width();
+  // In case no non-transparent pixels where found at all
+  if(firstX > lastX) {
+    firstX = lastX;
   }
-  if(firstLeft == sprite.width()) {
-    firstLeft = 0;
-  }
-  int shadowWidth = firstRight - firstLeft;
-  QImage shadow = origShadow.toImage().scaled(shadowWidth + 1, origShadow.height());
+  int shadowWidth = lastX - firstX + 3;
+  QImage shadow(32, 32, QImage::Format_ARGB32);
+  shadow.fill(Qt::transparent);
+  QPainter painter(&shadow);
+  painter.drawImage(firstX - 1, bottom - image.height() + 1, origShadow.toImage().scaled(shadowWidth, origShadow.height()));
+  painter.end();
+  //= origShadow.toImage().scaled(shadowWidth + 1, origShadow.height());
   return QPixmap::fromImage(shadow);
 }
 
