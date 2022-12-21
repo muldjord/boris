@@ -403,15 +403,14 @@ QPixmap Boris::getShadow(const QPixmap &sprite)
     }
   }
   // In case no non-transparent pixels where found at all
-  if(firstX > lastX) {
-    firstX = lastX;
-  }
-  int shadowWidth = lastX - firstX + 3;
   QImage shadow(32, 32, QImage::Format_ARGB32);
   shadow.fill(Qt::transparent);
-  QPainter painter(&shadow);
-  painter.drawImage(firstX - 1, bottom - image.height() + 1, origShadow.toImage().scaled(shadowWidth, origShadow.height()));
-  painter.end();
+  if(firstX < lastX) {
+    int shadowWidth = lastX - firstX + 3;
+    QPainter painter(&shadow);
+    painter.drawImage(firstX - 1, bottom - image.height() + 1, origShadow.toImage().scaled(shadowWidth, origShadow.height()));
+    painter.end();
+  }
   //= origShadow.toImage().scaled(shadowWidth + 1, origShadow.height());
   return QPixmap::fromImage(shadow);
 }
