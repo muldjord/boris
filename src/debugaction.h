@@ -1,9 +1,9 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /***************************************************************************
- *            about.h
+ *            debugaction.h
  *
- *  Sat Nov 24 14:02:00 CEST 2012
- *  Copyright 2012 Lars Muldjord
+ *  Thu Dec 22 11:15:00 CEST 2022
+ *  Copyright 2022 Lars Muldjord
  *  muldjordlars@gmail.com
  ****************************************************************************/
 
@@ -24,47 +24,24 @@
  *  along with Boris; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
-#ifndef _ABOUT_H
-#define _ABOUT_H
 
-#include "settings.h"
+#ifndef _DEBUGACTION_H
+#define _DEBUGACTION_H
 
-#include <QDialog>
-#include <QLineEdit>
-#include <QCheckBox>
-#include <QSlider>
-#include <QComboBox>
-#include <QSettings>
+#include <QWidgetAction>
+#include <QPlainTextEdit>
 
-class About : public QDialog
+class DebugAction : public QWidgetAction
 {
   Q_OBJECT;
 public:
-  About(QSettings *iniSettings, Settings &settings);
-  ~About();
-
-private slots:
-  void volumeChanged(int value);
-  void saveAll();
+  DebugAction(QObject *parent);
+  ~DebugAction();
+  void setText(const QString &text);
 
 private:
-  Settings &settings;
-  QSettings *iniSettings;
-  
-  QLineEdit *clonesLineEdit;
-  QLineEdit *sizeLineEdit;
-  QLineEdit *itemSpawnIntervalLineEdit;
-  QLineEdit *itemTimeoutLineEdit;
-  QLineEdit *weatherLineEdit;
-  QLineEdit *weatherKeyLineEdit;
-  QLineEdit *feedUrlLineEdit;
-  QComboBox *statsComboBox;
-  QCheckBox *enableSound;
-  QCheckBox *enableItems;
-  QCheckBox *enableBubbles;
-  QCheckBox *showWelcome;
-  QSlider *independenceSlider;
-  QSlider *volumeSlider;
+  QPlainTextEdit *debugText = nullptr;
+
 };
 
-#endif // _ABOUT_H
+#endif // _DEBUGACTION_H

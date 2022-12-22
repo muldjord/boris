@@ -211,8 +211,16 @@ void Boris::createBehavioursMenu()
     }
   }
 
-  if(settings.idkfa && !idkfaMenu->isEmpty()) {
-    behavioursMenu->addMenu(idkfaMenu);
+  if(settings.idkfa) {
+    behavioursMenu->addSeparator();
+    if(!idkfaMenu->isEmpty()) {
+      behavioursMenu->addMenu(idkfaMenu);
+    }
+    QMenu *debugMenu = new QMenu(tr("Debug"), behavioursMenu);
+    debugMenu->setIcon(QIcon(settings.getPixmap("idkfa.png")));
+    debugAction = new DebugAction(debugMenu);
+    debugMenu->addAction(debugAction);
+    behavioursMenu->addMenu(debugMenu);
   }
 
   if(behavioursMenu->isEmpty()) {
@@ -827,8 +835,7 @@ void Boris::handlePhysics()
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
           if(stats->getAnxiety() >= QRandomGenerator::global()->bounded(20) + 5) {
             changeBehaviour("_flee");
-          } else if(stats->getFun() > 10 &&
-                    stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 40)) {
+          } else if(stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 40)) {
             changeBehaviour("_mouse_interact");
             interactions = 0;
           }
@@ -1041,6 +1048,18 @@ void Boris::statQueueProgress()
 
   dirtSprite->setOpacity(0.50 - ((qreal)stats->getHygiene()) * 0.01);
   bruisesSprite->setOpacity(0.75 - ((qreal)stats->getHealth()) * 0.01);
+  if(debugAction != nullptr) {
+    debugAction->setText("Stats:\n"
+                         "Anxiety: " + QString::number(stats->getAnxiety()) + "\n" +
+                         "Energy: " + QString::number(stats->getEnergy()) + "\n" +
+                         "Fun: " + QString::number(stats->getFun()) + "\n" +
+                         "Health: " + QString::number(stats->getHealth()) + "\n" +
+                         "Hunger: " + QString::number(stats->getHunger()) + "\n" +
+                         "Hygiene: " + QString::number(stats->getHygiene()) + "\n" +
+                         "Hyper: " + QString::number(stats->getHyper()) + "\n" +
+                         "Social: " + QString::number(stats->getSocial()) + "\n" +
+                         "Toilet: " + QString::number(stats->getToilet()) + "\n");
+  }
   stats->updateStats();
 
   statQueueTimer.start();

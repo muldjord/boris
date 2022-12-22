@@ -79,7 +79,7 @@ Stats::Stats(Settings &settings,
   if(settings.statLogging) {
     statLog.setFileName("stats_" + QUuid::createUuid().toString().replace("{", "").replace("}", "") + ".csv");
     if(statLog.open(QIODevice::WriteOnly)) {
-      statLog.write("hyper;health;energy;hunger;toilet;hygiene;anxiety;social;fun\n");
+      statLog.write("anxiety;energy;fun;health;hunger;hygiene;hyper;social;toilet\n");
       statTimer.setInterval(10000);
       statTimer.setSingleShot(false);
       connect(&statTimer, &QTimer::timeout, this, &Stats::logStats);
@@ -108,16 +108,6 @@ void Stats::logStats()
                 QByteArray::number(hyper) + ";" +
                 QByteArray::number(social) + ";" +
                 QByteArray::number(toilet) + "\n");
-  printf("Stats:\n");
-  printf("  anxiety : %d\n", anxiety);
-  printf("  energy  : %d\n", energy);
-  printf("  fun     : %d\n", fun);
-  printf("  health  : %d\n", health);
-  printf("  hunger  : %d\n", hunger);
-  printf("  hygiene : %d\n", hygiene);
-  printf("  hyper   : %d\n", hyper);
-  printf("  social  : %d\n", social);
-  printf("  toilet  : %d\n", toilet);
 }
 
 int Stats::getHyper()

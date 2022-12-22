@@ -32,6 +32,7 @@
 #include "bubble.h"
 #include "settings.h"
 #include "item.h"
+#include "debugaction.h"
 
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
@@ -137,6 +138,7 @@ private:
   int staticBehaviours;
   int independence;
   
+  DebugAction *debugAction = nullptr;
   QMenu* behavioursMenu;
   QTimer behavTimer;
   QBasicTimer animTimer;

@@ -20,6 +20,7 @@ HEADERS += src/mainwindow.h \
            src/behaviour.h \
            src/sprite.h \
            src/stats.h \
+           src/debugaction.h \
            src/loader.h \
            src/netcomm.h \
            src/bubble.h \
@@ -35,6 +36,7 @@ SOURCES += src/mainwindow.cpp \
            src/behaviour.cpp \
            src/main.cpp \
            src/stats.cpp \
+           src/debugaction.cpp \
            src/loader.cpp \
            src/netcomm.cpp \
            src/bubble.cpp \
