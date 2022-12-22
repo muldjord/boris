@@ -21,14 +21,14 @@ oneShot
 9;50;0;0;;
 10;100;0;0;;
 11;200;0;0;;
-12;100;0;0;;
-13;100;0;0;;
-14;100;0;0;;
-15;100;0;0;;
-12;100;0;0;;label munch
-13;100;0;0;;stat hunger -= 4
-14;100;0;0;;
-15;100;0;0;;if @8 > 1 goto munch else if bites = 0 goto hadenough else goto bite
+12;75;0;0;;
+13;75;0;0;;
+14;125;0;0;;
+15;75;0;0;;
+12;75;0;0;;label munch
+13;75;0;0;;stat hunger -= 4
+14;125;0;0;;
+15;75;0;0;;if @8 > 1 goto munch else if bites = 0 goto hadenough else goto bite
 
 0;2000;0;0;;label imfull,think "I'm stuffed.",break
 
