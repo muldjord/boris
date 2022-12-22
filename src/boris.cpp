@@ -833,7 +833,7 @@ void Boris::handlePhysics()
       if(!mouseHovering) {
         interactions += 2; // Should be 2 due to checkInteractions now run every 1 second instead of 2
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
-          if(stats->getAnxiety() >= QRandomGenerator::global()->bounded(20) + 5) {
+          if(stats->getAnxiety() >= QRandomGenerator::global()->bounded(20) + 10) {
             changeBehaviour("_flee");
           } else if(stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 40)) {
             changeBehaviour("_mouse_interact");
@@ -878,7 +878,7 @@ void Boris::statProgress()
   hungerQueue += QRandomGenerator::global()->bounded(2); // This one is opposite in the stats overview
   socialQueue -= QRandomGenerator::global()->bounded(2);
   hygieneQueue -= QRandomGenerator::global()->bounded(1);
-  anxietyQueue -= QRandomGenerator::global()->bounded(7);
+  anxietyQueue -= QRandomGenerator::global()->bounded(8) + 8;
   funQueue -= QRandomGenerator::global()->bounded(3);
   // Nothing needed for 'health' and 'toilet'
 }
