@@ -48,7 +48,9 @@ $ ./Boris
 * Make a 'candycane' item for Boris to eat. It should be 'energy' category. He will get a significant energy boost and get very hyper
 
 #### Version 3.7.0 (In progress, unreleased):
-* Added 'anxiety' stat which causes Boris to flee the mouse cursor if high
+* Added 'anxiety' stat which causes Boris to flee the mouse cursor if he has been tossed around too much
+* Added 'debug' textedit to right-click menu when 'idkfa' is enabled
+* Fixed legs on coffee reading and steak eating
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
