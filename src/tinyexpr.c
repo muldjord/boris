@@ -325,9 +325,7 @@ static te_expr *base(state *s) {
             ret = new_expr(TE_VARIABLE, 0);
             CHECK_NULL(ret);
 
-            if(ret != NULL) {
-              ret->bound = s->bound;
-            }
+            ret->bound = s->bound;
             next_token(s);
             break;
 
