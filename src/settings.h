@@ -82,6 +82,7 @@ public:
   int size = 64;
   double sizeFactor = 2.0;
   int independence = 75;
+  bool isInvincible = false;
   int stats = STATS_CRITICAL;
   bool sound = true;
   double volume = 0.5;

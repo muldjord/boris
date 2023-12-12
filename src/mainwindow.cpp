@@ -191,6 +191,11 @@ MainWindow::MainWindow()
   }
   settings.sound = iniSettings->value("sound").toBool();
 
+  if(!iniSettings->contains("makeInvincible")) {
+    iniSettings->setValue("makeInvincible", false);
+  }
+  settings.isInvincible = iniSettings->value("makeInvincible").toBool();
+  
   if(!iniSettings->contains("volume")) {
     iniSettings->setValue("volume", 50);
   }

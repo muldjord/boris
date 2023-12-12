@@ -196,15 +196,21 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
   independenceSlider->setMaximum(100);
   independenceSlider->setValue(settings.independence);
 
-  enableBubbles = new QCheckBox(tr("Enable Boris speech bubbles"));
-  if(settings.bubbles) {
-    enableBubbles->setCheckState(Qt::Checked);
+  makeInvincible = new QCheckBox(tr("Make Boris invincible"));
+  if(settings.isInvincible) {
+    makeInvincible->setCheckState(Qt::Checked);
   }
 
   enableSound = new QCheckBox(tr("Enable sound"));
   if(settings.sound) {
     enableSound->setCheckState(Qt::Checked);
   }
+
+  enableBubbles = new QCheckBox(tr("Enable Boris speech bubbles"));
+  if(settings.bubbles) {
+    enableBubbles->setCheckState(Qt::Checked);
+  }
+
 
   QLabel *volumeLabel = new QLabel(tr("Sound volume:"));
   volumeSlider = new QSlider(Qt::Horizontal);
@@ -233,6 +239,7 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
   configLayout->addWidget(statsComboBox);
   configLayout->addWidget(independenceLabel);
   configLayout->addWidget(independenceSlider);
+  configLayout->addWidget(makeInvincible);
   configLayout->addWidget(enableSound);
   configLayout->addWidget(volumeLabel);
   configLayout->addWidget(volumeSlider);
@@ -322,6 +329,11 @@ void About::saveAll()
   settings.feedUrl = feedUrlLineEdit->text();
   settings.stats = statsComboBox->currentData().toInt();
   settings.independence = independenceSlider->value();
+  if(makeInvincible->isChecked()) {
+    settings.isInvincible = true;
+  } else {
+    settings.isInvincible = false;
+  }
   if(enableSound->isChecked()) {
     settings.sound = true;
   } else {
@@ -348,6 +360,7 @@ void About::saveAll()
   iniSettings->setValue("item_timeout", settings.itemTimeout);
   iniSettings->setValue("item_spawn_timer", settings.itemSpawnInterval);
   iniSettings->setValue("independence", settings.independence);
+  iniSettings->setValue("makeInvincible", settings.isInvincible);
   iniSettings->setValue("bubbles", settings.bubbles);
   iniSettings->setValue("sound", settings.sound);
   iniSettings->setValue("volume", settings.volume * 100);

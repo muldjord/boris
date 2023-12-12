@@ -59,6 +59,7 @@ private:
   QLineEdit *weatherKeyLineEdit;
   QLineEdit *feedUrlLineEdit;
   QComboBox *statsComboBox;
+  QCheckBox *makeInvincible;
   QCheckBox *enableSound;
   QCheckBox *enableItems;
   QCheckBox *enableBubbles;
