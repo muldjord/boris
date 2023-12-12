@@ -40,7 +40,7 @@
         <translation>Selvstændighed:</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="199"/>
+        <location filename="src/about.cpp" line="209"/>
         <source>Enable Boris speech bubbles</source>
         <translation>Tillad Boris talebobler</translation>
     </message>
@@ -50,7 +50,7 @@
         <translation>Aktivér lyd</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="216"/>
+        <location filename="src/about.cpp" line="222"/>
         <source>Always show this dialog on startup</source>
         <translation>Vis altid denne dialog ved start</translation>
     </message>
@@ -153,7 +153,12 @@
         <translation>Vis aldrig</translation>
     </message>
     <message>
-        <location filename="src/about.cpp" line="209"/>
+        <location filename="src/about.cpp" line="199"/>
+        <source>Make Boris invincible</source>
+        <translation>Gør Boris udødelig</translation>
+    </message>
+    <message>
+        <location filename="src/about.cpp" line="215"/>
         <source>Sound volume:</source>
         <translation>Lyd niveau:</translation>
     </message>
@@ -166,12 +171,17 @@
         <translation>Opførsler</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="171"/>
+        <location filename="src/boris.cpp" line="177"/>
         <source>Idkfa</source>
         <translation>Idkfa</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="213"/>
+        <location filename="src/boris.cpp" line="219"/>
+        <source>Debug</source>
+        <translation>Debug</translation>
+    </message>
+    <message>
+        <location filename="src/boris.cpp" line="227"/>
         <source>No behaviours!</source>
         <translation>Ingen opførsler!</translation>
     </message>
@@ -179,80 +189,80 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="src/mainwindow.cpp" line="228"/>
+        <location filename="src/mainwindow.cpp" line="229"/>
         <source>Behaviours</source>
         <translation>Opførsler</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="231"/>
+        <location filename="src/mainwindow.cpp" line="232"/>
         <source>Items</source>
         <translation>Genstande</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="242"/>
+        <location filename="src/mainwindow.cpp" line="243"/>
         <source>Looking for Boris, please wait...
 </source>
         <translation>Leder efter Boris, vent et øjeblik...
 </translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="385"/>
-        <location filename="src/mainwindow.cpp" line="644"/>
+        <location filename="src/mainwindow.cpp" line="386"/>
+        <location filename="src/mainwindow.cpp" line="645"/>
         <source> coins</source>
         <translation> mønter</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="394"/>
+        <location filename="src/mainwindow.cpp" line="395"/>
         <source>&amp;Config / about...</source>
         <translation>&amp;Konfigurér / om...</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="477"/>
+        <location filename="src/mainwindow.cpp" line="478"/>
         <source>Idkfa</source>
         <translation>Idkfa</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="519"/>
+        <location filename="src/mainwindow.cpp" line="520"/>
         <source>No behaviours!</source>
         <translation>Ingen opførsler!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="563"/>
+        <location filename="src/mainwindow.cpp" line="564"/>
         <source>No items unlocked!</source>
         <translation>Ingen genstande låst op!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="611"/>
+        <location filename="src/mainwindow.cpp" line="612"/>
         <source>Buy?</source>
         <translation>Køb?</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="611"/>
+        <location filename="src/mainwindow.cpp" line="612"/>
         <source>Do you want to buy &apos;</source>
         <translation>Vil du købe &apos;</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="611"/>
+        <location filename="src/mainwindow.cpp" line="612"/>
         <source>for </source>
         <translation>for </translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="611"/>
+        <location filename="src/mainwindow.cpp" line="612"/>
         <source> coins?</source>
         <translation> mønter?</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="624"/>
+        <location filename="src/mainwindow.cpp" line="625"/>
         <source>Not enough coins!</source>
         <translation>Ikke mønter nok!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="624"/>
+        <location filename="src/mainwindow.cpp" line="625"/>
         <source>You can&apos;t afford the &apos;</source>
         <translation>Du har ikke råd til &apos;</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="624"/>
+        <location filename="src/mainwindow.cpp" line="625"/>
         <source>item.
 
 Initiate behaviours that corresponds to Boris&apos; needs to earn coins. You can then use those coins to unlock new items.</source>
@@ -261,28 +271,28 @@ Initiate behaviours that corresponds to Boris&apos; needs to earn coins. You can
 Vælg opførsler der tilsvarer Boris´&apos; behov for at tjene mønter. Du kan derefter bruge dem på at låse nye genstande op.</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="636"/>
+        <location filename="src/mainwindow.cpp" line="637"/>
         <source>coins</source>
         <translation>mønter</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="380"/>
+        <location filename="src/mainwindow.cpp" line="381"/>
         <source>&amp;Earthquake!!!</source>
         <oldsource>&amp;Earthquake</oldsource>
         <translation>&amp;Jordskælv!!!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="383"/>
+        <location filename="src/mainwindow.cpp" line="384"/>
         <source>Updating weather...</source>
         <translation>Opdaterer vejr...</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="468"/>
+        <location filename="src/mainwindow.cpp" line="469"/>
         <source>Couldn&apos;t find city</source>
         <translation>Kunne ikke finde by</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="404"/>
+        <location filename="src/mainwindow.cpp" line="405"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>
