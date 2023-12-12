@@ -911,8 +911,7 @@ void Boris::sanityCheck()
 
   // Check if Boris is dying or is already dead
   if(isAlive) {
-    if(stats->getHealth() <= 2 ||
-       (stats->getEnergy() + stats->getSocial() + stats->getFun() + stats->getHunger()) < 35) {
+    if(stats->getHealth() <= 2) {
       killBoris();
     }
   }
@@ -922,11 +921,7 @@ void Boris::killBoris()
 {
   if(settings.isInvincible) {
     qInfo("Boris is in a bad shape, but is invincible! Phew...\n");
-    behavQueue.append("_patch_up");
-    energyQueue += 20;
-    socialQueue += 20;
-    funQueue += 20;
-    hungerQueue += 20;
+    stats->deltaHealth(100);
   } else {
     qInfo("Boris has died... RIP!\n");
     isAlive = false;
