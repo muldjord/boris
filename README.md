@@ -9,7 +9,8 @@ A scriptable desktop screenmate written in Qt (for graphics) and SFML (for sound
 * Programming: Lars Muldjord
 * Graphics: Lars Muldjord
 * Sound: Lars Muldjord
-* Website: http://www.muldjord.com/boris
+
+A video demonstrating Boris can be found [here](https://www.youtube.com/watch?v=wjx2j04cTcw).
 
 Boris was programmed in C++ using the [Qt framework](http://www.qt.io) for graphics and the [SFML library](https://www.sfml-dev.org) for sound. Boris requires Qt 5.10 or later.
 
