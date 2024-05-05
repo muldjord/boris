@@ -436,26 +436,6 @@ Per default all drawing routines are performed on the current frame sprite and c
 15;75;0;0;;draw end
 ```
 
-###### value
-* Definition:
-`draw COLOR value x y VARIABLE or VALUE`
-* Example:
-```
-draw yellow value 2 2 somevariable
-draw red value 2 2 42
-```
-The first example will draw the value of the `somevariable` variable at 2, 2 using a yellow color. The second example will draw the value `42` at 2, 2 using a red color.
-
-###### Additive drawing
-Per default all drawing routines are performed on the current frame sprite and cleared when moving on to the next. By using additive drawing you can begin drawing on one frame, then draw more stuff on subsequent frames, and end the drawing routine on a frame later on. It is only after the drawing routine has been ended it will be cleared upon moving on to the next frame.
-* Example:
-```
-10;75;0;0;;draw begin,draw red point 5 6
-11;75;0;0;;draw blue line 3 5 8 7
-12;75;0;0;;draw yellow ellipse 3 4 5 5
-15;75;0;0;;draw end
-```
-
 ##### spawn
 Spawn an item from the items folder (default is `data/items`). The item name is the name of the corresponding dat+png file pair without a suffix. Items can be animated and scripted mostly the same way Boris behaviours can.
 * Definition:
