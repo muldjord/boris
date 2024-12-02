@@ -1,5 +1,5 @@
 # Boris
-A scriptable desktop screenmate written in Qt (for graphics) and SFML (for sound). Boris will keep you company while you work. He has a bit of a prankster personality and needs to be cared for in order to stay alive. Move your mouse over him to check on his health stats.
+A scriptable desktop screenmate written in Qt6 (for graphics) and SFML (for sound). Boris will keep you company while you work. He has a bit of a prankster personality and needs to be cared for in order to stay alive. Move your mouse over him to check on his health stats.
 
 * All behaviours are fully scriptable using [BorisScript](data/behaviours/README.md)
 * Supports weather visualization using the OpenWeatherMap API
@@ -12,25 +12,37 @@ A scriptable desktop screenmate written in Qt (for graphics) and SFML (for sound
 
 A video demonstrating Boris can be found [here](https://www.youtube.com/watch?v=wjx2j04cTcw).
 
-Boris was programmed in C++ using the [Qt framework](http://www.qt.io) for graphics and the [SFML library](https://www.sfml-dev.org) for sound. Boris requires Qt 5.10 or later.
+Boris was programmed in C++ using the [Qt framework](http://www.qt.io) for graphics and the [SFML library](https://www.sfml-dev.org) for sound. Boris requires Qt6.
 
 Bug reports, suggestions and / or comments can be emailed to me at:
 muldjordlars@gmail.com.
 
-Copyright 2021 Lars Muldjord. This program is distributed under the terms of the GNU General Public License. Be sure to read the license in COPYING.TXT or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.
+Copyright 2024 Lars Muldjord. This program is distributed under the terms of the GNU General Public License. Be sure to read the license in COPYING.TXT or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.
 
 ## Building from source (Ubuntu Linux and Debian derivatives)
 ### Prerequisites
-Boris requires Qt 5.10 or later. Install all prerequisites with the following commands:
+Boris requires Qt6. Install all prerequisites with the following commands:
 ```
 $ sudo apt update
-$ sudo apt install build-essential qt5-default qtmultimedia5-dev libsfml-dev
+$ sudo apt install build-essential cmake libsfml-dev qt6-base-dev qt6-tools-dev qt6-l10n-tools
 ```
 
 ### Build commands
 ```
-$ qmake
-$ make -j8
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
+```
+
+### Preparing data files and running Boris
+While still in the above `build` folder run the following commands:
+```
+$ cd ../release
+$ ln -s ../data data
+```
+Now run Boris with
+```
 $ ./Boris
 ```
 
@@ -49,6 +61,7 @@ $ ./Boris
 * Make a 'candycane' item for Boris to eat. It should be 'energy' category. He will get a significant energy boost and get very hyper
 
 #### Version 3.7.0 (In progress, unreleased):
+* Ported codebase to Qt6 and cmake
 * Added 'anxiety' stat which causes Boris to flee the mouse cursor if he has been tossed around too much
 * Added 'debug' textedit to right-click menu when 'idkfa' is enabled
 * Fixed legs on coffee reading and steak eating
