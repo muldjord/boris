@@ -75,8 +75,9 @@ int main(int argc, char *argv[])
   qInstallMessageHandler(customMessageHandler);
 
   QTranslator translator;
-  translator.load("boris_" + QLocale::system().name());
-  app.installTranslator(&translator);
+  if(translator.load("boris_" + QLocale::system().name())) {
+    app.installTranslator(&translator);
+  }
 
   QDir::setCurrent(QApplication::applicationDirPath());
 

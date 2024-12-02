@@ -29,7 +29,6 @@
 #include "soundmixer.h"
 #include "item.h"
 #include "sprite.h"
-#include "tinyexpr.h"
 
 #include <stdio.h>
 
@@ -748,5 +747,8 @@ int ScriptHandler::getValue(QList<QString> &parameters)
   for(const auto &token: code) {
     codeConcat.append(token);
   }
-  return te_interp(codeConcat.toStdString().c_str(), 0);
+  
+  
+
+  return tep.evaluate(codeConcat.toStdString());
 }

@@ -39,7 +39,6 @@
 #include <QTime>
 #include <QDir>
 #include <QTextStream>
-#include <QDesktopWidget>
 #include <QHostInfo>
 #include <QLabel>
 #include <QVBoxLayout>
@@ -115,17 +114,17 @@ MainWindow::MainWindow()
   settings.coins = iniSettings->value("coins").toInt();
 
   if(!iniSettings->contains("boris_x")) {
-    iniSettings->setValue("boris_x", QApplication::desktop()->width() / 2);
+    iniSettings->setValue("boris_x", QApplication::primaryScreen()->size().width() / 2);
   }
   settings.borisX = iniSettings->value("boris_x").toInt();
 
   if(!iniSettings->contains("boris_y")) {
-    iniSettings->setValue("boris_y", QApplication::desktop()->height() / 2);
+    iniSettings->setValue("boris_y", QApplication::primaryScreen()->size().height() / 2);
   }
   settings.borisY = iniSettings->value("boris_y").toInt();
 
   // For use with sound panning in relation to Boris location
-  settings.desktopWidth = QApplication::desktop()->width();
+  settings.desktopWidth = QApplication::primaryScreen()->size().width();
 
   if(!iniSettings->contains("vision")) {
     iniSettings->setValue("vision", false);
@@ -588,8 +587,8 @@ void MainWindow::spawnRandomItem()
     randomItem = QRandomGenerator::global()->bounded(settings.itemBehaviours.count());
   } while(settings.itemBehaviours.at(randomItem).reactions.isEmpty());
   
-  settings.itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::desktop()->width()),
-                                    QRandomGenerator::global()->bounded(QApplication::desktop()->height()),
+  settings.itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::primaryScreen()->size().width()),
+                                    QRandomGenerator::global()->bounded(QApplication::primaryScreen()->size().height()),
                                     settings.size,
                                     settings.itemBehaviours.at(randomItem).file,
                                     settings,
@@ -606,8 +605,8 @@ void MainWindow::spawnItem(QAction* a)
   for(const auto &item: settings.itemBehaviours) {
     if(item.file == itemFile) {
       if(settings.unlocked.contains(item.file)) {
-        settings.itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::desktop()->width()),
-                                          QRandomGenerator::global()->bounded(QApplication::desktop()->height()),
+        settings.itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::primaryScreen()->size().width()),
+                                          QRandomGenerator::global()->bounded(QApplication::primaryScreen()->size().height()),
                                           settings.size,
                                           item.file,
                                           settings,

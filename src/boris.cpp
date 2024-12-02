@@ -36,7 +36,6 @@
 #include <QTimer>
 #include <QDir>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QBitmap>
 #include <QScreen>
 #include <QTime>
@@ -51,8 +50,8 @@ Boris::Boris(Settings &settings) : settings(settings)
 {
   int borisX = settings.borisX;
   int borisY = settings.borisY;
-  if(borisY > QApplication::desktop()->height() - height()) {
-    borisY = QApplication::desktop()->height() - height();
+  if(borisY > QApplication::primaryScreen()->size().height() - height()) {
+    borisY = QApplication::primaryScreen()->size().height() - height();
   }
   
   move(borisX + QRandomGenerator::global()->bounded(200) - 100, borisY + QRandomGenerator::global()->bounded(200) - 100);
@@ -660,9 +659,9 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
 {
   sanityCheck();
   
-  int maxX = QApplication::desktop()->width() - size;
+  int maxX = QApplication::primaryScreen()->size().width() - size;
   int minY = 0 - (size / 2);
-  int maxY = QApplication::desktop()->height() - height();
+  int maxY = QApplication::primaryScreen()->size().height() - height();
 
   if(dX == 666) {
     dX = QRandomGenerator::global()->bounded(maxX);
@@ -739,8 +738,8 @@ void Boris::mousePressEvent(QMouseEvent* event)
     setCursor(settings.getCursor("grab.png"));
     grabbed = true;
     changeBehaviour("_grabbed");
-    this->move(event->globalPos().x() - settings.sizeFactor * 17.0, 
-               event->globalPos().y() - settings.sizeFactor * 16.0);
+    this->move(event->globalPosition().x() - settings.sizeFactor * 17.0, 
+               event->globalPosition().y() - settings.sizeFactor * 16.0);
     oldCursor = QCursor::pos();
   }
 }
@@ -748,8 +747,8 @@ void Boris::mousePressEvent(QMouseEvent* event)
 void Boris::mouseMoveEvent(QMouseEvent* event)
 {
   if(event->buttons().testFlag(Qt::LeftButton)) {
-    this->move(event->globalPos().x() - settings.sizeFactor * 17.0, 
-               event->globalPos().y() - settings.sizeFactor * 16.0);
+    this->move(event->globalPosition().x() - settings.sizeFactor * 17.0, 
+               event->globalPosition().y() - settings.sizeFactor * 16.0);
     stats->move(pos().x() + (size / 2) - (stats->width() / 2),
                 pos().y() + size + (size / 2));
     bubble->moveBubble(pos().x(), pos().y(), size);
@@ -886,9 +885,9 @@ void Boris::statProgress()
 void Boris::sanityCheck()
 {
   int minX = - size;
-  int maxX = QApplication::desktop()->width();
+  int maxX = QApplication::primaryScreen()->size().width();
   int minY = 0 - (size / 2);
-  int maxY = QApplication::desktop()->height() - height();
+  int maxY = QApplication::primaryScreen()->size().height() - height();
 
   // Make sure Boris is not located outside boundaries
   if(pos().y() < minY) {
@@ -1119,7 +1118,9 @@ void Boris::processVision()
 {
   int border = 4;
   int contrast = 15;
-  QImage vision = QGuiApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId(), pos().x() - border, pos().y() - border, size + border * 2, size + border * 2).toImage();
+  // FIXME: This is broken!
+  //QImage vision = QImageQGuiApplication::primaryScreen()->grabWindow(QApplication::primaryScreen()->size().winId(), pos().x() - border, pos().y() - border, size + border * 2, size + border * 2).toImage();
+  QImage vision = QImage();
   
   QRgb *bits = (QRgb *)vision.bits();
   { // Check for wall to the west

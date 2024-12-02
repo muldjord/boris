@@ -33,7 +33,6 @@
 #include <QTime>
 #include <QDir>
 #include <QTextStream>
-#include <QDesktopWidget>
 #include <QRegularExpression>
 
 qint64 Loader::getAssetsSize(const QDir &dir)
@@ -412,7 +411,7 @@ bool Loader::loadSprites(Settings &settings)
       }
       x1 = x2;
     }
-    qInfo("  Added sprite: %s (%d frames)\n", info.baseName().toStdString().c_str(), sprite.count());
+    qInfo("  Added sprite: %s (%llu frames)\n", info.baseName().toStdString().c_str(), sprite.count());
     settings.sprites[info.baseName()] = sprite;
   }
   return allGood;

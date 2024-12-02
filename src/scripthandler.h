@@ -32,6 +32,7 @@
 #include "stats.h"
 #include "behaviour.h"
 #include "bubble.h"
+#include "tinyexpr.h"
 
 #include <QObject>
 
@@ -60,6 +61,8 @@ signals:
   void setCurFrame(const int &frame);
   
 private:
+  te_parser tep;
+
   QImage *image = nullptr;
   bool *drawing = nullptr;
   Settings &settings;

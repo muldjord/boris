@@ -35,7 +35,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QTimer>
 #include <QDate>
 #include <QTime>
@@ -278,9 +277,9 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
 {
   sanityCheck();
   
-  int maxX = QApplication::desktop()->width() - size;
+  int maxX = QApplication::primaryScreen()->size().width() - size;
   int minY = 0;
-  int maxY = QApplication::desktop()->height() - size;
+  int maxY = QApplication::primaryScreen()->size().height() - size;
 
   if(dX == 666) {
     dX = QRandomGenerator::global()->bounded(maxX);
@@ -307,9 +306,9 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
 void Item::sanityCheck()
 {
   int minX = - size;
-  int maxX = QApplication::desktop()->width();
+  int maxX = QApplication::primaryScreen()->size().width();
   int minY = 0;
-  int maxY = QApplication::desktop()->height() - height();
+  int maxY = QApplication::primaryScreen()->size().height() - height();
 
   // Make sure Item is not located outside boundaries
   if(pos().y() < minY) {
@@ -421,8 +420,8 @@ void Item::mousePressEvent(QMouseEvent* event)
 void Item::mouseMoveEvent(QMouseEvent* event)
 {
   if(grabbed && event->buttons().testFlag(Qt::LeftButton)) {
-    this->move(event->globalPos().x() - settings.sizeFactor * 16.0, 
-               event->globalPos().y() - settings.sizeFactor * 20.0);
+    this->move(event->globalPosition().x() - settings.sizeFactor * 16.0, 
+               event->globalPosition().y() - settings.sizeFactor * 20.0);
   }
 
 }

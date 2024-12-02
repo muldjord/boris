@@ -38,7 +38,6 @@
 #include <QMenu>
 #include <QSettings>
 #include <QTimer>
-#include <QLinkedList>
 #include <QProgressBar>
 
 class MainWindow : public QObject
