@@ -40,6 +40,7 @@ While still in the above `build` folder run the following commands:
 ```
 $ cd ../release
 $ ln -s ../data data
+$ cp ../COPYING.TXT .
 ```
 Now run Boris with
 ```
