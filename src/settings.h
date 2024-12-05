@@ -65,7 +65,7 @@ public:
 
   // If set to true the vision processing will take place, wall detection and such
   bool vision = false;
-  
+
   // Asset folders
   QString graphicsPath = "data/graphics";
   QString soundsPath = "data/sounds";
@@ -119,13 +119,13 @@ public:
 
   // Resources
   QPixmap missingPixmap;
-  
+
   QList<Boris*> borisList;
   QList<Behaviour> behaviours;
-  
+
   QList<Item*> itemList;
   QList<Behaviour> itemBehaviours;
- 
+
   QList<Behaviour> weathers;
 
   QMap<QString, Sprite> sprites;

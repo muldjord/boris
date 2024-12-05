@@ -153,7 +153,7 @@ void ScriptHandler::condition(QList<QString> &parameters, bool &isTrue, bool &co
   QString op = parameters.first();
   parameters.removeFirst(); // Remove operator
   int compareTo = getValue(parameters);
-  
+
   if(compare) {
     isTrue = false;
     if(op == "<") {
@@ -403,9 +403,9 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
       }
       painter.setPen(QPen(QColor(Qt::black)));
     }
-    
+
     parameters.removeFirst(); // Remove drawing color string
-    
+
     if(parameters.count() >= 1) {
       if(parameters.first() == "line") {
         parameters.removeFirst(); // Remove 'line'
@@ -747,8 +747,8 @@ int ScriptHandler::getValue(QList<QString> &parameters)
   for(const auto &token: code) {
     codeConcat.append(token);
   }
-  
-  
+
+
 
   return tep.evaluate(codeConcat.toStdString());
 }

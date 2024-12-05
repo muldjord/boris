@@ -50,7 +50,7 @@ private slots:
 private:
   Settings &settings;
   QSettings *iniSettings;
-  
+
   QLineEdit *clonesLineEdit;
   QLineEdit *sizeLineEdit;
   QLineEdit *itemSpawnIntervalLineEdit;

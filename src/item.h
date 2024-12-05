@@ -71,7 +71,7 @@ private slots:
   void setCurFrame(const int &frame);
   void dontIgnore();
   void handlePhysics();
-  
+
 private:
   Settings &settings;
   bool flipFrames = false;

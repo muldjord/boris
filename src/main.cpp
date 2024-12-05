@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
   QApplication app(argc, argv);
   app.setStyle(QStyleFactory::create("Fusion"));  
   app.setQuitOnLastWindowClosed(false);
-  
+
   qInstallMessageHandler(customMessageHandler);
 
   QTranslator translator;
@@ -82,6 +82,6 @@ int main(int argc, char *argv[])
   QDir::setCurrent(QApplication::applicationDirPath());
 
   MainWindow window;
-  
+
   return app.exec();
 }

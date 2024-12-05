@@ -39,7 +39,7 @@
 class Loader: public QObject
 {
   Q_OBJECT;
-  
+
 public:
   static qint64 getAssetsSize(const QDir &dir);
   static bool loadSoundFxs(const QString &soundsPath,

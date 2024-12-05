@@ -92,7 +92,7 @@ public:
   int anxietyQueue = 0;
   int curFrame = 0;
   int curBehav = 0;
-                                                        
+
 public slots:
   void earthquake();
   void triggerWeather();
@@ -100,7 +100,7 @@ public slots:
   void updateBoris();
   void createBehavioursMenu();
   void queueBehavFromFile(const QString &file);
-  
+
 protected:
   void timerEvent(QTimerEvent *event) override;
   void mouseMoveEvent(QMouseEvent* event) override;
@@ -126,7 +126,7 @@ private slots:
   void statChange(const QString &type, const int &amount);
   void behavFromFile(const QString &file);
   void setCurFrame(const int &frame);
-  
+
 private:
   Settings &settings;
 
@@ -137,7 +137,7 @@ private:
   void runScript(int &stop, const bool &init = false);
   int staticBehaviours;
   int independence;
-  
+
   DebugAction *debugAction = nullptr;
   QMenu* behavioursMenu;
   QTimer behavTimer;
@@ -164,7 +164,7 @@ private:
   QGraphicsPixmapItem *bruisesSprite;
   QPixmap origBruises;
   QGraphicsPixmapItem *weatherSprite;
-  
+
   double vVel = 0.0;
   double hVel = 0.0;
   double mouseVVel = 0.0;

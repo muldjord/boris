@@ -46,7 +46,7 @@ Bubble::Bubble(Settings &settings) : settings(settings)
 
   setTransformationAnchor(QGraphicsView::NoAnchor);
   setResizeAnchor(QGraphicsView::NoAnchor);
-  
+
   QGraphicsScene *scene = new QGraphicsScene();
   setScene(scene);
 
@@ -69,7 +69,7 @@ Bubble::Bubble(Settings &settings) : settings(settings)
   bubbleSpeech->setZValue(1.0);
   bubbleThought = this->scene()->addPixmap(settings.getPixmap("bubble_thought.png"));
   bubbleThought->setZValue(1.0);
-  
+
   hideTimer.setSingleShot(true);
   connect(&hideTimer, &QTimer::timeout, this, &Bubble::hide);
 }
@@ -121,7 +121,7 @@ int Bubble::initBubble(const int x, const int y,
 
   int width = 6 + textImage.width() + 6;
   int height = 6 + textImage.height() + 6 + 6;
-  
+
   if(type == "_thought") {
     bubbleSpeech->hide();
     bubbleThought->setPos(width / 2, height - 8);

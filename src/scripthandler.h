@@ -59,7 +59,7 @@ signals:
   void statChange(const QString &type, const int &amount);
   void behavFromFile(const QString &file);
   void setCurFrame(const int &frame);
-  
+
 private:
   te_parser tep;
 
@@ -68,13 +68,13 @@ private:
   Settings &settings;
   Bubble *bubble = nullptr;
   bool returnSet = false;
-  
+
   const QMap<QString, int> &labels;
   const QMap<QString, Script> &defines;
   QMap<QString, int> &scriptVars;
   const QPoint parentPos;
   const int &size;
-  
+
   // Main command handler
   void runCommand(QList<QString> &parameters, int &stop, const Script &script);
 
@@ -100,7 +100,7 @@ private:
   void condition(QList<QString> &parameters, bool &isTrue, bool &compare);
   void drawText(QPainter &painter, const int &x, const int &y, const QString &text);
   int getValue(QList<QString> &parameters);
-  
+
 };
 
 #endif // _SCRIPTHANDLER_H

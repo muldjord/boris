@@ -47,7 +47,7 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
   move((settings.desktopWidth / 2) - (width() / 2), 256);
   setWindowIcon(QIcon(":icon.png"));
   setWindowTitle("Boris v" VERSION);
-  
+
   // About tab
   QWidget *aboutWidget = new QWidget;
   QLabel *aboutText = new QLabel(tr("<strong>Boris bids you welcome!</strong><br/>He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye on him!<br/><br/>"
@@ -131,7 +131,7 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
   tabWidget->addTab(aboutScroll, tr("About"));
   tabWidget->addTab(authorScroll, tr("Author"));
   tabWidget->addTab(licenseScroll, tr("License"));
-  
+
   QPushButton *okButton = new QPushButton(tr("Close and save"));
   connect(okButton, &QPushButton::clicked, this, &About::saveAll);
 
@@ -218,7 +218,7 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
   volumeSlider->setMaximum(100);
   volumeSlider->setValue(settings.volume * 100);
   connect(volumeSlider, &QSlider::valueChanged, this, &About::volumeChanged);
-  
+
   showWelcome = new QCheckBox(tr("Always show this dialog on startup"));
   if(settings.showWelcome) {
     showWelcome->setCheckState(Qt::Checked);
@@ -250,7 +250,7 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
   configLayout->addWidget(enableBubbles);
   configLayout->addWidget(feedUrlLabel);
   configLayout->addWidget(feedUrlLineEdit);
-  
+
   QVBoxLayout *infoLayout = new QVBoxLayout;
   infoLayout->addWidget(tabWidget);
   infoLayout->addWidget(okButton);
@@ -258,7 +258,7 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
   QHBoxLayout *layout = new QHBoxLayout;
   layout->addLayout(configLayout);
   layout->addLayout(infoLayout);
-  
+
   setLayout(layout);
 }
 
@@ -290,7 +290,7 @@ void About::saveAll()
     settings.size = 64;
   }
   settings.sizeFactor = settings.size / 32.0;
-  
+
   if(clonesLineEdit->text().toInt() != 0) {
     if(clonesLineEdit->text().toInt() < 1) {
       clonesLineEdit->setText("1");
@@ -350,7 +350,7 @@ void About::saveAll()
   } else {
     settings.items = false;
   }
-  
+
   iniSettings->setValue("show_welcome", settings.showWelcome);
   iniSettings->setValue("boris_x", settings.borisX);
   iniSettings->setValue("boris_y", settings.borisY);

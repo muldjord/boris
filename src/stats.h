@@ -75,7 +75,7 @@ public:
   void deltaAnxiety(int value);
   void updateStats();
   bool underMouse;
-                    
+
 private slots:
   void logStats();
 
@@ -101,10 +101,10 @@ private:
   int fun;
   int hygiene;
   int anxiety;
-  
+
   QFile statLog;
   QTimer statTimer;
-  
+
 };
 
 #endif // _STATS_H

@@ -53,7 +53,7 @@ Boris::Boris(Settings &settings) : settings(settings)
   if(borisY > QApplication::primaryScreen()->size().height() - height()) {
     borisY = QApplication::primaryScreen()->size().height() - height();
   }
-  
+
   move(borisX + QRandomGenerator::global()->bounded(200) - 100, borisY + QRandomGenerator::global()->bounded(200) - 100);
 
   setAttribute(Qt::WA_TranslucentBackground);
@@ -62,7 +62,7 @@ Boris::Boris(Settings &settings) : settings(settings)
   setStyleSheet("background:transparent");
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  
+
   setScene(new QGraphicsScene);
   // Set the scene size for correct scaling when changing Boris' size through updateBoris()
   scene()->setSceneRect(0.0, 0.0, 32, 48);
@@ -91,7 +91,7 @@ Boris::Boris(Settings &settings) : settings(settings)
   weatherSprite = this->scene()->addPixmap(QPixmap());
   weatherSprite->setPos(0, 0);
   weatherSprite->hide();
-  
+
   behavioursMenu = new QMenu();
   behavioursMenu->setTitle(tr("Behaviours"));
   connect(behavioursMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
@@ -118,7 +118,7 @@ Boris::Boris(Settings &settings) : settings(settings)
   anxietyQueue = 0;
   stats = new Stats(settings, hyper, health, energy, hunger, toilet, social, fun, hygiene, anxiety, this);
   bubble = new Bubble(settings);
-  
+
   staticBehaviours = 0;
   // Figure out how many static behaviours there are
   for(const auto &behaviour: settings.behaviours) {
@@ -138,7 +138,7 @@ Boris::Boris(Settings &settings) : settings(settings)
 
   weatherTimer.setSingleShot(true);
   connect(&weatherTimer, &QTimer::timeout, this, &Boris::nextWeatherFrame);
-  
+
   statTimer.setInterval(30000);
   connect(&statTimer, &QTimer::timeout, this, &Boris::statProgress);
   statTimer.start();
@@ -147,7 +147,7 @@ Boris::Boris(Settings &settings) : settings(settings)
   statQueueTimer.setSingleShot(true);
   connect(&statQueueTimer, &QTimer::timeout, this, &Boris::statQueueProgress);
   statQueueTimer.start();
-  
+
   interactionsTimer.setInterval(1000);
   interactionsTimer.setSingleShot(true);
   connect(&interactionsTimer, &QTimer::timeout, this, &Boris::checkInteractions);
@@ -180,7 +180,7 @@ void Boris::createBehavioursMenu()
     QString title = behaviour.title;
     QPixmap iconPixmap(settings.getPixmap(behaviour.category.toLower() + ".png"));
     QMenu *menu = nullptr;
-      
+
     // Find correct menu to put behaviour into
     if((behaviour.file.left(1) == "_" && behaviour.category.isEmpty()) ||
        behaviour.category == "Other" ||
@@ -277,14 +277,14 @@ void Boris::changeBehaviour(QString behav, int time)
 
   // Always stop behavTimer, just in case. At this point we never want it to be running
   behavTimer.stop();
-  
+
   // Reset all script variables
   scriptVars.clear();
 
   // Clear script image canvas
   scriptImage.fill(Qt::transparent);
   drawing = false;
-  
+
   bool coinCheck = false;
   // Check if there are behaviours in queue, these are prioritized
   if(behav == "" && !behavQueue.isEmpty()) {
@@ -296,7 +296,7 @@ void Boris::changeBehaviour(QString behav, int time)
   if(behav == "") {
     processAi(behav);
   }
-  
+
   // Bias towards behaviours from 'Idle' and 'Locomotion' categories to make Boris less erratic
   if(QRandomGenerator::global()->bounded(10) >= 3) {
     if(QRandomGenerator::global()->bounded(70) >= stats->getEnergy()) {
@@ -342,7 +342,7 @@ void Boris::changeBehaviour(QString behav, int time)
       }
     }
   }
-  
+
   // Applying behaviour stats to Boris
   hyperQueue += settings.behaviours.at(curBehav).hyper;
   healthQueue += settings.behaviours.at(curBehav).health;
@@ -353,7 +353,7 @@ void Boris::changeBehaviour(QString behav, int time)
   funQueue += settings.behaviours.at(curBehav).fun;
   hygieneQueue += settings.behaviours.at(curBehav).hygiene;
   anxietyQueue += settings.behaviours.at(curBehav).anxiety;
-  
+
   if(settings.behaviours.at(curBehav).allowFlip && QRandomGenerator::global()->bounded(2)) {
     flipFrames = true;
   } else {
@@ -451,7 +451,7 @@ void Boris::runScript(int &stop, const bool &init)
   }
   scriptVars["xvel"] = 0;
   scriptVars["yvel"] = 0;
-  
+
   QDate date = QDate::currentDate();
   QTime time = QTime::currentTime();
   scriptVars["day"] = date.day();
@@ -578,7 +578,7 @@ void Boris::timerEvent(QTimerEvent *)
   }
 
   sanityCheck();
-  
+
   if(curFrame >= settings.behaviours.at(curBehav).frames.count()) {
     curFrame = 0;
     if(settings.behaviours.at(curBehav).oneShot) {
@@ -658,7 +658,7 @@ void Boris::timerEvent(QTimerEvent *)
 void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
 {
   sanityCheck();
-  
+
   int maxX = QApplication::primaryScreen()->size().width() - size;
   int minY = 0 - (size / 2);
   int maxY = QApplication::primaryScreen()->size().height() - height();
@@ -676,7 +676,7 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
   } else {
     dY = pos().y() + (dY * settings.sizeFactor);
   }
-  
+
   move(dX, dY);
   bubble->moveBubble(pos().x(), pos().y(), size);
   stats->move(pos().x() + (size / 2) - (stats->width() / 2),
@@ -1121,7 +1121,7 @@ void Boris::processVision()
   // FIXME: This is broken!
   //QImage vision = QImageQGuiApplication::primaryScreen()->grabWindow(QApplication::primaryScreen()->size().winId(), pos().x() - border, pos().y() - border, size + border * 2, size + border * 2).toImage();
   QImage vision = QImage();
-  
+
   QRgb *bits = (QRgb *)vision.bits();
   { // Check for wall to the west
     int top = border * vision.width();
@@ -1346,7 +1346,7 @@ void Boris::showWeather(QString &behav)
 
   weatherSprite->show();
   QTimer::singleShot(30000, this, SLOT(hideWeather()));
-  
+
   if(!falling && !grabbed) {
     if(settings.weatherType == "01d") {
       behavQueue.append("sunglasses");
@@ -1437,7 +1437,7 @@ void Boris::borisInteract(Boris *boris)
     raise();
     setFocus();
   }
-  
+
   if(borisFriend != nullptr || falling || grabbed || settings.behaviours.at(curBehav).doNotDisturb) {
     return;
   }

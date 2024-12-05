@@ -60,7 +60,7 @@ void NetComm::updateAll()
   feedRequest.setUrl(QUrl(settings.feedUrl));
   get(feedRequest);
 }
-   
+
 void NetComm::netReply(QNetworkReply *r)
 {
   QDomDocument doc;
@@ -90,7 +90,7 @@ void NetComm::netReply(QNetworkReply *r)
     if(settings.windDirection.isEmpty()) {
       settings.windDirection = "E";
     }
-    
+
     //qInfo("%s\n", rawData.data());
     qInfo("  Icon: %s\n", settings.weatherType.toStdString().c_str());
     qInfo("  Temp: %f\n", settings.temperature);

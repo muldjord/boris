@@ -52,10 +52,10 @@ public:
                  const QString &type = "_chat",
                  const QUrl &rssUrl = QUrl());
   void moveBubble(const int &x, const int &y, const int &borisSize);
-  
+
 protected:
   void mousePressEvent(QMouseEvent *event);
-  
+
 private:
   Settings &settings;
   QGraphicsPixmapItem *bubbleTopLeft;
@@ -69,7 +69,7 @@ private:
 
   QGraphicsPixmapItem *bubbleThought;
   QGraphicsPixmapItem *bubbleSpeech;
-  
+
   QGraphicsPixmapItem *bubbleText;
   QUrl rssUrl = QUrl();
   QTimer hideTimer;

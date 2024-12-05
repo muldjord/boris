@@ -57,7 +57,7 @@ MainWindow::MainWindow()
 #endif
 
   iniSettings = new QSettings("config.ini", QSettings::IniFormat);
-  
+
   if(!iniSettings->contains("show_welcome")) {
     iniSettings->setValue("show_welcome", true);
   }
@@ -72,7 +72,7 @@ MainWindow::MainWindow()
     iniSettings->setValue("script_output", false);
   }
   settings.scriptOutput = iniSettings->value("script_output").toBool();
-  
+
   if(!iniSettings->contains("data_path")) {
     iniSettings->setValue("data_path", "data");
   }
@@ -107,7 +107,7 @@ MainWindow::MainWindow()
     settings.windSpeed = iniSettings->value("weather_force_wind_speed").toDouble();
     settings.forceWindSpeed = true;
   }
-  
+
   if(!iniSettings->contains("coins")) {
     iniSettings->setValue("coins", coins);
   }
@@ -135,7 +135,7 @@ MainWindow::MainWindow()
     iniSettings->setValue("clones", 2);
   }
   settings.clones = iniSettings->value("clones").toInt();
-    
+
   if(!iniSettings->contains("size")) {
     iniSettings->setValue("size", 64);
   }
@@ -166,7 +166,7 @@ MainWindow::MainWindow()
     iniSettings->setValue("idkfa", false);
   }
   settings.idkfa = iniSettings->value("idkfa").toBool();
-  
+
   if(!iniSettings->contains("stats")) {
     iniSettings->setValue("stats", "critical");
   }
@@ -179,7 +179,7 @@ MainWindow::MainWindow()
   } else if(iniSettings->value("stats").toString() == "never") {
     settings.stats = STATS_NEVER;
   }
-  
+
   if(!iniSettings->contains("bubbles")) {
     iniSettings->setValue("bubbles", true);
   }
@@ -194,13 +194,13 @@ MainWindow::MainWindow()
     iniSettings->setValue("makeInvincible", false);
   }
   settings.isInvincible = iniSettings->value("makeInvincible").toBool();
-  
+
   if(!iniSettings->contains("volume")) {
     iniSettings->setValue("volume", 50);
   }
   settings.volume = iniSettings->value("volume").toInt() / 100.0;
   sf::Listener::setGlobalVolume(settings.volume * 100.0);
-  
+
   if(!iniSettings->contains("lemmy_mode")) {
     iniSettings->setValue("lemmy_mode", false);
   }
@@ -280,7 +280,7 @@ void MainWindow::loadAssets()
 
   totalAssetsSize += Loader::getAssetsSize(QDir(settings.soundsPath, "*.wav", QDir::Name,
                                                       QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
-  
+
   totalAssetsSize += Loader::getAssetsSize(QDir(settings.behavioursPath, "*.png", QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
 
   totalAssetsSize += Loader::getAssetsSize(QDir(settings.weathersPath, "*.png", QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
@@ -290,7 +290,7 @@ void MainWindow::loadAssets()
   qInfo("Loading %d kilobytes of assets, please wait...\n", totalAssetsSize / 1024);
 
   progressBar->setMaximum(totalAssetsSize);
-  
+
   if(Loader::loadSoundFxs(settings.soundsPath, soundMixer.soundFxs, progressBar)) {
     qInfo("Sounds loaded ok... :)\n");
   } else {
@@ -302,7 +302,7 @@ void MainWindow::loadAssets()
   } else {
     qInfo("Error when loading some behaviours, please check your png and dat files\n");
   }
-  
+
   if(Loader::loadBehaviours(settings, settings.weathersPath, settings.weathers, soundMixer.soundFxs, progressBar)) {
     qInfo("Weather types loaded ok... :)\n");
   } else {
@@ -345,7 +345,7 @@ void MainWindow::loadAssets()
 #endif
 
   progressBar->setValue(progressBar->maximum());
-  
+
   delete progressBar;
   delete loadWidget;
 
@@ -437,7 +437,7 @@ void MainWindow::aboutBox()
   } else if(settings.borisList.count() < newClones) {
     addBoris(newClones - settings.borisList.count());
   }
-  
+
   netComm->updateAll();
 
   itemTimer.setInterval(settings.itemSpawnInterval * 1000);
@@ -486,7 +486,7 @@ void MainWindow::createBehavioursMenu()
     QString title = behaviour.title;
     QPixmap iconPixmap(settings.getPixmap(behaviour.category.toLower() + ".png"));
     QMenu *menu = nullptr;
-      
+
     // Find correct menu to put behaviour into
     if((behaviour.file.left(1) == "_" && behaviour.category.isEmpty()) ||
        behaviour.category == "Other" ||
@@ -509,7 +509,7 @@ void MainWindow::createBehavioursMenu()
 
     menu->addAction(QIcon(iconPixmap), title)->setData(behaviour.file);
   }
-  
+
   for(auto &subMenu: subMenus) {
     if(!subMenu->isEmpty()) {
       behavioursMenu->addMenu(subMenu);
@@ -535,7 +535,7 @@ void MainWindow::updateItemsMenu()
     QString title = item.title;
     QPixmap iconPixmap(settings.getPixmap(item.category.toLower() + ".png"));
     QMenu *menu = nullptr;
-      
+
     // Find correct menu to put item into
     for(auto &subMenu: subMenus) {
       if(subMenu->title() == item.category && item.category != "Hidden") {
@@ -557,7 +557,7 @@ void MainWindow::updateItemsMenu()
 
     menu->addAction(QIcon(iconPixmap), title)->setData(item.file);
   }
-  
+
   for(auto &subMenu: subMenus) {
     if(!subMenu->isEmpty()) {
       itemsMenu->addMenu(subMenu);
@@ -586,14 +586,14 @@ void MainWindow::spawnRandomItem()
   do {
     randomItem = QRandomGenerator::global()->bounded(settings.itemBehaviours.count());
   } while(settings.itemBehaviours.at(randomItem).reactions.isEmpty());
-  
+
   settings.itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::primaryScreen()->size().width()),
                                     QRandomGenerator::global()->bounded(QApplication::primaryScreen()->size().height()),
                                     settings.size,
                                     settings.itemBehaviours.at(randomItem).file,
                                     settings,
                                     false));
-  
+
   if(settings.items && settings.itemSpawnInterval) {
     itemTimer.start();
   }

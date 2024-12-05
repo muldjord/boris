@@ -42,17 +42,17 @@ public:
 
 public slots:
   void updateAll();
-  
+
 signals:
   void weatherUpdated();
   void feedUpdated();
 
 private slots:
   void netReply(QNetworkReply *r);
-  
+
 private:
   Settings &settings;
-  
+
   QTimer netTimer;
   QNetworkRequest weatherRequest;
   QNetworkRequest feedRequest;

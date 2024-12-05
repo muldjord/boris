@@ -72,10 +72,10 @@ Stats::Stats(Settings &settings,
   toiletBar = scene->addRect(3, 71, 60, 2);
   flashIcon = scene->addPixmap(settings.getPixmap("flash_icon.png"));
   flashIcon->setVisible(false);
-  
+
   flashes = 0;
   underMouse = false;
-  
+
   if(settings.statLogging) {
     statLog.setFileName("stats_" + QUuid::createUuid().toString().replace("{", "").replace("}", "") + ".csv");
     if(statLog.open(QIODevice::WriteOnly)) {

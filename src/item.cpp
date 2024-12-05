@@ -51,7 +51,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   setStyleSheet("background:transparent");
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  
+
   for(int a = 0; a < settings.itemBehaviours.count(); ++a) {
     if(settings.itemBehaviours.at(a).file == item) {
       curItem = a;
@@ -107,7 +107,7 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   ignoreTimer.setInterval(60000);
   ignoreTimer.setSingleShot(true);
   connect(&ignoreTimer, &QTimer::timeout, this, &Item::dontIgnore);
-  
+
   animTimer.start(0, Qt::PreciseTimer, this);
 
   if(settings.itemBehaviours.at(curItem).noIgnore) {
@@ -215,7 +215,7 @@ void Item::timerEvent(QTimerEvent *)
   }
 
   sanityCheck();
-  
+
   if(curFrame >= settings.itemBehaviours.at(curItem).frames.count()) {
     curFrame = 0;
   }
@@ -276,7 +276,7 @@ void Item::timerEvent(QTimerEvent *)
 void Item::moveItem(int dX, int dY, const bool &flipped)
 {
   sanityCheck();
-  
+
   int maxX = QApplication::primaryScreen()->size().width() - size;
   int minY = 0;
   int maxY = QApplication::primaryScreen()->size().height() - size;
@@ -294,7 +294,7 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
   } else {
     dY = pos().y() + (dY * settings.sizeFactor);
   }
-  
+
   move(dX, dY);
   // if item is outside borders
   if(falling && (pos().y() > maxY || pos().y() < minY)) {
@@ -521,7 +521,7 @@ void Item::interact(Boris *boris)
   scriptVars["social"] = boris->getSocial();
   scriptVars["fun"] = boris->getFun();
   scriptVars["hygiene"] = boris->getHygiene();
-  
+
   borisHyper = boris->getHyper();
 
   move(boris->pos().x() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * settings.sizeFactor), boris->pos().y() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * settings.sizeFactor) + (size * 0.5));
