@@ -707,7 +707,7 @@ void Boris::handleBehaviourChange(QAction* a)
   }
 }
 
-void Boris::enterEvent(QEvent *event)
+void Boris::enterEvent(QEnterEvent *event)
 {
   event->accept();
   if(settings.stats == STATS_MOUSEOVER || settings.stats == STATS_CRITICAL) {

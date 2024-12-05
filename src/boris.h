@@ -102,13 +102,13 @@ public slots:
   void queueBehavFromFile(const QString &file);
   
 protected:
-  void timerEvent(QTimerEvent *event);
-  void mouseMoveEvent(QMouseEvent* event);
-  void mousePressEvent(QMouseEvent* event);
-  void mouseReleaseEvent(QMouseEvent* event);
-  void enterEvent(QEvent *event);
-  void leaveEvent(QEvent *event);
-  void wheelEvent(QWheelEvent *);
+  void timerEvent(QTimerEvent *event) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
+  void enterEvent(QEnterEvent *event) override;
+  void leaveEvent(QEvent *event) override;
+  void wheelEvent(QWheelEvent *) override;
 
 signals:
   void addCoins(const QString &message, const int &coins);
