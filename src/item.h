@@ -60,11 +60,11 @@ public slots:
   void destroy();
 
 protected:
-  void timerEvent(QTimerEvent *event);
-  void mouseDoubleClickEvent(QMouseEvent* event);
-  void mousePressEvent(QMouseEvent* event);
-  void mouseMoveEvent(QMouseEvent* event);
-  void mouseReleaseEvent(QMouseEvent* event);
+  void timerEvent(QTimerEvent *event) override;
+  void mouseDoubleClickEvent(QMouseEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
 
 private slots:
   QPixmap getShadow(const QPixmap &sprite);
