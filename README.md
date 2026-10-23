@@ -5,6 +5,8 @@ A scriptable desktop screenmate written in Qt6 (for graphics) and SFML (for soun
 * Supports weather visualization using the OpenWeatherMap API
 * Supports RSS feed speech bubbles using custom RSS feeds
 
+NOTE!!! I am currently working through the entire project and rewiring it to work with a modern Wayland compositor. Currently MANY things are completely broken such as the mouse grabbing features. Other things are out of alignment for one reason or another. It will be fixed over the coming month or so.
+
 # About
 * Programming: Lars Muldjord
 * Graphics: Lars Muldjord
