@@ -25,8 +25,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
 
-#ifndef _MAINWINDOW_H
-#define _MAINWINDOW_H
+#pragma once
 
 #include "boris.h"
 #include "behaviour.h"
@@ -40,7 +39,7 @@
 #include <QTimer>
 #include <QProgressBar>
 
-class MainWindow : public QObject
+class MainWindow : public QGraphicsView
 {
   Q_OBJECT;
 public:
@@ -48,15 +47,16 @@ public:
   ~MainWindow();
 
 protected:
-  void mousePressEvent(QMouseEvent* event);
+  void mousePressEvent(QMouseEvent *event) override;
+  void resizeEvent(QResizeEvent *event) override;
 
 signals:
-  void updateBoris();
-  void updateBorisBehavioursMenu();
+  void reconfBoris();
+  void reconfBorisBehavioursMenu();
   void queueBehavFromFile(const QString &file);
 
 private slots:
-  void loadAssets();
+  void init();
   void aboutBox();
   void killAll();
   void updateWeather();
@@ -67,6 +67,7 @@ private slots:
   void removeCoinsMessage();
 
 private:
+  void resetView();
   QSettings *iniSettings = nullptr;
   Settings settings;
   QIcon *icon = nullptr;
@@ -94,5 +95,3 @@ private:
   void addBoris(int clones);
   void removeBoris(int clones);
 };
-
-#endif // _MAINWINDOW_H

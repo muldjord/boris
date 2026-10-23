@@ -41,12 +41,14 @@ struct Settings;
 
 class Boris;
 
-class Item : public QGraphicsView
+class Item : public QGraphicsObject
 {
   Q_OBJECT;
 public:
-  Item(const int &x, const int &y, const int &size, const QString &item, Settings &settings, const bool &ignore = true);
+  Item(const QString &item, Settings &settings, QGraphicsView *parent, const bool &ignore = true);
   ~Item();
+  int getWidth() const;
+  int getHeight() const;
   void moveItem(int dX, int dY, const bool &flipped = false);
   QPoint getGlobalCenter();
   QString getReactionBehaviour();
@@ -60,35 +62,44 @@ public slots:
   void destroy();
 
 protected:
-  void timerEvent(QTimerEvent *event) override;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+  QRectF boundingRect() const override;
+  /*
   void mouseDoubleClickEvent(QMouseEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;
   void mouseMoveEvent(QMouseEvent* event) override;
   void mouseReleaseEvent(QMouseEvent* event) override;
+  */
 
 private slots:
+  void updateItem();
   QPixmap getShadow(const QPixmap &sprite);
   void setCurFrame(const int &frame);
   void dontIgnore();
   void handlePhysics();
 
 private:
+  QGraphicsView *parent = nullptr;
+
   Settings &settings;
   bool flipFrames = false;
-  QGraphicsPixmapItem *itemSprite;
-  QGraphicsPixmapItem *shadowSprite;
+  QPixmap itemSprite;
+  QPixmap shadowSprite;
+  bool showShadow = true;
+  qreal shadowOpacity = 1.0;
   QPixmap origShadow;
-  QBasicTimer animTimer;
-  QGraphicsPixmapItem *scriptSprite;
+  QTimer animTimer;
+  QPixmap scriptSprite;
   QImage scriptImage = QImage(32, 32, QImage::Format_ARGB32_Premultiplied);
   bool drawing = false;
   int curFrame = 0;
   int curItem = 0;
-  int size = 64;
 
   int borisHyper = 0;
   int interactReaction = -1;
 
+  QPixmap rendered;
+  
   QTimer physicsTimer;
   QTimer ignoreTimer;
   double vVel = 0.0;
@@ -101,8 +112,8 @@ private:
 
   void runScript(int &stop, const bool &init = false);
   void sanityCheck();
-  int getDistance(const QPoint &p);
-  int getSector(const QPoint &p);
+  int getDistance(const QPointF &p);
+  int getDirectionTo(const QPointF &p);
 
   bool stopAndDestroy = false;
 };

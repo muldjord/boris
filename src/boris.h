@@ -24,8 +24,7 @@
  *  along with Boris; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
-#ifndef _BORIS_H
-#define _BORIS_H
+#pragma once
 
 #include "behaviour.h"
 #include "stats.h"
@@ -34,10 +33,10 @@
 #include "item.h"
 #include "debugaction.h"
 
+#include <QGraphicsObject>
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QTimer>
-#include <QBasicTimer>
 #include <QAction>
 #include <QMouseEvent>
 #include <QMenu>
@@ -59,13 +58,15 @@ class Bubble;
 class Item;
 class Settings;
 
-class Boris : public QGraphicsView
+class Boris : public QGraphicsObject
 {
   Q_OBJECT;
 public:
-  explicit Boris(Settings &settings);
+  explicit Boris(Settings &settings, QGraphicsView *parent);
   ~Boris();
   Boris *borisFriend;
+  int getWidth() const;
+  int getHeight() const;
   int getEnergy() const;
   int getHealth() const;
   int getHyper() const;
@@ -79,7 +80,6 @@ public:
   int getCurBehav();
   void changeBehaviour(QString behav = "", int time = -1);
   QPoint getGlobalCenter();
-  int size = 64;
   QMap<QString, int> scriptVars;
   int hyperQueue = 0;
   int healthQueue = 0;
@@ -97,23 +97,26 @@ public slots:
   void earthquake();
   void triggerWeather();
   void nextBehaviour();
-  void updateBoris();
+  void reconfBoris();
   void createBehavioursMenu();
   void queueBehavFromFile(const QString &file);
 
 protected:
-  void timerEvent(QTimerEvent *event) override;
-  void mouseMoveEvent(QMouseEvent* event) override;
-  void mousePressEvent(QMouseEvent* event) override;
-  void mouseReleaseEvent(QMouseEvent* event) override;
-  void enterEvent(QEnterEvent *event) override;
-  void leaveEvent(QEvent *event) override;
-  void wheelEvent(QWheelEvent *) override;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+  QRectF boundingRect() const override;
+  
+  //void enterEvent(QEnterEvent *event) override;
+  //void leaveEvent(QEvent *event) override;
+  //void mouseMoveEvent(QMouseEvent* event) override;
+  //void mousePressEvent(QMouseEvent* event) override;
+  //void mouseReleaseEvent(QMouseEvent* event) override;
+  //void wheelEvent(QWheelEvent *) override;
 
 signals:
   void addCoins(const QString &message, const int &coins);
 
 private slots:
+  void updateBoris();
   void handleBehaviourChange(QAction* a);
   void handlePhysics();
   void statProgress();
@@ -128,12 +131,13 @@ private slots:
   void setCurFrame(const int &frame);
 
 private:
+  QGraphicsView *parent = nullptr;
   Settings &settings;
 
   bool falling = false;
   bool grabbed = false;
   bool interact = true;
-  void showWeather(QString &behav);
+  void setWeather(QString &behav);
   void runScript(int &stop, const bool &init = false);
   int staticBehaviours;
   int independence;
@@ -141,7 +145,7 @@ private:
   DebugAction *debugAction = nullptr;
   QMenu* behavioursMenu;
   QTimer behavTimer;
-  QBasicTimer animTimer;
+  QTimer animTimer;
   QTimer weatherTimer;
   QTimer physicsTimer;
   QTimer statTimer;
@@ -153,18 +157,27 @@ private:
   QPoint mLastMousePosition;
   bool mouseHovering = false;
 
-  QGraphicsPixmapItem *shadowSprite;
+  QPixmap shadowSprite;
   QPixmap origShadow;
-  QGraphicsPixmapItem *borisSprite;
-  QGraphicsPixmapItem *scriptSprite;
+  bool drawShadow = true;
+  QPixmap borisSprite;
+  QPixmap scriptSprite;
   QImage scriptImage = QImage(32, 32, QImage::Format_ARGB32_Premultiplied);
   bool drawing = false;
-  QGraphicsPixmapItem *dirtSprite;
-  QPixmap origDirt;
-  QGraphicsPixmapItem *bruisesSprite;
-  QPixmap origBruises;
-  QGraphicsPixmapItem *weatherSprite;
 
+  QPixmap dirtSprite;
+  QPixmap origDirt;
+  qreal dirtOpacity = 1.0;
+
+  QPixmap bruisesSprite;
+  QPixmap origBruises;
+  qreal bruisesOpacity = 1.0;
+
+  QPixmap weatherSprite;
+  bool showWeather = false;
+
+  QPixmap rendered;
+  
   double vVel = 0.0;
   double hVel = 0.0;
   double mouseVVel = 0.0;
@@ -172,15 +185,18 @@ private:
   int altitude = 0;
   QPoint oldCursor;
   void sanityCheck();
+
   Stats *stats;
+  bool showStats = false;
+
   Bubble *bubble;
   QList<QString> behavQueue;
   QString getFileFromCategory(const QString &category);
   int getIdxFromCategory(const QString &category);
   void processVision();
   void processAi(QString &behav);
-  int getDistance(const QPoint &p);
-  int getSector(const QPoint &p);
+  int getDistance(const QPointF &p);
+  int getDirectionTo(const QPointF &p);
   void borisInteract(Boris *boris);
   void itemInteract(Item *item);
   int curWeather = 0;
@@ -194,5 +210,3 @@ private:
 
   void killBoris();
 };
-
-#endif // _BORIS_H

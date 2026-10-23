@@ -28,10 +28,9 @@
 #include "mainwindow.h"
 #include "about.h"
 #include "loader.h"
-#include "soundmixer.h"
+//#include "soundmixer.h"
 #include "item.h"
-
-#include "SFML/Audio.hpp"
+#include "version.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -44,18 +43,57 @@
 #include <QVBoxLayout>
 #include <QMessageBox>
 
-#if QT_VERSION >= 0x050a00
 #include <QRandomGenerator>
-#endif
-
-SoundMixer soundMixer(24);
 
 MainWindow::MainWindow()
 {
-#if QT_VERSION < 0x050a00
-  qsrand(QTime::currentTime().msec());
-#endif
+  setScene(new QGraphicsScene());
+  scene()->setBackgroundBrush(Qt::transparent);
+  setStyleSheet("background:transparent");
+  setAttribute(Qt::WA_TranslucentBackground);
 
+  setFrameShape(QFrame::NoFrame);
+  //setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
+  setWindowFlags(Qt::FramelessWindowHint);
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  //resetTransform();
+  showMaximized();
+
+  setAlignment(Qt::AlignLeft | Qt::AlignTop);
+  setTransformationAnchor(QGraphicsView::NoAnchor);
+  setResizeAnchor(QGraphicsView::NoAnchor);
+
+  //fitInView(scene()->sceneRect());
+  setInteractive(true); // Default but setting it anyway
+  setMouseTracking(true);
+  
+  //QTransform transform(1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
+  //setTransform(transform);
+  /*
+  //setAttribute(Qt::WA_TranslucentBackground);
+  //setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
+  //setFrameShape(QFrame::NoFrame);
+  //setWindowFlags(Qt::FramelessWindowHint);
+  //setStyleSheet("background:transparent");
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  */
+  settings.mainView = this;
+  
+  QTimer::singleShot(100, this, &MainWindow::init);
+}
+
+MainWindow::~MainWindow()
+{
+  delete trayIcon;
+  for(auto &boris: settings.borisList) {
+    delete boris;
+  }
+}
+
+void MainWindow::init()
+{
   iniSettings = new QSettings("config.ini", QSettings::IniFormat);
 
   if(!iniSettings->contains("show_welcome")) {
@@ -113,19 +151,6 @@ MainWindow::MainWindow()
   }
   settings.coins = iniSettings->value("coins").toInt();
 
-  if(!iniSettings->contains("boris_x")) {
-    iniSettings->setValue("boris_x", QApplication::primaryScreen()->size().width() / 2);
-  }
-  settings.borisX = iniSettings->value("boris_x").toInt();
-
-  if(!iniSettings->contains("boris_y")) {
-    iniSettings->setValue("boris_y", QApplication::primaryScreen()->size().height() / 2);
-  }
-  settings.borisY = iniSettings->value("boris_y").toInt();
-
-  // For use with sound panning in relation to Boris location
-  settings.desktopWidth = QApplication::primaryScreen()->size().width();
-
   if(!iniSettings->contains("vision")) {
     iniSettings->setValue("vision", false);
   }
@@ -140,8 +165,7 @@ MainWindow::MainWindow()
     iniSettings->setValue("size", 64);
   }
   settings.size = iniSettings->value("size").toInt();
-  settings.sizeFactor = settings.size / 32.0;
-
+  
   if(!iniSettings->contains("independence")) {
     iniSettings->setValue("independence", 75);
   }
@@ -199,7 +223,7 @@ MainWindow::MainWindow()
     iniSettings->setValue("volume", 50);
   }
   settings.volume = iniSettings->value("volume").toInt() / 100.0;
-  sf::Listener::setGlobalVolume(settings.volume * 100.0);
+  //sf::Listener::setGlobalVolume(settings.volume * 100.0);
 
   if(!iniSettings->contains("lemmy_mode")) {
     iniSettings->setValue("lemmy_mode", false);
@@ -243,7 +267,10 @@ MainWindow::MainWindow()
 
   loadWidget = new QWidget;
   loadWidget->setWindowIcon(QIcon(":icon.png"));
-  loadWidget->setWindowTitle("Boris v" VERSION);
+  loadWidget->setWindowTitle("Boris v" + QString("%1.%2.%3")
+                             .arg(PROJECT_VERSION_MAJOR)
+                             .arg(PROJECT_VERSION_MINOR)
+                             .arg(PROJECT_VERSION_PATCH));
   QLabel *progressLabel = new QLabel(tr("Looking for Boris, please wait...\n"));
   progressBar = new QProgressBar;
   QVBoxLayout *layout = new QVBoxLayout;
@@ -253,8 +280,6 @@ MainWindow::MainWindow()
   loadWidget->setLayout(layout);
   loadWidget->show();
   qApp->processEvents();
-  loadWidget->move(settings.borisX - (loadWidget->width() / 2) + (settings.size / 2),
-                   settings.borisY);
 
   itemTimer.setInterval(settings.itemSpawnInterval * 1000);
   itemTimer.setSingleShot(true);
@@ -263,19 +288,8 @@ MainWindow::MainWindow()
     itemTimer.start();
   }
 
-  QTimer::singleShot(100, this, &MainWindow::loadAssets);
-}
+  resetView();
 
-MainWindow::~MainWindow()
-{
-  delete trayIcon;
-  for(auto &boris: settings.borisList) {
-    delete boris;
-  }
-}
-
-void MainWindow::loadAssets()
-{
   int totalAssetsSize = 0;
 
   totalAssetsSize += Loader::getAssetsSize(QDir(settings.soundsPath, "*.wav", QDir::Name,
@@ -291,25 +305,27 @@ void MainWindow::loadAssets()
 
   progressBar->setMaximum(totalAssetsSize);
 
-  if(Loader::loadSoundFxs(settings.soundsPath, soundMixer.soundFxs, progressBar)) {
+  /*
+  if(Loader::loadSoundFxs(settings.soundsPath, settings.soundMixer.soundFxs, progressBar)) {
     qInfo("Sounds loaded ok... :)\n");
   } else {
     qInfo("Error when loading some sounds, please check your wav files\n");
   }
+  */
 
-  if(Loader::loadBehaviours(settings, settings.behavioursPath, settings.behaviours, soundMixer.soundFxs, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.behavioursPath, settings.behaviours, progressBar)) {
     qInfo("Behaviours loaded ok... :)\n");
   } else {
     qInfo("Error when loading some behaviours, please check your png and dat files\n");
   }
 
-  if(Loader::loadBehaviours(settings, settings.weathersPath, settings.weathers, soundMixer.soundFxs, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.weathersPath, settings.weathers, progressBar)) {
     qInfo("Weather types loaded ok... :)\n");
   } else {
     qInfo("Error when loading some weather types, please check your png and dat files\n");
   }
 
-  if(Loader::loadBehaviours(settings, settings.itemsPath, settings.itemBehaviours, soundMixer.soundFxs, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.itemsPath, settings.itemBehaviours, progressBar)) {
     qInfo("Items loaded ok... :)\n");
   } else {
     qInfo("Error when loading some items, please check your png and dat files\n");
@@ -338,11 +354,7 @@ void MainWindow::loadAssets()
     about.exec();
   }
 
-#if QT_VERSION >= 0x050a00
   addBoris((settings.clones == 0?QRandomGenerator::global()->generate() % 99 + 1:settings.clones));
-#else
-  addBoris((settings.clones == 0?qrand() % 99 + 1:settings.clones));
-#endif
 
   progressBar->setValue(progressBar->maximum());
 
@@ -351,21 +363,35 @@ void MainWindow::loadAssets()
 
   createBehavioursMenu();
   updateItemsMenu();
+
+  show();
+}
+
+void MainWindow::resetView()
+{
+  settings.sizeFactor = settings.size / 32.0;
+  resetTransform();
+  scale(settings.sizeFactor, settings.sizeFactor);
+  scene()->setSceneRect(mapToScene(viewport()->rect()).boundingRect());
+  settings.desktopWidth = scene()->sceneRect().width();
+  settings.desktopHeight = scene()->sceneRect().height();
+  printf("Desktop w=%d, h=%d\n", settings.desktopWidth, settings.desktopHeight);
 }
 
 void MainWindow::addBoris(int clones)
 {
   qInfo("Spawning %d clone(s)\n", clones);
   while(clones--) {
-    settings.borisList.append(new Boris(settings));
-    connect(this, &MainWindow::updateBoris, settings.borisList.last(), &Boris::updateBoris);
-    connect(this, &MainWindow::updateBorisBehavioursMenu, settings.borisList.last(), &Boris::createBehavioursMenu);
-    connect(earthquakeAction, &QAction::triggered, settings.borisList.last(), &Boris::earthquake);
-    connect(this, &MainWindow::queueBehavFromFile, settings.borisList.last(), &Boris::queueBehavFromFile);
-    connect(weatherAction, &QAction::triggered, settings.borisList.last(), &Boris::triggerWeather);
-    connect(settings.borisList.last(), &Boris::addCoins, this, &MainWindow::addCoins);
-    settings.borisList.last()->show();
-    settings.borisList.last()->earthquake();
+    Boris *newBoris = new Boris(settings, this);
+    connect(this, &MainWindow::reconfBoris, newBoris, &Boris::reconfBoris);
+    connect(this, &MainWindow::reconfBorisBehavioursMenu, newBoris, &Boris::createBehavioursMenu);
+    connect(earthquakeAction, &QAction::triggered, newBoris, &Boris::earthquake);
+    connect(this, &MainWindow::queueBehavFromFile, newBoris, &Boris::queueBehavFromFile);
+    connect(weatherAction, &QAction::triggered, newBoris, &Boris::triggerWeather);
+    connect(newBoris, &Boris::addCoins, this, &MainWindow::addCoins);
+    scene()->addItem(newBoris);
+    settings.borisList.append(newBoris);
+    newBoris->earthquake();
   }
 }
 
@@ -422,15 +448,13 @@ void MainWindow::aboutBox()
 {
   About about(iniSettings, settings);
   about.exec();
-  emit updateBoris();
+  emit reconfBoris();
+  settings.sizeFactor = settings.size / 32.0;
+  resetView();
 
   int newClones = settings.clones;
   if(newClones == 0) {
-#if QT_VERSION >= 0x050a00
     newClones = (QRandomGenerator::global()->generate() % 99) + 1;
-#else
-    newClones = (qrand() % 99) + 1;
-#endif
   }
   if(settings.borisList.count() > newClones) {
     removeBoris(settings.borisList.count() - newClones);
@@ -448,17 +472,20 @@ void MainWindow::aboutBox()
   }
 }
 
-void MainWindow::mousePressEvent(QMouseEvent* event)
+void MainWindow::mousePressEvent(QMouseEvent *event)
 {
   if(event->button() == Qt::RightButton) {
     trayIconMenu->exec(QCursor::pos());
   }
 }
 
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+  resetView();
+}
+
 void MainWindow::killAll()
 {
-  iniSettings->setValue("boris_x", settings.borisX);
-  iniSettings->setValue("boris_y", settings.borisY);
   QTimer::singleShot(2000, qApp, SLOT(quit()));
   for(auto &boris: settings.borisList) {
     boris->changeBehaviour("_wave");
@@ -587,12 +614,14 @@ void MainWindow::spawnRandomItem()
     randomItem = QRandomGenerator::global()->bounded(settings.itemBehaviours.count());
   } while(settings.itemBehaviours.at(randomItem).reactions.isEmpty());
 
-  settings.itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::primaryScreen()->size().width()),
-                                    QRandomGenerator::global()->bounded(QApplication::primaryScreen()->size().height()),
-                                    settings.size,
-                                    settings.itemBehaviours.at(randomItem).file,
-                                    settings,
-                                    false));
+  Item *spawnedItem = new Item(settings.itemBehaviours.at(randomItem).file,
+                               settings,
+                               this,
+                               false);
+  spawnedItem->setPos(QRandomGenerator::global()->bounded(sceneRect().width()),
+                      QRandomGenerator::global()->bounded(sceneRect().height()));
+  scene()->addItem(spawnedItem);
+  settings.itemList.append(spawnedItem);
 
   if(settings.items && settings.itemSpawnInterval) {
     itemTimer.start();
@@ -605,12 +634,14 @@ void MainWindow::spawnItem(QAction* a)
   for(const auto &item: settings.itemBehaviours) {
     if(item.file == itemFile) {
       if(settings.unlocked.contains(item.file)) {
-        settings.itemList.append(new Item(QRandomGenerator::global()->bounded(QApplication::primaryScreen()->size().width()),
-                                          QRandomGenerator::global()->bounded(QApplication::primaryScreen()->size().height()),
-                                          settings.size,
-                                          item.file,
-                                          settings,
-                                          false));
+        Item *spawnedItem = new Item(item.file,
+                                     settings,
+                                     this,
+                                     false);
+        scene()->addItem(spawnedItem);
+        spawnedItem->setPos(QRandomGenerator::global()->bounded(scene()->sceneRect().width()),
+                            QRandomGenerator::global()->bounded(scene()->sceneRect().height()));
+        settings.itemList.append(spawnedItem);
       } else {
         if(settings.coins - item.coins >= 0) {
           if(QMessageBox::question(nullptr, tr("Buy?"), tr("Do you want to buy '") + " " + item.title + "' " + tr("for ") + QString::number(item.coins) + tr(" coins?")) == QMessageBox::Yes) {
@@ -625,7 +656,7 @@ void MainWindow::spawnItem(QAction* a)
             updateItemsMenu();
           }
         } else {
-          soundMixer.playSound(&soundMixer.soundFxs["nocoin.wav"], 0, 1);
+          //settings.soundMixer.playSound(settings.soundMixer.soundFxs["nocoin.wav"], 0, 1);
           QMessageBox::information(nullptr, tr("Not enough coins!"), tr("You can't afford the '") + " " + item.title + "' " + tr("item.\n\nInitiate behaviours that corresponds to Boris' needs to earn coins. You can then use those coins to unlock new items."));
         }
       }
@@ -636,7 +667,7 @@ void MainWindow::spawnItem(QAction* a)
 
 void MainWindow::addCoins(const QString &message, const int &coins)
 {
-  soundMixer.playSound(&soundMixer.soundFxs["coinup.wav"], 0, 1);
+  //settings.soundMixer.playSound(settings.soundMixer.soundFxs["coinup.wav"], 0, 1);
   settings.coins += coins;
   coinsAction->setText(QString::number(settings.coins) + " " + tr("coins") + " (" + message + ")");
   trayIcon->setIcon(*coinIcon);

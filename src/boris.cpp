@@ -26,10 +26,8 @@
  */
 
 #include "boris.h"
-#include "soundmixer.h"
+//#include "soundmixer.h"
 #include "scripthandler.h"
-
-#include "SFML/Audio.hpp"
 
 #include <stdio.h>
 #include <math.h>
@@ -44,54 +42,53 @@
 constexpr int STATTIMER = 200;
 constexpr int ANNOYMAX = 42;
 
-extern SoundMixer soundMixer;
-
-Boris::Boris(Settings &settings) : settings(settings)
+Boris::Boris(Settings &settings, QGraphicsView *parent)
+  : settings(settings), parent(parent)
 {
-  int borisX = settings.borisX;
-  int borisY = settings.borisY;
-  if(borisY > QApplication::primaryScreen()->size().height() - height()) {
-    borisY = QApplication::primaryScreen()->size().height() - height();
-  }
-
-  move(borisX + QRandomGenerator::global()->bounded(200) - 100, borisY + QRandomGenerator::global()->bounded(200) - 100);
-
+  /*
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
   setFrameShape(QFrame::NoFrame);
+  setWindowFlags(Qt::FramelessWindowHint);
+  setAttribute(Qt::WA_TranslucentBackground);
   setStyleSheet("background:transparent");
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  */
 
-  setScene(new QGraphicsScene);
-  // Set the scene size for correct scaling when changing Boris' size through updateBoris()
-  scene()->setSceneRect(0.0, 0.0, 32, 48);
+  //setScene(new QGraphicsScene);
+  // Set the scene size for correct scaling when changing Boris' size through reconfBoris()
+  //scene->setSceneRect(0.0, 0.0, 32, 48);
 
   origShadow = settings.getPixmap("shadow.png");
-  shadowSprite = this->scene()->addPixmap(origShadow);
+  /*
+  shadowSprite = scene->addPixmap(origShadow);
   shadowSprite->setPos(0, 16);
   shadowSprite->setOpacity(0.35);
+  */
 
-  borisSprite = this->scene()->addPixmap(QPixmap());
-  borisSprite->setPos(0, 15); // To make room for shadow
-
-  scriptSprite = this->scene()->addPixmap(QPixmap());
-  scriptSprite->setPos(0, 15); // To make room for shadow
+  //setPos(150, 50);
+  setPos(QRandomGenerator::global()->bounded(settings.desktopWidth), QRandomGenerator::global()->bounded(settings.desktopHeight));
+  //borisSprite->setPos(0, 15); // To make room for shadow
 
   origDirt = settings.getPixmap("dirt.png");
-  dirtSprite = this->scene()->addPixmap(origDirt);
+  origBruises = settings.getPixmap("bruises.png");
+  /*
+  scriptSprite = scene->addPixmap(QPixmap());
+  scriptSprite->setPos(0, 15); // To make room for shadow
+
+  dirtSprite = scene->addPixmap(origDirt);
   dirtSprite->setOpacity(0.0);
   dirtSprite->setPos(0, 15); // To make room for shadow
 
-  origBruises = settings.getPixmap("bruises.png");
-  bruisesSprite = this->scene()->addPixmap(origBruises);
+  bruisesSprite = scene->addPixmap(origBruises);
   bruisesSprite->setOpacity(0.0);
   bruisesSprite->setPos(0, 15); // To make room for shadow
 
-  weatherSprite = this->scene()->addPixmap(QPixmap());
+  weatherSprite = scene->addPixmap(QPixmap());
   weatherSprite->setPos(0, 0);
   weatherSprite->hide();
-
+  */
   behavioursMenu = new QMenu();
   behavioursMenu->setTitle(tr("Behaviours"));
   connect(behavioursMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
@@ -116,8 +113,11 @@ Boris::Boris(Settings &settings) : settings(settings)
   funQueue = 0;
   hygieneQueue = 0;
   anxietyQueue = 0;
-  stats = new Stats(settings, hyper, health, energy, hunger, toilet, social, fun, hygiene, anxiety, this);
+  stats = new Stats(settings, hyper, health, energy, hunger, toilet, social, fun, hygiene, anxiety);
+  stats->setParentItem(this);
+  stats->setPos((getWidth() / 2) - 40, -100);
   bubble = new Bubble(settings);
+  bubble->setParentItem(this);
 
   staticBehaviours = 0;
   // Figure out how many static behaviours there are
@@ -134,7 +134,10 @@ Boris::Boris(Settings &settings) : settings(settings)
   connect(&physicsTimer, &QTimer::timeout, this, &Boris::handlePhysics);
   physicsTimer.start();
 
-  animTimer.start(0, Qt::PreciseTimer, this);
+  animTimer.setInterval(0);
+  animTimer.setSingleShot(true);
+  connect(&animTimer, &QTimer::timeout, this, &Boris::updateBoris);
+  animTimer.start();
 
   weatherTimer.setSingleShot(true);
   connect(&weatherTimer, &QTimer::timeout, this, &Boris::nextWeatherFrame);
@@ -159,7 +162,7 @@ Boris::Boris(Settings &settings) : settings(settings)
 
   setCursor(settings.getCursor("hover.png"));
 
-  updateBoris();
+  reconfBoris();
 }
 
 Boris::~Boris()
@@ -167,6 +170,16 @@ Boris::~Boris()
   delete stats;
   delete bubble;
   delete behavioursMenu;
+}
+
+void Boris::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+  painter->drawPixmap(0, 0, rendered);
+}
+
+QRectF Boris::boundingRect() const
+{
+  return QRectF(0, 0, rendered.width(), rendered.height());
 }
 
 void Boris::createBehavioursMenu()
@@ -376,7 +389,8 @@ void Boris::changeBehaviour(QString behav, int time)
     runScript(stop, true);
   }
 
-  animTimer.start(0, Qt::PreciseTimer, this);
+  animTimer.setInterval(0);
+  animTimer.start();
 }
 
 QPixmap Boris::getShadow(const QPixmap &sprite)
@@ -425,7 +439,7 @@ QPixmap Boris::getShadow(const QPixmap &sprite)
 void Boris::runScript(int &stop, const bool &init)
 {
   // Update current stat variables for scripting use
-  scriptVars["bsize"] = size;
+  scriptVars["bsize"] = getWidth();
   scriptVars["energy"] = stats->getEnergy();
   scriptVars["health"] = stats->getHealth();
   scriptVars["hyper"] = stats->getHyper();
@@ -435,17 +449,18 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["fun"] = stats->getFun();
   scriptVars["hygiene"] = stats->getHygiene();
   scriptVars["anxiety"] = stats->getAnxiety();
-  scriptVars["borisx"] = pos().x() + (size / 2);
-  scriptVars["borisy"] = pos().y() + size;
-  QPoint p = QCursor::pos();
+  scriptVars["borisx"] = pos().x() + (getWidth() / 2);
+  scriptVars["borisy"] = pos().y() + (getHeight() / 2);
+  QPointF p = parent->mapToScene(QCursor::pos());
   scriptVars["mx"] = p.x();
   scriptVars["my"] = p.y();
   scriptVars["mxvel"] = mouseHVel;
   scriptVars["myvel"] = mouseVVel;
-  scriptVars["mdist"] = getDistance(QCursor::pos());
-  scriptVars["msec"] = getSector(QCursor::pos());
+  scriptVars["mdist"] = getDistance(parent->mapToScene(QCursor::pos()));
+  scriptVars["msec"] = getDirectionTo(parent->mapToScene(QCursor::pos()));
   if(borisFriend != nullptr) {
-    scriptVars["fsec"] = getSector(QPoint(borisFriend->pos().x() + (size / 2), borisFriend->pos().y() + size));
+    scriptVars["fsec"] = getDirectionTo(QPoint(borisFriend->pos().x() + (borisFriend->getWidth() / 2),
+                                               borisFriend->pos().y() + (borisFriend->getHeight() / 2)));
   } else {
     scriptVars["fsec"] = -1;
   }
@@ -465,7 +480,7 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["temp"] = settings.temperature;
   scriptVars["queued"] = behavQueue.count();
 
-  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, bubble, settings.behaviours.at(curBehav).labels, settings.behaviours.at(curBehav).defines, scriptVars, QPoint(pos().x(), pos().y()), size);
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, bubble, settings.behaviours.at(curBehav).labels, settings.behaviours.at(curBehav).defines, scriptVars, QPoint(pos().x(), pos().y()), getWidth());
   connect(&scriptHandler, &ScriptHandler::behavFromFile, this, &Boris::behavFromFile);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Boris::setCurFrame);
   connect(&scriptHandler, &ScriptHandler::statChange, this, &Boris::statChange);
@@ -476,10 +491,10 @@ void Boris::runScript(int &stop, const bool &init)
   }
 
   if(flipFrames) {
-    QImage flipped = scriptImage.mirrored(true, false);
-    scriptSprite->setPixmap(QPixmap::fromImage(flipped));
+    QImage flipped = scriptImage.flipped(Qt::Horizontal);
+    scriptSprite = QPixmap::fromImage(flipped);
   } else {
-    scriptSprite->setPixmap(QPixmap::fromImage(scriptImage));
+    scriptSprite = QPixmap::fromImage(scriptImage);
   }
   if(!drawing) {
     scriptImage.fill(Qt::transparent);
@@ -493,7 +508,7 @@ void Boris::runScript(int &stop, const bool &init)
   }
 }
 
-int Boris::getDistance(const QPoint &p)
+int Boris::getDistance(const QPointF &p)
 {
   int xA = p.x();
   int yA = p.y();
@@ -506,19 +521,19 @@ int Boris::getDistance(const QPoint &p)
 
 QPoint Boris::getGlobalCenter()
 {
-  return QPoint(pos().x() + (width() / 2),
-                pos().y() + height() - (size / 2));
+  return QPoint(pos().x() + (getWidth() / 2),
+                pos().y() + (getHeight() / 2));
 }
 
-int Boris::getSector(const QPoint &p)
+int Boris::getDirectionTo(const QPointF &p)
 {
   // Center coordinate of Boris
-  QPoint b(pos().x() + (size / 2), pos().y() + size);
+  QPoint center = getGlobalCenter();
 
   // First find seg coordinate on x
-  int xScale = abs(b.y() - p.y()) * 2;
+  int xScale = abs(center.y() - p.y()) * 2;
   double xScaleSeg = xScale / 3.0;
-  double xZero = b.x() - (xScale / 2.0);
+  double xZero = center.x() - (xScale / 2.0);
   int xSeg = -1;
   if(p.x() < xZero + xScaleSeg) {
     xSeg = 0;
@@ -528,9 +543,9 @@ int Boris::getSector(const QPoint &p)
     xSeg = 2;
   }
   // Then find seg coordinate on y
-  int yScale = abs(b.x() - p.x()) * 2;
+  int yScale = abs(center.x() - p.x()) * 2;
   double yScaleSeg = yScale / 3.0;
-  double yZero = b.y() - (yScale / 2.0);
+  double yZero = center.y() - (yScale / 2.0);
   int ySeg = -1;
   if(p.y() < yZero + yScaleSeg) {
     ySeg = 0;
@@ -568,7 +583,7 @@ int Boris::getSector(const QPoint &p)
   return pointSector;
 }
 
-void Boris::timerEvent(QTimerEvent *)
+void Boris::updateBoris()
 {
   if(stopNextBehaviour) {
     stopNextBehaviour = false;
@@ -596,27 +611,33 @@ void Boris::timerEvent(QTimerEvent *)
   bruisesPixmap.setMask(mask);
 
   if(flipFrames) {
-    QImage flipped = settings.behaviours.at(curBehav).frames.at(curFrame).sprite.toImage().mirrored(true, false);
-    borisSprite->setPixmap(QPixmap::fromImage(flipped));
-    shadowSprite->setPixmap(getShadow(QPixmap::fromImage(flipped)));
-    dirtSprite->setPixmap(QPixmap::fromImage(dirtPixmap.toImage().mirrored(true, false)));
-    bruisesSprite->setPixmap(QPixmap::fromImage(bruisesPixmap.toImage().mirrored(true, false)));
+    QImage flipped = settings.behaviours.at(curBehav).frames.at(curFrame).sprite.toImage().flipped(Qt::Horizontal);
+    borisSprite = QPixmap::fromImage(flipped);
+    shadowSprite = getShadow(QPixmap::fromImage(flipped));
+    dirtSprite = QPixmap::fromImage(dirtPixmap.toImage().flipped(Qt::Horizontal));
+    bruisesSprite = QPixmap::fromImage(bruisesPixmap.toImage().flipped(Qt::Horizontal));
   } else {
-    borisSprite->setPixmap(settings.behaviours.at(curBehav).frames.at(curFrame).sprite);
-    shadowSprite->setPixmap(getShadow(settings.behaviours.at(curBehav).frames.at(curFrame).sprite));
-    dirtSprite->setPixmap(dirtPixmap);
-    bruisesSprite->setPixmap(bruisesPixmap);
+    borisSprite = settings.behaviours.at(curBehav).frames.at(curFrame).sprite;
+    shadowSprite = getShadow(settings.behaviours.at(curBehav).frames.at(curFrame).sprite);
+    dirtSprite = dirtPixmap;
+    bruisesSprite = bruisesPixmap;
   }
 
+  //setPos(0, 0);
+  
   if(settings.sound && settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer != nullptr) {
     if(settings.behaviours.at(curBehav).pitchLock) {
-      soundMixer.playSound(settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
+      /*
+      settings.soundMixer.playSound(settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
                            (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
                            (stats->getHyper() / 60.0) + 1);
+      */
     } else {
-      soundMixer.playSound(settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
+      /*
+      settings.soundMixer.playSound(settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
                            (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
                            (stats->getHyper() / 60.0) + (0.95 + QRandomGenerator::global()->bounded(100) / 1000.0));
+      */
     }
   }
 
@@ -652,16 +673,36 @@ void Boris::timerEvent(QTimerEvent *)
   } else {
     curFrame++;
   }
-  animTimer.start(frameTime, Qt::PreciseTimer, this);
+
+  // Assemble the Boris sprite from parts
+  rendered = QPixmap(borisSprite.width(), borisSprite.height() + 1);
+  rendered.fill(Qt::transparent);
+  QPainter painter(&rendered);
+  painter.setOpacity(0.3);
+  painter.drawPixmap(0, 1, shadowSprite);
+  painter.setOpacity(1.0);
+  painter.drawPixmap(0, 0, borisSprite);
+  painter.drawPixmap(0, 0, scriptSprite);
+  painter.setOpacity(dirtOpacity);
+  painter.drawPixmap(0, 0, dirtSprite);
+  painter.setOpacity(bruisesOpacity);
+  painter.drawPixmap(0, 0, bruisesSprite);
+  painter.end();
+
+  // Make sure 'paint()' is called
+  update();
+
+  animTimer.setInterval(frameTime);
+  animTimer.start();
 }
 
 void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
 {
   sanityCheck();
 
-  int maxX = QApplication::primaryScreen()->size().width() - size;
-  int minY = 0 - (size / 2);
-  int maxY = QApplication::primaryScreen()->size().height() - height();
+  int maxX = settings.desktopWidth - getWidth();
+  int minY = 0 - (getHeight() / 2);
+  int maxY = settings.desktopHeight - getHeight();
 
   if(dX == 666) {
     dX = QRandomGenerator::global()->bounded(maxX);
@@ -669,18 +710,16 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
     if(flipped) {
       dX *= -1;
     }
-    dX = pos().x() + (dX * settings.sizeFactor);
+    dX = pos().x() + dX;
   }
   if(dY == 666) {
     dY = QRandomGenerator::global()->bounded(maxY);
   } else {
-    dY = pos().y() + (dY * settings.sizeFactor);
+    dY = pos().y() + dY;
   }
 
-  move(dX, dY);
-  bubble->moveBubble(pos().x(), pos().y(), size);
-  stats->move(pos().x() + (size / 2) - (stats->width() / 2),
-              pos().y() + size + (size * 0.6));
+  setPos(dX, dY);
+                
   // if Boris is outside borders
   if(pos().y() > maxY || pos().y() < minY) {
     if(falling) {
@@ -706,7 +745,7 @@ void Boris::handleBehaviourChange(QAction* a)
     }
   }
 }
-
+/*
 void Boris::enterEvent(QEnterEvent *event)
 {
   event->accept();
@@ -724,7 +763,6 @@ void Boris::leaveEvent(QEvent *event)
   }
   stats->underMouse = false;
 }
-
 void Boris::mousePressEvent(QMouseEvent* event)
 {
   if(event->button() == Qt::RightButton) {
@@ -738,7 +776,7 @@ void Boris::mousePressEvent(QMouseEvent* event)
     setCursor(settings.getCursor("grab.png"));
     grabbed = true;
     changeBehaviour("_grabbed");
-    this->move(event->globalPosition().x() - settings.sizeFactor * 17.0, 
+    this->setPos(event->globalPosition().x() - settings.sizeFactor * 17.0, 
                event->globalPosition().y() - settings.sizeFactor * 16.0);
     oldCursor = QCursor::pos();
   }
@@ -747,9 +785,9 @@ void Boris::mousePressEvent(QMouseEvent* event)
 void Boris::mouseMoveEvent(QMouseEvent* event)
 {
   if(event->buttons().testFlag(Qt::LeftButton)) {
-    this->move(event->globalPosition().x() - settings.sizeFactor * 17.0, 
+    this->setPos(event->globalPosition().x() - settings.sizeFactor * 17.0, 
                event->globalPosition().y() - settings.sizeFactor * 16.0);
-    stats->move(pos().x() + (size / 2) - (stats->width() / 2),
+    stats->setPos(pos().x() + (size / 2) - (stats->width() / 2),
                 pos().y() + size + (size / 2));
     bubble->moveBubble(pos().x(), pos().y(), size);
   }
@@ -782,13 +820,12 @@ void Boris::wheelEvent(QWheelEvent *)
     annoyance++;
   }
 }
+*/
 
 void Boris::handlePhysics()
 {
   if(falling && !grabbed) {
-    if(shadowSprite->isVisible()) {
-      shadowSprite->hide();
-    }
+    drawShadow = false;
     moveBoris(hVel, vVel);
     vVel += 0.5;
     if(settings.behaviours.at(curBehav).file != "_umbrella_falling") {
@@ -804,7 +841,7 @@ void Boris::handlePhysics()
       hVel *= 0.9;
     }
     if(pos().y() >= altitude) {
-      move(pos().x(), altitude - (pos().y() - altitude));
+      setPos(pos().x(), altitude - (pos().y() - altitude));
       if(vVel < 5.0) {
         if(settings.behaviours.at(curBehav).file != "_umbrella_falling") {
           changeBehaviour("_landing");
@@ -819,16 +856,14 @@ void Boris::handlePhysics()
       }
     }
   } else {
-    if(!shadowSprite->isVisible()) {
-      shadowSprite->show();
-    }
+    drawShadow = true;
   }
   mouseHVel = (QCursor::pos().x() - oldCursor.x()) * 0.25; // 0.25 is just an abstract factor that relates well to the 30 fps physics
   mouseVVel = (QCursor::pos().y() - oldCursor.y()) * 0.25;
   oldCursor = QCursor::pos();
 
   if(!falling && !grabbed) {
-    if(getDistance(QCursor::pos()) < size * 3) {
+    if(getDistance(parent->mapToScene(QCursor::pos())) < getWidth() * 2) {
       if(!mouseHovering) {
         interactions += 2; // Should be 2 due to checkInteractions now run every 1 second instead of 2
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
@@ -884,23 +919,23 @@ void Boris::statProgress()
 
 void Boris::sanityCheck()
 {
-  int minX = - size;
-  int maxX = QApplication::primaryScreen()->size().width();
-  int minY = 0 - (size / 2);
-  int maxY = QApplication::primaryScreen()->size().height() - height();
+  int minX = - getWidth();
+  int maxX = settings.desktopWidth;
+  int minY = 0 - (getHeight() / 2);
+  int maxY = settings.desktopHeight - getHeight();
 
   // Make sure Boris is not located outside boundaries
-  if(pos().y() < minY) {
-    move(pos().x(), minY);
-  }
-  if(pos().y() > maxY) {
-    move(pos().x(), maxY);
-  }
   if(pos().x() > maxX) {
-    move(minX, pos().y());
+    setPos(minX, pos().y());
   }
   if(pos().x() < minX) {
-    move(maxX, pos().y());
+    setPos(maxX, pos().y());
+  }
+  if(pos().y() < minY) {
+    setPos(pos().x(), minY);
+  }
+  if(pos().y() > maxY) {
+    setPos(pos().x(), maxY);
   }
 
   // Make sure Boris altitude is not outside bottom boundary
@@ -926,8 +961,8 @@ void Boris::killBoris()
     isAlive = false;
     statQueueTimer.stop();
     statTimer.stop();
-    dirtSprite->setOpacity(0.0);
-    bruisesSprite->setOpacity(0.0);
+    dirtOpacity = 0.0;
+    bruisesOpacity = 0.0;
     changeBehaviour("_drop_dead");
   }
 }
@@ -940,42 +975,16 @@ void Boris::statQueueProgress()
   if(statQueueTimer.interval() < 5)
     statQueueTimer.setInterval(5);
 
-  if(hyperQueue > 100)
-    hyperQueue = 100;
-  if(healthQueue > 100)
-    healthQueue = 100;
-  if(energyQueue > 100)
-    energyQueue = 100;
-  if(hungerQueue > 100)
-    hungerQueue = 100;
-  if(toiletQueue > 100)
-    toiletQueue = 100;
-  if(socialQueue > 100)
-    socialQueue = 100;
-  if(funQueue > 100)
-    funQueue = 100;
-  if(hygieneQueue > 100)
-    hygieneQueue = 100;
-  if(anxietyQueue > 100)
-    anxietyQueue = 100;
-  if(hyperQueue < -100)
-    hyperQueue = -100;
-  if(healthQueue < -100)
-    healthQueue = -100;
-  if(energyQueue < -100)
-    energyQueue = -100;
-  if(hungerQueue < -100)
-    hungerQueue = -100;
-  if(toiletQueue < -100)
-    toiletQueue = -100;
-  if(socialQueue < -100)
-    socialQueue = -100;
-  if(funQueue < -100)
-    funQueue = -100;
-  if(hygieneQueue < -100)
-    hygieneQueue = -100;
-  if(anxietyQueue < -100)
-    anxietyQueue = -100;
+  hyperQueue = std::clamp(hyperQueue, -100, 100);
+  healthQueue = std::clamp(healthQueue, -100, 100);
+  energyQueue = std::clamp(energyQueue, -100, 100);
+  hungerQueue = std::clamp(hungerQueue, -100, 100);
+  toiletQueue = std::clamp(toiletQueue, -100, 100);
+  socialQueue = std::clamp(socialQueue, -100, 100);
+  funQueue = std::clamp(funQueue, -100, 100);
+  hygieneQueue = std::clamp(hygieneQueue, -100, 100);
+  anxietyQueue = std::clamp(anxietyQueue, -100, 100);
+  hyperQueue = std::clamp(hyperQueue, -100, 100);
 
   if(hyperQueue > 0) {
     hyperQueue--;
@@ -1050,8 +1059,8 @@ void Boris::statQueueProgress()
     stats->deltaAnxiety(-1);
   }
 
-  dirtSprite->setOpacity(0.50 - ((qreal)stats->getHygiene()) * 0.01);
-  bruisesSprite->setOpacity(0.75 - ((qreal)stats->getHealth()) * 0.01);
+  dirtOpacity = 0.50 - ((qreal)stats->getHygiene()) * 0.01;
+  bruisesOpacity = 0.75 - ((qreal)stats->getHealth()) * 0.01;
   if(debugAction != nullptr) {
     debugAction->setText("Stats:\n"
                          "Anxiety: " + QString::number(stats->getAnxiety()) + "\n" +
@@ -1067,6 +1076,16 @@ void Boris::statQueueProgress()
   stats->updateStats();
 
   statQueueTimer.start();
+}
+
+int Boris::getWidth() const
+{
+  return boundingRect().width();
+}
+
+int Boris::getHeight() const
+{
+  return boundingRect().height();
 }
 
 int Boris::getEnergy() const
@@ -1125,7 +1144,7 @@ void Boris::processVision()
   QRgb *bits = (QRgb *)vision.bits();
   { // Check for wall to the west
     int top = border * vision.width();
-    int spread = size / 5;
+    int spread = getWidth() / 5;
     int wallDetect = 0;
     for(int smp = 0; smp < 5; ++smp) {
       printf("CONTRAST: %d\n", abs(qGray(bits[top + (smp * spread * vision.width())]) -
@@ -1144,7 +1163,7 @@ void Boris::processVision()
   }
   { // Check for wall to the east
     int top = border * vision.width() + vision.width() - border;
-    int spread = size / 5;
+    int spread = getWidth() / 5;
     int wallDetect = 0;
     for(int smp = 0; smp < 5; ++smp) {
       printf("CONTRAST: %d\n", abs(qGray(bits[top + (smp * spread * vision.width())]) -
@@ -1163,7 +1182,7 @@ void Boris::processVision()
   }
   { // Check for wall to the north
     int top = 0 + border;
-    int spread = size / 5;
+    int spread = getWidth() / 5;
     int wallDetect = 0;
     for(int smp = 0; smp < 5; ++smp) {
       if(abs(qGray(bits[top + (smp * spread)]) -
@@ -1179,8 +1198,8 @@ void Boris::processVision()
     }
   }
   { // Check for wall to the south
-    int top = ((size + border) * vision.width()) + border;
-    int spread = size / 5;
+    int top = ((getWidth() + border) * vision.width()) + border;
+    int spread = getWidth() / 5;
     int wallDetect = 0;
     for(int smp = 0; smp < 5; ++smp) {
       if(abs(qGray(bits[top + (smp * spread)]) -
@@ -1211,7 +1230,7 @@ void Boris::processAi(QString &behav)
   timeForWeather++;
   if(timeForWeather >= 50) {
     timeForWeather = 0;
-    showWeather(behav);
+    setWeather(behav);
   }
 
   if(behav == "" && QRandomGenerator::global()->bounded(2)) {
@@ -1289,19 +1308,10 @@ void Boris::processAi(QString &behav)
   }
 }
 
-void Boris::updateBoris()
+void Boris::reconfBoris()
 {
   // Reset Boris pointer
   borisFriend = nullptr;
-
-  // Set new size
-  size = settings.size;
-  if(size == 0) {
-    size = QRandomGenerator::global()->bounded(257 - 32) + 32; // Make him at least 32 and max 256
-  }
-  setFixedSize(size, size + (size / 2.0));
-  resetTransform();
-  scale(settings.sizeFactor, settings.sizeFactor);
 
   // Set new independence value
   independence = settings.independence;
@@ -1312,12 +1322,12 @@ void Boris::updateBoris()
   } else {
     stats->hide();
   }
-  moveBoris(0, 0);
+  //moveBoris(0, 0);
 }
 
 void Boris::nextWeatherFrame()
 {
-  weatherSprite->setPixmap(settings.weathers.at(curWeather).frames.at(curWeatherFrame).sprite);
+  weatherSprite = settings.weathers.at(curWeather).frames.at(curWeatherFrame).sprite;
   weatherTimer.setInterval(settings.weathers.at(curWeather).frames.at(curWeatherFrame).time);
   curWeatherFrame++;
   if(curWeatherFrame >= settings.weathers.at(curWeather).frames.length()) {
@@ -1332,7 +1342,7 @@ void Boris::triggerWeather()
   timeForWeather = 666;
 }
 
-void Boris::showWeather(QString &behav)
+void Boris::setWeather(QString &behav)
 {
   for(int a = 0; a < settings.weathers.count(); ++a) {
     if(settings.weathers.at(a).file == settings.weatherType) {
@@ -1344,8 +1354,8 @@ void Boris::showWeather(QString &behav)
   weatherTimer.setInterval(0);
   weatherTimer.start();
 
-  weatherSprite->show();
-  QTimer::singleShot(30000, this, SLOT(hideWeather()));
+  showWeather = true;
+  QTimer::singleShot(30000, this, &Boris::hideWeather);
 
   if(!falling && !grabbed) {
     if(settings.weatherType == "01d") {
@@ -1370,7 +1380,7 @@ void Boris::showWeather(QString &behav)
 
 void Boris::hideWeather()
 {
-  weatherSprite->hide();
+  showWeather = false;
 }
 
 int Boris::getCurBehav()
@@ -1386,10 +1396,10 @@ void Boris::enableInteract()
 
 void Boris::checkInteractions()
 {
-  // Check if there are any collisions with other Borises
+  // Check if there are other Borises nearby to interact with
   for(auto &boris: settings.borisList) {
     if(boris != this) {
-      if(getDistance(boris->getGlobalCenter()) < size * 2) {
+      if(getDistance(getGlobalCenter()) < (getWidth() * 2)) {
         borisInteract(boris);
         break;
       }
@@ -1400,7 +1410,7 @@ void Boris::checkInteractions()
   for(auto &item: settings.itemList) {
     if(interact && !falling && !grabbed && !settings.behaviours.at(curBehav).doNotDisturb &&
        (!item->ignore || item->grabbed) &&
-       getDistance(item->getGlobalCenter()) < (size * 0.75)) {
+       getDistance(item->getGlobalCenter()) < (getWidth() * 0.75)) {
       itemInteract(item);
       break;
     }
@@ -1430,18 +1440,18 @@ void Boris::checkInteractions()
   interactionsTimer.start();
 }
 
-void Boris::borisInteract(Boris *boris)
+void Boris::borisInteract(Boris *otherBoris)
 {
-  if(pos().y() > boris->pos().y()) {
+  if(pos().y() > otherBoris->pos().y()) {
     // Bring this Boris to the front, because he is considered closer in 3D space
-    raise();
-    setFocus();
+    setZValue(1.0);
+    otherBoris->setZValue(0.0);
   }
 
   if(borisFriend != nullptr || falling || grabbed || settings.behaviours.at(curBehav).doNotDisturb) {
     return;
   }
-  borisFriend = boris;
+  borisFriend = otherBoris;
   // Queue current behaviour so it isn't 'forgotten'
   behavQueue.prepend(settings.behaviours.at(curBehav).file);
 
@@ -1465,7 +1475,7 @@ void Boris::itemInteract(Item * item)
     changeBehaviour(item->getReactionBehaviour());
     item->interact(this);
   } else if(item->grabbed) {
-    bubble->initBubble(pos().x(), pos().y(), size, stats->getHyper(), "I don't know what to do with that.", "_thought");
+    bubble->initBubble(stats->getHyper(), "I don't know what to do with that.", "_thought");
   }
   enableInteractTimer.setInterval(5000);
   enableInteractTimer.start();

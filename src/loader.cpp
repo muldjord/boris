@@ -44,6 +44,7 @@ qint64 Loader::getAssetsSize(const QDir &dir)
   return assetsSize;
 }
 
+/*
 bool Loader::loadSoundFxs(const QString &soundsPath,
                           QMap<QString, sf::SoundBuffer> &soundFxs,
                           QProgressBar *progressBar)
@@ -67,11 +68,10 @@ bool Loader::loadSoundFxs(const QString &soundsPath,
   }
   return noErrors;
 }
-
+*/
 bool Loader::loadBehaviours(const Settings &settings,
                             const QString &behavioursPath,
                             QList<Behaviour> &behaviours,
-                            QMap<QString, sf::SoundBuffer> &soundFxs,
                             QProgressBar *progressBar)
 {
   QDir d(behavioursPath,
@@ -252,9 +252,11 @@ bool Loader::loadBehaviours(const Settings &settings,
           f.dy = snippets.at(3).toInt();
         }
         if(!snippets.at(4).isEmpty()) {
+          /*
           if(soundFxs.contains(snippets.at(4))) {
             f.soundBuffer = &soundFxs[snippets.at(4)];
           }
+          */
         }
         if(!snippets.at(5).isEmpty()) {
           QString script = snippets.at(5).simplified();

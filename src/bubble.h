@@ -38,41 +38,43 @@
 
 class Settings;
 
-class Bubble : public QGraphicsView
+class Bubble : public QGraphicsObject
 {
   Q_OBJECT;
 
 public:
   explicit Bubble(Settings &settings);
   ~Bubble();
-  int initBubble(const int x, const int y,
-                 const int &borisSize,
-                 const int &hyper,
-                 const QString &text,
-                 const QString &type = "_chat",
-                 const QUrl &rssUrl = QUrl());
-  void moveBubble(const int &x, const int &y, const int &borisSize);
+  void initBubble(const int &hyper,
+                  const QString &text,
+                  const QString &type = "_chat",
+                  const QUrl &rssUrl = QUrl());
+  bool showBubble = false;
 
 protected:
-  void mousePressEvent(QMouseEvent *event);
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+  QRectF boundingRect() const override;
 
+private slots:
+  void hideBubble();
+  
 private:
   Settings &settings;
-  QGraphicsPixmapItem *bubbleTopLeft;
-  QGraphicsPixmapItem *bubbleTop;
-  QGraphicsPixmapItem *bubbleTopRight;
-  QGraphicsPixmapItem *bubbleLeft;
-  QGraphicsPixmapItem *bubbleRight;
-  QGraphicsPixmapItem *bubbleBottomLeft;
-  QGraphicsPixmapItem *bubbleBottom;
-  QGraphicsPixmapItem *bubbleBottomRight;
+  QPixmap bubbleTopLeft;
+  QPixmap bubbleTop;
+  QPixmap bubbleTopRight;
+  QPixmap bubbleLeft;
+  QPixmap bubbleRight;
+  QPixmap bubbleBottomLeft;
+  QPixmap bubbleBottom;
+  QPixmap bubbleBottomRight;
 
-  QGraphicsPixmapItem *bubbleThought;
-  QGraphicsPixmapItem *bubbleSpeech;
+  QPixmap bubbleThought;
+  QPixmap bubbleSpeech;
 
-  QGraphicsPixmapItem *bubbleText;
+  QPixmap rendered;
+  
   QUrl rssUrl = QUrl();
-  QTimer hideTimer;
 };
 
 #endif // _BUBBLE_H

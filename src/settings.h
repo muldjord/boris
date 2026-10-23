@@ -31,13 +31,13 @@
 #include "behaviour.h"
 #include "sprite.h"
 #include "boris.h"
-#include "soundmixer.h"
 
 #include <QObject>
 #include <QUrl>
 #include <QMap>
 #include <QString>
 #include <QImage>
+#include <QGraphicsView>
 
 constexpr int STATS_ALWAYS = 42;
 constexpr int STATS_CRITICAL = 43;
@@ -61,6 +61,7 @@ public:
   bool showWelcome = true;
   bool statLogging = false;
   int desktopWidth = 1920;
+  int desktopHeight = 1080;
   bool scriptOutput = false;
 
   // If set to true the vision processing will take place, wall detection and such
@@ -76,8 +77,6 @@ public:
   QString cursorsPath = "data/cursors";
 
   // Boris related
-  int borisX = 64;
-  int borisY = 64;
   int clones = 2;
   int size = 64;
   double sizeFactor = 2.0;
@@ -120,6 +119,8 @@ public:
   // Resources
   QPixmap missingPixmap;
 
+  QGraphicsView *mainView = nullptr;
+  
   QList<Boris*> borisList;
   QList<Behaviour> behaviours;
 

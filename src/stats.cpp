@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <QUuid>
+#include <QPainter>
 
 Stats::Stats(Settings &settings,
              const int &hyper,
@@ -40,9 +41,7 @@ Stats::Stats(Settings &settings,
              const int &social,
              const int &fun,
              const int &hygiene,
-             const int &anxiety,
-             QWidget *parent) :
-  QGraphicsView(parent),
+             const int &anxiety) :
   settings(settings),
   hyper(hyper),
   health(health),
@@ -54,6 +53,7 @@ Stats::Stats(Settings &settings,
   hygiene(hygiene),
   anxiety(anxiety)
 {
+  /*
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
   setFrameShape(QFrame::NoFrame);
@@ -61,7 +61,8 @@ Stats::Stats(Settings &settings,
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setFixedSize(80, 80);
-
+  */
+  /*
   QGraphicsScene *scene = new QGraphicsScene();
   setScene(scene);
   scene->addPixmap(settings.getPixmap("stats.png"));
@@ -72,42 +73,26 @@ Stats::Stats(Settings &settings,
   toiletBar = scene->addRect(3, 71, 60, 2);
   flashIcon = scene->addPixmap(settings.getPixmap("flash_icon.png"));
   flashIcon->setVisible(false);
+  */
 
   flashes = 0;
   underMouse = false;
 
-  if(settings.statLogging) {
-    statLog.setFileName("stats_" + QUuid::createUuid().toString().replace("{", "").replace("}", "") + ".csv");
-    if(statLog.open(QIODevice::WriteOnly)) {
-      statLog.write("anxiety;energy;fun;health;hunger;hygiene;hyper;social;toilet\n");
-      statTimer.setInterval(10000);
-      statTimer.setSingleShot(false);
-      connect(&statTimer, &QTimer::timeout, this, &Stats::logStats);
-      statTimer.start();
-    }
-  }
+  statsPixmap = settings.getPixmap("stats.png");
 }
 
 Stats::~Stats()
 {
-  if(statLog.isOpen()) {
-    statLog.close();
-  }
 }
 
-void Stats::logStats()
+void Stats::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-  qInfo("Logging stats\n");
-  statLog.write(
-                QByteArray::number(anxiety) + ";" +
-                QByteArray::number(energy) + ";" +
-                QByteArray::number(fun) + ";" +
-                QByteArray::number(health) + ";" +
-                QByteArray::number(hunger) + ";" +
-                QByteArray::number(hygiene) + ";" +
-                QByteArray::number(hyper) + ";" +
-                QByteArray::number(social) + ";" +
-                QByteArray::number(toilet) + "\n");
+  painter->drawPixmap(0, 0, rendered);
+}
+
+QRectF Stats::boundingRect() const
+{
+  return QRectF(0, 0, rendered.width(), rendered.height());
 }
 
 int Stats::getHyper()
@@ -275,50 +260,76 @@ void Stats::updateStats()
   QColor funColor((5.1 * (fun - 100) * -1 > 255 ? 255 : round(5.1 * (fun - 100) * -1)),
                      (5.1 * fun > 255 ? 255 : round(5.1 * fun)), 0);
 
-  energyBar->setPen(energyColor);
-  energyBar->setBrush(QBrush(energyColor));
-  hungerBar->setPen(hungerColor);
-  hungerBar->setBrush(QBrush(hungerColor));
-  toiletBar->setPen(toiletColor);
-  toiletBar->setBrush(QBrush(toiletColor));
-  socialBar->setPen(socialColor);
-  socialBar->setBrush(QBrush(socialColor));
-  funBar->setPen(funColor);
-  funBar->setBrush(QBrush(funColor));
+  rendered = QPixmap(statsPixmap.width(), statsPixmap.height());
+  rendered.fill(Qt::transparent);
 
-  energyBar->setRect(17, 7, 0.6 * energy, 1);
-  socialBar->setRect(17, 23, 0.6 * social, 1);
-  funBar->setRect(17, 39, 0.6 * fun, 1);
-  hungerBar->setRect(3, 55, 0.6 * hunger, 1);
-  toiletBar->setRect(3, 71, 0.6 * toilet, 1);
-
+  rendered = settings.getPixmap("stats.png");
+  QPainter painter(&rendered);
+  
+  setRect(energyRect, 17, 7, 0.6 * energy, 1);
+  setRect(socialRect, 17, 23, 0.6 * social, 1);
+  setRect(funRect, 17, 39, 0.6 * fun, 1);
+  setRect(hungerRect, 3, 55, 0.6 * hunger, 1);
+  setRect(toiletRect, 3, 71, 0.6 * toilet, 1);
+  
+  painter.setPen(energyColor);
+  painter.setBrush(QBrush(energyColor));
+  painter.drawRect(energyRect);
+  
+  painter.setPen(hungerColor);
+  painter.setBrush(QBrush(hungerColor));
+  painter.drawRect(hungerRect);
+  
+  painter.setPen(toiletColor);
+  painter.setBrush(QBrush(toiletColor));
+  painter.drawRect(toiletRect);
+  
+  painter.setPen(socialColor);
+  painter.setBrush(QBrush(socialColor));
+  painter.drawRect(socialRect);
+  
+  painter.setPen(funColor);
+  painter.setBrush(QBrush(funColor));
+  painter.drawRect(funRect);
+  
+  painter.end();
+  
   if(flashes > 0) {
-    flashIcon->setVisible(!flashIcon->isVisible());
+    showFlashIcon = !showFlashIcon;
     flashes--;
   } else {
-    flashIcon->setVisible(false);
+    showFlashIcon = false;
     if(settings.stats == STATS_CRITICAL && !underMouse) {
-      this->hide();
+      hide();
     }
   }
+  update();
+}
+
+void Stats::setRect(QRect &rect, qreal x, qreal y, qreal width, qreal height)
+{
+  rect.setX(x);
+  rect.setY(y);
+  rect.setWidth(width);
+  rect.setHeight(height);
 }
 
 void Stats::flashStat(QString stat)
 {
   if(stat == "energy") {
-    flashIcon->setPos(7, 0);
+    flashIconPos = QPoint(7, 0);
   } else if(stat == "social") {
-    flashIcon->setPos(7, 16);
+    flashIconPos = QPoint(7, 16);
   } else if(stat == "fun") {
-    flashIcon->setPos(7, 32);
+    flashIconPos = QPoint(7, 32);
   } else if(stat == "hunger") {
-    flashIcon->setPos(57, 48);
+    flashIconPos = QPoint(57, 48);
   } else if(stat == "toilet") {
-    flashIcon->setPos(57, 64);
+    flashIconPos = QPoint(57, 64);
   }
   flashes = 15;
-  flashIcon->setVisible(true);
+  showFlashIcon = true;
   if(settings.stats == STATS_CRITICAL) {
-    this->show();
+    show();
   }
 }

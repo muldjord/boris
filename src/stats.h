@@ -25,36 +25,34 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
 
-#ifndef _STATS_H
-#define _STATS_H
+#pragma once
 
 #include "settings.h"
 
-#include <QGraphicsView>
 #include <QGraphicsPixmapItem>
-#include <QGraphicsRectItem>
+#include <QRect>
 #include <QFile>
 #include <QTimer>
 
 class Settings;
 
-class Stats : public QGraphicsView
+class Stats : public QGraphicsObject
 {
-  Q_OBJECT;
 public:
   Stats(Settings &settings,
-             const int &hyper,
-             const int &health,
-             const int &energy,
-             const int &hunger,
-             const int &toilet,
-             const int &social,
-             const int &fun,
-             const int &hygiene,
-             const int &anxiety,
-             QWidget *parent);
+        const int &hyper,
+        const int &health,
+        const int &energy,
+        const int &hunger,
+        const int &toilet,
+        const int &social,
+        const int &fun,
+        const int &hygiene,
+        const int &anxiety);
   ~Stats();
   void flashStat(QString stat = "none");
+  bool showStats = false;
+
   int getHyper();
   int getHealth();
   int getEnergy();
@@ -76,6 +74,10 @@ public:
   void updateStats();
   bool underMouse;
 
+protected:
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+  QRectF boundingRect() const override;
+
 private slots:
   void logStats();
 
@@ -83,14 +85,21 @@ private:
   Settings &settings;
 
   int flashes;
-  QImage image;
-  QGraphicsPixmapItem *sprite;
-  QGraphicsRectItem *energyBar;
-  QGraphicsRectItem *hungerBar;
-  QGraphicsRectItem *toiletBar;
-  QGraphicsRectItem *socialBar;
-  QGraphicsRectItem *funBar;
-  QGraphicsPixmapItem *flashIcon;
+
+  void setRect(QRect &rect, qreal x, qreal y, qreal width, qreal height);
+  
+  QRect energyRect;
+  QRect hungerRect;
+  QRect toiletRect;
+  QRect socialRect;
+  QRect funRect;
+  QPixmap flashIcon;
+  QPoint flashIconPos = QPoint(0, 0);
+  bool showFlashIcon = false;
+
+  QPixmap statsPixmap;
+  QPixmap rendered;
+
   bool visibility;
   int hyper;
   int health;
@@ -102,9 +111,6 @@ private:
   int hygiene;
   int anxiety;
 
-  QFile statLog;
   QTimer statTimer;
 
 };
-
-#endif // _STATS_H

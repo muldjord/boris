@@ -103,14 +103,14 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
   authorScroll->setWidget(authorWidget);
 
   // License tab
-  // Read COPYING data from file
-  QFile file("COPYING.TXT");
+  // Read LICENSE data from file
+  QFile file("LICENSE");
   QByteArray gplText;
   if(file.open(QIODevice::ReadOnly)) {
     gplText = file.readAll();
     file.close();
   } else {
-    qWarning("ERROR: Couldn't find COPYING file at the designated location.\n");
+    qWarning("ERROR: Couldn't find LICENSE file at the designated location.\n");
     gplText = "ERROR: File not found... This means that someone has been fiddling with the files of this software, and someone might be violating the terms of the GPL. Go to the following location to read the license: http://www.gnu.org/licenses/gpl-3.0.html";
   }
 
@@ -268,7 +268,7 @@ About::~About()
 
 void About::volumeChanged(int value)
 {
-  sf::Listener::setGlobalVolume(value);
+  //sf::Listener::setGlobalVolume(value);
 }
 
 void About::saveAll()
@@ -352,8 +352,6 @@ void About::saveAll()
   }
 
   iniSettings->setValue("show_welcome", settings.showWelcome);
-  iniSettings->setValue("boris_x", settings.borisX);
-  iniSettings->setValue("boris_y", settings.borisY);
   iniSettings->setValue("clones", settings.clones);
   iniSettings->setValue("size", settings.size);
   iniSettings->setValue("items", settings.items);

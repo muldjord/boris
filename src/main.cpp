@@ -72,14 +72,14 @@ int main(int argc, char *argv[])
   app.setStyle(QStyleFactory::create("Fusion"));  
   app.setQuitOnLastWindowClosed(false);
 
+  QDir::setCurrent(QApplication::applicationDirPath());
+
   qInstallMessageHandler(customMessageHandler);
 
   QTranslator translator;
   if(translator.load("boris_" + QLocale::system().name())) {
     app.installTranslator(&translator);
   }
-
-  QDir::setCurrent(QApplication::applicationDirPath());
 
   MainWindow window;
 

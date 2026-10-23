@@ -27,35 +27,43 @@
 
 #include "soundmixer.h"
 
-SoundMixer::SoundMixer(const int channels)
+#include <SFML/Audio/Sound.hpp>
+
+SoundMixer::SoundMixer()
 {
-  for(int a = 0; a < channels; ++a) {
-    sf::Sound soundChannel;
-    soundChannel.setAttenuation(0.f);
-    soundChannels.append(soundChannel);
-  }
 }
+
+SoundMixer::~SoundMixer()
+{
+}
+
+/*
+void SoundMixer::addSound(const QString &id,
+                          const sf::SoundBuffer &data)
+{
+  soundFxs[id] = data;
+}
+*/
 
 void SoundMixer::playSoundFile(const QString &fileName,
                                const float &panning,
                                const float &pitch)
 {
   if(soundFxs.contains(fileName)) {
-    playSound(&soundFxs[fileName], panning, pitch);
+    
+    sf::Sound sound(soundFxs[fileName]);
+    sound.setPan(panning);
+    sound.setPitch(pitch);
+    sound.play();
   }
 }
 
-void SoundMixer::playSound(const sf::SoundBuffer *buffer,
+void SoundMixer::playSound(const sf::SoundBuffer &data,
                            const float &panning,
                            const float &pitch)
 {
-  for(auto &channel: soundChannels) {
-    if(channel.getStatus() == sf::SoundSource::Status::Stopped) {
-      channel.setBuffer(*buffer);
-      channel.setPosition(panning, 0.f, 2.f);
-      channel.setPitch(pitch);
-      channel.play();
-      break;
-    }
-  }
+  sf::Sound sound(data);
+  sound.setPan(panning);
+  sound.setPitch(pitch);
+  sound.play();
 }

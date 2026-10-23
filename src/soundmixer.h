@@ -25,10 +25,9 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
 
-#ifndef _SOUNDMIXER_H
-#define _SOUNDMIXER_H
+#pragma once
 
-#include "SFML/Audio.hpp"
+#include <SFML/Audio/Sound.hpp>
 
 #include <QObject>
 #include <QMap>
@@ -38,17 +37,18 @@ class SoundMixer : public QObject
   Q_OBJECT;
 
 public:
-  explicit SoundMixer(const int channels);
+  SoundMixer();
+  ~SoundMixer();
+
   QMap<QString, sf::SoundBuffer> soundFxs;
+  /*
+  void addSound(const QString &id,
+                const sf::SoundBuffer &data);
+  */
   void playSoundFile(const QString &fileName,
                      const float &panning,
                      const float &pitch);
-  void playSound(const sf::SoundBuffer *buffer,
+  void playSound(const sf::SoundBuffer &data,
                  const float &panning,
                  const float &pitch);
-
-private:
-  QList<sf::Sound> soundChannels;
 };
-
-#endif // _SOUNDMIXER_H

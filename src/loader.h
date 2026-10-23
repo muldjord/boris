@@ -24,14 +24,11 @@
  *  along with Boris; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
-#ifndef _LOADER_H
-#define _LOADER_H
+#pragma once
 
 #include "behaviour.h"
 #include "mainwindow.h"
 #include "sprite.h"
-
-#include "SFML/Audio.hpp"
 
 #include <QObject>
 #include <QProgressBar>
@@ -43,12 +40,10 @@ class Loader: public QObject
 public:
   static qint64 getAssetsSize(const QDir &dir);
   static bool loadSoundFxs(const QString &soundsPath,
-                           QMap<QString, sf::SoundBuffer> &soundFxs,
                            QProgressBar *progressBar);
   static bool loadBehaviours(const Settings &settings,
                              const QString &behavioursPath,
                              QList<Behaviour> &behaviours,
-                             QMap<QString, sf::SoundBuffer> &soundFxs,
                              QProgressBar *progressBar);
   static bool loadFont(Settings &settings);
   static bool loadSprites(Settings &settings);
@@ -56,5 +51,3 @@ public:
   static Script parseScript(const QString &script);
   static void setClothesColor(const Settings &settings, QImage &image);
 };
-
-#endif // _LOADER_H

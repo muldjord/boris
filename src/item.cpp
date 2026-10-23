@@ -27,10 +27,8 @@
 
 #include "item.h"
 #include "scripthandler.h"
-#include "soundmixer.h"
+//#include "soundmixer.h"
 #include "settings.h"
-
-#include "SFML/Audio.hpp"
 
 #include <stdio.h>
 #include <math.h>
@@ -41,17 +39,9 @@
 #include <QElapsedTimer>
 #include <QRandomGenerator>
 
-extern SoundMixer soundMixer;
-
-Item::Item(const int &x, const int &y, const int &size, const QString &item, Settings &settings, const bool &ignore) : ignore(ignore), settings(settings), size(size)
+Item::Item(const QString &item, Settings &settings, QGraphicsView *parent, const bool &ignore)
+  : ignore(ignore), settings(settings), parent(parent)
 {
-  setAttribute(Qt::WA_TranslucentBackground);
-  setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
-  setFrameShape(QFrame::NoFrame);
-  setStyleSheet("background:transparent");
-  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
   for(int a = 0; a < settings.itemBehaviours.count(); ++a) {
     if(settings.itemBehaviours.at(a).file == item) {
       curItem = a;
@@ -59,24 +49,11 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
     }
   }
 
-  setScene(new QGraphicsScene);
-  scene()->setSceneRect(0.0, 0.0, 32, 32 + 1); // + 1 to make room for shadow
-
   origShadow = settings.getPixmap("shadow.png");
-  shadowSprite = this->scene()->addPixmap(origShadow);
-  shadowSprite->setOpacity(0.35);
-
-  itemSprite = this->scene()->addPixmap(QPixmap());
-  itemSprite->setPos(0, 0);
-
-  scriptSprite = this->scene()->addPixmap(QPixmap());
-  scriptSprite->setPos(0, 0);
+  shadowSprite = origShadow;
 
   setCursor(settings.getCursor("hover.png"));
 
-  setFixedSize(size, size + settings.sizeFactor);
-  scale(settings.sizeFactor, settings.sizeFactor);
-  move(x, y);
   if(settings.itemTimeout > 0) {
     QTimer::singleShot(settings.itemTimeout * 1000, this, &Item::destroy);
   }
@@ -108,7 +85,10 @@ Item::Item(const int &x, const int &y, const int &size, const QString &item, Set
   ignoreTimer.setSingleShot(true);
   connect(&ignoreTimer, &QTimer::timeout, this, &Item::dontIgnore);
 
-  animTimer.start(0, Qt::PreciseTimer, this);
+  animTimer.setInterval(0);
+  animTimer.setSingleShot(true);
+  connect(&animTimer, &QTimer::timeout, this, &Item::updateItem);
+  animTimer.start();
 
   if(settings.itemBehaviours.at(curItem).noIgnore) {
     this->ignore = false;
@@ -122,57 +102,69 @@ Item::~Item()
 {
 }
 
+void Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+  painter->drawPixmap(0, 0, rendered);
+}
+
+QRectF Item::boundingRect() const
+{
+  return QRectF(0, 0, rendered.width(), rendered.height());
+}
+
 QPixmap Item::getShadow(const QPixmap &sprite)
 {
   QImage image = sprite.toImage();
-  int firstLeft = sprite.width();
-  int bottom = 0;
-  for(int row = 0; row < sprite.height(); ++row) {
-    QRgb *rowBits = (QRgb *)image.constScanLine(row);
-    for(int col = 0; col < sprite.width(); ++col) {
-      if(qAlpha(rowBits[col]) != 0) {
-        if(bottom < row) {
-          bottom = row;
-        }
-        if(firstLeft > col) {
-          firstLeft = col;
-          break;
-        }
-      }
+  int bottom = image.height() - 1;
+  QRgb *pixelBits = (QRgb *)image.constBits();
+  for(int pixel = (image.width() * image.height()) - 1; pixel >= 0; --pixel) {
+    if(qAlpha(pixelBits[pixel]) != 0) {
+      bottom = (pixel / sprite.width());
+      break;
     }
   }
-  shadowSprite->setPos(firstLeft, bottom - 30);
-  int firstRight = 0;
-  for(int row = 0; row < sprite.height(); ++row) {
-    QRgb *rowBits = (QRgb *)image.constScanLine(row);
-    for(int col = sprite.width() - 1; col >= 0; --col) {
-      if(qAlpha(rowBits[col]) != 0 && firstRight < col) {
-        firstRight = col;
-        break;
+
+  int firstX = image.width();
+  int lastX = 0;
+  int shadowYDelta = 4;
+  for(int y = (bottom - shadowYDelta + 1 < 0?0:bottom - shadowYDelta + 1); y <= bottom; ++y) {
+    QRgb *yBits = (QRgb *)image.constScanLine(y);
+    int rowLastX = 0;
+    for(int x = 0; x < sprite.width(); ++x) {
+      if(qAlpha(yBits[x]) != 0) {
+        if(x < firstX) {
+          firstX = x;
+        }
+        rowLastX = x;
       }
     }
+    if(rowLastX > lastX) {
+      lastX = rowLastX;
+    }
   }
-  if(firstRight == 0) {
-    firstRight = sprite.width();
+  // In case no non-transparent pixels where found at all
+  QImage shadow(32, 32, QImage::Format_ARGB32);
+  shadow.fill(Qt::transparent);
+  if(firstX < lastX) {
+    int shadowWidth = lastX - firstX + 3;
+    QPainter painter(&shadow);
+    painter.drawImage(firstX - 1, bottom - image.height() + 1, origShadow.toImage().scaled(shadowWidth, origShadow.height()));
+    painter.end();
   }
-  if(firstLeft == sprite.width()) {
-    firstLeft = 0;
-  }
-  int shadowWidth = firstRight - firstLeft;
-  QImage shadow = origShadow.toImage().scaled(shadowWidth + 1, origShadow.height());
+  //= origShadow.toImage().scaled(shadowWidth + 1, origShadow.height());
   return QPixmap::fromImage(shadow);
 }
 
 void Item::runScript(int &stop, const bool &init)
 {
   // Update current stat variables for scripting use
-  QPoint p = QCursor::pos();
+  QPointF p = parent->mapToScene(QCursor::pos());
   scriptVars["mx"] = p.x();
   scriptVars["my"] = p.y();
   scriptVars["mxvel"] = mouseHVel;
   scriptVars["myvel"] = mouseVVel;
-  scriptVars["mdist"] = getDistance(QCursor::pos());
-  scriptVars["msec"] = getSector(QCursor::pos());
+  scriptVars["mdist"] = getDistance(parent->mapToScene(QCursor::pos()));
+  scriptVars["msec"] = getDirectionTo(parent->mapToScene(QCursor::pos()));
   QDate date = QDate::currentDate();
   QTime time = QTime::currentTime();
   scriptVars["day"] = date.day();
@@ -188,7 +180,7 @@ void Item::runScript(int &stop, const bool &init)
     scriptImage.fill(Qt::transparent);
   }
 
-  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, nullptr, settings.itemBehaviours.at(curItem).labels, settings.itemBehaviours.at(curItem).defines, scriptVars, pos(), size);
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, nullptr, settings.itemBehaviours.at(curItem).labels, settings.itemBehaviours.at(curItem).defines, scriptVars, QPoint(pos().x(), pos().y()), getWidth());
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Item::setCurFrame);
   if(init) {
     scriptHandler.runScript(stop, settings.itemBehaviours.at(curItem).defines["init"]);
@@ -196,7 +188,7 @@ void Item::runScript(int &stop, const bool &init)
     scriptHandler.runScript(stop, settings.itemBehaviours.at(curItem).frames.at(curFrame).script);
   }
 
-  scriptSprite->setPixmap(QPixmap::fromImage(scriptImage));
+  scriptSprite = QPixmap::fromImage(scriptImage);
   if(scriptVars["xvel"] != 0 &&
      scriptVars["yvel"] != 0) {
     falling = true;
@@ -206,7 +198,7 @@ void Item::runScript(int &stop, const bool &init)
   }
 }
 
-void Item::timerEvent(QTimerEvent *)
+void Item::updateItem()
 {
   if(stopAndDestroy) {
     stopAndDestroy = false;
@@ -221,22 +213,26 @@ void Item::timerEvent(QTimerEvent *)
   }
 
   if(flipFrames) {
-    QImage flipped = settings.itemBehaviours.at(curItem).frames.at(curFrame).sprite.toImage().mirrored(true, false);
-    itemSprite->setPixmap(QPixmap::fromImage(flipped));
-    shadowSprite->setPixmap(getShadow(QPixmap::fromImage(flipped)));
+    QImage flipped = settings.itemBehaviours.at(curItem).frames.at(curFrame).sprite.toImage().flipped(Qt::Horizontal);
+    itemSprite = QPixmap::fromImage(flipped);
+    shadowSprite = getShadow(QPixmap::fromImage(flipped));
   } else {
-    itemSprite->setPixmap(settings.itemBehaviours.at(curItem).frames.at(curFrame).sprite);
-    shadowSprite->setPixmap(getShadow(settings.itemBehaviours.at(curItem).frames.at(curFrame).sprite));
+    itemSprite = settings.itemBehaviours.at(curItem).frames.at(curFrame).sprite;
+    shadowSprite = getShadow(settings.itemBehaviours.at(curItem).frames.at(curFrame).sprite);
   }
 
   if(settings.sound && settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer != nullptr) {
     if(settings.itemBehaviours.at(curItem).pitchLock) {
+      /*
       soundMixer.playSound(settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
                            (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0, 1.0);
+      */
     } else {
+      /*
       soundMixer.playSound(settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
                            (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
                            0.95 + QRandomGenerator::global()->bounded(100) / 1000.0);
+      */
     }
   }
 
@@ -270,16 +266,31 @@ void Item::timerEvent(QTimerEvent *)
     curFrame++;
   }
 
-  animTimer.start(frameTime, Qt::PreciseTimer, this);
+  // Assemble the Boris sprite from parts
+  rendered = QPixmap(itemSprite.width(), itemSprite.height());
+  rendered.fill(Qt::transparent);
+  QPainter painter(&rendered);
+  painter.setOpacity(0.25);
+  painter.drawPixmap(0, 0, shadowSprite);
+  painter.setOpacity(1.0);
+  painter.drawPixmap(0, 0, itemSprite);
+  painter.drawPixmap(0, 0, scriptSprite);
+  painter.end();
+
+  // Make sure 'paint()' is called
+  update();
+
+  animTimer.setInterval(frameTime);
+  animTimer.start();
 }
 
 void Item::moveItem(int dX, int dY, const bool &flipped)
 {
   sanityCheck();
 
-  int maxX = QApplication::primaryScreen()->size().width() - size;
-  int minY = 0;
-  int maxY = QApplication::primaryScreen()->size().height() - size;
+  int maxX = settings.desktopWidth - getWidth();
+  int minY = 0 - getHeight();
+  int maxY = settings.desktopHeight - getHeight();
 
   if(dX == 666) {
     dX = QRandomGenerator::global()->bounded(maxX);
@@ -287,15 +298,16 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
     if(flipped) {
       dX *= -1;
     }
-    dX = pos().x() + (dX * settings.sizeFactor);
+    dX = pos().x() + dX;
   }
   if(dY == 666) {
     dY = QRandomGenerator::global()->bounded(maxY);
   } else {
-    dY = pos().y() + (dY * settings.sizeFactor);
+    dY = pos().y() + dY;
   }
 
-  move(dX, dY);
+  setPos(dX, dY);
+
   // if item is outside borders
   if(falling && (pos().y() > maxY || pos().y() < minY)) {
     hVel *= 0.2;
@@ -305,45 +317,56 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
 
 void Item::sanityCheck()
 {
-  int minX = - size;
-  int maxX = QApplication::primaryScreen()->size().width();
+  int minX = - getWidth();
+  int maxX = settings.desktopWidth;
   int minY = 0;
-  int maxY = QApplication::primaryScreen()->size().height() - height();
+  int maxY = settings.desktopHeight - getHeight();
 
   // Make sure Item is not located outside boundaries
   if(pos().y() < minY) {
-    move(pos().x(), minY);
+    setPos(pos().x(), minY);
   }
   if(pos().y() > maxY) {
-    move(pos().x(), maxY);
+    setPos(pos().x(), maxY);
   }
   if(pos().x() > maxX) {
-    move(minX, pos().y());
+    setPos(minX, pos().y());
   }
   if(pos().x() < minX) {
-    move(maxX, pos().y());
+    setPos(maxX, pos().y());
   }
 }
 
-int Item::getDistance(const QPoint &p)
+int Item::getWidth() const
+{
+  return boundingRect().width();
+}
+
+int Item::getHeight() const
+{
+  return boundingRect().height();
+}
+
+int Item::getDistance(const QPointF &p)
 {
   int xA = p.x();
   int yA = p.y();
-  int xB = pos().x() + (size / 2);
-  int yB = pos().y() + (size / 2);
+  QPoint globalCenter = getGlobalCenter();
+  int xB = globalCenter.x();
+  int yB = globalCenter.y();
 
   return sqrt((yB - yA) * (yB - yA) + (xB - xA) * (xB - xA));
 }
 
-int Item::getSector(const QPoint &p)
+int Item::getDirectionTo(const QPointF &p)
 {
   // Center coordinate of Item
-  QPoint b(pos().x() + (size / 2), pos().y() + (size / 2));
+  QPoint center = getGlobalCenter();
 
   // First find seg coordinate on x
-  int xScale = abs(b.y() - p.y()) * 2;
+  int xScale = abs(center.y() - p.y()) * 2;
   double xScaleSeg = xScale / 3.0;
-  double xZero = b.x() - (xScale / 2.0);
+  double xZero = center.x() - (xScale / 2.0);
   int xSeg = -1;
   if(p.x() < xZero + xScaleSeg) {
     xSeg = 0;
@@ -353,9 +376,9 @@ int Item::getSector(const QPoint &p)
     xSeg = 2;
   }
   // Then find seg coordinate on y
-  int yScale = abs(b.x() - p.x()) * 2;
+  int yScale = abs(center.x() - p.x()) * 2;
   double yScaleSeg = yScale / 3.0;
-  double yZero = b.y() - (yScale / 2.0);
+  double yZero = center.y() - (yScale / 2.0);
   int ySeg = -1;
   if(p.y() < yZero + yScaleSeg) {
     ySeg = 0;
@@ -392,7 +415,7 @@ int Item::getSector(const QPoint &p)
   }
   return pointSector;
 }
-
+/*
 void Item::mouseDoubleClickEvent(QMouseEvent* event)
 {
   if(event->button() == Qt::LeftButton) {
@@ -420,7 +443,7 @@ void Item::mousePressEvent(QMouseEvent* event)
 void Item::mouseMoveEvent(QMouseEvent* event)
 {
   if(grabbed && event->buttons().testFlag(Qt::LeftButton)) {
-    this->move(event->globalPosition().x() - settings.sizeFactor * 16.0, 
+    this->setPos(event->globalPosition().x() - settings.sizeFactor * 16.0, 
                event->globalPosition().y() - settings.sizeFactor * 20.0);
   }
 
@@ -437,7 +460,7 @@ void Item::mouseReleaseEvent(QMouseEvent* event)
     altitude = pos().y();
   }
 }
-
+*/
 void Item::setCurFrame(const int &frame)
 {
   curFrame = frame;
@@ -445,8 +468,8 @@ void Item::setCurFrame(const int &frame)
 
 QPoint Item::getGlobalCenter()
 {
-  return QPoint(pos().x() + (width() / 2),
-                pos().y() + (height() / 2));
+  return QPoint(pos().x() + (getWidth() / 2),
+                pos().y() + (getHeight() / 2));
 }
 
 QString Item::getReactionBehaviour()
@@ -483,11 +506,11 @@ void Item::dontIgnore()
 void Item::handlePhysics()
 {
   if(falling && !grabbed) {
-    if(shadowSprite->isVisible()) {
-      shadowSprite->hide();
+    if(showShadow) {
+      showShadow = false;
     }
     if(pos().y() + (vVel * settings.sizeFactor) <= altitude) {
-      moveItem(hVel, vVel); // moveItem scales hVel and vVel inside the function according to current item size
+      moveItem(hVel, vVel);
     } else {
       int distanceLeft = (altitude - pos().y()) / settings.sizeFactor;
       moveItem(hVel, vVel - ((vVel - distanceLeft) * 2));
@@ -495,15 +518,17 @@ void Item::handlePhysics()
         falling = false;
       } else {
         hVel *= settings.itemBehaviours.at(curItem).bounce * 0.1;
+        /*
         soundMixer.playSound(&soundMixer.soundFxs["bounce.wav"],
                              (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0, 1.0);
+        */
         vVel = (vVel * (settings.itemBehaviours.at(curItem).bounce * 0.1)) * -1;
       }
     }
     vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
   } else {
-    if(!shadowSprite->isVisible()) {
-      shadowSprite->show();
+    if(!showShadow) {
+      showShadow = true;
     }
   }
   mouseHVel = (QCursor::pos().x() - oldCursor.x()) / 4.0;
@@ -524,15 +549,15 @@ void Item::interact(Boris *boris)
 
   borisHyper = boris->getHyper();
 
-  move(boris->pos().x() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * settings.sizeFactor), boris->pos().y() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * settings.sizeFactor) + (size * 0.5));
-  //boris->move(pos().x() + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord() * settings.sizeFactor * -1), pos().y() - (size / 2.0) + (1 * settings.sizeFactor) + (settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() * settings.sizeFactor * -1));
+  setPos(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord(), boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() + (getWidth() * 0.5));
 
   if(settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel().isEmpty()) {
     destroy();
     return;
   }
   curFrame = settings.itemBehaviours.at(curItem).labels[settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel()];
-  animTimer.start(0, Qt::PreciseTimer, this);
+  animTimer.setInterval(0);
+  animTimer.start();
   setCursor(settings.getCursor("hover.png"));
   falling = false;
   grabbed = false;

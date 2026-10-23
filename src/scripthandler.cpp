@@ -26,7 +26,7 @@
  */
 
 #include "scripthandler.h"
-#include "soundmixer.h"
+//#include "soundmixer.h"
 #include "item.h"
 #include "sprite.h"
 
@@ -34,8 +34,6 @@
 
 #include <QRandomGenerator>
 #include <QRegularExpression>
-
-extern SoundMixer soundMixer;
 
 ScriptHandler::ScriptHandler(QImage *image,
                              bool *drawing,
@@ -304,9 +302,11 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
     if(settings.scriptOutput) {
       printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
     }
-    settings.itemList.append(new Item(parentPos.x() + (iX * (size / 32)),
-                                      parentPos.y() + (size / 2) + (iY * (size / 32)),
-                                      size, itemName, settings));
+    Item *spawnedItem = new Item(itemName, settings, settings.mainView);
+    spawnedItem->setPos(parentPos.x() + (iX * (size / 32)),
+                        parentPos.y() + (size / 2) + (iY * (size / 32)));
+    settings.mainView->scene()->addItem(spawnedItem);
+    settings.itemList.append(spawnedItem);
   } else {
     if(settings.scriptOutput) {
       printf("Items disabled, ignoring spawn\n");
@@ -560,9 +560,11 @@ void ScriptHandler::handleSound(QList<QString> &parameters)
     if(settings.scriptOutput) {
       printf("Playing sound '%s'\n", parameters.first().toStdString().c_str());
     }
+    /*
     soundMixer.playSoundFile(parameters.first(),
                              (float)parentPos.x() / (float)settings.desktopWidth * 2.0 - 1.0,
                              (scriptVars["hyper"] / 60.0) + 1);
+    */
   }
   parameters.removeFirst(); // Remove sound file name
 }
@@ -577,7 +579,7 @@ void ScriptHandler::handleSay(QList<QString> &parameters)
       if(!settings.rssLines.isEmpty()) {
         int rssLine = QRandomGenerator::global()->bounded(settings.rssLines.count());
         bubbleText = settings.rssLines.at(rssLine).text;
-        bubble->initBubble(parentPos.x(), parentPos.y(), size, scriptVars["hyper"],
+        bubble->initBubble(scriptVars["hyper"],
                            bubbleText,
                            "_chat",
                            settings.rssLines.at(rssLine).url);
@@ -597,7 +599,7 @@ void ScriptHandler::handleSay(QList<QString> &parameters)
       for(const auto &variable: scriptVars.keys()) {
         bubbleText.replace("$" + variable, QString::number(scriptVars[variable]));
       }
-      bubble->initBubble(parentPos.x(), parentPos.y(), size, scriptVars["hyper"], bubbleText);
+      bubble->initBubble(scriptVars["hyper"], bubbleText);
     }
     if(settings.scriptOutput) {
       printf("Saying '%s'\n", bubbleText.toStdString().c_str());
@@ -615,7 +617,7 @@ void ScriptHandler::handleThink(QList<QString> &parameters)
       if(!settings.rssLines.isEmpty()) {
         int rssLine = QRandomGenerator::global()->bounded(settings.rssLines.count());
         bubbleText = settings.rssLines.at(rssLine).text;
-        bubble->initBubble(parentPos.x(), parentPos.y(), size, scriptVars["hyper"],
+        bubble->initBubble(scriptVars["hyper"],
                            bubbleText,
                            "_thought",
                            settings.rssLines.at(rssLine).url);
@@ -635,7 +637,7 @@ void ScriptHandler::handleThink(QList<QString> &parameters)
       for(const auto &variable: scriptVars.keys()) {
         bubbleText.replace("$" + variable, QString::number(scriptVars[variable]));
       }
-      bubble->initBubble(parentPos.x(), parentPos.y(), size, scriptVars["hyper"], bubbleText, "_thought");
+      bubble->initBubble(scriptVars["hyper"], bubbleText, "_thought");
     }
     if(settings.scriptOutput) {
       printf("Thinking '%s'\n", bubbleText.toStdString().c_str());
