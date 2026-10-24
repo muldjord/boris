@@ -76,7 +76,7 @@ public:
   int getFun() const;
   int getHygiene() const;
   int getAnxiety() const;
-  void moveBoris(int dX, int dY, const bool &flipped = false, const bool &vision = true);
+  void moveBoris(int dX, int dY, const bool &flipped = false);
   int getCurBehav();
   void changeBehaviour(QString behav = "", int time = -1);
   QPoint getGlobalCenter();
@@ -192,7 +192,6 @@ private:
   QList<QString> behavQueue;
   QString getFileFromCategory(const QString &category);
   int getIdxFromCategory(const QString &category);
-  void processVision();
   void processAi(QString &behav);
   int getDistance(const QPointF &p);
   int getDirectionTo(const QPointF &p);

@@ -152,11 +152,6 @@ void MainWindow::init()
   }
   settings.coins = iniSettings->value("coins").toInt();
 
-  if(!iniSettings->contains("vision")) {
-    iniSettings->setValue("vision", false);
-  }
-  settings.vision = iniSettings->value("vision").toBool();
-
   if(!iniSettings->contains("clones")) {
     iniSettings->setValue("clones", 2);
   }

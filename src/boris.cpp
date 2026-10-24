@@ -703,7 +703,7 @@ void Boris::updateBoris()
   animTimer.start();
 }
 
-void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
+void Boris::moveBoris(int dX, int dY, const bool &flipped)
 {
   sanityCheck();
 
@@ -737,9 +737,6 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
     } else if(!grabbed) {
       changeBehaviour();
     }
-  }
-  if(vision && settings.vision && !falling && !grabbed) {
-    processVision();
   }
 }
 
@@ -1139,93 +1136,6 @@ int Boris::getHygiene() const
 int Boris::getAnxiety() const
 {
   return stats->getAnxiety();
-}
-
-void Boris::processVision()
-{
-  int border = 4;
-  int contrast = 15;
-  // FIXME: This is broken!
-  //QImage vision = QImageQGuiApplication::primaryScreen()->grabWindow(QApplication::primaryScreen()->size().winId(), pos().x() - border, pos().y() - border, size + border * 2, size + border * 2).toImage();
-  QImage vision = QImage();
-
-  QRgb *bits = (QRgb *)vision.bits();
-  { // Check for wall to the west
-    int top = border * vision.width();
-    int spread = getWidth() / 5;
-    int wallDetect = 0;
-    for(int smp = 0; smp < 5; ++smp) {
-      printf("CONTRAST: %d\n", abs(qGray(bits[top + (smp * spread * vision.width())]) -
-                                   qGray(bits[top + (smp * spread * vision.width()) + border - 1])));
-      if(abs(qGray(bits[top + (smp * spread * vision.width())]) -
-             qGray(bits[top + (smp * spread * vision.width()) + border - 1])) > contrast) {
-        printf("MAYBE A WALL!\n");
-        wallDetect++;
-      }
-    }
-    if(wallDetect >= 3) {
-      moveBoris(2, 0, false);
-      changeBehaviour();
-      return;
-    }
-  }
-  { // Check for wall to the east
-    int top = border * vision.width() + vision.width() - border;
-    int spread = getWidth() / 5;
-    int wallDetect = 0;
-    for(int smp = 0; smp < 5; ++smp) {
-      printf("CONTRAST: %d\n", abs(qGray(bits[top + (smp * spread * vision.width())]) -
-                                   qGray(bits[top + (smp * spread * vision.width()) + border - 1])));
-      if(abs(qGray(bits[top + (smp * spread * vision.width())]) -
-             qGray(bits[top + (smp * spread * vision.width()) + border - 1])) > contrast) {
-        printf("MAYBE A WALL!\n");
-        wallDetect++;
-      }
-    }
-    if(wallDetect >= 3) {
-      moveBoris(-2, 0, false);
-      changeBehaviour();
-      return;
-    }
-  }
-  { // Check for wall to the north
-    int top = 0 + border;
-    int spread = getWidth() / 5;
-    int wallDetect = 0;
-    for(int smp = 0; smp < 5; ++smp) {
-      if(abs(qGray(bits[top + (smp * spread)]) -
-             qGray(bits[top + (smp * spread) + ((border - 1) * vision.width())])) > contrast) {
-        printf("MAYBE A WALL!\n");
-        wallDetect++;
-      }
-    }
-    if(wallDetect >= 3) {
-      moveBoris(2, 0, false);
-      changeBehaviour();
-      return;
-    }
-  }
-  { // Check for wall to the south
-    int top = ((getWidth() + border) * vision.width()) + border;
-    int spread = getWidth() / 5;
-    int wallDetect = 0;
-    for(int smp = 0; smp < 5; ++smp) {
-      if(abs(qGray(bits[top + (smp * spread)]) -
-             qGray(bits[top + (smp * spread) + ((border - 1) * vision.width())])) > contrast) {
-        printf("MAYBE A WALL!\n");
-        wallDetect++;
-      }
-      //bits[top + (smp * spread)] = qRgb(255, 0, 0);
-      //bits[qGray(bits[top + (smp * spread) + ((border - 1) * vision.width())])] = qRgb(255, 0, 0);
-    }
-    //vision.save("blah.png");
-    //exit(0);
-    if(wallDetect >= 3) {
-      moveBoris(2, 0, false);
-      changeBehaviour();
-      return;
-    }
-  }
 }
 
 void Boris::processAi(QString &behav)

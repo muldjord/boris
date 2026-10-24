@@ -64,9 +64,6 @@ public:
   int desktopHeight = 1080;
   bool scriptOutput = false;
 
-  // If set to true the vision processing will take place, wall detection and such
-  bool vision = false;
-
   // Asset folders
   QString graphicsPath = "data/graphics";
   QString soundsPath = "data/sounds";

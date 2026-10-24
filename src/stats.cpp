@@ -92,7 +92,7 @@ void Stats::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
 
 QRectF Stats::boundingRect() const
 {
-  return QRectF(0, 0, 80, 80);
+  return QRectF(0, 0, rendered.width(), rendered.height());
 }
 
 QColor Stats::getBarColor(const int &value, const bool &inverse)
