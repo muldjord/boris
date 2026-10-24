@@ -51,37 +51,23 @@ MainWindow::MainWindow()
 {
   mainWindow = this;
   setScene(new QGraphicsScene());
+
   scene()->setBackgroundBrush(Qt::transparent);
   setStyleSheet("background:transparent");
   setAttribute(Qt::WA_TranslucentBackground);
 
-  setFrameShape(QFrame::NoFrame);
-  //setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
   setWindowFlags(Qt::FramelessWindowHint);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  //resetTransform();
   showMaximized();
 
   setAlignment(Qt::AlignLeft | Qt::AlignTop);
   setTransformationAnchor(QGraphicsView::NoAnchor);
   setResizeAnchor(QGraphicsView::NoAnchor);
 
-  //fitInView(scene()->sceneRect());
   setInteractive(true); // Default but setting it anyway
   setMouseTracking(true);
 
-  //QTransform transform(1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
-  //setTransform(transform);
-  /*
-  //setAttribute(Qt::WA_TranslucentBackground);
-  //setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
-  //setFrameShape(QFrame::NoFrame);
-  //setWindowFlags(Qt::FramelessWindowHint);
-  //setStyleSheet("background:transparent");
-  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  */
   physicsTimer.setInterval(30);
   connect(&physicsTimer, &QTimer::timeout, this, &MainWindow::handlePhysics);
 
