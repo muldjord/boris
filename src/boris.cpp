@@ -438,6 +438,8 @@ QPixmap Boris::getShadow(const QPixmap &sprite)
 
 void Boris::runScript(int &stop, const bool &init)
 {
+  QPointF cursorPos = parent->mapToScene(parent->viewport()->mapFromGlobal(QCursor::pos()));
+
   // Update current stat variables for scripting use
   scriptVars["bsize"] = getWidth();
   scriptVars["energy"] = stats->getEnergy();
@@ -451,13 +453,12 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["anxiety"] = stats->getAnxiety();
   scriptVars["borisx"] = pos().x() + (getWidth() / 2);
   scriptVars["borisy"] = pos().y() + (getHeight() / 2);
-  QPointF p = parent->mapToScene(QCursor::pos());
-  scriptVars["mx"] = p.x();
-  scriptVars["my"] = p.y();
+  scriptVars["mx"] = cursorPos.x();
+  scriptVars["my"] = cursorPos.y();
   scriptVars["mxvel"] = mouseHVel;
   scriptVars["myvel"] = mouseVVel;
-  scriptVars["mdist"] = getDistance(parent->mapToScene(QCursor::pos()));
-  scriptVars["msec"] = getDirectionTo(parent->mapToScene(QCursor::pos()));
+  scriptVars["mdist"] = getDistance(cursorPos);
+  scriptVars["msec"] = getDirectionTo(cursorPos);
   if(borisFriend != nullptr) {
     scriptVars["fsec"] = getDirectionTo(QPoint(borisFriend->pos().x() + (borisFriend->getWidth() / 2),
                                                borisFriend->pos().y() + (borisFriend->getHeight() / 2)));
@@ -862,8 +863,9 @@ void Boris::handlePhysics()
   mouseVVel = (QCursor::pos().y() - oldCursor.y()) * 0.25;
   oldCursor = QCursor::pos();
 
+  QPointF cursorPos = parent->mapToScene(parent->viewport()->mapFromGlobal(QCursor::pos()));
   if(!falling && !grabbed) {
-    if(getDistance(parent->mapToScene(QCursor::pos())) < getWidth() * 2) {
+    if(getDistance(cursorPos) < getWidth() * 2) {
       if(!mouseHovering) {
         interactions += 2; // Should be 2 due to checkInteractions now run every 1 second instead of 2
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
@@ -1399,7 +1401,7 @@ void Boris::checkInteractions()
   // Check if there are other Borises nearby to interact with
   for(auto &boris: settings.borisList) {
     if(boris != this) {
-      if(getDistance(getGlobalCenter()) < (getWidth() * 2)) {
+      if(getDistance(boris->getGlobalCenter()) < (getWidth() * 2)) {
         borisInteract(boris);
         break;
       }
