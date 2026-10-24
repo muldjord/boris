@@ -449,7 +449,6 @@ void MainWindow::aboutBox()
   About about(iniSettings, settings);
   about.exec();
   emit reconfBoris();
-  settings.sizeFactor = settings.size / 32.0;
   resetView();
 
   int newClones = settings.clones;

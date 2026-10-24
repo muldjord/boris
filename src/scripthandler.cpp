@@ -42,7 +42,7 @@ ScriptHandler::ScriptHandler(QImage *image,
                              const QMap<QString, int> &labels,
                              const QMap<QString, Script> &defines,
                              QMap<QString, int> &scriptVars,
-                             const QPoint parentPos,
+                             const QPointF parentPos,
                              const int &size)
   : settings(settings), labels(labels), defines(defines), scriptVars(scriptVars), parentPos(parentPos), size(size)
 {

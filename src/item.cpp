@@ -180,7 +180,7 @@ void Item::runScript(int &stop, const bool &init)
     scriptImage.fill(Qt::transparent);
   }
 
-  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, nullptr, settings.itemBehaviours.at(curItem).labels, settings.itemBehaviours.at(curItem).defines, scriptVars, QPoint(pos().x(), pos().y()), getWidth());
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, nullptr, settings.itemBehaviours.at(curItem).labels, settings.itemBehaviours.at(curItem).defines, scriptVars, pos(), getWidth());
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Item::setCurFrame);
   if(init) {
     scriptHandler.runScript(stop, settings.itemBehaviours.at(curItem).defines["init"]);

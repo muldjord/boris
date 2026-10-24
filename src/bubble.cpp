@@ -48,6 +48,9 @@ Bubble::Bubble(Settings &settings) : settings(settings)
 
   bubbleSpeech = settings.getPixmap("bubble_speech.png");
   bubbleThought = settings.getPixmap("bubble_thought.png");
+
+  hideTimer.setSingleShot(true);
+  connect(&hideTimer, &QTimer::timeout, this, &Bubble::hideBubble);
 }
 
 Bubble::~Bubble()
@@ -104,6 +107,7 @@ void Bubble::initBubble(const int &hyper,
   int width = 6 + sentencePixmap.width() + 6;
   int height = 6 + sentencePixmap.height() + 6 + 6;
 
+  prepareGeometryChange(); // Needed to make sure the parent scene has its geometry index updated or something... Otherwise boundingRect might report faulty size.
   rendered = QPixmap(width, height);
   rendered.fill(Qt::transparent);
   painter.begin(&rendered);
@@ -146,7 +150,8 @@ void Bubble::initBubble(const int &hyper,
 
   if(settings.bubbles) {
     show();
-    QTimer::singleShot(duration, this, &Bubble::hideBubble);
+    hideTimer.setInterval(duration);
+    hideTimer.start();
   }
 }
 

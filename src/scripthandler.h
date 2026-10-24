@@ -48,7 +48,7 @@ public:
                 const QMap<QString, int> &labels,
                 const QMap<QString, Script> &defines,
                 QMap<QString, int> &scriptVars,
-                const QPoint parentPos,
+                const QPointF parentPos,
                 const int &size);
   void runScript(int &stop, const Script &script);
 
@@ -72,7 +72,7 @@ private:
   const QMap<QString, int> &labels;
   const QMap<QString, Script> &defines;
   QMap<QString, int> &scriptVars;
-  const QPoint parentPos;
+  const QPointF parentPos;
   const int &size;
 
   // Main command handler

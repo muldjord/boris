@@ -73,6 +73,8 @@ private:
   QPixmap bubbleSpeech;
 
   QPixmap rendered;
+
+  QTimer hideTimer;
   
   QUrl rssUrl = QUrl();
 };

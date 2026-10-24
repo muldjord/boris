@@ -176,7 +176,7 @@ private:
   QPixmap weatherSprite;
   bool showWeather = false;
 
-  QPixmap rendered;
+  QPixmap rendered = QPixmap(32, 32 + 1); // +1 for the shadow
   
   double vVel = 0.0;
   double hVel = 0.0;

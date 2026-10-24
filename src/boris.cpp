@@ -115,7 +115,7 @@ Boris::Boris(Settings &settings, QGraphicsView *parent)
   anxietyQueue = 0;
   stats = new Stats(settings, hyper, health, energy, hunger, toilet, social, fun, hygiene, anxiety);
   stats->setParentItem(this);
-  stats->setPos((getWidth() / 2) - 40, -100);
+  stats->setPos((getWidth() / 2) - 40, -90);
   bubble = new Bubble(settings);
   bubble->setParentItem(this);
 
@@ -481,7 +481,7 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["temp"] = settings.temperature;
   scriptVars["queued"] = behavQueue.count();
 
-  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, bubble, settings.behaviours.at(curBehav).labels, settings.behaviours.at(curBehav).defines, scriptVars, QPoint(pos().x(), pos().y()), getWidth());
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, bubble, settings.behaviours.at(curBehav).labels, settings.behaviours.at(curBehav).defines, scriptVars, pos(), getWidth());
   connect(&scriptHandler, &ScriptHandler::behavFromFile, this, &Boris::behavFromFile);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Boris::setCurFrame);
   connect(&scriptHandler, &ScriptHandler::statChange, this, &Boris::statChange);
@@ -1324,7 +1324,6 @@ void Boris::reconfBoris()
   } else {
     stats->hide();
   }
-  //moveBoris(0, 0);
 }
 
 void Boris::nextWeatherFrame()
