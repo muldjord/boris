@@ -182,7 +182,7 @@ void Boris::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
 
 QRectF Boris::boundingRect() const
 {
-  return QRectF(0, 0, 32, 33);
+  return QRectF(0, 0, rendered.width(), rendered.height());
 }
 
 void Boris::createBehavioursMenu()
