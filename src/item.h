@@ -98,7 +98,6 @@ private:
 
   QPixmap rendered = QPixmap(32, 32 + 1); // +1 for the shadow
 
-  QTimer physicsTimer;
   QTimer ignoreTimer;
   double vVel = 0.0;
   double hVel = 0.0;

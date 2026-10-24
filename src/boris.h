@@ -146,7 +146,6 @@ private:
   QTimer behavTimer;
   QTimer animTimer;
   QTimer weatherTimer;
-  QTimer physicsTimer;
   QTimer statTimer;
   QTimer statQueueTimer;
   QTimer interactionsTimer;

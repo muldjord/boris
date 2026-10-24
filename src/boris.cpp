@@ -133,10 +133,6 @@ Boris::Boris(Settings &settings)
   behavTimer.setSingleShot(true);
   connect(&behavTimer, &QTimer::timeout, this, &Boris::nextBehaviour);
 
-  physicsTimer.setInterval(30);
-  connect(&physicsTimer, &QTimer::timeout, this, &Boris::handlePhysics);
-  physicsTimer.start();
-
   animTimer.setInterval(0);
   animTimer.setSingleShot(true);
   connect(&animTimer, &QTimer::timeout, this, &Boris::updateBoris);

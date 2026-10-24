@@ -82,6 +82,9 @@ MainWindow::MainWindow()
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   */
+  physicsTimer.setInterval(30);
+  connect(&physicsTimer, &QTimer::timeout, this, &MainWindow::handlePhysics);
+
   QTimer::singleShot(100, this, &MainWindow::init);
 }
 
@@ -360,6 +363,8 @@ void MainWindow::init()
   createBehavioursMenu();
   updateItemsMenu();
 
+  physicsTimer.start();
+
   show();
 }
 
@@ -466,10 +471,6 @@ void MainWindow::aboutBox()
   } else {
     itemTimer.stop();
   }
-
-  physicsTimer.setInterval(30);
-  connect(&physicsTimer, &QTimer::timeout, this, &MainWindow::handlePhysics);
-  physicsTimer.start();
 }
 
 void MainWindow::progressPhysics()
