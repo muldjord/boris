@@ -625,7 +625,7 @@ void Boris::updateBoris()
   }
 
   //setPos(0, 0);
-  
+
   if(settings.sound && settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer != nullptr) {
     if(settings.behaviours.at(curBehav).pitchLock) {
       /*
@@ -720,7 +720,7 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped, const bool &vision)
   }
 
   setPos(dX, dY);
-                
+
   // if Boris is outside borders
   if(pos().y() > maxY || pos().y() < minY) {
     if(falling) {

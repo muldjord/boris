@@ -99,7 +99,7 @@ private:
   int interactReaction = -1;
 
   QPixmap rendered;
-  
+
   QTimer physicsTimer;
   QTimer ignoreTimer;
   double vVel = 0.0;

@@ -265,35 +265,35 @@ void Stats::updateStats()
 
   rendered = settings.getPixmap("stats.png");
   QPainter painter(&rendered);
-  
+
   setRect(energyRect, 17, 7, 0.6 * energy, 1);
   setRect(socialRect, 17, 23, 0.6 * social, 1);
   setRect(funRect, 17, 39, 0.6 * fun, 1);
   setRect(hungerRect, 3, 55, 0.6 * hunger, 1);
   setRect(toiletRect, 3, 71, 0.6 * toilet, 1);
-  
+
   painter.setPen(energyColor);
   painter.setBrush(QBrush(energyColor));
   painter.drawRect(energyRect);
-  
+
   painter.setPen(hungerColor);
   painter.setBrush(QBrush(hungerColor));
   painter.drawRect(hungerRect);
-  
+
   painter.setPen(toiletColor);
   painter.setBrush(QBrush(toiletColor));
   painter.drawRect(toiletRect);
-  
+
   painter.setPen(socialColor);
   painter.setBrush(QBrush(socialColor));
   painter.drawRect(socialRect);
-  
+
   painter.setPen(funColor);
   painter.setBrush(QBrush(funColor));
   painter.drawRect(funRect);
-  
+
   painter.end();
-  
+
   if(flashes > 0) {
     showFlashIcon = !showFlashIcon;
     flashes--;

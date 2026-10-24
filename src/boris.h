@@ -104,7 +104,7 @@ public slots:
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
   QRectF boundingRect() const override;
-  
+
   //void enterEvent(QEnterEvent *event) override;
   //void leaveEvent(QEvent *event) override;
   //void mouseMoveEvent(QMouseEvent* event) override;
@@ -177,7 +177,7 @@ private:
   bool showWeather = false;
 
   QPixmap rendered = QPixmap(32, 32 + 1); // +1 for the shadow
-  
+
   double vVel = 0.0;
   double hVel = 0.0;
   double mouseVVel = 0.0;

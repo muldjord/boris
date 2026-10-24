@@ -50,7 +50,7 @@ void SoundMixer::playSoundFile(const QString &fileName,
                                const float &pitch)
 {
   if(soundFxs.contains(fileName)) {
-    
+
     sf::Sound sound(soundFxs[fileName]);
     sound.setPan(panning);
     sound.setPitch(pitch);

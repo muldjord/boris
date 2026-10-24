@@ -57,7 +57,7 @@ protected:
 
 private slots:
   void hideBubble();
-  
+
 private:
   Settings &settings;
   QPixmap bubbleTopLeft;
@@ -75,7 +75,7 @@ private:
   QPixmap rendered;
 
   QTimer hideTimer;
-  
+
   QUrl rssUrl = QUrl();
 };
 

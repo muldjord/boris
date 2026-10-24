@@ -67,7 +67,7 @@ MainWindow::MainWindow()
   //fitInView(scene()->sceneRect());
   setInteractive(true); // Default but setting it anyway
   setMouseTracking(true);
-  
+
   //QTransform transform(1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
   //setTransform(transform);
   /*
@@ -80,7 +80,7 @@ MainWindow::MainWindow()
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   */
   settings.mainView = this;
-  
+
   QTimer::singleShot(100, this, &MainWindow::init);
 }
 
@@ -165,7 +165,7 @@ void MainWindow::init()
     iniSettings->setValue("size", 64);
   }
   settings.size = iniSettings->value("size").toInt();
-  
+
   if(!iniSettings->contains("independence")) {
     iniSettings->setValue("independence", 75);
   }

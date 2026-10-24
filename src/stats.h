@@ -87,7 +87,7 @@ private:
   int flashes;
 
   void setRect(QRect &rect, qreal x, qreal y, qreal width, qreal height);
-  
+
   QRect energyRect;
   QRect hungerRect;
   QRect toiletRect;

@@ -126,7 +126,7 @@ void Bubble::initBubble(const int &hyper,
 
   bubbleRight = bubbleRight.scaled(bubbleRight.width(), sentencePixmap.height());
   painter.drawPixmap(sentencePixmap.width() + 6, 6, bubbleRight);
- 
+
   painter.drawPixmap(0, sentencePixmap.height() + 6, bubbleBottomLeft);
 
   bubbleBottom = bubbleBottom.scaled(sentencePixmap.width(), bubbleBottom.height());

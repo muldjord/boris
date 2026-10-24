@@ -120,7 +120,7 @@ public:
   QPixmap missingPixmap;
 
   QGraphicsView *mainView = nullptr;
-  
+
   QList<Boris*> borisList;
   QList<Behaviour> behaviours;
 
