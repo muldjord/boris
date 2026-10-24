@@ -25,6 +25,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
 
+#include "mainwindow.h"
 #include "item.h"
 #include "scripthandler.h"
 //#include "soundmixer.h"
@@ -39,8 +40,10 @@
 #include <QElapsedTimer>
 #include <QRandomGenerator>
 
-Item::Item(const QString &item, Settings &settings, QGraphicsView *parent, const bool &ignore)
-  : ignore(ignore), settings(settings), parent(parent)
+extern MainWindow *mainWindow;
+
+Item::Item(const QString &item, Settings &settings, const bool &ignore)
+  : ignore(ignore), settings(settings)
 {
   for(int a = 0; a < settings.itemBehaviours.count(); ++a) {
     if(settings.itemBehaviours.at(a).file == item) {
@@ -76,10 +79,6 @@ Item::Item(const QString &item, Settings &settings, QGraphicsView *parent, const
     int stop = 0;
     runScript(stop, true);
   }
-
-  physicsTimer.setInterval(30);
-  connect(&physicsTimer, &QTimer::timeout, this, &Item::handlePhysics);
-  physicsTimer.start();
 
   ignoreTimer.setInterval(60000);
   ignoreTimer.setSingleShot(true);
@@ -158,13 +157,13 @@ QPixmap Item::getShadow(const QPixmap &sprite)
 void Item::runScript(int &stop, const bool &init)
 {
   // Update current stat variables for scripting use
-  QPointF p = parent->mapToScene(QCursor::pos());
+  QPointF p = mainWindow->mapToScene(QCursor::pos());
   scriptVars["mx"] = p.x();
   scriptVars["my"] = p.y();
   scriptVars["mxvel"] = mouseHVel;
   scriptVars["myvel"] = mouseVVel;
-  scriptVars["mdist"] = getDistance(parent->mapToScene(QCursor::pos()));
-  scriptVars["msec"] = getDirectionTo(parent->mapToScene(QCursor::pos()));
+  scriptVars["mdist"] = getDistance(mainWindow->mapToScene(QCursor::pos()));
+  scriptVars["msec"] = getDirectionTo(mainWindow->mapToScene(QCursor::pos()));
   QDate date = QDate::currentDate();
   QTime time = QTime::currentTime();
   scriptVars["day"] = date.day();
@@ -180,7 +179,7 @@ void Item::runScript(int &stop, const bool &init)
     scriptImage.fill(Qt::transparent);
   }
 
-  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, nullptr, settings.itemBehaviours.at(curItem).labels, settings.itemBehaviours.at(curItem).defines, scriptVars, pos(), getWidth());
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, nullptr, settings.itemBehaviours.at(curItem).labels, settings.itemBehaviours.at(curItem).defines, scriptVars, pos());
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Item::setCurFrame);
   if(init) {
     scriptHandler.runScript(stop, settings.itemBehaviours.at(curItem).defines["init"]);
@@ -266,11 +265,12 @@ void Item::updateItem()
     curFrame++;
   }
 
-  // Assemble the Boris sprite from parts
+  // Assemble the Item sprite from parts
+  prepareGeometryChange(); // Needed to make sure the parent scene has its geometry index updated or something... Otherwise boundingRect might report faulty size.
   rendered = QPixmap(itemSprite.width(), itemSprite.height());
   rendered.fill(Qt::transparent);
   QPainter painter(&rendered);
-  painter.setOpacity(0.25);
+  painter.setOpacity(0.3);
   painter.drawPixmap(0, 0, shadowSprite);
   painter.setOpacity(1.0);
   painter.drawPixmap(0, 0, itemSprite);

@@ -71,10 +71,10 @@ Stats::Stats(Settings &settings,
   funBar = scene->addRect(17, 39, 60, 2);
   hungerBar = scene->addRect(3, 55, 60, 2);
   toiletBar = scene->addRect(3, 71, 60, 2);
-  flashIcon = scene->addPixmap(settings.getPixmap("flash_icon.png"));
   flashIcon->setVisible(false);
   */
 
+  flashIcon = settings.getPixmap("flash_icon.png");
   flashes = 0;
   underMouse = false;
 
@@ -92,32 +92,20 @@ void Stats::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
 
 QRectF Stats::boundingRect() const
 {
-  return QRectF(0, 0, rendered.width(), rendered.height());
+  return QRectF(0, 0, 80, 80);
 }
 
-int Stats::getHyper()
+QColor Stats::getBarColor(const int &value, const bool &inverse)
 {
-  return hyper;
-}
-
-int Stats::getHealth()
-{
-  return health;
+  if(inverse) {
+    return QColor((5.1 * value > 255 ? 255 : round(5.1 * value)), (5.1 * (value - 100) * -1 > 255 ? 255 : round(5.1 * (value - 100) * -1)), 0);
+  }
+  return QColor((5.1 * (value - 100) * -1 > 255 ? 255 : round(5.1 * (value - 100) * -1)), (5.1 * value > 255 ? 255 : round(5.1 * value)), 0);
 }
 
 int Stats::getEnergy()
 {
   return energy;
-}
-
-int Stats::getHunger()
-{
-  return hunger;
-}
-
-int Stats::getToilet()
-{
-  return toilet;
 }
 
 int Stats::getSocial()
@@ -130,6 +118,26 @@ int Stats::getFun()
   return fun;
 }
 
+int Stats::getHunger()
+{
+  return hunger;
+}
+
+int Stats::getToilet()
+{
+  return toilet;
+}
+
+int Stats::getHyper()
+{
+  return hyper;
+}
+
+int Stats::getHealth()
+{
+  return health;
+}
+
 int Stats::getHygiene()
 {
   return hygiene;
@@ -140,28 +148,6 @@ int Stats::getAnxiety()
   return anxiety;
 }
 
-void Stats::deltaHyper(int value)
-{
-  if(hyper + value > 100) {
-    hyper = 100;
-  } else if(hyper + value < 0) {
-    hyper = 0;
-  } else {
-    hyper += value;
-  }
-}
-
-void Stats::deltaHealth(int value)
-{
-  if(health + value > 100) {
-    health = 100;
-  } else if(health + value < 0) {
-    health = 0;
-  } else {
-    health += value;
-  }
-}
-
 void Stats::deltaEnergy(int value)
 {
   if(energy + value > 100) {
@@ -170,6 +156,28 @@ void Stats::deltaEnergy(int value)
     energy = 0;
   } else {
     energy += value;
+  }
+}
+
+void Stats::deltaSocial(int value)
+{
+  if(social + value > 100) {
+    social = 100;
+  } else if(social + value < 0) {
+    social = 0;
+  } else {
+    social += value;
+  }
+}
+
+void Stats::deltaFun(int value)
+{
+  if(fun + value > 100) {
+    fun = 100;
+  } else if(fun + value < 0) {
+    fun = 0;
+  } else {
+    fun += value;
   }
 }
 
@@ -195,25 +203,25 @@ void Stats::deltaToilet(int value)
   }
 }
 
-void Stats::deltaSocial(int value)
+void Stats::deltaHyper(int value)
 {
-  if(social + value > 100) {
-    social = 100;
-  } else if(social + value < 0) {
-    social = 0;
+  if(hyper + value > 100) {
+    hyper = 100;
+  } else if(hyper + value < 0) {
+    hyper = 0;
   } else {
-    social += value;
+    hyper += value;
   }
 }
 
-void Stats::deltaFun(int value)
+void Stats::deltaHealth(int value)
 {
-  if(fun + value > 100) {
-    fun = 100;
-  } else if(fun + value < 0) {
-    fun = 0;
+  if(health + value > 100) {
+    health = 100;
+  } else if(health + value < 0) {
+    health = 0;
   } else {
-    fun += value;
+    health += value;
   }
 }
 
@@ -241,77 +249,45 @@ void Stats::deltaAnxiety(int value)
 
 void Stats::updateStats()
 {
-  QColor energyColor((5.1 * (energy - 100) * -1 > 255 ? 255 : round(5.1 * (energy - 100) * -1)),
-                     (5.1 * energy > 255 ? 255 : round(5.1 * energy)), 0);
-  /*
-  QColor hungerColor((5.1 * (hunger - 100) * -1 > 255 ? 255 : round(5.1 * (hunger - 100) * -1)),
-                     (5.1 * hunger > 255 ? 255 : round(5.1 * hunger)), 0);
-  */
-  QColor hungerColor((5.1 * hunger > 255 ? 255 : round(5.1 * hunger)),
-                     (5.1 * (hunger - 100) * -1 > 255 ? 255 : round(5.1 * (hunger - 100) * -1)), 0);
-  /*
-  QColor toiletColor((5.1 * (toilet - 100) * -1 > 255 ? 255 : round(5.1 * (toilet - 100) * -1)),
-                     (5.1 * toilet > 255 ? 255 : round(5.1 * toilet)), 0);
-  */
-  QColor toiletColor((5.1 * toilet > 255 ? 255 : round(5.1 * toilet)),
-                     (5.1 * (toilet - 100) * -1 > 255 ? 255 : round(5.1 * (toilet - 100) * -1)), 0);
-  QColor socialColor((5.1 * (social - 100) * -1 > 255 ? 255 : round(5.1 * (social - 100) * -1)),
-                     (5.1 * social > 255 ? 255 : round(5.1 * social)), 0);
-  QColor funColor((5.1 * (fun - 100) * -1 > 255 ? 255 : round(5.1 * (fun - 100) * -1)),
-                     (5.1 * fun > 255 ? 255 : round(5.1 * fun)), 0);
+  energyColor = getBarColor(energy);
+  socialColor = getBarColor(social);
+  funColor = getBarColor(fun);
+  hungerColor = getBarColor(hunger, true);
+  toiletColor = getBarColor(toilet, true);
 
-  rendered = QPixmap(statsPixmap.width(), statsPixmap.height());
-  rendered.fill(Qt::transparent);
-
-  rendered = settings.getPixmap("stats.png");
+  rendered = statsPixmap;
   QPainter painter(&rendered);
 
-  setRect(energyRect, 17, 7, 0.6 * energy, 1);
-  setRect(socialRect, 17, 23, 0.6 * social, 1);
-  setRect(funRect, 17, 39, 0.6 * fun, 1);
-  setRect(hungerRect, 3, 55, 0.6 * hunger, 1);
-  setRect(toiletRect, 3, 71, 0.6 * toilet, 1);
-
   painter.setPen(energyColor);
-  painter.setBrush(QBrush(energyColor));
-  painter.drawRect(energyRect);
-
-  painter.setPen(hungerColor);
-  painter.setBrush(QBrush(hungerColor));
-  painter.drawRect(hungerRect);
-
-  painter.setPen(toiletColor);
-  painter.setBrush(QBrush(toiletColor));
-  painter.drawRect(toiletRect);
+  painter.drawRect(17, 7, 0.6 * energy, 1);
 
   painter.setPen(socialColor);
-  painter.setBrush(QBrush(socialColor));
-  painter.drawRect(socialRect);
+  painter.drawRect(17, 23, 0.6 * social, 1);
 
   painter.setPen(funColor);
-  painter.setBrush(QBrush(funColor));
-  painter.drawRect(funRect);
+  painter.drawRect(17, 39, 0.6 * fun, 1);
 
-  painter.end();
+  painter.setPen(hungerColor);
+  painter.drawRect(3, 55, 0.6 * hunger, 1);
+
+  painter.setPen(toiletColor);
+  painter.drawRect(3, 71, 0.6 * toilet, 1);
 
   if(flashes > 0) {
     showFlashIcon = !showFlashIcon;
     flashes--;
+    if(showFlashIcon) {
+      painter.drawPixmap(flashIconPos, flashIcon);
+    }
   } else {
     showFlashIcon = false;
     if(settings.stats == STATS_CRITICAL && !underMouse) {
       hide();
     }
   }
+  painter.end();
+  
   update();
-}
-
-void Stats::setRect(QRect &rect, qreal x, qreal y, qreal width, qreal height)
-{
-  rect.setX(x);
-  rect.setY(y);
-  rect.setWidth(width);
-  rect.setHeight(height);
 }
 
 void Stats::flashStat(QString stat)

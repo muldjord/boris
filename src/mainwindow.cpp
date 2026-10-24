@@ -45,8 +45,11 @@
 
 #include <QRandomGenerator>
 
+MainWindow *mainWindow = nullptr;
+
 MainWindow::MainWindow()
 {
+  mainWindow = this;
   setScene(new QGraphicsScene());
   scene()->setBackgroundBrush(Qt::transparent);
   setStyleSheet("background:transparent");
@@ -79,8 +82,6 @@ MainWindow::MainWindow()
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   */
-  settings.mainView = this;
-
   QTimer::singleShot(100, this, &MainWindow::init);
 }
 
@@ -382,7 +383,8 @@ void MainWindow::addBoris(int clones)
 {
   qInfo("Spawning %d clone(s)\n", clones);
   while(clones--) {
-    Boris *newBoris = new Boris(settings, this);
+    Boris *newBoris = new Boris(settings);
+    connect(this, &MainWindow::handlePhysics, newBoris, &Boris::handlePhysics);
     connect(this, &MainWindow::reconfBoris, newBoris, &Boris::reconfBoris);
     connect(this, &MainWindow::reconfBorisBehavioursMenu, newBoris, &Boris::createBehavioursMenu);
     connect(earthquakeAction, &QAction::triggered, newBoris, &Boris::earthquake);
@@ -469,6 +471,15 @@ void MainWindow::aboutBox()
   } else {
     itemTimer.stop();
   }
+
+  physicsTimer.setInterval(30);
+  connect(&physicsTimer, &QTimer::timeout, this, &MainWindow::handlePhysics);
+  physicsTimer.start();
+}
+
+void MainWindow::progressPhysics()
+{
+  emit handlePhysics();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
@@ -613,10 +624,8 @@ void MainWindow::spawnRandomItem()
     randomItem = QRandomGenerator::global()->bounded(settings.itemBehaviours.count());
   } while(settings.itemBehaviours.at(randomItem).reactions.isEmpty());
 
-  Item *spawnedItem = new Item(settings.itemBehaviours.at(randomItem).file,
-                               settings,
-                               this,
-                               false);
+  Item *spawnedItem = new Item(settings.itemBehaviours.at(randomItem).file, settings, false);
+  connect(this, &MainWindow::handlePhysics, spawnedItem, &Item::handlePhysics);
   spawnedItem->setPos(QRandomGenerator::global()->bounded(sceneRect().width()),
                       QRandomGenerator::global()->bounded(sceneRect().height()));
   scene()->addItem(spawnedItem);
@@ -633,13 +642,11 @@ void MainWindow::spawnItem(QAction* a)
   for(const auto &item: settings.itemBehaviours) {
     if(item.file == itemFile) {
       if(settings.unlocked.contains(item.file)) {
-        Item *spawnedItem = new Item(item.file,
-                                     settings,
-                                     this,
-                                     false);
-        scene()->addItem(spawnedItem);
+        Item *spawnedItem = new Item(item.file, settings, false);
+        connect(this, &MainWindow::handlePhysics, spawnedItem, &Item::handlePhysics);
         spawnedItem->setPos(QRandomGenerator::global()->bounded(scene()->sceneRect().width()),
                             QRandomGenerator::global()->bounded(scene()->sceneRect().height()));
+        scene()->addItem(spawnedItem);
         settings.itemList.append(spawnedItem);
       } else {
         if(settings.coins - item.coins >= 0) {

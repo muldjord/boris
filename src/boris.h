@@ -62,7 +62,7 @@ class Boris : public QGraphicsObject
 {
   Q_OBJECT;
 public:
-  explicit Boris(Settings &settings, QGraphicsView *parent);
+  explicit Boris(Settings &settings);
   ~Boris();
   Boris *borisFriend;
   int getWidth() const;
@@ -94,6 +94,7 @@ public:
   int curBehav = 0;
 
 public slots:
+  void handlePhysics();
   void earthquake();
   void triggerWeather();
   void nextBehaviour();
@@ -118,7 +119,6 @@ signals:
 private slots:
   void updateBoris();
   void handleBehaviourChange(QAction* a);
-  void handlePhysics();
   void statProgress();
   void statQueueProgress();
   QPixmap getShadow(const QPixmap &sprite);
@@ -131,7 +131,6 @@ private slots:
   void setCurFrame(const int &frame);
 
 private:
-  QGraphicsView *parent = nullptr;
   Settings &settings;
 
   bool falling = false;
@@ -176,7 +175,7 @@ private:
   QPixmap weatherSprite;
   bool showWeather = false;
 
-  QPixmap rendered = QPixmap(32, 32 + 1); // +1 for the shadow
+  QPixmap rendered;
 
   double vVel = 0.0;
   double hVel = 0.0;

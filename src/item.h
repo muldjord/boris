@@ -45,7 +45,7 @@ class Item : public QGraphicsObject
 {
   Q_OBJECT;
 public:
-  Item(const QString &item, Settings &settings, QGraphicsView *parent, const bool &ignore = true);
+  Item(const QString &item, Settings &settings, const bool &ignore = true);
   ~Item();
   int getWidth() const;
   int getHeight() const;
@@ -60,6 +60,7 @@ public:
 
 public slots:
   void destroy();
+  void handlePhysics();
 
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
@@ -76,11 +77,8 @@ private slots:
   QPixmap getShadow(const QPixmap &sprite);
   void setCurFrame(const int &frame);
   void dontIgnore();
-  void handlePhysics();
 
 private:
-  QGraphicsView *parent = nullptr;
-
   Settings &settings;
   bool flipFrames = false;
   QPixmap itemSprite;
@@ -98,7 +96,7 @@ private:
   int borisHyper = 0;
   int interactReaction = -1;
 
-  QPixmap rendered;
+  QPixmap rendered = QPixmap(32, 32 + 1); // +1 for the shadow
 
   QTimer physicsTimer;
   QTimer ignoreTimer;

@@ -78,7 +78,8 @@ public:
 
   // Boris related
   int clones = 2;
-  int size = 64;
+  int baseSize = 32; // This is just the basic size of all Boris sprites
+  int size = 64; // This is the on-screen size of Boris
   double sizeFactor = 2.0;
   int independence = 75;
   bool isInvincible = false;
@@ -118,8 +119,6 @@ public:
 
   // Resources
   QPixmap missingPixmap;
-
-  QGraphicsView *mainView = nullptr;
 
   QList<Boris*> borisList;
   QList<Behaviour> behaviours;

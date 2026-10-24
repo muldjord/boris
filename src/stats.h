@@ -53,24 +53,28 @@ public:
   void flashStat(QString stat = "none");
   bool showStats = false;
 
-  int getHyper();
-  int getHealth();
   int getEnergy();
-  int getHunger();
-  int getToilet();
   int getSocial();
   int getFun();
+  int getHunger();
+  int getToilet();
+
+  int getHyper();
+  int getHealth();
   int getHygiene();
   int getAnxiety();
-  void deltaHyper(int value);
-  void deltaHealth(int value);
+
   void deltaEnergy(int value);
-  void deltaHunger(int value);
-  void deltaToilet(int value);
   void deltaSocial(int value);
   void deltaFun(int value);
+  void deltaHunger(int value);
+  void deltaToilet(int value);
+
+  void deltaHyper(int value);
+  void deltaHealth(int value);
   void deltaHygiene(int value);
   void deltaAnxiety(int value);
+
   void updateStats();
   bool underMouse;
 
@@ -78,27 +82,25 @@ protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
   QRectF boundingRect() const override;
 
-private slots:
-  void logStats();
-
 private:
+  QColor getBarColor(const int &value, const bool &inverse = false);
   Settings &settings;
 
-  int flashes;
+  int flashes = 0;
 
-  void setRect(QRect &rect, qreal x, qreal y, qreal width, qreal height);
+  QColor energyColor = QColor(0, 0, 0);
+  QColor socialColor = QColor(0, 0, 0);
+  QColor funColor = QColor(0, 0, 0);
+  QColor hungerColor = QColor(0, 0, 0);
+  QColor toiletColor = QColor(0, 0, 0);
 
-  QRect energyRect;
-  QRect hungerRect;
-  QRect toiletRect;
-  QRect socialRect;
-  QRect funRect;
   QPixmap flashIcon;
   QPoint flashIconPos = QPoint(0, 0);
   bool showFlashIcon = false;
 
   QPixmap statsPixmap;
-  QPixmap rendered;
+
+  QPixmap rendered = QPixmap(80, 80); // +1 for the shadow
 
   bool visibility;
   int hyper;

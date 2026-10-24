@@ -28,6 +28,7 @@
 #include "boris.h"
 //#include "soundmixer.h"
 #include "scripthandler.h"
+#include "mainwindow.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -42,8 +43,10 @@
 constexpr int STATTIMER = 200;
 constexpr int ANNOYMAX = 42;
 
-Boris::Boris(Settings &settings, QGraphicsView *parent)
-  : settings(settings), parent(parent)
+extern MainWindow *mainWindow;
+
+Boris::Boris(Settings &settings)
+  : settings(settings)
 {
   /*
   setAttribute(Qt::WA_TranslucentBackground);
@@ -179,7 +182,7 @@ void Boris::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
 
 QRectF Boris::boundingRect() const
 {
-  return QRectF(0, 0, rendered.width(), rendered.height());
+  return QRectF(0, 0, 32, 33);
 }
 
 void Boris::createBehavioursMenu()
@@ -438,7 +441,7 @@ QPixmap Boris::getShadow(const QPixmap &sprite)
 
 void Boris::runScript(int &stop, const bool &init)
 {
-  QPointF cursorPos = parent->mapToScene(parent->viewport()->mapFromGlobal(QCursor::pos()));
+  QPointF cursorPos = mainWindow->mapToScene(mainWindow->viewport()->mapFromGlobal(QCursor::pos()));
 
   // Update current stat variables for scripting use
   scriptVars["bsize"] = getWidth();
@@ -481,7 +484,7 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["temp"] = settings.temperature;
   scriptVars["queued"] = behavQueue.count();
 
-  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, bubble, settings.behaviours.at(curBehav).labels, settings.behaviours.at(curBehav).defines, scriptVars, pos(), getWidth());
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, bubble, settings.behaviours.at(curBehav).labels, settings.behaviours.at(curBehav).defines, scriptVars, pos());
   connect(&scriptHandler, &ScriptHandler::behavFromFile, this, &Boris::behavFromFile);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Boris::setCurFrame);
   connect(&scriptHandler, &ScriptHandler::statChange, this, &Boris::statChange);
@@ -676,11 +679,14 @@ void Boris::updateBoris()
   }
 
   // Assemble the Boris sprite from parts
+  prepareGeometryChange(); // Needed to make sure the parent scene has its geometry index updated or something... Otherwise boundingRect might report faulty size.
   rendered = QPixmap(borisSprite.width(), borisSprite.height() + 1);
   rendered.fill(Qt::transparent);
   QPainter painter(&rendered);
-  painter.setOpacity(0.3);
-  painter.drawPixmap(0, 1, shadowSprite);
+  if(drawShadow) {
+    painter.setOpacity(0.3);
+    painter.drawPixmap(0, 1, shadowSprite);
+  }
   painter.setOpacity(1.0);
   painter.drawPixmap(0, 0, borisSprite);
   painter.drawPixmap(0, 0, scriptSprite);
@@ -863,7 +869,7 @@ void Boris::handlePhysics()
   mouseVVel = (QCursor::pos().y() - oldCursor.y()) * 0.25;
   oldCursor = QCursor::pos();
 
-  QPointF cursorPos = parent->mapToScene(parent->viewport()->mapFromGlobal(QCursor::pos()));
+  QPointF cursorPos = mainWindow->mapToScene(mainWindow->viewport()->mapFromGlobal(QCursor::pos()));
   if(!falling && !grabbed) {
     if(getDistance(cursorPos) < getWidth() * 2) {
       if(!mouseHovering) {

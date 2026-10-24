@@ -25,6 +25,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
 
+#include "mainwindow.h"
 #include "scripthandler.h"
 //#include "soundmixer.h"
 #include "item.h"
@@ -35,6 +36,8 @@
 #include <QRandomGenerator>
 #include <QRegularExpression>
 
+extern MainWindow *mainWindow;
+
 ScriptHandler::ScriptHandler(QImage *image,
                              bool *drawing,
                              Settings &settings,
@@ -42,9 +45,8 @@ ScriptHandler::ScriptHandler(QImage *image,
                              const QMap<QString, int> &labels,
                              const QMap<QString, Script> &defines,
                              QMap<QString, int> &scriptVars,
-                             const QPointF parentPos,
-                             const int &size)
-  : settings(settings), labels(labels), defines(defines), scriptVars(scriptVars), parentPos(parentPos), size(size)
+                             const QPointF parentPos)
+  : settings(settings), labels(labels), defines(defines), scriptVars(scriptVars), parentPos(parentPos)
 {
   this->image = image;
   this->drawing = drawing;
@@ -302,10 +304,11 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
     if(settings.scriptOutput) {
       printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
     }
-    Item *spawnedItem = new Item(itemName, settings, settings.mainView);
-    spawnedItem->setPos(parentPos.x() + (iX * (size / 32)),
-                        parentPos.y() + (size / 2) + (iY * (size / 32)));
-    settings.mainView->scene()->addItem(spawnedItem);
+    Item *spawnedItem = new Item(itemName, settings);
+    connect(mainWindow, &MainWindow::handlePhysics, spawnedItem, &Item::handlePhysics);
+    spawnedItem->setPos(parentPos.x() + iX,
+                        parentPos.y() + iY);
+    mainWindow->scene()->addItem(spawnedItem);
     settings.itemList.append(spawnedItem);
   } else {
     if(settings.scriptOutput) {
