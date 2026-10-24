@@ -160,8 +160,8 @@ void Item::runScript(int &stop, const bool &init)
   QPointF p = mainWindow->mapToScene(QCursor::pos());
   scriptVars["mx"] = p.x();
   scriptVars["my"] = p.y();
-  scriptVars["mxvel"] = mouseHVel;
-  scriptVars["myvel"] = mouseVVel;
+  scriptVars["mxvel"] = settings.mouseHVel;
+  scriptVars["myvel"] = settings.mouseVVel;
   scriptVars["mdist"] = getDistance(mainWindow->mapToScene(QCursor::pos()));
   scriptVars["msec"] = getDirectionTo(mainWindow->mapToScene(QCursor::pos()));
   QDate date = QDate::currentDate();
@@ -252,18 +252,6 @@ void Item::updateItem()
 
   int stop = 0; // Will be > 0 if a goto, behav or break command is run
   runScript(stop);
-  if(stop == 1) {
-    // In case of 'goto' curFrame has been set in scriptHandler
-  } else if(stop == 2) {
-    // In case of 'break' it will destroy the item when the frame timer times out
-    stopAndDestroy = true;
-  } else if(stop == 3) {
-    // In case of 'stop' it will cease any frame and animation progression
-    animTimer.stop();
-    return;
-  } else {
-    curFrame++;
-  }
 
   // Assemble the Item sprite from parts
   prepareGeometryChange(); // Needed to make sure the parent scene has its geometry index updated or something... Otherwise boundingRect might report faulty size.
@@ -279,6 +267,19 @@ void Item::updateItem()
 
   // Make sure 'paint()' is called
   update();
+
+  if(stop == 1) {
+    // In case of 'goto' curFrame has been set in scriptHandler
+  } else if(stop == 2) {
+    // In case of 'break' it will destroy the item when the frame timer times out
+    stopAndDestroy = true;
+  } else if(stop == 3) {
+    // In case of 'stop' it will cease any frame and animation progression
+    animTimer.stop();
+    return;
+  } else {
+    curFrame++;
+  }
 
   animTimer.setInterval(frameTime);
   animTimer.start();
@@ -509,10 +510,10 @@ void Item::handlePhysics()
     if(showShadow) {
       showShadow = false;
     }
-    if(pos().y() + (vVel * settings.sizeFactor) <= altitude) {
+    if(pos().y() + vVel <= altitude) {
       moveItem(hVel, vVel);
     } else {
-      int distanceLeft = (altitude - pos().y()) / settings.sizeFactor;
+      int distanceLeft = altitude - pos().y();
       moveItem(hVel, vVel - ((vVel - distanceLeft) * 2));
       if(vVel <= 2.0) {
         falling = false;
@@ -531,9 +532,6 @@ void Item::handlePhysics()
       showShadow = true;
     }
   }
-  mouseHVel = (QCursor::pos().x() - oldCursor.x()) / 4.0;
-  mouseVVel = (QCursor::pos().y() - oldCursor.y()) / 4.0;
-  oldCursor = QCursor::pos();
 }
 
 void Item::interact(Boris *boris)
@@ -549,7 +547,7 @@ void Item::interact(Boris *boris)
 
   borisHyper = boris->getHyper();
 
-  setPos(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord(), boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord() + (getWidth() * 0.5));
+  setPos(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord(), boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord());
 
   if(settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel().isEmpty()) {
     destroy();

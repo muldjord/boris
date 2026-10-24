@@ -92,6 +92,9 @@ private:
   //QAction *behavioursAction;
   QAction *weatherAction;
   int coins = 0;
+
+  QPoint oldCursor;
+
   QAction *coinsAction;
   QSystemTrayIcon *trayIcon;
   QMenu *trayIconMenu;

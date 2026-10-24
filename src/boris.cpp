@@ -458,8 +458,8 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["borisy"] = pos().y() + (getHeight() / 2);
   scriptVars["mx"] = cursorPos.x();
   scriptVars["my"] = cursorPos.y();
-  scriptVars["mxvel"] = mouseHVel;
-  scriptVars["myvel"] = mouseVVel;
+  scriptVars["mxvel"] = settings.mouseHVel;
+  scriptVars["myvel"] = settings.mouseVVel;
   scriptVars["mdist"] = getDistance(cursorPos);
   scriptVars["msec"] = getDirectionTo(cursorPos);
   if(borisFriend != nullptr) {
@@ -662,21 +662,6 @@ void Boris::updateBoris()
 
   int stop = 0; // Will be > 0 if a goto, behav or break command is run
   runScript(stop);
-  if(stop == 1) {
-    // In case of 'goto' curFrame has been set in scriptHandler
-    // In case of 'behav' behavFromFile has been emitted
-    // In case of 'return' will simply advance to the next frame
-  } else if(stop == 2) {
-    // In case of 'break' it will change to the next behaviour when the frame times out
-    stopNextBehaviour = true;
-  } else if(stop == 3) {
-    // In case of 'stop' it will cease any frame and animation progression
-    behavTimer.stop();
-    animTimer.stop();
-    return;
-  } else {
-    curFrame++;
-  }
 
   // Assemble the Boris sprite from parts
   prepareGeometryChange(); // Needed to make sure the parent scene has its geometry index updated or something... Otherwise boundingRect might report faulty size.
@@ -698,6 +683,22 @@ void Boris::updateBoris()
 
   // Make sure 'paint()' is called
   update();
+
+  if(stop == 1) {
+    // In case of 'goto' curFrame has been set in scriptHandler
+    // In case of 'behav' behavFromFile has been emitted
+    // In case of 'return' will simply advance to the next frame
+  } else if(stop == 2) {
+    // In case of 'break' it will change to the next behaviour when the frame times out
+    stopNextBehaviour = true;
+  } else if(stop == 3) {
+    // In case of 'stop' it will cease any frame and animation progression
+    behavTimer.stop();
+    animTimer.stop();
+    return;
+  } else {
+    curFrame++;
+  }
 
   animTimer.setInterval(frameTime);
   animTimer.start();
@@ -862,9 +863,6 @@ void Boris::handlePhysics()
   } else {
     drawShadow = true;
   }
-  mouseHVel = (QCursor::pos().x() - oldCursor.x()) * 0.25; // 0.25 is just an abstract factor that relates well to the 30 fps physics
-  mouseVVel = (QCursor::pos().y() - oldCursor.y()) * 0.25;
-  oldCursor = QCursor::pos();
 
   QPointF cursorPos = mainWindow->mapToScene(mainWindow->viewport()->mapFromGlobal(QCursor::pos()));
   if(!falling && !grabbed) {

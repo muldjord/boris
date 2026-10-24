@@ -474,6 +474,10 @@ void MainWindow::aboutBox()
 
 void MainWindow::progressPhysics()
 {
+  settings.mouseHVel = (QCursor::pos().x() - oldCursor.x()) * 0.25; // 0.25 is just an abstract factor that relates well to the 30 fps physics
+  settings.mouseVVel = (QCursor::pos().y() - oldCursor.y()) * 0.25;
+  oldCursor = QCursor::pos();
+
   emit handlePhysics();
 }
 

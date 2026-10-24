@@ -179,10 +179,7 @@ private:
 
   double vVel = 0.0;
   double hVel = 0.0;
-  double mouseVVel = 0.0;
-  double mouseHVel = 0.0;
   int altitude = 0;
-  QPoint oldCursor;
   void sanityCheck();
 
   Stats *stats;

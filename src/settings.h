@@ -84,6 +84,8 @@ public:
   bool sound = true;
   double volume = 0.5;
   bool bubbles = true;
+  double mouseVVel = 0.0;
+  double mouseHVel = 0.0;
 
   // Secret / only in config.ini
   bool idkfa = false;
