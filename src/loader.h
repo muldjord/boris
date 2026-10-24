@@ -32,6 +32,7 @@
 
 #include <QObject>
 #include <QProgressBar>
+#include <map>
 
 class Loader: public QObject
 {
@@ -40,10 +41,12 @@ class Loader: public QObject
 public:
   static qint64 getAssetsSize(const QDir &dir);
   static bool loadSoundFxs(const QString &soundsPath,
+                           std::map<std::string, sf::SoundBuffer> &soundFxs,
                            QProgressBar *progressBar);
   static bool loadBehaviours(const Settings &settings,
                              const QString &behavioursPath,
                              QList<Behaviour> &behaviours,
+                             std::map<std::string, sf::SoundBuffer> &soundFxs,
                              QProgressBar *progressBar);
   static bool loadFont(Settings &settings);
   static bool loadSprites(Settings &settings);

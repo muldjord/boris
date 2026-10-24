@@ -37,32 +37,25 @@ SoundMixer::~SoundMixer()
 {
 }
 
-/*
-void SoundMixer::addSound(const QString &id,
-                          const sf::SoundBuffer &data)
-{
-  soundFxs[id] = data;
-}
-*/
-
-void SoundMixer::playSoundFile(const QString &fileName,
+void SoundMixer::playSoundFile(const std::string &fileName,
                                const float &panning,
                                const float &pitch)
 {
-  if(soundFxs.contains(fileName)) {
-
-    sf::Sound sound(soundFxs[fileName]);
-    sound.setPan(panning);
-    sound.setPitch(pitch);
-    sound.play();
+  if(soundFxs.find(fileName) == soundFxs.end()) {
+    return;
   }
+
+  sf::Sound sound(soundFxs[fileName]);
+  sound.setPan(panning);
+  sound.setPitch(pitch);
+  sound.play();
 }
 
-void SoundMixer::playSound(const sf::SoundBuffer &data,
+void SoundMixer::playSound(const sf::SoundBuffer *data,
                            const float &panning,
                            const float &pitch)
 {
-  sf::Sound sound(data);
+  sf::Sound sound(*data);
   sound.setPan(panning);
   sound.setPitch(pitch);
   sound.play();

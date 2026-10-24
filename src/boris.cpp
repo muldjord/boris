@@ -26,7 +26,7 @@
  */
 
 #include "boris.h"
-//#include "soundmixer.h"
+#include "soundmixer.h"
 #include "scripthandler.h"
 #include "mainwindow.h"
 
@@ -44,6 +44,7 @@ constexpr int STATTIMER = 200;
 constexpr int ANNOYMAX = 42;
 
 extern MainWindow *mainWindow;
+extern SoundMixer *soundMixer;
 
 Boris::Boris(Settings &settings)
   : settings(settings)
@@ -590,21 +591,15 @@ void Boris::updateBoris()
     bruisesSprite = bruisesPixmap;
   }
 
-  //setPos(0, 0);
-
   if(settings.sound && settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer != nullptr) {
     if(settings.behaviours.at(curBehav).pitchLock) {
-      /*
-      settings.soundMixer.playSound(settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
+      soundMixer->playSound(settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
                            (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
                            (stats->getHyper() / 60.0) + 1);
-      */
     } else {
-      /*
-      settings.soundMixer.playSound(settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
+      soundMixer->playSound(settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
                            (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
                            (stats->getHyper() / 60.0) + (0.95 + QRandomGenerator::global()->bounded(100) / 1000.0));
-      */
     }
   }
 

@@ -44,9 +44,8 @@ qint64 Loader::getAssetsSize(const QDir &dir)
   return assetsSize;
 }
 
-/*
 bool Loader::loadSoundFxs(const QString &soundsPath,
-                          QMap<QString, sf::SoundBuffer> &soundFxs,
+                          std::map<std::string, sf::SoundBuffer> &soundFxs,
                           QProgressBar *progressBar)
 {
   QDir d(soundsPath,
@@ -58,7 +57,7 @@ bool Loader::loadSoundFxs(const QString &soundsPath,
   for(const auto &info: infoList) {
     sf::SoundBuffer soundFx;
     if(soundFx.loadFromFile(info.absoluteFilePath().toStdString())) {
-      soundFxs[info.fileName()] = soundFx;
+      soundFxs[info.fileName().toStdString()] = soundFx;
       qInfo("  Added sound: %s\n", info.fileName().toStdString().c_str());
     } else {
       noErrors = false;
@@ -68,10 +67,11 @@ bool Loader::loadSoundFxs(const QString &soundsPath,
   }
   return noErrors;
 }
-*/
+
 bool Loader::loadBehaviours(const Settings &settings,
                             const QString &behavioursPath,
                             QList<Behaviour> &behaviours,
+                            std::map<std::string, sf::SoundBuffer> &soundFxs,
                             QProgressBar *progressBar)
 {
   QDir d(behavioursPath,
@@ -234,11 +234,9 @@ bool Loader::loadBehaviours(const Settings &settings,
           continue;
         }
         Frame f;
-#if QT_VERSION >= 0x050e00
+
         QList<QString> snippets = line.split(";", Qt::KeepEmptyParts);
-#else
-        QList<QString> snippets = line.split(";", QString::KeepEmptyParts);
-#endif
+
         f.sprite = sprites.at(snippets.at(0).toInt());
         f.time = snippets.at(1).toInt();
         if(snippets.at(2) == "rand") {
@@ -252,11 +250,9 @@ bool Loader::loadBehaviours(const Settings &settings,
           f.dy = snippets.at(3).toInt();
         }
         if(!snippets.at(4).isEmpty()) {
-          /*
-          if(soundFxs.contains(snippets.at(4))) {
-            f.soundBuffer = &soundFxs[snippets.at(4)];
+          if(soundFxs.find(snippets.at(4).toStdString()) != soundFxs.end()) {
+            f.soundBuffer = &soundFxs[snippets.at(4).toStdString()];
           }
-          */
         }
         if(!snippets.at(5).isEmpty()) {
           QString script = snippets.at(5).simplified();

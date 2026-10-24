@@ -28,7 +28,7 @@
 #include "mainwindow.h"
 #include "about.h"
 #include "loader.h"
-//#include "soundmixer.h"
+#include "soundmixer.h"
 #include "item.h"
 #include "version.h"
 
@@ -46,10 +46,13 @@
 #include <QRandomGenerator>
 
 MainWindow *mainWindow = nullptr;
+SoundMixer *soundMixer = nullptr;
 
 MainWindow::MainWindow()
 {
   mainWindow = this;
+  soundMixer = new SoundMixer();
+
   setScene(new QGraphicsScene());
 
   scene()->setBackgroundBrush(Qt::transparent);
@@ -291,27 +294,25 @@ void MainWindow::init()
 
   progressBar.setMaximum(totalAssetsSize);
 
-  /*
-  if(Loader::loadSoundFxs(settings.soundsPath, settings.soundMixer.soundFxs, progressBar)) {
+  if(Loader::loadSoundFxs(settings.soundsPath, soundMixer->soundFxs, &progressBar)) {
     qInfo("Sounds loaded ok... :)\n");
   } else {
     qInfo("Error when loading some sounds, please check your wav files\n");
   }
-  */
 
-  if(Loader::loadBehaviours(settings, settings.behavioursPath, settings.behaviours, &progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.behavioursPath, settings.behaviours, soundMixer->soundFxs, &progressBar)) {
     qInfo("Behaviours loaded ok... :)\n");
   } else {
     qInfo("Error when loading some behaviours, please check your png and dat files\n");
   }
 
-  if(Loader::loadBehaviours(settings, settings.weathersPath, settings.weathers, &progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.weathersPath, settings.weathers, soundMixer->soundFxs, &progressBar)) {
     qInfo("Weather types loaded ok... :)\n");
   } else {
     qInfo("Error when loading some weather types, please check your png and dat files\n");
   }
 
-  if(Loader::loadBehaviours(settings, settings.itemsPath, settings.itemBehaviours, &progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.itemsPath, settings.itemBehaviours, soundMixer->soundFxs, &progressBar)) {
     qInfo("Items loaded ok... :)\n");
   } else {
     qInfo("Error when loading some items, please check your png and dat files\n");
@@ -646,7 +647,7 @@ void MainWindow::spawnItem(QAction* a)
             updateItemsMenu();
           }
         } else {
-          //settings.soundMixer.playSound(settings.soundMixer.soundFxs["nocoin.wav"], 0, 1);
+          soundMixer->playSoundFile("nocoin.wav", 0, 1);
           QMessageBox::information(nullptr, tr("Not enough coins!"), tr("You can't afford the '") + " " + item.title + "' " + tr("item.\n\nInitiate behaviours that corresponds to Boris' needs to earn coins. You can then use those coins to unlock new items."));
         }
       }
@@ -657,7 +658,7 @@ void MainWindow::spawnItem(QAction* a)
 
 void MainWindow::addCoins(const QString &message, const int &coins)
 {
-  //settings.soundMixer.playSound(settings.soundMixer.soundFxs["coinup.wav"], 0, 1);
+  soundMixer->playSoundFile("coinup.wav", 0, 1);
   settings.coins += coins;
   coinsAction->setText(QString::number(settings.coins) + " " + tr("coins") + " (" + message + ")");
   trayIcon->setIcon(*coinIcon);

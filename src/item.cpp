@@ -28,7 +28,7 @@
 #include "mainwindow.h"
 #include "item.h"
 #include "scripthandler.h"
-//#include "soundmixer.h"
+#include "soundmixer.h"
 #include "settings.h"
 
 #include <stdio.h>
@@ -41,6 +41,7 @@
 #include <QRandomGenerator>
 
 extern MainWindow *mainWindow;
+extern SoundMixer *soundMixer;
 
 Item::Item(const QString &item, Settings &settings, const bool &ignore)
   : ignore(ignore), settings(settings)
@@ -222,16 +223,12 @@ void Item::updateItem()
 
   if(settings.sound && settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer != nullptr) {
     if(settings.itemBehaviours.at(curItem).pitchLock) {
-      /*
-      soundMixer.playSound(settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
-                           (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0, 1.0);
-      */
+      soundMixer->playSound(settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
+                                    (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0, 1.0);
     } else {
-      /*
-      soundMixer.playSound(settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
-                           (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
-                           0.95 + QRandomGenerator::global()->bounded(100) / 1000.0);
-      */
+      soundMixer->playSound(settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
+                                    (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
+                                    0.95 + QRandomGenerator::global()->bounded(100) / 1000.0);
     }
   }
 
@@ -519,10 +516,8 @@ void Item::handlePhysics()
         falling = false;
       } else {
         hVel *= settings.itemBehaviours.at(curItem).bounce * 0.1;
-        /*
-        soundMixer.playSound(&soundMixer.soundFxs["bounce.wav"],
+        soundMixer->playSoundFile("bounce.wav",
                              (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0, 1.0);
-        */
         vVel = (vVel * (settings.itemBehaviours.at(curItem).bounce * 0.1)) * -1;
       }
     }

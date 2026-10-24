@@ -24,7 +24,7 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Xml Network LinguistTools)
 
-#find_package(SFML 3.0 COMPONENTS Audio REQUIRED)
+find_package(SFML 3 REQUIRED COMPONENTS Audio)
 
 qt_standard_project_setup()
 
@@ -44,6 +44,7 @@ set(SOURCES
   src/stats.cpp
   src/weather.cpp
   src/debugaction.cpp
+  src/soundmixer.cpp
   src/loader.cpp
   src/netcomm.cpp
   src/bubble.cpp
@@ -56,7 +57,7 @@ qt_add_executable(Boris
   ${APP_ICON_RESOURCE}
 )
 
-target_link_libraries(Boris PRIVATE Qt6::Widgets Qt6::Xml Qt6::Network)
+target_link_libraries(Boris PRIVATE Qt6::Widgets Qt6::Xml Qt6::Network SFML::Audio)
 
 set_target_properties(Boris PROPERTIES
   COMPILE_WARNING_AS_ERROR ON

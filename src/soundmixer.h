@@ -27,10 +27,12 @@
 
 #pragma once
 
+#include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Audio/Sound.hpp>
 
 #include <QObject>
-#include <QMap>
+#include <string>
+#include <map>
 
 class SoundMixer : public QObject
 {
@@ -40,15 +42,13 @@ public:
   SoundMixer();
   ~SoundMixer();
 
-  QMap<QString, sf::SoundBuffer> soundFxs;
-  /*
-  void addSound(const QString &id,
-                const sf::SoundBuffer &data);
-  */
-  void playSoundFile(const QString &fileName,
+  std::map<std::string, sf::SoundBuffer> soundFxs;
+
+  void playSoundFile(const std::string &fileName,
                      const float &panning,
                      const float &pitch);
-  void playSound(const sf::SoundBuffer &data,
+
+  void playSound(const sf::SoundBuffer *data,
                  const float &panning,
                  const float &pitch);
 };

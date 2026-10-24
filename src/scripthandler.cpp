@@ -27,7 +27,7 @@
 
 #include "mainwindow.h"
 #include "scripthandler.h"
-//#include "soundmixer.h"
+#include "soundmixer.h"
 #include "item.h"
 #include "sprite.h"
 
@@ -37,6 +37,7 @@
 #include <QRegularExpression>
 
 extern MainWindow *mainWindow;
+extern SoundMixer *soundMixer;
 
 ScriptHandler::ScriptHandler(QImage *image,
                              bool *drawing,
@@ -563,11 +564,9 @@ void ScriptHandler::handleSound(QList<QString> &parameters)
     if(settings.scriptOutput) {
       printf("Playing sound '%s'\n", parameters.first().toStdString().c_str());
     }
-    /*
-    soundMixer.playSoundFile(parameters.first(),
+    soundMixer->playSoundFile(parameters.first().toStdString(),
                              (float)parentPos.x() / (float)settings.desktopWidth * 2.0 - 1.0,
                              (scriptVars["hyper"] / 60.0) + 1);
-    */
   }
   parameters.removeFirst(); // Remove sound file name
 }
