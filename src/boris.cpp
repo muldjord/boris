@@ -705,7 +705,7 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped)
   sanityCheck();
 
   int maxX = settings.desktopWidth - getWidth();
-  int minY = 0 - (getHeight() / 2);
+  int minY = 0;
   int maxY = settings.desktopHeight - getHeight();
 
   if(dX == 666) {
@@ -724,7 +724,7 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped)
 
   setPos(dX, dY);
 
-  // if Boris is outside borders
+  // if Boris is outside vertical borders
   if(pos().y() > maxY || pos().y() < minY) {
     if(falling) {
       healthQueue -= 5; // It hurts to hit the borders
@@ -920,7 +920,7 @@ void Boris::sanityCheck()
 {
   int minX = - getWidth();
   int maxX = settings.desktopWidth;
-  int minY = 0 - (getHeight() / 2);
+  int minY = 0;
   int maxY = settings.desktopHeight - getHeight();
 
   // Make sure Boris is not located outside boundaries
