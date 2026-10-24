@@ -91,6 +91,14 @@ void NetComm::netReply(QNetworkReply *r)
       settings.windDirection = "E";
     }
 
+    // Set weatherIdx for use in Weather class
+    for(int a = 0; a < settings.weathers.count(); ++a) {
+      if(settings.weathers.at(a).file == settings.weatherType) {
+        settings.weatherIdx = a;
+        break;
+      }
+    }
+
     //qInfo("%s\n", rawData.data());
     qInfo("  Icon: %s\n", settings.weatherType.toStdString().c_str());
     qInfo("  Temp: %f\n", settings.temperature);

@@ -29,6 +29,7 @@
 #include "behaviour.h"
 #include "stats.h"
 #include "bubble.h"
+#include "weather.h"
 #include "settings.h"
 #include "item.h"
 #include "debugaction.h"
@@ -55,6 +56,7 @@ namespace Direction {
 
 class Stats;
 class Bubble;
+class Weather;
 class Item;
 class Settings;
 
@@ -122,7 +124,6 @@ private slots:
   void statProgress();
   void statQueueProgress();
   QPixmap getShadow(const QPixmap &sprite);
-  void nextWeatherFrame();
   void hideWeather();
   void enableInteract();
   void checkInteractions();
@@ -142,10 +143,9 @@ private:
   int independence;
 
   DebugAction *debugAction = nullptr;
-  QMenu* behavioursMenu;
+  QMenu *behavioursMenu;
   QTimer behavTimer;
   QTimer animTimer;
-  QTimer weatherTimer;
   QTimer statTimer;
   QTimer statQueueTimer;
   QTimer interactionsTimer;
@@ -158,6 +158,7 @@ private:
   QPixmap shadowSprite;
   QPixmap origShadow;
   bool drawShadow = true;
+
   QPixmap borisSprite;
   QPixmap scriptSprite;
   QImage scriptImage = QImage(32, 32, QImage::Format_ARGB32_Premultiplied);
@@ -171,9 +172,6 @@ private:
   QPixmap origBruises;
   qreal bruisesOpacity = 1.0;
 
-  QPixmap weatherSprite;
-  bool showWeather = false;
-
   QPixmap rendered = QPixmap(32, 32 + 1); // +1 for the shadow
 
   double vVel = 0.0;
@@ -181,10 +179,14 @@ private:
   int altitude = 0;
   void sanityCheck();
 
-  Stats *stats;
+  Bubble *bubble = nullptr;
+
+  Stats *stats = nullptr;
   bool showStats = false;
 
-  Bubble *bubble;
+  Weather *weather = nullptr;
+  bool showWeather = false;
+
   QList<QString> behavQueue;
   QString getFileFromCategory(const QString &category);
   int getIdxFromCategory(const QString &category);
@@ -193,8 +195,6 @@ private:
   int getDirectionTo(const QPointF &p);
   void borisInteract(Boris *boris);
   void itemInteract(Item *item);
-  int curWeather = 0;
-  int curWeatherFrame = 0;
   int timeForWeather = 0;
 
   bool isAlive = true;

@@ -102,7 +102,6 @@ private:
 
   QPixmap rendered = QPixmap(80, 80); // +1 for the shadow
 
-  bool visibility;
   int hyper;
   int health;
   int energy;
@@ -114,5 +113,4 @@ private:
   int anxiety;
 
   QTimer statTimer;
-
 };

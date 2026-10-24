@@ -48,50 +48,13 @@ extern MainWindow *mainWindow;
 Boris::Boris(Settings &settings)
   : settings(settings)
 {
-  /*
-  setAttribute(Qt::WA_TranslucentBackground);
-  setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::ToolTip);
-  setFrameShape(QFrame::NoFrame);
-  setWindowFlags(Qt::FramelessWindowHint);
-  setAttribute(Qt::WA_TranslucentBackground);
-  setStyleSheet("background:transparent");
-  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  */
-
-  //setScene(new QGraphicsScene);
-  // Set the scene size for correct scaling when changing Boris' size through reconfBoris()
-  //scene->setSceneRect(0.0, 0.0, 32, 48);
-
   origShadow = settings.getPixmap("shadow.png");
-  /*
-  shadowSprite = scene->addPixmap(origShadow);
-  shadowSprite->setPos(0, 16);
-  shadowSprite->setOpacity(0.35);
-  */
 
-  //setPos(150, 50);
   setPos(QRandomGenerator::global()->bounded(settings.desktopWidth), QRandomGenerator::global()->bounded(settings.desktopHeight));
-  //borisSprite->setPos(0, 15); // To make room for shadow
 
   origDirt = settings.getPixmap("dirt.png");
   origBruises = settings.getPixmap("bruises.png");
-  /*
-  scriptSprite = scene->addPixmap(QPixmap());
-  scriptSprite->setPos(0, 15); // To make room for shadow
 
-  dirtSprite = scene->addPixmap(origDirt);
-  dirtSprite->setOpacity(0.0);
-  dirtSprite->setPos(0, 15); // To make room for shadow
-
-  bruisesSprite = scene->addPixmap(origBruises);
-  bruisesSprite->setOpacity(0.0);
-  bruisesSprite->setPos(0, 15); // To make room for shadow
-
-  weatherSprite = scene->addPixmap(QPixmap());
-  weatherSprite->setPos(0, 0);
-  weatherSprite->hide();
-  */
   behavioursMenu = new QMenu();
   behavioursMenu->setTitle(tr("Behaviours"));
   connect(behavioursMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
@@ -116,12 +79,18 @@ Boris::Boris(Settings &settings)
   funQueue = 0;
   hygieneQueue = 0;
   anxietyQueue = 0;
+
   stats = new Stats(settings, hyper, health, energy, hunger, toilet, social, fun, hygiene, anxiety);
   stats->setParentItem(this);
-  stats->setPos((getWidth() / 2) - 40, -90);
+  stats->setPos((getWidth() / 2) - 40, -100);
+
   bubble = new Bubble(settings);
   bubble->setParentItem(this);
 
+  weather = new Weather(settings);
+  weather->setParentItem(this);
+  weather->setPos(0, 0 - getHeight() / 2);
+  
   staticBehaviours = 0;
   // Figure out how many static behaviours there are
   for(const auto &behaviour: settings.behaviours) {
@@ -137,9 +106,6 @@ Boris::Boris(Settings &settings)
   animTimer.setSingleShot(true);
   connect(&animTimer, &QTimer::timeout, this, &Boris::updateBoris);
   animTimer.start();
-
-  weatherTimer.setSingleShot(true);
-  connect(&weatherTimer, &QTimer::timeout, this, &Boris::nextWeatherFrame);
 
   statTimer.setInterval(30000);
   connect(&statTimer, &QTimer::timeout, this, &Boris::statProgress);
@@ -168,6 +134,7 @@ Boris::~Boris()
 {
   delete stats;
   delete bubble;
+  delete weather;
   delete behavioursMenu;
 }
 
@@ -1149,7 +1116,8 @@ void Boris::processAi(QString &behav)
     // Stat check
     QList<QString> potentials;
     if(stats->getFun() <= 50) {
-      if(QRandomGenerator::global()->bounded(stats->getFun()) > independence) {
+      // Clamping here to avoid value being 0 which throws an assert
+      if(QRandomGenerator::global()->bounded(std::clamp(stats->getFun(), 1, 100)) > independence) {
         potentials.append("_fun");
       } else {
         potentials.append(getFileFromCategory("Fun"));
@@ -1236,17 +1204,6 @@ void Boris::reconfBoris()
   }
 }
 
-void Boris::nextWeatherFrame()
-{
-  weatherSprite = settings.weathers.at(curWeather).frames.at(curWeatherFrame).sprite;
-  weatherTimer.setInterval(settings.weathers.at(curWeather).frames.at(curWeatherFrame).time);
-  curWeatherFrame++;
-  if(curWeatherFrame >= settings.weathers.at(curWeather).frames.length()) {
-    curWeatherFrame = 0;
-  }
-  weatherTimer.start();
-}
-
 void Boris::triggerWeather()
 {
   // Force showing weather next time processAi is run
@@ -1255,17 +1212,9 @@ void Boris::triggerWeather()
 
 void Boris::setWeather(QString &behav)
 {
-  for(int a = 0; a < settings.weathers.count(); ++a) {
-    if(settings.weathers.at(a).file == settings.weatherType) {
-      curWeather = a;
-      break;
-    }
-  }
-  curWeatherFrame = 0;
-  weatherTimer.setInterval(0);
-  weatherTimer.start();
+  weather->resetWeather();
 
-  showWeather = true;
+  weather->show();
   QTimer::singleShot(30000, this, &Boris::hideWeather);
 
   if(!falling && !grabbed) {
@@ -1291,7 +1240,7 @@ void Boris::setWeather(QString &behav)
 
 void Boris::hideWeather()
 {
-  showWeather = false;
+  weather->hide();
 }
 
 int Boris::getCurBehav()

@@ -42,6 +42,7 @@ set(SOURCES
   src/behaviour.cpp
   src/main.cpp
   src/stats.cpp
+  src/weather.cpp
   src/debugaction.cpp
   src/loader.cpp
   src/netcomm.cpp

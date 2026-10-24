@@ -79,8 +79,6 @@ private:
   QTimer physicsTimer;
   QMenu *behavioursMenu;
   QMenu *itemsMenu;
-  QWidget *loadWidget;
-  QProgressBar *progressBar;
   NetComm *netComm;
   QList<QString> extractSnippets(QString line);
   QString *aboutText;

@@ -67,6 +67,7 @@ MainWindow::MainWindow()
 
   setInteractive(true); // Default but setting it anyway
   setMouseTracking(true);
+  //setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
   physicsTimer.setInterval(30);
   connect(&physicsTimer, &QTimer::timeout, this, &MainWindow::handlePhysics);
@@ -250,20 +251,20 @@ void MainWindow::init()
   netComm = new NetComm(settings);
   connect(netComm, &NetComm::weatherUpdated, this, &MainWindow::updateWeather);
 
-  loadWidget = new QWidget;
-  loadWidget->setWindowIcon(QIcon(":icon.png"));
-  loadWidget->setWindowTitle("Boris v" + QString("%1.%2.%3")
-                             .arg(PROJECT_VERSION_MAJOR)
-                             .arg(PROJECT_VERSION_MINOR)
-                             .arg(PROJECT_VERSION_PATCH));
-  QLabel *progressLabel = new QLabel(tr("Looking for Boris, please wait...\n"));
-  progressBar = new QProgressBar;
-  QVBoxLayout *layout = new QVBoxLayout;
-  layout->addWidget(progressLabel);
-  layout->addWidget(progressBar);
+  QWidget loadWidget;
+  loadWidget.setWindowIcon(QIcon(":icon.png"));
+  loadWidget.setWindowTitle("Boris v" + QString("%1.%2.%3")
+                            .arg(PROJECT_VERSION_MAJOR)
+                            .arg(PROJECT_VERSION_MINOR)
+                            .arg(PROJECT_VERSION_PATCH));
+  QLabel progressLabel(tr("Looking for Boris, please wait...\n"));
+  QProgressBar progressBar;
+  QVBoxLayout layout;
+  layout.addWidget(&progressLabel);
+  layout.addWidget(&progressBar);
 
-  loadWidget->setLayout(layout);
-  loadWidget->show();
+  loadWidget.setLayout(&layout);
+  loadWidget.show();
   qApp->processEvents();
 
   itemTimer.setInterval(settings.itemSpawnInterval * 1000);
@@ -288,7 +289,7 @@ void MainWindow::init()
 
   qInfo("Loading %d kilobytes of assets, please wait...\n", totalAssetsSize / 1024);
 
-  progressBar->setMaximum(totalAssetsSize);
+  progressBar.setMaximum(totalAssetsSize);
 
   /*
   if(Loader::loadSoundFxs(settings.soundsPath, settings.soundMixer.soundFxs, progressBar)) {
@@ -298,19 +299,19 @@ void MainWindow::init()
   }
   */
 
-  if(Loader::loadBehaviours(settings, settings.behavioursPath, settings.behaviours, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.behavioursPath, settings.behaviours, &progressBar)) {
     qInfo("Behaviours loaded ok... :)\n");
   } else {
     qInfo("Error when loading some behaviours, please check your png and dat files\n");
   }
 
-  if(Loader::loadBehaviours(settings, settings.weathersPath, settings.weathers, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.weathersPath, settings.weathers, &progressBar)) {
     qInfo("Weather types loaded ok... :)\n");
   } else {
     qInfo("Error when loading some weather types, please check your png and dat files\n");
   }
 
-  if(Loader::loadBehaviours(settings, settings.itemsPath, settings.itemBehaviours, progressBar)) {
+  if(Loader::loadBehaviours(settings, settings.itemsPath, settings.itemBehaviours, &progressBar)) {
     qInfo("Items loaded ok... :)\n");
   } else {
     qInfo("Error when loading some items, please check your png and dat files\n");
@@ -341,10 +342,7 @@ void MainWindow::init()
 
   addBoris((settings.clones == 0?QRandomGenerator::global()->generate() % 99 + 1:settings.clones));
 
-  progressBar->setValue(progressBar->maximum());
-
-  delete progressBar;
-  delete loadWidget;
+  progressBar.setValue(progressBar.maximum());
 
   createBehavioursMenu();
   updateItemsMenu();

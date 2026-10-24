@@ -94,6 +94,7 @@ public:
   // Weather
   bool forceWeatherType = false;
   QString weatherType = "11d";
+  int weatherIdx = -1;
   bool forceTemperature = false;
   double temperature = -42;
   bool forceWindDirection = false;
