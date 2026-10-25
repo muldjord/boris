@@ -1,25 +1,23 @@
 # Boris
-A scriptable desktop screenmate written in Qt6 (for graphics) and SFML (for sound). Boris will keep you company while you work. He has a bit of a prankster personality and needs to be cared for in order to stay alive. Move your mouse over him to check on his health stats.
+A scriptable desktop screenmate written in Qt6 (for graphics) and SFML3 (for sound). Boris has a bit of a prankster personality and needs to be cared for in order to stay alive.
 
 * All behaviours are fully scriptable using [BorisScript](data/behaviours/README.md)
 * Supports weather visualization using the OpenWeatherMap API
 * Supports RSS feed speech bubbles using custom RSS feeds
 
-NOTE!!! I am currently working through the entire project and rewiring it to work with a modern Wayland compositor. Currently MANY things are completely broken such as the mouse grabbing features. Other things are out of alignment for one reason or another. It will be fixed over the coming month or so.
-
-# About
+## About
 * Programming: Lars Muldjord
 * Graphics: Lars Muldjord
 * Sound: Lars Muldjord
 
 A video demonstrating Boris can be found [here](https://www.youtube.com/watch?v=wjx2j04cTcw).
 
-Boris was programmed in C++ using the [Qt framework](http://www.qt.io) for graphics and the [SFML library](https://www.sfml-dev.org) for sound. Boris requires Qt6.
+Boris was programmed in C++ using the [Qt framework](http://www.qt.io) for graphics and the [SFML library](https://www.sfml-dev.org) for sound. Boris requires Qt6 and SFML3.
 
 Bug reports, suggestions and / or comments can be emailed to me at:
 muldjordlars@gmail.com.
 
-Copyright 2024 Lars Muldjord. This program is distributed under the terms of the GNU General Public License. Be sure to read the license in COPYING.TXT or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.
+Copyright 2026 Lars Muldjord. This program is distributed under the terms of the GNU General Public License. Be sure to read the license in COPYING.TXT or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.
 
 ## Building from source (Ubuntu Linux and Debian derivatives)
 ### Prerequisites
@@ -29,30 +27,22 @@ $ sudo apt update
 $ sudo apt install build-essential cmake libsfml-dev qt6-base-dev qt6-tools-dev qt6-l10n-tools
 ```
 
-### Build commands
+### Compiles Boris
 ```
 $ mkdir build
 $ cd build
 $ cmake ..
 $ make
+$ make install
 ```
+The last command copies all necessary files to the `release` folder. You can then run Boris using the `Boris` executable.
 
-### Preparing data files and running Boris
-While still in the above `build` folder run the following commands:
-```
-$ cd ../release
-$ ln -s ../data data
-$ cp ../COPYING.TXT .
-```
-Now run Boris with
-```
-$ ./Boris
-```
+## Notes on 4.x and later versions
+Due to how modern desktop compositors work it is no longer possible to run Boris as an old-school desktop screenmate. Wayland under Linux does not allow for programatically moving windows around the desktop (Boris used to exist inside a transparent window). It is also no longer possible to keep windows on top of other windows. For that reason Boris has been completely rewritten to use a transparent maximized graphics view. This works for the intent of running Boris and just having fun with enjoying his many shenanigangs. The mouse interactions are also intact. But you are not able to click stuff through the transparent view. You will have to alt-tab to get to those which moves Boris out of focus. For the past couple of years I have wanted to implement this new version of Boris. I am very happy with how it has turned out even with the slight limitations. At least Boris is still alive and well and here to bring you joy.
 
 ## Release notes
 #### Known issues:
 * Critical need behaviours added to the queue chosen by Boris himself also gives out coins
-* Spawned items seemingly spawn outside desktop more often than they should
 
 #### Version x.x.x, Roadmap:
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
@@ -63,11 +53,12 @@ $ ./Boris
 * Make it so Boris only interacts with items he is interested in (those that match his current needs)
 * Make a 'candycane' item for Boris to eat. It should be 'energy' category. He will get a significant energy boost and get very hyper
 
-#### Version 3.7.0 (In progress, unreleased):
+#### Version 4.0.0 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
+* Rewired entire project to work with modern Wayland compositors under Linux
 * Added 'anxiety' stat which causes Boris to flee the mouse cursor if he has been tossed around too much
 * Added 'debug' textedit to right-click menu when 'idkfa' is enabled
-* Fixed legs on coffee reading and steak eating
+* Fixed Boris' weird legs on coffee reading and steak eating behaviours
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
