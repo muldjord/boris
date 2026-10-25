@@ -54,6 +54,5 @@ private:
   Settings &settings;
   QTimer weatherTimer;
   int curFrame = 0;
-  QPixmap weatherPixmap = QPixmap(32, 32);
   QPixmap rendered = QPixmap(32, 32);
 };

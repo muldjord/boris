@@ -37,7 +37,7 @@ Weather::Weather(Settings &settings)
 {
   weatherTimer.setSingleShot(true);
   connect(&weatherTimer, &QTimer::timeout, this, &Weather::updateWeather);
-  weatherPixmap.fill(Qt::transparent);
+  rendered.fill(Qt::transparent);
 }
 
 Weather::~Weather()

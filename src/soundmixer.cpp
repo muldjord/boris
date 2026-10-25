@@ -26,13 +26,14 @@
  */
 
 #include "soundmixer.h"
-
 #include <SFML/Audio/Sound.hpp>
+
+constexpr int numOfChannels = 64;
 
 SoundMixer::SoundMixer()
 {
   sf::SoundBuffer buffer;
-  for(int a = 0; a < 64; ++a) {
+  for(int a = 0; a < numOfChannels; ++a) {
     sf::Sound channel(buffer);
     channels.push_back(channel);
   }
