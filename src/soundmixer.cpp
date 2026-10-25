@@ -27,6 +27,7 @@
 
 #include "soundmixer.h"
 #include <SFML/Audio/Sound.hpp>
+#include <SFML/Audio/Listener.hpp>
 
 constexpr int numOfChannels = 64;
 
@@ -41,6 +42,11 @@ SoundMixer::SoundMixer()
 
 SoundMixer::~SoundMixer()
 {
+}
+
+void SoundMixer::setGlobalVolume(const int &volume)
+{
+  sf::Listener::setGlobalVolume(std::clamp(volume, 1, 100));
 }
 
 void SoundMixer::playSoundFile(const std::string &fileName,

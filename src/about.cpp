@@ -24,7 +24,9 @@
  *  along with Boris; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
+
 #include "about.h"
+#include "soundmixer.h"
 
 #include "SFML/Audio.hpp"
 
@@ -40,6 +42,8 @@
 #include <QIntValidator>
 #include <QHostInfo>
 #include <QFileInfo>
+
+extern SoundMixer *soundMixer;
 
 About::About(QSettings *iniSettings, Settings &settings) : settings(settings), iniSettings(iniSettings)
 {
@@ -216,7 +220,7 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
   volumeSlider = new QSlider(Qt::Horizontal);
   volumeSlider->setMinimum(0);
   volumeSlider->setMaximum(100);
-  volumeSlider->setValue(settings.volume * 100);
+  volumeSlider->setValue(settings.volume);
   connect(volumeSlider, &QSlider::valueChanged, this, &About::volumeChanged);
 
   showWelcome = new QCheckBox(tr("Always show this dialog on startup"));
@@ -268,7 +272,7 @@ About::~About()
 
 void About::volumeChanged(int value)
 {
-  //sf::Listener::setGlobalVolume(value);
+  soundMixer->setGlobalVolume(value);
 }
 
 void About::saveAll()
@@ -339,7 +343,7 @@ void About::saveAll()
   } else {
     settings.sound = false;
   }
-  settings.volume = volumeSlider->value() / 100.0;
+  settings.volume = volumeSlider->value();
   if(enableBubbles->isChecked()) {
     settings.bubbles = true;
   } else {
@@ -361,7 +365,7 @@ void About::saveAll()
   iniSettings->setValue("makeInvincible", settings.isInvincible);
   iniSettings->setValue("bubbles", settings.bubbles);
   iniSettings->setValue("sound", settings.sound);
-  iniSettings->setValue("volume", settings.volume * 100);
+  iniSettings->setValue("volume", settings.volume);
   iniSettings->setValue("feed_url", settings.feedUrl);
   iniSettings->setValue("weather_city", settings.city);
   iniSettings->setValue("weather_key", settings.key);

@@ -82,7 +82,7 @@ public:
   bool isInvincible = false;
   int stats = STATS_CRITICAL;
   bool sound = true;
-  double volume = 0.5;
+  int volume = 50; // 0-100
   bool bubbles = true;
   double mouseVVel = 0.0;
   double mouseHVel = 0.0;

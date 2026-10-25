@@ -41,6 +41,7 @@ class SoundMixer : public QObject
 public:
   SoundMixer();
   ~SoundMixer();
+  void setGlobalVolume(const int &volume);
   void playSoundFile(const std::string &fileName,
                      const float &panning,
                      const float &pitch);

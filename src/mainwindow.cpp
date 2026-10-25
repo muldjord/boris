@@ -58,8 +58,9 @@ MainWindow::MainWindow()
   scene()->setBackgroundBrush(Qt::transparent);
   setStyleSheet("background:transparent");
   setAttribute(Qt::WA_TranslucentBackground);
-
-  setWindowFlags(Qt::FramelessWindowHint);
+  // StaysOnTop doesn't work under Wayland but it might work under some conditions so I am leaving it on
+  setWindowFlags(Qt::FramelessWindowHint |
+                 Qt::WindowStaysOnTopHint);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   showMaximized();
@@ -211,8 +212,8 @@ void MainWindow::init()
   if(!iniSettings->contains("volume")) {
     iniSettings->setValue("volume", 50);
   }
-  settings.volume = iniSettings->value("volume").toInt() / 100.0;
-  //sf::Listener::setGlobalVolume(settings.volume * 100.0);
+  settings.volume = iniSettings->value("volume").toInt();
+  soundMixer->setGlobalVolume(settings.volume);
 
   if(!iniSettings->contains("lemmy_mode")) {
     iniSettings->setValue("lemmy_mode", false);
