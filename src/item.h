@@ -37,7 +37,6 @@
 #include <QBasicTimer>
 
 struct Settings;
-
 class Boris;
 
 class Item : public QGraphicsObject
@@ -64,12 +63,10 @@ public slots:
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
   QRectF boundingRect() const override;
-  /*
-  void mouseDoubleClickEvent(QMouseEvent* event) override;
-  void mousePressEvent(QMouseEvent* event) override;
-  void mouseMoveEvent(QMouseEvent* event) override;
-  void mouseReleaseEvent(QMouseEvent* event) override;
-  */
+  void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
+  void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+  void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
 
 private slots:
   void updateItem();

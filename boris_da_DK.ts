@@ -166,22 +166,22 @@
 <context>
     <name>Boris</name>
     <message>
-        <location filename="src/boris.cpp" line="60"/>
+        <location filename="src/boris.cpp" line="61"/>
         <source>Behaviours</source>
         <translation>Opførsler</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="156"/>
+        <location filename="src/boris.cpp" line="153"/>
         <source>Idkfa</source>
         <translation>Idkfa</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="198"/>
+        <location filename="src/boris.cpp" line="195"/>
         <source>Debug</source>
         <translation>Debug</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="206"/>
+        <location filename="src/boris.cpp" line="203"/>
         <source>No behaviours!</source>
         <translation>Ingen opførsler!</translation>
     </message>
@@ -206,63 +206,63 @@
 </translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="404"/>
-        <location filename="src/mainwindow.cpp" line="672"/>
+        <location filename="src/mainwindow.cpp" line="403"/>
+        <location filename="src/mainwindow.cpp" line="673"/>
         <source> coins</source>
         <translation> mønter</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="413"/>
+        <location filename="src/mainwindow.cpp" line="412"/>
         <source>&amp;Config / about...</source>
         <translation>&amp;Konfigurér / om...</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="505"/>
+        <location filename="src/mainwindow.cpp" line="506"/>
         <source>Idkfa</source>
         <translation>Idkfa</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="547"/>
+        <location filename="src/mainwindow.cpp" line="548"/>
         <source>No behaviours!</source>
         <translation>Ingen opførsler!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="591"/>
+        <location filename="src/mainwindow.cpp" line="592"/>
         <source>No items unlocked!</source>
         <translation>Ingen genstande låst op!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="639"/>
+        <location filename="src/mainwindow.cpp" line="640"/>
         <source>Buy?</source>
         <translation>Køb?</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="639"/>
+        <location filename="src/mainwindow.cpp" line="640"/>
         <source>Do you want to buy &apos;</source>
         <translation>Vil du købe &apos;</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="639"/>
+        <location filename="src/mainwindow.cpp" line="640"/>
         <source>for </source>
         <translation>for </translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="639"/>
+        <location filename="src/mainwindow.cpp" line="640"/>
         <source> coins?</source>
         <translation> mønter?</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="652"/>
+        <location filename="src/mainwindow.cpp" line="653"/>
         <source>Not enough coins!</source>
         <translation>Ikke mønter nok!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="652"/>
+        <location filename="src/mainwindow.cpp" line="653"/>
         <source>You can&apos;t afford the &apos;</source>
         <translation>Du har ikke råd til &apos;</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="652"/>
+        <location filename="src/mainwindow.cpp" line="653"/>
         <source>item.
 
 Initiate behaviours that corresponds to Boris&apos; needs to earn coins. You can then use those coins to unlock new items.</source>
@@ -271,28 +271,28 @@ Initiate behaviours that corresponds to Boris&apos; needs to earn coins. You can
 Vælg opførsler der tilsvarer Boris´&apos; behov for at tjene mønter. Du kan derefter bruge dem på at låse nye genstande op.</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="664"/>
+        <location filename="src/mainwindow.cpp" line="665"/>
         <source>coins</source>
         <translation>mønter</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="399"/>
+        <location filename="src/mainwindow.cpp" line="398"/>
         <source>&amp;Earthquake!!!</source>
         <oldsource>&amp;Earthquake</oldsource>
         <translation>&amp;Jordskælv!!!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="402"/>
+        <location filename="src/mainwindow.cpp" line="401"/>
         <source>Updating weather...</source>
         <translation>Opdaterer vejr...</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="496"/>
+        <location filename="src/mainwindow.cpp" line="497"/>
         <source>Couldn&apos;t find city</source>
         <translation>Kunne ikke finde by</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="423"/>
+        <location filename="src/mainwindow.cpp" line="422"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>

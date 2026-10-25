@@ -54,9 +54,6 @@ Stats::Stats(Settings &settings,
   anxiety(anxiety)
 {
   flashIcon = settings.getPixmap("flash_icon.png");
-  flashes = 0;
-  underMouse = false;
-
   statsPixmap = settings.getPixmap("stats.png");
 }
 

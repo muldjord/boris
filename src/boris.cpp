@@ -49,6 +49,7 @@ extern SoundMixer *soundMixer;
 Boris::Boris(Settings &settings)
   : settings(settings)
 {
+  setAcceptHoverEvents(true);
   origShadow = settings.getPixmap("shadow.png");
 
   setPos(QRandomGenerator::global()->bounded(settings.desktopWidth), QRandomGenerator::global()->bounded(settings.desktopHeight));
@@ -133,10 +134,6 @@ Boris::Boris(Settings &settings)
 
 Boris::~Boris()
 {
-  delete stats;
-  delete bubble;
-  delete weather;
-  delete behavioursMenu;
 }
 
 void Boris::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
@@ -594,12 +591,12 @@ void Boris::updateBoris()
   if(settings.sound && settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer != nullptr) {
     if(settings.behaviours.at(curBehav).pitchLock) {
       soundMixer->playSound(settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
-                           (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
-                           (stats->getHyper() / 60.0) + 1);
+                            pos().x() / settings.desktopWidth * 2.0 - 1.0,
+                            (stats->getHyper() / 60.0) + 1);
     } else {
       soundMixer->playSound(settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
-                           (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
-                           (stats->getHyper() / 60.0) + (0.95 + QRandomGenerator::global()->bounded(100) / 1000.0));
+                            pos().x() / settings.desktopWidth * 2.0 - 1.0,
+                            (stats->getHyper() / 60.0) + (0.95 + QRandomGenerator::global()->bounded(100) / 1000.0));
     }
   }
 
@@ -708,8 +705,8 @@ void Boris::handleBehaviourChange(QAction* a)
     }
   }
 }
-/*
-void Boris::enterEvent(QEnterEvent *event)
+
+void Boris::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
   event->accept();
   if(settings.stats == STATS_MOUSEOVER || settings.stats == STATS_CRITICAL) {
@@ -718,7 +715,7 @@ void Boris::enterEvent(QEnterEvent *event)
   stats->underMouse = true;
 }
 
-void Boris::leaveEvent(QEvent *event)
+void Boris::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
   event->accept();
   if(settings.stats == STATS_MOUSEOVER || settings.stats == STATS_CRITICAL) {
@@ -726,7 +723,8 @@ void Boris::leaveEvent(QEvent *event)
   }
   stats->underMouse = false;
 }
-void Boris::mousePressEvent(QMouseEvent* event)
+
+void Boris::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
   if(event->button() == Qt::RightButton) {
     behavioursMenu->exec(QCursor::pos());
@@ -739,42 +737,35 @@ void Boris::mousePressEvent(QMouseEvent* event)
     setCursor(settings.getCursor("grab.png"));
     grabbed = true;
     changeBehaviour("_grabbed");
-    this->setPos(event->globalPosition().x() - settings.sizeFactor * 17.0, 
-               event->globalPosition().y() - settings.sizeFactor * 16.0);
-    oldCursor = QCursor::pos();
+    this->setPos(event->scenePos().x() - (getWidth() / 2), 
+                 event->scenePos().y());
   }
 }
 
-void Boris::mouseMoveEvent(QMouseEvent* event)
+void Boris::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
-  if(event->buttons().testFlag(Qt::LeftButton)) {
-    this->setPos(event->globalPosition().x() - settings.sizeFactor * 17.0, 
-               event->globalPosition().y() - settings.sizeFactor * 16.0);
-    stats->setPos(pos().x() + (size / 2) - (stats->width() / 2),
-                pos().y() + size + (size / 2));
-    bubble->moveBubble(pos().x(), pos().y(), size);
+  if(grabbed && event->buttons().testFlag(Qt::LeftButton)) {
+    this->setPos(event->scenePos().x() - (getWidth() / 2), 
+                 event->scenePos().y());
   }
-
 }
 
-void Boris::mouseReleaseEvent(QMouseEvent* event)
+void Boris::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
-  if(event->button() == Qt::LeftButton) {
+  if(grabbed && event->button() == Qt::LeftButton) {
     setCursor(settings.getCursor("hover.png"));
     grabbed = false;
-    settings.borisX = pos().x();
-    settings.borisY = pos().y();
     changeBehaviour("_falling");
     falling = true;
-    hVel = mouseHVel;
-    vVel = mouseVVel;
-    altitude = QCursor::pos().y();
+    hVel = settings.mouseHVel;
+    vVel = settings.mouseVVel;
+    altitude = pos().y();
   }
 }
 
-void Boris::wheelEvent(QWheelEvent *)
+void Boris::wheelEvent(QGraphicsSceneWheelEvent *)
 {
-  if(stats->underMouse && !falling && !grabbed && !settings.behaviours.at(curBehav).doNotDisturb) {
+  if(!falling && !grabbed && !settings.behaviours.at(curBehav).doNotDisturb) {
     if(annoyance < ANNOYMAX) {
       changeBehaviour("_tickle");
     } else {
@@ -783,7 +774,6 @@ void Boris::wheelEvent(QWheelEvent *)
     annoyance++;
   }
 }
-*/
 
 void Boris::handlePhysics()
 {

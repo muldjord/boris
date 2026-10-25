@@ -74,7 +74,7 @@ MainWindow::MainWindow()
   //setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
   physicsTimer.setInterval(30);
-  connect(&physicsTimer, &QTimer::timeout, this, &MainWindow::handlePhysics);
+  connect(&physicsTimer, &QTimer::timeout, this, &MainWindow::progressPhysics);
 
   QTimer::singleShot(100, this, &MainWindow::init);
 }
@@ -362,7 +362,6 @@ void MainWindow::resetView()
   scene()->setSceneRect(mapToScene(viewport()->rect()).boundingRect());
   settings.desktopWidth = scene()->sceneRect().width();
   settings.desktopHeight = scene()->sceneRect().height();
-  printf("Desktop w=%d, h=%d\n", settings.desktopWidth, settings.desktopHeight);
 }
 
 void MainWindow::addBoris(int clones)
@@ -468,12 +467,14 @@ void MainWindow::progressPhysics()
   emit handlePhysics();
 }
 
+/*
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
   if(event->button() == Qt::RightButton) {
     trayIconMenu->exec(QCursor::pos());
   }
 }
+*/
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {

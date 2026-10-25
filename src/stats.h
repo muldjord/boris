@@ -76,7 +76,7 @@ public:
   void deltaAnxiety(int value);
 
   void updateStats();
-  bool underMouse;
+  bool underMouse = false;
 
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;

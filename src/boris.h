@@ -41,6 +41,8 @@
 #include <QAction>
 #include <QMouseEvent>
 #include <QMenu>
+#include <QGraphicsSceneHoverEvent>
+#include <QGraphicsSceneMouseEvent>
 
 namespace Direction {
   constexpr int None = -1;
@@ -108,12 +110,12 @@ protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
   QRectF boundingRect() const override;
 
-  //void enterEvent(QEnterEvent *event) override;
-  //void leaveEvent(QEvent *event) override;
-  //void mouseMoveEvent(QMouseEvent* event) override;
-  //void mousePressEvent(QMouseEvent* event) override;
-  //void mouseReleaseEvent(QMouseEvent* event) override;
-  //void wheelEvent(QWheelEvent *) override;
+  void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+  void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
+  void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
+  void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
+  void wheelEvent(QGraphicsSceneWheelEvent *) override;
 
 signals:
   void addCoins(const QString &message, const int &coins);

@@ -60,8 +60,8 @@ public:
   Settings();
   bool showWelcome = true;
   bool statLogging = false;
-  int desktopWidth = 1920;
-  int desktopHeight = 1080;
+  qreal desktopWidth = 1920.0;
+  qreal desktopHeight = 1080.0;
   bool scriptOutput = false;
 
   // Asset folders

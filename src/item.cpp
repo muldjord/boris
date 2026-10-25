@@ -224,11 +224,11 @@ void Item::updateItem()
   if(settings.sound && settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer != nullptr) {
     if(settings.itemBehaviours.at(curItem).pitchLock) {
       soundMixer->playSound(settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
-                                    (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0, 1.0);
+                            pos().x() / settings.desktopWidth * 2.0 - 1.0, 1.0);
     } else {
       soundMixer->playSound(settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
-                                    (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0,
-                                    0.95 + QRandomGenerator::global()->bounded(100) / 1000.0);
+                            pos().x() / settings.desktopWidth * 2.0 - 1.0,
+                            0.95 + QRandomGenerator::global()->bounded(100) / 1000.0);
     }
   }
 
@@ -413,52 +413,50 @@ int Item::getDirectionTo(const QPointF &p)
   }
   return pointSector;
 }
-/*
-void Item::mouseDoubleClickEvent(QMouseEvent* event)
+void Item::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
   if(event->button() == Qt::LeftButton) {
     destroy();
   }
 }
 
-void Item::mousePressEvent(QMouseEvent* event)
+void Item::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
   if(event->button() == Qt::LeftButton) {
     grabbed = true;
     ignore = false;
     ignoreTimer.stop();
     setCursor(settings.getCursor("grab.png"));
-    oldCursor = QCursor::pos();
     if(!settings.itemBehaviours.at(curItem).reactions.isEmpty()) {
       curFrame = 0;
-      animTimer.start(0, Qt::PreciseTimer, this);
+      animTimer.setInterval(0);
+      animTimer.start();
     }
   } else if(event->button() == Qt::MiddleButton) {
     destroy();
   }
 }
 
-void Item::mouseMoveEvent(QMouseEvent* event)
+void Item::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
   if(grabbed && event->buttons().testFlag(Qt::LeftButton)) {
-    this->setPos(event->globalPosition().x() - settings.sizeFactor * 16.0, 
-               event->globalPosition().y() - settings.sizeFactor * 20.0);
+    this->setPos(event->scenePos().x() - (getWidth() / 2), 
+                 event->scenePos().y());
   }
-
 }
 
-void Item::mouseReleaseEvent(QMouseEvent* event)
+void Item::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
   if(grabbed && event->button() == Qt::LeftButton) {
     setCursor(settings.getCursor("hover.png"));
     grabbed = false;
     falling = true;
-    hVel = mouseHVel;
-    vVel = mouseVVel;
+    hVel = settings.mouseHVel;
+    vVel = settings.mouseVVel;
     altitude = pos().y();
   }
 }
-*/
+
 void Item::setCurFrame(const int &frame)
 {
   curFrame = frame;
@@ -517,7 +515,7 @@ void Item::handlePhysics()
       } else {
         hVel *= settings.itemBehaviours.at(curItem).bounce * 0.1;
         soundMixer->playSoundFile("bounce.wav",
-                             (float)pos().x() / (float)settings.desktopWidth * 2.0 - 1.0, 1.0);
+                                  pos().x() / settings.desktopWidth * 2.0 - 1.0, 1.0);
         vVel = (vVel * (settings.itemBehaviours.at(curItem).bounce * 0.1)) * -1;
       }
     }
@@ -542,7 +540,8 @@ void Item::interact(Boris *boris)
 
   borisHyper = boris->getHyper();
 
-  setPos(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord(), boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord());
+  setPos(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord(),
+         boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord());
 
   if(settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel().isEmpty()) {
     destroy();
