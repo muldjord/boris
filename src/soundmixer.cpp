@@ -31,6 +31,11 @@
 
 SoundMixer::SoundMixer()
 {
+  sf::SoundBuffer buffer;
+  for(int a = 0; a < 64; ++a) {
+    sf::Sound channel(buffer);
+    channels.push_back(channel);
+  }
 }
 
 SoundMixer::~SoundMixer()
@@ -44,19 +49,20 @@ void SoundMixer::playSoundFile(const std::string &fileName,
   if(soundFxs.find(fileName) == soundFxs.end()) {
     return;
   }
-
-  sf::Sound sound(soundFxs[fileName]);
-  sound.setPan(panning);
-  sound.setPitch(pitch);
-  sound.play();
+  playSound(&soundFxs[fileName], panning, pitch);
 }
 
 void SoundMixer::playSound(const sf::SoundBuffer *data,
                            const float &panning,
                            const float &pitch)
 {
-  sf::Sound sound(*data);
-  sound.setPan(panning);
-  sound.setPitch(pitch);
-  sound.play();
+  for(auto &channel: channels) {
+    if(channel.getStatus() == sf::SoundSource::Status::Stopped) {
+      channel.setBuffer(*data);
+      channel.setPan(panning);
+      channel.setPitch(pitch);
+      channel.play();
+      break;
+    }
+  }
 }

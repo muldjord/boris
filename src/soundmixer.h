@@ -41,9 +41,6 @@ class SoundMixer : public QObject
 public:
   SoundMixer();
   ~SoundMixer();
-
-  std::map<std::string, sf::SoundBuffer> soundFxs;
-
   void playSoundFile(const std::string &fileName,
                      const float &panning,
                      const float &pitch);
@@ -51,4 +48,8 @@ public:
   void playSound(const sf::SoundBuffer *data,
                  const float &panning,
                  const float &pitch);
+  std::map<std::string, sf::SoundBuffer> soundFxs;
+
+private:
+  std::vector<sf::Sound> channels;
 };
