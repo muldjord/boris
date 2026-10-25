@@ -11,13 +11,13 @@ allowFlip
 # Egg 1 move
 1;50;0;0;;label egg1move,if @2 = 1 goto egg1jump else goto egg1shake
 1;50;0;0;;label egg1jump
-1;50;0;-2;data/sfx/boing.wav;
+1;50;0;-2;boing.wav;
 1;50;0;-1;;
 1;50;0;0;;
 1;50;0;0;;
 1;50;0;1;;
 1;50;0;2;;
-1;50;0;-2;data/sfx/boing.wav;
+1;50;0;-2;boing.wav;
 1;50;0;-1;;
 1;50;0;0;;
 1;50;0;0;;
@@ -39,13 +39,13 @@ allowFlip
 # Egg 2 move
 2;50;0;0;;label egg2move,if @2 = 1 goto egg2jump else goto egg2shake
 2;50;0;0;;label egg2jump
-2;50;0;-2;data/sfx/boing.wav;
+2;50;0;-2;boing.wav;
 2;50;0;-1;;
 2;50;0;0;;
 2;50;0;0;;
 2;50;0;1;;
 2;50;0;2;;
-2;50;0;-2;data/sfx/boing.wav;
+2;50;0;-2;boing.wav;
 2;50;0;-1;;
 2;50;0;0;;
 2;50;0;0;;
@@ -67,13 +67,13 @@ allowFlip
 # Egg 3 move
 3;50;0;0;;label egg3move,if @2 = 1 goto egg3jump else goto egg3shake
 3;50;0;0;;label egg3jump
-3;50;0;-2;data/sfx/boing.wav;
+3;50;0;-2;boing.wav;
 3;50;0;-1;;
 3;50;0;0;;
 3;50;0;0;;
 3;50;0;1;;
 3;50;0;2;;
-3;50;0;-2;data/sfx/boing.wav;
+3;50;0;-2;boing.wav;
 3;50;0;-1;;
 3;50;0;0;;
 3;50;0;0;;
@@ -95,13 +95,13 @@ allowFlip
 # Egg 4 move
 4;50;0;0;;label egg4move,if @2 = 1 goto egg4jump else goto egg4shake
 4;50;0;0;;label egg4jump
-4;50;0;-2;data/sfx/boing.wav;
+4;50;0;-2;boing.wav;
 4;50;0;-1;;
 4;50;0;0;;
 4;50;0;0;;
 4;50;0;1;;
 4;50;0;2;;
-4;50;0;-2;data/sfx/boing.wav;
+4;50;0;-2;boing.wav;
 4;50;0;-1;;
 4;50;0;0;;
 4;50;0;0;;
@@ -123,13 +123,13 @@ allowFlip
 # Egg 5 move
 5;50;0;0;;label egg5move,if @2 = 1 goto egg5jump else goto egg5shake
 5;50;0;0;;label egg5jump
-5;50;0;-2;data/sfx/boing.wav;
+5;50;0;-2;boing.wav;
 5;50;0;-1;;
 5;50;0;0;;
 5;50;0;0;;
 5;50;0;1;;
 5;50;0;2;;
-5;50;0;-2;data/sfx/boing.wav;
+5;50;0;-2;boing.wav;
 5;50;0;-1;;
 5;50;0;0;;
 5;50;0;0;;
@@ -151,13 +151,13 @@ allowFlip
 # Egg 6 move
 6;50;0;0;;label egg6move,if @2 = 1 goto egg6jump else goto egg6shake
 6;50;0;0;;label egg6jump
-6;50;0;-2;data/sfx/boing.wav;
+6;50;0;-2;boing.wav;
 6;50;0;-1;;
 6;50;0;0;;
 6;50;0;0;;
 6;50;0;1;;
 6;50;0;2;;
-6;50;0;-2;data/sfx/boing.wav;
+6;50;0;-2;boing.wav;
 6;50;0;-1;;
 6;50;0;0;;
 6;50;0;0;;
@@ -174,7 +174,7 @@ allowFlip
 6;50;-1;0;;goto egg6
 
 # Spawn chicken
-7;75;0;0;data/sfx/poof.wav;label spawnchicken
+7;75;0;0;poof.wav;label spawnchicken
 8;75;0;0;;
 9;75;0;0;;
 10;75;0;0;;
