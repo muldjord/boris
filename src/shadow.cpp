@@ -87,12 +87,12 @@ void Shadow::updateShadow(const QPixmap &sprite, const int &altitude, const bool
   QImage shadow(32, 32, QImage::Format_ARGB32);
   shadow.fill(Qt::transparent);
   if(firstX < lastX) {
-    //double altitudeFactor = (settings.desktopHeight - altitude + 1) / settings.desktopHeight; // +1 to avoid division by zero
+    double altitudeFactor = (settings.desktopHeight - altitude + 1) / settings.desktopHeight; // +1 to avoid division by zero
     int shadowWidth = lastX - firstX + 3;
     QPainter painter(&shadow);
     painter.setOpacity(0.3);
     if(falling) {
-      painter.drawImage(firstX - 1, 0, origShadow.toImage().scaled(shadowWidth, origShadow.height()));
+      painter.drawImage(firstX - 1 + ((shadowWidth - (shadowWidth * altitudeFactor)) / 2), 0, origShadow.toImage().scaled(shadowWidth * altitudeFactor, origShadow.height()));
     } else {
       painter.drawImage(firstX - 1, bottom - image.height() + 1, origShadow.toImage().scaled(shadowWidth, origShadow.height()));
     }

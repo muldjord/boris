@@ -177,8 +177,6 @@ void Item::updateItem()
     itemSprite = settings.itemBehaviours.at(curItem).frames.at(curFrame).sprite;
   }
 
-  shadow->updateShadow(itemSprite, groundY - pos().y(), falling);
-
   if(settings.sound && settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer != nullptr) {
     if(settings.itemBehaviours.at(curItem).pitchLock) {
       soundMixer->playSound(settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer,
@@ -218,6 +216,8 @@ void Item::updateItem()
   painter.drawPixmap(0, 0, scriptSprite);
   painter.end();
 
+  // ALso update the shadow here in case the sprite doesn't move which misaligns it
+  shadow->updateShadow(rendered, groundY - pos().y(), falling);
   // Make sure 'paint()' is called
   update();
 
@@ -263,6 +263,7 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
   if(!falling) {
     groundY = dY;
   }
+  shadow->updateShadow(itemSprite, groundY - dY, falling);
   shadow->setPos(0, groundY - dY + 1);
   setPos(dX, dY);
 

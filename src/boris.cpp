@@ -546,8 +546,6 @@ void Boris::updateBoris()
     bruisesSprite = bruisesPixmap;
   }
 
-  shadow->updateShadow(borisSprite, groundY - pos().y(), falling);
-
   if(settings.sound && settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer != nullptr) {
     if(settings.behaviours.at(curBehav).pitchLock) {
       soundMixer->playSound(settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer,
@@ -591,6 +589,8 @@ void Boris::updateBoris()
   painter.drawPixmap(0, 0, bruisesSprite);
   painter.end();
 
+  // ALso update the shadow here in case the sprite doesn't move which misaligns it
+  shadow->updateShadow(rendered, groundY - pos().y(), falling);
   // Make sure 'paint()' is called
   update();
 
@@ -639,6 +639,7 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped)
   if(!falling) {
     groundY = dY;
   }
+  shadow->updateShadow(rendered, groundY - dY, falling);
   shadow->setPos(0, groundY - dY + 1);
   setPos(dX, dY);
 
