@@ -146,7 +146,7 @@ private:
   int independence;
 
   DebugAction *debugAction = nullptr;
-  QMenu *behavioursMenu;
+  QMenu *behavioursMenu = nullptr;
   QTimer behavTimer;
   QTimer animTimer;
   QTimer statTimer;
