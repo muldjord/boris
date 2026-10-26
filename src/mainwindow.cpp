@@ -130,15 +130,6 @@ void MainWindow::init()
   loadWidget.show();
   qApp->processEvents();
 
-  itemTimer.setInterval(settings.itemSpawnInterval * 1000);
-  itemTimer.setSingleShot(true);
-  connect(&itemTimer, &QTimer::timeout, this, &MainWindow::spawnRandomItem);
-  if(settings.items && settings.itemSpawnInterval) {
-    itemTimer.start();
-  }
-
-  resetView();
-
   int totalAssetsSize = 0;
 
   totalAssetsSize += Loader::getAssetsSize(QDir(settings.soundsPath, "*.wav", QDir::Name,
@@ -208,9 +199,16 @@ void MainWindow::init()
   createBehavioursMenu();
   updateItemsMenu();
 
-  physicsTimer.start();
-
   show();
+
+  itemTimer.setInterval(settings.itemSpawnInterval * 1000);
+  itemTimer.setSingleShot(true);
+  connect(&itemTimer, &QTimer::timeout, this, &MainWindow::spawnRandomItem);
+  if(settings.items && settings.itemSpawnInterval) {
+    itemTimer.start();
+  }
+
+  physicsTimer.start();
 }
 
 void MainWindow::loadFromConfig()
@@ -381,15 +379,14 @@ void MainWindow::addBoris(int clones)
     Boris *newBoris = new Boris(settings);
     connect(this, &MainWindow::handlePhysics, newBoris, &Boris::handlePhysics);
     connect(this, &MainWindow::reconfBoris, newBoris, &Boris::reconfBoris);
-    connect(this, &MainWindow::reconfBorisBehavioursMenu, newBoris, &Boris::createBehavioursMenu);
     connect(earthquakeAction, &QAction::triggered, newBoris, &Boris::earthquake);
     connect(this, &MainWindow::queueBehavFromFile, newBoris, &Boris::queueBehavFromFile);
     connect(weatherAction, &QAction::triggered, newBoris, &Boris::triggerWeather);
     connect(newBoris, &Boris::addCoins, this, &MainWindow::addCoins);
     scene()->addItem(newBoris);
     settings.borisList.append(newBoris);
-    newBoris->earthquake();
   }
+  earthquakeAction->trigger();
 }
 
 void MainWindow::removeBoris(int clones)
@@ -477,15 +474,6 @@ void MainWindow::progressPhysics()
   emit handlePhysics();
 }
 
-/*
-void MainWindow::mousePressEvent(QMouseEvent *event)
-{
-  if(event->button() == Qt::RightButton) {
-    trayIconMenu->exec(QCursor::pos());
-  }
-}
-*/
-
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
   resetView();
@@ -494,6 +482,10 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 void MainWindow::killAll()
 {
   QTimer::singleShot(2000, qApp, SLOT(quit()));
+  // Reset all Boris collide pointers within all existing clones to prevent crash
+  for(const auto &boris: settings.borisList) {
+    boris->borisFriend = nullptr;
+  }
   for(auto &boris: settings.borisList) {
     boris->changeBehaviour("_wave");
   }
