@@ -166,22 +166,22 @@
 <context>
     <name>Boris</name>
     <message>
-        <location filename="src/boris.cpp" line="61"/>
+        <location filename="src/boris.cpp" line="60"/>
         <source>Behaviours</source>
         <translation>Opførsler</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="153"/>
+        <location filename="src/boris.cpp" line="156"/>
         <source>Idkfa</source>
         <translation>Idkfa</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="195"/>
+        <location filename="src/boris.cpp" line="198"/>
         <source>Debug</source>
         <translation>Debug</translation>
     </message>
     <message>
-        <location filename="src/boris.cpp" line="203"/>
+        <location filename="src/boris.cpp" line="206"/>
         <source>No behaviours!</source>
         <translation>Ingen opførsler!</translation>
     </message>

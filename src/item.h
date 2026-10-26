@@ -37,6 +37,7 @@
 #include <QBasicTimer>
 
 struct Settings;
+class Shadow;
 class Boris;
 
 class Item : public QGraphicsObject
@@ -70,7 +71,6 @@ protected:
 
 private slots:
   void updateItem();
-  QPixmap getShadow(const QPixmap &sprite);
   void setCurFrame(const int &frame);
   void dontIgnore();
 
@@ -78,10 +78,6 @@ private:
   Settings &settings;
   bool flipFrames = false;
   QPixmap itemSprite;
-  QPixmap shadowSprite;
-  bool showShadow = true;
-  qreal shadowOpacity = 1.0;
-  QPixmap origShadow;
   QTimer animTimer;
   QPixmap scriptSprite;
   QImage scriptImage = QImage(32, 32, QImage::Format_ARGB32_Premultiplied);
@@ -92,12 +88,14 @@ private:
   int borisHyper = 0;
   int interactReaction = -1;
 
-  QPixmap rendered = QPixmap(32, 32 + 1); // +1 for the shadow
+  QPixmap rendered = QPixmap(32, 32);
+
+  Shadow *shadow = nullptr;
 
   QTimer ignoreTimer;
   double vVel = 0.0;
   double hVel = 0.0;
-  int altitude = 0;
+  int groundY = 0;
   bool falling = false;
 
   void runScript(int &stop, const bool &init = false);

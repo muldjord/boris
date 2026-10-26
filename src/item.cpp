@@ -53,10 +53,11 @@ Item::Item(const QString &item, Settings &settings, const bool &ignore)
     }
   }
 
-  origShadow = settings.getPixmap("shadow.png");
-  shadowSprite = origShadow;
-
   setCursor(settings.getCursor("hover.png"));
+
+  shadow = new Shadow(settings);
+  shadow->setParentItem(this);
+  shadow->setPos(0, 1);
 
   if(settings.itemTimeout > 0) {
     QTimer::singleShot(settings.itemTimeout * 1000, this, &Item::destroy);
@@ -112,49 +113,6 @@ QRectF Item::boundingRect() const
   return QRectF(0, 0, rendered.width(), rendered.height());
 }
 
-QPixmap Item::getShadow(const QPixmap &sprite)
-{
-  QImage image = sprite.toImage();
-  int bottom = image.height() - 1;
-  QRgb *pixelBits = (QRgb *)image.constBits();
-  for(int pixel = (image.width() * image.height()) - 1; pixel >= 0; --pixel) {
-    if(qAlpha(pixelBits[pixel]) != 0) {
-      bottom = (pixel / sprite.width());
-      break;
-    }
-  }
-
-  int firstX = image.width();
-  int lastX = 0;
-  int shadowYDelta = 4;
-  for(int y = (bottom - shadowYDelta + 1 < 0?0:bottom - shadowYDelta + 1); y <= bottom; ++y) {
-    QRgb *yBits = (QRgb *)image.constScanLine(y);
-    int rowLastX = 0;
-    for(int x = 0; x < sprite.width(); ++x) {
-      if(qAlpha(yBits[x]) != 0) {
-        if(x < firstX) {
-          firstX = x;
-        }
-        rowLastX = x;
-      }
-    }
-    if(rowLastX > lastX) {
-      lastX = rowLastX;
-    }
-  }
-  // In case no non-transparent pixels where found at all
-  QImage shadow(32, 32, QImage::Format_ARGB32);
-  shadow.fill(Qt::transparent);
-  if(firstX < lastX) {
-    int shadowWidth = lastX - firstX + 3;
-    QPainter painter(&shadow);
-    painter.drawImage(firstX - 1, bottom - image.height() + 1, origShadow.toImage().scaled(shadowWidth, origShadow.height()));
-    painter.end();
-  }
-  //= origShadow.toImage().scaled(shadowWidth + 1, origShadow.height());
-  return QPixmap::fromImage(shadow);
-}
-
 void Item::runScript(int &stop, const bool &init)
 {
   // Update current stat variables for scripting use
@@ -194,7 +152,7 @@ void Item::runScript(int &stop, const bool &init)
     falling = true;
     hVel = scriptVars["xvel"];
     vVel = scriptVars["yvel"];
-    altitude = pos().y();
+    groundY = pos().y();
   }
 }
 
@@ -215,11 +173,11 @@ void Item::updateItem()
   if(flipFrames) {
     QImage flipped = settings.itemBehaviours.at(curItem).frames.at(curFrame).sprite.toImage().flipped(Qt::Horizontal);
     itemSprite = QPixmap::fromImage(flipped);
-    shadowSprite = getShadow(QPixmap::fromImage(flipped));
   } else {
     itemSprite = settings.itemBehaviours.at(curItem).frames.at(curFrame).sprite;
-    shadowSprite = getShadow(settings.itemBehaviours.at(curItem).frames.at(curFrame).sprite);
   }
+
+  shadow->updateShadow(itemSprite, groundY - pos().y(), falling);
 
   if(settings.sound && settings.itemBehaviours.at(curItem).frames.at(curFrame).soundBuffer != nullptr) {
     if(settings.itemBehaviours.at(curItem).pitchLock) {
@@ -255,8 +213,6 @@ void Item::updateItem()
   rendered = QPixmap(itemSprite.width(), itemSprite.height());
   rendered.fill(Qt::transparent);
   QPainter painter(&rendered);
-  painter.setOpacity(0.3);
-  painter.drawPixmap(0, 0, shadowSprite);
   painter.setOpacity(1.0);
   painter.drawPixmap(0, 0, itemSprite);
   painter.drawPixmap(0, 0, scriptSprite);
@@ -287,7 +243,7 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
   sanityCheck();
 
   int maxX = settings.desktopWidth - getWidth();
-  int minY = 0 - getHeight();
+  int minY = 0;
   int maxY = settings.desktopHeight - getHeight();
 
   if(dX == 666) {
@@ -304,6 +260,10 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
     dY = pos().y() + dY;
   }
 
+  if(!falling) {
+    groundY = dY;
+  }
+  shadow->setPos(0, groundY - dY + 1);
   setPos(dX, dY);
 
   // if item is outside borders
@@ -453,7 +413,7 @@ void Item::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     falling = true;
     hVel = settings.mouseHVel;
     vVel = settings.mouseVVel;
-    altitude = pos().y();
+    groundY = pos().y();
   }
 }
 
@@ -502,27 +462,20 @@ void Item::dontIgnore()
 void Item::handlePhysics()
 {
   if(falling && !grabbed) {
-    if(showShadow) {
-      showShadow = false;
-    }
-    if(pos().y() + vVel <= altitude) {
-      moveItem(hVel, vVel);
-    } else {
-      int distanceLeft = altitude - pos().y();
-      moveItem(hVel, vVel - ((vVel - distanceLeft) * 2));
-      if(vVel <= 2.0) {
+    moveItem(hVel, vVel);
+    vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
+
+    if(pos().y() >= groundY) {
+      setPos(pos().x(), groundY); // Necessary to avoid Boris stopping jumping back up of vector becomes too low "underground"
+      if(vVel < 5.0) {
         falling = false;
+        moveItem(0, 0); // Make sure location of item and shadow is synchronized
       } else {
         hVel *= settings.itemBehaviours.at(curItem).bounce * 0.1;
+        vVel = (vVel * (settings.itemBehaviours.at(curItem).bounce * 0.1)) * -1;
         soundMixer->playSoundFile("bounce.wav",
                                   pos().x() / settings.desktopWidth * 2.0 - 1.0, 1.0);
-        vVel = (vVel * (settings.itemBehaviours.at(curItem).bounce * 0.1)) * -1;
       }
-    }
-    vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
-  } else {
-    if(!showShadow) {
-      showShadow = true;
     }
   }
 }

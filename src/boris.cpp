@@ -50,7 +50,6 @@ Boris::Boris(Settings &settings)
   : settings(settings)
 {
   setAcceptHoverEvents(true);
-  origShadow = settings.getPixmap("shadow.png");
 
   setPos(QRandomGenerator::global()->bounded(settings.desktopWidth), QRandomGenerator::global()->bounded(settings.desktopHeight));
 
@@ -92,6 +91,10 @@ Boris::Boris(Settings &settings)
   weather = new Weather(settings);
   weather->setParentItem(this);
   weather->setPos(0, 0 - getHeight() / 2);
+
+  shadow = new Shadow(settings);
+  shadow->setParentItem(this);
+  shadow->setPos(0, 1);
   
   staticBehaviours = 0;
   // Figure out how many static behaviours there are
@@ -357,49 +360,6 @@ void Boris::changeBehaviour(QString behav, int time)
   animTimer.start();
 }
 
-QPixmap Boris::getShadow(const QPixmap &sprite)
-{
-  QImage image = sprite.toImage();
-  int bottom = image.height() - 1;
-  QRgb *pixelBits = (QRgb *)image.constBits();
-  for(int pixel = (image.width() * image.height()) - 1; pixel >= 0; --pixel) {
-    if(qAlpha(pixelBits[pixel]) != 0) {
-      bottom = (pixel / sprite.width());
-      break;
-    }
-  }
-
-  int firstX = image.width();
-  int lastX = 0;
-  int shadowYDelta = 4;
-  for(int y = (bottom - shadowYDelta + 1 < 0?0:bottom - shadowYDelta + 1); y <= bottom; ++y) {
-    QRgb *yBits = (QRgb *)image.constScanLine(y);
-    int rowLastX = 0;
-    for(int x = 0; x < sprite.width(); ++x) {
-      if(qAlpha(yBits[x]) != 0) {
-        if(x < firstX) {
-          firstX = x;
-        }
-        rowLastX = x;
-      }
-    }
-    if(rowLastX > lastX) {
-      lastX = rowLastX;
-    }
-  }
-  // In case no non-transparent pixels where found at all
-  QImage shadow(32, 32, QImage::Format_ARGB32);
-  shadow.fill(Qt::transparent);
-  if(firstX < lastX) {
-    int shadowWidth = lastX - firstX + 3;
-    QPainter painter(&shadow);
-    painter.drawImage(firstX - 1, bottom - image.height() + 1, origShadow.toImage().scaled(shadowWidth, origShadow.height()));
-    painter.end();
-  }
-  //= origShadow.toImage().scaled(shadowWidth + 1, origShadow.height());
-  return QPixmap::fromImage(shadow);
-}
-
 void Boris::runScript(int &stop, const bool &init)
 {
   QPointF cursorPos = mainWindow->mapToScene(mainWindow->viewport()->mapFromGlobal(QCursor::pos()));
@@ -469,7 +429,7 @@ void Boris::runScript(int &stop, const bool &init)
     falling = true;
     hVel = scriptVars["xvel"];
     vVel = scriptVars["yvel"];
-    altitude = pos().y();
+    groundY = pos().y();
   }
 }
 
@@ -578,15 +538,15 @@ void Boris::updateBoris()
   if(flipFrames) {
     QImage flipped = settings.behaviours.at(curBehav).frames.at(curFrame).sprite.toImage().flipped(Qt::Horizontal);
     borisSprite = QPixmap::fromImage(flipped);
-    shadowSprite = getShadow(QPixmap::fromImage(flipped));
     dirtSprite = QPixmap::fromImage(dirtPixmap.toImage().flipped(Qt::Horizontal));
     bruisesSprite = QPixmap::fromImage(bruisesPixmap.toImage().flipped(Qt::Horizontal));
   } else {
     borisSprite = settings.behaviours.at(curBehav).frames.at(curFrame).sprite;
-    shadowSprite = getShadow(settings.behaviours.at(curBehav).frames.at(curFrame).sprite);
     dirtSprite = dirtPixmap;
     bruisesSprite = bruisesPixmap;
   }
+
+  shadow->updateShadow(borisSprite, groundY - pos().y(), falling);
 
   if(settings.sound && settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer != nullptr) {
     if(settings.behaviours.at(curBehav).pitchLock) {
@@ -620,14 +580,9 @@ void Boris::updateBoris()
 
   // Assemble the Boris sprite from parts
   prepareGeometryChange(); // Needed to make sure the parent scene has its geometry index updated or something... Otherwise boundingRect might report faulty size.
-  rendered = QPixmap(borisSprite.width(), borisSprite.height() + 1);
+  rendered = QPixmap(borisSprite.width(), borisSprite.height());
   rendered.fill(Qt::transparent);
   QPainter painter(&rendered);
-  if(drawShadow) {
-    painter.setOpacity(0.3);
-    painter.drawPixmap(0, 1, shadowSprite);
-  }
-  painter.setOpacity(1.0);
   painter.drawPixmap(0, 0, borisSprite);
   painter.drawPixmap(0, 0, scriptSprite);
   painter.setOpacity(dirtOpacity);
@@ -667,7 +622,7 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped)
   int minY = 0;
   int maxY = settings.desktopHeight - getHeight();
 
-  if(dX == 666) {
+  if(dX == 666) { // Not pretty but it works
     dX = QRandomGenerator::global()->bounded(maxX);
   } else {
     if(flipped) {
@@ -675,12 +630,16 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped)
     }
     dX = pos().x() + dX;
   }
-  if(dY == 666) {
+  if(dY == 666) { // Not pretty but it works
     dY = QRandomGenerator::global()->bounded(maxY);
   } else {
     dY = pos().y() + dY;
   }
 
+  if(!falling) {
+    groundY = dY;
+  }
+  shadow->setPos(0, groundY - dY + 1);
   setPos(dX, dY);
 
   // if Boris is outside vertical borders
@@ -759,7 +718,7 @@ void Boris::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     falling = true;
     hVel = settings.mouseHVel;
     vVel = settings.mouseVVel;
-    altitude = pos().y();
+    groundY = pos().y();
   }
 }
 
@@ -778,7 +737,6 @@ void Boris::wheelEvent(QGraphicsSceneWheelEvent *)
 void Boris::handlePhysics()
 {
   if(falling && !grabbed) {
-    drawShadow = false;
     moveBoris(hVel, vVel);
     vVel += 0.5;
     if(settings.behaviours.at(curBehav).file != "_umbrella_falling") {
@@ -793,8 +751,8 @@ void Boris::handlePhysics()
       }
       hVel *= 0.9;
     }
-    if(pos().y() >= altitude) {
-      setPos(pos().x(), altitude - (pos().y() - altitude));
+    if(pos().y() >= groundY) {
+      setPos(pos().x(), groundY); // Necessary to avoid Boris stopping jumping back up of vector becomes too low "underground"
       if(vVel < 5.0) {
         if(settings.behaviours.at(curBehav).file != "_umbrella_falling") {
           changeBehaviour("_landing");
@@ -802,14 +760,13 @@ void Boris::handlePhysics()
           changeBehaviour("_umbrella_landing");
         }
         falling = false;
+        moveBoris(0, 0); // Make sure location of Boris and shadow is synchronized
       } else {
         hVel *= 0.5;
         vVel = (vVel * 0.5) * -1;
         changeBehaviour("_bounce");
       }
     }
-  } else {
-    drawShadow = true;
   }
 
   QPointF cursorPos = mainWindow->mapToScene(mainWindow->viewport()->mapFromGlobal(QCursor::pos()));
@@ -840,7 +797,7 @@ void Boris::earthquake()
     falling = true;
     vVel = (QRandomGenerator::global()->bounded(12) * -1) - 5;
     hVel = QRandomGenerator::global()->bounded(11) - 5;
-    altitude = pos().y();
+    groundY = pos().y();
   }
 }
 
@@ -889,9 +846,9 @@ void Boris::sanityCheck()
     setPos(pos().x(), maxY);
   }
 
-  // Make sure Boris altitude is not outside bottom boundary
-  if(altitude > maxY) {
-    altitude = maxY;
+  // Make sure Boris groundY is not outside bottom boundary
+  if(groundY > maxY) {
+    groundY = maxY;
   }
 
   // Check if Boris is dying or is already dead

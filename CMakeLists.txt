@@ -48,6 +48,7 @@ set(SOURCES
   src/loader.cpp
   src/netcomm.cpp
   src/bubble.cpp
+  src/shadow.cpp
   src/tinyexpr.cpp
 )
 

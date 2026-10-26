@@ -30,6 +30,7 @@
 #include "stats.h"
 #include "bubble.h"
 #include "weather.h"
+#include "shadow.h"
 #include "settings.h"
 #include "item.h"
 #include "debugaction.h"
@@ -60,6 +61,7 @@ class Stats;
 class Bubble;
 class Weather;
 class Item;
+class Shadow;
 class Settings;
 
 class Boris : public QGraphicsObject
@@ -125,7 +127,6 @@ private slots:
   void handleBehaviourChange(QAction* a);
   void statProgress();
   void statQueueProgress();
-  QPixmap getShadow(const QPixmap &sprite);
   void hideWeather();
   void enableInteract();
   void checkInteractions();
@@ -157,10 +158,6 @@ private:
   QPoint mLastMousePosition;
   bool mouseHovering = false;
 
-  QPixmap shadowSprite;
-  QPixmap origShadow;
-  bool drawShadow = true;
-
   QPixmap borisSprite;
   QPixmap scriptSprite;
   QImage scriptImage = QImage(32, 32, QImage::Format_ARGB32_Premultiplied);
@@ -174,11 +171,11 @@ private:
   QPixmap origBruises;
   qreal bruisesOpacity = 1.0;
 
-  QPixmap rendered = QPixmap(32, 32 + 1); // +1 for the shadow
+  QPixmap rendered = QPixmap(32, 32);
 
   double vVel = 0.0;
   double hVel = 0.0;
-  int altitude = 0;
+  int groundY = 0;
   void sanityCheck();
 
   Bubble *bubble = nullptr;
@@ -189,6 +186,8 @@ private:
   Weather *weather = nullptr;
   bool showWeather = false;
 
+  Shadow *shadow = nullptr;
+  
   QList<QString> behavQueue;
   QString getFileFromCategory(const QString &category);
   int getIdxFromCategory(const QString &category);
