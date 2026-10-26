@@ -64,14 +64,15 @@ MainWindow::MainWindow()
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   showMaximized();
-
+  
   setAlignment(Qt::AlignLeft | Qt::AlignTop);
   setTransformationAnchor(QGraphicsView::NoAnchor);
   setResizeAnchor(QGraphicsView::NoAnchor);
 
+  setFrameShape(QFrame::NoFrame);
+  setContentsMargins(0, 0, 0, 0);
   setInteractive(true); // Default but setting it anyway
   setMouseTracking(true);
-  //setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
   physicsTimer.setInterval(30);
   connect(&physicsTimer, &QTimer::timeout, this, &MainWindow::progressPhysics);
@@ -81,13 +82,138 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-  delete trayIcon;
   for(auto &boris: settings.borisList) {
     delete boris;
   }
 }
 
 void MainWindow::init()
+{
+  loadFromConfig();
+
+  // Load all graphics before loading rest of assets, as these are used as icons too
+  if(Loader::loadImages(settings.graphicsPath, settings.graphics)) {
+    qInfo("Graphics loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading graphics...\n");
+  }
+
+  createActions();
+
+  behavioursMenu = new QMenu();
+  behavioursMenu->setTitle(tr("Behaviours"));
+  connect(behavioursMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
+
+  itemsMenu = new QMenu();
+  itemsMenu->setTitle(tr("Items"));
+  connect(itemsMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
+
+  createTrayIcon();
+  trayIcon->show();
+
+  netComm = new NetComm(settings);
+  connect(netComm, &NetComm::weatherUpdated, this, &MainWindow::updateWeather);
+
+  QWidget loadWidget;
+  loadWidget.setWindowIcon(QIcon(":icon.png"));
+  loadWidget.setWindowTitle("Boris v" + QString("%1.%2.%3")
+                            .arg(PROJECT_VERSION_MAJOR)
+                            .arg(PROJECT_VERSION_MINOR)
+                            .arg(PROJECT_VERSION_PATCH));
+  QLabel progressLabel(tr("Looking for Boris, please wait...\n"));
+  QProgressBar progressBar;
+  QVBoxLayout layout;
+  layout.addWidget(&progressLabel);
+  layout.addWidget(&progressBar);
+
+  loadWidget.setLayout(&layout);
+  loadWidget.show();
+  qApp->processEvents();
+
+  itemTimer.setInterval(settings.itemSpawnInterval * 1000);
+  itemTimer.setSingleShot(true);
+  connect(&itemTimer, &QTimer::timeout, this, &MainWindow::spawnRandomItem);
+  if(settings.items && settings.itemSpawnInterval) {
+    itemTimer.start();
+  }
+
+  resetView();
+
+  int totalAssetsSize = 0;
+
+  totalAssetsSize += Loader::getAssetsSize(QDir(settings.soundsPath, "*.wav", QDir::Name,
+                                                      QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
+
+  totalAssetsSize += Loader::getAssetsSize(QDir(settings.behavioursPath, "*.png", QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
+
+  totalAssetsSize += Loader::getAssetsSize(QDir(settings.weathersPath, "*.png", QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
+
+  totalAssetsSize += Loader::getAssetsSize(QDir(settings.itemsPath, "*.png", QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
+
+  qInfo("Loading %d kilobytes of assets, please wait...\n", totalAssetsSize / 1024);
+
+  progressBar.setMaximum(totalAssetsSize);
+
+  if(Loader::loadSoundFxs(settings.soundsPath, soundMixer->soundFxs, &progressBar)) {
+    qInfo("Sounds loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading some sounds, please check your wav files\n");
+  }
+
+  if(Loader::loadBehaviours(settings, settings.behavioursPath, settings.behaviours, soundMixer->soundFxs, &progressBar)) {
+    qInfo("Behaviours loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading some behaviours, please check your png and dat files\n");
+  }
+
+  if(Loader::loadBehaviours(settings, settings.weathersPath, settings.weathers, soundMixer->soundFxs, &progressBar)) {
+    qInfo("Weather types loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading some weather types, please check your png and dat files\n");
+  }
+
+  if(Loader::loadBehaviours(settings, settings.itemsPath, settings.itemBehaviours, soundMixer->soundFxs, &progressBar)) {
+    qInfo("Items loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading some items, please check your png and dat files\n");
+  }
+
+  if(Loader::loadImages(settings.cursorsPath, settings.cursors)) {
+    qInfo("Cursors loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading cursors...\n");
+  }
+
+  if(Loader::loadSprites(settings)) {
+    qInfo("Sprites loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading sprites...\n");
+  }
+
+  if(Loader::loadFont(settings)) {
+    qInfo("Font loaded ok... :)\n");
+  } else {
+    qInfo("Error when loading font...\n");
+  }
+
+  if(settings.showWelcome) {
+    About about(iniSettings, settings);
+    about.exec();
+  }
+
+  addBoris((settings.clones == 0?QRandomGenerator::global()->bounded(99) + 1:settings.clones));
+
+  progressBar.setValue(progressBar.maximum());
+
+  createBehavioursMenu();
+  updateItemsMenu();
+
+  physicsTimer.start();
+
+  show();
+}
+
+void MainWindow::loadFromConfig()
 {
   iniSettings = new QSettings("config.ini", QSettings::IniFormat);
 
@@ -234,124 +360,6 @@ void MainWindow::init()
     iniSettings->setValue("weather_key", "fe9fe6cf47c03d2640d5063fbfa053a2");
   }
   settings.key = iniSettings->value("weather_key").toString();
-
-  // Load all graphics before loading rest of assets, as these are used as icons too
-  if(Loader::loadImages(settings.graphicsPath, settings.graphics)) {
-    qInfo("Graphics loaded ok... :)\n");
-  } else {
-    qInfo("Error when loading graphics...\n");
-  }
-
-  createActions();
-  behavioursMenu = new QMenu();
-  behavioursMenu->setTitle(tr("Behaviours"));
-  connect(behavioursMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
-  itemsMenu = new QMenu();
-  itemsMenu->setTitle(tr("Items"));
-  connect(itemsMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
-  createTrayIcon();
-  trayIcon->show();
-
-  netComm = new NetComm(settings);
-  connect(netComm, &NetComm::weatherUpdated, this, &MainWindow::updateWeather);
-
-  QWidget loadWidget;
-  loadWidget.setWindowIcon(QIcon(":icon.png"));
-  loadWidget.setWindowTitle("Boris v" + QString("%1.%2.%3")
-                            .arg(PROJECT_VERSION_MAJOR)
-                            .arg(PROJECT_VERSION_MINOR)
-                            .arg(PROJECT_VERSION_PATCH));
-  QLabel progressLabel(tr("Looking for Boris, please wait...\n"));
-  QProgressBar progressBar;
-  QVBoxLayout layout;
-  layout.addWidget(&progressLabel);
-  layout.addWidget(&progressBar);
-
-  loadWidget.setLayout(&layout);
-  loadWidget.show();
-  qApp->processEvents();
-
-  itemTimer.setInterval(settings.itemSpawnInterval * 1000);
-  itemTimer.setSingleShot(true);
-  connect(&itemTimer, &QTimer::timeout, this, &MainWindow::spawnRandomItem);
-  if(settings.items && settings.itemSpawnInterval) {
-    itemTimer.start();
-  }
-
-  resetView();
-
-  int totalAssetsSize = 0;
-
-  totalAssetsSize += Loader::getAssetsSize(QDir(settings.soundsPath, "*.wav", QDir::Name,
-                                                      QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
-
-  totalAssetsSize += Loader::getAssetsSize(QDir(settings.behavioursPath, "*.png", QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
-
-  totalAssetsSize += Loader::getAssetsSize(QDir(settings.weathersPath, "*.png", QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
-
-  totalAssetsSize += Loader::getAssetsSize(QDir(settings.itemsPath, "*.png", QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
-
-  qInfo("Loading %d kilobytes of assets, please wait...\n", totalAssetsSize / 1024);
-
-  progressBar.setMaximum(totalAssetsSize);
-
-  if(Loader::loadSoundFxs(settings.soundsPath, soundMixer->soundFxs, &progressBar)) {
-    qInfo("Sounds loaded ok... :)\n");
-  } else {
-    qInfo("Error when loading some sounds, please check your wav files\n");
-  }
-
-  if(Loader::loadBehaviours(settings, settings.behavioursPath, settings.behaviours, soundMixer->soundFxs, &progressBar)) {
-    qInfo("Behaviours loaded ok... :)\n");
-  } else {
-    qInfo("Error when loading some behaviours, please check your png and dat files\n");
-  }
-
-  if(Loader::loadBehaviours(settings, settings.weathersPath, settings.weathers, soundMixer->soundFxs, &progressBar)) {
-    qInfo("Weather types loaded ok... :)\n");
-  } else {
-    qInfo("Error when loading some weather types, please check your png and dat files\n");
-  }
-
-  if(Loader::loadBehaviours(settings, settings.itemsPath, settings.itemBehaviours, soundMixer->soundFxs, &progressBar)) {
-    qInfo("Items loaded ok... :)\n");
-  } else {
-    qInfo("Error when loading some items, please check your png and dat files\n");
-  }
-
-  if(Loader::loadImages(settings.cursorsPath, settings.cursors)) {
-    qInfo("Cursors loaded ok... :)\n");
-  } else {
-    qInfo("Error when loading cursors...\n");
-  }
-
-  if(Loader::loadSprites(settings)) {
-    qInfo("Sprites loaded ok... :)\n");
-  } else {
-    qInfo("Error when loading sprites...\n");
-  }
-
-  if(Loader::loadFont(settings)) {
-    qInfo("Font loaded ok... :)\n");
-  } else {
-    qInfo("Error when loading font...\n");
-  }
-
-  if(settings.showWelcome) {
-    About about(iniSettings, settings);
-    about.exec();
-  }
-
-  addBoris((settings.clones == 0?QRandomGenerator::global()->generate() % 99 + 1:settings.clones));
-
-  progressBar.setValue(progressBar.maximum());
-
-  createBehavioursMenu();
-  updateItemsMenu();
-
-  physicsTimer.start();
-
-  show();
 }
 
 void MainWindow::resetView()
@@ -359,7 +367,9 @@ void MainWindow::resetView()
   settings.sizeFactor = settings.size / 32.0;
   resetTransform();
   scale(settings.sizeFactor, settings.sizeFactor);
-  scene()->setSceneRect(mapToScene(viewport()->rect()).boundingRect());
+  scene()->setSceneRect(0, 0,
+                        viewport()->width() / transform().m11(),
+                        viewport()->height() / transform().m22());
   settings.desktopWidth = scene()->sceneRect().width();
   settings.desktopHeight = scene()->sceneRect().height();
 }

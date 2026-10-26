@@ -69,6 +69,7 @@ private slots:
   void removeCoinsMessage();
 
 private:
+  void loadFromConfig();
   void resetView();
   QSettings *iniSettings = nullptr;
   Settings settings;
