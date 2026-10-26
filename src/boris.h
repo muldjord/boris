@@ -165,11 +165,11 @@ private:
 
   QPixmap dirtSprite;
   QPixmap origDirt;
-  qreal dirtOpacity = 1.0;
+  qreal dirtOpacity = 0.0;
 
   QPixmap bruisesSprite;
   QPixmap origBruises;
-  qreal bruisesOpacity = 1.0;
+  qreal bruisesOpacity = 0.0;
 
   QPixmap rendered = QPixmap(32, 32);
 
