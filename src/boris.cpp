@@ -737,6 +737,9 @@ void Boris::wheelEvent(QGraphicsSceneWheelEvent *)
 
 void Boris::handlePhysics()
 {
+  // Set scene distance so Boris goes behind other Borises that are in front of him
+  setZValue(pos().y() - settings.desktopHeight);
+
   if(falling && !grabbed) {
     moveBoris(hVel, vVel);
     vVel += 0.5;
@@ -1245,12 +1248,6 @@ void Boris::checkInteractions()
 
 void Boris::borisInteract(Boris *otherBoris)
 {
-  if(pos().y() > otherBoris->pos().y()) {
-    // Bring this Boris to the front, because he is considered closer in 3D space
-    setZValue(1.0);
-    otherBoris->setZValue(0.0);
-  }
-
   if(borisFriend != nullptr || falling || grabbed || settings.behaviours.at(curBehav).doNotDisturb) {
     return;
   }

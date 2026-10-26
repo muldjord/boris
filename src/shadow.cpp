@@ -35,6 +35,8 @@
 Shadow::Shadow(Settings &settings)
   : settings(settings)
 {
+  setFlag(QGraphicsItem::ItemStacksBehindParent);
+
   origShadow = settings.getPixmap("shadow.png");
 }
 

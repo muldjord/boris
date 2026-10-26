@@ -462,6 +462,9 @@ void Item::dontIgnore()
 
 void Item::handlePhysics()
 {
+  // Set scene distance so the item goes behind other items and Borises that are in front of it
+  setZValue(pos().y() - settings.desktopHeight);
+
   if(falling && !grabbed) {
     moveItem(hVel, vVel);
     vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
