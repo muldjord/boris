@@ -1,7 +1,7 @@
 title=What are you thinking?
 category=Social
 #Frames
-0;50;0;0;;var line = @13,
+0;50;0;0;;var line = @14,
 if line = 1 think "I wonder if I'm a real person...",
 if line = 2 think "Where am I when the computer is turned off?",
 if line = 3 think "Am I living in the Matrix?",
@@ -13,6 +13,7 @@ if line = 8 think "Am I at work or is this my vacation?",
 if line = 9 think "Mars is the only planet populated entirely by robots.",
 if line = 10 think "Do I forget everything when the computer restarts?",
 if line = 11 think "I just farted, I wonder if anyone heard it...",
-if line = 12 think "Why can't I remember my childhood?",
+if line = 12 think "Now, where did I leave my tennisball?",
 if line = 13 think "What afsnit is this?",
+if line = 14 think "42 is the answer, but what is the question?",
 behav _thought
