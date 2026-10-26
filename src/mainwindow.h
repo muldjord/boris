@@ -47,12 +47,10 @@ public:
   ~MainWindow();
 
 protected:
-  //void mousePressEvent(QMouseEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
 
 signals:
   void reconfBoris();
-  void reconfBorisBehavioursMenu();
   void queueBehavFromFile(const QString &file);
   void handlePhysics();
                                               
