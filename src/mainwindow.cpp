@@ -98,9 +98,6 @@ MainWindow::MainWindow(QSplashScreen &splash)
   createTrayIcon();
   trayIcon->show();
 
-  netComm = new NetComm(settings);
-  connect(netComm, &NetComm::weatherUpdated, this, &MainWindow::updateWeather);
-
   qApp->processEvents();
 
   int soundsSize = Loader::getAssetsSize(QDir(settings.soundsPath, "*.wav",
@@ -171,6 +168,9 @@ MainWindow::MainWindow(QSplashScreen &splash)
   createBehavioursMenu();
   updateItemsMenu();
   show();
+
+  netComm = new NetComm(settings);
+  connect(netComm, &NetComm::weatherUpdated, this, &MainWindow::updateWeather);
 
   QTimer::singleShot(0, this, &MainWindow::init);
 }
