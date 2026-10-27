@@ -38,11 +38,12 @@ $ make install
 The last command copies all necessary files to the `release` folder. You can then run Boris using the `Boris` executable.
 
 ## Notes on 4.x and later versions
-Due to how modern desktop compositors work it is no longer possible to run Boris as an old-school desktop screenmate. Wayland under Linux does not allow for programatically moving windows around the desktop (Boris used to exist inside a transparent window). It is also no longer possible to keep windows on top of other windows. For that reason Boris has been completely rewritten to use a transparent maximized graphics view. This works for the intent of running Boris and just having fun with enjoying his many shenanigangs. The mouse interactions are also intact. But you are not able to click stuff through the transparent view. You will have to alt-tab to get to those which moves Boris out of focus. For the past couple of years I have wanted to implement this new version of Boris. I am very happy with how it has turned out even with the slight limitations. At least Boris is still alive and well and here to bring you joy.
+Due to how modern desktop compositors work it is no longer possible to run Boris as an old-school desktop screenmate. Wayland under Linux does not allow for programatically moving windows around the desktop (Boris used to exist inside a transparent window). It is also no longer possible to keep windows on top of other windows. For that reason Boris has been completely rewritten to use a transparent maximized graphics view. This works for the intent of running Boris and just having fun with enjoying his many shenanigangs. The mouse interactions are also intact. But you are not able to click stuff through the transparent view. You will have to alt-tab to get to those which moves Boris out of focus. Despite these limitations at least Boris is still alive and well and here to bring you joy! :)
 
 ## Release notes
 #### Known issues:
 * Critical need behaviours added to the queue chosen by Boris himself also gives out coins
+* Bouncy items will sometimes bounce forever when thrown with low force
 
 #### Version x.x.x, Roadmap:
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
@@ -55,10 +56,14 @@ Due to how modern desktop compositors work it is no longer possible to run Boris
 
 #### Version 4.0.0 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
-* Rewired entire project to work with modern Wayland compositors under Linux
+* Rewired entire project to work with modern Wayland compositors under Linux using a maximized QGraphicsView instead of individual windows per Boris
 * Added 'anxiety' stat which causes Boris to flee the mouse cursor if he has been tossed around too much
 * Added 'debug' textedit to right-click menu when 'idkfa' is enabled
 * Fixed Boris' weird legs on coffee reading and steak eating behaviours
+* Added new splash screen
+* Fixed a number of bugs
+* Shadows now stays visible on the ground when Boris and items are airborne
+* Shadows now have dynamic width depending on the altitude of Boris and items
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
