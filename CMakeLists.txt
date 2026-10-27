@@ -81,7 +81,7 @@ qt_add_translations(Boris TS_FILES boris_da_DK.ts
   # LUPDATE_OPTIONS -no-obsolete
 )
 
-add_dependencies(Boris update_translations)
+# add_dependencies(Boris update_translations)
 
 install(TARGETS Boris
   RUNTIME DESTINATION .

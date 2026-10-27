@@ -205,63 +205,63 @@
 </translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="404"/>
-        <location filename="src/mainwindow.cpp" line="669"/>
+        <location filename="src/mainwindow.cpp" line="402"/>
+        <location filename="src/mainwindow.cpp" line="667"/>
         <source> coins</source>
         <translation> mønter</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="413"/>
+        <location filename="src/mainwindow.cpp" line="411"/>
         <source>&amp;Config / about...</source>
         <translation>&amp;Konfigurér / om...</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="502"/>
+        <location filename="src/mainwindow.cpp" line="500"/>
         <source>Idkfa</source>
         <translation>Idkfa</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="544"/>
+        <location filename="src/mainwindow.cpp" line="542"/>
         <source>No behaviours!</source>
         <translation>Ingen opførsler!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="588"/>
+        <location filename="src/mainwindow.cpp" line="586"/>
         <source>No items unlocked!</source>
         <translation>Ingen genstande låst op!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="636"/>
+        <location filename="src/mainwindow.cpp" line="634"/>
         <source>Buy?</source>
         <translation>Køb?</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="636"/>
+        <location filename="src/mainwindow.cpp" line="634"/>
         <source>Do you want to buy &apos;</source>
         <translation>Vil du købe &apos;</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="636"/>
+        <location filename="src/mainwindow.cpp" line="634"/>
         <source>for </source>
         <translation>for </translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="636"/>
+        <location filename="src/mainwindow.cpp" line="634"/>
         <source> coins?</source>
         <translation> mønter?</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="649"/>
+        <location filename="src/mainwindow.cpp" line="647"/>
         <source>Not enough coins!</source>
         <translation>Ikke mønter nok!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="649"/>
+        <location filename="src/mainwindow.cpp" line="647"/>
         <source>You can&apos;t afford the &apos;</source>
         <translation>Du har ikke råd til &apos;</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="649"/>
+        <location filename="src/mainwindow.cpp" line="647"/>
         <source>item.
 
 Initiate behaviours that corresponds to Boris&apos; needs to earn coins. You can then use those coins to unlock new items.</source>
@@ -270,28 +270,28 @@ Initiate behaviours that corresponds to Boris&apos; needs to earn coins. You can
 Vælg opførsler der tilsvarer Boris´&apos; behov for at tjene mønter. Du kan derefter bruge dem på at låse nye genstande op.</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="661"/>
+        <location filename="src/mainwindow.cpp" line="659"/>
         <source>coins</source>
         <translation>mønter</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="399"/>
+        <location filename="src/mainwindow.cpp" line="397"/>
         <source>&amp;Earthquake!!!</source>
         <oldsource>&amp;Earthquake</oldsource>
         <translation>&amp;Jordskælv!!!</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="402"/>
+        <location filename="src/mainwindow.cpp" line="400"/>
         <source>Updating weather...</source>
         <translation>Opdaterer vejr...</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="493"/>
+        <location filename="src/mainwindow.cpp" line="491"/>
         <source>Couldn&apos;t find city</source>
         <translation>Kunne ikke finde by</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="423"/>
+        <location filename="src/mainwindow.cpp" line="421"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>
