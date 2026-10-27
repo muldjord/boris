@@ -473,7 +473,7 @@ void Item::handlePhysics()
 
     if(pos().y() >= groundY) {
       setPos(pos().x(), groundY); // Necessary to avoid Boris stopping jumping back up of vector becomes too low "underground"
-      if(vVel < 5.0) {
+      if(vVel < 2.0) {
         falling = false;
         moveItem(0, 0); // Make sure location of item and shadow is synchronized
       } else {
