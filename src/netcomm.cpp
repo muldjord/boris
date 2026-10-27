@@ -42,7 +42,7 @@ NetComm::NetComm(Settings &settings) : settings(settings)
   netTimer.setSingleShot(true);
   connect(&netTimer, &QTimer::timeout, this, &NetComm::updateAll);
 
-  QTimer::singleShot(0, this, SLOT(updateAll()));
+  QTimer::singleShot(0, this, &NetComm::updateAll);
 }
 
 NetComm::~NetComm()

@@ -388,6 +388,8 @@ void Item::mousePressEvent(QGraphicsSceneMouseEvent* event)
     ignore = false;
     ignoreTimer.stop();
     setCursor(settings.getCursor("grab.png"));
+    this->setPos(event->scenePos().x() - (getWidth() / 2), 
+                 event->scenePos().y() - (getHeight() / 2));
     if(!settings.itemBehaviours.at(curItem).reactions.isEmpty()) {
       curFrame = 0;
       animTimer.setInterval(0);
@@ -402,7 +404,7 @@ void Item::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
   if(grabbed && event->buttons().testFlag(Qt::LeftButton)) {
     this->setPos(event->scenePos().x() - (getWidth() / 2), 
-                 event->scenePos().y());
+                 event->scenePos().y() - (getHeight() / 2));
   }
 }
 

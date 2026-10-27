@@ -45,8 +45,7 @@ qint64 Loader::getAssetsSize(const QDir &dir)
 }
 
 bool Loader::loadSoundFxs(const QString &soundsPath,
-                          std::map<std::string, sf::SoundBuffer> &soundFxs,
-                          QProgressBar *progressBar)
+                          std::map<std::string, sf::SoundBuffer> &soundFxs)
 {
   QDir d(soundsPath,
          "*.wav",
@@ -63,7 +62,6 @@ bool Loader::loadSoundFxs(const QString &soundsPath,
       noErrors = false;
       qWarning("  Error when loading sound: %s\n", info.fileName().toStdString().c_str());
     }
-    progressBar->setValue(progressBar->value() + info.size());
   }
   return noErrors;
 }
@@ -71,8 +69,7 @@ bool Loader::loadSoundFxs(const QString &soundsPath,
 bool Loader::loadBehaviours(const Settings &settings,
                             const QString &behavioursPath,
                             QList<Behaviour> &behaviours,
-                            std::map<std::string, sf::SoundBuffer> &soundFxs,
-                            QProgressBar *progressBar)
+                            std::map<std::string, sf::SoundBuffer> &soundFxs)
 {
   QDir d(behavioursPath,
          "*.png",
@@ -280,7 +277,6 @@ bool Loader::loadBehaviours(const Settings &settings,
       qWarning("  Error in behaviour: %s\n", info.fileName().toStdString().c_str());
       return false;
     }
-    progressBar->setValue(progressBar->value() + info.size());
   }
   return true;
 }

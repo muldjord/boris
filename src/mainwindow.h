@@ -37,13 +37,13 @@
 #include <QMenu>
 #include <QSettings>
 #include <QTimer>
-#include <QProgressBar>
+#include <QSplashScreen>
 
 class MainWindow : public QGraphicsView
 {
   Q_OBJECT;
 public:
-  MainWindow();
+  MainWindow(QSplashScreen &splash);
   ~MainWindow();
 
 protected:

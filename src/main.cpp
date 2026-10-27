@@ -35,7 +35,7 @@
 #include <QFileInfo>
 #include <QHostInfo>
 #include <QMessageBox>
-#include <QStyleFactory>
+#include <QSplashScreen>
 
 void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QString &msg)
 {
@@ -69,8 +69,6 @@ void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QStri
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
-  app.setStyle(QStyleFactory::create("Fusion"));  
-  app.setQuitOnLastWindowClosed(false);
 
   QDir::setCurrent(QApplication::applicationDirPath());
 
@@ -81,7 +79,13 @@ int main(int argc, char *argv[])
     app.installTranslator(&translator);
   }
 
-  MainWindow window;
+  QPixmap pixmap(":splash.png");
+  QSplashScreen splash(pixmap.scaledToWidth(496));
+  splash.show();
+  app.processEvents();
 
+  MainWindow window(splash);
+  window.show();
+  splash.finish(&window);
   return app.exec();
 }

@@ -2,6 +2,7 @@
   <RCC version="1.0">
   <qresource prefix="/">
     <file alias="icon.png">icons/icon.png</file>
+    <file alias="splash.png">icons/splash.png</file>
     <file alias="missing.png">icons/missing.png</file>
   </qresource>
 </RCC>
