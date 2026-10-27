@@ -44,6 +44,7 @@ Due to how modern desktop compositors work it is no longer possible to run Boris
 #### Known issues:
 * Critical need behaviours added to the queue chosen by Boris himself also gives out coins
 * Bouncy items will sometimes bounce forever when thrown with low force
+* RSS feed headlines cannot yet be clicked and opened in a browser
 
 #### Version x.x.x, Roadmap:
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
