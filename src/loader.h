@@ -31,6 +31,7 @@
 #include "sprite.h"
 
 #include <QObject>
+#include <QSplashScreen>
 #include <map>
 
 class Loader: public QObject
@@ -40,11 +41,13 @@ class Loader: public QObject
 public:
   static qint64 getAssetsSize(const QDir &dir);
   static bool loadSoundFxs(const QString &soundsPath,
-                           std::map<std::string, sf::SoundBuffer> &soundFxs);
+                           std::map<std::string, sf::SoundBuffer> &soundFxs,
+                           QSplashScreen &splash);
   static bool loadBehaviours(const Settings &settings,
                              const QString &behavioursPath,
                              QList<Behaviour> &behaviours,
-                             std::map<std::string, sf::SoundBuffer> &soundFxs);
+                             std::map<std::string, sf::SoundBuffer> &soundFxs,
+                             QSplashScreen &splash);
   static bool loadFont(Settings &settings);
   static bool loadSprites(Settings &settings);
   static bool loadImages(const QString &path, QMap<QString, QPixmap> &images);

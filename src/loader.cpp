@@ -45,7 +45,8 @@ qint64 Loader::getAssetsSize(const QDir &dir)
 }
 
 bool Loader::loadSoundFxs(const QString &soundsPath,
-                          std::map<std::string, sf::SoundBuffer> &soundFxs)
+                          std::map<std::string, sf::SoundBuffer> &soundFxs,
+                          QSplashScreen &splash)
 {
   QDir d(soundsPath,
          "*.wav",
@@ -57,10 +58,12 @@ bool Loader::loadSoundFxs(const QString &soundsPath,
     sf::SoundBuffer soundFx;
     if(soundFx.loadFromFile(info.absoluteFilePath().toStdString())) {
       soundFxs[info.fileName().toStdString()] = soundFx;
-      qInfo("  Added sound: %s\n", info.fileName().toStdString().c_str());
+      qInfo("  Added sound: %s\n", qPrintable(info.fileName()));
+      splash.showMessage("Loaded sound: " + info.fileName(), Qt::AlignBottom, QColor(78, 92, 106));
+      qApp->processEvents();
     } else {
       noErrors = false;
-      qWarning("  Error when loading sound: %s\n", info.fileName().toStdString().c_str());
+      qWarning("  Error when loading sound: %s\n", qPrintable(info.fileName()));
     }
   }
   return noErrors;
@@ -69,7 +72,8 @@ bool Loader::loadSoundFxs(const QString &soundsPath,
 bool Loader::loadBehaviours(const Settings &settings,
                             const QString &behavioursPath,
                             QList<Behaviour> &behaviours,
-                            std::map<std::string, sf::SoundBuffer> &soundFxs)
+                            std::map<std::string, sf::SoundBuffer> &soundFxs,
+                            QSplashScreen &splash)
 {
   QDir d(behavioursPath,
          "*.png",
@@ -271,10 +275,12 @@ bool Loader::loadBehaviours(const Settings &settings,
         frames++;
       }
       dat.close();
-      qInfo("  Added behaviour: %s\n", b.title.toStdString().c_str());
+      qInfo("  Added behaviour: %s\n", qPrintable(b.title));
+      splash.showMessage("Loaded behaviour: " + b.title, Qt::AlignBottom, QColor(78, 92, 106));
+      qApp->processEvents();
       behaviours.append(b);
     } else {
-      qWarning("  Error in behaviour: %s\n", info.fileName().toStdString().c_str());
+      qWarning("  Error in behaviour: %s\n", qPrintable(info.fileName()));
       return false;
     }
   }
@@ -378,7 +384,7 @@ bool Loader::loadSprites(Settings &settings)
   QFileInfoList infoList = d.entryInfoList();
   for(const auto &info: infoList) {
     if(!QRegularExpression("^[0-9a-z_]{0,42}$").match(info.baseName()).hasMatch()) {
-      qWarning("  Sprite file '%s' contains illegal characters, skipping...\n", info.baseName().toStdString().c_str());
+      qWarning("  Sprite file '%s' contains illegal characters, skipping...\n", qPrintable(info.baseName()));
       allGood = false;
       continue;
     }
@@ -405,7 +411,7 @@ bool Loader::loadSprites(Settings &settings)
       }
       x1 = x2;
     }
-    qInfo("  Added sprite: %s (%llu frames)\n", info.baseName().toStdString().c_str(), sprite.count());
+    qInfo("  Added sprite: %s (%llu frames)\n", qPrintable(info.baseName()), sprite.count());
     settings.sprites[info.baseName()] = sprite;
   }
   return allGood;
@@ -422,13 +428,13 @@ bool Loader::loadImages(const QString &path, QMap<QString, QPixmap> &images)
   for(const auto &info: infoList) {
     if(!QRegularExpression("^[0-9a-z_]{0,42}$").match(info.baseName()).hasMatch()) {
       qWarning("  Image file '%s' contains illegal characters, skipping...\n",
-               info.baseName().toStdString().c_str());
+               qPrintable(info.baseName()));
       allGood = false;
       continue;
     }
     images[info.fileName()] =
       QPixmap(info.absoluteFilePath());
-    qInfo("  Added image: %s\n", info.fileName().toStdString().c_str());
+    qInfo("  Added image: %s\n", qPrintable(info.fileName()));
   }
   return allGood;
 }

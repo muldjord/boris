@@ -68,6 +68,7 @@ private slots:
 
 private:
   void loadFromConfig();
+  void stall(const int &ms);
   void resetView();
   QSettings *iniSettings = nullptr;
   Settings settings;

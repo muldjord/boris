@@ -109,56 +109,63 @@ MainWindow::MainWindow(QSplashScreen &splash)
   int itemsSize = Loader::getAssetsSize(QDir(settings.itemsPath, "*.png",
                                              QDir::Name, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable)) / 1024;
 
-  splash.showMessage("Loading " + QString::number(soundsSize) + " kilobytes of sounds, please wait...", Qt::AlignBottom);
+  splash.showMessage("Loading " + QString::number(soundsSize) + " kilobytes of sounds, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
   qApp->processEvents();
-  if(Loader::loadSoundFxs(settings.soundsPath, soundMixer->soundFxs)) {
+  stall(50);
+  if(Loader::loadSoundFxs(settings.soundsPath, soundMixer->soundFxs, splash)) {
     qInfo("Sounds loaded ok... :)\n");
   } else {
     qInfo("Error when loading some sounds, please check your wav files\n");
   }
 
-  splash.showMessage("Loading " + QString::number(behavsSize) + " kilobytes of behaviours, please wait...");
+  splash.showMessage("Loading " + QString::number(behavsSize) + " kilobytes of behaviours, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
   qApp->processEvents();
-  if(Loader::loadBehaviours(settings, settings.behavioursPath, settings.behaviours, soundMixer->soundFxs)) {
+  stall(50);
+  if(Loader::loadBehaviours(settings, settings.behavioursPath, settings.behaviours, soundMixer->soundFxs, splash)) {
     qInfo("Behaviours loaded ok... :)\n");
   } else {
     qInfo("Error when loading some behaviours, please check your png and dat files\n");
   }
 
-  splash.showMessage("Loading " + QString::number(weathersSize) + " kilobytes of weather types, please wait...");
+  splash.showMessage("Loading " + QString::number(weathersSize) + " kilobytes of weather types, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
   qApp->processEvents();
-  if(Loader::loadBehaviours(settings, settings.weathersPath, settings.weathers, soundMixer->soundFxs)) {
+  stall(50);
+  if(Loader::loadBehaviours(settings, settings.weathersPath, settings.weathers, soundMixer->soundFxs, splash)) {
     qInfo("Weather types loaded ok... :)\n");
   } else {
     qInfo("Error when loading some weather types, please check your png and dat files\n");
   }
 
-  splash.showMessage("Loading " + QString::number(itemsSize) + " kilobytes of interaction items, please wait...");
+  splash.showMessage("Loading " + QString::number(itemsSize) + " kilobytes of interaction items, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
   qApp->processEvents();
-  if(Loader::loadBehaviours(settings, settings.itemsPath, settings.itemBehaviours, soundMixer->soundFxs)) {
+  stall(50);
+  if(Loader::loadBehaviours(settings, settings.itemsPath, settings.itemBehaviours, soundMixer->soundFxs, splash)) {
     qInfo("Items loaded ok... :)\n");
   } else {
     qInfo("Error when loading some items, please check your png and dat files\n");
   }
 
-  splash.showMessage("Loading cursors, please wait...");
+  splash.showMessage("Loading cursors, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
   qApp->processEvents();
+  stall(50);
   if(Loader::loadImages(settings.cursorsPath, settings.cursors)) {
     qInfo("Cursors loaded ok... :)\n");
   } else {
     qInfo("Error when loading cursors...\n");
   }
 
-  splash.showMessage("Loading additional sprites, please wait...");
+  splash.showMessage("Loading additional sprites, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
   qApp->processEvents();
+  stall(50);
   if(Loader::loadSprites(settings)) {
     qInfo("Sprites loaded ok... :)\n");
   } else {
     qInfo("Error when loading sprites...\n");
   }
 
-  splash.showMessage("Loading font, please wait...");
+  splash.showMessage("Loading font, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
   qApp->processEvents();
+  stall(50);
   if(Loader::loadFont(settings)) {
     qInfo("Font loaded ok... :)\n");
   } else {
@@ -201,6 +208,13 @@ void MainWindow::init()
   physicsTimer.setInterval(30);
   connect(&physicsTimer, &QTimer::timeout, this, &MainWindow::progressPhysics);
   physicsTimer.start();
+}
+
+void MainWindow::stall(const int &ms)
+{
+  QEventLoop loop;
+  QTimer::singleShot(ms, &loop, &QEventLoop::quit);
+  loop.exec();
 }
 
 void MainWindow::loadFromConfig()
