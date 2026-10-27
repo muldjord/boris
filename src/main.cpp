@@ -52,15 +52,12 @@ void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QStri
     break;
   case QtWarningMsg:
     txt += QString(": Warning: %1").arg(msg);
-    QMessageBox::warning(nullptr, "!!!", txt);
     break;
   case QtCriticalMsg:
     txt += QString(": Critical: %1").arg(msg);
-    QMessageBox::critical(nullptr, "!!!", txt);
     break;
   case QtFatalMsg:
     txt += QString(": Fatal: %1").arg(msg);
-    QMessageBox::critical(nullptr, "!!!", txt);
     abort();
   }
   printf("%s", txt.toStdString().c_str());
