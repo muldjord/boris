@@ -114,8 +114,6 @@ MainWindow::MainWindow(QSplashScreen &splash)
 
   splash.showMessage("Loading " + QString::number(soundsSize) + " kilobytes of sounds, please wait...", Qt::AlignBottom);
   qApp->processEvents();
-  QEventLoop loop;
-  loop.exec();
   if(Loader::loadSoundFxs(settings.soundsPath, soundMixer->soundFxs)) {
     qInfo("Sounds loaded ok... :)\n");
   } else {
