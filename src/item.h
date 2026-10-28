@@ -64,13 +64,14 @@ public slots:
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
   QRectF boundingRect() const override;
+  void timerEvent(QTimerEvent *event);
+
   void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
   void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
   void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
   void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
 
 private slots:
-  void updateItem();
   void setCurFrame(const int &frame);
   void dontIgnore();
 
@@ -78,7 +79,7 @@ private:
   Settings &settings;
   bool flipFrames = false;
   QPixmap itemSprite;
-  QTimer animTimer;
+  QBasicTimer animTimer;
   QPixmap scriptSprite;
   QImage scriptImage = QImage(32, 32, QImage::Format_ARGB32_Premultiplied);
   bool drawing = false;

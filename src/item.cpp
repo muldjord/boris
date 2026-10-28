@@ -86,17 +86,13 @@ Item::Item(const QString &item, Settings &settings, const bool &ignore)
   ignoreTimer.setSingleShot(true);
   connect(&ignoreTimer, &QTimer::timeout, this, &Item::dontIgnore);
 
-  animTimer.setInterval(0);
-  animTimer.setSingleShot(true);
-  connect(&animTimer, &QTimer::timeout, this, &Item::updateItem);
-  animTimer.start();
-
   if(settings.itemBehaviours.at(curItem).noIgnore) {
     this->ignore = false;
   } else {
     ignoreTimer.start();
   }
-  show();
+
+  animTimer.start(0, Qt::PreciseTimer, this);
 }
 
 Item::~Item()
@@ -156,7 +152,7 @@ void Item::runScript(int &stop, const bool &init)
   }
 }
 
-void Item::updateItem()
+void Item::timerEvent(QTimerEvent *)
 {
   if(stopAndDestroy) {
     stopAndDestroy = false;
@@ -234,8 +230,7 @@ void Item::updateItem()
     curFrame++;
   }
 
-  animTimer.setInterval(frameTime);
-  animTimer.start();
+  animTimer.start(frameTime, Qt::PreciseTimer, this);
 }
 
 void Item::moveItem(int dX, int dY, const bool &flipped)
@@ -392,8 +387,7 @@ void Item::mousePressEvent(QGraphicsSceneMouseEvent* event)
                  event->scenePos().y() - (getHeight() / 2));
     if(!settings.itemBehaviours.at(curItem).reactions.isEmpty()) {
       curFrame = 0;
-      animTimer.setInterval(0);
-      animTimer.start();
+      animTimer.start(0, Qt::PreciseTimer, this);
     }
   } else if(event->button() == Qt::MiddleButton) {
     destroy();
@@ -471,8 +465,8 @@ void Item::handlePhysics()
     moveItem(hVel, vVel);
     vVel += settings.itemBehaviours.at(curItem).weight * 0.1;
 
-    if(pos().y() >= groundY) {
-      setPos(pos().x(), groundY); // Necessary to avoid Boris stopping jumping back up of vector becomes too low "underground"
+    if(pos().y() + vVel >= groundY) {
+      setPos(pos().x(), groundY); // Necessary to avoid item jumping back up if vector becomes too low "underground"
       if(vVel < 2.0) {
         falling = false;
         moveItem(0, 0); // Make sure location of item and shadow is synchronized
@@ -507,8 +501,7 @@ void Item::interact(Boris *boris)
     return;
   }
   curFrame = settings.itemBehaviours.at(curItem).labels[settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel()];
-  animTimer.setInterval(0);
-  animTimer.start();
+  animTimer.start(0, Qt::PreciseTimer, this);
   setCursor(settings.getCursor("hover.png"));
   falling = false;
   grabbed = false;

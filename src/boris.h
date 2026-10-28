@@ -111,6 +111,7 @@ public slots:
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
   QRectF boundingRect() const override;
+  void timerEvent(QTimerEvent *event);
 
   void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
   void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
@@ -123,7 +124,6 @@ signals:
   void addCoins(const QString &message, const int &coins);
 
 private slots:
-  void updateBoris();
   void handleBehaviourChange(QAction* a);
   void statProgress();
   void statQueueProgress();
@@ -148,7 +148,7 @@ private:
   DebugAction *debugAction = nullptr;
   QMenu *behavioursMenu = nullptr;
   QTimer behavTimer;
-  QTimer animTimer;
+  QBasicTimer animTimer;
   QTimer statTimer;
   QTimer statQueueTimer;
   QTimer interactionsTimer;

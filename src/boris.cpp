@@ -107,11 +107,6 @@ Boris::Boris(Settings &settings)
   behavTimer.setSingleShot(true);
   connect(&behavTimer, &QTimer::timeout, this, &Boris::nextBehaviour);
 
-  animTimer.setInterval(0);
-  animTimer.setSingleShot(true);
-  connect(&animTimer, &QTimer::timeout, this, &Boris::updateBoris);
-  animTimer.start();
-
   statTimer.setInterval(30000);
   connect(&statTimer, &QTimer::timeout, this, &Boris::statProgress);
   statTimer.start();
@@ -133,6 +128,8 @@ Boris::Boris(Settings &settings)
   setCursor(settings.getCursor("hover.png"));
 
   reconfBoris();
+
+  animTimer.start(0, Qt::PreciseTimer, this);
 }
 
 Boris::~Boris()
@@ -356,8 +353,7 @@ void Boris::changeBehaviour(QString behav, int time)
     runScript(stop, true);
   }
 
-  animTimer.setInterval(0);
-  animTimer.start();
+  animTimer.start(0, Qt::PreciseTimer, this);
 }
 
 void Boris::runScript(int &stop, const bool &init)
@@ -508,7 +504,7 @@ int Boris::getDirectionTo(const QPointF &p)
   return pointSector;
 }
 
-void Boris::updateBoris()
+void Boris::timerEvent(QTimerEvent *)
 {
   if(stopNextBehaviour) {
     stopNextBehaviour = false;
@@ -610,8 +606,7 @@ void Boris::updateBoris()
     curFrame++;
   }
 
-  animTimer.setInterval(frameTime);
-  animTimer.start();
+  animTimer.start(frameTime, Qt::PreciseTimer, this);
 }
 
 void Boris::moveBoris(int dX, int dY, const bool &flipped)
@@ -755,9 +750,9 @@ void Boris::handlePhysics()
       }
       hVel *= 0.9;
     }
-    if(pos().y() >= groundY) {
-      setPos(pos().x(), groundY); // Necessary to avoid Boris stopping jumping back up of vector becomes too low "underground"
-      if(vVel < 5.0) {
+    if(pos().y() + vVel >= groundY) {
+      setPos(pos().x(), groundY); // Necessary to avoid Boris jumping back up if vector becomes too low "underground"
+      if(vVel < 5.0) { // This is higher than for an item as it looks weird when he keeps bouncing if it's set at 2.0
         if(settings.behaviours.at(curBehav).file != "_umbrella_falling") {
           changeBehaviour("_landing");
         } else {
