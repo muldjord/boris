@@ -84,7 +84,8 @@ private:
   QString *aboutText;
   void createTrayIcon();
   void createBehavioursMenu();
-  void updateItemsMenu();
+  void createItemsMenu();
+  void unlockItem(const QString &item);
   void createActions();
   QAction *earthquakeAction;
   //QAction *behavioursAction;

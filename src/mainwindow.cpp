@@ -85,19 +85,6 @@ MainWindow::MainWindow(QSplashScreen &splash)
     qInfo("Error when loading graphics...\n");
   }
 
-  createActions();
-
-  behavioursMenu = new QMenu();
-  behavioursMenu->setTitle(tr("Behaviours"));
-  connect(behavioursMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
-
-  itemsMenu = new QMenu();
-  itemsMenu->setTitle(tr("Items"));
-  connect(itemsMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
-
-  createTrayIcon();
-  trayIcon->show();
-
   qApp->processEvents();
 
   int soundsSize = Loader::getAssetsSize(QDir(settings.soundsPath, "*.wav",
@@ -172,8 +159,14 @@ MainWindow::MainWindow(QSplashScreen &splash)
     qInfo("Error when loading font...\n");
   }
 
+  createActions();
+
+  createItemsMenu();
   createBehavioursMenu();
-  updateItemsMenu();
+
+  createTrayIcon();
+  trayIcon->show();
+
   show();
 
   netComm = new NetComm(settings);
@@ -507,8 +500,62 @@ void MainWindow::updateWeather()
   weatherAction->setIcon(QIcon(settings.getPixmap(settings.weatherType + ".png")));
 }
 
+void MainWindow::createItemsMenu()
+{
+  itemsMenu = new QMenu();
+  itemsMenu->setTitle(tr("Items"));
+  connect(itemsMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
+
+  QList<QMenu*> subMenus;
+
+  for(const auto &item: settings.itemBehaviours) {
+    QString title = item.title;
+    QPixmap iconPixmap(settings.getPixmap(item.category.toLower() + ".png"));
+    QMenu *menu = nullptr;
+
+    // Find correct menu to put item into
+    for(auto &subMenu: subMenus) {
+      if(subMenu->title() == item.category && item.category != "Hidden") {
+        menu = subMenu;
+        break;
+      }
+    }
+    if(menu == nullptr) {
+      menu = new QMenu(item.category, itemsMenu);
+      menu->setIcon(QIcon(iconPixmap));
+      subMenus.append(menu);
+    }
+
+    // Append coin price to title if it's not already unlocked
+    if(!settings.unlocked.contains(item.file)) {
+      title.append(" (" + QString::number(item.coins) + "c)");
+      iconPixmap = settings.getPixmap("coin.png");
+    }
+
+    QAction *itemAction = new QAction(QIcon(iconPixmap), title);
+    itemAction->setObjectName(item.file);
+    itemAction->setData(item.category.toLower());
+
+    menu->addAction(itemAction);
+  }
+
+  for(auto &subMenu: subMenus) {
+    if(!subMenu->isEmpty()) {
+      itemsMenu->addMenu(subMenu);
+    }
+  }
+
+  if(itemsMenu->isEmpty()) {
+    itemsMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), tr("No items unlocked!"));
+  }
+}
+
 void MainWindow::createBehavioursMenu()
 {
+  behavioursMenu = new QMenu();
+  behavioursMenu->setTitle(tr("Behaviours"));
+  connect(behavioursMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
+
   QList<QMenu*> subMenus;
 
   QMenu *idkfaMenu = new QMenu(tr("Idkfa"), behavioursMenu);
@@ -539,7 +586,10 @@ void MainWindow::createBehavioursMenu()
       subMenus.append(menu);
     }
 
-    menu->addAction(QIcon(iconPixmap), title)->setData(behaviour.file);
+    QAction *behavAction = new QAction(QIcon(iconPixmap), title);
+    behavAction->setObjectName(behaviour.file);
+
+    menu->addAction(behavAction);
   }
 
   for(auto &subMenu: subMenus) {
@@ -557,54 +607,9 @@ void MainWindow::createBehavioursMenu()
   }
 }
 
-void MainWindow::updateItemsMenu()
-{
-  printf("Updating ITEMS menu!!!\n");
-  itemsMenu->clear();
-
-  QList<QMenu*> subMenus;
-
-  for(const auto &item: settings.itemBehaviours) {
-    QString title = item.title;
-    QPixmap iconPixmap(settings.getPixmap(item.category.toLower() + ".png"));
-    QMenu *menu = nullptr;
-
-    // Find correct menu to put item into
-    for(auto &subMenu: subMenus) {
-      if(subMenu->title() == item.category && item.category != "Hidden") {
-        menu = subMenu;
-        break;
-      }
-    }
-    if(menu == nullptr) {
-      menu = new QMenu(item.category, itemsMenu);
-      menu->setIcon(QIcon(iconPixmap));
-      subMenus.append(menu);
-    }
-
-    // Append coin price to title if it's not already unlocked
-    if(!settings.unlocked.contains(item.file)) {
-      title.append(" (" + QString::number(item.coins) + "c)");
-      iconPixmap = settings.getPixmap("coin.png");
-    }
-
-    menu->addAction(QIcon(iconPixmap), title)->setData(item.file);
-  }
-
-  for(auto &subMenu: subMenus) {
-    if(!subMenu->isEmpty()) {
-      itemsMenu->addMenu(subMenu);
-    }
-  }
-
-  if(itemsMenu->isEmpty()) {
-    itemsMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), tr("No items unlocked!"));
-  }
-}
-
 void MainWindow::triggerBehaviour(QAction* a)
 {
-  QString behaviourFile = a->data().toString();
+  QString behaviourFile = a->objectName();
   for(const auto &behaviour: settings.behaviours) {
     if(behaviour.file == behaviourFile) {
       emit queueBehavFromFile(behaviour.file);
@@ -634,7 +639,7 @@ void MainWindow::spawnRandomItem()
 
 void MainWindow::spawnItem(QAction* a)
 {
-  QString itemFile = a->data().toString();
+  QString itemFile = a->objectName();
   for(const auto &item: settings.itemBehaviours) {
     if(item.file == itemFile) {
       if(settings.unlocked.contains(item.file)) {
@@ -648,14 +653,8 @@ void MainWindow::spawnItem(QAction* a)
         if(settings.coins - item.coins >= 0) {
           if(QMessageBox::question(nullptr, tr("Buy?"), tr("Do you want to buy '") + " " + item.title + "' " + tr("for ") + QString::number(item.coins) + tr(" coins?")) == QMessageBox::Yes) {
             addCoins("-" + QString::number(item.coins), - item.coins);
-            settings.unlocked.append(item.file);
-            QString unlocked = "";
-            for(const auto &unlock: settings.unlocked) {
-              unlocked.append(unlock + ",");
-            }
-            unlocked = unlocked.left(unlocked.length() - 1);
-            iniSettings->setValue("unlocked", unlocked);
-            updateItemsMenu();
+            a->setIcon(QIcon(settings.getPixmap(item.category.toLower() + ".png")));
+            unlockItem(item.file);
           }
         } else {
           soundMixer->playSoundFile("nocoin.wav", 0, 1);
@@ -665,6 +664,17 @@ void MainWindow::spawnItem(QAction* a)
       break;
     }
   }
+}
+
+void MainWindow::unlockItem(const QString &item)
+{
+  settings.unlocked.append(item);
+  QString unlocked = "";
+  for(const auto &unlock: settings.unlocked) {
+    unlocked.append(unlock + ",");
+  }
+  unlocked = unlocked.left(unlocked.length() - 1);
+  iniSettings->setValue("unlocked", unlocked);
 }
 
 void MainWindow::addCoins(const QString &message, const int &coins)
