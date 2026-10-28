@@ -49,7 +49,7 @@ var easterm = (varh + varl - 7 * varm + 114) % 31 + 1
 30;2000;0;0;;
 31;75;0;0;poof.wav;stat fun += 5
 32;75;0;0;;
-33;75;0;0;;if month = easterm and day >= easterd - 5 and day <= easterd + 5 spawn easter_egg 6 0 else { var rand = @8,if rand = 1 spawn teddy 6 0,if rand = 2 spawn horse 6 0,if rand = 3 spawn train 6 0,if rand = 4 spawn c64 6 0,if rand = 5 spawn pacman 6 0,if rand = 6 spawn glass_ball 6 0,if rand = 7 spawn football 6 0,if rand = 8 spawn coffee_mug 6 0 }
+33;75;0;0;;if month = easterm and day >= easterd - 5 and day <= easterd + 5 spawn easter_egg 6 1 else { var rand = @8,if rand = 1 spawn teddy 6 1,if rand = 2 spawn horse 6 1,if rand = 3 spawn train 6 1,if rand = 4 spawn c64 6 1,if rand = 5 spawn pacman 6 1,if rand = 6 spawn glass_ball 6 1,if rand = 7 spawn football 6 1,if rand = 8 spawn coffee_mug 6 1 }
 34;75;0;0;;
 35;75;0;0;;
 36;75;0;0;;
