@@ -1,5 +1,5 @@
 # Boris
-A scriptable desktop screenmate written in Qt6 (for graphics) and SFML3 (for sound). Boris has a bit of a prankster personality and needs to be cared for in order to stay alive.
+A scriptable desktop screenmate written in Qt6 (for graphics) and SFML3 (for sound). Boris has a bit of a prankster personality and needs to be cared for in order to stay healthy. It's all in good fun so please enjoy!
 
 * All behaviours are fully scriptable using [BorisScript](data/behaviours/README.md)
 * Supports weather visualization using the OpenWeatherMap API
@@ -37,13 +37,10 @@ $ make install
 ```
 The last command copies all necessary files to the `release` folder. You can then run Boris using the `Boris` executable.
 
-## Notes on 4.x and later versions
-Due to how modern desktop compositors work it is no longer possible to run Boris as an old-school desktop screenmate. Wayland under Linux does not allow for programatically moving windows around the desktop (Boris used to exist inside a transparent window). It is also no longer possible to keep windows on top of other windows. For that reason Boris has been completely rewritten to use a transparent maximized graphics view. This works for the intent of running Boris and just having fun with enjoying his many shenanigangs. The mouse interactions are also intact. But you are not able to click stuff through the transparent view. You will have to alt-tab to get to those which moves Boris out of focus. Despite these limitations at least Boris is still alive and well and here to bring you joy! :)
-
 ## Release notes
 #### Known issues:
+* Linux: For security reasons modern Wayland compositors don't support `Qt::WindowStaysOnTopHint` and click-through behaviour. The non-free OS called Windows (which apparently people still use for some bizarre reason) still support this, but it is probably only a matter of time before they catch up and stop supporting it as well
 * Critical need behaviours added to the queue chosen by Boris himself also gives out coins
-* Bouncy items will sometimes bounce forever when thrown with low force
 * RSS feed headlines cannot yet be clicked and opened in a browser
 
 #### Version x.x.x, Roadmap:
@@ -61,10 +58,10 @@ Due to how modern desktop compositors work it is no longer possible to run Boris
 * Added 'anxiety' stat which causes Boris to flee the mouse cursor if he has been tossed around too much
 * Added 'debug' textedit to right-click menu when 'idkfa' is enabled
 * Fixed Boris' weird legs on coffee reading and steak eating behaviours
-* Added new splash screen
-* Fixed a number of bugs
+* Added new splash screen with loading sequence
 * Shadows now stays visible on the ground when Boris and items are airborne
 * Shadows now have dynamic width depending on the altitude of Boris and items
+* Fixed eternal bouncing bug (I think)
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
