@@ -312,7 +312,7 @@ void Boris::changeBehaviour(QString behav, int time)
           coins /= 20;
 
           if(coins) {
-            emit addCoins("+" + QString::number(coins), coins);
+            emit deltaCoins(coins);
           }
         }
         break;
@@ -1156,7 +1156,7 @@ void Boris::setWeather(QString &behav)
   weather->resetWeather();
 
   weather->show();
-  QTimer::singleShot(30000, this, &Boris::hideWeather);
+  QTimer::singleShot(30000, [this]() { weather->hide(); });
 
   if(!falling && !grabbed) {
     if(settings.weatherType == "01d") {
@@ -1177,11 +1177,6 @@ void Boris::setWeather(QString &behav)
       behavQueue.append("_cloudy");
     }
   }
-}
-
-void Boris::hideWeather()
-{
-  weather->hide();
 }
 
 int Boris::getCurBehav()

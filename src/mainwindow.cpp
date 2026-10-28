@@ -381,7 +381,7 @@ void MainWindow::addBoris(int clones)
     connect(earthquakeAction, &QAction::triggered, newBoris, &Boris::earthquake);
     connect(this, &MainWindow::queueBehavFromFile, newBoris, &Boris::queueBehavFromFile);
     connect(weatherAction, &QAction::triggered, newBoris, &Boris::triggerWeather);
-    connect(newBoris, &Boris::addCoins, this, &MainWindow::addCoins);
+    connect(newBoris, &Boris::deltaCoins, this, &MainWindow::deltaCoins);
     scene()->addItem(newBoris);
     settings.borisList.append(newBoris);
   }
@@ -480,7 +480,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
 void MainWindow::killAll()
 {
-  QTimer::singleShot(2000, qApp, SLOT(quit()));
+  QTimer::singleShot(2000, qApp, &QApplication::quit);
   // Reset all Boris collide pointers within all existing clones to prevent crash
   for(const auto &boris: settings.borisList) {
     boris->borisFriend = nullptr;
@@ -637,9 +637,9 @@ void MainWindow::spawnRandomItem()
   }
 }
 
-void MainWindow::spawnItem(QAction* a)
+void MainWindow::spawnItem(QAction* itemAction)
 {
-  QString itemFile = a->objectName();
+  QString itemFile = itemAction->objectName();
   for(const auto &item: settings.itemBehaviours) {
     if(item.file == itemFile) {
       if(settings.unlocked.contains(item.file)) {
@@ -652,9 +652,8 @@ void MainWindow::spawnItem(QAction* a)
       } else {
         if(settings.coins - item.coins >= 0) {
           if(QMessageBox::question(nullptr, tr("Buy?"), tr("Do you want to buy '") + " " + item.title + "' " + tr("for ") + QString::number(item.coins) + tr(" coins?")) == QMessageBox::Yes) {
-            addCoins("-" + QString::number(item.coins), - item.coins);
-            a->setIcon(QIcon(settings.getPixmap(item.category.toLower() + ".png")));
-            unlockItem(item.file);
+            deltaCoins(- item.coins);
+            unlockItem(itemAction);
           }
         } else {
           soundMixer->playSoundFile("nocoin.wav", 0, 1);
@@ -666,29 +665,25 @@ void MainWindow::spawnItem(QAction* a)
   }
 }
 
-void MainWindow::unlockItem(const QString &item)
+void MainWindow::unlockItem(QAction *itemAction)
 {
-  settings.unlocked.append(item);
-  QString unlocked = "";
+  settings.unlocked.append(itemAction->objectName());
+  itemAction->setIcon(QIcon(settings.getPixmap(itemAction->data().toString().toLower() + ".png")));
+
+  QString newUnlocked = "";
   for(const auto &unlock: settings.unlocked) {
     unlocked.append(unlock + ",");
   }
-  unlocked = unlocked.left(unlocked.length() - 1);
-  iniSettings->setValue("unlocked", unlocked);
+  newUnlocked = newUnlocked.left(newUnlocked.length() - 1);
+  iniSettings->setValue("unlocked", newUnlocked);
 }
 
-void MainWindow::addCoins(const QString &message, const int &coins)
+void MainWindow::deltaCoins(const int &coins)
 {
   soundMixer->playSoundFile("coinup.wav", 0, 1);
   settings.coins += coins;
-  coinsAction->setText(QString::number(settings.coins) + " " + tr("coins") + " (" + message + ")");
+  coinsAction->setText(QString::number(settings.coins) + " " + tr("coins") + " (" + QString::number(coins) + ")");
   trayIcon->setIcon(*coinIcon);
-  QTimer::singleShot(10000, this, &MainWindow::removeCoinsMessage);
+  QTimer::singleShot(10000, [this]() { coinsAction->setText(QString::number(settings.coins) + tr(" coins")); trayIcon->setIcon(*icon); });
   iniSettings->setValue("coins", settings.coins);
-}
-
-void MainWindow::removeCoinsMessage()
-{
-  coinsAction->setText(QString::number(settings.coins) + tr(" coins"));
-  trayIcon->setIcon(*icon);
 }

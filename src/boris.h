@@ -121,13 +121,12 @@ protected:
   void wheelEvent(QGraphicsSceneWheelEvent *) override;
 
 signals:
-  void addCoins(const QString &message, const int &coins);
+  void deltaCoins(const int &coins);
 
 private slots:
   void handleBehaviourChange(QAction* a);
   void statProgress();
   void statQueueProgress();
-  void hideWeather();
   void enableInteract();
   void checkInteractions();
   void statChange(const QString &type, const int &amount);

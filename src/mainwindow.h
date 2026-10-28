@@ -63,8 +63,7 @@ private slots:
   void triggerBehaviour(QAction *a);
   void spawnRandomItem();
   void spawnItem(QAction *a);
-  void addCoins(const QString &message, const int &coins);
-  void removeCoinsMessage();
+  void deltaCoins(const int &coins);
 
 private:
   void loadFromConfig();
@@ -85,7 +84,7 @@ private:
   void createTrayIcon();
   void createBehavioursMenu();
   void createItemsMenu();
-  void unlockItem(const QString &item);
+  void unlockItem(QAction *action);
   void createActions();
   QAction *earthquakeAction;
   //QAction *behavioursAction;
