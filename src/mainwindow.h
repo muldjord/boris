@@ -73,7 +73,6 @@ private:
   Settings settings;
   QIcon *icon = nullptr;
   QIcon *coinIcon = nullptr;
-  QList<QString> unlocked;
   QTimer itemTimer;
   QTimer physicsTimer;
   QMenu *behavioursMenu;

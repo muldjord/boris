@@ -672,7 +672,7 @@ void MainWindow::unlockItem(QAction *itemAction)
 
   QString newUnlocked = "";
   for(const auto &unlock: settings.unlocked) {
-    unlocked.append(unlock + ",");
+    newUnlocked.append(unlock + ",");
   }
   newUnlocked = newUnlocked.left(newUnlocked.length() - 1);
   iniSettings->setValue("unlocked", newUnlocked);
