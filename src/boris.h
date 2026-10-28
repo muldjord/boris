@@ -187,7 +187,7 @@ private:
   bool showWeather = false;
 
   Shadow *shadow = nullptr;
-  
+
   QList<QString> behavQueue;
   QString getFileFromCategory(const QString &category);
   int getIdxFromCategory(const QString &category);

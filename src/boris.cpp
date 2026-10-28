@@ -95,7 +95,7 @@ Boris::Boris(Settings &settings)
   shadow = new Shadow(settings);
   shadow->setParentItem(this);
   shadow->setPos(0, 1);
-  
+
   staticBehaviours = 0;
   // Figure out how many static behaviours there are
   for(const auto &behaviour: settings.behaviours) {

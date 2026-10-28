@@ -65,7 +65,7 @@ MainWindow::MainWindow(QSplashScreen &splash)
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   showMaximized();
-  
+
   // Make sure 0,0 is at top-left of view
   setAlignment(Qt::AlignLeft | Qt::AlignTop);
   setTransformationAnchor(QGraphicsView::NoAnchor);
@@ -559,6 +559,7 @@ void MainWindow::createBehavioursMenu()
 
 void MainWindow::updateItemsMenu()
 {
+  printf("Updating ITEMS menu!!!\n");
   itemsMenu->clear();
 
   QList<QMenu*> subMenus;

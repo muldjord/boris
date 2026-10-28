@@ -53,7 +53,7 @@ signals:
   void reconfBoris();
   void queueBehavFromFile(const QString &file);
   void handlePhysics();
-                                              
+
 private slots:
   void init();
   void progressPhysics();

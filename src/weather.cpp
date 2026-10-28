@@ -69,7 +69,7 @@ void Weather::updateWeather()
   if(curFrame >= settings.weathers.at(settings.weatherIdx).frames.length()) {
     curFrame = 0;
   }
- 
+
   update();
 
   weatherTimer.start();

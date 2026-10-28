@@ -262,7 +262,7 @@ void Stats::updateStats()
     }
   }
   painter.end();
-  
+
   update();
 }
 
