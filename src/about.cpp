@@ -58,17 +58,17 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
                                     "<strong>Good to know:</strong>"
                                     "<ul>"
                                     "<li>You can pick Boris up if he is in your way by holding down the left mouse button while the pointer is on top of him.</li>"
-                                    "<li>Right-clicking Boris brings up a menu where you can select any of the behaviours you have unlocked using coins. Each behaviour is added to a queue and performed in the order you select them.</li>"
+                                    "<li>Right-clicking any Boris brings up a menu where you can select from a plethora of Boris behaviours from categories that correspond to his current needs.</li>"
                                     "<li>Using the mouse scroll-wheel on Boris will tickle him if he's not busy.</li>"
-                                    "<li>Right-clicking the Boris system tray icon brings up a menu that gives you access to information and important functions that will help you configure and take care of Boris.</li>"
+                                    "<li>Right-clicking the Boris system tray icon brings up a menu that gives you access to information and important functions that will help you configure and take care of Boris. This is also where you can unlock items that Boris can interact with.</li>"
                                     "</ul>"
                                     "<strong>Health stats:</strong>"
                                     "<ul>"
                                     "<li>The 'Zz' icon signifies Boris' energy level.</li>"
-                                    "<li>The 'Knife and fork' icon shows how hungry Boris currently is.</li>"
-                                    "<li>The 'Toilet' icon is an indicator of Boris' need to go to the bathroom.</li>"
                                     "<li>The 'Speech bubble' icon shows Boris' need for social interaction.</li>"
                                     "<li>The 'Smiley' icon indicates whether Boris is in a good mood and having fun.</li>"
+                                    "<li>The 'Knife and fork' icon shows how hungry Boris currently is.</li>"
+                                    "<li>The 'Toilet' icon is an indicator of Boris' need to go to the bathroom.</li>"
                                     "</ul>"
                                     "<strong>Other stats:</strong>"
                                     "<ul>"
@@ -76,8 +76,8 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
                                     "<li>He can also get bruised if you thrown him around too much.</li>"
                                     "</ul>"
                                     "<strong>How to get coins:</strong>"
-                                    "<br/>It's just for fun! No real money involved. You can earn Boris coins by right-clicking Boris and choosing an behaviour from a category that corresponds to Boris' current needs. The more needy Boris is for the particular category you select, the more coins you receive.<br/>"
-                                    "You can then spend the coins by selecting the 'Items' submenu and choosing the item you want to buy. The item then becomes unlocked and can be selected anytime you want.<br/>"
+                                    "<br/>It's just for fun! No real money involved. You can earn Boris coins by right-clicking Boris and choosing a behaviour from a category that corresponds to his current needs. The more needy Boris is for the particular category you select, the more coins you receive.<br/>"
+                                    "You can then spend the coins by right-clicking the Boris system tray icon, selecting the 'Items' submenu and choose the item you want to unlock. The item then becomes unlocked and can be selected any time you want.<br/>"
                                     "<br/>"
                                     "<strong>Where to get Boris:</strong><br/>"
                                     "If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit https://github.com/muldjord/boris/releases and download it. He is completely free and open source. You can also download the full source code (GPLv3) in there if you like."));
@@ -94,7 +94,7 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
 
   // Author tab
   QWidget *authorWidget = new QWidget;
-  QLabel *authorText = new QLabel(tr("<strong>Programming:</strong> Lars Muldjord<br/><strong>Graphics:</strong> Lars Muldjord<br/><strong>Sound:</strong> Lars Muldjord<br/><br/>Boris was programmed using the Qt framework (http://www.qt.io) and C++.<br/><br/>Bug reports, suggestions and / or comments can be emailed to me at: muldjordlars@gmail.com.<br/><br/>If your friends / colleagues would like to get their own Boris, tell them to visit:<br/><br/>https://github.com/muldjord/boris/releases<br/><br/>Copyright 2021 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the 'License' tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html."));
+  QLabel *authorText = new QLabel(tr("<strong>Programming:</strong> Lars Muldjord<br/><strong>Graphics:</strong> Lars Muldjord<br/><strong>Sound:</strong> Lars Muldjord<br/><br/>Boris was programmed using the Qt framework (http://www.qt.io) and C++.<br/><br/>Bug reports, suggestions and / or comments can be emailed to me at: muldjordlars@gmail.com.<br/><br/>If your friends / colleagues would like to get their own Boris, tell them to visit:<br/><br/>https://github.com/muldjord/boris/releases<br/><br/>Copyright 2026 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the 'License' tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html."));
   authorText->setWordWrap(true);
   authorText->setMaximumWidth(400);
 
