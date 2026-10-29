@@ -367,13 +367,11 @@ void Stats::updateStats()
   painter.drawRect(3, 71, 0.6 * toilet, 1);
 
   if(flashes > 0) {
-    if(flashes % 5 == 0) { // Only blink every 5 updates
-      showFlashIcon = !showFlashIcon;
-    }
-    flashes--;
     if(showFlashIcon) {
       painter.drawPixmap(flashIconPos, flashIcon);
     }
+    showFlashIcon = !showFlashIcon;
+    flashes--;
   } else {
     showFlashIcon = false;
     if(settings.stats == STATS_CRITICAL && !underMouse) {
@@ -398,7 +396,7 @@ void Stats::flashStat(QString stat)
   } else if(stat == "toilet") {
     flashIconPos = QPoint(57, 64);
   }
-  flashes = 150;
+  flashes = 10;
   showFlashIcon = true;
   if(settings.stats == STATS_CRITICAL) {
     show();
