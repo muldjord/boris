@@ -77,16 +77,16 @@ QRectF Stats::boundingRect() const
 
 void Stats::timerEvent(QTimerEvent *)
 {
-  energyQueue = std::clamp(energyQueue, -100, 100);
-  socialQueue = std::clamp(socialQueue, -100, 100);
-  funQueue = std::clamp(funQueue, -100, 100);
-  hungerQueue = std::clamp(hungerQueue, -100, 100);
-  toiletQueue = std::clamp(toiletQueue, -100, 100);
+  energyQueue = std::clamp(energyQueue, -99, 99);
+  socialQueue = std::clamp(socialQueue, -99, 99);
+  funQueue = std::clamp(funQueue, -99, 99);
+  hungerQueue = std::clamp(hungerQueue, -99, 99);
+  toiletQueue = std::clamp(toiletQueue, -99, 99);
 
-  anxietyQueue = std::clamp(anxietyQueue, -100, 100);
-  healthQueue = std::clamp(healthQueue, -100, 100);
-  hygieneQueue = std::clamp(hygieneQueue, -100, 100);
-  hyperQueue = std::clamp(hyperQueue, -100, 100);
+  anxietyQueue = std::clamp(anxietyQueue, -99, 99);
+  healthQueue = std::clamp(healthQueue, -99, 99);
+  hygieneQueue = std::clamp(hygieneQueue, -99, 99);
+  hyperQueue = std::clamp(hyperQueue, -99, 99);
 
   if(energyQueue > 0) {
     energyQueue--;
@@ -231,31 +231,31 @@ void Stats::setStat(const StatType &stat, const int &value)
 {
   switch(stat) {
   case ENERGY:
-    energy = std::clamp(value, 0, 100);
+    energy = std::clamp(value, 0, 99);
     break;
   case SOCIAL:
-    social = std::clamp(value, 0, 100);
+    social = std::clamp(value, 0, 99);
     break;
   case FUN:
-    fun = std::clamp(value, 0, 100);
+    fun = std::clamp(value, 0, 99);
     break;
   case HUNGER:
-    hunger = std::clamp(value, 0, 100);
+    hunger = std::clamp(value, 0, 99);
     break;
   case TOILET:
-    toilet = std::clamp(value, 0, 100);
+    toilet = std::clamp(value, 0, 99);
     break;
   case ANXIETY:
-    anxiety = std::clamp(value, 0, 100);
+    anxiety = std::clamp(value, 0, 99);
     break;
   case HEALTH:
-    health = std::clamp(value, 0, 100);
+    health = std::clamp(value, 0, 99);
     break;
   case HYGIENE:
-    hygiene = std::clamp(value, 0, 100);
+    hygiene = std::clamp(value, 0, 99);
     break;
   case HYPER:
-    hyper = std::clamp(value, 0, 100);
+    hyper = std::clamp(value, 0, 99);
     break;
   default:
     qWarning("deltaStat: Unknown stat type: %d\n", stat);
@@ -267,31 +267,31 @@ void Stats::deltaStat(const StatType &stat, const int &value)
 {
   switch(stat) {
   case ENERGY:
-    energy = std::clamp(energy + value, 0, 100);
+    energy = std::clamp(energy + value, 0, 99);
     break;
   case SOCIAL:
-    social = std::clamp(social + value, 0, 100);
+    social = std::clamp(social + value, 0, 99);
     break;
   case FUN:
-    fun = std::clamp(fun + value, 0, 100);
+    fun = std::clamp(fun + value, 0, 99);
     break;
   case HUNGER:
-    hunger = std::clamp(hunger + value, 0, 100);
+    hunger = std::clamp(hunger + value, 0, 99);
     break;
   case TOILET:
-    toilet = std::clamp(toilet + value, 0, 100);
+    toilet = std::clamp(toilet + value, 0, 99);
     break;
   case ANXIETY:
-    anxiety = std::clamp(anxiety + value, 0, 100);
+    anxiety = std::clamp(anxiety + value, 0, 99);
     break;
   case HEALTH:
-    health = std::clamp(health + value, 0, 100);
+    health = std::clamp(health + value, 0, 99);
     break;
   case HYGIENE:
-    hygiene = std::clamp(hygiene + value, 0, 100);
+    hygiene = std::clamp(hygiene + value, 0, 99);
     break;
   case HYPER:
-    hyper = std::clamp(hyper + value, 0, 100);
+    hyper = std::clamp(hyper + value, 0, 99);
     break;
   default:
     qWarning("deltaStat: Unknown stat type: %d\n", stat);
@@ -303,31 +303,31 @@ void Stats::queueStatChange(const StatType &stat, const int &value)
 {
   switch(stat) {
   case ENERGY:
-    energyQueue = std::clamp(energyQueue + value, -100, 100);
+    energyQueue = std::clamp(energyQueue + value, -99, 99);
     break;
   case SOCIAL:
-    socialQueue = std::clamp(socialQueue + value, -100, 100);
+    socialQueue = std::clamp(socialQueue + value, -99, 99);
     break;
   case FUN:
-    funQueue = std::clamp(funQueue + value, -100, 100);
+    funQueue = std::clamp(funQueue + value, -99, 99);
     break;
   case HUNGER:
-    hungerQueue = std::clamp(hungerQueue + value, -100, 100);
+    hungerQueue = std::clamp(hungerQueue + value, -99, 99);
     break;
   case TOILET:
-    toiletQueue = std::clamp(toiletQueue + value, -100, 100);
+    toiletQueue = std::clamp(toiletQueue + value, -99, 99);
     break;
   case ANXIETY:
-    anxietyQueue = std::clamp(anxietyQueue + value, -100, 100);
+    anxietyQueue = std::clamp(anxietyQueue + value, -99, 99);
     break;
   case HEALTH:
-    healthQueue = std::clamp(healthQueue + value, -100, 100);
+    healthQueue = std::clamp(healthQueue + value, -99, 99);
     break;
   case HYGIENE:
-    hygieneQueue = std::clamp(hygieneQueue + value, -100, 100);
+    hygieneQueue = std::clamp(hygieneQueue + value, -99, 99);
     break;
   case HYPER:
-    hyperQueue = std::clamp(hyperQueue + value, -100, 100);
+    hyperQueue = std::clamp(hyperQueue + value, -99, 99);
     break;
   default:
     qWarning("queueStatChange: Unknown stat type: %d\n", stat);
