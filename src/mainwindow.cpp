@@ -244,7 +244,7 @@ void MainWindow::loadFromConfig()
   if(!iniSettings->contains("unlocked")) {
     iniSettings->setValue("unlocked", "balloon");
   }
-  settings.unlocked = iniSettings->value("unlocked").toString().split(",");
+  settings.unlocked = iniSettings->value("unlocked").toString().split(",", Qt::SkipEmptyParts);
 
   // Force weather from ini
   if(iniSettings->contains("weather_force_type")) {
