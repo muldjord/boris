@@ -20,12 +20,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "settings.h"
 
+#include <QCheckBox>
+#include <QComboBox>
 #include <QDialog>
 #include <QLineEdit>
-#include <QCheckBox>
-#include <QSlider>
-#include <QComboBox>
 #include <QSettings>
+#include <QSlider>
 
 class About : public QDialog
 {

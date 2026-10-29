@@ -259,22 +259,44 @@ void ScriptHandler::handleStat(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'stat'
 
-  QString statType = parameters.takeFirst();
+  QString statTypeString = parameters.takeFirst();
+  StatType statType = StatType::NONE;
+  if(statTypeString == "energy") {
+    statType = StatType::ENERGY;
+  } else if(statTypeString == "social") {
+    statType = StatType::SOCIAL;
+  } else if(statTypeString == "fun") {
+    statType = StatType::FUN;
+  } else if(statTypeString == "hunger") {
+    statType = StatType::HUNGER;
+  } else if(statTypeString == "toilet") {
+    statType = StatType::TOILET;
+  } else if(statTypeString == "anxiety") {
+    statType = StatType::ANXIETY;
+  } else if(statTypeString == "health") {
+    statType = StatType::HEALTH;
+  } else if(statTypeString == "hygiene") {
+    statType = StatType::HYGIENE;
+  } else if(statTypeString == "hyper") {
+    statType = StatType::HYPER;
+  }
   QString op = parameters.takeFirst();
   int number = getValue(parameters);
 
   if(op == "-=") {
     number *= -1;
   }
-  if(statType == "hyper" || statType == "health" || statType == "energy" || statType == "hunger" || statType == "toilet" || statType == "social" || statType == "fun" || statType == "hygiene" || statType == "anxiety") {
+  if(statType == StatType::ENERGY || statType == StatType::SOCIAL || statType == StatType::FUN || statType == StatType::HUNGER || statType == StatType::TOILET || statType == StatType::ANXIETY || statType == StatType::HEALTH || statType == StatType::HYGIENE || statType == StatType::HYPER) {
     if(settings.scriptOutput) {
-      printf("%s %s %d\n", statType.toStdString().c_str(),
-             op.toStdString().c_str(), number);
+      printf("%s %s %d\n",
+	     qPrintable(statTypeString),
+             qPrintable(op),
+	     number);
     }
-    emit statChange(statType, number);
+    emit queueStatChange(statType, number);
   } else {
     if(settings.scriptOutput) {
-      printf("%s, ERROR: Unknown stat\n", statType.toStdString().c_str());
+      printf("%s, ERROR: Unknown stat\n", qPrintable(statTypeString));
     }
   }
 }

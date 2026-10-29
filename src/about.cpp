@@ -19,20 +19,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "about.h"
 #include "soundmixer.h"
 
-#include "SFML/Audio.hpp"
-
-#include <stdio.h>
 #include <QApplication>
+#include <QFile>
+#include <QFileInfo>
+#include <QHBoxLayout>
+#include <QHostInfo>
+#include <QIntValidator>
 #include <QLabel>
 #include <QPushButton>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QTabWidget>
 #include <QScrollArea>
-#include <QFile>
-#include <QIntValidator>
-#include <QHostInfo>
-#include <QFileInfo>
+#include <QTabWidget>
+#include <QVBoxLayout>
+
+#include <stdio.h>
+
+#include <SFML/Audio/Sound.hpp>
 
 extern SoundMixer *soundMixer;
 

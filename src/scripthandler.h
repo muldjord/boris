@@ -46,7 +46,7 @@ signals:
   void playSoundFile(const QString &fileName,
                      const float &panning,
                      const float &pitch);
-  void statChange(const QString &type, const int &amount);
+  void queueStatChange(const StatType &type, const int &amount);
   void behavFromFile(const QString &file);
   void setCurFrame(const int &frame);
 

@@ -27,57 +27,81 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class Settings;
 
+enum StatType
+{
+  NONE = -1,
+  ENERGY = 0,
+  SOCIAL = 1,
+  FUN = 2,
+  HUNGER = 3,
+  TOILET = 4,
+  ANXIETY = 5,
+  HEALTH = 6,
+  HYGIENE = 7,
+  HYPER = 8
+};
+
 class Stats : public QGraphicsObject
 {
 public:
   Stats(Settings &settings,
-        const int &hyper,
-        const int &health,
         const int &energy,
-        const int &hunger,
-        const int &toilet,
         const int &social,
         const int &fun,
+        const int &hunger,
+        const int &toilet,
+        const int &anxiety,
+        const int &health,
         const int &hygiene,
-        const int &anxiety);
+        const int &hyper,
+        const int &independence);
   ~Stats();
   void flashStat(QString stat = "none");
-  bool showStats = false;
+  void stopTimers();
+  void updateStats();
 
+  // Getters for main stats
   int getEnergy();
   int getSocial();
   int getFun();
   int getHunger();
   int getToilet();
 
-  int getHyper();
+  // Getters for visual and reaction only stats
+  int getAnxiety();
   int getHealth();
   int getHygiene();
-  int getAnxiety();
+  int getHyper();
 
-  void deltaEnergy(int value);
-  void deltaSocial(int value);
-  void deltaFun(int value);
-  void deltaHunger(int value);
-  void deltaToilet(int value);
+  // Getters for other stats
+  int getIndependence();
 
-  void deltaHyper(int value);
-  void deltaHealth(int value);
-  void deltaHygiene(int value);
-  void deltaAnxiety(int value);
+  // Setters 
+  void setStat(const StatType &stat, const int &value); // Set stat to exact value instantly
+  void setIndependence(const int &value);
 
-  void updateStats();
+  void deltaStat(const StatType &stat, const int &value); // Change stat with delta of value instantly
+  
+  bool showStats = false;
   bool underMouse = false;
 
+public slots:
+  void queueStatChange(const StatType &stat, const int &value); // Queue stat change that will be added over time
+  
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
   QRectF boundingRect() const override;
+
+private slots:
+  void statProgress();
+  void statQueueProgress();
 
 private:
   QColor getBarColor(const int &value, const bool &inverse = false);
   Settings &settings;
 
-  int flashes = 0;
+  QTimer statProgressTimer;
+  QTimer statQueueTimer;
 
   QColor energyColor = QColor(0, 0, 0);
   QColor socialColor = QColor(0, 0, 0);
@@ -88,20 +112,36 @@ private:
   QPixmap flashIcon;
   QPoint flashIconPos = QPoint(0, 0);
   bool showFlashIcon = false;
+  int flashes = 0;
 
   QPixmap statsPixmap;
 
   QPixmap rendered = QPixmap(80, 80); // +1 for the shadow
 
-  int hyper;
-  int health;
-  int energy;
-  int hunger;
-  int toilet;
-  int social;
-  int fun;
-  int hygiene;
-  int anxiety;
+  // Stats
+  int energy = 0;
+  int social = 0;
+  int fun = 0;
+  int hunger = 0;
+  int toilet = 0;
 
+  int anxiety = 0;
+  int health = 0;
+  int hygiene = 0;
+  int hyper = 0;
+  int independence = 0;
+
+  // Queued stat changes
+  int energyQueue = 0;
+  int socialQueue = 0;
+  int funQueue = 0;
+  int hungerQueue = 0;
+  int toiletQueue = 0;
+
+  int anxietyQueue = 0;
+  int healthQueue = 0;
+  int hygieneQueue = 0;
+  int hyperQueue = 0;
+  
   QTimer statTimer;
 };

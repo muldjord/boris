@@ -19,23 +19,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "behaviour.h"
-#include "stats.h"
 #include "bubble.h"
-#include "weather.h"
-#include "shadow.h"
-#include "settings.h"
-#include "item.h"
 #include "debugaction.h"
+#include "item.h"
+#include "settings.h"
+#include "shadow.h"
+#include "stats.h"
+#include "weather.h"
 
-#include <QGraphicsObject>
-#include <QGraphicsView>
-#include <QGraphicsPixmapItem>
-#include <QTimer>
 #include <QAction>
-#include <QMouseEvent>
-#include <QMenu>
+#include <QGraphicsObject>
+#include <QGraphicsPixmapItem>
 #include <QGraphicsSceneHoverEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsView>
+#include <QMenu>
+#include <QMouseEvent>
+#include <QTimer>
 
 namespace Direction {
   constexpr int None = -1;
@@ -54,7 +54,6 @@ class Bubble;
 class Weather;
 class Item;
 class Shadow;
-class Settings;
 
 class Boris : public QGraphicsObject
 {
@@ -79,15 +78,7 @@ public:
   void changeBehaviour(QString behav = "", int time = -1);
   QPoint getGlobalCenter();
   QMap<QString, int> scriptVars;
-  int hyperQueue = 0;
-  int healthQueue = 0;
-  int energyQueue = 0;
-  int hungerQueue = 0;
-  int toiletQueue = 0;
-  int socialQueue = 0;
-  int funQueue = 0;
-  int hygieneQueue = 0;
-  int anxietyQueue = 0;
+
   int curFrame = 0;
   int curBehav = 0;
 
@@ -117,35 +108,34 @@ signals:
 
 private slots:
   void handleBehaviourChange(QAction* a);
-  void statProgress();
-  void statQueueProgress();
+  void updateDebugInfo();
   void enableInteract();
   void checkInteractions();
-  void statChange(const QString &type, const int &amount);
   void behavFromFile(const QString &file);
   void setCurFrame(const int &frame);
 
 private:
+  void runScript(int &stop, const bool &init = false);
+  void sanityCheck();
+  void setWeather(QString &behav);
+
   Settings &settings;
 
   bool falling = false;
   bool grabbed = false;
   bool interact = true;
-  void setWeather(QString &behav);
-  void runScript(int &stop, const bool &init = false);
-  int staticBehaviours;
-  int independence;
+  int staticBehaviours = 0;
+  int interactions = 0;
+  int annoyance = 0;
 
   DebugAction *debugAction = nullptr;
   QMenu *behavioursMenu = nullptr;
+
   QTimer behavTimer;
   QBasicTimer animTimer;
-  QTimer statTimer;
-  QTimer statQueueTimer;
   QTimer interactionsTimer;
   QTimer enableInteractTimer;
-  int interactions = 0;
-  int annoyance = 0;
+
   QPoint mLastMousePosition;
   bool mouseHovering = false;
 
@@ -167,7 +157,6 @@ private:
   double vVel = 0.0;
   double hVel = 0.0;
   int groundY = 0;
-  void sanityCheck();
 
   Bubble *bubble = nullptr;
 

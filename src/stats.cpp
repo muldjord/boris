@@ -20,32 +20,46 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stdio.h>
 #include <math.h>
-#include <QUuid>
+
 #include <QPainter>
+#include <QRandomGenerator>
+#include <QTime>
+#include <QUuid>
 
 Stats::Stats(Settings &settings,
-             const int &hyper,
-             const int &health,
-             const int &energy,
-             const int &hunger,
-             const int &toilet,
-             const int &social,
-             const int &fun,
-             const int &hygiene,
-             const int &anxiety) :
+	     const int &energy,
+	     const int &social,
+	     const int &fun,
+	     const int &hunger,
+	     const int &toilet,
+	     const int &anxiety,
+	     const int &health,
+	     const int &hygiene,
+	     const int &hyper,
+	     const int &independence) :
   settings(settings),
-  hyper(hyper),
-  health(health),
   energy(energy),
-  hunger(hunger),
-  toilet(toilet),
   social(social),
   fun(fun),
+  hunger(hunger),
+  toilet(toilet),
+  anxiety(anxiety),
+  health(health),
   hygiene(hygiene),
-  anxiety(anxiety)
+  hyper(hyper),
+  independence(independence)
 {
   flashIcon = settings.getPixmap("flash_icon.png");
   statsPixmap = settings.getPixmap("stats.png");
+
+  statProgressTimer.setInterval(30000);
+  connect(&statProgressTimer, &QTimer::timeout, this, &Stats::statProgress);
+  statProgressTimer.start();
+
+  statQueueTimer.setInterval(50);
+  statQueueTimer.setSingleShot(true);
+  connect(&statQueueTimer, &QTimer::timeout, this, &Stats::statQueueProgress);
+  statQueueTimer.start();
 }
 
 Stats::~Stats()
@@ -115,103 +129,122 @@ int Stats::getAnxiety()
   return anxiety;
 }
 
-void Stats::deltaEnergy(int value)
+int Stats::getIndependence()
 {
-  if(energy + value > 100) {
-    energy = 100;
-  } else if(energy + value < 0) {
-    energy = 0;
-  } else {
-    energy += value;
-  }
+  return independence;
 }
 
-void Stats::deltaSocial(int value)
+void Stats::setStat(const StatType &stat, const int &value)
 {
-  if(social + value > 100) {
-    social = 100;
-  } else if(social + value < 0) {
-    social = 0;
-  } else {
-    social += value;
-  }
+  switch(stat) {
+  case ENERGY:
+    energy = std::clamp(value, 0, 100);
+    break;
+  case SOCIAL:
+    social = std::clamp(value, 0, 100);
+    break;
+  case FUN:
+    fun = std::clamp(value, 0, 100);
+    break;
+  case HUNGER:
+    hunger = std::clamp(value, 0, 100);
+    break;
+  case TOILET:
+    toilet = std::clamp(value, 0, 100);
+    break;
+  case ANXIETY:
+    anxiety = std::clamp(value, 0, 100);
+    break;
+  case HEALTH:
+    health = std::clamp(value, 0, 100);
+    break;
+  case HYGIENE:
+    hygiene = std::clamp(value, 0, 100);
+    break;
+  case HYPER:
+    hyper = std::clamp(value, 0, 100);
+    break;
+  default:
+    qWarning("deltaStat: Unknown stat type: %d\n", stat);
+    break;
+  };
 }
 
-void Stats::deltaFun(int value)
+void Stats::deltaStat(const StatType &stat, const int &value)
 {
-  if(fun + value > 100) {
-    fun = 100;
-  } else if(fun + value < 0) {
-    fun = 0;
-  } else {
-    fun += value;
-  }
+  switch(stat) {
+  case ENERGY:
+    energy = std::clamp(energy + value, 0, 100);
+    break;
+  case SOCIAL:
+    social = std::clamp(social + value, 0, 100);
+    break;
+  case FUN:
+    fun = std::clamp(fun + value, 0, 100);
+    break;
+  case HUNGER:
+    hunger = std::clamp(hunger + value, 0, 100);
+    break;
+  case TOILET:
+    toilet = std::clamp(toilet + value, 0, 100);
+    break;
+  case ANXIETY:
+    anxiety = std::clamp(anxiety + value, 0, 100);
+    break;
+  case HEALTH:
+    health = std::clamp(health + value, 0, 100);
+    break;
+  case HYGIENE:
+    hygiene = std::clamp(hygiene + value, 0, 100);
+    break;
+  case HYPER:
+    hyper = std::clamp(hyper + value, 0, 100);
+    break;
+  default:
+    qWarning("deltaStat: Unknown stat type: %d\n", stat);
+    break;
+  };
 }
 
-void Stats::deltaHunger(int value)
+void Stats::queueStatChange(const StatType &stat, const int &value)
 {
-  if(hunger + value > 100) {
-    hunger = 100;
-  } else if(hunger + value < 0) {
-    hunger = 0;
-  } else {
-    hunger += value;
-  }
+  switch(stat) {
+  case ENERGY:
+    energyQueue = std::clamp(energyQueue + value, -100, 100);
+    break;
+  case SOCIAL:
+    socialQueue = std::clamp(socialQueue + value, -100, 100);
+    break;
+  case FUN:
+    funQueue = std::clamp(funQueue + value, -100, 100);
+    break;
+  case HUNGER:
+    hungerQueue = std::clamp(hungerQueue + value, -100, 100);
+    break;
+  case TOILET:
+    toiletQueue = std::clamp(toiletQueue + value, -100, 100);
+    break;
+  case ANXIETY:
+    anxietyQueue = std::clamp(anxietyQueue + value, -100, 100);
+    break;
+  case HEALTH:
+    healthQueue = std::clamp(healthQueue + value, -100, 100);
+    break;
+  case HYGIENE:
+    hygieneQueue = std::clamp(hygieneQueue + value, -100, 100);
+    break;
+  case HYPER:
+    hyperQueue = std::clamp(hyperQueue + value, -100, 100);
+    break;
+  default:
+    qWarning("queueStatChange: Unknown stat type: %d\n", stat);
+    break;
+  };
 }
 
-void Stats::deltaToilet(int value)
+void Stats::setIndependence(const int &value)
 {
-  if(toilet + value > 100) {
-    toilet = 100;
-  } else if(toilet + value < 0) {
-    toilet = 0;
-  } else {
-    toilet += value;
-  }
-}
-
-void Stats::deltaHyper(int value)
-{
-  if(hyper + value > 100) {
-    hyper = 100;
-  } else if(hyper + value < 0) {
-    hyper = 0;
-  } else {
-    hyper += value;
-  }
-}
-
-void Stats::deltaHealth(int value)
-{
-  if(health + value > 100) {
-    health = 100;
-  } else if(health + value < 0) {
-    health = 0;
-  } else {
-    health += value;
-  }
-}
-
-void Stats::deltaHygiene(int value)
-{
-  if(hygiene + value > 100) {
-    hygiene = 100;
-  } else if(hygiene + value < 0) {
-    hygiene = 0;
-  } else {
-    hygiene += value;
-  }
-}
-
-void Stats::deltaAnxiety(int value)
-{
-  if(anxiety + value > 100) {
-    anxiety = 100;
-  } else if(anxiety + value < 0) {
-    anxiety = 0;
-  } else {
-    anxiety += value;
-  }
+  independence = value;
 }
 
 void Stats::updateStats()
@@ -241,7 +274,9 @@ void Stats::updateStats()
   painter.drawRect(3, 71, 0.6 * toilet, 1);
 
   if(flashes > 0) {
-    showFlashIcon = !showFlashIcon;
+    if(flashes % 5 == 0) { // Only blink every 5 updates
+      showFlashIcon = !showFlashIcon;
+    }
     flashes--;
     if(showFlashIcon) {
       painter.drawPixmap(flashIconPos, flashIcon);
@@ -270,9 +305,130 @@ void Stats::flashStat(QString stat)
   } else if(stat == "toilet") {
     flashIconPos = QPoint(57, 64);
   }
-  flashes = 15;
+  flashes = 150;
   showFlashIcon = true;
   if(settings.stats == STATS_CRITICAL) {
     show();
   }
+}
+
+void Stats::statProgress()
+{
+  // If it's late decrease energy to make Boris tired
+  // Other than that energy decreases are mainly controlled by walking behaviours
+  if(QTime::currentTime().hour() >= 21 && QTime::currentTime().hour() < 23) {
+    queueStatChange(StatType::ENERGY, -1);
+  } else if(QTime::currentTime().hour() >= 23) {
+    queueStatChange(StatType::ENERGY, -3);
+  } else if(QTime::currentTime().hour() >= 0 && QTime::currentTime().hour() < 3) {
+    queueStatChange(StatType::ENERGY, -4);
+  } else if(QTime::currentTime().hour() >= 3 && QTime::currentTime().hour() < 6) {
+    queueStatChange(StatType::ENERGY, -5);
+  } else if(QTime::currentTime().hour() >= 6 && QTime::currentTime().hour() < 8) {
+    queueStatChange(StatType::ENERGY, -1);
+  }
+  queueStatChange(StatType::SOCIAL, -QRandomGenerator::global()->bounded(2));
+  queueStatChange(StatType::FUN, -QRandomGenerator::global()->bounded(3));
+  queueStatChange(StatType::HUNGER, QRandomGenerator::global()->bounded(2)); // This one is opposite in the stats overview
+  queueStatChange(StatType::ANXIETY, -QRandomGenerator::global()->bounded(8) + 8);
+  queueStatChange(StatType::HYGIENE, -QRandomGenerator::global()->bounded(1));
+  queueStatChange(StatType::HYPER, -QRandomGenerator::global()->bounded(7));
+  // Nothing needed for 'health' and 'toilet'
+}
+
+void Stats::statQueueProgress()
+{
+  energyQueue = std::clamp(energyQueue, -100, 100);
+  socialQueue = std::clamp(socialQueue, -100, 100);
+  funQueue = std::clamp(funQueue, -100, 100);
+  hungerQueue = std::clamp(hungerQueue, -100, 100);
+  toiletQueue = std::clamp(toiletQueue, -100, 100);
+
+  anxietyQueue = std::clamp(anxietyQueue, -100, 100);
+  healthQueue = std::clamp(healthQueue, -100, 100);
+  hygieneQueue = std::clamp(hygieneQueue, -100, 100);
+  hyperQueue = std::clamp(hyperQueue, -100, 100);
+
+  if(energyQueue > 0) {
+    energyQueue--;
+    deltaStat(StatType::ENERGY, 1);
+  }
+  if(energyQueue < 0) {
+    energyQueue++;
+    deltaStat(StatType::ENERGY, -1);
+  }
+  if(socialQueue > 0) {
+    socialQueue--;
+    deltaStat(StatType::SOCIAL, 1);
+  }
+  if(socialQueue < 0) {
+    socialQueue += 2;
+    deltaStat(StatType::SOCIAL, -2);
+  }
+  if(funQueue > 0) {
+    funQueue--;
+    deltaStat(StatType::FUN, 1);
+  }
+  if(funQueue < 0) {
+    funQueue++;
+    deltaStat(StatType::FUN, -1);
+  }
+  if(hungerQueue > 0) {
+    hungerQueue--;
+    deltaStat(StatType::HUNGER, 1);
+  }
+  if(hungerQueue < 0) {
+    hungerQueue++;
+    deltaStat(StatType::HUNGER, -1);
+  }
+  if(toiletQueue > 0) {
+    toiletQueue--;
+    deltaStat(StatType::TOILET, 1);
+  }
+  if(toiletQueue < 0) {
+    toiletQueue += 2;
+    deltaStat(StatType::TOILET, -2);
+  }
+  if(anxietyQueue > 0) {
+    anxietyQueue -= 2;
+    deltaStat(StatType::ANXIETY, 2);
+  }
+  if(anxietyQueue < 0) {
+    anxietyQueue++;
+    deltaStat(StatType::ANXIETY, -1);
+  }
+  if(healthQueue > 0) {
+    healthQueue -= 2;
+    deltaStat(StatType::HEALTH, 2);
+  }
+  if(healthQueue < 0) {
+    healthQueue++;
+    deltaStat(StatType::HEALTH, -1);
+  }
+  if(hygieneQueue > 0) {
+    hygieneQueue -= 2;
+    deltaStat(StatType::HYGIENE, 2);
+  }
+  if(hygieneQueue < 0) {
+    hygieneQueue++;
+    deltaStat(StatType::HYGIENE, -1);
+  }
+  if(hyperQueue > 0) {
+    hyperQueue--;
+    deltaStat(StatType::HYPER, 1);
+  }
+  if(hyperQueue < 0) {
+    hyperQueue++;
+    deltaStat(StatType::HYPER, -1);
+  }
+
+  updateStats();
+
+  statQueueTimer.start();
+}
+
+void Stats::stopTimers()
+{
+  statProgressTimer.stop();
+  statQueueTimer.stop();
 }

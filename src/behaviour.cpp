@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "behaviour.h"
 
-Reaction::Reaction(const Reaction &reaction) : QObject()
+Reaction::Reaction(const Reaction &reaction)
 {
   this->borisBehaviour = reaction.borisBehaviour;
   this->itemLabel = reaction.itemLabel;
@@ -65,7 +65,7 @@ int Reaction::getYCoord() const
   return yCoord;
 }
 
-Script::Script(const Script &script) : QObject()
+Script::Script(const Script &script)
 {
   this->commands = script.commands;
   this->blocks = script.blocks;
@@ -81,7 +81,7 @@ Script::Script()
 {
 }
 
-Frame::Frame(const Frame &frame): QObject()
+Frame::Frame(const Frame &frame)
 {
   this->sprite = frame.sprite;
   this->time = frame.time;

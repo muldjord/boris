@@ -17,21 +17,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "boris.h"
-#include "soundmixer.h"
-#include "scripthandler.h"
 #include "mainwindow.h"
+#include "scripthandler.h"
+#include "soundmixer.h"
 
-#include <stdio.h>
 #include <math.h>
-#include <QTimer>
-#include <QDir>
+#include <stdio.h>
+
 #include <QApplication>
 #include <QBitmap>
-#include <QScreen>
-#include <QTime>
+#include <QDir>
 #include <QRandomGenerator>
+#include <QScreen>
+#include <QTimer>
 
-constexpr int STATTIMER = 200;
 constexpr int ANNOYMAX = 42;
 
 extern MainWindow *mainWindow;
@@ -53,26 +52,20 @@ Boris::Boris(Settings &settings)
   createBehavioursMenu();
 
   // Set initial stats with some randomization
-  int hyper = 0;
-  int health = 100;
   int energy = 40 + QRandomGenerator::global()->bounded(25);
-  int hunger = 40 + QRandomGenerator::global()->bounded(25);
-  int toilet = 40 + QRandomGenerator::global()->bounded(25);
-  int hygiene = 100;
-  int anxiety = 0;
   int social = 40 + QRandomGenerator::global()->bounded(25);
   int fun = 40 + QRandomGenerator::global()->bounded(25);
-  hyperQueue = 0;
-  healthQueue = 0;
-  energyQueue = 0;
-  hungerQueue = 0;
-  toiletQueue = 0;
-  socialQueue = 0;
-  funQueue = 0;
-  hygieneQueue = 0;
-  anxietyQueue = 0;
+  int hunger = 40 + QRandomGenerator::global()->bounded(25);
+  int toilet = 40 + QRandomGenerator::global()->bounded(25);
 
-  stats = new Stats(settings, hyper, health, energy, hunger, toilet, social, fun, hygiene, anxiety);
+  int anxiety = 0;
+  int health = 100;
+  int hygiene = 100;
+  int hyper = 0;
+
+  int independence = settings.independence;
+
+  stats = new Stats(settings, energy, social, fun, hunger, toilet, anxiety, health, hygiene, hyper, independence);
   stats->setParentItem(this);
   stats->setPos((getWidth() / 2) - 40, -100);
 
@@ -97,15 +90,6 @@ Boris::Boris(Settings &settings)
 
   behavTimer.setSingleShot(true);
   connect(&behavTimer, &QTimer::timeout, this, &Boris::nextBehaviour);
-
-  statTimer.setInterval(30000);
-  connect(&statTimer, &QTimer::timeout, this, &Boris::statProgress);
-  statTimer.start();
-
-  statQueueTimer.setInterval(STATTIMER);
-  statQueueTimer.setSingleShot(true);
-  connect(&statQueueTimer, &QTimer::timeout, this, &Boris::statQueueProgress);
-  statQueueTimer.start();
 
   interactionsTimer.setInterval(1000);
   interactionsTimer.setSingleShot(true);
@@ -312,15 +296,15 @@ void Boris::changeBehaviour(QString behav, int time)
   }
 
   // Applying behaviour stats to Boris
-  hyperQueue += settings.behaviours.at(curBehav).hyper;
-  healthQueue += settings.behaviours.at(curBehav).health;
-  energyQueue += settings.behaviours.at(curBehav).energy;
-  hungerQueue += settings.behaviours.at(curBehav).hunger;
-  toiletQueue += settings.behaviours.at(curBehav).toilet;
-  socialQueue += settings.behaviours.at(curBehav).social;
-  funQueue += settings.behaviours.at(curBehav).fun;
-  hygieneQueue += settings.behaviours.at(curBehav).hygiene;
-  anxietyQueue += settings.behaviours.at(curBehav).anxiety;
+  stats->queueStatChange(StatType::HYPER, settings.behaviours.at(curBehav).hyper);
+  stats->queueStatChange(StatType::HEALTH,  settings.behaviours.at(curBehav).health);
+  stats->queueStatChange(StatType::ENERGY,  settings.behaviours.at(curBehav).energy);
+  stats->queueStatChange(StatType::HUNGER, settings.behaviours.at(curBehav).hunger);
+  stats->queueStatChange(StatType::TOILET, settings.behaviours.at(curBehav).toilet);
+  stats->queueStatChange(StatType::SOCIAL, settings.behaviours.at(curBehav).social);
+  stats->queueStatChange(StatType::FUN, settings.behaviours.at(curBehav).fun);
+  stats->queueStatChange(StatType::HYGIENE, settings.behaviours.at(curBehav).hygiene);
+  stats->queueStatChange(StatType::ANXIETY, settings.behaviours.at(curBehav).anxiety);
 
   if(settings.behaviours.at(curBehav).allowFlip && QRandomGenerator::global()->bounded(2)) {
     flipFrames = true;
@@ -395,7 +379,7 @@ void Boris::runScript(int &stop, const bool &init)
   ScriptHandler scriptHandler(&scriptImage, &drawing, settings, bubble, settings.behaviours.at(curBehav).labels, settings.behaviours.at(curBehav).defines, scriptVars, pos());
   connect(&scriptHandler, &ScriptHandler::behavFromFile, this, &Boris::behavFromFile);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Boris::setCurFrame);
-  connect(&scriptHandler, &ScriptHandler::statChange, this, &Boris::statChange);
+  connect(&scriptHandler, &ScriptHandler::queueStatChange, stats, &Stats::queueStatChange);
   if(init) {
     scriptHandler.runScript(stop, settings.behaviours.at(curBehav).defines["init"]);
   } else {
@@ -632,7 +616,7 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped)
   // if Boris is outside vertical borders
   if(pos().y() > maxY || pos().y() < minY) {
     if(falling) {
-      healthQueue -= 5; // It hurts to hit the borders
+      stats->queueStatChange(StatType::HEALTH, -5); // It hurts to hit the borders
       // Physics velocity when hitting borders
       hVel *= 0.2;
       vVel = 0.0;
@@ -677,8 +661,8 @@ void Boris::mousePressEvent(QGraphicsSceneMouseEvent* event)
   }
   if(event->button() == Qt::LeftButton) {
     if(settings.behaviours.at(curBehav).file == "_sleep" && stats->getEnergy() <= 95) {
-      energyQueue -= 25;
-      funQueue -= 20;
+      stats->queueStatChange(StatType::ENERGY, -25);
+      stats->queueStatChange(StatType::FUN, -20);
     }
     setCursor(settings.getCursor("grab.png"));
     grabbed = true;
@@ -723,6 +707,10 @@ void Boris::wheelEvent(QGraphicsSceneWheelEvent *)
 
 void Boris::handlePhysics()
 {
+  // Update opacity of dirt and bruises
+  dirtOpacity = 0.50 - ((qreal)stats->getHygiene()) * 0.01;
+  bruisesOpacity = 0.75 - ((qreal)stats->getHealth()) * 0.01;
+
   // Set scene distance so Boris goes behind other Borises that are in front of him
   setZValue(pos().y() - settings.desktopHeight);
 
@@ -791,30 +779,6 @@ void Boris::earthquake()
   }
 }
 
-void Boris::statProgress()
-{
-  // If it's late decrease energy to make Boris tired
-  // Other than that energy decreases are mainly controlled by walking behaviours
-  if(QTime::currentTime().hour() >= 21 && QTime::currentTime().hour() < 23) {
-    energyQueue -= 1;
-  } else if(QTime::currentTime().hour() >= 23) {
-    energyQueue -= 3;
-  } else if(QTime::currentTime().hour() >= 0 && QTime::currentTime().hour() < 3) {
-    energyQueue -= 4;
-  } else if(QTime::currentTime().hour() >= 3 && QTime::currentTime().hour() < 6) {
-    energyQueue -= 5;
-  } else if(QTime::currentTime().hour() >= 6 && QTime::currentTime().hour() < 8) {
-    energyQueue -= 1;
-  }
-  hyperQueue -= QRandomGenerator::global()->bounded(7);
-  hungerQueue += QRandomGenerator::global()->bounded(2); // This one is opposite in the stats overview
-  socialQueue -= QRandomGenerator::global()->bounded(2);
-  hygieneQueue -= QRandomGenerator::global()->bounded(1);
-  anxietyQueue -= QRandomGenerator::global()->bounded(8) + 8;
-  funQueue -= QRandomGenerator::global()->bounded(3);
-  // Nothing needed for 'health' and 'toilet'
-}
-
 void Boris::sanityCheck()
 {
   int minX = - getWidth();
@@ -853,127 +817,32 @@ void Boris::killBoris()
 {
   if(settings.isInvincible) {
     qInfo("Boris is in a bad shape, but is invincible! Phew...\n");
-    stats->deltaHealth(100);
+    stats->setStat(StatType::HEALTH, 100);
   } else {
     qInfo("Boris has died... RIP!\n");
     isAlive = false;
-    statQueueTimer.stop();
-    statTimer.stop();
+    stats->stopTimers();
     dirtOpacity = 0.0;
     bruisesOpacity = 0.0;
     changeBehaviour("_drop_dead");
   }
 }
 
-void Boris::statQueueProgress()
+void Boris::updateDebugInfo()
 {
-  // Adjust timer interval to match how hyper Boris is
-  int interval = STATTIMER;
-  statQueueTimer.setInterval(interval - (interval / 100.0 * stats->getHyper()));
-  if(statQueueTimer.interval() < 5)
-    statQueueTimer.setInterval(5);
-
-  hyperQueue = std::clamp(hyperQueue, -100, 100);
-  healthQueue = std::clamp(healthQueue, -100, 100);
-  energyQueue = std::clamp(energyQueue, -100, 100);
-  hungerQueue = std::clamp(hungerQueue, -100, 100);
-  toiletQueue = std::clamp(toiletQueue, -100, 100);
-  socialQueue = std::clamp(socialQueue, -100, 100);
-  funQueue = std::clamp(funQueue, -100, 100);
-  hygieneQueue = std::clamp(hygieneQueue, -100, 100);
-  anxietyQueue = std::clamp(anxietyQueue, -100, 100);
-  hyperQueue = std::clamp(hyperQueue, -100, 100);
-
-  if(hyperQueue > 0) {
-    hyperQueue--;
-    stats->deltaHyper(1);
-  }
-  if(hyperQueue < 0) {
-    hyperQueue++;
-    stats->deltaHyper(-1);
-  }
-  if(healthQueue > 0) {
-    healthQueue -= 2;
-    stats->deltaHealth(2);
-  }
-  if(healthQueue < 0) {
-    healthQueue++;
-    stats->deltaHealth(-1);
-  }
-  if(energyQueue > 0) {
-    energyQueue--;
-    stats->deltaEnergy(1);
-  }
-  if(energyQueue < 0) {
-    energyQueue++;
-    stats->deltaEnergy(-1);
-  }
-  if(hungerQueue > 0) {
-    hungerQueue--;
-    stats->deltaHunger(1);
-  }
-  if(hungerQueue < 0) {
-    hungerQueue++;
-    stats->deltaHunger(-1);
-  }
-  if(toiletQueue > 0) {
-    toiletQueue--;
-    stats->deltaToilet(1);
-  }
-  if(toiletQueue < 0) {
-    toiletQueue += 2;
-    stats->deltaToilet(-2);
-  }
-  if(socialQueue > 0) {
-    socialQueue--;
-    stats->deltaSocial(1);
-  }
-  if(socialQueue < 0) {
-    socialQueue += 2;
-    stats->deltaSocial(-2);
-  }
-  if(funQueue > 0) {
-    funQueue--;
-    stats->deltaFun(1);
-  }
-  if(funQueue < 0) {
-    funQueue++;
-    stats->deltaFun(-1);
-  }
-  if(hygieneQueue > 0) {
-    hygieneQueue -= 2;
-    stats->deltaHygiene(2);
-  }
-  if(hygieneQueue < 0) {
-    hygieneQueue++;
-    stats->deltaHygiene(-1);
-  }
-  if(anxietyQueue > 0) {
-    anxietyQueue -= 2;
-    stats->deltaAnxiety(2);
-  }
-  if(anxietyQueue < 0) {
-    anxietyQueue++;
-    stats->deltaAnxiety(-1);
-  }
-
-  dirtOpacity = 0.50 - ((qreal)stats->getHygiene()) * 0.01;
-  bruisesOpacity = 0.75 - ((qreal)stats->getHealth()) * 0.01;
   if(debugAction != nullptr) {
-    debugAction->setText("Stats:\n"
-                         "Anxiety: " + QString::number(stats->getAnxiety()) + "\n" +
+    debugAction->setText("STATS:\n"
                          "Energy: " + QString::number(stats->getEnergy()) + "\n" +
+                         "Social: " + QString::number(stats->getSocial()) + "\n" +
                          "Fun: " + QString::number(stats->getFun()) + "\n" +
-                         "Health: " + QString::number(stats->getHealth()) + "\n" +
                          "Hunger: " + QString::number(stats->getHunger()) + "\n" +
+                         "Toilet: " + QString::number(stats->getToilet()) + "\n" +
+                         "Anxiety: " + QString::number(stats->getAnxiety()) + "\n" +
+                         "Health: " + QString::number(stats->getHealth()) + "\n" +
                          "Hygiene: " + QString::number(stats->getHygiene()) + "\n" +
                          "Hyper: " + QString::number(stats->getHyper()) + "\n" +
-                         "Social: " + QString::number(stats->getSocial()) + "\n" +
-                         "Toilet: " + QString::number(stats->getToilet()) + "\n");
+                         "Independence: " + QString::number(stats->getIndependence()) + "\n");
   }
-  stats->updateStats();
-
-  statQueueTimer.start();
 }
 
 int Boris::getWidth() const
@@ -1049,41 +918,41 @@ void Boris::processAi(QString &behav)
     QList<QString> potentials;
     if(stats->getFun() <= 50) {
       // Clamping here to avoid value being 0 which throws an assert
-      if(QRandomGenerator::global()->bounded(std::clamp(stats->getFun(), 1, 100)) > independence) {
+      if(QRandomGenerator::global()->bounded(std::clamp(stats->getFun(), 1, 100)) > stats->getIndependence()) {
         potentials.append("_fun");
       } else {
         potentials.append(getFileFromCategory("Fun"));
       }
     }
     if(stats->getEnergy() <= 50) {
-      if(QRandomGenerator::global()->bounded(100) > independence) {
+      if(QRandomGenerator::global()->bounded(100) > stats->getIndependence()) {
         potentials.append("_energy");
       } else {
         potentials.append(getFileFromCategory("Energy"));
       }
     }
     if(stats->getSocial() <= 50) {
-      if(QRandomGenerator::global()->bounded(100) > independence) {
+      if(QRandomGenerator::global()->bounded(100) > stats->getIndependence()) {
         potentials.append("_social");
       } else {
         potentials.append(getFileFromCategory("Social"));
       }
     }
     if(stats->getHygiene() <= 50) {
-      if(QRandomGenerator::global()->bounded(100) > independence) {
+      if(QRandomGenerator::global()->bounded(100) > stats->getIndependence()) {
         potentials.append("_hygiene");
       } else {
         potentials.append(getFileFromCategory("Hygiene"));
       }
     }
     if(stats->getHealth() <= 50) {
-      if(QRandomGenerator::global()->bounded(150 - stats->getHealth()) < independence) {
+      if(QRandomGenerator::global()->bounded(150 - stats->getHealth()) < stats->getIndependence()) {
         potentials.append("_health");
       }
     }
     // This one is 'inverted' compared to the others. High 'hunger' means Boris is starving.
     if(stats->getHunger() >= 50) {
-      if(QRandomGenerator::global()->bounded(100) > independence) {
+      if(QRandomGenerator::global()->bounded(100) > stats->getIndependence()) {
         potentials.append("_hunger");
       } else {
         potentials.append(getFileFromCategory("Hunger"));
@@ -1091,7 +960,7 @@ void Boris::processAi(QString &behav)
     }
     // This one is 'inverted' compared to the others. High 'toilet' means Boris has to go to the bathroom.
     if(stats->getToilet() >= 50) {
-      if(QRandomGenerator::global()->bounded(100) > independence) {
+      if(QRandomGenerator::global()->bounded(100) > stats->getIndependence()) {
         potentials.append("_toilet");
       } else {
         potentials.append(getFileFromCategory("Toilet"));
@@ -1125,8 +994,8 @@ void Boris::reconfBoris()
   // Reset Boris pointer
   borisFriend = nullptr;
 
-  // Set new independence value
-  independence = settings.independence;
+  // Set new independence level
+  stats->setIndependence(settings.independence);
 
   // Show or hide stats
   if(settings.stats == STATS_ALWAYS) {
@@ -1260,29 +1129,6 @@ void Boris::itemInteract(Item * item)
   }
   enableInteractTimer.setInterval(5000);
   enableInteractTimer.start();
-}
-
-void Boris::statChange(const QString &type, const int &amount)
-{
-  if(type == "hyper") {
-    hyperQueue += amount;
-  } else if(type == "health") {
-    healthQueue += amount;
-  } else if(type == "energy") {
-    energyQueue += amount;
-  } else if(type == "hunger") {
-    hungerQueue += amount;
-  } else if(type == "toilet") {
-    toiletQueue += amount;
-  } else if(type == "social") {
-    socialQueue += amount;
-  } else if(type == "fun") {
-    funQueue += amount;
-  } else if(type == "hygiene") {
-    hygieneQueue += amount;
-  } else if(type == "anxiety") {
-    anxietyQueue += amount;
-  }
 }
 
 // Used by scripthandler to immediately switch to behav using file

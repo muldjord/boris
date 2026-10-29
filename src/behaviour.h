@@ -18,13 +18,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "SFML/Audio.hpp"
-
+#include <QMap>
 #include <QObject>
 #include <QPixmap>
-#include <QMap>
 
-class Reaction: public QObject
+#include <SFML/Audio/SoundBuffer.hpp>
+
+class Reaction
 {
 public:
   Reaction(const Reaction &reaction);
@@ -46,7 +46,7 @@ private:
 };
 
 // All single commands stored in the list with all children blocks replaced by '##1##', '##2##'
-class Script: public QObject
+class Script
 {
 public:
   Script(const Script &script);
@@ -56,10 +56,8 @@ public:
   QMap<QString, Script> blocks; // Contains map of '##1##', '##2##'... which contains a script with the commands of that block inside
 };
 
-class Frame: public QObject
+class Frame
 {
-  Q_OBJECT;
-
 public:
   Frame(const Frame &frame);
   void operator=(const Frame &frame);
