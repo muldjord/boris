@@ -1,35 +1,25 @@
-/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
-/***************************************************************************
- *            settings.h
- *
- *  Wed Jun 14 12:00:00 CEST 2017
- *  Copyright 2017 Lars Muldjord
- *  muldjordlars@gmail.com
- ****************************************************************************/
 /*
- *  This file is part of Boris.
- *
- *  Boris is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  Boris is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with Boris; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
- */
+Boris
+Copyright (C) 2026 Lars Muldjord
 
-#ifndef SETTINGS_H
-#define SETTINGS_H
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#pragma once
 
 #include "item.h"
 #include "behaviour.h"
-#include "sprite.h"
 #include "boris.h"
 
 #include <QObject>
@@ -128,7 +118,7 @@ public:
 
   QList<Behaviour> weathers;
 
-  QMap<QString, Sprite> sprites;
+  QMap<QString, QList<QImage> > sprites;
 
   QMap<QString, QImage> pixelFont;
 
@@ -138,5 +128,3 @@ public:
   QPixmap& getPixmap(const QString &name);
   QCursor getCursor(const QString &name);
 };
-
-#endif // SETTINGS_H
