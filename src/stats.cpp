@@ -26,6 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QTime>
 #include <QUuid>
 
+constexpr int STATTIMER = 200;
+
 Stats::Stats(Settings &settings,
 	     const int &energy,
 	     const int &social,
@@ -424,6 +426,10 @@ void Stats::statQueueProgress()
 
   updateStats();
 
+  int interval = STATTIMER;
+  statQueueTimer.setInterval(interval - (interval / 100.0 * hyper));
+  if(statQueueTimer.interval() < 5)
+    statQueueTimer.setInterval(5);
   statQueueTimer.start();
 }
 
