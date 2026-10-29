@@ -473,16 +473,16 @@ void Item::handlePhysics()
 
 void Item::interact(Boris *boris)
 {
-  scriptVars["energy"] = boris->getEnergy();
-  scriptVars["health"] = boris->getHealth();
-  scriptVars["hyper"] = boris->getHyper();
-  scriptVars["hunger"] = boris->getHunger();
-  scriptVars["toilet"] = boris->getToilet();
-  scriptVars["social"] = boris->getSocial();
-  scriptVars["fun"] = boris->getFun();
-  scriptVars["hygiene"] = boris->getHygiene();
+  scriptVars["energy"] = boris->stats->getEnergy();
+  scriptVars["health"] = boris->stats->getHealth();
+  scriptVars["hyper"] = boris->stats->getHyper();
+  scriptVars["hunger"] = boris->stats->getHunger();
+  scriptVars["toilet"] = boris->stats->getToilet();
+  scriptVars["social"] = boris->stats->getSocial();
+  scriptVars["fun"] = boris->stats->getFun();
+  scriptVars["hygiene"] = boris->stats->getHygiene();
 
-  borisHyper = boris->getHyper();
+  borisHyper = boris->stats->getHyper();
 
   setPos(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord(),
          boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord());

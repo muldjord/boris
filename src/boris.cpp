@@ -855,51 +855,6 @@ int Boris::getHeight() const
   return boundingRect().height();
 }
 
-int Boris::getEnergy() const
-{
-  return stats->getEnergy();
-}
-
-int Boris::getHealth() const
-{
-  return stats->getHealth();
-}
-
-int Boris::getHyper() const
-{
-  return stats->getHyper();
-}
-
-int Boris::getHunger() const
-{
-  return stats->getHunger();
-}
-
-int Boris::getToilet() const
-{
-  return stats->getToilet();
-}
-
-int Boris::getSocial() const
-{
-  return stats->getSocial();
-}
-
-int Boris::getFun() const
-{
-  return stats->getFun();
-}
-
-int Boris::getHygiene() const
-{
-  return stats->getHygiene();
-}
-
-int Boris::getAnxiety() const
-{
-  return stats->getAnxiety();
-}
-
 void Boris::processAi(QString &behav)
 {
   // You might wonder why I check behav == "" in all the following if sentences.
@@ -1107,7 +1062,7 @@ void Boris::borisInteract(Boris *otherBoris)
 
   if(settings.behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
     changeBehaviour("_sad");
-  } else if(borisFriend->getHygiene() <= 22) {
+  } else if(borisFriend->stats->getHygiene() <= 22) {
     changeBehaviour("_hygiene");
   } else {
     changeBehaviour("_wave");

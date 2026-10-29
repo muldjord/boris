@@ -62,17 +62,9 @@ public:
   explicit Boris(Settings &settings);
   ~Boris();
   Boris *borisFriend;
+  Stats *stats = nullptr;
   int getWidth() const;
   int getHeight() const;
-  int getEnergy() const;
-  int getHealth() const;
-  int getHyper() const;
-  int getHunger() const;
-  int getToilet() const;
-  int getSocial() const;
-  int getFun() const;
-  int getHygiene() const;
-  int getAnxiety() const;
   void moveBoris(int dX, int dY, const bool &flipped = false);
   int getCurBehav();
   void changeBehaviour(QString behav = "", int time = -1);
@@ -160,7 +152,6 @@ private:
 
   Bubble *bubble = nullptr;
 
-  Stats *stats = nullptr;
   bool showStats = false;
 
   Weather *weather = nullptr;
