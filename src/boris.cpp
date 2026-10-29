@@ -1050,6 +1050,11 @@ void Boris::checkInteractions()
     annoyance = 0;
   }
 
+  // Update debug info in idkfa menu here as well if it's enabled
+  if(settings.idkfa) {
+    updateDebugInfo();
+  }
+
   interactionsTimer.start();
 }
 
