@@ -91,6 +91,7 @@ public slots:
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
   QRectF boundingRect() const override;
+  void timerEvent(QTimerEvent *event);
 
 private slots:
   void statProgress();
@@ -101,7 +102,7 @@ private:
   Settings &settings;
 
   QTimer statProgressTimer;
-  QTimer statQueueTimer;
+  QBasicTimer statQueueTimer;
 
   QColor energyColor = QColor(0, 0, 0);
   QColor socialColor = QColor(0, 0, 0);

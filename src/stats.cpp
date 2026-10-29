@@ -58,10 +58,7 @@ Stats::Stats(Settings &settings,
   connect(&statProgressTimer, &QTimer::timeout, this, &Stats::statProgress);
   statProgressTimer.start();
 
-  statQueueTimer.setInterval(50);
-  statQueueTimer.setSingleShot(true);
-  connect(&statQueueTimer, &QTimer::timeout, this, &Stats::statQueueProgress);
-  statQueueTimer.start();
+  statQueueTimer.start(0, Qt::PreciseTimer, this);
 }
 
 Stats::~Stats()
@@ -76,6 +73,100 @@ void Stats::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
 QRectF Stats::boundingRect() const
 {
   return QRectF(0, 0, rendered.width(), rendered.height());
+}
+
+void Stats::timerEvent(QTimerEvent *)
+{
+  energyQueue = std::clamp(energyQueue, -100, 100);
+  socialQueue = std::clamp(socialQueue, -100, 100);
+  funQueue = std::clamp(funQueue, -100, 100);
+  hungerQueue = std::clamp(hungerQueue, -100, 100);
+  toiletQueue = std::clamp(toiletQueue, -100, 100);
+
+  anxietyQueue = std::clamp(anxietyQueue, -100, 100);
+  healthQueue = std::clamp(healthQueue, -100, 100);
+  hygieneQueue = std::clamp(hygieneQueue, -100, 100);
+  hyperQueue = std::clamp(hyperQueue, -100, 100);
+
+  if(energyQueue > 0) {
+    energyQueue--;
+    deltaStat(StatType::ENERGY, 1);
+  }
+  if(energyQueue < 0) {
+    energyQueue++;
+    deltaStat(StatType::ENERGY, -1);
+  }
+  if(socialQueue > 0) {
+    socialQueue--;
+    deltaStat(StatType::SOCIAL, 1);
+  }
+  if(socialQueue < 0) {
+    socialQueue += 2;
+    deltaStat(StatType::SOCIAL, -2);
+  }
+  if(funQueue > 0) {
+    funQueue--;
+    deltaStat(StatType::FUN, 1);
+  }
+  if(funQueue < 0) {
+    funQueue++;
+    deltaStat(StatType::FUN, -1);
+  }
+  if(hungerQueue > 0) {
+    hungerQueue--;
+    deltaStat(StatType::HUNGER, 1);
+  }
+  if(hungerQueue < 0) {
+    hungerQueue++;
+    deltaStat(StatType::HUNGER, -1);
+  }
+  if(toiletQueue > 0) {
+    toiletQueue--;
+    deltaStat(StatType::TOILET, 1);
+  }
+  if(toiletQueue < 0) {
+    toiletQueue += 2;
+    deltaStat(StatType::TOILET, -2);
+  }
+  if(anxietyQueue > 0) {
+    anxietyQueue -= 2;
+    deltaStat(StatType::ANXIETY, 2);
+  }
+  if(anxietyQueue < 0) {
+    anxietyQueue++;
+    deltaStat(StatType::ANXIETY, -1);
+  }
+  if(healthQueue > 0) {
+    healthQueue -= 2;
+    deltaStat(StatType::HEALTH, 2);
+  }
+  if(healthQueue < 0) {
+    healthQueue++;
+    deltaStat(StatType::HEALTH, -1);
+  }
+  if(hygieneQueue > 0) {
+    hygieneQueue -= 2;
+    deltaStat(StatType::HYGIENE, 2);
+  }
+  if(hygieneQueue < 0) {
+    hygieneQueue++;
+    deltaStat(StatType::HYGIENE, -1);
+  }
+  if(hyperQueue > 0) {
+    hyperQueue--;
+    deltaStat(StatType::HYPER, 1);
+  }
+  if(hyperQueue < 0) {
+    hyperQueue++;
+    deltaStat(StatType::HYPER, -1);
+  }
+
+  updateStats();
+
+  int interval = STATTIMER - (STATTIMER / 100.0 * hyper);
+  interval = std::clamp(interval, 5, STATTIMER);
+
+  statQueueTimer.start(interval, Qt::PreciseTimer, this);
 }
 
 QColor Stats::getBarColor(const int &value, const bool &inverse)
@@ -336,101 +427,6 @@ void Stats::statProgress()
   queueStatChange(StatType::HYGIENE, -QRandomGenerator::global()->bounded(1));
   queueStatChange(StatType::HYPER, -QRandomGenerator::global()->bounded(7));
   // Nothing needed for 'health' and 'toilet'
-}
-
-void Stats::statQueueProgress()
-{
-  energyQueue = std::clamp(energyQueue, -100, 100);
-  socialQueue = std::clamp(socialQueue, -100, 100);
-  funQueue = std::clamp(funQueue, -100, 100);
-  hungerQueue = std::clamp(hungerQueue, -100, 100);
-  toiletQueue = std::clamp(toiletQueue, -100, 100);
-
-  anxietyQueue = std::clamp(anxietyQueue, -100, 100);
-  healthQueue = std::clamp(healthQueue, -100, 100);
-  hygieneQueue = std::clamp(hygieneQueue, -100, 100);
-  hyperQueue = std::clamp(hyperQueue, -100, 100);
-
-  if(energyQueue > 0) {
-    energyQueue--;
-    deltaStat(StatType::ENERGY, 1);
-  }
-  if(energyQueue < 0) {
-    energyQueue++;
-    deltaStat(StatType::ENERGY, -1);
-  }
-  if(socialQueue > 0) {
-    socialQueue--;
-    deltaStat(StatType::SOCIAL, 1);
-  }
-  if(socialQueue < 0) {
-    socialQueue += 2;
-    deltaStat(StatType::SOCIAL, -2);
-  }
-  if(funQueue > 0) {
-    funQueue--;
-    deltaStat(StatType::FUN, 1);
-  }
-  if(funQueue < 0) {
-    funQueue++;
-    deltaStat(StatType::FUN, -1);
-  }
-  if(hungerQueue > 0) {
-    hungerQueue--;
-    deltaStat(StatType::HUNGER, 1);
-  }
-  if(hungerQueue < 0) {
-    hungerQueue++;
-    deltaStat(StatType::HUNGER, -1);
-  }
-  if(toiletQueue > 0) {
-    toiletQueue--;
-    deltaStat(StatType::TOILET, 1);
-  }
-  if(toiletQueue < 0) {
-    toiletQueue += 2;
-    deltaStat(StatType::TOILET, -2);
-  }
-  if(anxietyQueue > 0) {
-    anxietyQueue -= 2;
-    deltaStat(StatType::ANXIETY, 2);
-  }
-  if(anxietyQueue < 0) {
-    anxietyQueue++;
-    deltaStat(StatType::ANXIETY, -1);
-  }
-  if(healthQueue > 0) {
-    healthQueue -= 2;
-    deltaStat(StatType::HEALTH, 2);
-  }
-  if(healthQueue < 0) {
-    healthQueue++;
-    deltaStat(StatType::HEALTH, -1);
-  }
-  if(hygieneQueue > 0) {
-    hygieneQueue -= 2;
-    deltaStat(StatType::HYGIENE, 2);
-  }
-  if(hygieneQueue < 0) {
-    hygieneQueue++;
-    deltaStat(StatType::HYGIENE, -1);
-  }
-  if(hyperQueue > 0) {
-    hyperQueue--;
-    deltaStat(StatType::HYPER, 1);
-  }
-  if(hyperQueue < 0) {
-    hyperQueue++;
-    deltaStat(StatType::HYPER, -1);
-  }
-
-  updateStats();
-
-  int interval = STATTIMER;
-  statQueueTimer.setInterval(interval - (interval / 100.0 * hyper));
-  if(statQueueTimer.interval() < 5)
-    statQueueTimer.setInterval(5);
-  statQueueTimer.start();
 }
 
 void Stats::stopTimers()
