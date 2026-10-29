@@ -707,9 +707,11 @@ void Boris::wheelEvent(QGraphicsSceneWheelEvent *)
 
 void Boris::handlePhysics()
 {
-  // Update opacity of dirt and bruises
-  dirtOpacity = 0.50 - ((qreal)stats->getHygiene()) * 0.01;
-  bruisesOpacity = 0.75 - ((qreal)stats->getHealth()) * 0.01;
+  // Update opacity of dirt and bruises if Boris is alive
+  if(isAlive) {
+    dirtOpacity = 0.50 - ((qreal)stats->getHygiene()) * 0.01;
+    bruisesOpacity = 0.75 - ((qreal)stats->getHealth()) * 0.01;
+  }
 
   // Set scene distance so Boris goes behind other Borises that are in front of him
   setZValue(pos().y() - settings.desktopHeight);
