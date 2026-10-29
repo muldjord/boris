@@ -17,7 +17,7 @@ endif()
 # Set build type with '-DCMAKE_BUILD_TYPE=type' where type is usually 'Debug' or 'Release'.
 # Default to 'Release' type
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "CMAKE_BUILD_TYPE" FORCE)
 endif()
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
@@ -33,23 +33,23 @@ qt_add_resources(QT_RESOURCES
 )
 
 set(SOURCES
-  src/mainwindow.cpp
-  src/settings.cpp
   src/about.cpp
-  src/boris.cpp
-  src/item.cpp
-  src/scripthandler.cpp
   src/behaviour.cpp
-  src/main.cpp
-  src/stats.cpp
-  src/weather.cpp
-  src/debugaction.cpp
-  src/soundmixer.cpp
-  src/loader.cpp
-  src/netcomm.cpp
+  src/boris.cpp
   src/bubble.cpp
+  src/debugaction.cpp
+  src/item.cpp
+  src/loader.cpp
+  src/main.cpp
+  src/mainwindow.cpp
+  src/netcomm.cpp
+  src/scripthandler.cpp
+  src/settings.cpp
   src/shadow.cpp
+  src/soundmixer.cpp
+  src/stats.cpp
   src/tinyexpr.cpp
+  src/weather.cpp
 )
 
 qt_add_executable(Boris
