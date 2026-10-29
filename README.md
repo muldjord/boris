@@ -51,6 +51,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Make a 'bowling' behaviour with a 'bowlingball' item and spawned 'pin' items (which might need syncronization as well?)
 * Make it so Boris only interacts with items he is interested in (those that match his current needs)
 * Make a 'candycane' item for Boris to eat. It should be 'energy' category. He will get a significant energy boost and get very hyper
+* Make a 'candle' item for Boris to warm himself at
 
 #### Version 4.0.0 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
