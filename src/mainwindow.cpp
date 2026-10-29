@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "soundmixer.h"
 #include "item.h"
 #include "version.h"
+#include "boris.h"
 
 #include <stdio.h>
 #include <math.h>

@@ -18,12 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "behaviour.h"
-#include "mainwindow.h"
+#include "settings.h"
 
-#include <QObject>
+#include <QDir>
 #include <QSplashScreen>
-#include <map>
+
+#include <SFML/Audio/SoundBuffer.hpp>
 
 class Loader: public QObject
 {

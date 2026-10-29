@@ -20,11 +20,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "settings.h"
 
-#include <QGraphicsView>
-#include <QGraphicsPixmapItem>
-#include <QMouseEvent>
-#include <QUrl>
+#include <QGraphicsObject>
+#include <QGraphicsSceneMouseEvent>
+#include <QStyleOptionGraphicsItem>
 #include <QTimer>
+#include <QUrl>
 
 class Settings;
 
@@ -44,9 +44,7 @@ public:
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
   QRectF boundingRect() const override;
-
-private slots:
-  void hideBubble();
+  void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
 
 private:
   Settings &settings;

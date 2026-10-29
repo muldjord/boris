@@ -16,20 +16,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "mainwindow.h"
 #include "item.h"
+#include "mainwindow.h"
 #include "scripthandler.h"
-#include "soundmixer.h"
 #include "settings.h"
+#include "shadow.h"
+#include "soundmixer.h"
+
+#include <QApplication>
+#include <QDate>
+#include <QElapsedTimer>
+#include <QRandomGenerator>
+#include <QTime>
+#include <QTimer>
 
 #include <stdio.h>
 #include <math.h>
-#include <QApplication>
-#include <QTimer>
-#include <QDate>
-#include <QTime>
-#include <QElapsedTimer>
-#include <QRandomGenerator>
 
 extern MainWindow *mainWindow;
 extern SoundMixer *soundMixer;

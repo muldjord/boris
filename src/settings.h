@@ -18,16 +18,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "item.h"
 #include "behaviour.h"
-#include "boris.h"
+//#include "boris.h"
+//#include "item.h"
 
+//#include <QGraphicsView>
+//#include <QImage>
+//#include <QMap>
+#include <QPixmap>
 #include <QObject>
-#include <QUrl>
-#include <QMap>
 #include <QString>
-#include <QImage>
-#include <QGraphicsView>
+#include <QUrl>
 
 constexpr int STATS_ALWAYS = 42;
 constexpr int STATS_CRITICAL = 43;

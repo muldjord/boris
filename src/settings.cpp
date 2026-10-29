@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "settings.h"
 
 #include <QPixmap>
+#include <QCursor>
 
 Settings::Settings()
 {

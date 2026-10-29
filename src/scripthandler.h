@@ -18,14 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "boris.h"
-#include "settings.h"
-#include "stats.h"
-#include "behaviour.h"
 #include "bubble.h"
 #include "tinyexpr.h"
-
-#include <QObject>
+#include "stats.h"
+#include "boris.h"
 
 class ScriptHandler : public QObject
 {

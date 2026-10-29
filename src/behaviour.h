@@ -18,9 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#include <QList>
 #include <QMap>
 #include <QObject>
 #include <QPixmap>
+#include <QString>
 
 #include <SFML/Audio/SoundBuffer.hpp>
 

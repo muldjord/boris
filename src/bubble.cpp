@@ -21,9 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 
 #include <QApplication>
-#include <QHBoxLayout>
-#include <QFile>
 #include <QDesktopServices>
+#include <QFile>
+#include <QHBoxLayout>
 #include <QPainter>
 
 Bubble::Bubble(Settings &settings) : settings(settings)
@@ -41,7 +41,7 @@ Bubble::Bubble(Settings &settings) : settings(settings)
   bubbleThought = settings.getPixmap("bubble_thought.png");
 
   hideTimer.setSingleShot(true);
-  connect(&hideTimer, &QTimer::timeout, this, &Bubble::hideBubble);
+  connect(&hideTimer, &QTimer::timeout, [this]() { hide(); });
 }
 
 Bubble::~Bubble()
@@ -58,7 +58,6 @@ QRectF Bubble::boundingRect() const
   return QRectF(0, 0, rendered.width(), rendered.height());
 }
 
-
 void Bubble::initBubble(const int &hyper,
                         const QString &sentence,
                         const QString &type,
@@ -69,8 +68,10 @@ void Bubble::initBubble(const int &hyper,
   } else {
     this->rssUrl.clear();
   }
+
   int sentenceWidth = 0;
   int sentenceHeight = 0;
+
   for(const auto &ch: sentence.split("")) {
     if(settings.pixelFont.contains(ch)) {
       sentenceWidth += settings.pixelFont[ch].width();
@@ -146,23 +147,10 @@ void Bubble::initBubble(const int &hyper,
   }
 }
 
-void Bubble::hideBubble()
-{
-  hide();
-}
-
-/*
-void Bubble::moveBubble(const int &x, const int &y, const int &borisSize)
-{
-  move((x + (borisSize * 0.7)) - (width() * 0.5), y);
-}
-*/
-/*
-void Bubble::mousePressEvent(QMouseEvent *event)
+void Bubble::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
   if(event->button() == Qt::LeftButton && rssUrl.isValid()) {
     QDesktopServices::openUrl(rssUrl);
   }
   event->ignore();
 }
-*/

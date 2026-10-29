@@ -18,16 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "boris.h"
-#include "behaviour.h"
 #include "netcomm.h"
-#include "settings.h"
 
-#include <QObject>
+#include <QGraphicsView>
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QSettings>
-#include <QTimer>
 #include <QSplashScreen>
 
 class MainWindow : public QGraphicsView

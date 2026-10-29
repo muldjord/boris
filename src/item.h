@@ -18,15 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "boris.h"
-#include "behaviour.h"
-#include "settings.h"
-
-#include <QGraphicsView>
-#include <QGraphicsPixmapItem>
-#include <QMouseEvent>
+#include <QGraphicsObject>
+#include <QGraphicsSceneMouseEvent>
+#include <QMap>
+#include <QPainter>
+#include <QStyleOptionGraphicsItem>
 #include <QTimer>
-#include <QBasicTimer>
 
 struct Settings;
 class Shadow;

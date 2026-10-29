@@ -27,15 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "stats.h"
 #include "weather.h"
 
-#include <QAction>
-#include <QGraphicsObject>
-#include <QGraphicsPixmapItem>
 #include <QGraphicsSceneHoverEvent>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsView>
-#include <QMenu>
-#include <QMouseEvent>
-#include <QTimer>
 
 namespace Direction {
   constexpr int None = -1;
