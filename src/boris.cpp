@@ -172,8 +172,8 @@ void Boris::createBehavioursMenu()
     }
 
     QAction *behavAction = new QAction(QIcon(iconPixmap), title);
-    behavAction->setObjectName(behaviour.file);
-    behavAction->setData(behaviour.category.toLower());
+    behavAction->setObjectName(behaviour.file); // Behaviour file / name
+    behavAction->setData(behaviour.category.toLower()); // Behaviour category
 
     menu->addAction(behavAction);
   }
@@ -650,7 +650,7 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped)
 
 void Boris::handleBehaviourChange(QAction* action)
 {
-  QString behavFile = action->objectName();
+  QString behavFile = action->objectName(); // Behaviour file / name is set as objectName
   for(const auto &behaviour: settings.behaviours) {
     if(behaviour.file == behavFile) {
       behavQueue.append(behaviour.file);
