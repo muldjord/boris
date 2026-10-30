@@ -61,6 +61,8 @@ Boris::Boris(Settings &settings)
 
   origDirt = settings.getPixmap("dirt.png");
   origBruises = settings.getPixmap("bruises.png");
+  scriptSprite.fill(Qt::transparent);
+  scriptImage.fill(Qt::transparent);
 
   behavioursMenu = new QMenu();
   behavioursMenu->setTitle(tr("Behaviours"));
@@ -169,7 +171,11 @@ void Boris::createBehavioursMenu()
       subMenus.append(menu);
     }
 
-    menu->addAction(QIcon(iconPixmap), title)->setData(behaviour.file);
+    QAction *behavAction = new QAction(QIcon(iconPixmap), title);
+    behavAction->setObjectName(behaviour.file);
+    behavAction->setData(behaviour.category.toLower());
+
+    menu->addAction(behavAction);
   }
 
   for(auto &subMenu: subMenus) {
