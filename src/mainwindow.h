@@ -18,13 +18,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "netcomm.h"
+#include "settings.h"
 
+#include <QAction>
 #include <QGraphicsView>
-#include <QSystemTrayIcon>
-#include <QMenu>
-#include <QSettings>
-#include <QSplashScreen>
+#include <QTimer>
+
+class NetComm;
+class QIcon;
+class QMenu;
+class QResizeEvent;
+class QSettings;
+class QSplashScreen;
+class QString;
+class QSystemTrayIcon;
 
 class MainWindow : public QGraphicsView
 {
@@ -34,7 +41,7 @@ public:
   ~MainWindow();
 
 protected:
-  void resizeEvent(QResizeEvent *event) override;
+  void resizeEvent(QResizeEvent *) override;
 
 signals:
   void reconfBoris();
@@ -47,41 +54,41 @@ private slots:
   void aboutBox();
   void killAll();
   void updateWeather();
-  void triggerBehaviour(QAction *a);
+  void triggerBehaviour(QAction *action);
   void spawnRandomItem();
-  void spawnItem(QAction *a);
+  void spawnItem(QAction *action);
   void deltaCoins(const int &coins);
 
 private:
   void loadFromConfig();
   void stall(const int &ms);
   void resetView();
+  QList<QString> extractSnippets(QString line);
+  void createTrayIcon();
+  void createBehavioursMenu();
+  void createItemsMenu();
+  void unlockItem(QAction *action);
+  void createActions();
+  void addBoris(int clones);
+  void removeBoris(int clones);
+
   QSettings *iniSettings = nullptr;
   Settings settings;
   QIcon *icon = nullptr;
   QIcon *coinIcon = nullptr;
   QTimer itemTimer;
   QTimer physicsTimer;
-  QMenu *behavioursMenu;
-  QMenu *itemsMenu;
-  NetComm *netComm;
-  QList<QString> extractSnippets(QString line);
-  QString *aboutText;
-  void createTrayIcon();
-  void createBehavioursMenu();
-  void createItemsMenu();
-  void unlockItem(QAction *action);
-  void createActions();
-  QAction *earthquakeAction;
-  //QAction *behavioursAction;
-  QAction *weatherAction;
+  QMenu *behavioursMenu = nullptr;
+  QMenu *itemsMenu = nullptr;
+  NetComm *netComm = nullptr;
+  QString *aboutText = nullptr;
+  QAction *earthquakeAction = nullptr;
+  QAction *weatherAction = nullptr;
   int coins = 0;
 
-  QPoint oldCursor;
+  QPoint oldCursor = QPoint(0, 0);
 
-  QAction *coinsAction;
-  QSystemTrayIcon *trayIcon;
-  QMenu *trayIconMenu;
-  void addBoris(int clones);
-  void removeBoris(int clones);
+  QAction *coinsAction = nullptr;
+  QSystemTrayIcon *trayIcon = nullptr;
+  QMenu *trayIconMenu = nullptr;
 };

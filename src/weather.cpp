@@ -18,10 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "weather.h"
 
-#include <stdio.h>
-#include <math.h>
-#include <QUuid>
+#include "settings.h"
+
 #include <QPainter>
+#include <QRectF>
 
 Weather::Weather(Settings &settings)
   : settings(settings)

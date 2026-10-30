@@ -18,12 +18,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "netcomm.h"
 
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QTimer>
-#include <QFile>
+#include "settings.h"
+
+#include <QDebug>
 #include <QDomDocument>
+#include <QDomNodeList>
+#include <QNetworkReply>
+#include <QUrl>
 
 NetComm::NetComm(Settings &settings) : settings(settings)
 {
@@ -52,12 +53,12 @@ void NetComm::updateAll()
   get(feedRequest);
 }
 
-void NetComm::netReply(QNetworkReply *r)
+void NetComm::netReply(QNetworkReply *reply)
 {
   QDomDocument doc;
-  doc.setContent(r->readAll());
-  r->close();
-  if(r->request() == weatherRequest) {
+  doc.setContent(reply->readAll());
+  reply->close();
+  if(reply->request() == weatherRequest) {
     qInfo("Updating weather:\n");
     if(!settings.forceWeatherType) {
       settings.weatherType = doc.elementsByTagName("weather").at(0).toElement().attribute("icon");
@@ -96,7 +97,7 @@ void NetComm::netReply(QNetworkReply *r)
     qInfo("  Wind: %fm/s from %s\n", settings.windSpeed, settings.windDirection.toStdString().c_str());
 
     emit weatherUpdated();
-  } else if(r->request() == feedRequest) {
+  } else if(reply->request() == feedRequest) {
     settings.rssLines.clear();
     qInfo("Updating feed:\n");
     QDomNodeList titles = doc.elementsByTagName("item");
@@ -109,5 +110,5 @@ void NetComm::netReply(QNetworkReply *r)
     }
   }
   netTimer.start();
-  r->deleteLater();
+  reply->deleteLater();
 }

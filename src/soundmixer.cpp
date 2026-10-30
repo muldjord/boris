@@ -18,6 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "soundmixer.h"
 
+#include <algorithm>
+
 #include <SFML/Audio/Listener.hpp>
 
 constexpr int numOfChannels = 64;

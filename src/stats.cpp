@@ -18,13 +18,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "stats.h"
 
-#include <stdio.h>
-#include <math.h>
+#include "settings.h"
 
+#include <algorithm>
+
+#include <QDebug>
 #include <QPainter>
 #include <QRandomGenerator>
+#include <QRectF>
 #include <QTime>
-#include <QUuid>
 
 constexpr int STATTIMER = 200;
 
@@ -258,7 +260,7 @@ void Stats::setStat(const StatType &stat, const int &value)
     hyper = std::clamp(value, 0, 99);
     break;
   default:
-    qWarning("deltaStat: Unknown stat type: %d\n", stat);
+    qWarning("setStat: Unknown stat type: %d\n", stat);
     break;
   };
 }

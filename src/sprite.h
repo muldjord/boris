@@ -19,7 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include <QList>
-#include <QImage>
 
 class Sprite: public QList<QImage>
 {

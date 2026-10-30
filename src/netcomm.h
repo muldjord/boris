@@ -18,10 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "settings.h"
-
-#include <QNetworkReply>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
 #include <QTimer>
+
+class Settings;
+class QNetworkReply;
 
 class NetComm : public QNetworkAccessManager
 {
@@ -38,7 +40,7 @@ signals:
   void feedUpdated();
 
 private slots:
-  void netReply(QNetworkReply *r);
+  void netReply(QNetworkReply *reply);
 
 private:
   Settings &settings;

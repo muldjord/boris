@@ -20,11 +20,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "settings.h"
 
-#include <QGraphicsPixmapItem>
-#include <QRect>
-#include <QFile>
+#include <QBasicTimer>
+#include <QColor>
+#include <QGraphicsObject>
+#include <QPixmap>
+#include <QPoint>
+#include <QString>
 #include <QTimer>
 
+class QPainter;
+class QRectF;
+class QStyleOptionGraphicsItem;
+class QTimerEvent;
+class QWidget;
 class Settings;
 
 enum StatType
@@ -110,12 +118,12 @@ private:
   QColor hungerColor = QColor(0, 0, 0);
   QColor toiletColor = QColor(0, 0, 0);
 
-  QPixmap flashIcon;
+  QPixmap flashIcon = QPixmap(8, 8);
   QPoint flashIconPos = QPoint(0, 0);
   bool showFlashIcon = false;
   int flashes = 0;
 
-  QPixmap statsPixmap;
+  QPixmap statsPixmap = QPixmap(80, 80);
 
   QPixmap rendered = QPixmap(80, 80); // +1 for the shadow
 

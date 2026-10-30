@@ -20,11 +20,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "settings.h"
 
-#include <QGraphicsPixmapItem>
-#include <QRect>
-#include <QFile>
+#include <QGraphicsObject>
+#include <QPixmap>
 #include <QTimer>
 
+class QPainter;
+class QRectF;
+class QStyleOptionGraphicsItem;
+class QWidget;
 class Settings;
 
 class Weather : public QGraphicsObject

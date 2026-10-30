@@ -18,15 +18,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "bubble.h"
 #include "tinyexpr.h"
 #include "stats.h"
-#include "boris.h"
+
+#include <QList>
+#include <QMap>
+#include <QObject>
+#include <QPointF>
+#include <QString>
+
+class Bubble;
+class QImage;
+class QPainter;
+class QString;
+class Script;
+class Settings;
 
 class ScriptHandler : public QObject
 {
   Q_OBJECT;
-
 public:
   ScriptHandler(QImage *image,
                 bool *drawing,

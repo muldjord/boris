@@ -16,26 +16,31 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "mainwindow.h"
 #include "about.h"
-#include "loader.h"
-#include "soundmixer.h"
-#include "item.h"
-#include "version.h"
 #include "boris.h"
+#include "item.h"
+#include "loader.h"
+#include "mainwindow.h"
+#include "netcomm.h"
+#include "soundmixer.h"
 
-#include <stdio.h>
-#include <math.h>
 #include <QApplication>
-#include <QTime>
+#include <QColor>
+#include <QCursor>
+#include <QDebug>
 #include <QDir>
-#include <QTextStream>
-#include <QHostInfo>
-#include <QLabel>
-#include <QVBoxLayout>
+#include <QEventLoop>
+#include <QGraphicsScene>
+#include <QIcon>
+#include <QList>
+#include <QMenu>
 #include <QMessageBox>
-
+#include <QPixmap>
 #include <QRandomGenerator>
+#include <QSettings>
+#include <QSplashScreen>
+#include <QString>
+#include <QSystemTrayIcon>
 
 MainWindow *mainWindow = nullptr;
 SoundMixer *soundMixer = nullptr;
@@ -51,7 +56,7 @@ MainWindow::MainWindow(QSplashScreen &splash)
   scene()->setBackgroundBrush(Qt::transparent);
   setStyleSheet("background:transparent");
   setAttribute(Qt::WA_TranslucentBackground);
-  // StaysOnTop doesn't work under Wayland but it might work under some conditions so I am leaving it on
+  // StaysOnTop doesn't work under Wayland but it might work under other conditions so I am leaving it on
   setWindowFlags(Qt::FramelessWindowHint |
                  Qt::WindowStaysOnTopHint);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -65,6 +70,7 @@ MainWindow::MainWindow(QSplashScreen &splash)
 
   setFrameShape(QFrame::NoFrame);
   setContentsMargins(0, 0, 0, 0);
+
   setInteractive(true); // Default but setting it anyway
   setMouseTracking(true);
 
@@ -465,7 +471,7 @@ void MainWindow::progressPhysics()
   emit handlePhysics();
 }
 
-void MainWindow::resizeEvent(QResizeEvent *event)
+void MainWindow::resizeEvent(QResizeEvent *)
 {
   resetView();
 }
@@ -629,9 +635,9 @@ void MainWindow::spawnRandomItem()
   }
 }
 
-void MainWindow::spawnItem(QAction* itemAction)
+void MainWindow::spawnItem(QAction* action)
 {
-  QString itemFile = itemAction->objectName();
+  QString itemFile = action->objectName();
   for(const auto &item: settings.itemBehaviours) {
     if(item.file == itemFile) {
       if(settings.unlocked.contains(item.file)) {
@@ -645,7 +651,7 @@ void MainWindow::spawnItem(QAction* itemAction)
         if(settings.coins - item.coins >= 0) {
           if(QMessageBox::question(nullptr, tr("Buy?"), tr("Do you want to buy '") + " " + item.title + "' " + tr("for ") + QString::number(item.coins) + tr(" coins?")) == QMessageBox::Yes) {
             deltaCoins(- item.coins);
-            unlockItem(itemAction);
+            unlockItem(action);
           }
         } else {
           soundMixer->playSoundFile("nocoin.wav", 0, 1);
@@ -657,10 +663,10 @@ void MainWindow::spawnItem(QAction* itemAction)
   }
 }
 
-void MainWindow::unlockItem(QAction *itemAction)
+void MainWindow::unlockItem(QAction *action)
 {
-  settings.unlocked.append(itemAction->objectName());
-  itemAction->setIcon(QIcon(settings.getPixmap(itemAction->data().toString().toLower() + ".png")));
+  settings.unlocked.append(action->objectName());
+  action->setIcon(QIcon(settings.getPixmap(action->data().toString().toLower() + ".png")));
 
   QString newUnlocked = "";
   for(const auto &unlock: settings.unlocked) {

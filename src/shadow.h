@@ -20,8 +20,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "settings.h"
 
-#include <QGraphicsPixmapItem>
+#include <QGraphicsObject>
+#include <QPixmap>
 
+class QPainter;
+class QRectF;
+class QStyleOptionGraphicsItem;
+class QWidget;
 class Settings;
 
 class Shadow : public QGraphicsObject

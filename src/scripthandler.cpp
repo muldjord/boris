@@ -16,15 +16,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "mainwindow.h"
 #include "scripthandler.h"
-#include "soundmixer.h"
+
+#include "behaviour.h"
+#include "bubble.h"
 #include "item.h"
+#include "mainwindow.h"
+#include "settings.h"
+#include "soundmixer.h"
 
-#include <stdio.h>
-
+#include <QBrush>
+#include <QColor>
+#include <QImage>
+#include <QPainter>
+#include <QPen>
 #include <QRandomGenerator>
-#include <QRegularExpression>
+#include <QString>
 
 extern MainWindow *mainWindow;
 extern SoundMixer *soundMixer;
@@ -37,11 +44,15 @@ ScriptHandler::ScriptHandler(QImage *image,
                              const QMap<QString, Script> &defines,
                              QMap<QString, int> &scriptVars,
                              const QPointF parentPos)
-  : settings(settings), labels(labels), defines(defines), scriptVars(scriptVars), parentPos(parentPos)
+  : image(image),
+    drawing(drawing),
+    settings(settings),
+    bubble(bubble),
+    labels(labels),
+    defines(defines),
+    scriptVars(scriptVars),
+    parentPos(parentPos)
 {
-  this->image = image;
-  this->drawing = drawing;
-  this->bubble = bubble;
 }
 
 void ScriptHandler::runScript(int &stop, const Script &script)
@@ -50,11 +61,7 @@ void ScriptHandler::runScript(int &stop, const Script &script)
     if(settings.scriptOutput) {
       printf("CODE: '%s'\n", command.toStdString().c_str());
     }
-#if QT_VERSION >= 0x050e00
     QList<QString> parameters = command.split(" ", Qt::KeepEmptyParts);
-#else
-    QList<QString> parameters = command.split(" ", QString::KeepEmptyParts);
-#endif
     runCommand(parameters, stop, script);
     if(stop) {
       return;
@@ -565,7 +572,7 @@ void ScriptHandler::handleBehav(QList<QString> &parameters, int &stop)
   if(settings.scriptOutput) {
     printf("Changing behaviour to '%s'\n", parameters.first().toStdString().c_str());
   }
-  stop = 1; // Will tell the Boris class to exit the script processing
+  stop = 1; // Will tell the Boris / Item class to exit the script processing
   parameters.removeFirst(); // Remove behaviour filename
 }
 
@@ -765,8 +772,6 @@ int ScriptHandler::getValue(QList<QString> &parameters)
   for(const auto &token: code) {
     codeConcat.append(token);
   }
-
-
 
   return tep.evaluate(codeConcat.toStdString());
 }

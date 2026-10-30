@@ -29,8 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "stats.h"
 #include "weather.h"
 
-#include <math.h>
-#include <stdio.h>
+#include <algorithm>
 
 #include <QAction>
 #include <QBitmap>

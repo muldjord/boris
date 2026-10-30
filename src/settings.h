@@ -19,16 +19,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "behaviour.h"
-//#include "boris.h"
-//#include "item.h"
 
-//#include <QGraphicsView>
-//#include <QImage>
-//#include <QMap>
+#include <QCursor>
+#include <QImage>
+#include <QList>
+#include <QMap>
 #include <QPixmap>
-#include <QObject>
 #include <QString>
 #include <QUrl>
+
+class Boris;
+class Item;
 
 constexpr int STATS_ALWAYS = 42;
 constexpr int STATS_CRITICAL = 43;
@@ -41,14 +42,13 @@ struct RssLine
   QUrl url;
 };
 
-class Item;
-class Boris;
-
-class Settings : public QObject
+class Settings
 {
-  Q_OBJECT;
 public:  
   Settings();
+  QPixmap& getPixmap(const QString &name);
+  QCursor getCursor(const QString &name);
+
   bool showWelcome = true;
   bool statLogging = false;
   qreal desktopWidth = 1920.0;
@@ -125,7 +125,4 @@ public:
 
   QMap<QString, QPixmap> graphics;
   QMap<QString, QPixmap> cursors;
-
-  QPixmap& getPixmap(const QString &name);
-  QCursor getCursor(const QString &name);
 };
