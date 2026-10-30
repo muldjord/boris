@@ -17,21 +17,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "about.h"
+
+#include "settings.h"
 #include "soundmixer.h"
 
-#include <QApplication>
+#include <stdio.h>
+
+#include <QCheckBox>
+#include <QComboBox>
 #include <QFile>
-#include <QFileInfo>
 #include <QHBoxLayout>
-#include <QHostInfo>
 #include <QIntValidator>
 #include <QLabel>
+#include <QLineEdit>
 #include <QPushButton>
 #include <QScrollArea>
+#include <QSettings>
+#include <QSlider>
 #include <QTabWidget>
 #include <QVBoxLayout>
-
-#include <stdio.h>
 
 #include <SFML/Audio/Sound.hpp>
 

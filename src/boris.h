@@ -18,16 +18,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "behaviour.h"
-#include "bubble.h"
-#include "debugaction.h"
-#include "item.h"
-#include "settings.h"
-#include "shadow.h"
-#include "stats.h"
-#include "weather.h"
+#include <QBasicTimer>
+#include <QGraphicsObject>
+#include <QImage>
+#include <QList>
+#include <QMap>
+#include <QPoint>
+#include <QTimer>
 
-#include <QGraphicsSceneHoverEvent>
+class Boris;
+class Bubble;
+class DebugAction;
+class Item;
+class QAction;
+class QGraphicsSceneHoverEvent;
+class QGraphicsSceneMouseEvent;
+class QGraphicsSceneWheelEvent;
+class QMenu;
+class QPainter;
+class QPointF;
+class QString;
+class QStyleOptionGraphicsItem;
+class QTimerEvent;
+class QWidget;
+class Settings;
+class Shadow;
+class Stats;
+class Weather;
 
 namespace Direction {
   constexpr int None = -1;
@@ -41,19 +58,13 @@ namespace Direction {
   constexpr int NorthWest = 7;
 };
 
-class Stats;
-class Bubble;
-class Weather;
-class Item;
-class Shadow;
-
 class Boris : public QGraphicsObject
 {
   Q_OBJECT;
 public:
   explicit Boris(Settings &settings);
   ~Boris();
-  Boris *borisFriend;
+  Boris *borisFriend = nullptr;
   Stats *stats = nullptr;
   int getWidth() const;
   int getHeight() const;
@@ -123,17 +134,17 @@ private:
   QPoint mLastMousePosition;
   bool mouseHovering = false;
 
-  QPixmap borisSprite;
-  QPixmap scriptSprite;
+  QPixmap borisSprite = QPixmap(32, 32);
+  QPixmap scriptSprite = QPixmap(32, 32);
   QImage scriptImage = QImage(32, 32, QImage::Format_ARGB32_Premultiplied);
   bool drawing = false;
 
-  QPixmap dirtSprite;
-  QPixmap origDirt;
+  QPixmap dirtSprite = QPixmap(32, 32);;
+  QPixmap origDirt = QPixmap(32, 32);;
   qreal dirtOpacity = 0.0;
 
-  QPixmap bruisesSprite;
-  QPixmap origBruises;
+  QPixmap bruisesSprite = QPixmap(32, 32);;
+  QPixmap origBruises = QPixmap(32, 32);;
   qreal bruisesOpacity = 0.0;
 
   QPixmap rendered = QPixmap(32, 32);

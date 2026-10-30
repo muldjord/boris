@@ -17,18 +17,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "boris.h"
+
+#include "bubble.h"
+#include "debugaction.h"
+#include "item.h"
 #include "mainwindow.h"
 #include "scripthandler.h"
+#include "settings.h"
+#include "shadow.h"
 #include "soundmixer.h"
+#include "stats.h"
+#include "weather.h"
 
 #include <math.h>
 #include <stdio.h>
 
-#include <QApplication>
+#include <QAction>
 #include <QBitmap>
-#include <QDir>
+#include <QCursor>
+#include <QDate>
+#include <QGraphicsSceneHoverEvent>
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneWheelEvent>
+#include <QMenu>
+#include <QPainter>
+#include <QPointF>
 #include <QRandomGenerator>
-#include <QScreen>
+#include <QRectF>
+#include <QString>
+#include <QTime>
 #include <QTimer>
 
 constexpr int ANNOYMAX = 42;
@@ -626,9 +643,9 @@ void Boris::moveBoris(int dX, int dY, const bool &flipped)
   }
 }
 
-void Boris::handleBehaviourChange(QAction* a)
+void Boris::handleBehaviourChange(QAction* action)
 {
-  QString behavFile = a->data().toString();
+  QString behavFile = action->objectName();
   for(const auto &behaviour: settings.behaviours) {
     if(behaviour.file == behavFile) {
       behavQueue.append(behaviour.file);
@@ -1034,21 +1051,11 @@ void Boris::checkInteractions()
     stats->show();
   }
   // This balances the interaction count which is increased when mouse is moved across Boris
-  if(interactions > 10) {
-    interactions = 10;
-  }
-  interactions--;
-  if(interactions < 0) {
-    interactions = 0;
-  }
+  interactions -= 1;
+  interactions = std::clamp(interactions, 0, 10);
 
-  if(annoyance > ANNOYMAX) {
-    annoyance = ANNOYMAX;
-  }
-  annoyance = annoyance - 2;
-  if(annoyance < 0) {
-    annoyance = 0;
-  }
+  annoyance -= 2;
+  annoyance = std::clamp(annoyance, 0, ANNOYMAX);
 
   // Update debug info in idkfa menu here as well if it's enabled
   if(settings.idkfa) {

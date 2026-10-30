@@ -109,7 +109,7 @@ Behaviour::Behaviour()
 {
 }
 
-Behaviour::Behaviour(const Behaviour &behaviour) : QObject()
+Behaviour::Behaviour(const Behaviour &behaviour)
 {
   this->absoluteFilePath = behaviour.absoluteFilePath;
   this->file = behaviour.file;

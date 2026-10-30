@@ -18,14 +18,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "settings.h"
-
 #include <QGraphicsObject>
-#include <QGraphicsSceneMouseEvent>
-#include <QStyleOptionGraphicsItem>
+#include <QPixmap>
 #include <QTimer>
 #include <QUrl>
 
+class QGraphicsSceneMouseEvent;
+class QPainter;
+class QRectF;
+class QString;
+class QStyleOptionGraphicsItem;
+class QWidget;
 class Settings;
 
 class Bubble : public QGraphicsObject
@@ -48,19 +51,19 @@ protected:
 
 private:
   Settings &settings;
-  QPixmap bubbleTopLeft;
-  QPixmap bubbleTop;
-  QPixmap bubbleTopRight;
-  QPixmap bubbleLeft;
-  QPixmap bubbleRight;
-  QPixmap bubbleBottomLeft;
-  QPixmap bubbleBottom;
-  QPixmap bubbleBottomRight;
+  QPixmap bubbleTopLeft = QPixmap(6, 6);
+  QPixmap bubbleTop = QPixmap(1, 6);
+  QPixmap bubbleTopRight = QPixmap(6, 6);
+  QPixmap bubbleLeft = QPixmap(6, 6);
+  QPixmap bubbleRight = QPixmap(6, 6);
+  QPixmap bubbleBottomLeft = QPixmap(6, 6);
+  QPixmap bubbleBottom = QPixmap(1, 6);
+  QPixmap bubbleBottomRight = QPixmap(6, 6);
 
-  QPixmap bubbleThought;
-  QPixmap bubbleSpeech;
+  QPixmap bubbleThought = QPixmap(6, 6);
+  QPixmap bubbleSpeech = QPixmap(6, 6);
 
-  QPixmap rendered;
+  QPixmap rendered = QPixmap(32, 24); // Just an approximate it's not really important as it's quickly set to something else
 
   QTimer hideTimer;
 

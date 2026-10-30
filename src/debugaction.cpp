@@ -18,11 +18,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "debugaction.h"
 
-#include <stdio.h>
+#include <QObject>
+#include <QPlainTextEdit>
+#include <QSizePolicy>
+#include <QString>
 
 DebugAction::DebugAction(QObject *parent) : QWidgetAction(parent)
 {
   debugText = new QPlainTextEdit();
+  debugText->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
   setDefaultWidget(debugText);
 }
 

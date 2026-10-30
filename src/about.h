@@ -18,14 +18,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "settings.h"
-
-#include <QCheckBox>
-#include <QComboBox>
 #include <QDialog>
-#include <QLineEdit>
-#include <QSettings>
-#include <QSlider>
+
+class Settings;
+class QLineEdit;
+class QComboBox;
+class QCheckBox;
+class QSlider;
+class QSettings;
 
 class About : public QDialog
 {

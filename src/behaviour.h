@@ -19,10 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include <QList>
-#include <QMap>
 #include <QObject>
 #include <QPixmap>
 #include <QString>
+#include <QMap>
 
 #include <SFML/Audio/SoundBuffer.hpp>
 
@@ -72,10 +72,8 @@ public:
   Script script;
 };
 
-class Behaviour: public QObject
+class Behaviour
 {
-  Q_OBJECT;
-
 public:
   Behaviour(const Behaviour &behaviour);
   void operator=(const Behaviour &behaviour);

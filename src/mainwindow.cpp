@@ -599,9 +599,9 @@ void MainWindow::createBehavioursMenu()
   }
 }
 
-void MainWindow::triggerBehaviour(QAction* a)
+void MainWindow::triggerBehaviour(QAction* action)
 {
-  QString behaviourFile = a->objectName();
+  QString behaviourFile = action->objectName();
   for(const auto &behaviour: settings.behaviours) {
     if(behaviour.file == behaviourFile) {
       emit queueBehavFromFile(behaviour.file);

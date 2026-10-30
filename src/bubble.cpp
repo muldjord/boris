@@ -18,13 +18,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "bubble.h"
 
-#include <stdio.h>
+#include "settings.h"
 
-#include <QApplication>
 #include <QDesktopServices>
-#include <QFile>
-#include <QHBoxLayout>
+#include <QGraphicsSceneMouseEvent>
+#include <QImage>
 #include <QPainter>
+#include <QRectF>
+#include <QString>
 
 Bubble::Bubble(Settings &settings) : settings(settings)
 {

@@ -19,14 +19,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mainwindow.h"
 
 #include <QApplication>
-#include <QTranslator>
-#include <QLocale>
-#include <QDir>
 #include <QDateTime>
-#include <QFileInfo>
-#include <QHostInfo>
-#include <QMessageBox>
+#include <QDir>
+#include <QLocale>
+#include <QPixmap>
 #include <QSplashScreen>
+#include <QTranslator>
 
 void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QString &msg)
 {

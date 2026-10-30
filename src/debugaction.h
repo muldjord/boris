@@ -18,8 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include <QPlainTextEdit>
 #include <QWidgetAction>
+
+class QObject;
+class QPlainTextEdit;
+class QString;
 
 class DebugAction : public QWidgetAction
 {

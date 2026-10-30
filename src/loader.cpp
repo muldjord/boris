@@ -18,13 +18,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "loader.h"
 
-#include <stdio.h>
-#include <math.h>
+#include "settings.h"
+
 #include <QApplication>
-#include <QTime>
+#include <QByteArray>
+#include <QDate>
+#include <QDebug>
 #include <QDir>
-#include <QTextStream>
+#include <QFile>
+#include <QFileInfo>
+#include <QImage>
+#include <QList>
+#include <QMap>
 #include <QRegularExpression>
+#include <QSplashScreen>
 
 qint64 Loader::getAssetsSize(const QDir &dir)
 {
@@ -43,7 +50,7 @@ bool Loader::loadSoundFxs(const QString &soundsPath,
          "*.wav",
          QDir::Name,
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
-  QFileInfoList infoList = d.entryInfoList();
+  QList<QFileInfo> infoList = d.entryInfoList();
   bool noErrors = true;
   for(const auto &info: infoList) {
     sf::SoundBuffer soundFx;
@@ -70,10 +77,9 @@ bool Loader::loadBehaviours(const Settings &settings,
          "*.png",
          QDir::Name,
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
-  QFileInfoList infoList = d.entryInfoList();
+  QList<QFileInfo> infoList = d.entryInfoList();
   for(const auto &info: infoList) {
-    QFile dat(info.absoluteFilePath().
-              left(info.absoluteFilePath().length() - 4) + ".dat");
+    QFile dat(info.absoluteFilePath().left(info.absoluteFilePath().length() - 4) + ".dat");
     if(dat.open(QIODevice::ReadOnly)) {
       // Load all sprites from png
       QList<QPixmap> sprites;
@@ -286,6 +292,7 @@ Script Loader::parseScript(const QString &script)
   bool inBlock = false;
   QString commands = script;
   QString childScript = "";
+
   for(const auto ch: script) {
     if(ch == '{') {
       blockLevel++;
@@ -311,6 +318,7 @@ Script Loader::parseScript(const QString &script)
       }
     } 
   }
+
   if(commands.contains("\"")) {
     bool inQuotes = false;
     QString command = "";
@@ -372,7 +380,7 @@ bool Loader::loadSprites(Settings &settings)
          "*.png",
          QDir::Name,
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
-  QFileInfoList infoList = d.entryInfoList();
+  QList<QFileInfo> infoList = d.entryInfoList();
   for(const auto &info: infoList) {
     if(!QRegularExpression("^[0-9a-z_]{0,42}$").match(info.baseName()).hasMatch()) {
       qWarning("  Sprite file '%s' contains illegal characters, skipping...\n", qPrintable(info.baseName()));
@@ -415,7 +423,7 @@ bool Loader::loadImages(const QString &path, QMap<QString, QPixmap> &images)
          "*.png",
          QDir::Name,
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
-  QFileInfoList infoList = d.entryInfoList();
+  QList<QFileInfo> infoList = d.entryInfoList();
   for(const auto &info: infoList) {
     if(!QRegularExpression("^[0-9a-z_]{0,42}$").match(info.baseName()).hasMatch()) {
       qWarning("  Image file '%s' contains illegal characters, skipping...\n",

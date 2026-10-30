@@ -18,16 +18,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#include <QBasicTimer>
 #include <QGraphicsObject>
-#include <QGraphicsSceneMouseEvent>
+#include <QImage>
 #include <QMap>
-#include <QPainter>
-#include <QStyleOptionGraphicsItem>
+#include <QPixmap>
 #include <QTimer>
 
-struct Settings;
-class Shadow;
 class Boris;
+class QGraphicsSceneMouseEvent;
+class QPainter;
+class QPoint;
+class QPointF;
+class QRectF;
+class QString;
+class QStyleOptionGraphicsItem;
+class QTimerEvent;
+class QWidget;
+class Settings;
+class Shadow;
 
 class Item : public QGraphicsObject
 {
@@ -65,11 +74,17 @@ private slots:
   void dontIgnore();
 
 private:
+  void runScript(int &stop, const bool &init = false);
+  void sanityCheck();
+  int getDistance(const QPointF &p);
+  int getDirectionTo(const QPointF &p);
+
   Settings &settings;
-  bool flipFrames = false;
-  QPixmap itemSprite;
   QBasicTimer animTimer;
-  QPixmap scriptSprite;
+
+  bool flipFrames = false;
+  QPixmap itemSprite = QPixmap(32, 32);
+  QPixmap scriptSprite = QPixmap(32, 32);
   QImage scriptImage = QImage(32, 32, QImage::Format_ARGB32_Premultiplied);
   bool drawing = false;
   int curFrame = 0;
@@ -87,11 +102,6 @@ private:
   double hVel = 0.0;
   int groundY = 0;
   bool falling = false;
-
-  void runScript(int &stop, const bool &init = false);
-  void sanityCheck();
-  int getDistance(const QPointF &p);
-  int getDirectionTo(const QPointF &p);
 
   bool stopAndDestroy = false;
 };

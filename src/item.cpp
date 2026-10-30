@@ -17,21 +17,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "item.h"
+
+#include "boris.h"
 #include "mainwindow.h"
 #include "scripthandler.h"
 #include "settings.h"
 #include "shadow.h"
 #include "soundmixer.h"
 
-#include <QApplication>
 #include <QDate>
-#include <QElapsedTimer>
+#include <QGraphicsSceneMouseEvent>
+#include <QPainter>
+#include <QPoint>
+#include <QPointF>
 #include <QRandomGenerator>
+#include <QRectF>
+#include <QString>
 #include <QTime>
-#include <QTimer>
-
-#include <stdio.h>
-#include <math.h>
 
 extern MainWindow *mainWindow;
 extern SoundMixer *soundMixer;
