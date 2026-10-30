@@ -89,13 +89,13 @@ public:
   void setIndependence(const int &value);
 
   void deltaStat(const StatType &stat, const int &value); // Change stat with delta of value instantly
-  
+
   bool showStats = false;
   bool underMouse = false;
 
 public slots:
   void queueStatChange(const StatType &stat, const int &value); // Queue stat change that will be added over time
-  
+
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
   QRectF boundingRect() const override;
@@ -151,6 +151,6 @@ private:
   int healthQueue = 0;
   int hygieneQueue = 0;
   int hyperQueue = 0;
-  
+
   QTimer statTimer;
 };
