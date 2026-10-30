@@ -42,6 +42,6 @@ protected:
 
 private:
   Settings &settings;
-  QPixmap origShadow = QPixmap(32, 32);;
+  QPixmap origShadow = QPixmap(32, 32);
   QPixmap rendered = QPixmap(32, 32);
 };
