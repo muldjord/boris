@@ -38,8 +38,10 @@ Bubble::Bubble(Settings &settings) : settings(settings)
   bubbleBottom = settings.getPixmap("bubble.png").copy(6, 7, 1, 6);
   bubbleBottomRight = settings.getPixmap("bubble.png").copy(7, 7, 6, 6);
 
-  bubbleSpeech = settings.getPixmap("bubble_speech.png");
   bubbleThought = settings.getPixmap("bubble_thought.png");
+  bubbleSpeech = settings.getPixmap("bubble_speech.png");
+
+  rendered.fill(Qt::transparent);
 
   hideTimer.setSingleShot(true);
   connect(&hideTimer, &QTimer::timeout, [this]() { hide(); });
