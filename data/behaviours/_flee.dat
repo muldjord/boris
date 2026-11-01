@@ -3,14 +3,14 @@ oneShot
 
 define init:var steps = @3 + 5,
 if @2 = 1 sound flee1.wav else sound flee2.wav,
-if msec = 0 goto south,
-if msec = 1 goto southwest,
-if msec = 2 goto west,
-if msec = 3 goto northwest,
-if msec = 4 goto north,
-if msec = 5 goto northeast,
-if msec = 6 goto east,
-if msec = 7 goto southeast
+if mdir = 0 goto south,
+if mdir = 1 goto southwest,
+if mdir = 2 goto west,
+if mdir = 3 goto northwest,
+if mdir = 4 goto north,
+if mdir = 5 goto northeast,
+if mdir = 6 goto east,
+if mdir = 7 goto southeast
 
 define progress:var steps -= 1,stat fun -= 1,if @2 = 1 stat energy -= 1
 
