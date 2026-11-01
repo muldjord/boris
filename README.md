@@ -63,6 +63,8 @@ The last command copies all necessary files to the `release` folder. You can the
 * Shadows now stays visible on the ground when Boris and items are airborne
 * Shadows now have dynamic width depending on the altitude of Boris and items
 * Fixed eternal bouncing bug (I think)
+* Added 'candle' item
+* Added 'sit_and_relax' behaviour for 'energy' category
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
