@@ -4,9 +4,9 @@ anxiety=100
 oneShot
 doNotDisturb
 
-define init:if fsec >= 0 and fsec <= 3 goto east,
-if fsec >= 4 and fsec <= 7 goto west,
-if fsec = -1 break
+define init:if bdir >= 0 and bdir <= 3 goto east,
+if bdir >= 4 and bdir <= 7 goto west,
+if bdir = -1 break
 
 #Frames
 
