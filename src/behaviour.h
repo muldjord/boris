@@ -33,16 +33,19 @@ public:
   void operator=(const Reaction &reaction);
   explicit Reaction(const QString &borisBehaviour,
                     const QString &itemLabel = "",
+		    const bool &moveItem = false,
                     const int &xCoord = 0,
                     const int &yCoord = 0);
   QString getBehaviour() const;
   QString getLabel() const;
+  bool doMoveItem() const;
   int getXCoord() const;
   int getYCoord() const;
 
 private:
   QString borisBehaviour = "";
   QString itemLabel = "";
+  bool moveItem = false;
   int xCoord = 0;
   int yCoord = 0;
 };

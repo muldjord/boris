@@ -22,6 +22,7 @@ Reaction::Reaction(const Reaction &reaction)
 {
   this->borisBehaviour = reaction.borisBehaviour;
   this->itemLabel = reaction.itemLabel;
+  this->moveItem = reaction.moveItem;
   this->xCoord = reaction.xCoord;
   this->yCoord = reaction.yCoord;
 }
@@ -30,17 +31,20 @@ void Reaction::operator=(const Reaction &reaction)
 {
   this->borisBehaviour = reaction.borisBehaviour;
   this->itemLabel = reaction.itemLabel;
+  this->moveItem = reaction.moveItem;
   this->xCoord = reaction.xCoord;
   this->yCoord = reaction.yCoord;
 }
 
 Reaction::Reaction(const QString &borisBehaviour,
                    const QString &itemLabel,
+		   const bool &moveItem,
                    const int &xCoord,
                    const int &yCoord)
 {
   this->borisBehaviour = borisBehaviour;
   this->itemLabel = itemLabel;
+  this->moveItem = moveItem;
   this->xCoord = xCoord;
   this->yCoord = yCoord;
 }
@@ -53,6 +57,11 @@ QString Reaction::getBehaviour() const
 QString Reaction::getLabel() const
 {
   return itemLabel;
+}
+
+bool Reaction::doMoveItem() const
+{
+  return moveItem;
 }
 
 int Reaction::getXCoord() const
