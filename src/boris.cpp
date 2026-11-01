@@ -306,7 +306,7 @@ void Boris::changeBehaviour(QString behav, int time)
           } else if(settings.behaviours.at(curBehav).category.toLower() == "anxiety") {
             coins = stats->getAnxiety();
           }
-          coins /= 20;
+          coins /= 10;
 
           if(coins) {
             emit deltaCoins(coins);
