@@ -42,6 +42,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Linux: For security reasons modern Wayland compositors don't support `Qt::WindowStaysOnTopHint` and click-through behaviour. The non-free OS called Windows (which apparently people still use for some bizarre reason) still support this, but it is probably only a matter of time before they catch up and stop supporting it as well
 * Critical need behaviours added to the queue chosen by Boris himself also gives out coins
 * RSS feed headlines cannot yet be clicked and opened in a browser
+* Boris will interact with an object instantly when he spawns it himself (eg. through 'Social->Place a gift')
 
 #### Version x.x.x, Roadmap:
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
