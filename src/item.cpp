@@ -488,8 +488,10 @@ void Item::interact(Boris *boris)
 
   borisHyper = boris->stats->getHyper();
 
-  setPos(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord(),
-         boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord());
+  if(settings.itemBehaviours.at(curItem).reactions.at(interactReaction).doMoveItem()) {
+    setPos(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord(),
+	   boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord());
+  }
 
   if(settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel().isEmpty()) {
     destroy();
