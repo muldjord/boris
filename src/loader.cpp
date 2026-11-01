@@ -156,9 +156,14 @@ bool Loader::loadBehaviours(const Settings &settings,
             if(reactionSnippets.count() == 1) {
               Reaction reaction(reactionSnippets.at(0));
               b.reactions.append(reaction);
+            } else if(reactionSnippets.count() == 2) {
+              Reaction reaction(reactionSnippets.at(0),
+                                reactionSnippets.at(1));
+              b.reactions.append(reaction);
             } else if(reactionSnippets.count() == 4) {
               Reaction reaction(reactionSnippets.at(0),
                                 reactionSnippets.at(1),
+				true,
                                 reactionSnippets.at(2).toInt(),
                                 reactionSnippets.at(3).toInt());
               b.reactions.append(reaction);
