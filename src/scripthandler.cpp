@@ -322,7 +322,7 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
   int iY = getValue(parameters);
   if(settings.items) {
     if(settings.scriptOutput) {
-      printf("Spawning item '%s' at %d,%d\n", itemName.toStdString().c_str(), iX, iY);
+      printf("Spawning item '%s' at %d,%d\n", qPrintable(itemName), iX, iY);
     }
     Item *spawnedItem = new Item(itemName, settings);
     connect(mainWindow, &MainWindow::handlePhysics, spawnedItem, &Item::handlePhysics);
