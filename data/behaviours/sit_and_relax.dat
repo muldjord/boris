@@ -1,0 +1,58 @@
+title=Sit and relax
+category=Energy
+
+fun=4
+energy=20
+social=5
+
+oneShot
+allowFlip
+
+define morerelax:if sitloop <= 0 goto getbackup,var sitloop -= 1,var whichrelax = @3,if whichrelax = 1 goto sit1,if whichrelax = 2 goto sit2,if whichrelax = 3 goto sit3
+
+#Frames
+0;75;0;0;;var sitloop = @5 + 5
+1;75;0;0;;
+2;75;0;0;;
+3;75;0;0;;
+4;75;0;0;;
+5;75;0;0;;
+6;75;0;0;;
+7;75;0;0;;
+8;75;0;0;;
+9;75;0;0;;
+10;75;0;0;;
+11;75;0;0;;
+12;75;0;0;;
+13;75;0;0;;
+14;75;0;0;;
+15;75;0;0;;
+16;75;0;0;;
+17;75;0;0;;
+18;75;0;0;;
+19;1000;0;0;;label sit1,goto blink1
+19;2200;0;0;;label sit2,goto blink1
+19;3500;0;0;;label sit3,goto blink1
+20;75;0;0;;label blink1,if @2 = 1 call morerelax
+19;75;0;0;;
+20;75;0;0;;label blink2,call morerelax
+18;75;0;0;;label getbackup
+17;75;0;0;;
+16;75;0;0;;
+15;75;0;0;;
+14;75;0;0;;
+13;75;0;0;;
+12;75;0;0;;
+11;75;0;0;;
+10;75;0;0;;
+9;75;0;0;;
+8;75;0;0;;
+7;75;0;0;;
+6;75;0;0;;
+5;75;0;0;;
+4;75;0;0;;
+3;75;0;0;;
+2;75;0;0;;
+1;75;0;0;;
+0;75;0;0;;
+
