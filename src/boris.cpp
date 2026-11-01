@@ -109,14 +109,18 @@ Boris::Boris(Settings &settings)
   behavTimer.setSingleShot(true);
   connect(&behavTimer, &QTimer::timeout, this, &Boris::nextBehaviour);
 
-  interactionsTimer.setInterval(1000);
+  interactionsTimer.setInterval(500);
   interactionsTimer.setSingleShot(true);
   connect(&interactionsTimer, &QTimer::timeout, this, &Boris::checkInteractions);
   interactionsTimer.start();
 
-  enableInteractTimer.setInterval(2000);
-  enableInteractTimer.setSingleShot(true);
-  connect(&enableInteractTimer, &QTimer::timeout, this, &Boris::enableInteract);
+  acknowledgeBorisesTimer.setInterval(60000);
+  acknowledgeBorisesTimer.setSingleShot(true);
+  connect(&acknowledgeBorisesTimer, &QTimer::timeout, [this]() { ignoreBorises = false; borisFriend = nullptr; });
+
+  acknowledgeItemsTimer.setInterval(120000); // When dragging an object close to Boris he will still always interact with it
+  acknowledgeItemsTimer.setSingleShot(true);
+  connect(&acknowledgeItemsTimer, &QTimer::timeout, [this]() { ignoreItems = false; });
 
   setCursor(settings.getCursor("hover.png"));
 
@@ -239,6 +243,7 @@ int Boris::getIdxFromCategory(const QString &category)
 
 void Boris::nextBehaviour()
 {
+  interactItemPos = QPoint();
   changeBehaviour();
 }
 
@@ -375,12 +380,18 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["mxvel"] = settings.mouseHVel;
   scriptVars["myvel"] = settings.mouseVVel;
   scriptVars["mdist"] = getDistance(cursorPos);
-  scriptVars["msec"] = getDirectionTo(cursorPos);
+  scriptVars["mdir"] = getDirectionTo(cursorPos); // Mouse direction in relation to Boris
   if(borisFriend != nullptr) {
-    scriptVars["fsec"] = getDirectionTo(QPoint(borisFriend->pos().x() + (borisFriend->getWidth() / 2),
-                                               borisFriend->pos().y() + (borisFriend->getHeight() / 2)));
+    scriptVars["bdir"] = getDirectionTo(QPoint(borisFriend->pos().x() + (borisFriend->getWidth() / 2),
+                                               borisFriend->pos().y() + (borisFriend->getHeight() / 2))); // Boris friend direction in relation to Boris
   } else {
-    scriptVars["fsec"] = -1;
+    scriptVars["bdir"] = -1;
+  }
+  if(!interactItemPos.isNull()) {
+    scriptVars["idir"] = getDirectionTo(QPoint(interactItemPos.x() + (settings.baseSize / 2),
+                                               interactItemPos.y() + (settings.baseSize / 2))); // Interaction item direction in relation to Boris
+  } else {
+    scriptVars["idir"] = -1;
   }
   scriptVars["xvel"] = 0;
   scriptVars["yvel"] = 0;
@@ -723,7 +734,7 @@ void Boris::wheelEvent(QGraphicsSceneWheelEvent *)
     } else {
       changeBehaviour("_annoyed");
     }
-    annoyance++;
+    annoyance += 2;
   }
 }
 
@@ -775,7 +786,7 @@ void Boris::handlePhysics()
   if(!falling && !grabbed) {
     if(getDistance(cursorPos) < getWidth() * 2) {
       if(!mouseHovering) {
-        interactions += 2; // Should be 2 due to checkInteractions now run every 1 second instead of 2
+        interactions += 4; // Should be 2 due to checkInteractions now run every 500 ms
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
           if(stats->getAnxiety() >= QRandomGenerator::global()->bounded(20) + 10) {
             changeBehaviour("_flee");
@@ -972,7 +983,7 @@ void Boris::reconfBoris()
 {
   // Reset Boris pointer
   borisFriend = nullptr;
-
+  
   // Set new independence level
   stats->setIndependence(settings.independence);
 
@@ -1023,29 +1034,25 @@ int Boris::getCurBehav()
   return curBehav;
 }
 
-void Boris::enableInteract()
-{
-  interact = true;
-  borisFriend = nullptr;
-}
-
 void Boris::checkInteractions()
 {
   // Check if there are other Borises nearby to interact with
   for(auto &boris: settings.borisList) {
     if(boris != this) {
-      if(getDistance(boris->getGlobalCenter()) < (getWidth() * 2)) {
+      if(getDistance(boris->getGlobalCenter()) < getWidth() * 1.5) {
         borisInteract(boris);
         break;
       }
     }
   }
 
-  // Check if user is dragging any items close by
+  // Check if an item is close by
   for(auto &item: settings.itemList) {
-    if(interact && !falling && !grabbed && !settings.behaviours.at(curBehav).doNotDisturb &&
-       (!item->ignore || item->grabbed) &&
-       getDistance(item->getGlobalCenter()) < (getWidth() * 0.75)) {
+    if((!ignoreItems || item->grabbed) &&
+       !falling &&
+       !grabbed &&
+       !settings.behaviours.at(curBehav).doNotDisturb &&
+       getDistance(item->getGlobalCenter()) < getWidth()) {
       itemInteract(item);
       break;
     }
@@ -1072,6 +1079,7 @@ void Boris::checkInteractions()
 
 void Boris::borisInteract(Boris *otherBoris)
 {
+  ignoreBorises = true;
   if(borisFriend != nullptr || falling || grabbed || settings.behaviours.at(curBehav).doNotDisturb) {
     return;
   }
@@ -1086,14 +1094,13 @@ void Boris::borisInteract(Boris *otherBoris)
   } else {
     changeBehaviour("_wave");
   }
-  enableInteractTimer.setInterval(QRandomGenerator::global()->bounded(5000) + 17000);
-  enableInteractTimer.start();
+  acknowledgeBorisesTimer.start();
 }
 
 void Boris::itemInteract(Item * item)
 {
-  // Disable interactions for a while
-  interact = false;
+  ignoreItems = true;
+  interactItemPos = item->pos().toPoint();
 
   if(!item->getReactionBehaviour().isEmpty()) {
     changeBehaviour(item->getReactionBehaviour());
@@ -1101,8 +1108,7 @@ void Boris::itemInteract(Item * item)
   } else if(item->grabbed) {
     bubble->initBubble(stats->getHyper(), "I don't know what to do with that.", "_thought");
   }
-  enableInteractTimer.setInterval(5000);
-  enableInteractTimer.start();
+  acknowledgeItemsTimer.start();
 }
 
 // Used by scripthandler to immediately switch to behav using file

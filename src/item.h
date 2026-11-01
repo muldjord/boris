@@ -42,7 +42,7 @@ class Item : public QGraphicsObject
 {
   Q_OBJECT;
 public:
-  Item(const QString &item, Settings &settings, const bool &ignore = true);
+  Item(const QString &item, Settings &settings);
   ~Item();
   int getWidth() const;
   int getHeight() const;
@@ -53,7 +53,6 @@ public:
   void interact(Boris *boris);
   QMap<QString, int> scriptVars;
   bool grabbed = false;
-  bool ignore;
 
 public slots:
   void destroy();
@@ -71,7 +70,6 @@ protected:
 
 private slots:
   void setCurFrame(const int &frame);
-  void dontIgnore();
 
 private:
   void runScript(int &stop, const bool &init = false);
@@ -97,7 +95,6 @@ private:
 
   Shadow *shadow = nullptr;
 
-  QTimer ignoreTimer;
   double vVel = 0.0;
   double hVel = 0.0;
   int groundY = 0;

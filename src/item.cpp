@@ -38,8 +38,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern MainWindow *mainWindow;
 extern SoundMixer *soundMixer;
 
-Item::Item(const QString &item, Settings &settings, const bool &ignore)
-  : ignore(ignore), settings(settings)
+Item::Item(const QString &item, Settings &settings)
+  : settings(settings)
 {
   for(int a = 0; a < settings.itemBehaviours.count(); ++a) {
     if(settings.itemBehaviours.at(a).file == item) {
@@ -77,16 +77,6 @@ Item::Item(const QString &item, Settings &settings, const bool &ignore)
     runScript(stop, true);
   }
 
-  ignoreTimer.setInterval(60000);
-  ignoreTimer.setSingleShot(true);
-  connect(&ignoreTimer, &QTimer::timeout, this, &Item::dontIgnore);
-
-  if(settings.itemBehaviours.at(curItem).noIgnore) {
-    this->ignore = false;
-  } else {
-    ignoreTimer.start();
-  }
-
   animTimer.start(0, Qt::PreciseTimer, this);
 }
 
@@ -113,7 +103,7 @@ void Item::runScript(int &stop, const bool &init)
   scriptVars["mxvel"] = settings.mouseHVel;
   scriptVars["myvel"] = settings.mouseVVel;
   scriptVars["mdist"] = getDistance(mainWindow->mapToScene(QCursor::pos()));
-  scriptVars["msec"] = getDirectionTo(mainWindow->mapToScene(QCursor::pos()));
+  scriptVars["mdir"] = getDirectionTo(mainWindow->mapToScene(QCursor::pos()));
   QDate date = QDate::currentDate();
   QTime time = QTime::currentTime();
   scriptVars["day"] = date.day();
@@ -375,8 +365,6 @@ void Item::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
   if(event->button() == Qt::LeftButton) {
     grabbed = true;
-    ignore = false;
-    ignoreTimer.stop();
     setCursor(settings.getCursor("grab.png"));
     this->setPos(event->scenePos().x() - (getWidth() / 2), 
                  event->scenePos().y() - (getHeight() / 2));
@@ -445,12 +433,6 @@ void Item::destroy()
   delete this;
 }
 
-void Item::dontIgnore()
-{
-  ignore = false;
-  borisHyper = 0;
-}
-
 void Item::handlePhysics()
 {
   // Set scene distance so the item goes behind other items and Borises that are in front of it
@@ -485,10 +467,15 @@ void Item::interact(Boris *boris)
   scriptVars["social"] = boris->stats->getSocial();
   scriptVars["fun"] = boris->stats->getFun();
   scriptVars["hygiene"] = boris->stats->getHygiene();
-
+  scriptVars["bdir"] = getDirectionTo(boris->pos());
+  
   borisHyper = boris->stats->getHyper();
 
   if(settings.itemBehaviours.at(curItem).reactions.at(interactReaction).doMoveItem()) {
+    falling = false;
+    grabbed = false;
+    hVel = 0.0;
+    vVel = 0.0;
     setPos(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord(),
 	   boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord());
   }
@@ -500,10 +487,4 @@ void Item::interact(Boris *boris)
   curFrame = settings.itemBehaviours.at(curItem).labels[settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel()];
   animTimer.start(0, Qt::PreciseTimer, this);
   setCursor(settings.getCursor("hover.png"));
-  falling = false;
-  grabbed = false;
-  hVel = 0.0;
-  vVel = 0.0;
-  ignore = true;
-  ignoreTimer.start();
 }

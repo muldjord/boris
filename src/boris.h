@@ -64,8 +64,6 @@ class Boris : public QGraphicsObject
 public:
   explicit Boris(Settings &settings);
   ~Boris();
-  Boris *borisFriend = nullptr;
-  Stats *stats = nullptr;
   int getWidth() const;
   int getHeight() const;
   void moveBoris(int dX, int dY, const bool &flipped = false);
@@ -76,6 +74,9 @@ public:
 
   int curFrame = 0;
   int curBehav = 0;
+
+  Boris *borisFriend = nullptr;
+  Stats *stats = nullptr;
 
 public slots:
   void handlePhysics();
@@ -93,9 +94,9 @@ protected:
 
   void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
   void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
-  void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
-  void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-  void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
+  void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+  void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
   void wheelEvent(QGraphicsSceneWheelEvent *) override;
 
 signals:
@@ -104,7 +105,6 @@ signals:
 private slots:
   void handleBehaviourChange(QAction* a);
   void updateDebugInfo();
-  void enableInteract();
   void checkInteractions();
   void behavFromFile(const QString &file);
   void setCurFrame(const int &frame);
@@ -116,9 +116,12 @@ private:
 
   Settings &settings;
 
+  QPoint interactItemPos = QPoint();
+
   bool falling = false;
   bool grabbed = false;
-  bool interact = true;
+  bool ignoreBorises = false;
+  bool ignoreItems = false;
   int staticBehaviours = 0;
   int interactions = 0;
   int annoyance = 0;
@@ -129,7 +132,8 @@ private:
   QTimer behavTimer;
   QBasicTimer animTimer;
   QTimer interactionsTimer;
-  QTimer enableInteractTimer;
+  QTimer acknowledgeBorisesTimer;
+  QTimer acknowledgeItemsTimer;
 
   QPoint mLastMousePosition;
   bool mouseHovering = false;
