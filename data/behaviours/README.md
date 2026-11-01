@@ -43,7 +43,7 @@ The line `#Frames` must be there so the software knows when the frame definition
 
 #### Options specific to item behaviours
 * coins=PRICE: The amount of Boris coins this item costs to unlock before it can be spawned. Earn Boris coins right-clicking Boris and selecting behaviours that correspons to his needs.
-* reaction=REACTION,LABEL,XCOORD,YCOORD;...: Each REACTION,LABEL,COORDINATE set specifies a Boris behaviour to initiate, what label to goto inside this item when it is initiated, and where to move the item relative to Boris when it is initiated.
+* reaction=REACTION[,LABEL[,XCOORD,YCOORD]];...: Each REACTION,LABEL,COORDINATE set specifies a Boris behaviour to initiate, what label to goto inside this item when it is initiated, and where to move the item relative to Boris when it is initiated. LABEL and XCOORD/YCOORD can be left out. If LABEL is left out the item will simply disappear when Boris reacts to it. If XCOORD/YCOORD are left out the item will goto the defined LABEL but will stay in place. If XCOORD/YCOORD are added the item will be moved to the specified coordinates when the reaction starts. The coordinates are relative to the position the reacting Boris is in.
 * weight=INTEGER: Set the weight of the item. Value can be from 0-10. 0 means floating. 10 means really heavy.
 * bounce=INTEGER: Sets the bounce factor of the object. Value can be from 0-10. 0 means no bounce. 10 means bounce forever.
 
@@ -155,7 +155,7 @@ label end
 As you can see a label can be named pretty much anything. Do not use any of the reserved keywords used by the language though. It will give you some very odd behaviour. So make sure you steer clear of `if`, `var`, `goto` and so on.
 
 ##### if
-Good old if sentence. This is probably the most important of all the commands as it allows for conditions to be tested and acted upon.
+Good old if statement. This is probably the most important of all the commands as it allows for conditions to be tested and acted upon.
 * Definition:
 `if EXPRESSION [then if ...] [{] COMMANDs [}] else [{] COMMAND(s) [}]`
 * Expression definition:
