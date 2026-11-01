@@ -1,10 +1,18 @@
 title=Candle
 category=Energy
+
 weight=20
 bounce=2
 reaction=sit_and_relax,one
+
 allowFlip
-define nextframe:var nxt = @4,if nxt = 1 then goto one,if nxt = 2 then goto two,if nxt = 3 then goto three,if nxt = 4 then goto four
+
+define nextframe:var nxt = @4,
+if nxt = 1 then goto one,
+if nxt = 2 then goto two,
+if nxt = 3 then goto three,
+if nxt = 4 then goto four
+
 #Frames
 0;150;0;0;;label one,call nextframe
 1;150;0;0;;label two,call nextframe
