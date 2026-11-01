@@ -2,25 +2,25 @@ fun=5
 social=30
 oneShot
 
-define init:if fsec > -1 call friend else call mouse
+define init:if bdir > -1 call friend else call mouse
 
-define friend:if fsec = 0 goto north,
-if fsec = 1 goto northeast,
-if fsec = 2 goto east,
-if fsec = 3 goto southeast,
-if fsec = 4 goto south,
-if fsec = 5 goto southwest,
-if fsec = 6 goto west,
-if fsec = 7 goto northwest
+define friend:if bdir = 0 goto north,
+if bdir = 1 goto northeast,
+if bdir = 2 goto east,
+if bdir = 3 goto southeast,
+if bdir = 4 goto south,
+if bdir = 5 goto southwest,
+if bdir = 6 goto west,
+if bdir = 7 goto northwest
 
-define mouse:if msec = 0 goto north,
-if msec = 1 goto northeast,
-if msec = 2 goto east,
-if msec = 3 goto southeast,
-if msec = 4 goto south,
-if msec = 5 goto southwest,
-if msec = 6 goto west,
-if msec = 7 goto northwest
+define mouse:if mdir = 0 goto north,
+if mdir = 1 goto northeast,
+if mdir = 2 goto east,
+if mdir = 3 goto southeast,
+if mdir = 4 goto south,
+if mdir = 5 goto southwest,
+if mdir = 6 goto west,
+if mdir = 7 goto northwest
 
 #Frames
 # Wave east
