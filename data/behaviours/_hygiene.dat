@@ -1,11 +1,11 @@
-oneShot
+oneShotque
 allowFlip
 #Frames
 0;75;0;0;flies.wav;
 1;75;0;0;;
 2;75;0;0;;
 3;75;0;0;;
-4;75;0;0;;if hygiene > 35 and fsec != -1 think "Wow, he stinks..." else think "I smell terrible..."
+4;75;0;0;;if hygiene > 35 and bdir != -1 think "Wow, he stinks..." else think "I smell terrible..."
 5;75;0;0;;
 6;75;0;0;;
 7;75;0;0;;
