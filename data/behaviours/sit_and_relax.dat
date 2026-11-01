@@ -6,12 +6,28 @@ energy=20
 social=5
 
 oneShot
-allowFlip
 
-define morerelax:if sitloop <= 0 goto getbackup,var sitloop -= 1,var whichrelax = @3,if whichrelax = 1 goto sit1,if whichrelax = 2 goto sit2,if whichrelax = 3 goto sit3
+define init:var sitloop = @5 + 5,
+if idir = -1 var idir = @8 - 1,
+if idir = 0 goto initu,
+if idir = 1 or idir = 2 or idir = 3 goto initr,
+if idir = 4 goto initd,
+if idir = 5 or idir = 6 or idir = 7 goto initl
+
+define getbackup:if idir = 0 goto endu,
+if idir = 1 or idir = 2 or idir = 3 goto endr,
+if idir = 4 goto endd,
+if idir = 5 or idir = 6 or idir = 7 goto endl
+
+define morerelax:if sitloop <= 0 call getbackup,
+var sitloop -= 1,
+var whichrelax = @3,
+if whichrelax = 1 then if idir = 0 goto situ1 else if idir = 1 or idir = 2 or idir = 3 goto sitr1 else if idir = 4 goto sitd1 else if idir = 5 or idir = 6 or idir = 7 goto sitl1,
+if whichrelax = 2 then if idir = 0 goto situ2 else if idir = 1 or idir = 2 or idir = 3 goto sitr2 else if idir = 4 goto sitd2 else if idir = 5 or idir = 6 or idir = 7 goto sitl2,
+if whichrelax = 3 then if idir = 0 goto situ3 else if idir = 1 or idir = 2 or idir = 3 goto sitr3 else if idir = 4 goto sitd2 else if idir = 5 or idir = 6 or idir = 7 goto sitl3
 
 #Frames
-0;75;0;0;;var sitloop = @5 + 5
+0;75;0;0;;label initr
 1;75;0;0;;
 2;75;0;0;;
 3;75;0;0;;
@@ -30,13 +46,13 @@ define morerelax:if sitloop <= 0 goto getbackup,var sitloop -= 1,var whichrelax 
 16;75;0;0;;
 17;75;0;0;;
 18;75;0;0;;
-19;1000;0;0;;label sit1,goto blink1
-19;2200;0;0;;label sit2,goto blink1
-19;3500;0;0;;label sit3,goto blink1
-20;75;0;0;;label blink1,if @2 = 1 call morerelax
+19;1000;0;0;;label sitr1,goto blr1
+19;2200;0;0;;label sitr2,goto blr1
+19;3500;0;0;;label sitr3
+20;75;0;0;;label blr1,if @2 = 1 call morerelax
 19;75;0;0;;
-20;75;0;0;;label blink2,call morerelax
-18;75;0;0;;label getbackup
+20;75;0;0;;call morerelax
+18;75;0;0;;label endr
 17;75;0;0;;
 16;75;0;0;;
 15;75;0;0;;
@@ -54,5 +70,139 @@ define morerelax:if sitloop <= 0 goto getbackup,var sitloop -= 1,var whichrelax 
 3;75;0;0;;
 2;75;0;0;;
 1;75;0;0;;
-0;75;0;0;;
+0;75;0;0;;break
 
+21;75;0;0;;label initl
+22;75;0;0;;
+23;75;0;0;;
+24;75;0;0;;
+25;75;0;0;;
+26;75;0;0;;
+27;75;0;0;;
+28;75;0;0;;
+29;75;0;0;;
+30;75;0;0;;
+31;75;0;0;;
+32;75;0;0;;
+33;75;0;0;;
+34;75;0;0;;
+35;75;0;0;;
+36;75;0;0;;
+37;75;0;0;;
+38;75;0;0;;
+39;75;0;0;;
+40;1000;0;0;;label sitl1,goto bll1
+40;2200;0;0;;label sitl2,goto bll1
+40;3500;0;0;;label sitl3
+41;75;0;0;;label bll1,if @2 = 1 call morerelax
+40;75;0;0;;
+41;75;0;0;;call morerelax
+39;75;0;0;;label endl
+38;75;0;0;;
+37;75;0;0;;
+36;75;0;0;;
+35;75;0;0;;
+34;75;0;0;;
+33;75;0;0;;
+32;75;0;0;;
+31;75;0;0;;
+30;75;0;0;;
+29;75;0;0;;
+28;75;0;0;;
+27;75;0;0;;
+26;75;0;0;;
+25;75;0;0;;
+24;75;0;0;;
+23;75;0;0;;
+22;75;0;0;;
+21;75;0;0;;break
+
+42;75;0;0;;label initd
+43;75;0;0;;
+44;75;0;0;;
+45;75;0;0;;
+46;75;0;0;;
+47;75;0;0;;
+48;75;0;0;;
+49;75;0;0;;
+50;75;0;0;;
+51;75;0;0;;
+52;75;0;0;;
+53;75;0;0;;
+54;75;0;0;;
+55;75;0;0;;
+56;75;0;0;;
+57;75;0;0;;
+58;75;0;0;;
+59;75;0;0;;
+60;75;0;0;;
+61;1000;0;0;;label sitd1,goto bld1
+61;2200;0;0;;label sitd2,goto bld1
+61;3500;0;0;;label sitd3
+62;75;0;0;;label bld1,if @2 = 1 call morerelax
+61;75;0;0;;
+62;75;0;0;;call morerelax
+60;75;0;0;;label endd
+59;75;0;0;;
+58;75;0;0;;
+57;75;0;0;;
+56;75;0;0;;
+55;75;0;0;;
+54;75;0;0;;
+53;75;0;0;;
+52;75;0;0;;
+51;75;0;0;;
+50;75;0;0;;
+49;75;0;0;;
+48;75;0;0;;
+47;75;0;0;;
+46;75;0;0;;
+45;75;0;0;;
+44;75;0;0;;
+43;75;0;0;;
+42;75;0;0;;break
+
+63;75;0;0;;label initu
+64;75;0;0;;
+65;75;0;0;;
+66;75;0;0;;
+67;75;0;0;;
+68;75;0;0;;
+69;75;0;0;;
+70;75;0;0;;
+71;75;0;0;;
+72;75;0;0;;
+73;75;0;0;;
+74;75;0;0;;
+75;75;0;0;;
+76;75;0;0;;
+77;75;0;0;;
+78;75;0;0;;
+79;75;0;0;;
+80;75;0;0;;
+81;75;0;0;;
+82;1000;0;0;;label situ1,goto blu1
+82;2200;0;0;;label situ2,goto blu1
+82;3500;0;0;;label situ3
+83;75;0;0;;label blu1,if @2 = 1 call morerelax
+82;75;0;0;;
+83;75;0;0;;call morerelax
+81;75;0;0;;label endu
+80;75;0;0;;
+79;75;0;0;;
+78;75;0;0;;
+77;75;0;0;;
+76;75;0;0;;
+75;75;0;0;;
+74;75;0;0;;
+73;75;0;0;;
+72;75;0;0;;
+71;75;0;0;;
+70;75;0;0;;
+69;75;0;0;;
+68;75;0;0;;
+67;75;0;0;;
+66;75;0;0;;
+65;75;0;0;;
+64;75;0;0;;
+63;75;0;0;;break
