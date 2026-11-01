@@ -892,7 +892,7 @@ int Boris::getHeight() const
 
 void Boris::processAi(QString &behav)
 {
-  // You might wonder why I check behav == "" in all the following if sentences.
+  // You might wonder why I check behav == "" in all the following if statements.
   // The reason is that they might change throughout the function, and thus makes sense to
   // make sure an AI decision hasn't already been made.
 
