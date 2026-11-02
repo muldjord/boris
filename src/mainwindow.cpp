@@ -175,9 +175,6 @@ MainWindow::MainWindow(QSplashScreen &splash)
 
 MainWindow::~MainWindow()
 {
-  for(auto &boris: settings.borisList) {
-    delete boris;
-  }
 }
 
 void MainWindow::init()
@@ -541,10 +538,6 @@ void MainWindow::createItemsMenu()
     if(!subMenu->isEmpty()) {
       itemsMenu->addMenu(subMenu);
     }
-  }
-
-  if(itemsMenu->isEmpty()) {
-    itemsMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), tr("No items unlocked!"));
   }
 }
 

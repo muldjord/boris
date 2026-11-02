@@ -786,7 +786,7 @@ void Boris::handlePhysics()
   if(!falling && !grabbed) {
     if(getDistance(cursorPos) < getWidth() * 2) {
       if(!mouseHovering) {
-        interactions += 4; // Should be 2 due to checkInteractions now run every 500 ms
+        interactions += 4; // Should be 4 due to checkInteractions now run every 500 ms
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
           if(stats->getAnxiety() >= QRandomGenerator::global()->bounded(20) + 10) {
             changeBehaviour("_flee");

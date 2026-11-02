@@ -49,7 +49,7 @@ void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QStri
     txt += QString(": Fatal: %1").arg(msg);
     abort();
   }
-  printf("%s", txt.toStdString().c_str());
+  printf("%s", qPrintable(txt));
 }
 
 int main(int argc, char *argv[])

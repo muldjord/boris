@@ -59,7 +59,7 @@ void ScriptHandler::runScript(int &stop, const Script &script)
 {
   for(const auto &command: script.commands) {
     if(settings.scriptOutput) {
-      printf("CODE: '%s'\n", command.toStdString().c_str());
+      printf("CODE: '%s'\n", qPrintable(command));
     }
     QList<QString> parameters = command.split(" ", Qt::KeepEmptyParts);
     runCommand(parameters, stop, script);
@@ -186,7 +186,7 @@ void ScriptHandler::condition(QList<QString> &parameters, bool &isTrue, bool &co
   }
 
   if(settings.scriptOutput) {
-    printf("%d %s %d", compareFrom, op.toStdString().c_str(), compareTo);
+    printf("%d %s %d", compareFrom, qPrintable(op), compareTo);
   }
 
   if(parameters.count() >= 1) {
@@ -224,12 +224,12 @@ void ScriptHandler::handleGoto(QList<QString> &parameters, int &stop)
 
   if(labels.contains(parameters.first())) {
     if(settings.scriptOutput) {
-      printf("Going to label '%s' at frame %d\n", parameters.first().toStdString().c_str(), labels[parameters.first()]);
+      printf("Going to label '%s' at frame %d\n", qPrintable(parameters.first()), labels[parameters.first()]);
     }
     emit setCurFrame(labels[parameters.first()]);
   } else {
     if(settings.scriptOutput) {
-      printf("Going to '%s', ERROR: Unknown label\n", parameters.first().toStdString().c_str());
+      printf("Going to '%s', ERROR: Unknown label\n", qPrintable(parameters.first()));
     }
   }
   stop = 1; // Will end the script execution for this frame
@@ -258,7 +258,7 @@ void ScriptHandler::handleVar(QList<QString> &parameters)
   }
 
   if(settings.scriptOutput) {
-    printf("%s = %d\n", variable.toStdString().c_str(), scriptVars[variable]);
+    printf("%s = %d\n", qPrintable(variable), scriptVars[variable]);
   }
 }
 
@@ -364,7 +364,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
         int x = getValue(parameters);
         int y = getValue(parameters);
         if(settings.scriptOutput) {
-          printf("Drawing frame %d from sprite '%s' at %d,%d\n", f, sprite.toStdString().c_str(), x, y);
+          printf("Drawing frame %d from sprite '%s' at %d,%d\n", f, qPrintable(sprite), x, y);
         }
         if(settings.sprites[sprite].length() - 1 >= f) {
           painter.drawImage(x, y, settings.sprites[sprite].at(f));
@@ -422,7 +422,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
     } else {
       if(settings.scriptOutput) {
         printf("Color '%s' is malformed, falling back to black\n",
-               colorString.toStdString().c_str());
+               qPrintable(colorString));
       }
       painter.setPen(QPen(QColor(Qt::black)));
     }
@@ -438,7 +438,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           int x2 = getValue(parameters);
           int y2 = getValue(parameters);
           if(settings.scriptOutput) {
-            printf("Drawing %s line from %d,%d to %d,%d\n", colorString.toStdString().c_str(),
+            printf("Drawing %s line from %d,%d to %d,%d\n", qPrintable(colorString),
                    x1, y1, x2, y2);
           }
           painter.drawLine(x1, y1, x2, y2);
@@ -449,7 +449,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           int x = getValue(parameters);
           int y = getValue(parameters);
           if(settings.scriptOutput) {
-            printf("Drawing %s pixel at %d,%d\n", colorString.toStdString().c_str(), x, y);
+            printf("Drawing %s pixel at %d,%d\n", qPrintable(colorString), x, y);
           }
           painter.drawPoint(x, y);
         }
@@ -462,7 +462,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           int w = getValue(parameters);
           int h = getValue(parameters);
           if(settings.scriptOutput) {
-            printf("Drawing %s ellipse at %d,%d with a width of %d and a height of %d\n", colorString.toStdString().c_str(), x, y, w, h);
+            printf("Drawing %s ellipse at %d,%d with a width of %d and a height of %d\n", qPrintable(colorString), x, y, w, h);
           }
           painter.drawEllipse(x, y, w, h);
         }
@@ -475,7 +475,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           int w = getValue(parameters);
           int h = getValue(parameters);
           if(settings.scriptOutput) {
-            printf("Drawing %s rectangle at %d,%d with a width of %d and a height of %d\n", colorString.toStdString().c_str(), x, y, w, h);
+            printf("Drawing %s rectangle at %d,%d with a width of %d and a height of %d\n", qPrintable(colorString), x, y, w, h);
           }
           painter.drawRect(x, y, w, h);
         }
@@ -487,8 +487,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           QString text = parameters.first();
           parameters.removeFirst(); // Remove string
           if(settings.scriptOutput) {
-            printf("Drawing %s text '%s' at %d,%d\n", colorString.toStdString().c_str(),
-                   text.toStdString().c_str(), x, y);
+            printf("Drawing %s text '%s' at %d,%d\n", qPrintable(colorString), qPrintable(text), x, y);
           }
           drawText(painter, x, y, text);
         }
@@ -499,7 +498,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           int y = getValue(parameters);
           int value = getValue(parameters);
           if(settings.scriptOutput) {
-            printf("Drawing %s value %d at %d,%d\n", colorString.toStdString().c_str(),
+            printf("Drawing %s value %d at %d,%d\n", qPrintable(colorString),
                    value, x, y);
           }
           drawText(painter, x, y, QString::number(value));
@@ -554,12 +553,12 @@ void ScriptHandler::handleCall(QList<QString> &parameters, int &stop)
   parameters.removeFirst(); // Remove 'call'
   if(defines.contains(parameters.first())) {
     if(settings.scriptOutput) {
-      printf("Calling define '%s'\n", parameters.first().toStdString().c_str());
+      printf("Calling define '%s'\n", qPrintable(parameters.first()));
     }
     runScript(stop, defines[parameters.first()]);
   } else {
     if(settings.scriptOutput) {
-      printf("Calling define '%s', ERROR: Unknown define\n", parameters.first().toStdString().c_str());
+      printf("Calling define '%s', ERROR: Unknown define\n", qPrintable(parameters.first()));
     }
   }
   parameters.removeFirst(); // Remove define name
@@ -570,7 +569,7 @@ void ScriptHandler::handleBehav(QList<QString> &parameters, int &stop)
   parameters.removeFirst(); // Remove 'behav'
   emit behavFromFile(parameters.first());
   if(settings.scriptOutput) {
-    printf("Changing behaviour to '%s'\n", parameters.first().toStdString().c_str());
+    printf("Changing behaviour to '%s'\n", qPrintable(parameters.first()));
   }
   stop = 1; // Will tell the Boris / Item class to exit the script processing
   parameters.removeFirst(); // Remove behaviour filename
@@ -581,7 +580,7 @@ void ScriptHandler::handleSound(QList<QString> &parameters)
   parameters.removeFirst(); // Remove 'sound'
   if(parameters.count() >= 1) {
     if(settings.scriptOutput) {
-      printf("Playing sound '%s'\n", parameters.first().toStdString().c_str());
+      printf("Playing sound '%s'\n", qPrintable(parameters.first()));
     }
     if(settings.sound) {
       soundMixer->playSoundFile(parameters.first().toStdString(),
@@ -625,7 +624,7 @@ void ScriptHandler::handleSay(QList<QString> &parameters)
       bubble->initBubble(scriptVars["hyper"], bubbleText);
     }
     if(settings.scriptOutput) {
-      printf("Saying '%s'\n", bubbleText.toStdString().c_str());
+      printf("Saying '%s'\n", qPrintable(bubbleText));
     }
   }
 }
@@ -663,7 +662,7 @@ void ScriptHandler::handleThink(QList<QString> &parameters)
       bubble->initBubble(scriptVars["hyper"], bubbleText, "_thought");
     }
     if(settings.scriptOutput) {
-      printf("Thinking '%s'\n", bubbleText.toStdString().c_str());
+      printf("Thinking '%s'\n", qPrintable(bubbleText));
     }
   }
 }

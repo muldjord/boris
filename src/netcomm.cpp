@@ -92,9 +92,9 @@ void NetComm::netReply(QNetworkReply *reply)
     }
 
     //qInfo("%s\n", rawData.data());
-    qInfo("  Icon: %s\n", settings.weatherType.toStdString().c_str());
+    qInfo("  Icon: %s\n", qPrintable(settings.weatherType));
     qInfo("  Temp: %f\n", settings.temperature);
-    qInfo("  Wind: %fm/s from %s\n", settings.windSpeed, settings.windDirection.toStdString().c_str());
+    qInfo("  Wind: %fm/s from %s\n", settings.windSpeed, qPrintable(settings.windDirection));
 
     emit weatherUpdated();
   } else if(reply->request() == feedRequest) {
@@ -105,7 +105,7 @@ void NetComm::netReply(QNetworkReply *reply)
       RssLine rssLine;
       rssLine.text = titles.at(a).firstChildElement("title").text().trimmed();
       rssLine.url = QUrl(titles.at(a).firstChildElement("link").text());
-      qInfo("  '%s'\n", rssLine.text.toStdString().c_str());
+      qInfo("  '%s'\n", qPrintable(rssLine.text));
       settings.rssLines.append(rssLine);
     }
   }

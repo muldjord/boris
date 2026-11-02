@@ -110,6 +110,14 @@ private slots:
   void setCurFrame(const int &frame);
 
 private:
+  QString getFileFromCategory(const QString &category);
+  int getIdxFromCategory(const QString &category);
+  void processAi(QString &behav);
+  int getDistance(const QPointF &p);
+  int getDirectionTo(const QPointF &p);
+  void borisInteract(Boris *boris);
+  void itemInteract(Item *item);
+  void killBoris();
   void runScript(int &stop, const bool &init = false);
   void sanityCheck();
   void setWeather(QString &behav);
@@ -167,19 +175,10 @@ private:
   Shadow *shadow = nullptr;
 
   QList<QString> behavQueue;
-  QString getFileFromCategory(const QString &category);
-  int getIdxFromCategory(const QString &category);
-  void processAi(QString &behav);
-  int getDistance(const QPointF &p);
-  int getDirectionTo(const QPointF &p);
-  void borisInteract(Boris *boris);
-  void itemInteract(Item *item);
   int timeForWeather = 0;
 
   bool isAlive = true;
   bool flipFrames = false;
 
   bool stopNextBehaviour = false;
-
-  void killBoris();
 };
