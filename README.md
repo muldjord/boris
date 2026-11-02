@@ -40,8 +40,6 @@ The last command copies all necessary files to the `release` folder. You can the
 ## Release notes
 #### Known issues:
 * Linux: For security reasons modern Wayland compositors don't support `Qt::WindowStaysOnTopHint` and click-through behaviour. The non-free OS called Windows (which apparently people still use for some bizarre reason) still support this, but it is probably only a matter of time before they catch up and stop supporting it as well
-* Critical need behaviours added to the queue chosen by Boris himself also gives out coins
-* RSS feed headlines cannot yet be clicked and opened in a browser
 * Boris will interact with an object instantly when he spawns it himself (eg. through 'Social->Place a gift')
 
 #### Version x.x.x, Roadmap:
@@ -52,7 +50,6 @@ The last command copies all necessary files to the `release` folder. You can the
 * Make a 'bowling' behaviour with a 'bowlingball' item and spawned 'pin' items (which might need syncronization as well?)
 * Make it so Boris only interacts with items he is interested in (those that match his current needs)
 * Make a 'candycane' item for Boris to eat. It should be 'energy' category. He will get a significant energy boost and get very hyper
-* Make a 'candle' item for Boris to warm himself at
 
 #### Version 4.0.0 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
@@ -63,7 +60,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Added new splash screen with loading sequence
 * Shadows now stays visible on the ground when Boris and items are airborne
 * Shadows now have dynamic width depending on the altitude of Boris and items
-* Fixed eternal bouncing bug (I think)
+* Fixed eternal bouncing bug
 * Added 'candle' item
 * Added 'sit_and_relax' behaviour for 'energy' category
 
