@@ -478,6 +478,7 @@ void Item::interact(Boris *boris)
     vVel = 0.0;
     setPos(boris->pos().x() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getXCoord(),
 	   boris->pos().y() + settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getYCoord());
+    setCursor(settings.getCursor("hover.png"));
   }
 
   if(settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel().isEmpty()) {
@@ -486,5 +487,4 @@ void Item::interact(Boris *boris)
   }
   curFrame = settings.itemBehaviours.at(curItem).labels[settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel()];
   animTimer.start(0, Qt::PreciseTimer, this);
-  setCursor(settings.getCursor("hover.png"));
 }
