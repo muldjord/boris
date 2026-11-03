@@ -147,7 +147,7 @@ void Boris::createBehavioursMenu()
 {
   QList<QMenu*> subMenus;
 
-  QMenu *idkfaMenu = new QMenu(tr("Idkfa"), behavioursMenu);
+  QMenu *idkfaMenu = new QMenu("Idkfa", behavioursMenu);
   idkfaMenu->setIcon(QIcon(settings.getPixmap("idkfa.png")));
 
   for(const auto &behaviour: settings.behaviours) {
@@ -193,7 +193,7 @@ void Boris::createBehavioursMenu()
     if(!idkfaMenu->isEmpty()) {
       behavioursMenu->addMenu(idkfaMenu);
     }
-    QMenu *debugMenu = new QMenu(tr("Debug"), behavioursMenu);
+    QMenu *debugMenu = new QMenu("Debug", behavioursMenu);
     debugMenu->setIcon(QIcon(settings.getPixmap("idkfa.png")));
     debugAction = new DebugAction(debugMenu);
     debugMenu->addAction(debugAction);
@@ -201,7 +201,7 @@ void Boris::createBehavioursMenu()
   }
 
   if(behavioursMenu->isEmpty()) {
-    behavioursMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), tr("No behaviours!"));
+    behavioursMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), "No behaviours!");
   }
 }
 

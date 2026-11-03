@@ -74,16 +74,6 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   endif()
 endif()
 
-# Update translation from sources:
-# - Use 'make update_translations' to update ts file
-# - Use 'make release_translations' to update qm file
-qt_add_translations(Boris TS_FILES boris_da_DK.ts
-  SOURCES ${SOURCES}
-  # LUPDATE_OPTIONS -no-obsolete
-)
-
-# add_dependencies(Boris update_translations)
-
 install(TARGETS Boris
   RUNTIME DESTINATION .
 )
@@ -91,7 +81,6 @@ install(TARGETS Boris
 install(FILES
   ${CMAKE_SOURCE_DIR}/AUTHORS
   ${CMAKE_SOURCE_DIR}/LICENSE
-  ${CMAKE_CURRENT_BINARY_DIR}/boris_da_DK.qm
   ${CMAKE_SOURCE_DIR}/README.md
   DESTINATION .
 )

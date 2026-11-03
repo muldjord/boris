@@ -261,7 +261,7 @@ void MainWindow::loadFromConfig()
   }
 
   if(!iniSettings->contains("coins")) {
-    iniSettings->setValue("coins", coins);
+    iniSettings->setValue("coins", 100);
   }
   settings.coins = iniSettings->value("coins").toInt();
 
@@ -398,12 +398,12 @@ void MainWindow::removeBoris(int clones)
 
 void MainWindow::createActions()
 {
-  earthquakeAction = new QAction(tr("&Earthquake!!!"), this);
+  earthquakeAction = new QAction("&Earthquake!!!", this);
   earthquakeAction->setIcon(QIcon(settings.getPixmap("earthquake.png")));
 
-  weatherAction = new QAction(tr("Updating weather..."), this);
+  weatherAction = new QAction("Updating weather...", this);
 
-  coinsAction = new QAction(QString::number(settings.coins) + tr(" coins"), this);
+  coinsAction = new QAction(QString::number(settings.coins) + " coins", this);
   coinsAction->setIcon(QIcon(settings.getPixmap("coin.png")));
 }
 
@@ -412,7 +412,7 @@ void MainWindow::createTrayIcon()
   trayIcon = new QSystemTrayIcon(this);
 
   trayIconMenu = new QMenu();
-  trayIconMenu->addAction(QIcon(settings.getPixmap("about.png")), tr("&Config / about..."), this, &MainWindow::aboutBox);
+  trayIconMenu->addAction(QIcon(settings.getPixmap("about.png")), "&Config / about...", this, &MainWindow::aboutBox);
   trayIconMenu->addSeparator();
   trayIconMenu->addMenu(behavioursMenu);
   trayIconMenu->addSeparator();
@@ -422,7 +422,7 @@ void MainWindow::createTrayIcon()
   trayIconMenu->addAction(earthquakeAction);
   trayIconMenu->addAction(weatherAction);
   trayIconMenu->addSeparator();
-  trayIconMenu->addAction(QIcon(settings.getPixmap("quit.png")), tr("&Quit"), this, &MainWindow::killAll);
+  trayIconMenu->addAction(QIcon(settings.getPixmap("quit.png")), "&Quit", this, &MainWindow::killAll);
 
   coinIcon = new QIcon(settings.getPixmap("coin.png"));
 
@@ -493,7 +493,7 @@ void MainWindow::updateWeather()
   if(settings.temperature != -42) {
     weatherAction->setText(QString::number(settings.temperature) + "°C, " + QString::number(settings.windSpeed) + "m/s " + settings.windDirection);
   } else {
-    weatherAction->setText(tr("Couldn't find city"));
+    weatherAction->setText("Couldn't find city");
   }
   weatherAction->setIcon(QIcon(settings.getPixmap(settings.weatherType + ".png")));
 }
@@ -501,7 +501,7 @@ void MainWindow::updateWeather()
 void MainWindow::createItemsMenu()
 {
   itemsMenu = new QMenu();
-  itemsMenu->setTitle(tr("Items"));
+  itemsMenu->setTitle("Items");
   connect(itemsMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
 
   QList<QMenu*> subMenus;
@@ -547,12 +547,12 @@ void MainWindow::createItemsMenu()
 void MainWindow::createBehavioursMenu()
 {
   behavioursMenu = new QMenu();
-  behavioursMenu->setTitle(tr("Behaviours"));
+  behavioursMenu->setTitle("Behaviours");
   connect(behavioursMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
 
   QList<QMenu*> subMenus;
 
-  QMenu *idkfaMenu = new QMenu(tr("Idkfa"), behavioursMenu);
+  QMenu *idkfaMenu = new QMenu("Idkfa", behavioursMenu);
   idkfaMenu->setIcon(QIcon(settings.getPixmap("idkfa.png")));
 
   for(const auto &behaviour: settings.behaviours) {
@@ -597,7 +597,7 @@ void MainWindow::createBehavioursMenu()
   }
 
   if(behavioursMenu->isEmpty()) {
-    behavioursMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), tr("No behaviours!"));
+    behavioursMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), "No behaviours!");
   }
 }
 
@@ -645,13 +645,13 @@ void MainWindow::spawnItem(QAction* action)
         settings.itemList.append(spawnedItem);
       } else {
         if(settings.coins - item.coins >= 0) {
-          if(QMessageBox::question(nullptr, tr("Buy?"), tr("Do you want to buy '") + " " + item.title + "' " + tr("for ") + QString::number(item.coins) + tr(" coins?")) == QMessageBox::Yes) {
+          if(QMessageBox::question(nullptr, "Buy?", "Do you want to buy '" + item.title + "' " + "for " + QString::number(item.coins) + " coins?") == QMessageBox::Yes) {
             deltaCoins(- item.coins);
             unlockItem(action);
           }
         } else {
           soundMixer->playSoundFile("nocoin.wav", 0, 1);
-          QMessageBox::information(nullptr, tr("Not enough coins!"), tr("You can't afford the '") + " " + item.title + "' " + tr("item.\n\nInitiate behaviours that corresponds to Boris' needs to earn coins. You can then use those coins to unlock new items."));
+          QMessageBox::information(nullptr, "Not enough coins!", "You can't afford the '" + item.title + "' " + "item.\n\nInitiate behaviours that corresponds to Boris' needs to earn coins. You can then use those coins to unlock new items.");
         }
       }
       break;
@@ -676,8 +676,8 @@ void MainWindow::deltaCoins(const int &coins)
 {
   soundMixer->playSoundFile("coinup.wav", 0, 1);
   settings.coins += coins;
-  coinsAction->setText(QString::number(settings.coins) + " " + tr("coins") + " (" + QString::number(coins) + ")");
+  coinsAction->setText(QString::number(settings.coins) + " " + "coins" + " (" + QString::number(coins) + ")");
   trayIcon->setIcon(*coinIcon);
-  QTimer::singleShot(10000, [this]() { coinsAction->setText(QString::number(settings.coins) + tr(" coins")); trayIcon->setIcon(*icon); });
+  QTimer::singleShot(10000, [this]() { coinsAction->setText(QString::number(settings.coins) + " coins"); trayIcon->setIcon(*icon); });
   iniSettings->setValue("coins", settings.coins);
 }

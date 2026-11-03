@@ -375,7 +375,7 @@ QTextBrowser {
 <p>It's just for fun! No real money involved. You can earn Boris coins by right-clicking Boris and choosing a behaviour from a category that corresponds to his current needs. The more needy Boris is for the particular category you select, the more coins you receive.</p>
 <p>You can then spend the coins by right-clicking the Boris system tray icon, selecting the 'Items' submenu and choose the item you want to unlock. The item then becomes unlocked and can be selected any time you want.</p>
 <h4>Where to get Boris:</h4>
-<p>If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit https://github.com/muldjord/boris/releases and download it. He is completely free and open source. You can also download the full source code (GPLv3) in there if you like.</p>
+<p>If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit <a href="https://github.com/muldjord/boris/releases">https://github.com/muldjord/boris/releases</a> and download it. He is completely free and open source. You can also download the full source code (GPLv3) in there if you like.</p>
 )";
   aboutWidget->setHtml(aboutText);
 
@@ -424,94 +424,94 @@ QTextBrowser {
   licenseWidget->setHtml(licenseText);
 
   QTabWidget *tabWidget = new QTabWidget;
-  tabWidget->addTab(aboutWidget, tr("About"));
-  tabWidget->addTab(authorWidget, tr("Author"));
-  tabWidget->addTab(licenseWidget, tr("License"));
+  tabWidget->addTab(aboutWidget, "About");
+  tabWidget->addTab(authorWidget, "Author");
+  tabWidget->addTab(licenseWidget, "License");
 
-  QPushButton *okButton = new QPushButton(tr("Close and save"));
+  QPushButton *okButton = new QPushButton("Close and save");
   connect(okButton, &QPushButton::clicked, this, &About::saveAll);
 
-  QLabel *sizeLabel = new QLabel(tr("Boris size in pixels (32, 64, 128, 256 or 512):"));
+  QLabel *sizeLabel = new QLabel("Boris size in pixels (32, 64, 128, 256 or 512):");
   sizeSlider = new StepSlider({32, 64, 128, 256, 512}, this);
   sizeSlider->setValue(settings.size);
 
-  QLabel *clonesLabel = new QLabel(tr("Boris clones (1-20 or 0 for random):"));
+  QLabel *clonesLabel = new QLabel("Boris clones (1-20 or 0 for random):");
   clonesSlider = new StepSlider({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}, this);
   clonesSlider->setValue(settings.clones);
 
-  enableItems = new QCheckBox(tr("Allow items"));
-  enableItems->setToolTip(tr("Boris will sometimes place various items around the desktop. Items will also be randomly spawned or created using the tray icon menu."));
+  enableItems = new QCheckBox("Allow items");
+  enableItems->setToolTip("Boris will sometimes place various items around the desktop. Items will also be randomly spawned or created using the tray icon menu.");
   if(settings.items) {
     enableItems->setCheckState(Qt::Checked);
   }
 
-  QLabel *itemSpawnIntervalLabel = new QLabel(tr("Seconds between random item spawn (5-3600):"));
+  QLabel *itemSpawnIntervalLabel = new QLabel("Seconds between random item spawn (5-3600):");
   itemSpawnIntervalLineEdit = new QLineEdit();
-  itemSpawnIntervalLineEdit->setToolTip(tr("If items are enabled random items will be spawned around the desktop at this interval."));
+  itemSpawnIntervalLineEdit->setToolTip("If items are enabled random items will be spawned around the desktop at this interval.");
   QIntValidator *itemSpawnIntervalValidator = new QIntValidator(5, 3600, this);
   itemSpawnIntervalLineEdit->setValidator(itemSpawnIntervalValidator);
   itemSpawnIntervalLineEdit->setText(QString::number(settings.itemSpawnInterval));
 
-  QLabel *itemTimeoutLabel = new QLabel(tr("Item timeout in seconds (10-3600):"));
+  QLabel *itemTimeoutLabel = new QLabel("Item timeout in seconds (10-3600):");
   itemTimeoutLineEdit = new QLineEdit();
-  itemTimeoutLineEdit->setToolTip(tr("Items will disappear after this amount of time."));
+  itemTimeoutLineEdit->setToolTip("Items will disappear after this amount of time.");
   QIntValidator *itemValidator = new QIntValidator(10, 3600, this);
   itemTimeoutLineEdit->setValidator(itemValidator);
   itemTimeoutLineEdit->setText(QString::number(settings.itemTimeout));
 
-  QLabel *weatherLabel = new QLabel(tr("Show weather for city (mouse over for help):"));
+  QLabel *weatherLabel = new QLabel("Show weather for city (mouse over for help):");
   weatherLineEdit = new QLineEdit();
-  weatherLineEdit->setToolTip(tr("Type in a nearby city name or the openweathermap city id. Using a city id is the most stable method. To find the id for your city go to openweathermap.org and do a city lookup. The city id will be the last part of the website address."));
+  weatherLineEdit->setToolTip("Type in a nearby city name or the openweathermap city id. Using a city id is the most stable method. To find the id for your city go to openweathermap.org and do a city lookup. The city id will be the last part of the website address.");
   weatherLineEdit->setText(settings.city);
 
-  QLabel *weatherKeyLabel = new QLabel(tr("OpenWeatherMap key (mouse over for help):"));
+  QLabel *weatherKeyLabel = new QLabel("OpenWeatherMap key (mouse over for help):");
   weatherKeyLineEdit = new QLineEdit();
-  weatherKeyLineEdit->setToolTip(tr("The weather functionality needs an API key to function. The default one should work.<br/>In case it doesn't, get a new one for free at openweathermap.org/appid."));
+  weatherKeyLineEdit->setToolTip("The weather functionality needs an API key to function. The default one should work.<br/>In case it doesn't, get a new one for free at openweathermap.org/appid.");
   weatherKeyLineEdit->setText(settings.key);
 
-  QLabel *feedUrlLabel = new QLabel(tr("RSS feed url (mouse over for help):"));
+  QLabel *feedUrlLabel = new QLabel("RSS feed url (mouse over for help):");
   feedUrlLineEdit = new QLineEdit();
-  feedUrlLineEdit->setToolTip(tr("Type in any RSS feed url. Boris will sometimes update you on a title from this feed. You can click it to open it in the default browser."));
+  feedUrlLineEdit->setToolTip("Type in any RSS feed url. Boris will sometimes update you on a title from this feed. You can click it to open it in the default browser.");
   feedUrlLineEdit->setText(settings.feedUrl);
 
-  QLabel *statsLabel = new QLabel(tr("Vitality stats:"));
+  QLabel *statsLabel = new QLabel("Vitality stats:");
   statsComboBox = new QComboBox();
-  statsComboBox->addItem(tr("Always show"), STATS_ALWAYS);
-  statsComboBox->addItem(tr("Show on critical levels and mouse over"), STATS_CRITICAL);
-  statsComboBox->addItem(tr("Show only on mouse over"), STATS_MOUSEOVER);
-  statsComboBox->addItem(tr("Never show"), STATS_NEVER);
+  statsComboBox->addItem("Always show", STATS_ALWAYS);
+  statsComboBox->addItem("Show on critical levels and mouse over", STATS_CRITICAL);
+  statsComboBox->addItem("Show only on mouse over", STATS_MOUSEOVER);
+  statsComboBox->addItem("Never show", STATS_NEVER);
   statsComboBox->setCurrentIndex(statsComboBox->findData(settings.stats));
 
-  QLabel *independenceLabel = new QLabel(tr("Independence:"));
+  QLabel *independenceLabel = new QLabel("Independence:");
   independenceSlider = new QSlider(Qt::Horizontal);
   independenceSlider->setMinimum(0);
   independenceSlider->setMaximum(100);
   independenceSlider->setValue(settings.independence);
 
-  makeInvincible = new QCheckBox(tr("Make Boris invincible"));
+  makeInvincible = new QCheckBox("Make Boris invincible");
   if(settings.isInvincible) {
     makeInvincible->setCheckState(Qt::Checked);
   }
 
-  enableSound = new QCheckBox(tr("Enable sound"));
+  enableSound = new QCheckBox("Enable sound");
   if(settings.sound) {
     enableSound->setCheckState(Qt::Checked);
   }
 
-  enableBubbles = new QCheckBox(tr("Enable Boris speech bubbles"));
+  enableBubbles = new QCheckBox("Enable Boris speech bubbles");
   if(settings.bubbles) {
     enableBubbles->setCheckState(Qt::Checked);
   }
 
 
-  QLabel *volumeLabel = new QLabel(tr("Sound volume:"));
+  QLabel *volumeLabel = new QLabel("Sound volume:");
   volumeSlider = new QSlider(Qt::Horizontal);
   volumeSlider->setMinimum(0);
   volumeSlider->setMaximum(100);
   volumeSlider->setValue(settings.volume);
   connect(volumeSlider, &QSlider::valueChanged, this, &About::volumeChanged);
 
-  showWelcome = new QCheckBox(tr("Always show this dialog on startup"));
+  showWelcome = new QCheckBox("Always show this dialog on startup");
   if(settings.showWelcome) {
     showWelcome->setCheckState(Qt::Checked);
   }

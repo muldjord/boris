@@ -81,10 +81,8 @@ private:
   QMenu *behavioursMenu = nullptr;
   QMenu *itemsMenu = nullptr;
   NetComm *netComm = nullptr;
-  QString *aboutText = nullptr;
   QAction *earthquakeAction = nullptr;
   QAction *weatherAction = nullptr;
-  int coins = 0;
 
   QPoint oldCursor = QPoint(0, 0);
 
