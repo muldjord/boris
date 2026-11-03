@@ -42,16 +42,17 @@ The last command copies all necessary files to the `release` folder. You can the
 * Linux: For security reasons modern Wayland compositors don't support `Qt::WindowStaysOnTopHint` and click-through behaviour. The non-free OS called Windows (which apparently people still use for some bizarre reason) still support this, but it is probably only a matter of time before they catch up and stop supporting it as well
 * Boris will interact with an object instantly when he spawns it himself (eg. through 'Social->Place a gift')
 
-#### Version x.x.x, Roadmap:
+#### Ideas (that I might / might not implement):
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
 * Add a 'usec' that points towards any direction the arrow keys are currently pressed
 * Spawn a puddle when '_too_late' happens
 * Add Boris 'memory'. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
 * Make a 'bowling' behaviour with a 'bowlingball' item and spawned 'pin' items (which might need syncronization as well?)
-* Make it so Boris only interacts with items he is interested in (those that match his current needs)
 * Make a 'candycane' item for Boris to eat. It should be 'energy' category. He will get a significant energy boost and get very hyper
+* Create a Bub or Bob item that will put Boris in a bubble on interaction
+* When changing the size of Boris all Borises should be moved randomly around the desktop to avoid some Borises being at the edge
 
-#### Version 4.0.0 (In progress, unreleased):
+#### Version 4.0.5 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
 * Rewired entire project to work with modern Wayland compositors under Linux using a maximized QGraphicsView instead of individual windows per Boris
 * Added 'anxiety' stat which causes Boris to flee the mouse cursor if he has been tossed around too much
@@ -63,6 +64,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Fixed eternal bouncing bug
 * Added 'candle' item
 * Added 'sit_and_relax' behaviour for 'energy' category
+* About dialog has been improved
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
