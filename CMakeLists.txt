@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(Boris VERSION 4.0.0 LANGUAGES CXX)
+project(Boris VERSION 4.0.5 LANGUAGES CXX)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/version.h.in ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -48,6 +48,7 @@ set(SOURCES
   src/shadow.cpp
   src/soundmixer.cpp
   src/stats.cpp
+  src/stepslider.cpp
   src/tinyexpr.cpp
   src/weather.cpp
 )
