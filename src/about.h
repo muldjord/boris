@@ -18,6 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#include "stepslider.h"
+
 #include <QDialog>
 
 class Settings;
@@ -42,8 +44,8 @@ private:
   Settings &settings;
   QSettings *iniSettings;
 
-  QLineEdit *clonesLineEdit;
-  QLineEdit *sizeLineEdit;
+  StepSlider *clonesSlider;
+  StepSlider *sizeSlider;
   QLineEdit *itemSpawnIntervalLineEdit;
   QLineEdit *itemTimeoutLineEdit;
   QLineEdit *weatherLineEdit;

@@ -20,9 +20,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "settings.h"
 #include "soundmixer.h"
+#include "version.h"
 
 #include <stdio.h>
 
+#include <QApplication>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QFile>
@@ -35,6 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QSettings>
 #include <QSlider>
 #include <QTabWidget>
+#include <QTextBrowser>
 #include <QVBoxLayout>
 
 #include <SFML/Audio/Sound.hpp>
@@ -43,109 +46,398 @@ extern SoundMixer *soundMixer;
 
 About::About(QSettings *iniSettings, Settings &settings) : settings(settings), iniSettings(iniSettings)
 {
-  setFixedSize(900, 700);
-  move((settings.desktopWidth / 2) - (width() / 2), 256);
+  setMinimumWidth(1024);
   setWindowIcon(QIcon(":icon.png"));
-  setWindowTitle("Boris v" VERSION);
+  setWindowTitle(QApplication::applicationName() + " v" +
+                 QString("%1.%2.%3")
+                 .arg(PROJECT_VERSION_MAJOR)
+                 .arg(PROJECT_VERSION_MINOR)
+                 .arg(PROJECT_VERSION_PATCH));
+
+  QString aboutStyle = R"(
+/* ==========================================
+   MAIN DIALOG AND WIDGETS
+   ========================================== */
+
+QDialog {
+    background-color: #FFF0D0;
+    color: #14581D;
+    font-family: "sans-serif";
+    font-size: 10pt;
+}
+
+QWidget {
+    color: #14581D;
+}
+
+/* ==========================================
+   COMBO BOX
+   ========================================== */
+
+QComboBox {
+    background-color: white;
+    color: #14581D;
+    border: 3px solid #14581D;
+    border-radius: 10px;
+    padding: 6px 10px;
+    min-height: 24px;
+}
+
+QComboBox:focus {
+    border-color: #D53825;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 2px solid #14581D;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    background-color: #4A8710;
+}
+
+QComboBox::down-arrow {
+    image: none;
+    width: 0px;
+    height: 0px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 7px solid #14581D;
+    margin-right: 8px;
+}
+
+/* ==========================================
+   LABELS
+   ========================================== */
+
+QLabel {
+    background-color: transparent;
+    color: #14581D;
+    padding: 2px;
+}
+
+/* ==========================================
+   PUSH BUTTONS
+   ========================================== */
+
+QPushButton {
+    background-color: #D53825;
+    color: white;
+    border: 3px solid #AA1010;
+    border-radius: 12px;
+    padding: 8px 18px;
+    font-weight: bold;
+    min-height: 22px;
+}
+
+QPushButton:hover {
+    background-color: #FFA27F;
+    border: 3px solid #D56659;
+}
+
+QPushButton:pressed {
+    background-color: #AA1010;
+    padding-top: 10px;
+    padding-bottom: 6px;
+}
+
+QPushButton:disabled {
+    background-color: #D8D0C5;
+    border-color: #C5BCAF;
+    color: #99918A;
+}
+
+
+/* ==========================================
+   CHECK BOXES
+   ========================================== */
+
+QCheckBox {
+    spacing: 9px;
+    color: #14581D;
+    padding: 4px;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #D53825;
+    border-radius: 6px;
+    background-color: white;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #4A8710;
+    border: 3px solid #14581D;
+    image: url(:checkmark.png);
+}
+
+QCheckBox::indicator:unchecked {
+    background-color: white;
+}
+
+QCheckBox::indicator:disabled {
+    background-color: #EEE8DE;
+    border-color: #C5BCAF;
+}
+
+/* ==========================================
+   LINE EDITS
+   ========================================== */
+
+QLineEdit {
+    background-color: white;
+    color: #14581D;
+    border: 3px solid #14581D;
+    border-radius: 10px;
+    padding: 7px 10px;
+    selection-background-color: #FFB85C;
+    selection-color: #14581D;
+}
+
+QLineEdit:focus {
+    border: 3px solid #D53825;
+}
+
+QLineEdit:disabled {
+    background-color: #EEE8DE;
+    color: #A9A2A0;
+}
+
+
+/* ==========================================
+   SCROLL AREAS
+   ========================================== */
+
+QScrollArea {
+    background-color: #FFFDF8;
+    border: 3px solid #14581D;
+    border-radius: 14px;
+}
+
+QScrollArea QWidget {
+    background-color: transparent;
+}
+
+QScrollBar:vertical {
+    background-color: #F0E8D9;
+    width: 14px;
+    margin: 4px;
+    border-radius: 7px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #D6915D;
+    min-height: 30px;
+    border-radius: 6px;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: transparent;
+}
+
+
+/* ==========================================
+   SLIDERS
+   ========================================== */
+
+QSlider {
+    min-height: 32px;
+}
+
+QSlider::groove:horizontal {
+    height: 9px;
+    background-color: #4A8710;
+    border-radius: 4px;
+}
+
+QSlider::sub-page:horizontal {
+    background-color: #D53825;
+    border-radius: 4px;
+}
+
+QSlider::add-page:horizontal {
+    background-color: #4A8710;
+    border-radius: 4px;
+}
+
+QSlider::handle:horizontal {
+    background-color: #D6915D;
+    border: 3px solid #B67B4F;
+    width: 18px;
+    height: 18px;
+    margin: -7px 0;
+    border-radius: 11px;
+}
+
+/* ==========================================
+   TAB WIDGET
+   ========================================== */
+
+QTabWidget {
+    background: transparent;
+    border: none;
+}
+
+/* Content frame */
+QTabWidget::pane {
+    background-color: #FFFDF8;
+    border: 3px solid #14581D;
+
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* Individual tabs */
+QTabBar::tab {
+    background-color: #4A8710;
+    color: #14581D;
+
+    border: 3px solid #14581D;
+    border-bottom: none;
+
+    border-top-left-radius: 11px;
+    border-top-right-radius: 11px;
+
+    padding: 8px 18px;
+    min-height: 24px;
+
+    margin-right: 4px;
+    margin-top: 4px;
+
+    font-weight: bold;
+}
+
+/* Selected tab */
+QTabBar::tab:selected {
+    background-color: #D6915D;
+    color: white;
+    border-color: #B67B4F;
+    margin-top: 0px;
+}
+
+/* ==========================================
+   TEXTBROWSER
+   ========================================== */
+
+QTextBrowser {
+    background-color: white;
+    color: #14581D;
+    border-radius: 7px;
+    padding: 8px 12px;
+}
+
+)";
+
+  setStyleSheet(aboutStyle);
 
   // About tab
-  QWidget *aboutWidget = new QWidget;
-  QLabel *aboutText = new QLabel(tr("<strong>Boris bids you welcome!</strong><br/>He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye on him!<br/><br/>"
-                                    "<strong>Good to know:</strong>"
-                                    "<ul>"
-                                    "<li>You can pick Boris up if he is in your way by holding down the left mouse button while the pointer is on top of him.</li>"
-                                    "<li>Right-clicking any Boris brings up a menu where you can select from a plethora of Boris behaviours from categories that correspond to his current needs.</li>"
-                                    "<li>Using the mouse scroll-wheel on Boris will tickle him if he's not busy.</li>"
-                                    "<li>Right-clicking the Boris system tray icon brings up a menu that gives you access to information and important functions that will help you configure and take care of Boris. This is also where you can unlock items that Boris can interact with.</li>"
-                                    "</ul>"
-                                    "<strong>Health stats:</strong>"
-                                    "<ul>"
-                                    "<li>The 'Zz' icon signifies Boris' energy level.</li>"
-                                    "<li>The 'Speech bubble' icon shows Boris' need for social interaction.</li>"
-                                    "<li>The 'Smiley' icon indicates whether Boris is in a good mood and having fun.</li>"
-                                    "<li>The 'Knife and fork' icon shows how hungry Boris currently is.</li>"
-                                    "<li>The 'Toilet' icon is an indicator of Boris' need to go to the bathroom.</li>"
-                                    "</ul>"
-                                    "<strong>Other stats:</strong>"
-                                    "<ul>"
-                                    "<li>Boris can get dirty if he eats messy food or goes to the toilet without washing his hands.</li>"
-                                    "<li>He can also get bruised if you thrown him around too much.</li>"
-                                    "</ul>"
-                                    "<strong>How to get coins:</strong>"
-                                    "<br/>It's just for fun! No real money involved. You can earn Boris coins by right-clicking Boris and choosing a behaviour from a category that corresponds to his current needs. The more needy Boris is for the particular category you select, the more coins you receive.<br/>"
-                                    "You can then spend the coins by right-clicking the Boris system tray icon, selecting the 'Items' submenu and choose the item you want to unlock. The item then becomes unlocked and can be selected any time you want.<br/>"
-                                    "<br/>"
-                                    "<strong>Where to get Boris:</strong><br/>"
-                                    "If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit https://github.com/muldjord/boris/releases and download it. He is completely free and open source. You can also download the full source code (GPLv3) in there if you like."));
-  aboutText->setWordWrap(true);
-  aboutText->setMaximumWidth(400);
+  QTextBrowser *aboutWidget = new QTextBrowser(this);
+  aboutWidget->setReadOnly(true);
+  aboutWidget->setOpenExternalLinks(true);
+  aboutWidget->setFrameShape(QFrame::NoFrame);
+  aboutWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  aboutWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-  QVBoxLayout *aboutLayout = new QVBoxLayout();
-  aboutLayout->addWidget(aboutText);
-  aboutWidget->setLayout(aboutLayout);
-
-  QScrollArea *aboutScroll = new QScrollArea();
-  aboutScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  aboutScroll->setWidget(aboutWidget);
+  QString aboutText = R"(
+<h3>Boris bids you welcome!</h3>
+<p>He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye on him!</p>
+<h4>Good to know:</h4>
+<ul>
+<li>You can pick Boris up if he is in your way by holding down the left mouse button while the pointer is on top of him.</li>
+<li>Right-clicking any Boris brings up a menu where you can select from a plethora of Boris behaviours from categories that correspond to his current needs.</li>
+<li>Using the mouse scroll-wheel on Boris will tickle him if he's not busy.</li>
+<li>Right-clicking the Boris system tray icon brings up a menu that gives you access to information and important functions that will help you configure and take care of Boris. This is also where you can unlock items that Boris can interact with.</li>
+</ul>
+<h4>Health stats:</h4>
+<ul>
+<li>The 'Zz' icon signifies Boris' energy level.</li>
+<li>The 'Speech bubble' icon shows Boris' need for social interaction.</li>
+<li>The 'Smiley' icon indicates whether Boris is in a good mood and having fun.</li>
+<li>The 'Knife and fork' icon shows how hungry Boris currently is.</li>
+<li>The 'Toilet' icon is an indicator of Boris' need to go to the bathroom.</li>
+</ul>
+<h4>Other stats:</h4>
+<ul>
+<li>Boris can get dirty if he eats messy food or goes to the toilet without washing his hands.</li>
+<li>He can also get bruised if you thrown him around too much.</li>
+</ul>
+<h4>How to get coins:</h4>
+<p>It's just for fun! No real money involved. You can earn Boris coins by right-clicking Boris and choosing a behaviour from a category that corresponds to his current needs. The more needy Boris is for the particular category you select, the more coins you receive.</p>
+<p>You can then spend the coins by right-clicking the Boris system tray icon, selecting the 'Items' submenu and choose the item you want to unlock. The item then becomes unlocked and can be selected any time you want.</p>
+<h4>Where to get Boris:</h4>
+<p>If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit https://github.com/muldjord/boris/releases and download it. He is completely free and open source. You can also download the full source code (GPLv3) in there if you like.</p>
+)";
+  aboutWidget->setHtml(aboutText);
 
   // Author tab
-  QWidget *authorWidget = new QWidget;
-  QLabel *authorText = new QLabel(tr("<strong>Programming:</strong> Lars Muldjord<br/><strong>Graphics:</strong> Lars Muldjord<br/><strong>Sound:</strong> Lars Muldjord<br/><br/>Boris was programmed using the Qt framework (http://www.qt.io) and C++.<br/><br/>Bug reports, suggestions and / or comments can be emailed to me at: muldjordlars@gmail.com.<br/><br/>If your friends / colleagues would like to get their own Boris, tell them to visit:<br/><br/>https://github.com/muldjord/boris/releases<br/><br/>Copyright 2026 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the 'License' tab or check out the web page http://www.gnu.org/licenses/gpl-3.0.html."));
-  authorText->setWordWrap(true);
-  authorText->setMaximumWidth(400);
+  QTextBrowser *authorWidget = new QTextBrowser(this);
+  authorWidget->setReadOnly(true);
+  authorWidget->setOpenExternalLinks(true);
+  authorWidget->setFrameShape(QFrame::NoFrame);
+  authorWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  authorWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  QString authorText = R"(
+<h3>Programming</h3>
+<p>Lars Muldjord</p>
 
-  QVBoxLayout *authorLayout = new QVBoxLayout();
-  authorLayout->addWidget(authorText);
-  authorWidget->setLayout(authorLayout);
+<h3>Graphics</h3>
+<p>Lars Muldjord</p>
 
-  QScrollArea *authorScroll = new QScrollArea();
-  authorScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  authorScroll->setWidget(authorWidget);
+<h3>Sound</h3>
+<p>Lars Muldjord</p>
+
+<h4>Other notes</h4>
+<p>Boris was programmed using the Qt framework (<a href="http://www.qt.io">http://www.qt.io</a>), SFML framework (<a href="https://www.sfml-dev.org">https://www.sfml-dev.org</a>) and C++.</p>
+<p>Bug reports, suggestions and / or comments can be emailed to me at: muldjordlars@gmail.com.</p>
+<p>If your friends / colleagues would like to get their own Boris, tell them to visit <a href="https://github.com/muldjord/boris/releases">https://github.com/muldjord/boris/releases</a>.</p>
+<p>Copyright 2026 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the 'License' tab or check out <a href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licenses/gpl-3.0.html</a>.</p>
+)";
+  authorWidget->setHtml(authorText);			   
 
   // License tab
+  QTextBrowser *licenseWidget = new QTextBrowser(this);
+  licenseWidget->setReadOnly(true);
+  licenseWidget->setOpenExternalLinks(true);
+  licenseWidget->setFrameShape(QFrame::NoFrame);
+  licenseWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  licenseWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   // Read LICENSE data from file
   QFile file("LICENSE");
-  QByteArray gplText;
+  QByteArray licenseText;
   if(file.open(QIODevice::ReadOnly)) {
-    gplText = file.readAll();
+    licenseText = file.readAll();
     file.close();
   } else {
     qWarning("ERROR: Couldn't find LICENSE file at the designated location.\n");
-    gplText = "ERROR: File not found... This means that someone has been fiddling with the files of this software, and someone might be violating the terms of the GPL. Go to the following location to read the license: http://www.gnu.org/licenses/gpl-3.0.html";
+    licenseText = "ERROR: File not found... This means that someone has been fiddling with the files of this software, and someone might be violating the terms of the GPL. Go to the following location to read the license: http://www.gnu.org/licenses/gpl-3.0.html";
   }
-
-  QWidget *licenseWidget = new QWidget;
-  QLabel *licenseText = new QLabel(gplText);
-  licenseText->setWordWrap(true);
-  licenseText->setMaximumWidth(400);
-
-  QVBoxLayout *licenseLayout = new QVBoxLayout();
-  licenseLayout->addWidget(licenseText);
-  licenseWidget->setLayout(licenseLayout);
-
-  QScrollArea *licenseScroll = new QScrollArea();
-  licenseScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  licenseScroll->setWidget(licenseWidget);
+  licenseWidget->setHtml(licenseText);
 
   QTabWidget *tabWidget = new QTabWidget;
-  tabWidget->addTab(aboutScroll, tr("About"));
-  tabWidget->addTab(authorScroll, tr("Author"));
-  tabWidget->addTab(licenseScroll, tr("License"));
+  tabWidget->addTab(aboutWidget, tr("About"));
+  tabWidget->addTab(authorWidget, tr("Author"));
+  tabWidget->addTab(licenseWidget, tr("License"));
 
   QPushButton *okButton = new QPushButton(tr("Close and save"));
   connect(okButton, &QPushButton::clicked, this, &About::saveAll);
 
-  QLabel *sizeLabel = new QLabel(tr("Boris size in pixels (32-256):"));
-  sizeLineEdit = new QLineEdit();
-  QIntValidator *sizeValidator = new QIntValidator(32, 256, this);
-  sizeLineEdit->setValidator(sizeValidator);
-  sizeLineEdit->setText(QString::number(settings.size));
+  QLabel *sizeLabel = new QLabel(tr("Boris size in pixels (32, 64, 128, 256 or 512):"));
+  sizeSlider = new StepSlider({32, 64, 128, 256, 512}, this);
+  sizeSlider->setValue(settings.size);
 
-  QLabel *clonesLabel = new QLabel(tr("Boris clones (1-100 or 0 for random):"));
-  clonesLineEdit = new QLineEdit();
-  QIntValidator *clonesValidator = new QIntValidator(0, 100, this);
-  clonesLineEdit->setValidator(clonesValidator);
-  clonesLineEdit->setText(QString::number(settings.clones));
+  QLabel *clonesLabel = new QLabel(tr("Boris clones (1-20 or 0 for random):"));
+  clonesSlider = new StepSlider({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}, this);
+  clonesSlider->setValue(settings.clones);
 
   enableItems = new QCheckBox(tr("Allow items"));
   enableItems->setToolTip(tr("Boris will sometimes place various items around the desktop. Items will also be randomly spawned or created using the tray icon menu."));
@@ -153,16 +445,16 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
     enableItems->setCheckState(Qt::Checked);
   }
 
-  QLabel *itemSpawnIntervalLabel = new QLabel(tr("Seconds between random item spawn (5-3600 or 0 for never):"));
+  QLabel *itemSpawnIntervalLabel = new QLabel(tr("Seconds between random item spawn (5-3600):"));
   itemSpawnIntervalLineEdit = new QLineEdit();
-  itemSpawnIntervalLineEdit->setToolTip(tr("If items are enabled random items will be spawned around the desktop at this interval. If set to 0 no items will spawn randomly."));
+  itemSpawnIntervalLineEdit->setToolTip(tr("If items are enabled random items will be spawned around the desktop at this interval."));
   QIntValidator *itemSpawnIntervalValidator = new QIntValidator(5, 3600, this);
   itemSpawnIntervalLineEdit->setValidator(itemSpawnIntervalValidator);
   itemSpawnIntervalLineEdit->setText(QString::number(settings.itemSpawnInterval));
 
-  QLabel *itemTimeoutLabel = new QLabel(tr("Item timeout in seconds (10-3600 or 0 for never):"));
+  QLabel *itemTimeoutLabel = new QLabel(tr("Item timeout in seconds (10-3600):"));
   itemTimeoutLineEdit = new QLineEdit();
-  itemTimeoutLineEdit->setToolTip(tr("Items will disappear after this amount of time. Setting this to 0 will make them stay indefinitely."));
+  itemTimeoutLineEdit->setToolTip(tr("Items will disappear after this amount of time."));
   QIntValidator *itemValidator = new QIntValidator(10, 3600, this);
   itemTimeoutLineEdit->setValidator(itemValidator);
   itemTimeoutLineEdit->setText(QString::number(settings.itemTimeout));
@@ -227,9 +519,9 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
   QVBoxLayout *configLayout = new QVBoxLayout();
   configLayout->addWidget(showWelcome);
   configLayout->addWidget(sizeLabel);
-  configLayout->addWidget(sizeLineEdit);
+  configLayout->addWidget(sizeSlider);
   configLayout->addWidget(clonesLabel);
-  configLayout->addWidget(clonesLineEdit);
+  configLayout->addWidget(clonesSlider);
   configLayout->addWidget(enableItems);
   configLayout->addWidget(itemSpawnIntervalLabel);
   configLayout->addWidget(itemSpawnIntervalLineEdit);
@@ -278,30 +570,11 @@ void About::saveAll()
   } else {
     settings.showWelcome = false;
   }
-  if(sizeLineEdit->text().toInt() != 0) {
-    if(sizeLineEdit->text().toInt() < 32) {
-      sizeLineEdit->setText("32");
-    }
-    if(sizeLineEdit->text().toInt() > 256) {
-      sizeLineEdit->setText("256");
-    }
-    settings.size = sizeLineEdit->text().toInt();
-  } else {
-    settings.size = 64;
-  }
+  settings.size = sizeSlider->value();
   settings.sizeFactor = settings.size / 32.0;
 
-  if(clonesLineEdit->text().toInt() != 0) {
-    if(clonesLineEdit->text().toInt() < 1) {
-      clonesLineEdit->setText("1");
-    }
-    if(clonesLineEdit->text().toInt() > 100) {
-      clonesLineEdit->setText("100");
-    }
-    settings.clones = clonesLineEdit->text().toInt();
-  } else {
-    settings.clones = 0;
-  }
+  settings.clones = clonesSlider->value();
+
   if(itemSpawnIntervalLineEdit->text().toInt() != 0) {
     if(itemSpawnIntervalLineEdit->text().toInt() < 5) {
       itemSpawnIntervalLineEdit->setText("5");
