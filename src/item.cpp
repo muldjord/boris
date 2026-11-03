@@ -48,6 +48,8 @@ Item::Item(const QString &item, Settings &settings)
     }
   }
 
+  rendered.fill(Qt::transparent);
+
   setCursor(settings.getCursor("hover.png"));
 
   shadow = new Shadow(settings);
