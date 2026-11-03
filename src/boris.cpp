@@ -66,7 +66,6 @@ Boris::Boris(Settings &settings)
   rendered.fill(Qt::transparent);
 
   behavioursMenu = new QMenu();
-  behavioursMenu->setTitle(tr("Behaviours"));
   connect(behavioursMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
   createBehavioursMenu();
 
@@ -691,7 +690,7 @@ void Boris::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 void Boris::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
   if(event->button() == Qt::RightButton) {
-    behavioursMenu->exec(QCursor::pos());
+    behavioursMenu->popup(QCursor::pos());
   }
   if(event->button() == Qt::LeftButton) {
     if(settings.behaviours.at(curBehav).file == "_sleep" && stats->getEnergy() <= 95) {
