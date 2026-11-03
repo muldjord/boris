@@ -51,6 +51,8 @@ MainWindow::MainWindow(QSplashScreen &splash)
 
   soundMixer = new SoundMixer();
 
+  loadFromConfig();
+
   setScene(new QGraphicsScene());
 
   scene()->setBackgroundBrush(Qt::transparent);
@@ -73,8 +75,6 @@ MainWindow::MainWindow(QSplashScreen &splash)
 
   setInteractive(true); // Default but setting it anyway
   setMouseTracking(true);
-
-  loadFromConfig();
 
   // Load all graphics before loading rest of assets, as these are used as icons too
   if(Loader::loadImages(settings.graphicsPath, settings.graphics)) {
@@ -182,9 +182,10 @@ void MainWindow::init()
   if(settings.showWelcome) {
     About about(iniSettings, settings);
     about.exec();
+    resetView();
   }
 
-  addBoris((settings.clones == 0?QRandomGenerator::global()->bounded(99) + 1:settings.clones));
+  addBoris((settings.clones == 0?QRandomGenerator::global()->bounded(19) + 1:settings.clones));
 
   itemTimer.setInterval(settings.itemSpawnInterval * 1000);
   itemTimer.setSingleShot(true);
@@ -273,6 +274,7 @@ void MainWindow::loadFromConfig()
     iniSettings->setValue("size", 64);
   }
   settings.size = iniSettings->value("size").toInt();
+  settings.sizeFactor = settings.size / 32.0;
 
   if(!iniSettings->contains("independence")) {
     iniSettings->setValue("independence", 75);
@@ -356,8 +358,8 @@ void MainWindow::loadFromConfig()
 
 void MainWindow::resetView()
 {
-  settings.sizeFactor = settings.size / 32.0;
   resetTransform();
+  printf("sizeFactor is: %f\n", settings.sizeFactor);
   scale(settings.sizeFactor, settings.sizeFactor);
   scene()->setSceneRect(0, 0,
                         viewport()->width() / transform().m11(),
@@ -441,7 +443,7 @@ void MainWindow::aboutBox()
 
   int newClones = settings.clones;
   if(newClones == 0) {
-    newClones = (QRandomGenerator::global()->generate() % 99) + 1;
+    newClones = QRandomGenerator::global()->bounded(19) + 1;
   }
   if(settings.borisList.count() > newClones) {
     removeBoris(settings.borisList.count() - newClones);
