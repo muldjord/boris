@@ -63,6 +63,7 @@ Boris::Boris(Settings &settings)
   origBruises = settings.getPixmap("bruises.png");
   scriptSprite.fill(Qt::transparent);
   scriptImage.fill(Qt::transparent);
+  rendered.fill(Qt::transparent);
 
   behavioursMenu = new QMenu();
   behavioursMenu->setTitle(tr("Behaviours"));
