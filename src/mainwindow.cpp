@@ -73,10 +73,6 @@ MainWindow::MainWindow(QSplashScreen &splash)
   setFrameShape(QFrame::NoFrame);
   setContentsMargins(0, 0, 0, 0);
 
-  // These are not necessary
-  //setInteractive(true); // Default but setting it anyway
-  //setMouseTracking(true);
-
   // Load all graphics before loading rest of assets, as these are used as icons too
   if(Loader::loadImages(settings.graphicsPath, settings.graphics)) {
     qInfo("Graphics loaded ok... :)\n");
