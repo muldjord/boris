@@ -55,6 +55,7 @@ void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QStri
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
+  app.setApplicationName(QObject::tr("Boris"));
 
   QDir::setCurrent(QApplication::applicationDirPath());
 
