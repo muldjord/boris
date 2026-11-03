@@ -73,8 +73,9 @@ MainWindow::MainWindow(QSplashScreen &splash)
   setFrameShape(QFrame::NoFrame);
   setContentsMargins(0, 0, 0, 0);
 
-  setInteractive(true); // Default but setting it anyway
-  setMouseTracking(true);
+  // These are not necessary
+  //setInteractive(true); // Default but setting it anyway
+  //setMouseTracking(true);
 
   // Load all graphics before loading rest of assets, as these are used as icons too
   if(Loader::loadImages(settings.graphicsPath, settings.graphics)) {
@@ -163,7 +164,6 @@ MainWindow::MainWindow(QSplashScreen &splash)
   createBehavioursMenu();
 
   createTrayIcon();
-  trayIcon->show();
 
   show();
 
@@ -409,9 +409,9 @@ void MainWindow::createActions()
 
 void MainWindow::createTrayIcon()
 {
-  trayIcon = new QSystemTrayIcon;
+  trayIcon = new QSystemTrayIcon(this);
 
-  trayIconMenu = new QMenu;
+  trayIconMenu = new QMenu();
   trayIconMenu->addAction(QIcon(settings.getPixmap("about.png")), tr("&Config / about..."), this, &MainWindow::aboutBox);
   trayIconMenu->addSeparator();
   trayIconMenu->addMenu(behavioursMenu);
@@ -431,6 +431,7 @@ void MainWindow::createTrayIcon()
   icon = new QIcon(QPixmap::fromImage(iconImage));
   trayIcon->setIcon(*icon);
   trayIcon->setToolTip("Boris");
+  trayIcon->show();
   trayIcon->setContextMenu(trayIconMenu);
 }
 
