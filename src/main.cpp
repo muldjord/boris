@@ -21,10 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QApplication>
 #include <QDateTime>
 #include <QDir>
-#include <QLocale>
 #include <QPixmap>
 #include <QSplashScreen>
-#include <QTranslator>
 
 void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QString &msg)
 {
@@ -60,11 +58,6 @@ int main(int argc, char *argv[])
   QDir::setCurrent(QApplication::applicationDirPath());
 
   qInstallMessageHandler(customMessageHandler);
-
-  QTranslator translator;
-  if(translator.load("boris_" + QLocale::system().name())) {
-    app.installTranslator(&translator);
-  }
 
   QPixmap pixmap(":splash.png");
   QSplashScreen splash(pixmap.scaledToWidth(496));
