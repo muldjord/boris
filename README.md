@@ -41,6 +41,7 @@ The last command copies all necessary files to the `release` folder. You can the
 #### Known issues:
 * Linux: For security reasons modern Wayland compositors don't support `Qt::WindowStaysOnTopHint` and click-through behaviour. The non-free OS called Windows (which apparently people still use for some bizarre reason) still support this, but it is probably only a matter of time before they catch up and stop supporting it as well
 * Boris will interact with an object instantly when he spawns it himself (eg. through 'Social->Place a gift')
+* 'noIgnore' item flag is probably broken right now
 
 #### Ideas (that I might / might not implement):
 * Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
@@ -62,9 +63,11 @@ The last command copies all necessary files to the `release` folder. You can the
 * Shadows now stays visible on the ground when Boris and items are airborne
 * Shadows now have dynamic width depending on the altitude of Boris and items
 * Fixed eternal bouncing bug
+* About dialog has been vastly improved
 * Added 'candle' item
 * Added 'sit_and_relax' behaviour for 'energy' category
-* About dialog has been improved
+* Added 'acme_gift' item for 'fun' category (negative impact)
+* Added 'curious_explosion' behaviour reaction for 'acme_gift'
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
