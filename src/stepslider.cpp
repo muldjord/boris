@@ -67,27 +67,14 @@ void InternalSlider::mouseMoveEvent(QMouseEvent *event)
   setValue(nearestValue(value()));
 }
 
+void InternalSlider::wheelEvent(QWheelEvent *event)
+{
+  event->accept();
+}
+
 void InternalSlider::keyPressEvent(QKeyEvent *event)
 {
-  int index = allowedValues.indexOf(value());
-
-  if(event->key() == Qt::Key_Right ||
-     event->key() == Qt::Key_Up) {
-    index = qMin(index + 1, allowedValues.size() - 1);
-    setValue(allowedValues[index]);
-    
-    return;
-  }
-  
-  if(event->key() == Qt::Key_Left ||
-     event->key() == Qt::Key_Down) {
-    index = qMax(index - 1, 0);
-    setValue(allowedValues[index]);
-
-    return;
-  }
-  
-  QSlider::keyPressEvent(event);
+  event->accept();
 }
 
 StepSlider::StepSlider(const QList<int> &allowedValues, QWidget *parent)
