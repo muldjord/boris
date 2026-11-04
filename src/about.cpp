@@ -413,7 +413,7 @@ QTextBrowser {
   sizeSlider->setValue(settings.size);
 
   QLabel *clonesLabel = new QLabel("Boris clones (1-20 or 0 for random):");
-  clonesSlider = new StepSlider({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}, this);
+  clonesSlider = new StepSlider({0, 20}, this);
   clonesSlider->setValue(settings.clones);
 
   enableItems = new QCheckBox("Allow items");
@@ -460,9 +460,7 @@ QTextBrowser {
   statsComboBox->setCurrentIndex(statsComboBox->findData(settings.stats));
 
   QLabel *independenceLabel = new QLabel("Independence:");
-  independenceSlider = new QSlider(Qt::Horizontal);
-  independenceSlider->setMinimum(0);
-  independenceSlider->setMaximum(100);
+  independenceSlider = new StepSlider({0, 100}, this);
   independenceSlider->setValue(settings.independence);
 
   makeInvincible = new QCheckBox("Make Boris invincible");
@@ -470,7 +468,7 @@ QTextBrowser {
     makeInvincible->setCheckState(Qt::Checked);
   }
 
-  enableSound = new QCheckBox("Enable sound");
+  enableSound = new QCheckBox("Enable sound (applied when dialog closes)");
   if(settings.sound) {
     enableSound->setCheckState(Qt::Checked);
   }
@@ -481,11 +479,9 @@ QTextBrowser {
   }
 
   QLabel *volumeLabel = new QLabel("Sound volume:");
-  volumeSlider = new QSlider(Qt::Horizontal);
-  volumeSlider->setMinimum(0);
-  volumeSlider->setMaximum(100);
+  volumeSlider = new StepSlider({0, 100}, this);
   volumeSlider->setValue(settings.volume);
-  connect(volumeSlider, &QSlider::valueChanged, this, &About::volumeChanged);
+  connect(volumeSlider, &StepSlider::valueChanged, this, &About::volumeChanged);
 
   showWelcome = new QCheckBox("Always show this dialog on startup");
   if(settings.showWelcome) {

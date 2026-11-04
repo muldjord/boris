@@ -57,6 +57,6 @@ private:
   QCheckBox *enableItems;
   QCheckBox *enableBubbles;
   QCheckBox *showWelcome;
-  QSlider *independenceSlider;
-  QSlider *volumeSlider;
+  StepSlider *independenceSlider;
+  StepSlider *volumeSlider;
 };
