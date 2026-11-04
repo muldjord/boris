@@ -63,7 +63,7 @@ QDialog {
     background-color: #FFF0D0;
     color: #14581D;
     font-family: "sans-serif";
-    font-size: 10pt;
+    font-size: 12pt;
 }
 
 QWidget {
@@ -79,32 +79,24 @@ QComboBox {
     color: #14581D;
     border: 3px solid #14581D;
     border-radius: 10px;
-    padding: 6px 10px;
+    padding: 3px 5px;
     min-height: 24px;
-}
-
-QComboBox:focus {
-    border-color: #D53825;
 }
 
 QComboBox::drop-down {
     subcontrol-origin: padding;
     subcontrol-position: top right;
     width: 30px;
-    border-left: 2px solid #14581D;
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
+    border-left: 3px solid #14581D;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     background-color: #4A8710;
 }
 
 QComboBox::down-arrow {
-    image: none;
-    width: 0px;
-    height: 0px;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 7px solid #14581D;
-    margin-right: 8px;
+    image: url(:downarrow.png);
+    width: 20px;
+    height: 20px;
 }
 
 /* ==========================================
@@ -114,7 +106,8 @@ QComboBox::down-arrow {
 QLabel {
     background-color: transparent;
     color: #14581D;
-    padding: 2px;
+    padding: 0px;
+    font-weight: bold;
 }
 
 /* ==========================================
@@ -126,7 +119,7 @@ QPushButton {
     color: white;
     border: 3px solid #AA1010;
     border-radius: 12px;
-    padding: 8px 18px;
+    padding: 5px 10px;
     font-weight: bold;
     min-height: 22px;
 }
@@ -142,13 +135,6 @@ QPushButton:pressed {
     padding-bottom: 6px;
 }
 
-QPushButton:disabled {
-    background-color: #D8D0C5;
-    border-color: #C5BCAF;
-    color: #99918A;
-}
-
-
 /* ==========================================
    CHECK BOXES
    ========================================== */
@@ -162,7 +148,7 @@ QCheckBox {
 QCheckBox::indicator {
     width: 20px;
     height: 20px;
-    border: 3px solid #D53825;
+    border: 3px solid #14581D;
     border-radius: 6px;
     background-color: white;
 }
@@ -171,15 +157,12 @@ QCheckBox::indicator:checked {
     background-color: #4A8710;
     border: 3px solid #14581D;
     image: url(:checkmark.png);
+    width: 20;
+    height: 20;
 }
 
 QCheckBox::indicator:unchecked {
     background-color: white;
-}
-
-QCheckBox::indicator:disabled {
-    background-color: #EEE8DE;
-    border-color: #C5BCAF;
 }
 
 /* ==========================================
@@ -191,20 +174,9 @@ QLineEdit {
     color: #14581D;
     border: 3px solid #14581D;
     border-radius: 10px;
-    padding: 7px 10px;
-    selection-background-color: #FFB85C;
-    selection-color: #14581D;
+    padding: 3px 5px;
+    min-height: 24px;
 }
-
-QLineEdit:focus {
-    border: 3px solid #D53825;
-}
-
-QLineEdit:disabled {
-    background-color: #EEE8DE;
-    color: #A9A2A0;
-}
-
 
 /* ==========================================
    SCROLL AREAS
@@ -243,13 +215,12 @@ QScrollBar::sub-page:vertical {
     background: transparent;
 }
 
-
 /* ==========================================
    SLIDERS
    ========================================== */
 
 QSlider {
-    min-height: 32px;
+    min-height: 24px;
 }
 
 QSlider::groove:horizontal {
@@ -286,18 +257,6 @@ QTabWidget {
     border: none;
 }
 
-/* Content frame */
-QTabWidget::pane {
-    background-color: #FFFDF8;
-    border: 3px solid #14581D;
-
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-}
-
-/* Individual tabs */
 QTabBar::tab {
     background-color: #4A8710;
     color: #14581D;
@@ -317,12 +276,21 @@ QTabBar::tab {
     font-weight: bold;
 }
 
-/* Selected tab */
 QTabBar::tab:selected {
     background-color: #D6915D;
     color: white;
     border-color: #B67B4F;
     margin-top: 0px;
+}
+
+QTabWidget::pane {
+    background-color: #FFFDF8;
+    border: 3px solid #14581D;
+
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
 }
 
 /* ==========================================
@@ -349,6 +317,7 @@ QTextBrowser {
   aboutWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
   QString aboutText = R"(
+
 <h3>Boris bids you welcome!</h3>
 <p>He is here to keep you company during all seasons of the year. He is a bit of a prankster, so keep an eye on him!</p>
 <h4>Good to know:</h4>
@@ -376,6 +345,7 @@ QTextBrowser {
 <p>You can then spend the coins by right-clicking the Boris system tray icon, selecting the 'Items' submenu and choose the item you want to unlock. The item then becomes unlocked and can be selected any time you want.</p>
 <h4>Where to get Boris:</h4>
 <p>If your friends / colleagues become envious and would like a Boris of their own, simply ask them to visit <a href="https://github.com/muldjord/boris/releases">https://github.com/muldjord/boris/releases</a> and download it. He is completely free and open source. You can also download the full source code (GPLv3) in there if you like.</p>
+
 )";
   aboutWidget->setHtml(aboutText);
 
@@ -386,7 +356,9 @@ QTextBrowser {
   authorWidget->setFrameShape(QFrame::NoFrame);
   authorWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   authorWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
   QString authorText = R"(
+
 <h3>Programming</h3>
 <p>Lars Muldjord</p>
 
@@ -401,7 +373,9 @@ QTextBrowser {
 <p>Bug reports, suggestions and / or comments can be emailed to me at: muldjordlars@gmail.com.</p>
 <p>If your friends / colleagues would like to get their own Boris, tell them to visit <a href="https://github.com/muldjord/boris/releases">https://github.com/muldjord/boris/releases</a>.</p>
 <p>Copyright 2026 Lars Muldjord. This software is distributed under the terms of the GNU General Public License. Be sure to read the license in the 'License' tab or check out <a href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licenses/gpl-3.0.html</a>.</p>
+
 )";
+
   authorWidget->setHtml(authorText);			   
 
   // License tab
@@ -411,6 +385,7 @@ QTextBrowser {
   licenseWidget->setFrameShape(QFrame::NoFrame);
   licenseWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   licenseWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
   // Read LICENSE data from file
   QFile file("LICENSE");
   QByteArray licenseText;
@@ -429,6 +404,8 @@ QTextBrowser {
   tabWidget->addTab(licenseWidget, "License");
 
   QPushButton *okButton = new QPushButton("Close and save");
+  okButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  okButton->setMinimumWidth(500);
   connect(okButton, &QPushButton::clicked, this, &About::saveAll);
 
   QLabel *sizeLabel = new QLabel("Boris size in pixels (32, 64, 128, 256 or 512):");
@@ -503,7 +480,6 @@ QTextBrowser {
     enableBubbles->setCheckState(Qt::Checked);
   }
 
-
   QLabel *volumeLabel = new QLabel("Sound volume:");
   volumeSlider = new QSlider(Qt::Horizontal);
   volumeSlider->setMinimum(0);
@@ -517,7 +493,6 @@ QTextBrowser {
   }
 
   QVBoxLayout *configLayout = new QVBoxLayout();
-  configLayout->addWidget(showWelcome);
   configLayout->addWidget(sizeLabel);
   configLayout->addWidget(sizeSlider);
   configLayout->addWidget(clonesLabel);
@@ -543,15 +518,21 @@ QTextBrowser {
   configLayout->addWidget(feedUrlLabel);
   configLayout->addWidget(feedUrlLineEdit);
 
-  QVBoxLayout *infoLayout = new QVBoxLayout;
-  infoLayout->addWidget(tabWidget);
-  infoLayout->addWidget(okButton);
+  QHBoxLayout *hLayout1 = new QHBoxLayout;
+  hLayout1->addLayout(configLayout);
+  hLayout1->addWidget(tabWidget);
 
-  QHBoxLayout *layout = new QHBoxLayout;
-  layout->addLayout(configLayout);
-  layout->addLayout(infoLayout);
+  QHBoxLayout *hLayout2 = new QHBoxLayout;
+  hLayout2->addStretch(2);
+  hLayout2->addWidget(showWelcome, 0);
+  hLayout2->addWidget(okButton, 0);
+  hLayout2->addStretch(2);
 
-  setLayout(layout);
+  QVBoxLayout *vLayout = new QVBoxLayout;
+  vLayout->addLayout(hLayout1);
+  vLayout->addLayout(hLayout2);
+  
+  setLayout(vLayout);
 }
 
 About::~About()
