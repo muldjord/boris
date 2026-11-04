@@ -153,6 +153,7 @@ QCheckBox {
     spacing: 9px;
     color: #14581D;
     padding: 4px;
+    font-weight: bold;
 }
 
 QCheckBox::indicator {
