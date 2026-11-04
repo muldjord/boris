@@ -63,7 +63,7 @@ QDialog {
     background-color: #FFF0D0;
     color: #14581D;
     font-family: "sans-serif";
-    font-size: 12pt;
+    font-size: 14pt;
 }
 
 QWidget {
@@ -97,6 +97,16 @@ QComboBox::down-arrow {
     image: url(:downarrow.png);
     width: 20px;
     height: 20px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: transparent;
+    color: #14581D;
+    border: 3px solid #14581D;
+    border-radius: 0px;
+    selection-background-color: #14581D;
+    selection-color: white;
+    padding: 0px;
 }
 
 /* ==========================================
@@ -302,6 +312,18 @@ QTextBrowser {
     color: #14581D;
     border-radius: 7px;
     padding: 8px 12px;
+}
+
+/* ==========================================
+   TOOLTIP
+   ========================================== */
+
+QToolTip {
+    background-color: #FFFDF8;
+    color: #14581D;
+    border: 2px solid #14581D;
+    border-radius: 0px;
+    padding: 2px 2px;
 }
 
 )";
