@@ -88,13 +88,14 @@ void InternalSlider::keyPressEvent(QKeyEvent *event)
 StepSlider::StepSlider(const QList<int> &allowedValues, QWidget *parent)
   : QWidget(parent)
 {
-  setContentsMargins(0, 0, 0, 0);
   slider = new InternalSlider(allowedValues, parent);
   connect(slider, &QSlider::valueChanged, this, &StepSlider::setValue);
+  slider->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
   
   label = new QLineEdit;
   label->setReadOnly(true);
-  label->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+  label->setMaximumWidth(64);
+  label->setAlignment(Qt::AlignHCenter);
   QHBoxLayout *layout = new QHBoxLayout;
   layout->addWidget(slider);
   layout->addWidget(label);
