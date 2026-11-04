@@ -8,7 +8,7 @@ doNotDisturb
 0;1000;0;0;;stop
 
 0;3000;0;0;;label lightfuse
-1;75;0;0;;
+1;75;0;0;fuseburn.wav;
 2;75;0;0;;
 3;75;0;0;;
 4;75;0;0;;
