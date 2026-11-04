@@ -1,0 +1,5 @@
+Record with slightly bright cartoony voice
+Open with Audacity
+Apply speed / pitch adjustment to 2.0
+Apply high-pass filter at 400 Hz
+Done!
