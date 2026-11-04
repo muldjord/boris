@@ -355,7 +355,6 @@ void MainWindow::loadFromConfig()
 void MainWindow::resetView()
 {
   resetTransform();
-  printf("sizeFactor is: %f\n", settings.sizeFactor);
   scale(settings.sizeFactor, settings.sizeFactor);
   scene()->setSceneRect(0, 0,
                         viewport()->width() / transform().m11(),
