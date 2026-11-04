@@ -29,10 +29,18 @@
 #include <QStyleOptionSlider>
 
 InternalSlider::InternalSlider(const QList<int> &allowedValues, QWidget *parent)
-  : allowedValues(allowedValues), QSlider(Qt::Horizontal, parent)
+  : QSlider(Qt::Horizontal, parent)
 {
-  setMinimum(allowedValues.first());
-  setMaximum(allowedValues.last());
+  this->allowedValues = allowedValues;
+  if(allowedValues.length() == 2) {
+    this->allowedValues.clear();
+    for(int a = allowedValues.first(); a <= allowedValues.last(); ++a) {
+      this->allowedValues.append(a);
+    }
+  }
+
+  setMinimum(this->allowedValues.first());
+  setMaximum(this->allowedValues.last());
 
   setSingleStep(1);
   setPageStep(1);
@@ -97,6 +105,7 @@ StepSlider::StepSlider(const QList<int> &allowedValues, QWidget *parent)
 void StepSlider::setValue(const int &value)
 {
   slider->setValue(value);
+  emit valueChanged(value);
   label->setText(QString::number(value));
 }
 

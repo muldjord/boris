@@ -41,12 +41,15 @@ protected:
 
 private:
   int nearestValue(int value) const;
-  const QList<int> allowedValues;
+  QList<int> allowedValues;
 };
 
 class StepSlider : public QWidget
 {
   Q_OBJECT
+
+signals:
+  void valueChanged(int value);
 
 public:
   explicit StepSlider(const QList<int> &allowedValues, QWidget *parent = nullptr);
