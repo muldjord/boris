@@ -1,5 +1,5 @@
 title=Trees
-reaction=dance
+reaction=sit_and_relax,nil
 weight=100
 bounce=0
 allowFlip
