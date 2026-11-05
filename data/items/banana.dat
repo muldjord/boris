@@ -1,6 +1,6 @@
 title=Banana
 category=Fun
-reaction=_bananaslip,bananaslip,0,4
+reaction=bananaslip,bananaslip,0,4
 weight=4
 bounce=1
 doNotDisturb
