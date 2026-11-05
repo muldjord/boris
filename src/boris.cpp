@@ -279,7 +279,10 @@ void Boris::changeBehaviour(QString behav, int time)
       curBehav = getIdxFromCategory("Locomotion"); // This category DOES exist. See data/behaviours/README.md
     }
   } else {
-    curBehav = QRandomGenerator::global()->bounded(settings.behaviours.size() - staticBehaviours) + staticBehaviours;
+    // No behaviour has been set so far, so just choose one at random but be sure it has a category set so we avoid using reaction behaviours
+    do {
+      curBehav = QRandomGenerator::global()->bounded(settings.behaviours.size() - staticBehaviours) + staticBehaviours;
+    } while(settings.behaviours.at(curBehav).category == "Reaction");
   }
 
   // If a specific behaviour is requested, use that
