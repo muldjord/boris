@@ -8,23 +8,23 @@ social=5
 oneShot
 
 define init:var sitloop = @5 + 5,
-if idir = -1 var idir = @8 - 1,
-if idir = 0 goto initu,
-if idir = 1 or idir = 2 or idir = 3 goto initr,
-if idir = 4 goto initd,
-if idir = 5 or idir = 6 or idir = 7 goto initl
+if idir = -1 var sdir = @8 - 1 else var sdir = idir,
+if sdir = 0 goto initu,
+if sdir = 1 or sdir = 2 or sdir = 3 goto initr,
+if sdir = 4 goto initd,
+if sdir = 5 or sdir = 6 or sdir = 7 goto initl
 
-define getbackup:if idir = 0 goto endu,
-if idir = 1 or idir = 2 or idir = 3 goto endr,
-if idir = 4 goto endd,
-if idir = 5 or idir = 6 or idir = 7 goto endl
+define getbackup:if sdir = 0 goto endu,
+if sdir = 1 or sdir = 2 or sdir = 3 goto endr,
+if sdir = 4 goto endd,
+if sdir = 5 or sdir = 6 or sdir = 7 goto endl
 
 define morerelax:if sitloop <= 0 call getbackup,
 var sitloop -= 1,
 var whichrelax = @3,
-if whichrelax = 1 then if idir = 0 goto situ1 else if idir = 1 or idir = 2 or idir = 3 goto sitr1 else if idir = 4 goto sitd1 else if idir = 5 or idir = 6 or idir = 7 goto sitl1,
-if whichrelax = 2 then if idir = 0 goto situ2 else if idir = 1 or idir = 2 or idir = 3 goto sitr2 else if idir = 4 goto sitd2 else if idir = 5 or idir = 6 or idir = 7 goto sitl2,
-if whichrelax = 3 then if idir = 0 goto situ3 else if idir = 1 or idir = 2 or idir = 3 goto sitr3 else if idir = 4 goto sitd2 else if idir = 5 or idir = 6 or idir = 7 goto sitl3
+if whichrelax = 1 then if sdir = 0 goto situ1 else if sdir = 1 or sdir = 2 or sdir = 3 goto sitr1 else if sdir = 4 goto sitd1 else if sdir = 5 or sdir = 6 or sdir = 7 goto sitl1,
+if whichrelax = 2 then if sdir = 0 goto situ2 else if sdir = 1 or sdir = 2 or sdir = 3 goto sitr2 else if sdir = 4 goto sitd2 else if sdir = 5 or sdir = 6 or sdir = 7 goto sitl2,
+if whichrelax = 3 then if sdir = 0 goto situ3 else if sdir = 1 or sdir = 2 or sdir = 3 goto sitr3 else if sdir = 4 goto sitd2 else if sdir = 5 or sdir = 6 or sdir = 7 goto sitl3
 
 #Frames
 0;75;0;0;;label initr
