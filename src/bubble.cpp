@@ -45,6 +45,9 @@ Bubble::Bubble(Settings &settings) : settings(settings)
 
   hideTimer.setSingleShot(true);
   connect(&hideTimer, &QTimer::timeout, [this]() { hide(); });
+
+  // Hide initially
+  hide();
 }
 
 Bubble::~Bubble()
