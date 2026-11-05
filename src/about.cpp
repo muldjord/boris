@@ -80,7 +80,7 @@ QComboBox {
     border: 3px solid #14581D;
     border-radius: 10px;
     padding: 3px 5px;
-    min-height: 24px;
+    min-height: 20px;
 }
 
 QComboBox::drop-down {
@@ -186,7 +186,7 @@ QLineEdit {
     border: 3px solid #14581D;
     border-radius: 10px;
     padding: 3px 5px;
-    min-height: 24px;
+    min-height: 20px;
 }
 
 /* ==========================================
@@ -231,7 +231,7 @@ QScrollBar::sub-page:vertical {
    ========================================== */
 
 QSlider {
-    min-height: 24px;
+    min-height: 20px;
 }
 
 QSlider::groove:horizontal {
@@ -253,10 +253,10 @@ QSlider::add-page:horizontal {
 QSlider::handle:horizontal {
     background-color: #D6915D;
     border: 3px solid #B67B4F;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     margin: -7px 0;
-    border-radius: 11px;
+    border-radius: 5px;
 }
 
 /* ==========================================
@@ -279,7 +279,7 @@ QTabBar::tab {
     border-top-right-radius: 11px;
 
     padding: 8px 18px;
-    min-height: 24px;
+    min-height: 20px;
 
     margin-right: 4px;
     margin-top: 4px;
@@ -446,18 +446,14 @@ QToolTip {
   }
 
   QLabel *itemSpawnIntervalLabel = new QLabel("Seconds between random item spawn (5-3600):");
-  itemSpawnIntervalLineEdit = new QLineEdit();
-  itemSpawnIntervalLineEdit->setToolTip("If items are enabled random items will be spawned around the desktop at this interval.");
-  QIntValidator *itemSpawnIntervalValidator = new QIntValidator(5, 3600, this);
-  itemSpawnIntervalLineEdit->setValidator(itemSpawnIntervalValidator);
-  itemSpawnIntervalLineEdit->setText(QString::number(settings.itemSpawnInterval));
+  itemSpawnIntervalSlider = new StepSlider({5, 3600}, this);
+  itemSpawnIntervalSlider->setValue(settings.itemSpawnInterval);
+  itemSpawnIntervalSlider->setToolTip("If items are enabled random items will be spawned around the desktop at this interval.");
 
   QLabel *itemTimeoutLabel = new QLabel("Item timeout in seconds (10-3600):");
-  itemTimeoutLineEdit = new QLineEdit();
-  itemTimeoutLineEdit->setToolTip("Items will disappear after this amount of time.");
-  QIntValidator *itemValidator = new QIntValidator(10, 3600, this);
-  itemTimeoutLineEdit->setValidator(itemValidator);
-  itemTimeoutLineEdit->setText(QString::number(settings.itemTimeout));
+  itemTimeoutSlider = new StepSlider({10, 3600}, this);
+  itemTimeoutSlider->setValue(settings.itemTimeout);
+  itemTimeoutSlider->setToolTip("Items will disappear after this amount of time.");
 
   QLabel *weatherLabel = new QLabel("Show weather for city (mouse over for help):");
   weatherLineEdit = new QLineEdit();
@@ -518,9 +514,9 @@ QToolTip {
   configLayout->addWidget(clonesSlider);
   configLayout->addWidget(enableItems);
   configLayout->addWidget(itemSpawnIntervalLabel);
-  configLayout->addWidget(itemSpawnIntervalLineEdit);
+  configLayout->addWidget(itemSpawnIntervalSlider);
   configLayout->addWidget(itemTimeoutLabel);
-  configLayout->addWidget(itemTimeoutLineEdit);
+  configLayout->addWidget(itemTimeoutSlider);
   configLayout->addWidget(statsLabel);
   configLayout->addWidget(statsComboBox);
   configLayout->addWidget(independenceLabel);
@@ -575,28 +571,10 @@ void About::saveAll()
 
   settings.clones = clonesSlider->value();
 
-  if(itemSpawnIntervalLineEdit->text().toInt() != 0) {
-    if(itemSpawnIntervalLineEdit->text().toInt() < 5) {
-      itemSpawnIntervalLineEdit->setText("5");
-    }
-    if(itemSpawnIntervalLineEdit->text().toInt() > 3600) {
-      itemSpawnIntervalLineEdit->setText("3600");
-    }
-    settings.itemSpawnInterval = itemSpawnIntervalLineEdit->text().toInt();
-  } else {
-    settings.itemSpawnInterval = 0;
-  }
-  if(itemTimeoutLineEdit->text().toInt() != 0) {
-    if(itemTimeoutLineEdit->text().toInt() < 10) {
-      itemTimeoutLineEdit->setText("10");
-    }
-    if(itemTimeoutLineEdit->text().toInt() > 3600) {
-      itemTimeoutLineEdit->setText("3600");
-    }
-    settings.itemTimeout = itemTimeoutLineEdit->text().toInt();
-  } else {
-    settings.itemTimeout = 0;
-  }
+  settings.itemSpawnInterval = itemSpawnIntervalSlider->value();
+
+  settings.itemTimeout = itemTimeoutSlider->value();
+
   settings.city = weatherLineEdit->text();
   settings.key = weatherKeyLineEdit->text();
   settings.feedUrl = feedUrlLineEdit->text();
@@ -613,6 +591,7 @@ void About::saveAll()
     settings.sound = false;
   }
   settings.volume = volumeSlider->value();
+
   if(enableBubbles->isChecked()) {
     settings.bubbles = true;
   } else {

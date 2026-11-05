@@ -42,21 +42,21 @@ private slots:
 
 private:
   Settings &settings;
-  QSettings *iniSettings;
+  QSettings *iniSettings = nullptr;
 
-  StepSlider *clonesSlider;
-  StepSlider *sizeSlider;
-  QLineEdit *itemSpawnIntervalLineEdit;
-  QLineEdit *itemTimeoutLineEdit;
-  QLineEdit *weatherLineEdit;
-  QLineEdit *weatherKeyLineEdit;
-  QLineEdit *feedUrlLineEdit;
-  QComboBox *statsComboBox;
-  QCheckBox *makeInvincible;
-  QCheckBox *enableSound;
-  QCheckBox *enableItems;
-  QCheckBox *enableBubbles;
-  QCheckBox *showWelcome;
-  StepSlider *independenceSlider;
-  StepSlider *volumeSlider;
+  StepSlider *clonesSlider = nullptr;
+  StepSlider *sizeSlider = nullptr;
+  StepSlider *itemSpawnIntervalSlider = nullptr;
+  StepSlider *itemTimeoutSlider = nullptr;
+  QLineEdit *weatherLineEdit = nullptr;
+  QLineEdit *weatherKeyLineEdit = nullptr;
+  QLineEdit *feedUrlLineEdit = nullptr;
+  QComboBox *statsComboBox = nullptr;
+  QCheckBox *makeInvincible = nullptr;
+  QCheckBox *enableSound = nullptr;
+  QCheckBox *enableItems = nullptr;
+  QCheckBox *enableBubbles = nullptr;
+  QCheckBox *showWelcome = nullptr;
+  StepSlider *independenceSlider = nullptr;
+  StepSlider *volumeSlider = nullptr;
 };
