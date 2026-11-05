@@ -62,12 +62,12 @@ About::About(QSettings *iniSettings, Settings &settings) : settings(settings), i
 QDialog {
     background-color: #FFF0D0;
     color: #14581D;
-    font-family: "sans-serif";
-    font-size: 14pt;
 }
 
 QWidget {
     color: #14581D;
+    font-family: "sans-serif";
+    font-size: 14px;
 }
 
 /* ==========================================
@@ -79,8 +79,8 @@ QComboBox {
     color: #14581D;
     border: 3px solid #14581D;
     border-radius: 10px;
-    padding: 3px 5px;
-    min-height: 20px;
+    padding: 0px 5px;
+    height: 22px;
 }
 
 QComboBox::drop-down {
@@ -95,8 +95,8 @@ QComboBox::drop-down {
 
 QComboBox::down-arrow {
     image: url(:downarrow.png);
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
 }
 
 QComboBox QAbstractItemView {
@@ -129,9 +129,8 @@ QPushButton {
     color: white;
     border: 3px solid #AA1010;
     border-radius: 12px;
-    padding: 5px 10px;
     font-weight: bold;
-    min-height: 22px;
+    height: 26px;
 }
 
 QPushButton:hover {
@@ -141,8 +140,6 @@ QPushButton:hover {
 
 QPushButton:pressed {
     background-color: #AA1010;
-    padding-top: 10px;
-    padding-bottom: 6px;
 }
 
 /* ==========================================
@@ -152,13 +149,13 @@ QPushButton:pressed {
 QCheckBox {
     spacing: 9px;
     color: #14581D;
-    padding: 4px;
+    padding: 0px;
     font-weight: bold;
 }
 
 QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     border: 3px solid #14581D;
     border-radius: 6px;
     background-color: white;
@@ -168,8 +165,8 @@ QCheckBox::indicator:checked {
     background-color: #4A8710;
     border: 3px solid #14581D;
     image: url(:checkmark.png);
-    width: 20;
-    height: 20;
+    width: 16;
+    height: 16;
 }
 
 QCheckBox::indicator:unchecked {
@@ -185,8 +182,8 @@ QLineEdit {
     color: #14581D;
     border: 3px solid #14581D;
     border-radius: 10px;
-    padding: 3px 5px;
-    min-height: 20px;
+    padding: 0px 5px;
+    height: 22px;
 }
 
 /* ==========================================
@@ -231,22 +228,22 @@ QScrollBar::sub-page:vertical {
    ========================================== */
 
 QSlider {
-    min-height: 20px;
+    height: 22px;
 }
 
 QSlider::groove:horizontal {
-    height: 9px;
+    height: 8px;
     background-color: #4A8710;
     border-radius: 4px;
 }
 
 QSlider::sub-page:horizontal {
-    background-color: #D53825;
+    background-color: #4A8710;
     border-radius: 4px;
 }
 
 QSlider::add-page:horizontal {
-    background-color: #4A8710;
+    background-color: #D53825;
     border-radius: 4px;
 }
 
@@ -255,7 +252,7 @@ QSlider::handle:horizontal {
     border: 3px solid #B67B4F;
     width: 16px;
     height: 16px;
-    margin: -7px 0;
+    margin: -6px 0;
     border-radius: 5px;
 }
 
@@ -279,7 +276,7 @@ QTabBar::tab {
     border-top-right-radius: 11px;
 
     padding: 8px 18px;
-    min-height: 20px;
+    max-height: 20px;
 
     margin-right: 4px;
     margin-top: 4px;
