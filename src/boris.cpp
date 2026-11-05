@@ -207,19 +207,14 @@ void Boris::createBehavioursMenu()
 
 QString Boris::getFileFromCategory(const QString &category)
 {
-  QList<QString> b;
-  for(const auto &behaviour: settings.behaviours) {
-    if(behaviour.category == category) {
-      b.append(behaviour.file);
-    }
-  }
-  int chosen = QRandomGenerator::global()->bounded(b.length());
+  QList<int> potentials;
   for(int i = 0; i < settings.behaviours.length(); ++i) {
-    if(settings.behaviours.at(i).file == b.at(chosen)) {
-      chosen = i;
-      break;
+    if(settings.behaviours.at(i).category == category) {
+      potentials.append(i);
     }
   }
+
+  int chosen = potentials.at(QRandomGenerator::global()->bounded(potentials.length()));
   return settings.behaviours.at(chosen).file;
 }
 
@@ -892,10 +887,6 @@ int Boris::getHeight() const
 
 void Boris::processAi(QString &behav)
 {
-  // You might wonder why I check behav == "" in all the following if statements.
-  // The reason is that they might change throughout the function, and thus makes sense to
-  // make sure an AI decision hasn't already been made.
-
   // Check if it is time to show the weather again
   timeForWeather++;
   if(timeForWeather >= 50) {
@@ -970,11 +961,8 @@ void Boris::processAi(QString &behav)
         stats->flashStat("toilet");
       } else if(behav == "_social") {
         stats->flashStat("social");
-      } else if(behav == "_health") {
-        // This is a visual stat, nothing to flash
-      } else if(behav == "_hygiene") {
-        // This is a visual stat, nothing to flash
       }
+      // Nothing needed for other stat types as they aren't in the stats widget
     }
   }
 }
