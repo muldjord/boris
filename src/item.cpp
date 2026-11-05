@@ -487,6 +487,8 @@ void Item::interact(Boris *boris)
     destroy();
     return;
   }
-  curFrame = settings.itemBehaviours.at(curItem).labels[settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel()];
-  animTimer.start(0, Qt::PreciseTimer, this);
+  if(settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel() != "nil") {
+    curFrame = settings.itemBehaviours.at(curItem).labels[settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel()];
+    animTimer.start(0, Qt::PreciseTimer, this);
+  }
 }
