@@ -2,6 +2,7 @@ title=Let it rip
 category=Idle
 fun=2
 social=-2
+hygiene=-5
 
 allowFlip
 oneShot
@@ -13,7 +14,8 @@ define init:var cycle = @3
 1;75;0;0;;
 2;750;0;0;;
 1;75;0;0;;var cycle -= 1,if cycle > 0 goto lookout
-3;2000;0;0;;var fart = @6,
+3;2000;0;0;;if bdir != -1 break,
+var fart = @6,
 if fart = 1 goto fart1,
 if fart = 2 goto fart2,
 if fart = 3 goto fart3,
