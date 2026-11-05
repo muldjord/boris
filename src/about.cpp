@@ -80,7 +80,7 @@ QComboBox {
     border: 3px solid #14581D;
     border-radius: 10px;
     padding: 0px 5px;
-    height: 22px;
+    height: 24px;
 }
 
 QComboBox::drop-down {
@@ -183,7 +183,7 @@ QLineEdit {
     border: 3px solid #14581D;
     border-radius: 10px;
     padding: 0px 5px;
-    height: 22px;
+    height: 24px;
 }
 
 /* ==========================================
@@ -228,7 +228,7 @@ QScrollBar::sub-page:vertical {
    ========================================== */
 
 QSlider {
-    height: 22px;
+    height: 24px;
 }
 
 QSlider::groove:horizontal {
@@ -272,13 +272,11 @@ QTabBar::tab {
     border: 3px solid #14581D;
     border-bottom: none;
 
-    border-top-left-radius: 11px;
-    border-top-right-radius: 11px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
 
-    padding: 8px 18px;
-    max-height: 20px;
+    padding: 4px 8px;
 
-    margin-right: 4px;
     margin-top: 4px;
 
     font-weight: bold;

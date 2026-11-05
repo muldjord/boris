@@ -97,6 +97,7 @@ StepSlider::StepSlider(const QList<int> &allowedValues, QWidget *parent)
   label->setMaximumWidth(64);
   label->setAlignment(Qt::AlignHCenter);
   QHBoxLayout *layout = new QHBoxLayout;
+  layout->setContentsMargins(0, 0, 0, 0);
   layout->addWidget(slider);
   layout->addWidget(label);
 
