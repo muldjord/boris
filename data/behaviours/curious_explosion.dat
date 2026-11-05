@@ -1,8 +1,10 @@
 fun=-50
 health=-35
 energy=-25
+
 oneShot
 doNotDisturb
+
 #Frames
 0;75;0;0;;
 1;75;0;0;;
