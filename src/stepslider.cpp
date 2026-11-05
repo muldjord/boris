@@ -53,13 +53,13 @@ int InternalSlider::nearestValue(int value) const
 
   for(int v : allowedValues) {
     int distance = abs(value - v);
-    
+
     if(distance < minDistance) {
       minDistance = distance;
       nearest = v;
     }
   }
-  
+
   return nearest;
 }
 
@@ -91,7 +91,7 @@ StepSlider::StepSlider(const QList<int> &allowedValues, QWidget *parent)
   slider = new InternalSlider(allowedValues, parent);
   connect(slider, &QSlider::valueChanged, this, &StepSlider::setValue);
   slider->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-  
+
   label = new QLineEdit;
   label->setReadOnly(true);
   label->setMaximumWidth(64);

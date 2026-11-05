@@ -470,7 +470,7 @@ void Item::interact(Boris *boris)
   scriptVars["fun"] = boris->stats->getFun();
   scriptVars["hygiene"] = boris->stats->getHygiene();
   scriptVars["bdir"] = getDirectionTo(boris->pos());
-  
+
   borisHyper = boris->stats->getHyper();
 
   if(settings.itemBehaviours.at(curItem).reactions.at(interactReaction).doMoveItem()) {

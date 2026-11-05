@@ -971,7 +971,7 @@ void Boris::reconfBoris()
 {
   // Reset Boris pointer
   borisFriend = nullptr;
-  
+
   // Set new independence level
   stats->setIndependence(settings.independence);
 

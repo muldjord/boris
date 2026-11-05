@@ -541,7 +541,7 @@ QToolTip {
   QVBoxLayout *vLayout = new QVBoxLayout;
   vLayout->addLayout(hLayout1);
   vLayout->addLayout(hLayout2);
-  
+
   setLayout(vLayout);
 }
 
