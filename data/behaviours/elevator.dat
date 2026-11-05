@@ -7,6 +7,16 @@ oneShot
 allowFlip
 doNotDisturb
 pitchLock
+
+define maybefart:var fart = 0,
+if @20 = 1 then var fart = @6,
+if fart = 1 sound fart1.wav,
+if fart = 2 sound fart2.wav,
+if fart = 3 sound fart3.wav,
+if fart = 4 sound fart4.wav,
+if fart = 5 sound fart5.wav,
+if fart = 6 sound fart6.wav
+
 #Frames
 0;75;0;0;;var floors = 1 + @3
 1;75;0;0;;var direction = @2
@@ -86,7 +96,7 @@ pitchLock
 72;300;0;0;;label goingdown
 73;225;0;0;elevator_start.wav;
 74;150;0;0;;
-75;75;0;0;;
+75;75;0;0;;call maybefart
 76;75;0;0;;
 77;75;0;0;;
 78;75;0;0;;
@@ -107,7 +117,7 @@ pitchLock
 90;150;0;0;;
 91;75;0;0;;
 92;75;0;0;;
-93;75;0;0;;
+93;75;0;0;;call maybefart
 94;75;0;0;;
 95;75;0;0;;
 96;75;0;0;;
@@ -131,7 +141,7 @@ pitchLock
 100;75;0;0;;
 99;75;0;0;;
 98;75;0;0;;
-97;75;0;0;;
+97;75;0;0;;call maybefart
 96;75;0;0;;
 95;75;0;0;;
 94;75;0;0;;
@@ -164,7 +174,7 @@ pitchLock
 84;75;0;0;;
 83;75;0;0;;
 82;75;0;0;;
-81;75;0;0;;
+81;75;0;0;;call maybefart
 80;75;0;0;;
 79;75;0;0;;
 78;75;0;0;;
@@ -194,7 +204,7 @@ pitchLock
 103;75;0;0;;
 102;75;0;0;;
 101;75;0;0;;
-100;75;0;0;;
+100;75;0;0;;call maybefart
 99;75;0;0;;
 98;75;0;0;;
 97;75;0;0;;
@@ -214,7 +224,7 @@ pitchLock
 87;75;0;0;;
 86;75;0;0;;
 85;75;0;0;;
-84;75;0;0;;
+84;75;0;0;;call maybefart
 83;75;0;0;;
 82;75;0;0;;
 81;75;0;0;;
