@@ -68,6 +68,8 @@ The last command copies all necessary files to the `release` folder. You can the
 * Added 'sit_and_relax' behaviour for 'energy' category
 * Added 'acme_gift' item for 'fun' category (negative impact)
 * Added 'curious_explosion' behaviour reaction for 'acme_gift'
+* Added 'farting' behaviour!
+* Now allows 'nil' for frame to goto in item reactions
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
