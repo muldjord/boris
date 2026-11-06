@@ -1,7 +1,8 @@
 # Boris
 A scriptable desktop screenmate written in Qt6 (for graphics) and SFML3 (for sound). Boris has a bit of a prankster personality and needs to be cared for in order to stay healthy. It's all in good fun so please enjoy!
 
-* All behaviours are fully scriptable using [BorisScript](data/behaviours/README.md)
+* All behaviours and items are defined in an human-readable data format. See the [behaviours](docs/BEHAVIOURS.md) and [items](docs/ITEMS.md) documentation for more details
+* Create fun and dynamic behaviours and items. See the [BorisScript](docs/BORISSCRIPT.md) documentation for more details
 * Supports weather visualization using the OpenWeatherMap API
 * Supports RSS feed speech bubbles using custom RSS feeds
 
@@ -184,7 +185,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Added complain behaviour, and added sound to all chatter behaviours.
 
 #### Version 1.9.3 (05th November 2016):
-* Added speech bubbles. Edit the text in data/chatter.dat. Read CHATTER.md for more info.
+* Added speech bubbles.
 
 #### Version 1.9.2 (24th August 2016):
 * Limited the weather api call to once every hour. Added OpenWeatherMap API key lineedit to config.
