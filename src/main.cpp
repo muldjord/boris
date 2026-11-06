@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QDir>
 #include <QPixmap>
 #include <QSplashScreen>
+#include <QStyleFactory>
 
 void customMessageHandler(QtMsgType type, const QMessageLogContext&, const QString &msg)
 {
@@ -54,6 +55,8 @@ int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
   app.setApplicationName("Boris");
+
+  QApplication::setStyle(QStyleFactory::create("Fusion"));
 
   QDir::setCurrent(QApplication::applicationDirPath());
 
