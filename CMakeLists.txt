@@ -88,4 +88,8 @@ install(FILES
 install(DIRECTORY
   ${CMAKE_SOURCE_DIR}/data
   DESTINATION .
+  FILES_MATCHING
+  PATTERN "*.png"
+  PATTERN "*.dat"
+  PATTERN "*.wav"
 )
