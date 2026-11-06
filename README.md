@@ -53,6 +53,9 @@ The last command copies all necessary files to the `release` folder. You can the
 * Make a 'candycane' item for Boris to eat. It should be 'energy' category. He will get a significant energy boost and get very hyper
 * Create a Bub or Bob item that will put Boris in a bubble on interaction
 * When changing the size of Boris all Borises should be moved randomly around the desktop to avoid some Borises being at the edge
+* Create a shark item that moves around the desktop for a little while. It should make Boris flee
+* When Boris is blowing up the balloon sometimes, instead of popping, it should go "pllrrlrlt!" and flying around the screen
+* Allow setting the colors of Boris' clothes in the About dialog
 
 #### Version 4.0.5 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
@@ -70,7 +73,9 @@ The last command copies all necessary files to the `release` folder. You can the
 * Added 'acme_gift' item for 'fun' category (negative impact)
 * Added 'curious_explosion' behaviour reaction for 'acme_gift'
 * Added 'farting' behaviour!
-* Now allows 'nil' for frame to goto in item reactions
+* Now allows 'nil' for frame to go to in item reactions
+* Moved all documentation into `docs` path
+* Updated / rewrote a lot of the documentation
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
