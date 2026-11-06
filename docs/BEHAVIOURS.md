@@ -83,20 +83,20 @@ define other:var loop -= 1,if loop <= 0 goto end
   * `Reaction`: This marks the behaviour as a `Reaction` behaviour that is *only* used when an encountered item requests it
 
 ### Stat changes
-* energy=INTEGER: The amount of Boris' energy this behaviour will increase or decrease when starting the behaviour
-* social=INTEGER: The amount of Boris' social needs this behaviour will increase or decrease when starting the behaviour
-* fun=INTEGER: The amount of Boris' fun level this behaviour will increase or decrease when starting the behaviour
-* hunger=INTEGER: The amount of Boris' hunger this behaviour will increase or decrease when starting the behaviour
-* toilet=INTEGER: The amount of Boris' need for a toilet this behaviour will increase or decrease when starting the behaviour
-* health=INTEGER: The amount of Boris' health this behaviour will increase or decrease when starting the behaviour
-* hygiene=INTEGER: The amount of Boris' filth level this behaviour will increase or decrease when starting the behaviour
-* hyper=INTEGER: The amount of Boris' hyperactivity level this behaviour will increase or decrease when starting the behaviour
+* `energy=INTEGER`: The amount of Boris' energy this behaviour will increase or decrease when starting the behaviour
+* `social=INTEGER`: The amount of Boris' social needs this behaviour will increase or decrease when starting the behaviour
+* `fun=INTEGER`: The amount of Boris' fun level this behaviour will increase or decrease when starting the behaviour
+* `hunger=INTEGER`: The amount of Boris' hunger this behaviour will increase or decrease when starting the behaviour
+* `toilet=INTEGER`: The amount of Boris' need for a toilet this behaviour will increase or decrease when starting the behaviour
+* `health=INTEGER`: The amount of Boris' health this behaviour will increase or decrease when starting the behaviour
+* `hygiene=INTEGER`: The amount of Boris' filth level this behaviour will increase or decrease when starting the behaviour
+* `hyper=INTEGER`: The amount of Boris' hyperactivity level this behaviour will increase or decrease when starting the behaviour
 
 ### Behaviour flags
-* allowFlip: Set this to enable a 50% chance of the behaviour being mirrored horizontally when initiated
-* pitchLock: Set this to disable the slight pitch randomness otherwise used when playing the sounds in this behaviour
-* oneShot: Set this to tell the behaviour to move on to a different behaviour when the end of the frame definitions are reached. If this is unset it will instead loop back to the first frame definition and keep playing for a randomly chosen amount of time before moving on to the next behaviour.
-* doNotDisturb: Set this to make sure Boris cannot be disturbed while this behaviour is playing (eg. when encountering another Boris or if the Mouse moves close to him)
+* `allowFlip`: Set this to enable a 50% chance of the behaviour being mirrored horizontally when initiated
+* `pitchLock`: Set this to disable the slight pitch randomness otherwise used when playing the sounds in this behaviour
+* `oneShot`: Set this to tell the behaviour to move on to a different behaviour when the end of the frame definitions are reached. If this is unset it will instead loop back to the first frame definition and keep playing for a randomly chosen amount of time before moving on to the next behaviour.
+* `doNotDisturb`: Set this to make sure Boris cannot be disturbed while this behaviour is playing (eg. when encountering another Boris or if the Mouse moves close to him)
 
 ### BorisScript defines
 BorisScript supports blocks of code to be defined which can be called from the frame definitions to avoid repeating the same code over and over again. They can be seen as parameter-less functions. See the `call` command specification in the [BorisScript](BORISSCRIPT.md) documentation for more details.

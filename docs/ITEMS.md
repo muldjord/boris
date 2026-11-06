@@ -55,13 +55,15 @@ define other:var loop -= 1,if loop <= 0 goto end
   * `Toilet`: Used for items that relieves Boris' need for a toilet visit when he interacts with it
   * `Health`: Used for items that heal Boris when he interacts with it
   * `Hygiene`: Used for items that cleans Boris when he interacts with it
-* coins=PRICE: The amount of Boris coins this item costs to unlock before it can be spawned from the menu
-* weight=INTEGER: Set the weight of the item. Value can be from 0-10. 0 means floating. 10 means really heavy.
-* bounce=INTEGER: Sets the bounce factor of the object. Value can be from 0-10. 0 means no bounce. 10 means bounce forever.
+* `coins=PRICE`: The amount of Boris coins this item costs to unlock before it can be spawned from the menu
+* `weight=INTEGER`: Set the weight of the item. Value can be from 0-10. 0 means floating. 10 means really heavy.
+* `bounce=INTEGER`: Sets the bounce factor of the object. Value can be from 0-10. 0 means no bounce. 10 means bounce forever.
 
 ### Item reaction
 #### Definition
-* reaction=REACTION,LABEL,XCOORD,YCOORD;...
+```
+reaction=REACTION,LABEL,XCOORD,YCOORD;...
+```
 
 #### Examples
 ```
@@ -82,8 +84,8 @@ The fourth example tells Boris to initiate the `sit_and_relax` behaviour. The ha
 The fifth example tells Boris to initiate the `eat_steak` behaviour. The item *is* destroyed when the interaction starts.
 
 ### Item flags
-* allowFlip: Set this to enable a 50% chance of the item being mirrored horizontally when spawned
-* pitchLock: Set this to disable the slight pitch randomness otherwise used when playing the sounds of this item
+* `allowFlip`: Set this to enable a 50% chance of the item being mirrored horizontally when spawned
+* `pitchLock`: Set this to disable the slight pitch randomness otherwise used when playing the sounds of this item
 
 ### BorisScript defines
 BorisScript supports blocks of code to be defined which can be called from the frame definitions to avoid repeating the same code over and over again. They can be seen as parameter-less functions. See the `call` command specification in the [BorisScript](BORISSCRIPT.md) documentation for more details.
