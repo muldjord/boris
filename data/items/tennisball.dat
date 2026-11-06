@@ -1,10 +1,13 @@
 title=Tennisball
 category=Fun
+
 reaction=hitball_w,hitballw,0,6;hitball_e,hitballe,2,6
+
 weight=4
 bounce=7
-noIgnore
+
 doNotDisturb
+
 #Frames
 0;1000;0;0;;stop
 
