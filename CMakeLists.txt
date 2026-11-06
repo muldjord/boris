@@ -93,3 +93,10 @@ install(DIRECTORY
   PATTERN "*.dat"
   PATTERN "*.wav"
 )
+
+install(DIRECTORY
+  ${CMAKE_SOURCE_DIR}/docs
+  DESTINATION .
+  FILES_MATCHING
+  PATTERN "*.md"
+)
