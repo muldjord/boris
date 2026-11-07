@@ -614,10 +614,10 @@ void MainWindow::spawnRandomItem()
     randomItem = QRandomGenerator::global()->bounded(settings.itemBehaviours.count());
   } while(settings.itemBehaviours.at(randomItem).reactions.isEmpty());
 
-  Item *spawnedItem = new Item(settings.itemBehaviours.at(randomItem).file, settings);
+  Item *spawnedItem = new Item(settings.itemBehaviours.at(randomItem).file, settings,
+			       QRandomGenerator::global()->bounded(settings.desktopWidth),
+			       QRandomGenerator::global()->bounded(settings.desktopHeight));
   connect(this, &MainWindow::handlePhysics, spawnedItem, &Item::handlePhysics);
-  spawnedItem->setPos(QRandomGenerator::global()->bounded(settings.desktopWidth),
-                      QRandomGenerator::global()->bounded(settings.desktopHeight));
   scene()->addItem(spawnedItem);
   settings.itemList.append(spawnedItem);
 
@@ -632,10 +632,10 @@ void MainWindow::spawnItem(QAction* action)
   for(const auto &item: settings.itemBehaviours) {
     if(item.file == itemFile) {
       if(settings.unlocked.contains(item.file)) {
-        Item *spawnedItem = new Item(item.file, settings);
+        Item *spawnedItem = new Item(item.file, settings,
+				     QRandomGenerator::global()->bounded(settings.desktopWidth),
+				     QRandomGenerator::global()->bounded(settings.desktopHeight));
         connect(this, &MainWindow::handlePhysics, spawnedItem, &Item::handlePhysics);
-        spawnedItem->setPos(QRandomGenerator::global()->bounded(settings.desktopWidth),
-                            QRandomGenerator::global()->bounded(settings.desktopHeight));
         scene()->addItem(spawnedItem);
         settings.itemList.append(spawnedItem);
       } else {
