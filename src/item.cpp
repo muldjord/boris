@@ -38,7 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern MainWindow *mainWindow;
 extern SoundMixer *soundMixer;
 
-Item::Item(const QString &item, Settings &settings)
+Item::Item(const QString &item, Settings &settings, const int &xPos, const int&yPos)
   : settings(settings)
 {
   for(int a = 0; a < settings.itemBehaviours.count(); ++a) {
@@ -51,6 +51,8 @@ Item::Item(const QString &item, Settings &settings)
   rendered.fill(Qt::transparent);
 
   setCursor(settings.getCursor("hover.png"));
+
+  setPos(xPos, yPos);
 
   shadow = new Shadow(settings);
   shadow->setParentItem(this);

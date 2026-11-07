@@ -42,7 +42,7 @@ class Item : public QGraphicsObject
 {
   Q_OBJECT;
 public:
-  Item(const QString &item, Settings &settings);
+  Item(const QString &item, Settings &settings, const int &xPos = 0, const int &yPos = 0);
   ~Item();
   int getWidth() const;
   int getHeight() const;
