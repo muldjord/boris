@@ -114,7 +114,7 @@ Boris::Boris(Settings &settings)
   connect(&interactionsTimer, &QTimer::timeout, this, &Boris::checkInteractions);
   interactionsTimer.start();
 
-  acknowledgeBorisesTimer.setInterval(120 * 1000); // Two minutes between Boris interacting with other Borises
+  acknowledgeBorisesTimer.setInterval(120 * 1000); // Two minutes between Boris setting a new friend
   acknowledgeBorisesTimer.setSingleShot(true);
   connect(&acknowledgeBorisesTimer, &QTimer::timeout, [this]() { ignoreBorises = false; borisFriend = nullptr; });
 
