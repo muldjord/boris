@@ -784,7 +784,7 @@ void Boris::handlePhysics()
 
   QPointF cursorPos = mainWindow->mapToScene(mainWindow->viewport()->mapFromGlobal(QCursor::pos()));
   if(!falling && !grabbed) {
-    if(getDistance(cursorPos) < getWidth() * 2) {
+    if(getDistance(cursorPos) < getWidth() * 3) {
       if(!mouseHovering) {
         interactions += 4; // Should be 4 due to checkInteractions now run every 500 ms
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
