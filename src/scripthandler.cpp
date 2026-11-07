@@ -324,10 +324,8 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
     if(settings.scriptOutput) {
       printf("Spawning item '%s' at %d,%d\n", qPrintable(itemName), iX, iY);
     }
-    Item *spawnedItem = new Item(itemName, settings);
+    Item *spawnedItem = new Item(itemName, settings, parentPos.x() + iX, parentPos.y() + iY);
     connect(mainWindow, &MainWindow::handlePhysics, spawnedItem, &Item::handlePhysics);
-    spawnedItem->setPos(parentPos.x() + iX,
-                        parentPos.y() + iY);
     mainWindow->scene()->addItem(spawnedItem);
     settings.itemList.append(spawnedItem);
   } else {
@@ -577,15 +575,19 @@ void ScriptHandler::handleBehav(QList<QString> &parameters, int &stop)
 
 void ScriptHandler::handleSound(QList<QString> &parameters)
 {
+  float panning = parentPos.x() / settings.desktopWidth * 2.0 - 1.0;
+  float pitch = (scriptVars["hyper"] / 60.0) + 1;
   parameters.removeFirst(); // Remove 'sound'
   if(parameters.count() >= 1) {
     if(settings.scriptOutput) {
-      printf("Playing sound '%s'\n", qPrintable(parameters.first()));
+      printf("Playing sound '%s' at pitch %f panned to %f\n", qPrintable(parameters.first()),
+	     pitch,
+	     panning);
     }
     if(settings.sound) {
       soundMixer->playSoundFile(parameters.first().toStdString(),
-                                (float)parentPos.x() / (float)settings.desktopWidth * 2.0 - 1.0,
-                                (scriptVars["hyper"] / 60.0) + 1);
+                                panning,
+                                pitch);
     }
   }
   parameters.removeFirst(); // Remove sound file name
