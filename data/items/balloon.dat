@@ -1,6 +1,6 @@
 title=Balloon
 category=Fun
-reaction=balloon_pop
+reaction=balloon_inflate
 allowFlip
 weight=6
 bounce=2
