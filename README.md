@@ -73,6 +73,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Added 'acme_gift' item for 'fun' category (negative impact)
 * Added 'curious_explosion' behaviour reaction for 'acme_gift'
 * Added 'farting' behaviour!
+* Updated inflate balloon behaviour so the balloon sometimes starts farting around instead of popping
 * Now allows 'nil' for frame to go to in item reactions
 * Moved all documentation into `docs` path
 * Updated / rewrote a lot of the documentation
