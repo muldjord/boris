@@ -506,3 +506,8 @@ int Item::getRange()
 {
   return range;
 }
+
+bool Item::isGrabbed()
+{
+  return grabbed;
+}
