@@ -42,7 +42,7 @@ class Item : public QGraphicsObject
 {
   Q_OBJECT;
 public:
-  Item(const QString &item, Settings &settings, const int &xPos = 0, const int &yPos = 0);
+  Item(const QString &item, Settings &settings, const int &xPos, const int &yPos, const QString &gotoLabel = QString());
   ~Item();
   int getWidth() const;
   int getHeight() const;
@@ -50,6 +50,7 @@ public:
   QPoint getGlobalCenter();
   QString getReactionBehaviour();
   QString getCategory();
+  int getRange();
   void interact(Boris *boris);
   QMap<QString, int> scriptVars;
   bool grabbed = false;
@@ -95,6 +96,8 @@ private:
 
   Shadow *shadow = nullptr;
 
+  int range = -1;
+  
   double vVel = 0.0;
   double hVel = 0.0;
   int groundY = 0;

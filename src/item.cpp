@@ -38,12 +38,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern MainWindow *mainWindow;
 extern SoundMixer *soundMixer;
 
-Item::Item(const QString &item, Settings &settings, const int &xPos, const int&yPos)
+Item::Item(const QString &item, Settings &settings, const int &xPos, const int&yPos, const QString &gotoLabel)
   : settings(settings)
 {
   for(int a = 0; a < settings.itemBehaviours.count(); ++a) {
     if(settings.itemBehaviours.at(a).file == item) {
       curItem = a;
+      range = settings.itemBehaviours.at(a).range;
       break;
     }
   }
@@ -79,6 +80,12 @@ Item::Item(const QString &item, Settings &settings, const int &xPos, const int&y
   if(settings.itemBehaviours.at(curItem).defines.contains("init")) {
     int stop = 0;
     runScript(stop, true);
+  }
+
+  if(!gotoLabel.isNull()) {
+    if(settings.itemBehaviours.at(curItem).labels.contains(gotoLabel)) {
+      curFrame = settings.itemBehaviours.at(curItem).labels[gotoLabel];
+    }
   }
 
   animTimer.start(0, Qt::PreciseTimer, this);
@@ -493,4 +500,9 @@ void Item::interact(Boris *boris)
     curFrame = settings.itemBehaviours.at(curItem).labels[settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel()];
     animTimer.start(0, Qt::PreciseTimer, this);
   }
+}
+
+int Item::getRange()
+{
+  return range;
 }
