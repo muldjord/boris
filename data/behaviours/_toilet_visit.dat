@@ -1,10 +1,13 @@
 title=Number two
 category=Toilet
+
 fun=-8
 social=-5
 hygiene=-80
+
 oneShot
 doNotDisturb
+
 #Frames
 0;75;5;0;door_open.wav;
 1;75;0;0;;

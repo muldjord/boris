@@ -1,8 +1,10 @@
 title=Drink coffee
 category=Energy
+
 hunger=15
 social=-1
 hygiene=-4
+
 oneShot
 allowFlip
 

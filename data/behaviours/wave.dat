@@ -1,10 +1,13 @@
 title=Wave at me
 category=Social
+
 energy=-2
 fun=5
 social=10
+
 oneShot
 allowFlip
+
 #Frames
 0;75;0;0;;
 1;75;0;0;;

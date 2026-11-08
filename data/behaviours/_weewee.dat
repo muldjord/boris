@@ -1,11 +1,13 @@
 title=Number one
 category=Toilet
+
 fun=-8
 social=-5
 hygiene=-75
+
 oneShot
-doNotDisturb
 allowFlip
+
 #Frames
 0;75;0;0;;
 1;75;0;0;;

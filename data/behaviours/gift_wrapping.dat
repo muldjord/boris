@@ -1,12 +1,15 @@
 title=Wrap a gift
 category=Fun
+
 energy=-5
 fun=24
 hunger=3
 hygiene=-3
+
 oneShot
 allowFlip
 doNotDisturb
+
 #Frames
 0;75;0;0;;
 1;75;0;0;;

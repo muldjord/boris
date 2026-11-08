@@ -1,10 +1,13 @@
 title=Unzip the desktop
 category=Movement
+
 fun=2
 hunger=1
+
 oneShot
 allowFlip
 doNotDisturb
+
 #Frames
 0;75;5;0;;
 1;75;0;0;;

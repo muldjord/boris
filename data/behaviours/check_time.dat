@@ -1,9 +1,12 @@
 title=Check the time
 category=Idle
+
 fun=1
 hunger=1
 social=-2
+
 oneShot
+
 #Frames
 0;75;0;0;;
 1;75;0;0;;

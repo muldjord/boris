@@ -1,8 +1,10 @@
 energy=-5
 fun=-5
 hygiene=-5
+
 oneShot
 doNotDisturb
+
 #Frames
 0;75;0;0;dropped.wav;
 1;75;0;0;;
@@ -14,7 +16,7 @@ doNotDisturb
 3;75;0;0;;label stars
 4;75;0;0;;
 5;75;0;0;;
-6;75;0;0;;if @6 > 1 goto stars
+6;75;0;0;;if @5 > 1 goto stars
 7;75;0;0;;
 8;500;0;0;;
 9;75;0;0;;

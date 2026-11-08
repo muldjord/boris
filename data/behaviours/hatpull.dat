@@ -1,10 +1,12 @@
 title=Pull the hat down
 category=Idle
+
 social=-3
 fun=1
+
 oneShot
-doNotDisturb
 allowFlip
+
 #Frames
 0;75;0;0;;
 1;75;0;0;;

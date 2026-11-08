@@ -1,9 +1,13 @@
 social=5
 fun=-5
+
 oneShot
 allowFlip
+
 define init:var chats = 3,call nextchat
+
 define nextchat:var chats -= 1,if chats < 0 break,var rand = @4,if rand = 1 goto chat1,if rand = 2 goto chat2,if rand = 3 goto chat3,if rand = 4 goto chat4
+
 #Frames
 0;100;0;0;annoyed1.wav;label chat1
 1;100;0;0;;

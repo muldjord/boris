@@ -1,5 +1,8 @@
-oneShot
 fun=-100
+
+oneShot
+doNotDisturb
+
 #Frames
 0;3000;0;0;urgh.wav;
 1;500;-1;0;;

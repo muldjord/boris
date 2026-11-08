@@ -1,9 +1,10 @@
 fun=-15
 hygiene=20
 toilet=2
+
 allowFlip
 oneShot
-doNotDisturb
+
 #Frames
 0;75;0;0;;
 1;75;0;0;;

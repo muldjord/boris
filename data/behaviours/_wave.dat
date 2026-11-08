@@ -1,5 +1,6 @@
 fun=5
 social=30
+
 oneShot
 
 define init:if bdir > -1 call friend else call mouse

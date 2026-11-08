@@ -1,5 +1,6 @@
 title=Zombie walk
 category=Movement
+
 oneShot
 
 define init:var steps = @3 + 7,

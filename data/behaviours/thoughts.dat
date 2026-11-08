@@ -1,5 +1,7 @@
 title=What are you thinking?
+
 category=Social
+
 #Frames
 0;50;0;0;;var line = @14,
 if line = 1 think "I wonder if I'm a real person...",

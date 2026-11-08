@@ -1,5 +1,9 @@
 title=Tell me the news
 category=Social
+
 social=10
+
+oneShot
+
 #Frames
 0;50;0;0;;say rss,behav _chat

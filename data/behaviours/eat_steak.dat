@@ -1,8 +1,11 @@
 title=Eat a steak
 category=Hunger
+
 energy=10
+
 allowFlip
 oneShot
+
 #Frames
 0;75;0;0;;var bites = @4 + 1
 0;75;0;0;;label bite,var bites -= 1,if hunger <= 0 goto imfull

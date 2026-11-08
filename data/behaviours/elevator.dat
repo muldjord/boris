@@ -1,8 +1,10 @@
 title=Take the elevator
 category=Movement
+
 fun=3
 hunger=1
 social=-3
+
 oneShot
 allowFlip
 doNotDisturb

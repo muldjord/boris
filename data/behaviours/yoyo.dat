@@ -1,10 +1,13 @@
 title=Spin the yoyo
 category=Idle
+
 fun=2
 hunger=1
 social=-2
+
 oneShot
 allowFlip
+
 #Frames
 0;75;0;0;;
 1;75;0;0;;

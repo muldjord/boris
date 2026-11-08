@@ -1,13 +1,15 @@
 title=Teleport
 category=Movement
+
 health=-2
 energy=-5
 fun=-5
 hunger=1
 hygiene=5
+
 oneShot
 allowFlip
-doNotDisturb
+
 #Frames
 0;60;0;0;;
 1;60;0;0;;

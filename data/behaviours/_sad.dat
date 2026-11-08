@@ -1,6 +1,7 @@
 fun=-75
 energy=-30
 anxiety=100
+
 oneShot
 doNotDisturb
 
@@ -9,7 +10,6 @@ if bdir >= 4 and bdir <= 7 goto west,
 if bdir = -1 break
 
 #Frames
-
 # Towards east
 0;150;0;0;sad01.wav;label east
 1;150;0;0;;

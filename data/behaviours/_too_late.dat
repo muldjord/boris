@@ -2,9 +2,10 @@ social=-20
 fun=-80
 hygiene=-100
 toilet=-50
+
 oneShot
-doNotDisturb
 allowFlip
+
 #Frames
 0;75;0;0;too_late.wav;
 1;75;0;0;;

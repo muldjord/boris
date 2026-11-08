@@ -1,10 +1,14 @@
 fun=15
 social=15
 toilet=2
+
 oneShot
 allowFlip
+
 define init:var chats = 2,call nextchat
+
 define nextchat:var chats -= 1,if chats < 0 goto chat3,var rand = @2,if rand = 1 goto chat1,if rand = 2 goto chat2
+
 #Frames
 0;100;0;0;joking1.wav;label chat1
 1;100;0;0;;

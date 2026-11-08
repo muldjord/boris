@@ -1,6 +1,8 @@
 social=-2
+
 oneShot
 allowFlip
+
 #Frames
 0;100;0;0;;
 1;100;0;0;;

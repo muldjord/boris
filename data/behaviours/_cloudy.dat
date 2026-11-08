@@ -1,5 +1,8 @@
+fun=-5
+
 oneShot
 allowFlip
+
 #Frames
 0;1500;0;0;;
 1;50;0;0;;

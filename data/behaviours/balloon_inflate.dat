@@ -1,12 +1,16 @@
 title=Inflate a balloon
 category=Fun
+
 energy=-5
 fun=20
 hunger=5
 hygiene=-8
 health=-1
+
 oneShot
+doNotDisturb
 allowFlip
+
 #Frames
 0;75;0;0;;
 1;75;0;0;;

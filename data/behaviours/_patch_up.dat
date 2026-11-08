@@ -1,9 +1,12 @@
 title=Patch up
 category=Health
+
 fun=-5
+
 oneShot
 allowFlip
 doNotDisturb
+
 #Frames
 0;75;0;0;bandage.wav;
 1;75;0;0;;

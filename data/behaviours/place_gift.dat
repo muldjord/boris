@@ -1,7 +1,8 @@
 title=Place a gift
 category=Social
+
 oneShot
-doNotDisturb
+
 #Frames
 0;75;0;0;;var vara = year % 19,
 var varb = year / 100,

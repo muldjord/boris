@@ -1,9 +1,12 @@
 title=Pacman portal
 category=Idle
+
 social=-2
 fun=-2
+
 allowFlip
 oneShot
+
 #Frames
 0;50;0;3;;
 1;50;0;0;;

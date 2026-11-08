@@ -1,10 +1,11 @@
 title=Watch the mouse
 category=Idle
+
 fun=-2
 
-define init:var mouseover = 0,call nextsec
+define init:var mouseover = 0,call nextdir
 
-define nextsec:if mouseover = 0 and mdist < bsize call actonmouse,if mouseover = 1 and mdist > bsize var mouseover = 0,if mdir = 0 { if @24 = 1 goto bnorth else goto north } else if mdir = 1 { if @24 = 1 goto bnortheast else goto northeast } else if mdir = 2 { if @24 = 1 goto beast else goto east } else if mdir = 3 { if @24 = 1 goto bsoutheast else goto southeast } else if mdir = 4 { if @24 = 1 goto bsouth else goto south } else if mdir = 5 { if @24 = 1 goto bsouthwest else goto southwest } else if mdir = 6 { if @24 = 1 goto bwest else goto west } else if mdir = 7 { if @24 = 1 goto bnorthwest else goto northwest }
+define nextdir:if mouseover = 0 and mdist < bsize call actonmouse,if mouseover = 1 and mdist > bsize var mouseover = 0,if mdir = 0 { if @24 = 1 goto bnorth else goto north } else if mdir = 1 { if @24 = 1 goto bnortheast else goto northeast } else if mdir = 2 { if @24 = 1 goto beast else goto east } else if mdir = 3 { if @24 = 1 goto bsoutheast else goto southeast } else if mdir = 4 { if @24 = 1 goto bsouth else goto south } else if mdir = 5 { if @24 = 1 goto bsouthwest else goto southwest } else if mdir = 6 { if @24 = 1 goto bwest else goto west } else if mdir = 7 { if @24 = 1 goto bnorthwest else goto northwest }
 
 define actonmouse:stat social += 2,
 var mouseover = 1,
@@ -18,20 +19,20 @@ if rand = 6 think "How' you doin'?",
 if rand = 7 think "What's up?"
 
 #Frames
-0;50;0;0;;label north,draw black pixel 15 9,draw black pixel 19 9,call nextsec
-0;50;0;0;;label northeast,draw black pixel 16 9,draw black pixel 20 9,call nextsec
-0;50;0;0;;label east,draw black pixel 16 10,draw black pixel 20 10,call nextsec
-0;50;0;0;;label southeast,draw black pixel 16 11,draw black pixel 20 11,call nextsec
-0;50;0;0;;label south,draw black pixel 16 11,draw black pixel 19 11,call nextsec
-2;50;0;0;;label southwest,draw black pixel 9 11,draw black pixel 13 11,call nextsec
-2;50;0;0;;label west,draw black pixel 9 10,draw black pixel 13 10,call nextsec
-2;50;0;0;;label northwest,draw black pixel 9 9,draw black pixel 13 9,call nextsec
+0;100;0;0;;label north,draw black pixel 15 9,draw black pixel 19 9,call nextdir
+0;100;0;0;;label northeast,draw black pixel 16 9,draw black pixel 20 9,call nextdir
+0;100;0;0;;label east,draw black pixel 16 10,draw black pixel 20 10,call nextdir
+0;100;0;0;;label southeast,draw black pixel 16 11,draw black pixel 20 11,call nextdir
+0;100;0;0;;label south,draw black pixel 16 11,draw black pixel 19 11,call nextdir
+2;100;0;0;;label southwest,draw black pixel 9 11,draw black pixel 13 11,call nextdir
+2;100;0;0;;label west,draw black pixel 9 10,draw black pixel 13 10,call nextdir
+2;100;0;0;;label northwest,draw black pixel 9 9,draw black pixel 13 9,call nextdir
 
-1;50;0;0;;label bnorth,call nextsec
-1;50;0;0;;label bnortheast,call nextsec
-1;50;0;0;;label beast,call nextsec
-1;50;0;0;;label bsoutheast,call nextsec
-1;50;0;0;;label bsouth,call nextsec
-3;50;0;0;;label bsouthwest,call nextsec
-3;50;0;0;;label bwest,call nextsec
-3;50;0;0;;label bnorthwest,call nextsec
+1;100;0;0;;label bnorth,call nextdir
+1;100;0;0;;label bnortheast,call nextdir
+1;100;0;0;;label beast,call nextdir
+1;100;0;0;;label bsoutheast,call nextdir
+1;100;0;0;;label bsouth,call nextdir
+3;100;0;0;;label bsouthwest,call nextdir
+3;100;0;0;;label bwest,call nextdir
+3;100;0;0;;label bnorthwest,call nextdir

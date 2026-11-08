@@ -1,9 +1,11 @@
 title=Wash hands
 category=Hygiene
+
 fun=-10
+
 oneShot
-doNotDisturb
 allowFlip
+
 #Frames
 0;75;0;0;;
 1;75;0;0;;

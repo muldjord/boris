@@ -1,9 +1,11 @@
 title=Play piano
 category=Fun
+
 energy=-3
 hunger=1
 social=-2
 hygiene=-3
+
 oneShot
 doNotDisturb
 pitchLock

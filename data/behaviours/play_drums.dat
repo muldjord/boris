@@ -1,8 +1,10 @@
 title=Play drums
 category=Fun
+
 energy=-8
 hunger=5
 social=-2
+
 oneShot
 doNotDisturb
 pitchLock

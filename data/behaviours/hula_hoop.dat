@@ -1,9 +1,12 @@
 title=Hula hoop
 category=Fun
+
 hunger=5
 hygiene=-5
+
 oneShot
 allowFlip
+
 #Frames
 #0;75;0;0;;
 #1;75;0;0;;

@@ -1,8 +1,10 @@
 title=Jump
 category=Movement
+
 energy=-1
 fun=1
 hunger=2
+
 oneShot
 
 define init:if @2 = 1 goto east else goto west
