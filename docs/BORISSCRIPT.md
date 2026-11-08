@@ -240,7 +240,7 @@ sound soundfile.wav
 Keep in mind that this command DOES NOT allow spaces in the filename. So a file called `sound file.wav` will not work. Rename it to `soundfile.wav` instead. Filename and path is relative to the `data/sounds` path (eg. `data/sounds/soundfile.wav` should be typed in as simply `soundfile.wav`).
 
 ### say
-Spawns a speech bubble containing the specified text. Alternatively you can use the keyword "rss" (without the double-quotes) which will make Boris pick a headline from the configured RSS feed.
+Initiates a speech bubble containing the specified text. Alternatively you can use the keyword "rss" (without the double-quotes) which will make Boris pick a headline from the configured RSS feed.
 
 The length of the text will determine how long it is shown for.
 
@@ -256,7 +256,7 @@ The double-quotes at the beginning and end are important! If you leave them out 
 NOTE: You can use variables inside the double quoted text by prepending them with a `$`. Any variables will be replaced with the contained value. See the `hula_hoop.dat` behaviour for an example.
 
 ### think
-Spawns a thought bubble containing the specified text. Alternatively you can use the keyword "rss" (without the double-quotes) which will make Boris pick a headline from the configured RSS feed.
+Initiates a thought bubble containing the specified text. Alternatively you can use the keyword "rss" (without the double-quotes) which will make Boris pick a headline from the configured RSS feed.
 
 The length of the text will determine how long it is shown for.
 
@@ -365,7 +365,7 @@ The first example will draw the value of the `somevariable` variable at 2, 2 usi
 
 #### Additive drawing
 Per default all drawing routines are performed on the current frame sprite and cleared when moving on to the next. By using additive drawing you can begin drawing on one frame, then draw more stuff on subsequent frames, and end the drawing routine on a frame later on. It is only after the drawing routine has been ended it will be cleared upon moving on to the next frame.
-* Example:
+###### Example
 ```
 10;75;0;0;;draw begin,draw red point 5 6
 11;75;0;0;;draw blue line 3 5 8 7
@@ -375,10 +375,14 @@ Per default all drawing routines are performed on the current frame sprite and c
 
 ### spawn
 Spawn an item from the items folder (default is `data/items`). The item name is the name of the corresponding dat+png file pair without a suffix. Items can be animated and scripted mostly the same way Boris behaviours can.
-* Definition:
-`spawn ITEM FILENAME x y`
-* Example:
+#### Definition:
+`spawn ITEM FILENAME x y [goto label]`
+#### Examples
 ```
 spawn christmas_tree 10 2
+spawn pie_fly 0 0 north
 ```
-This will spawn an item at x, y relative to Boris using the graphics from `data/items/christmas_tree.png`. The coordinates and item are scaled according to the current size of Boris.
+The first example spawns an the item 'christmas_tree' at x, y relative to Boris.
+The second example spawns an the item 'pie_fly' at x, y relative to Boris. The `north` parameter tells the item to immediately go to the label `north` inside the item script and proceed from there.
+
+The item names must be the basenames of the `.dat` and `.png` filename pairs as seen in `data/items`.
