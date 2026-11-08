@@ -3,6 +3,8 @@ category=Energy
 
 weight=20
 bounce=2
+range=64
+
 reaction=sit_and_relax,nil
 
 allowFlip
