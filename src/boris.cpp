@@ -109,7 +109,7 @@ Boris::Boris(Settings &settings)
   behavTimer.setSingleShot(true);
   connect(&behavTimer, &QTimer::timeout, this, &Boris::nextBehaviour);
 
-  interactionsTimer.setInterval(500);
+  interactionsTimer.setInterval(250);
   interactionsTimer.setSingleShot(true);
   connect(&interactionsTimer, &QTimer::timeout, this, &Boris::checkInteractions);
   interactionsTimer.start();
@@ -784,7 +784,7 @@ void Boris::handlePhysics()
   if(!falling && !grabbed) {
     if(getDistance(cursorPos) < getWidth() * 3) {
       if(!mouseHovering) {
-        interactions += 4; // Should be 4 due to checkInteractions now run every 500 ms
+        interactions += 8; // Should be 4 due to checkInteractions now run every 500 ms
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
           if(stats->getAnxiety() >= QRandomGenerator::global()->bounded(20) + 10) {
             changeBehaviour("_flee");
@@ -1028,7 +1028,7 @@ int Boris::getCurBehav()
 void Boris::checkInteractions()
 {
   // Check if there are other Borises nearby to interact with
-  for(auto &boris: settings.borisList) {
+  for(auto *boris: settings.borisList) {
     if(boris != this) {
       if(getDistance(boris->getGlobalCenter()) < getWidth() * 1.5) {
         borisInteract(boris);
@@ -1038,12 +1038,12 @@ void Boris::checkInteractions()
   }
 
   // Check if an item is close by
-  for(auto &item: settings.itemList) {
+  for(auto *item: settings.itemList) {
     if((!ignoreItems || item->grabbed) &&
        !falling &&
        !grabbed &&
        !settings.behaviours.at(curBehav).doNotDisturb &&
-       getDistance(item->getGlobalCenter()) < getWidth()) {
+       getDistance(item->getGlobalCenter()) < (item->getRange() == -1?getWidth():item->getRange())) {
       itemInteract(item);
       break;
     }
