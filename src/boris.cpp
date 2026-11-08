@@ -55,15 +55,15 @@ extern SoundMixer *soundMixer;
 Boris::Boris(Settings &settings)
   : settings(settings)
 {
-  setAcceptHoverEvents(true);
+  setCursor(settings.getCursor("hover.png"));
 
   setPos(QRandomGenerator::global()->bounded(settings.desktopWidth), QRandomGenerator::global()->bounded(settings.desktopHeight));
 
+  rendered.fill(Qt::transparent);
   origDirt = settings.getPixmap("dirt.png");
   origBruises = settings.getPixmap("bruises.png");
   scriptSprite.fill(Qt::transparent);
   scriptImage.fill(Qt::transparent);
-  rendered.fill(Qt::transparent);
 
   behavioursMenu = new QMenu();
   connect(behavioursMenu, &QMenu::triggered, this, &Boris::handleBehaviourChange);
@@ -121,8 +121,6 @@ Boris::Boris(Settings &settings)
   acknowledgeItemsTimer.setInterval(60 * 1000); // When dragging an object close to Boris he will still always interact with it
   acknowledgeItemsTimer.setSingleShot(true);
   connect(&acknowledgeItemsTimer, &QTimer::timeout, [this]() { ignoreItems = false; });
-
-  setCursor(settings.getCursor("hover.png"));
 
   reconfBoris();
 
