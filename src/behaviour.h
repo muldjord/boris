@@ -99,10 +99,10 @@ public:
   bool doNotDisturb = false;
   bool allowFlip = false;
   bool pitchLock = false;
-  bool noIgnore = false; // For Item: Tells whether it should be instantly active when spawned
   int coins = 50;
-  int weight = 50;
-  int bounce = 50;
+  int weight = 50; // Used by items
+  int bounce = 50; // Used by items
+  int range = -1; // Used by items. This is the interaction range when Boris passes nearby.
   QList<Frame> frames;
   QMap<QString, int> labels; // Used for scripts when goto'ing
   QMap<QString, Script> defines; // Used for defines of reusable scripting blocks
