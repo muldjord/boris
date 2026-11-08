@@ -55,6 +55,8 @@ extern SoundMixer *soundMixer;
 Boris::Boris(Settings &settings)
   : settings(settings)
 {
+  setAcceptHoverEvents(true);
+
   setCursor(settings.getCursor("hover.png"));
 
   setPos(QRandomGenerator::global()->bounded(settings.desktopWidth), QRandomGenerator::global()->bounded(settings.desktopHeight));
