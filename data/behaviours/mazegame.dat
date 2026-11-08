@@ -1,5 +1,4 @@
-title=Play 'MazeGame'
-category=Fun
+# This game is initiated from 'play_computer'
 
 energy=-3
 hunger=1
@@ -9,17 +8,10 @@ hygiene=-3
 oneShot
 doNotDisturb
 
+define init:var level = 1,
+var lives = 3
+
 #Frames
-0;75;0;0;;var level = 1
-1;75;0;0;;var lives = 3
-2;75;0;0;;
-3;75;0;0;;
-4;75;0;0;;
-5;75;0;0;;
-6;75;0;0;;
-7;75;0;0;;
-8;75;0;0;;
-9;1000;0;0;game_boot.wav;
 14;2000;0;0;;
 
 10;2000;0;0;;label nextround,
