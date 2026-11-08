@@ -4,6 +4,7 @@ category=Hunger
 energy=10
 
 oneShot
+doNotDisturb
 
 define init:if bdir != -1 { if bdir = 0 goto north,
 if bdir = 1 goto northeast,
@@ -55,46 +56,62 @@ var slubbers = @3 + 3
 29;75;0;0;;
 30;75;0;0;;
 31;75;0;0;;
-32;75;0;0;;spawn pie_fly 0 0 north,break
+32;75;0;0;;spawn pie_fly 0 0 north
+33;350;0;0;;
+34;750;0;0;;break
 
-33;75;0;0;woosh.wav;label northeast
-34;75;0;0;;
-35;75;0;0;;
+35;75;0;0;woosh.wav;label northeast
 36;75;0;0;;
-37;75;0;0;;spawn pie_fly 0 0 northeast,break
+37;75;0;0;;
+38;75;0;0;;
+39;75;0;0;;spawn pie_fly 0 0 northeast
+40;350;0;0;;
+41;750;0;0;;break
 
-38;75;0;0;woosh.wav;label east
-39;75;0;0;;
-40;75;0;0;;
-41;75;0;0;;
-42;75;0;0;;spawn pie_fly 0 0 east,break
-
-43;75;0;0;woosh.wav;label southeast
+42;75;0;0;woosh.wav;label east
+43;75;0;0;;
 44;75;0;0;;
 45;75;0;0;;
-46;75;0;0;;
-47;75;0;0;;spawn pie_fly 0 0 southeast,break
+46;75;0;0;;spawn pie_fly 0 0 east
+47;350;0;0;;
+48;750;0;0;;break
 
-48;75;0;0;woosh.wav;label south
-49;75;0;0;;
+49;75;0;0;woosh.wav;label southeast
 50;75;0;0;;
 51;75;0;0;;
-52;75;0;0;;spawn pie_fly 0 0 south,break
+52;75;0;0;;
+53;75;0;0;;spawn pie_fly 0 0 southeast
+54;350;0;0;;
+55;750;0;0;;break
 
-53;75;0;0;woosh.wav;label southwest
-54;75;0;0;;
-55;75;0;0;;
-56;75;0;0;;
-57;75;0;0;;spawn pie_fly 0 0 southwest,break
-
-58;75;0;0;woosh.wav;label west
+56;75;0;0;woosh.wav;label south
+57;75;0;0;;
+58;75;0;0;;
 59;75;0;0;;
-60;75;0;0;;
-61;75;0;0;;
-62;75;0;0;;spawn pie_fly 0 0 west,break
+60;75;0;0;;spawn pie_fly 0 0 south
+61;350;0;0;;
+62;750;0;0;;break
 
-63;75;0;0;woosh.wav;label northwest
+63;75;0;0;woosh.wav;label southwest
 64;75;0;0;;
 65;75;0;0;;
 66;75;0;0;;
-67;75;0;0;;spawn pie_fly 0 0 northwest,break
+67;75;0;0;;spawn pie_fly 0 0 southwest
+68;350;0;0;;
+69;750;0;0;;break
+
+70;75;0;0;woosh.wav;label west
+71;75;0;0;;
+72;75;0;0;;
+73;75;0;0;;
+74;75;0;0;;spawn pie_fly 0 0 west
+75;350;0;0;;
+76;750;0;0;;break
+
+77;75;0;0;woosh.wav;label northwest
+78;75;0;0;;
+79;75;0;0;;
+80;75;0;0;;
+81;75;0;0;;spawn pie_fly 0 0 northwest
+82;350;0;0;;
+83;750;0;0;;break
