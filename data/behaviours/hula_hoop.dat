@@ -48,7 +48,7 @@ allowFlip
 5;75;0;0;;stat fun += 2
 6;75;0;0;;
 7;75;0;0;;
-8;75;0;0;;
+8;75;0;0;;if @2 = 1 sound clothes1.wav else sound clothes2.wav
 9;75;0;0;;var hulas += 1,think "Number $hulas",if hulas = highscore + 1 sound win2.wav
 10;75;0;0;;if remaining > 0 goto hula
 11;75;0;0;;
