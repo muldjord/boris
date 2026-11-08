@@ -784,9 +784,9 @@ void Boris::handlePhysics()
 
   QPointF cursorPos = mainWindow->mapToScene(mainWindow->viewport()->mapFromGlobal(QCursor::pos()));
   if(!falling && !grabbed) {
-    if(getDistance(cursorPos) < getWidth() * 3) {
+    if(getDistance(cursorPos) < getWidth() * 4) {
       if(!mouseHovering) {
-        interactions += 8; // Should be 4 due to checkInteractions now run every 500 ms
+        interactions += 4;
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
           if(stats->getAnxiety() >= QRandomGenerator::global()->bounded(20) + 10) {
             changeBehaviour("_flee");
@@ -1032,7 +1032,7 @@ void Boris::checkInteractions()
   // Check if there are other Borises nearby to interact with
   for(auto *boris: settings.borisList) {
     if(boris != this) {
-      if(getDistance(boris->getGlobalCenter()) < getWidth() * 1.5) {
+      if(getDistance(boris->getGlobalCenter()) < getWidth() * 4) {
         borisInteract(boris);
         break;
       }
@@ -1041,7 +1041,7 @@ void Boris::checkInteractions()
 
   // Check if an item is close by
   for(auto *item: settings.itemList) {
-    if((!ignoreItems || item->grabbed) &&
+    if((!ignoreItems || item->isGrabbed()) &&
        !falling &&
        !grabbed &&
        !settings.behaviours.at(curBehav).doNotDisturb &&
@@ -1098,7 +1098,7 @@ void Boris::itemInteract(Item * item)
   if(!item->getReactionBehaviour().isEmpty()) {
     changeBehaviour(item->getReactionBehaviour());
     item->interact(this);
-  } else if(item->grabbed) {
+  } else if(item->isGrabbed()) {
     bubble->initBubble(stats->getHyper(), "I don't know what to do with that.", "_thought");
   }
   acknowledgeItemsTimer.start();
