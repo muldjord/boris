@@ -143,7 +143,7 @@ void Bubble::initBubble(const int &hyper,
   int duration = 1000 + (sentence.length() * 100);
   duration = duration - (duration / 100.0 * hyper);
 
-  setPos(0 - (width / 2) + 24, -16);
+  setPos(0 - (width / 2) + 24, -20);
   update();
 
   if(settings.bubbles) {
