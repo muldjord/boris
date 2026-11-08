@@ -137,10 +137,6 @@ bool Loader::loadBehaviours(const Settings &settings,
           b.pitchLock = true;
           continue;
         }
-        if(line == "noIgnore") {
-          b.noIgnore = true;
-          continue;
-        }
         if(line.left(5) == "title") {
           b.title = line.mid(6,line.length());
           continue;
@@ -177,20 +173,17 @@ bool Loader::loadBehaviours(const Settings &settings,
         }
         if(line.left(6) == "weight") {
           b.weight = line.mid(7,line.length()).toInt();
-          if(b.weight > 10) {
-            b.weight = 10;
-          } else if(b.weight < 0) {
-            b.weight = 0;
-          }
+	  b.weight = std::clamp(b.weight, 0, 10);
+          continue;
+        }
+        if(line.left(5) == "range") {
+          b.range = line.mid(6,line.length()).toInt();
+	  b.range = std::clamp(b.range, 1, 512);
           continue;
         }
         if(line.left(6) == "bounce") {
           b.bounce = line.mid(7,line.length()).toInt();
-          if(b.bounce > 10) {
-            b.bounce = 10;
-          } else if(b.bounce < 0) {
-            b.bounce = 0;
-          }
+	  b.bounce = std::clamp(b.bounce, 0, 10);
           continue;
         }
         if(line.left(5) == "hyper") {
