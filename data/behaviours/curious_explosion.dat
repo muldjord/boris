@@ -22,7 +22,12 @@ doNotDisturb
 8;100;0;0;;
 9;125;0;0;;
 10;150;0;0;curious.wav;
-11;150;0;0;;think "What's this?"
+11;150;0;0;;var thought = @4,
+if thought = 1 think "What's this?",
+if thought = 2 think "Huh? Acme?",
+if thought = 3 think "A gift? Who's Acme?",
+if thought = 4 think "Acme? What's that?"
+
 12;150;0;0;;
 13;1300;0;0;;
 14;75;0;0;;
