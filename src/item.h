@@ -53,7 +53,7 @@ public:
   int getRange();
   void interact(Boris *boris);
   QMap<QString, int> scriptVars;
-  bool grabbed = false;
+  bool isGrabbed();
 
 public slots:
   void destroy();
@@ -102,6 +102,7 @@ private:
   double hVel = 0.0;
   int groundY = 0;
   bool falling = false;
+  bool grabbed = false;
 
   bool stopAndDestroy = false;
 };
