@@ -34,6 +34,7 @@ category=Fun
 coins=50
 weight=2
 bounce=7
+range=64
 
 reaction=kickball_w,kickballw,-12,7;kickball_e,kickballe,12,7
 
@@ -56,8 +57,9 @@ define other:var loop -= 1,if loop <= 0 goto end
   * `Health`: Used for items that heal Boris when he interacts with it
   * `Hygiene`: Used for items that cleans Boris when he interacts with it
 * `coins=PRICE`: The amount of Boris coins this item costs to unlock before it can be spawned from the menu
-* `weight=INTEGER`: Set the weight of the item. Value can be from 0-10. 0 means floating. 10 means really heavy.
-* `bounce=INTEGER`: Sets the bounce factor of the object. Value can be from 0-10. 0 means no bounce. 10 means bounce forever.
+* `weight=INTEGER`: Set the weight of the item. Value can be from 0-10. 0 means floating. 10 means really heavy
+* `bounce=INTEGER`: Sets the bounce factor of the object. Value can be from 0-10. 0 means no bounce. 10 means bounce forever
+* `range=INTEGER`: This set the reaction range for the item in pixels. If Boris comes closer than this he will react with the item
 
 ### Item reaction
 #### Definition
