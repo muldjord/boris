@@ -116,11 +116,11 @@ Boris::Boris(Settings &settings)
   connect(&interactionsTimer, &QTimer::timeout, this, &Boris::checkInteractions);
   interactionsTimer.start();
 
-  acknowledgeBorisesTimer.setInterval(120 * 1000); // Two minutes between Boris setting a new friend
+  acknowledgeBorisesTimer.setInterval(60 * 1000); // Two minutes between Boris setting a new friend
   acknowledgeBorisesTimer.setSingleShot(true);
   connect(&acknowledgeBorisesTimer, &QTimer::timeout, [this]() { ignoreBorises = false; borisFriend = nullptr; });
 
-  acknowledgeItemsTimer.setInterval(60 * 1000); // When dragging an object close to Boris he will still always interact with it
+  acknowledgeItemsTimer.setInterval(30 * 1000); // When dragging an object close to Boris he will still always interact with it
   acknowledgeItemsTimer.setSingleShot(true);
   connect(&acknowledgeItemsTimer, &QTimer::timeout, [this]() { ignoreItems = false; });
 
