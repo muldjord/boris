@@ -1,10 +1,18 @@
 # Boris
-A scriptable desktop screenmate written in Qt6 (for graphics) and SFML3 (for sound). Boris has a bit of a prankster personality and needs to be cared for in order to stay healthy. It's all in good fun so please enjoy!
+Boris is hand-coded, hand-drawn scriptable desktop screenmate written in C++. He uses Qt6 (for graphics) and SFML3 (for sound). Boris has a bit of a prankster personality and needs to be cared for in order to stay healthy. It's all in good fun so please enjoy!
 
-* All behaviours and items are defined in an human-readable data format. See the [behaviours](docs/BEHAVIOURS.md) and [items](docs/ITEMS.md) documentation for more details
-* Create fun and dynamic behaviours and items. See the [BorisScript](docs/BORISSCRIPT.md) documentation for more details
-* Supports weather visualization using the OpenWeatherMap API
-* Supports RSS feed speech bubbles using custom RSS feeds
+I started working on Boris all the way back in 2013. The project is a labour of love and the functionality have been expanded many times in order to accomodate my many silly ideas.
+
+Boris has many, *many* things he can do. A lot of what he does is decided by his current mood and needs. He will get tired, hungry, angry, dirty, hyperactive, anxious and more. He can even die if you don't take good care of him... So please do!
+
+It brings me great joy to work on this project. I hope Boris will bring joy to you as well!
+
+## Main features
+* Behaviours: As you will learn Boris has many, *many* behaviours. Read more about how to create your own [here](docs/BEHAVIOURS.ms)
+* Items: Items will spawn and Boris will interact with them. Read more about how to create your own [here](docs/ITEMS.ms)
+* BorisScript: All the behaviours Boris have available to him are written in a rudimentary scripting language I invented for the project called [BorisScript](docs/BORISSCRIPT.md)
+* Boris supports weather visualization using the OpenWeatherMap API
+* Boris supports RSS feed speech bubbles using custom RSS feeds
 
 ## About
 * Programming: Lars Muldjord
@@ -12,8 +20,6 @@ A scriptable desktop screenmate written in Qt6 (for graphics) and SFML3 (for sou
 * Sound: Lars Muldjord
 
 A video demonstrating Boris can be found [here](https://www.youtube.com/watch?v=wjx2j04cTcw).
-
-Boris was programmed in C++ using the [Qt framework](http://www.qt.io) for graphics and the [SFML library](https://www.sfml-dev.org) for sound. Boris requires Qt6 and SFML3.
 
 Bug reports, suggestions and / or comments can be emailed to me at:
 muldjordlars@gmail.com.
