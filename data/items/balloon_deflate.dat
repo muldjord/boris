@@ -1,6 +1,8 @@
 weight=1
 bounce=1
 
+hidden
+
 define init:var air = 15,
 var dir = @8 - 1,
 sound deflate.wav,
