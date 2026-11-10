@@ -1,10 +1,7 @@
 category=Reaction
 
-fun=-30
-health=-25
-energy=-15
-
 oneShot
+doNotDisturb
 
 #Frames
 0;75;0;0;;
@@ -18,15 +15,15 @@ oneShot
 6;75;0;0;;
 7;75;0;0;;
 6;750;0;0;;
-8;100;0;0;;
-9;125;0;0;;
-10;150;0;0;curious.wav;
-11;150;0;0;;var thought = @4,
+8;100;0;0;;var thought = @4,
 if thought = 1 think "What's this?",
-if thought = 2 think "Huh? Acme?",
+if thought = 2 think "Are those chocolates?",
 if thought = 3 think "A gift? Who's Acme?",
 if thought = 4 think "Acme? What's that?"
 
+9;125;0;0;;
+10;150;0;0;curious.wav;
+11;150;0;0;;
 12;150;0;0;;
 13;1300;0;0;;
 14;75;0;0;;
@@ -35,7 +32,7 @@ if thought = 4 think "Acme? What's that?"
 13;1500;0;0;;
 14;75;0;0;;
 13;1925;0;0;;
-15;50;0;0;flee2.wav;stat hygiene -= 75
+15;50;0;0;flee2.wav;stat hygiene -= 75,stat health -= 25,stat fun -= 30
 16;50;0;0;;
 17;50;0;0;;
 18;2000;0;0;;
