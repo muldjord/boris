@@ -5,24 +5,23 @@ Use them to make some interesting behaviours.
 
 ### The variables
 * `energy`: Boris' current energy level (0-100, 100 means he's well rested)
-* `health`: Boris' current health level (0-100, 100 means he's doing well)
-* `hyper`: Boris' current hyper level (0-100, 100 means he will speed around the desktop like crazy)
-* `hunger`: Boris' current hunger level (0-100, 100 means he's VERY hungry)
-* `toilet`: Boris' current toilet need level (0-100, 100 means he needs to go NOW!)
 * `social`: Boris' current social level (0-100, 0 means Boris will seek your attention)
 * `fun`: Boris' current fun level (0-100, 100 means Boris has been having a lot of fun)
+* `hunger`: Boris' current hunger level (0-100, 100 means he's VERY hungry)
+* `toilet`: Boris' current toilet need level (0-100, 100 means he needs to go NOW!)
+* `health`: Boris' current health level (0-100, 100 means he's doing well)
 * `hygiene`: Boris' current hygiene level (0-100, 100 means he's clean)
-* `queue`: Tells how many behaviours are currently in behaviour queue. This is useful for creating breaking points in long behaviours if a new behaviour is waiting activation
-* `xvel`: The entity velocity in pixels on the y axis during the last 30 ms
-** This variable can be set with `var xvel = n` to put the entity in motion
-* `yvel`: The entity velocity in pixels on the x axis during the last 30 ms
-** This variable can be set with `var yvel = n` to put the entity in motion
-* `borisx`: Current Boris x center coordinate
-* `borisy`: Current Boris y center coordinate
+* `hyper`: Boris' current hyper level (0-100, 100 means he will speed around the desktop like crazy)
+* `anxiety`: Boris' current anxiety level (0-100, 100 means he's very anxious)
+* `queue`: Tells how many behaviours are currently in the behaviour queue. This is useful for creating breaking points in long behaviours if a new behaviour is waiting activation
+* `hvel`: The current horizontal velocity of the entity during the last 30 ms
+* `vvel`: The current vertical velocity of the entity during the last 30 ms
+* `xpos`: Current entity x center coordinate
+* `ypos`: Current entity y center coordinate
 * `mx`: Current mouse pointer x coordinate
 * `my`: Current mouse pointer x coordinate
-* `mxvel`: The velocity of the mouse on the y axis during the last 30 ms
-* `myvel`: The velocity of the mouse on the x axis during the last 30 ms
+* `mhvel`: The horizontal velocity of the mouse during the last 30 ms
+* `mvvel`: The vertical velocity of the mouse during the last 30 ms
 * `mdist`: The current pixel distance from Boris to the mouse cursor
 * `mdir`: The direction the mouse is in relative to Boris. Directions are 0-7 clockwise where 0 is north. 1 is northeast and so on.
 * `bsize`: The current size of Boris in pixels (After Boris 4.0.0 this is always 32 pixels. I might remove it in future versions.)

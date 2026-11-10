@@ -373,12 +373,14 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["fun"] = stats->getFun();
   scriptVars["hygiene"] = stats->getHygiene();
   scriptVars["anxiety"] = stats->getAnxiety();
-  scriptVars["borisx"] = pos().x() + (getWidth() / 2);
-  scriptVars["borisy"] = pos().y() + (getHeight() / 2);
+  scriptVars["xpos"] = pos().x() + (getWidth() / 2);
+  scriptVars["ypos"] = pos().y() + (getHeight() / 2);
+  scriptVars["hvel"] = hVel;
+  scriptVars["yvel"] = vVel;
   scriptVars["mx"] = cursorPos.x();
   scriptVars["my"] = cursorPos.y();
-  scriptVars["mxvel"] = settings.mouseHVel;
-  scriptVars["myvel"] = settings.mouseVVel;
+  scriptVars["mhvel"] = settings.mouseHVel;
+  scriptVars["mvvel"] = settings.mouseVVel;
   scriptVars["mdist"] = getDistance(cursorPos);
   scriptVars["mdir"] = getDirectionTo(cursorPos); // Mouse direction in relation to Boris
   if(borisFriend != nullptr) {
@@ -393,8 +395,6 @@ void Boris::runScript(int &stop, const bool &init)
   } else {
     scriptVars["idir"] = -1;
   }
-  scriptVars["xvel"] = 0;
-  scriptVars["yvel"] = 0;
 
   QDate date = QDate::currentDate();
   QTime time = QTime::currentTime();
@@ -428,11 +428,14 @@ void Boris::runScript(int &stop, const bool &init)
   if(!drawing) {
     scriptImage.fill(Qt::transparent);
   }
-  if(scriptVars["xvel"] != 0 ||
-     scriptVars["yvel"] != 0) {
+
+  if(scriptVars.contains("sethvel") ||
+     scriptVars.contains("setvvel")) {
+    hVel = scriptVars["sethvel"];
+    vVel = scriptVars["setvvel"];
+    scriptVars.remove("sethvel");
+    scriptVars.remove("setvvel");
     falling = true;
-    hVel = scriptVars["xvel"];
-    vVel = scriptVars["yvel"];
     groundY = pos().y();
   }
 }

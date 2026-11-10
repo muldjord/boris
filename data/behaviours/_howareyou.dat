@@ -26,9 +26,8 @@ if rand = 7 goto fun
 
 5;50;0;0;;label health,
 var tried += 1,
-if health < 15 {say "Stop throwing me around!!!",behav _complain},
-if health < 30 {say "I'm not feeling well, thanks to you!",behav _complain},
-if health < 55 {say "I'm ok, but please stop throwing me around.",behav _complain},
+if health < 15 {say "I feel terrible!!!",behav _complain},
+if health < 30 {say "I'm not feeling well...",behav _complain},
 call checkup
 
 # Hygiene

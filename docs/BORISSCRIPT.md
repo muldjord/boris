@@ -210,13 +210,15 @@ Changes the current behaviour to the behaviour with the requested behaviour file
 behav play_piano
 ```
 
-### throw
-Throws the object up in the air at xvelocity and yvelocity speed. This will enable the physics engine and make it bounce when it lands according to the `weight` and `bounce` option values.
+### sethvel and setvvel
+Throws the object up in the air at a horizontal and / or vertical velocity of VELOCITY. VELOCITY can be an expression. This will engage the physics engine and make the entity bounce when it lands.
 #### Definition
-`throw XVELOCITY YVELOCITY`
+`sethvel VELOCITY`
+`setvvel VELOCITY`
 #### Example
 ```
-throw 10 4
+sethvel @2 + 5 + (energy / 10)
+setyvel 10
 ```
 
 ### call

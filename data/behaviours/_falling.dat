@@ -6,7 +6,7 @@ oneShot
 doNotDisturb
 
 #Frames
-0;75;0;0;;if myvel > 3 or mxvel > 3 sound falling.wav
+0;75;0;0;;if mvvel > 3 or mhvel > 3 sound falling.wav
 1;75;0;0;;
 2;75;0;0;;
 3;75;0;0;;

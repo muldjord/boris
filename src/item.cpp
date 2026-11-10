@@ -108,11 +108,15 @@ QRectF Item::boundingRect() const
 void Item::runScript(int &stop, const bool &init)
 {
   // Update current stat variables for scripting use
+  scriptVars["xpos"] = pos().x() + (getWidth() / 2);
+  scriptVars["ypos"] = pos().y() + (getHeight() / 2);
+  scriptVars["hvel"] = hVel;
+  scriptVars["vvel"] = vVel;
   QPointF p = mainWindow->mapToScene(QCursor::pos());
   scriptVars["mx"] = p.x();
   scriptVars["my"] = p.y();
-  scriptVars["mxvel"] = settings.mouseHVel;
-  scriptVars["myvel"] = settings.mouseVVel;
+  scriptVars["mhvel"] = settings.mouseHVel;
+  scriptVars["mvvel"] = settings.mouseVVel;
   scriptVars["mdist"] = getDistance(mainWindow->mapToScene(QCursor::pos()));
   scriptVars["mdir"] = getDirectionTo(mainWindow->mapToScene(QCursor::pos()));
   QDate date = QDate::currentDate();
@@ -123,8 +127,6 @@ void Item::runScript(int &stop, const bool &init)
   scriptVars["hour"] = time.hour();
   scriptVars["minute"] = time.minute();
   scriptVars["second"] = time.second();
-  scriptVars["xvel"] = 0;
-  scriptVars["yvel"] = 0;
 
   if(!drawing) {
     scriptImage.fill(Qt::transparent);
@@ -138,12 +140,23 @@ void Item::runScript(int &stop, const bool &init)
     scriptHandler.runScript(stop, settings.itemBehaviours.at(curItem).frames.at(curFrame).script);
   }
 
-  scriptSprite = QPixmap::fromImage(scriptImage);
-  if(scriptVars["xvel"] != 0 ||
-     scriptVars["yvel"] != 0) {
+  if(flipFrames) {
+    QImage flipped = scriptImage.flipped(Qt::Horizontal);
+    scriptSprite = QPixmap::fromImage(flipped);
+  } else {
+    scriptSprite = QPixmap::fromImage(scriptImage);
+  }
+  if(!drawing) {
+    scriptImage.fill(Qt::transparent);
+  }
+
+  if(scriptVars.contains("sethvel") ||
+     scriptVars.contains("setvvel")) {
+    hVel = scriptVars["sethvel"];
+    vVel = scriptVars["setvvel"];
+    scriptVars.remove("sethvel");
+    scriptVars.remove("setvvel");
     falling = true;
-    hVel = scriptVars["xvel"];
-    vVel = scriptVars["yvel"];
     groundY = pos().y();
   }
 }
