@@ -56,6 +56,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Create a shark item that moves around the desktop for a little while. It should make Boris flee
 * When Boris is blowing up the balloon sometimes, instead of popping, it should go "pllrrlrlt!" and flying around the screen
 * Allow setting the colors of Boris' clothes in the About dialog
+* 'throw' doesn't work if xvel or yvel is set to 0
 
 #### Version 4.0.5 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
