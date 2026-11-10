@@ -88,6 +88,7 @@ The fifth example tells Boris to initiate the `eat_steak` behaviour. The item *i
 ### Item flags
 * `allowFlip`: Set this to enable a 50% chance of the item being mirrored horizontally when spawned
 * `pitchLock`: Set this to disable the slight pitch randomness otherwise used when playing the sounds of this item
+* `hidden`: If this is set the item won't be added to the tray icon item menu
 
 ### BorisScript defines
 BorisScript supports blocks of code to be defined which can be called from the frame definitions to avoid repeating the same code over and over again. They can be seen as parameter-less functions. See the `call` command specification in the [BorisScript](BORISSCRIPT.md) documentation for more details.
