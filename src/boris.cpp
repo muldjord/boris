@@ -428,7 +428,7 @@ void Boris::runScript(int &stop, const bool &init)
   if(!drawing) {
     scriptImage.fill(Qt::transparent);
   }
-  if(scriptVars["xvel"] != 0 &&
+  if(scriptVars["xvel"] != 0 ||
      scriptVars["yvel"] != 0) {
     falling = true;
     hVel = scriptVars["xvel"];

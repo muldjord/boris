@@ -139,7 +139,7 @@ void Item::runScript(int &stop, const bool &init)
   }
 
   scriptSprite = QPixmap::fromImage(scriptImage);
-  if(scriptVars["xvel"] != 0 &&
+  if(scriptVars["xvel"] != 0 ||
      scriptVars["yvel"] != 0) {
     falling = true;
     hVel = scriptVars["xvel"];

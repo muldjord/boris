@@ -60,7 +60,7 @@ allowFlip
 35;40;0;-4;;
 35;40;0;-4;;
 35;40;0;-4;;var airtime -= 1,if airtime >= 0 goto float
-35;40;0;-4;;throw 1 6,if @2 = 1 { spawn balloon_deflate 0 0,goto falling } else goto pop
+35;40;0;-4;;throw 0 6,if @2 = 1 { spawn balloon_deflate 0 0,goto falling } else goto pop
 
 36;40;0;0;pop.wav;label pop
 37;40;0;0;;goto falling
