@@ -4,12 +4,12 @@ The following is a complete description of the behaviour format used to bring Bo
 All behaviours are located in the `data/behaviours` folder. There are 3 different types of behaviours.
 
 ### Common behaviours
-These are the self-contained behaviours Boris uses when he's just going about his day on your desktop. If you want to create your own this is probably the type you are looking for.
+These are the self-contained behaviours Boris uses when he's just going about his day on your desktop. If you want to create your own behaviours this is probably the type you are looking for.
 
 What defines a common behaviour? It has a category set of either `Energy`, `Social`, `Fun`, `Hunger`, `Toilet`, `Hygiene` or `Health`. That means Boris will choose from it when his vitality stats require something from one of these categories.
 
 ### Reaction behaviours
-These behaviours are *only* used as reactions to Boris encountering [items](ITEMS.md) that requests them. Items can be spawned on the desktop either by you or at random. When Boris encounters these items a specific reaction behaviour can be set.
+These behaviours are *only* used as reactions to Boris encountering [items](ITEMS.md) that requests them. Items can be spawned on the desktop either by you or at random. When Boris encounters these items a specific reaction behaviour can be initiated.
 
 It's important to note that a behaviour that is *not* a reaction behaviour can still be used as a reaction when encountering an item. The difference being that a behaviour specifically set with the `Reaction` category will *only* ever be used as a reaction to encountering an item that requests it.
 
@@ -24,7 +24,7 @@ Usually there is no reason for you to create static behaviours yourself except f
 If you want to enable *all* behaviours in the menus including the ones you wouldn't usually select manually you can add `idkfa=true` to the `config.ini` file. This will add the invisible behaviours to an `idkfa` behaviour submenu.
 
 ## How to create a behaviour
-A single behaviour is made up of two files. A 32x32 horizontal PNG sprites sheet and a `.dat` that describes all aspects of the behaviour. Both files must have the same base filename and be placed in the `data/behaviours` folder.
+A single behaviour is made up of two files. A 32x32 horizontal PNG sprites sheet and a `.dat` file (you can edit these with any text editor) that describes all aspects of the behaviour. Both files must have the same base filename and be placed in the `data/behaviours` folder.
 
 ##### Example
 * Sprite sheet: `data/behaviours/mybehav.png`
