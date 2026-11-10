@@ -25,14 +25,14 @@ Copyright 2026 Lars Muldjord. This program is distributed under the terms of the
 Boris requires Qt6. Install all prerequisites with the following commands:
 ```
 $ sudo apt update
-$ sudo apt install build-essential cmake libsfml-dev qt6-base-dev qt6-tools-dev qt6-l10n-tools
+$ sudo apt install build-essential cmake libsfml-dev qt6-base-dev
 ```
 
 ### Compiles Boris
 ```
 $ mkdir build
 $ cd build
-$ cmake ..
+$ cmake -DCMAKE_BUILD_TYPE=Release ..
 $ make
 $ make install
 ```
