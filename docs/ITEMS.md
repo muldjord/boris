@@ -4,7 +4,7 @@ The following is a complete description of the item format used to give Boris so
 All items are located in the `data/items` folder.
 
 ## How to create an item
-A single item is made up of two files. A 32x32 horizontal PNG sprites sheet and a `.dat` that describes all aspects of the item. Both files must have the same base filename and be placed in the `data/items` folder.
+A single item is made up of two files. A 32x32 horizontal PNG sprite sheet and a `.dat` that describes all aspects of the item. Both files must have the same base filename and be placed in the `data/items` folder.
 
 ##### Example
 * Sprite sheet: `data/items/myitem.png`

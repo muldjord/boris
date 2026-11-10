@@ -24,7 +24,7 @@ Usually there is no reason for you to create static behaviours yourself except f
 If you want to enable *all* behaviours in the menus including the ones you wouldn't usually select manually you can add `idkfa=true` to the `config.ini` file. This will add the invisible behaviours to an `idkfa` behaviour submenu.
 
 ## How to create a behaviour
-A single behaviour is made up of two files. A 32x32 horizontal PNG sprites sheet and a `.dat` file (you can edit these with any text editor) that describes all aspects of the behaviour. Both files must have the same base filename and be placed in the `data/behaviours` folder.
+A single behaviour is made up of two files. A 32x32 horizontal PNG sprite sheet and a `.dat` file (you can edit these with any text editor) that describes all aspects of the behaviour. Both files must have the same base filename and be placed in the `data/behaviours` folder.
 
 ##### Example
 * Sprite sheet: `data/behaviours/mybehav.png`
@@ -37,7 +37,7 @@ NOTE: If your behaviour includes Boris himself it is necessary to use an indexed
 
 In general I highly recommend using an indexed color format of your PNG with the first color being transparent and the next 18 colors matching the ones from the existing behaviours.
 
-But an indexed palette is not a requirement. You can use a true-color PNG with alpha if you want to as long as it doesn't have Boris in it (because a true-color spritesheet will break the clothes color change).
+But an indexed palette is not a requirement. You can use a true-color PNG with alpha if you want to as long as it doesn't have Boris in it (because a true-color sprite sheet will break the clothes color change).
 
 ### The DAT file definition
 The format of the dat files is as follows:
