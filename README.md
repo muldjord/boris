@@ -85,6 +85,8 @@ The last command copies all necessary files to the `release` folder. You can the
 * 'throw' now works even if xvel or yvel is set to 0
 * When changing the size of Boris all Borises are now moved randomly around the desktop to avoid some Borises being at the edge
 * Lower-case behaviour category will now automaticall be made uppercase when loading (eg. 'hunger' becomes 'Hunger')
+* `xvel` and `yvel` scriptVars have been renamed `hvel` and `vvel`
+* `throw` has been deprecated in favor of `sethvel` and `setvvel` to allow expressions in VELOCITY
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
