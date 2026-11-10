@@ -68,5 +68,5 @@ allowFlip
 # Falling
 38;50;0;0;;label falling
 39;50;0;0;;
-40;50;0;1;;label loop
-41;50;0;3;;goto loop
+40;50;0;0;;label loop
+41;50;0;0;;goto loop
