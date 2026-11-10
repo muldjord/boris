@@ -45,15 +45,14 @@ The last command copies all necessary files to the `release` folder. You can the
 * 'noIgnore' item flag is probably broken right now
 
 #### Ideas (that I might / might not implement):
-* Make wind behaviours that are appended before or after weather reaction behaviour when weather is shown
 * Add a 'usec' that points towards any direction the arrow keys are currently pressed
-* Spawn a puddle when '_too_late' happens
 * Add Boris 'memory'. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
 * Make a 'bowling' behaviour with a 'bowlingball' item and spawned 'pin' items (which might need syncronization as well?)
-* Make a 'candycane' item for Boris to eat. It should be 'energy' category. He will get a significant energy boost and get very hyper
+* Make a big round 'candy' item for Boris to eat. He will get round and roll around when he encounters it
 * Create a Bub or Bob item that will put Boris in a bubble on interaction
 * Create a shark item that moves around the desktop for a little while. It should make Boris flee
-* Allow setting the colors of Boris' clothes in the About dialog
+* Allow setting the colors of Boris' clothes in the About dialog that will overwrite the season colors
+* Create an 'easel' item that will cause Boris to paint a random picture when he interacts with it
 
 #### Version 4.0.5 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
