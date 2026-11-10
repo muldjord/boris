@@ -359,8 +359,17 @@ void MainWindow::resetView()
   scene()->setSceneRect(0, 0,
                         viewport()->width() / transform().m11(),
                         viewport()->height() / transform().m22());
-  settings.desktopWidth = scene()->sceneRect().width();
-  settings.desktopHeight = scene()->sceneRect().height();
+  int newWidth = scene()->sceneRect().width();
+  int newHeight = scene()->sceneRect().height();
+  if(settings.desktopWidth != newWidth ||
+     settings.desktopHeight != newHeight) {
+    settings.desktopWidth = newWidth;
+    settings.desktopHeight = newHeight;
+    // Move all Borises randomly around the screen to avoid some Borises being at the edge
+    for(auto *boris: settings.borisList) {
+      boris->setPos(QRandomGenerator::global()->bounded(settings.desktopWidth), QRandomGenerator::global()->bounded(settings.desktopHeight));
+    }
+  }
 }
 
 void MainWindow::addBoris(int clones)
