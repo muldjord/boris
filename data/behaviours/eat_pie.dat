@@ -24,7 +24,7 @@ var slubbers = @3 + 3
 
 4;75;0;0;;label slubber,if @2 = 1 sound slurp1.wav else sound slurp2.wav,if hunger <= 0 { think "That's enough.",goto endeat }
 5;75;0;0;;var slubbers -= 1
-6;75;0;0;;stat hunger -= 3
+6;75;0;0;;stat hunger -= 5
 7;75;0;0;;stat hygiene += 5
 8;75;0;0;;if hunger <= 0 { think "No more!",goto endeat }
 9;75;0;0;;stat toilet += 1
