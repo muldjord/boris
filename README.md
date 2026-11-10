@@ -8,8 +8,8 @@ Boris has many, *many* things he can do. A lot of what he does is decided by his
 It brings me great joy to work on this project. I hope Boris will bring joy to you as well!
 
 ## Main features
-* Behaviours: As you will learn Boris has many, *many* behaviours. Read more about how to create your own [here](docs/BEHAVIOURS.ms)
-* Items: Items will spawn and Boris will interact with them. Read more about how to create your own [here](docs/ITEMS.ms)
+* Behaviours: As you will learn Boris has many, *many* behaviours. Read more about how to create your own [here](docs/BEHAVIOURS.md)
+* Items: Items will spawn and Boris will interact with them. Read more about how to create your own [here](docs/ITEMS.md)
 * BorisScript: All the behaviours Boris have available to him are written in a rudimentary scripting language I invented for the project called [BorisScript](docs/BORISSCRIPT.md)
 * Boris supports weather visualization using the OpenWeatherMap API
 * Boris supports RSS feed speech bubbles using custom RSS feeds
