@@ -22,7 +22,7 @@ endif()
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Xml Network LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Xml Network)
 
 find_package(SFML 3 REQUIRED COMPONENTS Audio)
 
