@@ -84,6 +84,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Updated / rewrote a lot of the documentation
 * 'throw' now works even if xvel or yvel is set to 0
 * When changing the size of Boris all Borises are now moved randomly around the desktop to avoid some Borises being at the edge
+* Lower-case behaviour category will now automaticall be made uppercase when loading (eg. 'hunger' becomes 'Hunger')
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'

@@ -147,6 +147,8 @@ bool Loader::loadBehaviours(const Settings &settings,
         }
         if(line.left(8) == "category") {
           b.category = line.mid(9,line.length());
+	  // Make sure "hunger" becomes "Hunger" and so on
+	  b.category = b.category.left(1).toUpper() + b.category.mid(1);
           continue;
         }
         if(line.left(8) == "reaction") {
