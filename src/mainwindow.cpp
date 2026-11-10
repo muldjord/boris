@@ -502,13 +502,16 @@ void MainWindow::createItemsMenu()
   QList<QMenu*> subMenus;
 
   for(const auto &item: settings.itemBehaviours) {
+    if(item.hidden) {
+      continue;
+    }
     QString title = item.title;
     QPixmap iconPixmap(settings.getPixmap(item.category.toLower() + ".png"));
     QMenu *menu = nullptr;
 
     // Find correct menu to put item into
     for(auto &subMenu: subMenus) {
-      if(subMenu->title() == item.category && item.category != "Hidden") {
+      if(subMenu->title() == item.category && !item.hidden) {
         menu = subMenu;
         break;
       }

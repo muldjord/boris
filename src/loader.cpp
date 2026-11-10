@@ -137,6 +137,10 @@ bool Loader::loadBehaviours(const Settings &settings,
           b.pitchLock = true;
           continue;
         }
+        if(line == "hidden") {
+          b.hidden = true;
+          continue;
+        }
         if(line.left(5) == "title") {
           b.title = line.mid(6,line.length());
           continue;

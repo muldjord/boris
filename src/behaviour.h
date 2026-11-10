@@ -95,10 +95,14 @@ public:
   int fun = 0;
   int hygiene = 0;
   int anxiety = 0;
+
+  // Flags
   bool oneShot = false;
   bool doNotDisturb = false;
   bool allowFlip = false;
   bool pitchLock = false;
+  bool hidden = false; // Show in menus?
+
   int coins = 50;
   int weight = 50; // Used by items
   int bounce = 50; // Used by items

@@ -142,6 +142,7 @@ Behaviour::Behaviour(const Behaviour &behaviour)
   this->doNotDisturb = behaviour.doNotDisturb;
   this->allowFlip = behaviour.allowFlip;
   this->pitchLock = behaviour.pitchLock;
+  this->hidden = behaviour.hidden;
   this->frames = behaviour.frames;
   this->labels = behaviour.labels;
   this->defines = behaviour.defines;
@@ -171,6 +172,7 @@ void Behaviour::operator=(const Behaviour &behaviour)
   this->doNotDisturb = behaviour.doNotDisturb;
   this->allowFlip = behaviour.allowFlip;
   this->pitchLock = behaviour.pitchLock;
+  this->hidden = behaviour.hidden;
   this->frames = behaviour.frames;
   this->labels = behaviour.labels;
   this->defines = behaviour.defines;
