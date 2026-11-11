@@ -63,7 +63,6 @@ private:
   bool *drawing = nullptr;
   Settings &settings;
   Bubble *bubble = nullptr;
-  bool returnSet = false;
 
   const QMap<QString, int> &labels;
   const QMap<QString, Script> &defines;

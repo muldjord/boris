@@ -378,8 +378,11 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
       }        
       return;
     }
-    QString colorString = parameters.first();
+
     Qt::GlobalColor color = Qt::transparent;
+
+    QString colorString = parameters.first();
+    bool colorIsVar = false;
     if(colorString == "black") {
       painter.setPen(QPen(QColor(Qt::black)));
     } else if(colorString == "white") {
@@ -426,14 +429,73 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
       int greenVal = colorString.mid(5, 2).toInt(nullptr, 16);
       painter.setPen(QPen(QColor(redVal, greenVal, blueVal)));
     } else {
-      if(settings.scriptOutput) {
-        printf("Color '%s' is malformed, falling back to black\n",
-               qPrintable(colorString));
-      }
-      painter.setPen(QPen(QColor(Qt::black)));
+      int colorInt = getValue(parameters);
+      colorIsVar = true;
+      switch(colorInt) {
+      case 0:
+	painter.setPen(QPen(QColor(Qt::black)));
+	break;
+      case 1:
+	painter.setPen(QPen(QColor(Qt::white)));
+	break;
+      case 2:
+	painter.setPen(QPen(QColor(Qt::cyan)));
+	break;
+      case 3:
+	painter.setPen(QPen(QColor(Qt::darkCyan)));
+	break;
+      case 4:
+	painter.setPen(QPen(QColor(Qt::red)));
+	break;
+      case 5:
+	painter.setPen(QPen(QColor(Qt::darkRed)));
+	break;
+      case 6:
+	painter.setPen(QPen(QColor(Qt::magenta)));
+	break;
+      case 7:
+	painter.setPen(QPen(QColor(Qt::darkMagenta)));
+	break;
+      case 8:
+	painter.setPen(QPen(QColor(Qt::green)));
+	break;
+      case 9:
+	painter.setPen(QPen(QColor(Qt::darkGreen)));
+	break;
+      case 10:
+	painter.setPen(QPen(QColor(Qt::yellow)));
+	break;
+      case 11:
+	painter.setPen(QPen(QColor(Qt::darkYellow)));
+	break;
+      case 12:
+	painter.setPen(QPen(QColor(Qt::blue)));
+	break;
+      case 13:
+	painter.setPen(QPen(QColor(Qt::darkBlue)));
+	break;
+      case 14:
+	painter.setPen(QPen(QColor(Qt::gray)));
+	break;
+      case 15:
+	painter.setPen(QPen(QColor(Qt::darkGray)));
+	break;
+      case 16:
+	painter.setPen(QPen(QColor(Qt::lightGray)));
+	break;
+      default:
+	if(settings.scriptOutput) {
+	  printf("Color '%s' is malformed, falling back to black\n",
+		 qPrintable(colorString));
+	}
+	painter.setPen(QPen(QColor(Qt::black)));
+	break;
+      };
     }
 
-    parameters.removeFirst(); // Remove drawing color string
+    if(!colorIsVar) {
+      parameters.removeFirst(); // Remove drawing color string
+    }
 
     if(parameters.count() >= 1) {
       if(parameters.first() == "line") {
@@ -710,9 +772,21 @@ int ScriptHandler::getValue(QList<QString> &parameters)
        scriptVars.contains(parameters.first()) ||
        parameters.first() == "pixel") {
       if(parameters.first().left(1) == "@") {
-        code.append(startPars +
-                    QString::number(QRandomGenerator::global()->bounded(parameters.first().mid(1).toInt()) + 1) +
-                    endPars);
+	bool randIsInt = false;
+	parameters.first().mid(1).toInt(&randIsInt);
+	if(randIsInt) {
+	  code.append(startPars +
+		      QString::number(QRandomGenerator::global()->bounded(parameters.first().mid(1).toInt()) + 1) +
+		      endPars);
+	} else {
+	  if(scriptVars.contains(parameters.first().mid(1))) {
+	    code.append(startPars +
+			QString::number(QRandomGenerator::global()->bounded(scriptVars[parameters.first().mid(1)]) + 1) +
+			endPars);
+	  } else {
+	    code.append(startPars + "0" + endPars);
+	  }
+	}
         parameters.removeFirst();
       } else if(scriptVars.contains(parameters.first())) {
         code.append(startPars + QString::number(scriptVars[parameters.first()]) + endPars);
