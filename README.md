@@ -58,6 +58,8 @@ The last command copies all necessary files to the `release` folder. You can the
 * Create a Bub or Bob item that will put Boris in a bubble on interaction
 * Create a shark item that moves around the desktop for a little while. It should make Boris flee
 * Allow setting the colors of Boris' clothes in the About dialog that will overwrite the season colors
+* Create 'Advanced options' in About dialog with 'script_output', 'idkfa' and so on
+* Allow expressions to begin with `(` and end with `)` in `getValue` to make parameters more useful in commands that require several in a row. This will allow stuff like `draw white line 5 4 (@32 - 1) (@32 - 1)`. Basically the same as I do with quotes for `say` but with expressions instead
 * Create an 'easel' item that will cause Boris to paint a random picture when he interacts with it
 
 #### Version 4.0.5 (In progress, unreleased):
@@ -87,6 +89,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Lower-case behaviour category will now automaticall be made uppercase when loading (eg. 'hunger' becomes 'Hunger')
 * `xvel` and `yvel` scriptVars have been renamed `hvel` and `vvel`
 * `throw` has been deprecated in favor of `sethvel` and `setvvel` to allow expressions in VELOCITY
+* Random variable set with `@VALUE` can now also be a random value within the range of a variable by using `@VARIABLE`
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
