@@ -1,0 +1,33 @@
+title=Easel
+category=Fun
+
+reaction=paint_picture,initpaint,5,-5
+
+weight=7
+bounce=2
+
+doNotDisturb
+
+define paintsomething:var strokes -= 1,
+var type = @4,
+var x1 = 6 + @18,
+var y1 = @21,
+var x2 = 6 + @18,
+var y2 = @21,
+var wmax = 25 - x1,
+var hmax = 22 - y1,
+var w = @wmax - 1,
+var h = @hmax - 1,
+if type = 1 draw @16 pixel x1 y1,
+if type = 2 draw @16 line x1 y1 x2 y2,
+if type = 3 draw @16 ellipse x1 y1 w h,
+if type = 4 draw @16 rectangle x1 y1 w h
+
+#Frames
+0;100;0;0;;stop
+
+0;100;0;0;;label initpaint,var strokes = @15 + 5
+0;100;0;0;;draw begin
+0;100;0;0;;label morepaint,call paintsomething
+0;100;0;0;;if strokes >= 0 goto morepaint else goto endpaint
+0;100;0;0;;label endpaint,stop
