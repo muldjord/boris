@@ -1,7 +1,7 @@
 title=Television
 category=Energy
 
-reaction=sit_and_relax;startshow
+reaction=sit_and_relax,startshow
 
 weight=5
 bounce=3
