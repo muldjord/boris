@@ -2,6 +2,7 @@ title=Television
 category=Energy
 
 reaction=sit_and_relax,startshow
+range=64
 
 weight=5
 bounce=3
