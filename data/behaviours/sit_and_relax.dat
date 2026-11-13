@@ -9,10 +9,10 @@ oneShot
 
 define init:var sitloop = [@5 + 5],
 if idir = -1 var sdir = [@8 - 1] else var sdir = idir,
-if sdir = 0 goto initu,
-if sdir = 1 or sdir = 2 or sdir = 3 goto initr,
+if sdir = 0 or sdir = 1 or sdir = 7 goto initu,
+if sdir = 1 or sdir = 3 goto initr,
 if sdir = 4 goto initd,
-if sdir = 5 or sdir = 6 or sdir = 7 goto initl
+if sdir = 5 or sdir = 6 goto initl
 
 define getbackup:if sdir = 0 goto endu,
 if sdir = 1 or sdir = 2 or sdir = 3 goto endr,
@@ -22,9 +22,9 @@ if sdir = 5 or sdir = 6 or sdir = 7 goto endl
 define morerelax:if sitloop <= 0 call getbackup,
 var sitloop -= 1,
 var whichrelax = @3,
-if whichrelax = 1 then if sdir = 0 goto situ1 else if sdir = 1 or sdir = 2 or sdir = 3 goto sitr1 else if sdir = 4 goto sitd1 else if sdir = 5 or sdir = 6 or sdir = 7 goto sitl1,
-if whichrelax = 2 then if sdir = 0 goto situ2 else if sdir = 1 or sdir = 2 or sdir = 3 goto sitr2 else if sdir = 4 goto sitd2 else if sdir = 5 or sdir = 6 or sdir = 7 goto sitl2,
-if whichrelax = 3 then if sdir = 0 goto situ3 else if sdir = 1 or sdir = 2 or sdir = 3 goto sitr3 else if sdir = 4 goto sitd2 else if sdir = 5 or sdir = 6 or sdir = 7 goto sitl3
+if whichrelax = 1 then if sdir = 0 or sdir = 1 or sdir = 7 goto situ1 else if sdir = 2 or sdir = 3 goto sitr1 else if sdir = 4 goto sitd1 else if sdir = 5 or sdir = 6 goto sitl1,
+if whichrelax = 2 then if sdir = 0 or sdir = 1 or sdir = 7 goto situ2 else if sdir = 2 or sdir = 3 goto sitr2 else if sdir = 4 goto sitd2 else if sdir = 5 or sdir = 6 goto sitl2,
+if whichrelax = 3 then if sdir = 0 or sdir = 1 or sdir = 7 goto situ3 else if sdir = 2 or sdir = 3 goto sitr3 else if sdir = 4 goto sitd2 else if sdir = 5 or sdir = 6 goto sitl3
 
 #Frames
 0;75;0;0;;label initr
