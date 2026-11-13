@@ -20,7 +20,7 @@ if fart = 5 sound fart5.wav,
 if fart = 6 sound fart6.wav
 
 #Frames
-0;75;0;0;;var floors = 1 + @3
+0;75;0;0;;var floors = [1 + @3]
 1;75;0;0;;var direction = @2
 2;75;0;0;;
 3;150;0;0;;

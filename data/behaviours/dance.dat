@@ -8,10 +8,10 @@ social=1
 allowFlip
 oneShot
 
-define nextdance:var dances -= 1,if dances <= 0 break,var cycles = @4,if dances % 2 = 0 goto dance1 else goto dance2
+define nextdance:var dances -= 1,if dances <= 0 break,var cycles = @4,if [dances % 2] = 0 goto dance1 else goto dance2
 
 #Frames
-0;50;0;0;;var dances = @6 + 3,call nextdance
+0;50;0;0;;var dances = [@6 + 3],call nextdance
 
 0;100;0;0;;label dance1,var cycles -= 1
 1;100;0;0;;

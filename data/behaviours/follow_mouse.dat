@@ -3,9 +3,9 @@ category=Social
 
 oneShot
 
-define init:var steps = 24 + @16,call nextfollow
+define init:var steps = [24 + @16],call nextfollow
 
-define progress:var steps -= 1,if mdist < bsize * 4 stat social += 2,if mdist < bsize * 2 behav _mouse_interact
+define progress:var steps -= 1,if mdist < [bsize * 4] stat social += 2,if mdist < [bsize * 2] behav _mouse_interact
 
 define nextfollow:if mdir = 0 goto north else if mdir = 1 goto northeast else if mdir = 2 goto east else if mdir = 3 goto southeast else if mdir = 4 goto south else if mdir = 5 goto southwest else if mdir = 6 goto west else if mdir = 7 goto northwest
 #Frames

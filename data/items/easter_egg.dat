@@ -3,10 +3,10 @@ weight=5
 bounce=1
 allowFlip
 #Frames
-0;50;0;0;;var fertile = @2,var incubate = @35 + 35,var rand = @6,if rand = 1 goto egg1,if rand = 2 goto egg2,if rand = 3 goto egg3,if rand = 4 goto egg4,if rand = 5 goto egg5,if rand = 6 goto egg6
+0;50;0;0;;var fertile = @2,var incubate = [@35 + 35],var rand = @6,if rand = 1 goto egg1,if rand = 2 goto egg2,if rand = 3 goto egg3,if rand = 4 goto egg4,if rand = 5 goto egg5,if rand = 6 goto egg6
 
 # Egg 1
-1;2000;0;0;;label egg1,if fertile = 1 stop,var incubate -= 1,if incubate = 1 goto spawnchicken,if incubate < @20 + 5 goto egg1move else goto egg1
+1;2000;0;0;;label egg1,if fertile = 1 stop,var incubate -= 1,if incubate = 1 goto spawnchicken,if incubate < [@20 + 5] goto egg1move else goto egg1
 
 # Egg 1 move
 1;50;0;0;;label egg1move,if @2 = 1 goto egg1jump else goto egg1shake
@@ -34,7 +34,7 @@ allowFlip
 1;50;-1;0;;goto egg1
 
 # Egg 2
-2;2000;0;0;;label egg2,if fertile = 1 stop,var incubate -= 1,if incubate = 1 goto spawnchicken,if incubate < @20 + 5 goto egg2move else goto egg2
+2;2000;0;0;;label egg2,if fertile = 1 stop,var incubate -= 1,if incubate = 1 goto spawnchicken,if incubate < [@20 + 5] goto egg2move else goto egg2
 
 # Egg 2 move
 2;50;0;0;;label egg2move,if @2 = 1 goto egg2jump else goto egg2shake
@@ -62,7 +62,7 @@ allowFlip
 2;50;-1;0;;goto egg2
 
 # Egg 3
-3;2000;0;0;;label egg3,if fertile = 1 stop,var incubate -= 1,if incubate = 1 goto spawnchicken,if incubate < @20 + 5 goto egg3move else goto egg3
+3;2000;0;0;;label egg3,if fertile = 1 stop,var incubate -= 1,if incubate = 1 goto spawnchicken,if incubate < [@20 + 5] goto egg3move else goto egg3
 
 # Egg 3 move
 3;50;0;0;;label egg3move,if @2 = 1 goto egg3jump else goto egg3shake
@@ -90,7 +90,7 @@ allowFlip
 3;50;-1;0;;goto egg3
 
 # Egg 4
-4;2000;0;0;;label egg4,if fertile = 1 stop,var incubate -= 1,if incubate = 1 goto spawnchicken,if incubate < @20 + 5 goto egg4move else goto egg4
+4;2000;0;0;;label egg4,if fertile = 1 stop,var incubate -= 1,if incubate = 1 goto spawnchicken,if incubate < [@20 + 5] goto egg4move else goto egg4
 
 # Egg 4 move
 4;50;0;0;;label egg4move,if @2 = 1 goto egg4jump else goto egg4shake
@@ -118,7 +118,7 @@ allowFlip
 4;50;-1;0;;goto egg4
 
 # Egg 5
-5;2000;0;0;;label egg5,if fertile = 1 stop,var incubate -= 1,if incubate = 1 goto spawnchicken,if incubate < @20 + 5 goto egg5move else goto egg5
+5;2000;0;0;;label egg5,if fertile = 1 stop,var incubate -= 1,if incubate = 1 goto spawnchicken,if incubate < [@20 + 5] goto egg5move else goto egg5
 
 # Egg 5 move
 5;50;0;0;;label egg5move,if @2 = 1 goto egg5jump else goto egg5shake
@@ -146,7 +146,7 @@ allowFlip
 5;50;-1;0;;goto egg5
 
 # Egg 6
-6;2000;0;0;;label egg6,if fertile = 1 stop,var incubate -= 1,if incubate = 1 goto spawnchicken,if incubate < @20 + 5 goto egg6move else goto egg6
+6;2000;0;0;;label egg6,if fertile = 1 stop,var incubate -= 1,if incubate = 1 goto spawnchicken,if incubate < [@20 + 5] goto egg6move else goto egg6
 
 # Egg 6 move
 6;50;0;0;;label egg6move,if @2 = 1 goto egg6jump else goto egg6shake

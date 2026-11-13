@@ -101,10 +101,8 @@ void ScriptHandler::runCommand(QList<QString> &parameters, int &stop, const Scri
     handleSay(parameters);
   } else if(parameters.first() == "think") {
     handleThink(parameters);
-  } else if(parameters.first() == "sethvel") {
-    handleSetHVel(parameters);
-  } else if(parameters.first() == "setvvel") {
-    handleSetVVel(parameters);
+  } else if(parameters.first() == "setvel") {
+    handleSetVel(parameters);
   }
   // IMPORTANT!!! When adding new commands, REMEMBER TO ALSO ADD THEM TO 'getValue()'!!!
 }
@@ -739,63 +737,79 @@ void ScriptHandler::handleThink(QList<QString> &parameters)
   }
 }
 
-void ScriptHandler::handleSetHVel(QList<QString> &parameters)
+void ScriptHandler::handleSetVel(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'sethvel'
   scriptVars["sethvel"] = getValue(parameters);
-}
-
-void ScriptHandler::handleSetVVel(QList<QString> &parameters)
-{
-  parameters.removeFirst(); // Remove 'setvvel'
   scriptVars["setvvel"] = getValue(parameters) * -1; // Reverse it as y axis is opposite
 }
 
 int ScriptHandler::getValue(QList<QString> &parameters)
 {
+  if(parameters.isEmpty()) {
+    return 0;
+  }
+  
+  QList<QString> exprParams;
+
+  if(parameters.first().left(1) == "[") {
+    do {
+      QString exprParam = parameters.takeFirst();
+      exprParams.append(exprParam.replace("[", ""));
+    } while(!parameters.isEmpty() && !parameters.first().contains("]"));
+
+    // In case it's a 'var this = 2 + 2' make sure parameters is not empty before adding this one
+    if(!parameters.isEmpty()) {
+      QString exprParam = parameters.takeFirst();
+      exprParams.append(exprParam.replace("]", ""));
+    }
+  } else {
+    exprParams.append(parameters.takeFirst());
+  }
+  
   QList<QString> code;
-  while(!parameters.isEmpty()) {
+  while(!exprParams.isEmpty()) {
     QString startPars = "";
     QString endPars = "";
-    while(parameters.first().left(1) == "(") {
+    while(exprParams.first().left(1) == "(") {
       startPars.append("(");
-      parameters.first().remove(0, 1);
+      exprParams.first().remove(0, 1);
     }
-    while(parameters.first().right(1) == ")") {
+    while(exprParams.first().right(1) == ")") {
       endPars.append(")");
-      parameters.first().remove(parameters.first().length() - 1, 1);
+      exprParams.first().remove(exprParams.first().length() - 1, 1);
     }
     bool isInt = false;
-    parameters.first().toInt(&isInt);
+    exprParams.first().toInt(&isInt);
     if(isInt ||
-       parameters.first().left(1) == "@" ||
-       scriptVars.contains(parameters.first()) ||
-       parameters.first() == "pixel") {
-      if(parameters.first().left(1) == "@") {
+       exprParams.first().left(1) == "@" ||
+       scriptVars.contains(exprParams.first()) ||
+       exprParams.first() == "pixel") {
+      if(exprParams.first().left(1) == "@") {
 	bool randIsInt = false;
-	parameters.first().mid(1).toInt(&randIsInt);
+	exprParams.first().mid(1).toInt(&randIsInt);
 	if(randIsInt) {
 	  code.append(startPars +
-		      QString::number(QRandomGenerator::global()->bounded(parameters.first().mid(1).toInt()) + 1) +
+		      QString::number(QRandomGenerator::global()->bounded(exprParams.first().mid(1).toInt()) + 1) +
 		      endPars);
 	} else {
-	  if(scriptVars.contains(parameters.first().mid(1))) {
+	  if(scriptVars.contains(exprParams.first().mid(1))) {
 	    code.append(startPars +
-			QString::number(QRandomGenerator::global()->bounded(scriptVars[parameters.first().mid(1)]) + 1) +
+			QString::number(QRandomGenerator::global()->bounded(scriptVars[exprParams.first().mid(1)]) + 1) +
 			endPars);
 	  } else {
 	    code.append(startPars + "0" + endPars);
 	  }
 	}
-        parameters.removeFirst();
-      } else if(scriptVars.contains(parameters.first())) {
-        code.append(startPars + QString::number(scriptVars[parameters.first()]) + endPars);
-        parameters.removeFirst();
-      } else if(parameters.first() == "pixel" && parameters.length() >= 3) {
-        parameters.removeFirst();
+        exprParams.removeFirst();
+      } else if(scriptVars.contains(exprParams.first())) {
+        code.append(startPars + QString::number(scriptVars[exprParams.first()]) + endPars);
+        exprParams.removeFirst();
+      } else if(exprParams.first() == "pixel" && exprParams.length() >= 3) {
+        exprParams.removeFirst();
         QString colorValue = "0";
-        int xCoord = getValue(parameters);
-        int yCoord = getValue(parameters);
+        int xCoord = getValue(exprParams);
+        int yCoord = getValue(exprParams);
         QColor pixelColor = image->pixelColor(xCoord, yCoord);
         if(pixelColor.name(QColor::HexRgb) == "#000000") {
           colorValue = "0";
@@ -836,23 +850,12 @@ int ScriptHandler::getValue(QList<QString> &parameters)
         }
         code.append(startPars + colorValue + endPars);
       } else {
-        code.append(startPars + parameters.first() + endPars);
-        parameters.removeFirst();
-      }
-      if(parameters.count() >= 1) {
-        if(parameters.first() != "+" &&
-           parameters.first() != "-" &&
-           parameters.first() != "*" &&
-           parameters.first() != "/" &&
-           parameters.first() != "(" &&
-           parameters.first() != ")" &&
-           parameters.first() != "%") {
-          break;
-        }
+        code.append(startPars + exprParams.first() + endPars);
+        exprParams.removeFirst();
       }
     } else {
-      code.append(startPars + parameters.first() + endPars);
-      parameters.removeFirst();
+      code.append(startPars + exprParams.first() + endPars);
+      exprParams.removeFirst();
     }
   }
 

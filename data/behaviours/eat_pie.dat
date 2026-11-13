@@ -14,7 +14,7 @@ if bdir = 4 goto south,
 if bdir = 5 goto southwest,
 if bdir = 6 goto west,
 if bdir = 7 goto northwest },
-var slubbers = @3 + 3
+var slubbers = [@3 + 3]
 
 #Frames
 0;75;0;0;;

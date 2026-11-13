@@ -4,7 +4,7 @@ weight=5
 bounce=2
 range=24
 
-define init:var airtime = 18 + @5
+define init:var airtime = [18 + @5]
 
 define dropped:spawn pie 0 0,
 break

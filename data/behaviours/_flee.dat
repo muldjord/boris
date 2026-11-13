@@ -2,7 +2,7 @@ social=-5
 
 oneShot
 
-define init:var steps = @3 + 5,
+define init:var steps = [@3 + 5],
 if @2 = 1 sound flee1.wav else sound flee2.wav,
 if mdir = 0 goto south,
 if mdir = 1 goto southwest,

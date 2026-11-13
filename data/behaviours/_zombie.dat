@@ -3,7 +3,7 @@ category=Movement
 
 oneShot
 
-define init:var steps = @3 + 7,
+define init:var steps = [@3 + 7],
 var direction = @4,
 if direction = 1 goto east,
 if direction = 2 goto south,

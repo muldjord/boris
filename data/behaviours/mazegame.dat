@@ -28,59 +28,59 @@ var pellets = 0,
 var time = 240
 
 10;500;0;0;;draw begin,
-var sprlvl = level - 1,
+var sprlvl = [level - 1],
 draw sprite mazegame sprlvl 17 4
 
 10;50;0;0;;label gameloop,
 var move = 1,
 draw yellow pixel bx by,
-var pixeltime = 17 + (time / 20),
+var pixeltime = [17 + (time / 20)],
 if time > 175 draw green line 17 12 pixeltime 12 else if time > 100 draw yellow line 17 12 pixeltime 12 else if time <= 100 draw red line 17 12 pixeltime 12,
 var time -= 1,
-if dir = 1 {var nx = bx,var ny = by - 1,goto moveup} else if dir = 2 {var nx = bx + 1,var ny = by,goto moveright} else if dir = 3 {var nx = bx,var ny = by + 1,goto movedown} else if dir = 4 {var nx = bx - 1,var ny = by,goto moveleft}
+if dir = 1 { var nx = bx,var ny = [by - 1],goto moveup } else if dir = 2 { var nx = [bx + 1],var ny = by,goto moveright } else if dir = 3 { var nx = bx,var ny = [by + 1],goto movedown } else if dir = 4 { var nx = [bx - 1],var ny = by,goto moveleft }
 
 10;0;0;0;;label moveup,
-if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,goto endmove},
-if pixel nx ny = 12 {var dir = 3,var move = 0,goto endmove},
-var checkleft = nx - 1,
-var checkright = nx + 1,
-if pixel checkleft ny != 12 {if @2 = 1 var dir = 4,sound game_move.wav},
-if pixel checkright ny != 12 {if @2 = 1 var dir = 2,sound game_move.wav},
+if [pixel nx ny] = 4 { var pellets += 1,sound game_pellet.wav,goto endmove },
+if [pixel nx ny] = 12 { var dir = 3,var move = 0,goto endmove },
+var checkleft = [nx - 1],
+var checkright = [nx + 1],
+if [pixel checkleft ny] != 12 { if @2 = 1 var dir = 4,sound game_move.wav },
+if [pixel checkright ny] != 12 { if @2 = 1 var dir = 2,sound game_move.wav },
 goto endmove
 
 10;0;0;0;;label moveright,
-if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,goto endmove},
-if pixel nx ny = 12 {var dir = 4,var move = 0,goto endmove},
-var checkup = ny - 1,
-var checkdown = ny + 1,
-if pixel nx checkup != 12 {if @2 = 1 var dir = 1,sound game_move.wav},
-if pixel nx checkdown != 12 {if @2 = 1 var dir = 3,sound game_move.wav},
+if [pixel nx ny] = 4 { var pellets += 1,sound game_pellet.wav,goto endmove },
+if [pixel nx ny] = 12 { var dir = 4,var move = 0,goto endmove },
+var checkup = [ny - 1],
+var checkdown = [ny + 1],
+if [pixel nx checkup] != 12 { if @2 = 1 var dir = 1,sound game_move.wav },
+if [pixel nx checkdown] != 12 { if @2 = 1 var dir = 3,sound game_move.wav },
 goto endmove
 
 10;0;0;0;;label movedown,
-if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,goto endmove},
-if pixel nx ny = 12 {var dir = 1,var move = 0,goto endmove},
-var checkleft = nx - 1,
-var checkright = nx + 1,
-if pixel checkleft ny != 12 {if @2 = 1 var dir = 4,sound game_move.wav},
-if pixel checkright ny != 12 {if @2 = 1 var dir = 2,sound game_move.wav},
+if [pixel nx ny] = 4 { var pellets += 1,sound game_pellet.wav,goto endmove },
+if [pixel nx ny] = 12 { var dir = 1,var move = 0,goto endmove },
+var checkleft = [nx - 1],
+var checkright = [nx + 1],
+if [pixel checkleft ny] != 12 { if @2 = 1 var dir = 4,sound game_move.wav },
+if [pixel checkright ny] != 12 { if @2 = 1 var dir = 2,sound game_move.wav },
 goto endmove
 
 10;0;0;0;;label moveleft,
-if pixel nx ny = 4 {var pellets += 1,sound game_pellet.wav,goto endmove},
-if pixel nx ny = 12 {var dir = 2,var move = 0,goto endmove},
-var checkup = ny - 1,
-var checkdown = ny + 1,
-if pixel nx checkup != 12 {if @2 = 1 var dir = 1,sound game_move.wav},
-if pixel nx checkdown != 12 {if @2 = 1 var dir = 3,sound game_move.wav},
+if [pixel nx ny] = 4 { var pellets += 1,sound game_pellet.wav,goto endmove },
+if [pixel nx ny] = 12 { var dir = 2,var move = 0,goto endmove },
+var checkup = [ny - 1],
+var checkdown = [ny + 1],
+if [pixel nx checkup] != 12 { if @2 = 1 var dir = 1,sound game_move.wav },
+if [pixel nx checkdown] != 12 { if @2 = 1 var dir = 3,sound game_move.wav },
 goto endmove
 
 10;0;0;0;;label endmove,
 draw black pixel bx by,
 draw black line 17 12 29 12,
-if move = 1 {var bx = nx,var by = ny},
-if pellets = 8 {draw end,goto winround},
-if time = 0 {draw end,goto looseround},
+if move = 1 { var bx = nx,var by = ny },
+if pellets = 8 { draw end,goto winround },
+if time = 0 { draw end,goto looseround },
 goto gameloop
 
 15;1000;0;0;game_win.wav;label winround,sound win2.wav,stat fun += 10,var level += 1,if level < 6 goto nextround else goto wingame

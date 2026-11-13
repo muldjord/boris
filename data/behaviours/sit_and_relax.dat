@@ -7,8 +7,8 @@ social=5
 
 oneShot
 
-define init:var sitloop = @5 + 5,
-if idir = -1 var sdir = @8 - 1 else var sdir = idir,
+define init:var sitloop = [@5 + 5],
+if idir = -1 var sdir = [@8 - 1] else var sdir = idir,
 if sdir = 0 goto initu,
 if sdir = 1 or sdir = 2 or sdir = 3 goto initr,
 if sdir = 4 goto initd,

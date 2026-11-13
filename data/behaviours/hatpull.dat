@@ -23,7 +23,7 @@ allowFlip
 12;75;0;0;;
 13;75;0;0;;
 14;75;0;0;;
-15;75;0;0;;var loops = @4 + 2,if @2 = 1 goto rtom else goto rtol
+15;75;0;0;;var loops = [@4 + 2],if @2 = 1 goto rtom else goto rtol
 
 16;750;0;0;;label rtol,var loops -= 1
 17;125;0;0;;

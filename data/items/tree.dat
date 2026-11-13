@@ -6,7 +6,7 @@ allowFlip
 
 define init:if month = 12 and @4 > 1 goto christmaspine,if @2 = 1 goto pine else goto oak
 
-define endgrow:if @3 = 1 spawn tree @128 - 64 @128 - 64,stop
+define endgrow:if @3 = 1 spawn tree [@128 - 64] [@128 - 64],stop
 
 #Frames
 # Pine tree

@@ -12,7 +12,7 @@ doNotDisturb
 0;1000;0;0;;stop
 
 1;4200;-2;-2;;label hitballw
-0;50;0;0;kick.wav;sethvel (@2 + 5 + (energy / 5)) * -1,setvvel (@2 + 1 + (energy / 10)) * -1,stop
+0;50;0;0;kick.wav;setvel [(@2 + 5 + (energy / 5)) * -1] [(@2 + 1 + (energy / 10)) * -1],stop
 
 1;4200;2;-2;;label hitballe
-0;50;0;0;kick.wav;sethvel @2 + 5 + (energy / 5),setvvel (@2 + 1 + (energy / 10)) * -1,stop
+0;50;0;0;kick.wav;setvel [@2 + 5 + (energy / 5)] [(@2 + 1 + (energy / 10)) * -1],stop
