@@ -79,6 +79,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Added 'curious_explosion' behaviour reaction for 'acme_gift'
 * Added 'farting' behaviour!
 * Added 'pie' item
+* Added a 'television' item
 * If Boris encounters a 'pie' item and have recently encuntered another Boris, he will now throw the pie in the direction of the other Boris instead of eating it
 * Updated inflate balloon behaviour so the balloon sometimes starts farting around instead of popping
 * Now allows 'nil' for frame to go to in item reactions
@@ -89,7 +90,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Lower-case behaviour category will now automaticall be made uppercase when loading (eg. 'hunger' becomes 'Hunger')
 * `xvel` and `yvel` scriptVars have been renamed `hvel` and `vvel`
 * `throw` has been deprecated in favor of `sethvel` and `setvvel` to allow expressions in VELOCITY
-* Random variable set with `@VALUE` can now also be a random value within the range of a variable by using `@VARIABLE`
+* Random variable set with `@INT` can now also be a random value within the range of a variable by using `@VARIABLE`
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
