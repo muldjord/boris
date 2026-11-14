@@ -59,9 +59,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Create a shark item that moves around the desktop for a little while. It should make Boris flee
 * Allow setting the colors of Boris' clothes in the About dialog that will overwrite the season colors
 * Create 'Advanced options' in About dialog with 'script_output', 'idkfa' and so on
-* Allow expressions to begin with `(` and end with `)` in `getValue` to make parameters more useful in commands that require several in a row. This will allow stuff like `draw white line 5 4 (@32 - 1) (@32 - 1)`. Basically the same as I do with quotes for `say` but with expressions instead
 * Create an 'easel' item that will cause Boris to paint a random picture when he interacts with it
-* Make sure sprite loading handles a purple separater at the end gracefully
 
 #### Version 4.0.5 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
@@ -86,12 +84,12 @@ The last command copies all necessary files to the `release` folder. You can the
 * Now allows 'nil' for frame to go to in item reactions
 * Moved all documentation into `docs` path
 * Updated / rewrote a lot of the documentation
-* 'throw' now works even if xvel or yvel is set to 0
 * When changing the size of Boris all Borises are now moved randomly around the desktop to avoid some Borises being at the edge
 * Lower-case behaviour category will now automaticall be made uppercase when loading (eg. 'hunger' becomes 'Hunger')
-* `xvel` and `yvel` scriptVars have been renamed `hvel` and `vvel`
-* `throw` has been deprecated in favor of `sethvel` and `setvvel` to allow expressions in VELOCITY
+* `xvel` and `yvel` scriptVars have been renamed `hvel` and `vvel` and can no longer be used to set velocity with `var hvel = 4`. Use `setvel` instead
+* `throw` has been deprecated in favor of `setvel` to allow expressions in VELOCITY
 * Random variable set with `@INT` can now also be a random value within the range of a variable by using `@VARIABLE`
+* Now allows expressions to begin with `[` and end with `]` in `getValue` to make parameters more useful in commands that require several in a row
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
