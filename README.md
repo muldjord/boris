@@ -61,6 +61,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Create 'Advanced options' in About dialog with 'script_output', 'idkfa' and so on
 * Allow expressions to begin with `(` and end with `)` in `getValue` to make parameters more useful in commands that require several in a row. This will allow stuff like `draw white line 5 4 (@32 - 1) (@32 - 1)`. Basically the same as I do with quotes for `say` but with expressions instead
 * Create an 'easel' item that will cause Boris to paint a random picture when he interacts with it
+* Make sure sprite loading handles a purple separater at the end gracefully
 
 #### Version 4.0.5 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
