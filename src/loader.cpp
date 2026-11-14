@@ -396,7 +396,7 @@ bool Loader::loadSprites(Settings &settings)
     int x1 = 0;
     int x2 = 0;
     bool inSprite = true;
-    for(x2 = 0; x2 <= spriteSheet.width(); ++x2) {
+    for(;x2 <= spriteSheet.width(); ++x2) {
       if(inSprite) {
         if(x2 < spriteSheet.width() &&
            spriteSheet.pixelColor(x2, 0) != QColor(255, 0, 255)) {
@@ -407,7 +407,7 @@ bool Loader::loadSprites(Settings &settings)
         }
         inSprite = false;
       } else {
-        if(spriteSheet.pixelColor(x2, 0) == QColor(255, 0, 255)) {
+        if(x2 < spriteSheet.width() && spriteSheet.pixelColor(x2, 0) == QColor(255, 0, 255)) {
           continue;
         }
         inSprite = true;
