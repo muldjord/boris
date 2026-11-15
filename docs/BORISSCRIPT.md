@@ -120,6 +120,7 @@ You can also combine `and` and `or` expressions but as this is a very rudimentar
 ###### pixel
 Returns an integer corresponding to the pixel color located at the specified coordinate within the current 32x32 sprite.
 
+* -1: Transparent
 * 0: Black, #000000
 * 1: White, #ffffff
 * 2: Cyan, #00ffff
