@@ -356,8 +356,15 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
       *drawing = false;
       return;
     }
+
     QPainter painter;
     painter.begin(image);
+    // Never use a brush as it will infill rectangles and ellipsees
+    painter.setBrush(Qt::NoBrush);
+    QPen pen = painter.pen();
+    pen.setWidth(1);
+
+
     painter.setRenderHint(QPainter::Antialiasing, false);
     if(parameters.first() == "sprite") {
       parameters.removeFirst(); // Remove 'sprite'
@@ -381,116 +388,125 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
 
     QString colorString = parameters.first();
     bool colorIsVar = false;
-    if(colorString == "black") {
-      painter.setPen(QPen(QColor(Qt::black)));
+    if(colorString == "transparent") {
+      // Make sure the transparent pixels are actually painted and now just overlayed
+      painter.setCompositionMode(QPainter::CompositionMode_Clear);
+      pen.setColor(Qt::transparent);
+    } else if(colorString == "black") {
+      pen.setColor(QColor(Qt::black));
     } else if(colorString == "white") {
-      painter.setPen(QPen(QColor(Qt::white)));
+      pen.setColor(QColor(Qt::white));
     } else if(colorString == "cyan") {
-      painter.setPen(QPen(QColor(Qt::cyan)));
+      pen.setColor(QColor(Qt::cyan));
     } else if(colorString == "darkcyan") {
-      painter.setPen(QPen(QColor(Qt::darkCyan)));
+      pen.setColor(QColor(Qt::darkCyan));
     } else if(colorString == "red") {
-      painter.setPen(QPen(QColor(Qt::red)));
+      pen.setColor(QColor(Qt::red));
     } else if(colorString == "darkred") {
-      painter.setPen(QPen(QColor(Qt::darkRed)));
+      pen.setColor(QColor(Qt::darkRed));
     } else if(colorString == "magenta") {
-      painter.setPen(QPen(QColor(Qt::magenta)));
+      pen.setColor(QColor(Qt::magenta));
     } else if(colorString == "darkmagenta") {
-      painter.setPen(QPen(QColor(Qt::darkMagenta)));
+      pen.setColor(QColor(Qt::darkMagenta));
     } else if(colorString == "green") {
-      painter.setPen(QPen(QColor(Qt::green)));
+      pen.setColor(QColor(Qt::green));
     } else if(colorString == "darkgreen") {
-      painter.setPen(QPen(QColor(Qt::darkGreen)));
+      pen.setColor(QColor(Qt::darkGreen));
     } else if(colorString == "yellow") {
-      painter.setPen(QPen(QColor(Qt::yellow)));
+      pen.setColor(QColor(Qt::yellow));
     } else if(colorString == "darkyellow") {
-      painter.setPen(QPen(QColor(Qt::darkYellow)));
+      pen.setColor(QColor(Qt::darkYellow));
     } else if(colorString == "blue") {
-      painter.setPen(QPen(QColor(Qt::blue)));
+      pen.setColor(QColor(Qt::blue));
     } else if(colorString == "darkblue") {
-      painter.setPen(QPen(QColor(Qt::darkBlue)));
+      pen.setColor(QColor(Qt::darkBlue));
     } else if(colorString == "gray") {
-      painter.setPen(QPen(QColor(Qt::gray)));
+      pen.setColor(QColor(Qt::gray));
     } else if(colorString == "grey") {
-      painter.setPen(QPen(QColor(Qt::gray)));
+      pen.setColor(QColor(Qt::gray));
     } else if(colorString == "darkgray") {
-      painter.setPen(QPen(QColor(Qt::darkGray)));
+      pen.setColor(QColor(Qt::darkGray));
     } else if(colorString == "darkgrey") {
-      painter.setPen(QPen(QColor(Qt::darkGray)));
+      pen.setColor(QColor(Qt::darkGray));
     } else if(colorString == "lightgray") {
-      painter.setPen(QPen(QColor(Qt::lightGray)));
+      pen.setColor(QColor(Qt::lightGray));
     } else if(colorString == "lightgrey") {
-      painter.setPen(QPen(QColor(Qt::lightGray)));
+      pen.setColor(QColor(Qt::lightGray));
     } else if(colorString.length() == 7 && colorString.left(1) == "#") {
       int redVal = colorString.mid(1, 2).toInt(nullptr, 16);
       int blueVal = colorString.mid(3, 2).toInt(nullptr, 16);
       int greenVal = colorString.mid(5, 2).toInt(nullptr, 16);
-      painter.setPen(QPen(QColor(redVal, greenVal, blueVal)));
+      pen.setColor(QColor(redVal, greenVal, blueVal));
     } else {
       int colorInt = getValue(parameters);
       colorIsVar = true;
       switch(colorInt) {
+      case -1:
+	pen.setColor(QColor(Qt::transparent));
+	break;
       case 0:
-	painter.setPen(QPen(QColor(Qt::black)));
+	pen.setColor(QColor(Qt::black));
 	break;
       case 1:
-	painter.setPen(QPen(QColor(Qt::white)));
+	pen.setColor(QColor(Qt::white));
 	break;
       case 2:
-	painter.setPen(QPen(QColor(Qt::cyan)));
+	pen.setColor(QColor(Qt::cyan));
 	break;
       case 3:
-	painter.setPen(QPen(QColor(Qt::darkCyan)));
+	pen.setColor(QColor(Qt::darkCyan));
 	break;
       case 4:
-	painter.setPen(QPen(QColor(Qt::red)));
+	pen.setColor(QColor(Qt::red));
 	break;
       case 5:
-	painter.setPen(QPen(QColor(Qt::darkRed)));
+	pen.setColor(QColor(Qt::darkRed));
 	break;
       case 6:
-	painter.setPen(QPen(QColor(Qt::magenta)));
+	pen.setColor(QColor(Qt::magenta));
 	break;
       case 7:
-	painter.setPen(QPen(QColor(Qt::darkMagenta)));
+	pen.setColor(QColor(Qt::darkMagenta));
 	break;
       case 8:
-	painter.setPen(QPen(QColor(Qt::green)));
+	pen.setColor(QColor(Qt::green));
 	break;
       case 9:
-	painter.setPen(QPen(QColor(Qt::darkGreen)));
+	pen.setColor(QColor(Qt::darkGreen));
 	break;
       case 10:
-	painter.setPen(QPen(QColor(Qt::yellow)));
+	pen.setColor(QColor(Qt::yellow));
 	break;
       case 11:
-	painter.setPen(QPen(QColor(Qt::darkYellow)));
+	pen.setColor(QColor(Qt::darkYellow));
 	break;
       case 12:
-	painter.setPen(QPen(QColor(Qt::blue)));
+	pen.setColor(QColor(Qt::blue));
 	break;
       case 13:
-	painter.setPen(QPen(QColor(Qt::darkBlue)));
+	pen.setColor(QColor(Qt::darkBlue));
 	break;
       case 14:
-	painter.setPen(QPen(QColor(Qt::gray)));
+	pen.setColor(QColor(Qt::gray));
 	break;
       case 15:
-	painter.setPen(QPen(QColor(Qt::darkGray)));
+	pen.setColor(QColor(Qt::darkGray));
 	break;
       case 16:
-	painter.setPen(QPen(QColor(Qt::lightGray)));
+	pen.setColor(QColor(Qt::lightGray));
 	break;
       default:
 	if(settings.scriptOutput) {
 	  printf("Color '%s' is malformed, falling back to black\n",
 		 qPrintable(colorString));
 	}
-	painter.setPen(QPen(QColor(Qt::black)));
+	pen.setColor(QColor(Qt::black));
 	break;
       };
     }
 
+    painter.setPen(pen);
+    
     if(!colorIsVar) {
       parameters.removeFirst(); // Remove drawing color string
     }
@@ -522,7 +538,6 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
       } else if(parameters.first() == "ellipse") {
         parameters.removeFirst(); // Remove 'ellipse'
         if(parameters.count() >= 4) {
-          painter.setBrush(QBrush(color, Qt::SolidPattern));
           int x = getValue(parameters);
           int y = getValue(parameters);
           int w = getValue(parameters);
@@ -535,7 +550,6 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
       } else if(parameters.first() == "rectangle") {
         parameters.removeFirst(); // Remove 'rectangle'
         if(parameters.count() >= 4) {
-          painter.setBrush(QBrush(color, Qt::SolidPattern));
           int x = getValue(parameters);
           int y = getValue(parameters);
           int w = getValue(parameters);
@@ -811,7 +825,9 @@ int ScriptHandler::getValue(QList<QString> &parameters)
         int xCoord = getValue(exprParams);
         int yCoord = getValue(exprParams);
         QColor pixelColor = image->pixelColor(xCoord, yCoord);
-        if(pixelColor.name(QColor::HexRgb) == "#000000") {
+        if(pixelColor.alpha() == 00) {
+          colorValue = "-1";
+	} else if(pixelColor.name(QColor::HexRgb) == "#000000") {
           colorValue = "0";
         } else if(pixelColor.name(QColor::HexRgb) == "#ffffff") {
           colorValue = "1";
