@@ -90,6 +90,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * `throw` has been deprecated in favor of `setvel` to allow expressions in VELOCITY
 * Random variable set with `@INT` can now also be a random value within the range of a variable by using `@VARIABLE`
 * Now allows expressions to begin with `[` and end with `]` in `getValue` to make parameters more useful in commands that require several in a row
+* All `draw` routines now uses QPen only to avoid infill of rectangles and ellipsees
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
