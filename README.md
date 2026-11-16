@@ -92,6 +92,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Random variable set with `@INT` can now also be a random value within the range of a variable by using `@VARIABLE`
 * Now allows expressions to begin with `[` and end with `]` in `getValue` to make parameters more useful in commands that require several one after the other
 * All `draw` routines now uses QPen only to avoid infill of rectangles and ellipsees
+* Items moving beyond the vertical edges now appears at the opposite unless they are thrown upwards out of sight in which case they will simply drop back down after a while
 
 #### Version 3.6.1 (30 November 2022):
 * Added 'mazegame'
