@@ -941,14 +941,20 @@ int ScriptHandler::parametersCount(const QList<QString> &parameters)
 
     if(!inSquares) {
       if(parameter.left(1) == "[") {
-	inSquares = true;
-	continue;
+	// In case it is capped in the same parameter such as '[something]'
+	if(parameter.right(1) != "]") {
+	  inSquares = true;
+	  continue;
+	}
       }
     }
     if(!inQuotes) {
       if(parameter.left(1) == "\"") {
-	inQuotes = true;
-	continue;
+	// In case it is capped in the same parameter such as '"something"'
+	if(parameter.right(1) != "\"") {
+	  inQuotes = true;
+	  continue;
+	}
       }
     }
 
