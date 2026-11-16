@@ -375,21 +375,30 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
         int f = getValue(parameters); // Sprite frame
         int x = getValue(parameters);
         int y = getValue(parameters);
-	int sx = 0;
-	int sy = 0;
-	int sw = settings.sprites[sprite].at(f).width();
-	int sh = settings.sprites[sprite].at(f).height();
-	// Allow painting only part of the sprite
-	if(parametersCount(parameters) >= 4) {
-	  sx = getValue(parameters);
-	  sy = getValue(parameters);
-	  sw = getValue(parameters);
-	  sh = getValue(parameters);
-	}
         if(settings.scriptOutput) {
           printf("Drawing frame %d from sprite '%s' at %d,%d\n", f, qPrintable(sprite), x, y);
         }
-        if(settings.sprites[sprite].length() - 1 >= f) {
+        if(f < settings.sprites[sprite].length()) {
+          painter.drawImage(x, y, settings.sprites[sprite].at(f));
+        }
+      }        
+      return;
+    } else if(parameters.first() == "spritepart") {
+      parameters.removeFirst(); // Remove 'spritepart'
+      if(parametersCount(parameters) >= 8) {
+        QString sprite = parameters.first();
+        parameters.removeFirst(); // Remove sprite name
+        int f = getValue(parameters); // Sprite frame
+        int x = getValue(parameters);
+        int y = getValue(parameters);
+	int sx = getValue(parameters);
+	int sy = getValue(parameters);
+	int sw = getValue(parameters);
+	int sh = getValue(parameters);
+        if(settings.scriptOutput) {
+          printf("Drawing frame %d from sprite '%s' at %d,%d\n", f, qPrintable(sprite), x, y);
+        }
+        if(f < settings.sprites[sprite].length()) {
           painter.drawImage(x, y, settings.sprites[sprite].at(f).copy(sx, sy, sw, sh));
         }
       }        
@@ -925,5 +934,42 @@ int ScriptHandler::getValue(QList<QString> &parameters)
 
 int ScriptHandler::parametersCount(const QList<QString> &parameters)
 {
-  return parameters.count();
+  int actualParameters = 0;
+  bool inSquares = false;
+  bool inQuotes = false;
+  for(const auto &parameter: parameters) {
+
+    if(!inSquares) {
+      if(parameter.left(1) == "[") {
+	inSquares = true;
+	continue;
+      }
+    }
+    if(!inQuotes) {
+      if(parameter.left(1) == "\"") {
+	inQuotes = true;
+	continue;
+      }
+    }
+
+    if(inSquares) {
+      if(parameter.right(1) == "]") {
+	inSquares = false;
+	actualParameters++;
+	continue;
+      }
+    }
+    if(inQuotes) {
+      if(parameter.right(1) == "\"") {
+	inQuotes = false;
+	actualParameters++;
+	continue;
+      }
+    }
+
+    actualParameters++;
+
+  }
+
+  return actualParameters;
 }
