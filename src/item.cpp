@@ -432,7 +432,6 @@ void Item::mousePressEvent(QGraphicsSceneMouseEvent* event)
     this->setPos(event->scenePos().x() - (getWidth() / 2), 
                  event->scenePos().y() - (getHeight() / 2));
     if(!settings.itemBehaviours.at(curItem).reactions.isEmpty()) {
-      curFrame = 0;
       QTimer::singleShot(0, this, &Item::nextFrame);
     }
   } else if(event->button() == Qt::MiddleButton) {
