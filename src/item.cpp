@@ -286,7 +286,7 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
   sanityCheck();
 
   int maxX = settings.desktopWidth - getWidth();
-  int minY = 0;
+  int minY = 0 - getHeight();
   int maxY = settings.desktopHeight - getHeight();
 
   if(dX == 666) {
@@ -311,25 +311,28 @@ void Item::moveItem(int dX, int dY, const bool &flipped)
   setPos(dX, dY);
 
   // if item is outside borders
+  /*
   if(falling && (pos().y() > maxY || pos().y() < minY)) {
     hVel *= 0.2;
     vVel = 0.0;
   }
+  */
 }
 
 void Item::sanityCheck()
 {
   int minX = - getWidth();
   int maxX = settings.desktopWidth;
-  int minY = 0;
-  int maxY = settings.desktopHeight - getHeight();
+  int minY = - getHeight();
+  int maxY = settings.desktopHeight;
 
   // Make sure Item is not located outside boundaries
-  if(pos().y() < minY) {
-    setPos(pos().x(), minY);
+  if(pos().y() < minY &&
+     !falling) {
+    setPos(pos().x(), maxY);
   }
   if(pos().y() > maxY) {
-    setPos(pos().x(), maxY);
+    setPos(pos().x(), minY);
   }
   if(pos().x() > maxX) {
     setPos(minX, pos().y());
