@@ -430,8 +430,8 @@ QToolTip {
   sizeSlider = new StepSlider({32, 64, 128, 256, 512}, this);
   sizeSlider->setValue(settings.size);
 
-  QLabel *clonesLabel = new QLabel("Boris clones (1-20 or 0 for random):");
-  clonesSlider = new StepSlider({0, 20}, this);
+  QLabel *clonesLabel = new QLabel("Boris clones (1-100 or 0 for random):");
+  clonesSlider = new StepSlider({0, 100}, this);
   clonesSlider->setValue(settings.clones);
 
   enableItems = new QCheckBox("Allow items");

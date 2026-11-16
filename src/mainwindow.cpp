@@ -175,7 +175,7 @@ void MainWindow::init()
     resetView();
   }
 
-  addBoris((settings.clones == 0?QRandomGenerator::global()->bounded(19) + 1:settings.clones));
+  addBoris((settings.clones == 0?QRandomGenerator::global()->bounded(99) + 1:settings.clones));
 
   /*
   itemTimer.setInterval(settings.itemSpawnInterval * 1000);
