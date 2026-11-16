@@ -35,7 +35,7 @@ class Weather : public QGraphicsObject
 public:
   Weather(Settings &settings);
   ~Weather();
-  void resetWeather();
+  void showWeather();
 
 public slots:
   void updateWeather();

@@ -45,11 +45,13 @@ QRectF Weather::boundingRect() const
   return QRectF(0, 0, rendered.width(), rendered.height());
 }
 
-void Weather::resetWeather()
+void Weather::showWeather()
 {
   curFrame = 0; 
   weatherTimer.setInterval(0);
   weatherTimer.start();
+  show();
+  QTimer::singleShot(30000, this, [this]() { hide(); });
 }
 
 void Weather::updateWeather()
