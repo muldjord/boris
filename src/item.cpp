@@ -512,8 +512,10 @@ void Item::handlePhysics()
       } else {
         hVel *= settings.itemBehaviours.at(curItem).bounce * 0.1;
         vVel = (vVel * (settings.itemBehaviours.at(curItem).bounce * 0.1)) * -1;
-        soundMixer->playSoundFile("bounce.wav",
-                                  pos().x() / settings.desktopWidth * 2.0 - 1.0, 1.0);
+	if(settings.sound) {
+	  soundMixer->playSoundFile("bounce.wav",
+				    pos().x() / settings.desktopWidth * 2.0 - 1.0, 1.0);
+	}
       }
     }
   }
