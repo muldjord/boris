@@ -876,6 +876,7 @@ void Boris::handlePhysics()
     }
   }
 
+  
   QPointF cursorPos = mainWindow->mapToScene(mainWindow->viewport()->mapFromGlobal(QCursor::pos()));
   if(!falling && !grabbed) {
     if(getDistance(cursorPos) < getWidth() * 4) {
@@ -884,9 +885,9 @@ void Boris::handlePhysics()
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
           if(stats->getAnxiety() >= QRandomGenerator::global()->bounded(20) + 10) {
             changeBehaviour("_flee");
-          } else if(stats->getSocial() < QRandomGenerator::global()->bounded(interactions * 40)) {
-            changeBehaviour("_mouse_interact");
+          } else if(stats->getSocial() < (interactions * 10)) {
             interactions = 0;
+            changeBehaviour("_mouse_interact");
           }
         }
       }
@@ -1149,10 +1150,9 @@ void Boris::checkInteractions()
      stats->underMouse) {
     stats->show();
   }
-  // This balances the interaction count which is increased when mouse is moved across Boris
+  // This clamps the interaction count which is increased when mouse is moved across Boris
   interactions -= 1;
-  interactions = std::clamp(interactions, 0, 10);
-
+  interactions = std::clamp(interactions, 0, 100);
   annoyance -= 2;
   annoyance = std::clamp(annoyance, 0, ANNOYMAX);
 
