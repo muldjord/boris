@@ -19,7 +19,7 @@ if canvas = 7 goto blue,
 if canvas = 8 goto purple
 
 define paintpart:var progress += 1,
-draw sprite paint element xcoord ycoord 0 0 8 progress,
+draw spritepart paint element xcoord ycoord 0 0 8 progress,
 draw transparent rectangle 6 0 20 25,
 draw transparent rectangle 7 0 18 24
 
