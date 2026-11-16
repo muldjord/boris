@@ -1,6 +1,6 @@
 title=Bub
 category=Fun
-reaction=_snicker,gameover
+reaction=scare,gameover
 
 weight=3
 bounce=0
@@ -34,15 +34,15 @@ if nextmove = 8 goto jumpeastdn
 
 10;50;0;0;;label bublwest
 11;50;0;0;;
-12;50;0;0;;spawn bubble_w -10 0
+12;50;0;0;;spawn bubble_w -7 0
 13;50;0;0;;call decide
 
 14;50;0;0;;label bubleast
 15;50;0;0;;
-16;50;0;0;;spawn bubble_e 10 0
+16;50;0;0;;spawn bubble_e 7 0
 17;50;0;0;;call decide
 
-18;50;-1;-4;;label jumpwestup
+18;50;-1;-4;jump.wav;label jumpwestup
 18;50;-1;-4;;
 18;50;-1;-4;;
 18;50;-1;-4;;
@@ -64,7 +64,7 @@ if nextmove = 8 goto jumpeastdn
 22;50;-1;2;;
 23;50;-1;2;;call decide
 
-20;50;1;-4;;label jumpeastup
+20;50;1;-4;jump.wav;label jumpeastup
 20;50;1;-4;;
 20;50;1;-4;;
 20;50;1;-4;;
@@ -86,7 +86,7 @@ if nextmove = 8 goto jumpeastdn
 24;50;1;2;;
 25;50;1;2;;call decide
 
-18;50;-1;-2;;label jumpwestdn
+18;50;-1;-2;jump.wav;label jumpwestdn
 19;50;-1;-2;;
 19;50;-1;-1;;
 18;50;-1;-1;;
@@ -108,7 +108,7 @@ if nextmove = 8 goto jumpeastdn
 23;50;-1;4;;
 23;50;-1;4;;call decide
 
-20;50;1;-2;;label jumpeastdn
+20;50;1;-2;jump.wav;label jumpeastdn
 21;50;1;-2;;
 21;50;1;-1;;
 20;50;1;-1;;
