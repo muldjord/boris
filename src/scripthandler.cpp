@@ -189,7 +189,7 @@ void ScriptHandler::condition(QList<QString> &parameters, bool &isTrue, bool &co
     printf("%d %s %d", compareFrom, qPrintable(op), compareTo);
   }
 
-  if(parameters.count() >= 1) {
+  if(parametersCount(parameters) >= 1) {
     if(parameters.first() == "or") {
       if(settings.scriptOutput) {
         printf(" or ");
@@ -322,7 +322,7 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
   int iY = getValue(parameters);
   QString gotoLabel = QString();
   // Check if there's an optional goto label set
-  if(parameters.count() == 1) {
+  if(parametersCount(parameters) == 1) {
     gotoLabel = parameters.takeFirst();
   }
 
@@ -346,7 +346,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'draw'
 
-  if(parameters.count() >= 1) {
+  if(parametersCount(parameters) >= 1) {
     if(parameters.first() == "begin") {
       parameters.removeFirst(); // Remove 'begin'
       *drawing = true;
@@ -369,17 +369,28 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
     painter.setRenderHint(QPainter::Antialiasing, false);
     if(parameters.first() == "sprite") {
       parameters.removeFirst(); // Remove 'sprite'
-      if(parameters.count() >= 4) {
+      if(parametersCount(parameters) >= 4) {
         QString sprite = parameters.first();
         parameters.removeFirst(); // Remove sprite name
         int f = getValue(parameters); // Sprite frame
         int x = getValue(parameters);
         int y = getValue(parameters);
+	int sx = 0;
+	int sy = 0;
+	int sw = settings.sprites[sprite].at(f).width();
+	int sh = settings.sprites[sprite].at(f).height();
+	// Allow painting only part of the sprite
+	if(parametersCount(parameters) >= 4) {
+	  sx = getValue(parameters);
+	  sy = getValue(parameters);
+	  sw = getValue(parameters);
+	  sh = getValue(parameters);
+	}
         if(settings.scriptOutput) {
           printf("Drawing frame %d from sprite '%s' at %d,%d\n", f, qPrintable(sprite), x, y);
         }
         if(settings.sprites[sprite].length() - 1 >= f) {
-          painter.drawImage(x, y, settings.sprites[sprite].at(f));
+          painter.drawImage(x, y, settings.sprites[sprite].at(f).copy(sx, sy, sw, sh));
         }
       }        
       return;
@@ -512,10 +523,10 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
       parameters.removeFirst(); // Remove drawing color string
     }
 
-    if(parameters.count() >= 1) {
+    if(parametersCount(parameters) >= 1) {
       if(parameters.first() == "line") {
         parameters.removeFirst(); // Remove 'line'
-        if(parameters.count() >= 4) {
+        if(parametersCount(parameters) >= 4) {
           int x1 = getValue(parameters);
           int y1 = getValue(parameters);
           int x2 = getValue(parameters);
@@ -528,7 +539,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
         }        
       } else if(parameters.first() == "pixel") {
         parameters.removeFirst(); // Remove 'pixel'
-        if(parameters.count() >= 2) {
+        if(parametersCount(parameters) >= 2) {
           int x = getValue(parameters);
           int y = getValue(parameters);
           if(settings.scriptOutput) {
@@ -538,7 +549,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
         }
       } else if(parameters.first() == "ellipse") {
         parameters.removeFirst(); // Remove 'ellipse'
-        if(parameters.count() >= 4) {
+        if(parametersCount(parameters) >= 4) {
           int x = getValue(parameters);
           int y = getValue(parameters);
           int w = getValue(parameters);
@@ -548,9 +559,23 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           }
           painter.drawEllipse(x, y, w, h);
         }
+      } else if(parameters.first() == "ellipsef") {
+        parameters.removeFirst(); // Remove 'ellipsef'
+        if(parametersCount(parameters) >= 4) {
+          int x = getValue(parameters);
+          int y = getValue(parameters);
+          int w = getValue(parameters);
+          int h = getValue(parameters);
+          if(settings.scriptOutput) {
+            printf("Drawing %s filled ellipse at %d,%d with a width of %d and a height of %d\n", qPrintable(colorString), x, y, w, h);
+          }
+	  painter.setBrush(pen.color());
+          painter.drawEllipse(x, y, w, h);
+	  painter.setBrush(Qt::NoBrush);
+        }
       } else if(parameters.first() == "rectangle") {
         parameters.removeFirst(); // Remove 'rectangle'
-        if(parameters.count() >= 4) {
+        if(parametersCount(parameters) >= 4) {
           int x = getValue(parameters);
           int y = getValue(parameters);
           int w = getValue(parameters);
@@ -560,9 +585,23 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
           }
           painter.drawRect(x, y, w, h);
         }
+      } else if(parameters.first() == "rectanglef") {
+        parameters.removeFirst(); // Remove 'rectanglef'
+        if(parametersCount(parameters) >= 4) {
+          int x = getValue(parameters);
+          int y = getValue(parameters);
+          int w = getValue(parameters);
+          int h = getValue(parameters);
+          if(settings.scriptOutput) {
+            printf("Drawing %s filled rectangle at %d,%d with a width of %d and a height of %d\n", qPrintable(colorString), x, y, w, h);
+          }
+	  painter.setBrush(pen.color());
+          painter.drawRect(x, y, w, h);
+	  painter.setBrush(Qt::NoBrush);
+        }
       } else if(parameters.first() == "text") {
         parameters.removeFirst(); // Remove 'text'
-        if(parameters.count() >= 3) {
+        if(parametersCount(parameters) >= 3) {
           int x = getValue(parameters);
           int y = getValue(parameters);
           QString text = parameters.first();
@@ -574,7 +613,7 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
         }
       } else if(parameters.first() == "value") {
         parameters.removeFirst(); // Remove 'value'
-        if(parameters.count() >= 3) {
+        if(parametersCount(parameters) >= 3) {
           int x = getValue(parameters);
           int y = getValue(parameters);
           int value = getValue(parameters);
@@ -661,7 +700,7 @@ void ScriptHandler::handleSound(QList<QString> &parameters)
   float panning = parentPos.x() / settings.desktopWidth * 2.0 - 1.0;
   float pitch = (scriptVars["hyper"] / 60.0) + 1;
   parameters.removeFirst(); // Remove 'sound'
-  if(parameters.count() >= 1) {
+  if(parametersCount(parameters) >= 1) {
     if(settings.scriptOutput) {
       printf("Playing sound '%s' at pitch %f panned to %f\n", qPrintable(parameters.first()),
 	     pitch,
@@ -679,7 +718,7 @@ void ScriptHandler::handleSound(QList<QString> &parameters)
 void ScriptHandler::handleSay(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'say'
-  if(parameters.count() >= 1) {
+  if(parametersCount(parameters) >= 1) {
     QString bubbleText = "";
     if(parameters.first() == "rss") {
       parameters.removeFirst(); // Remove 'rss'
@@ -717,7 +756,7 @@ void ScriptHandler::handleSay(QList<QString> &parameters)
 void ScriptHandler::handleThink(QList<QString> &parameters)
 {
   parameters.removeFirst(); // Remove 'think'
-  if(parameters.count() >= 1) {
+  if(parametersCount(parameters) >= 1) {
     QString bubbleText = "";
     if(parameters.first() == "rss") {
       parameters.removeFirst(); // Remove 'rss'
@@ -882,4 +921,9 @@ int ScriptHandler::getValue(QList<QString> &parameters)
   }
 
   return tep.evaluate(codeConcat.toStdString());
+}
+
+int ScriptHandler::parametersCount(const QList<QString> &parameters)
+{
+  return parameters.count();
 }

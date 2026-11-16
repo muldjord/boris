@@ -94,5 +94,6 @@ private:
   void condition(QList<QString> &parameters, bool &isTrue, bool &compare);
   void drawText(QPainter &painter, const int &x, const int &y, const QString &text);
   int getValue(QList<QString> &parameters);
-
+  int parametersCount(const QList<QString> &parameters); // Tells you how many parameters are left by also parsing "" and []
+  
 };
