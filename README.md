@@ -64,6 +64,7 @@ The last command copies all necessary files to the `release` folder. You can the
 #### Version 4.0.5 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
 * Rewired entire project to work with modern Wayland compositors under Linux using a maximized QGraphicsView instead of individual windows per Boris
+* Switched to a tick system instead of individual timers resulting in much improved performance and synchronization on reactions
 * Added 'anxiety' stat which causes Boris to flee the mouse cursor if he has been tossed around too much
 * Added 'debug' textedit to right-click menu when 'idkfa' is enabled
 * Fixed Boris' weird legs on coffee reading and steak eating behaviours
@@ -85,11 +86,11 @@ The last command copies all necessary files to the `release` folder. You can the
 * Moved all documentation into `docs` path
 * Updated / rewrote a lot of the documentation
 * When changing the size of Boris all Borises are now moved randomly around the desktop to avoid some Borises being at the edge
-* Lower-case behaviour category will now automaticall be made uppercase when loading (eg. 'hunger' becomes 'Hunger')
+* Lower-case behaviour category will now automatically be made uppercase when loading (eg. 'hunger' becomes 'Hunger')
 * `xvel` and `yvel` scriptVars have been renamed `hvel` and `vvel` and can no longer be used to set velocity with `var hvel = 4`. Use `setvel` instead
-* `throw` has been deprecated in favor of `setvel` to allow expressions in VELOCITY
+* `throw` has been deprecated in favor of `setvel`. Now allows expressions as VELOCITY
 * Random variable set with `@INT` can now also be a random value within the range of a variable by using `@VARIABLE`
-* Now allows expressions to begin with `[` and end with `]` in `getValue` to make parameters more useful in commands that require several in a row
+* Now allows expressions to begin with `[` and end with `]` in `getValue` to make parameters more useful in commands that require several one after the other
 * All `draw` routines now uses QPen only to avoid infill of rectangles and ellipsees
 
 #### Version 3.6.1 (30 November 2022):
