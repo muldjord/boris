@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include <QBasicTimer>
+//#include <QBasicTimer>
 #include <QGraphicsObject>
 #include <QImage>
 #include <QList>
@@ -79,7 +79,7 @@ public:
   Stats *stats = nullptr;
 
 public slots:
-  void handlePhysics();
+  void tick();
   void earthquake();
   void triggerWeather();
   void nextBehaviour();
@@ -90,7 +90,7 @@ public slots:
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
   QRectF boundingRect() const override;
-  void timerEvent(QTimerEvent *event);
+  //void timerEvent(QTimerEvent *event);
 
   void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
   void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
@@ -103,6 +103,7 @@ signals:
   void deltaCoins(const int &coins);
 
 private slots:
+  void nextFrame();
   void handleBehaviourChange(QAction* a);
   void updateDebugInfo();
   void checkInteractions();
@@ -110,6 +111,7 @@ private slots:
   void setCurFrame(const int &frame);
 
 private:
+  void handlePhysics();
   QString getFileFromCategory(const QString &category);
   int getIdxFromCategory(const QString &category);
   void processAi(QString &behav);
@@ -137,11 +139,38 @@ private:
   DebugAction *debugAction = nullptr;
   QMenu *behavioursMenu = nullptr;
 
-  QTimer behavTimer;
-  QBasicTimer animTimer;
-  QTimer interactionsTimer;
-  QTimer acknowledgeBorisesTimer;
-  QTimer acknowledgeItemsTimer;
+  // Tick timers
+  qint64 behavTime = 0;
+  qint64 behavTimeMax = 0;
+  bool behavTimer = true;
+
+  qint64 frameTime = 0;
+  qint64 frameTimeMax = 0;
+  bool frameTimer = true;
+
+  qint64 interactionsTime = 0;
+  qint64 interactionsTimeMax = 250;
+  bool interactionsTimer = true;
+
+  qint64 physicsTime = 0;
+  qint64 physicsTimeMax = 30;
+  bool physicsTimer = true;
+
+  qint64 acknowledgeItemTime = 0;
+  qint64 acknowledgeItemTimeMax = 60 * 1000;
+  bool acknowledgeItemTimer = true;
+
+  qint64 acknowledgeBorisTime = 0;
+  qint64 acknowledgeBorisTimeMax = 60 * 1000;
+  bool acknowledgeBorisTimer = true;
+
+  qint64 oldElapsed = 0;
+  //QTimer behavTimer;
+  //QBasicTimer animTimer;
+
+  //QTimer interactionsTimer;
+  //QTimer acknowledgeBorisesTimer;
+  //QTimer acknowledgeItemsTimer;
 
   QPoint mLastMousePosition;
   bool mouseHovering = false;

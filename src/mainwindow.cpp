@@ -93,7 +93,6 @@ MainWindow::MainWindow(QSplashScreen &splash)
 
   splash.showMessage("Loading " + QString::number(soundsSize) + " kilobytes of sounds, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
   qApp->processEvents();
-  stall(50);
   if(Loader::loadSoundFxs(settings.soundsPath, soundMixer->soundFxs, splash)) {
     qInfo("Sounds loaded ok... :)\n");
   } else {
@@ -102,7 +101,6 @@ MainWindow::MainWindow(QSplashScreen &splash)
 
   splash.showMessage("Loading " + QString::number(behavsSize) + " kilobytes of behaviours, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
   qApp->processEvents();
-  stall(50);
   if(Loader::loadBehaviours(settings, settings.behavioursPath, settings.behaviours, soundMixer->soundFxs, splash)) {
     qInfo("Behaviours loaded ok... :)\n");
   } else {
@@ -111,7 +109,6 @@ MainWindow::MainWindow(QSplashScreen &splash)
 
   splash.showMessage("Loading " + QString::number(weathersSize) + " kilobytes of weather types, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
   qApp->processEvents();
-  stall(50);
   if(Loader::loadBehaviours(settings, settings.weathersPath, settings.weathers, soundMixer->soundFxs, splash)) {
     qInfo("Weather types loaded ok... :)\n");
   } else {
@@ -120,7 +117,6 @@ MainWindow::MainWindow(QSplashScreen &splash)
 
   splash.showMessage("Loading " + QString::number(itemsSize) + " kilobytes of interaction items, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
   qApp->processEvents();
-  stall(50);
   if(Loader::loadBehaviours(settings, settings.itemsPath, settings.itemBehaviours, soundMixer->soundFxs, splash)) {
     qInfo("Items loaded ok... :)\n");
   } else {
@@ -129,7 +125,6 @@ MainWindow::MainWindow(QSplashScreen &splash)
 
   splash.showMessage("Loading cursors, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
   qApp->processEvents();
-  stall(50);
   if(Loader::loadImages(settings.cursorsPath, settings.cursors)) {
     qInfo("Cursors loaded ok... :)\n");
   } else {
@@ -138,7 +133,6 @@ MainWindow::MainWindow(QSplashScreen &splash)
 
   splash.showMessage("Loading additional sprites, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
   qApp->processEvents();
-  stall(50);
   if(Loader::loadSprites(settings)) {
     qInfo("Sprites loaded ok... :)\n");
   } else {
@@ -147,7 +141,6 @@ MainWindow::MainWindow(QSplashScreen &splash)
 
   splash.showMessage("Loading font, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
   qApp->processEvents();
-  stall(50);
   if(Loader::loadFont(settings)) {
     qInfo("Font loaded ok... :)\n");
   } else {
@@ -166,6 +159,7 @@ MainWindow::MainWindow(QSplashScreen &splash)
   netComm = new NetComm(settings);
   connect(netComm, &NetComm::weatherUpdated, this, &MainWindow::updateWeather);
 
+  elapsedTimer.start();
   QTimer::singleShot(0, this, &MainWindow::init);
 }
 
@@ -183,23 +177,49 @@ void MainWindow::init()
 
   addBoris((settings.clones == 0?QRandomGenerator::global()->bounded(19) + 1:settings.clones));
 
+  /*
   itemTimer.setInterval(settings.itemSpawnInterval * 1000);
   itemTimer.setSingleShot(true);
   connect(&itemTimer, &QTimer::timeout, this, &MainWindow::spawnRandomItem);
   if(settings.items && settings.itemSpawnInterval) {
     itemTimer.start();
   }
+  */
 
+  /*
   physicsTimer.setInterval(30);
   connect(&physicsTimer, &QTimer::timeout, this, &MainWindow::progressPhysics);
   physicsTimer.start();
+  */
+
+  tickTimer.setInterval(15);
+  tickTimer.setSingleShot(false);
+  connect(&tickTimer, &QTimer::timeout, this, &MainWindow::tick);
+  tickTimer.start();
 }
 
-void MainWindow::stall(const int &ms)
+void MainWindow::tick()
 {
-  QEventLoop loop;
-  QTimer::singleShot(ms, &loop, &QEventLoop::quit);
-  loop.exec();
+  qint64 elapsed = getElapsed() - oldElapsed;
+
+  physicsTime += elapsed;
+
+  if(physicsTimer && physicsTime > physicsTimeMax) {
+    physicsTime = physicsTime - physicsTimeMax;
+    handlePhysics();
+  }
+
+  if(itemSpawnTimer && itemSpawnTime > itemSpawnTimeMax) {
+    itemSpawnTime = itemSpawnTime - itemSpawnTimeMax;
+    spawnRandomItem();
+  }
+
+  oldElapsed = getElapsed();
+}
+
+qint64 MainWindow::getElapsed()
+{
+  return elapsedTimer.elapsed();
 }
 
 void MainWindow::loadFromConfig()
@@ -377,7 +397,7 @@ void MainWindow::addBoris(int clones)
   qInfo("Spawning %d clone(s)\n", clones);
   while(clones--) {
     Boris *newBoris = new Boris(settings);
-    connect(this, &MainWindow::handlePhysics, newBoris, &Boris::handlePhysics);
+    connect(&tickTimer, &QTimer::timeout, newBoris, &Boris::tick);
     connect(this, &MainWindow::reconfBoris, newBoris, &Boris::reconfBoris);
     connect(earthquakeAction, &QAction::triggered, newBoris, &Boris::earthquake);
     connect(this, &MainWindow::queueBehavFromFile, newBoris, &Boris::queueBehavFromFile);
@@ -458,21 +478,22 @@ void MainWindow::aboutBox()
 
   netComm->updateAll();
 
-  itemTimer.setInterval(settings.itemSpawnInterval * 1000);
+  //itemTimer.setInterval(settings.itemSpawnInterval * 1000);
+  itemSpawnTime = settings.itemSpawnInterval * 1000;
+  /*
   if(settings.items && settings.itemSpawnInterval) {
     itemTimer.start();
   } else {
     itemTimer.stop();
   }
+  */
 }
 
-void MainWindow::progressPhysics()
+void MainWindow::handlePhysics()
 {
   settings.mouseHVel = (QCursor::pos().x() - oldCursor.x()) * 0.25; // 0.25 is just an abstract factor that relates well to the 30 fps physics
   settings.mouseVVel = (QCursor::pos().y() - oldCursor.y()) * 0.25;
   oldCursor = QCursor::pos();
-
-  emit handlePhysics();
 }
 
 void MainWindow::resizeEvent(QResizeEvent *)
@@ -629,13 +650,15 @@ void MainWindow::spawnRandomItem()
   Item *spawnedItem = new Item(settings.itemBehaviours.at(randomItem).file, settings,
 			       QRandomGenerator::global()->bounded(settings.desktopWidth),
 			       QRandomGenerator::global()->bounded(settings.desktopHeight));
-  connect(this, &MainWindow::handlePhysics, spawnedItem, &Item::handlePhysics);
+  connect(&tickTimer, &QTimer::timeout, spawnedItem, &Item::tick);
   scene()->addItem(spawnedItem);
   settings.itemList.append(spawnedItem);
 
+  /*
   if(settings.items && settings.itemSpawnInterval) {
     itemTimer.start();
   }
+  */
 }
 
 void MainWindow::spawnItem(QAction* action)
@@ -647,7 +670,7 @@ void MainWindow::spawnItem(QAction* action)
         Item *spawnedItem = new Item(item.file, settings,
 				     QRandomGenerator::global()->bounded(settings.desktopWidth),
 				     QRandomGenerator::global()->bounded(settings.desktopHeight));
-        connect(this, &MainWindow::handlePhysics, spawnedItem, &Item::handlePhysics);
+	connect(&tickTimer, &QTimer::timeout, spawnedItem, &Item::tick);
         scene()->addItem(spawnedItem);
         settings.itemList.append(spawnedItem);
       } else {

@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "settings.h"
 
 #include <QAction>
+#include <QElapsedTimer>
 #include <QGraphicsView>
 #include <QTimer>
 
@@ -39,6 +40,8 @@ class MainWindow : public QGraphicsView
 public:
   MainWindow(QSplashScreen &splash);
   ~MainWindow();
+  qint64 getElapsed();
+  QTimer tickTimer;
 
 protected:
   void resizeEvent(QResizeEvent *) override;
@@ -46,11 +49,12 @@ protected:
 signals:
   void reconfBoris();
   void queueBehavFromFile(const QString &file);
-  void handlePhysics();
+  //void handlePhysics();
 
 private slots:
   void init();
-  void progressPhysics();
+  void tick();
+  void handlePhysics();
   void aboutBox();
   void killAll();
   void updateWeather();
@@ -76,8 +80,22 @@ private:
   Settings settings;
   QIcon *icon = nullptr;
   QIcon *coinIcon = nullptr;
-  QTimer itemTimer;
-  QTimer physicsTimer;
+
+  //QTimer itemTimer;
+  //QTimer physicsTimer;
+
+  qint64 physicsTime = 0;
+  qint64 physicsTimeMax = 30;
+  bool physicsTimer = true;
+
+  qint64 itemSpawnTime = 0;
+  qint64 itemSpawnTimeMax = 3600 * 1000;
+  bool itemSpawnTimer = true;
+
+  qint64 oldElapsed = 0;
+  
+  QElapsedTimer elapsedTimer;
+
   QMenu *behavioursMenu = nullptr;
   QMenu *itemsMenu = nullptr;
   NetComm *netComm = nullptr;

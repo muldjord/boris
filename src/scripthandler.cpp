@@ -331,7 +331,8 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
       printf("Spawning item '%s' at %d,%d\n", qPrintable(itemName), iX, iY);
     }
     Item *spawnedItem = new Item(itemName, settings, parentPos.x() + iX, parentPos.y() + iY, gotoLabel);
-    connect(mainWindow, &MainWindow::handlePhysics, spawnedItem, &Item::handlePhysics);
+    //connect(mainWindow, &MainWindow::handlePhysics, spawnedItem, &Item::handlePhysics);
+    connect(&mainWindow->tickTimer, &QTimer::timeout, spawnedItem, &Item::tick);
     mainWindow->scene()->addItem(spawnedItem);
     settings.itemList.append(spawnedItem);
   } else {

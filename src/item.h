@@ -18,7 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include <QBasicTimer>
 #include <QGraphicsObject>
 #include <QImage>
 #include <QMap>
@@ -56,13 +55,12 @@ public:
   bool isGrabbed();
 
 public slots:
+  void tick();
   void destroy();
-  void handlePhysics();
 
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
   QRectF boundingRect() const override;
-  void timerEvent(QTimerEvent *event);
 
   void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
   void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
@@ -70,16 +68,27 @@ protected:
   void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
 
 private slots:
+  void nextFrame();
   void setCurFrame(const int &frame);
 
 private:
+  void handlePhysics();
   void runScript(int &stop, const bool &init = false);
   void sanityCheck();
   int getDistance(const QPointF &p);
   int getDirectionTo(const QPointF &p);
 
   Settings &settings;
-  QBasicTimer animTimer;
+
+  qint64 frameTime = 0;
+  qint64 frameTimeMax = 0;
+  bool frameTimer = true;
+
+  qint64 physicsTime = 0;
+  qint64 physicsTimeMax = 30;
+  bool physicsTimer = true;
+
+  qint64 oldElapsed = 0;
 
   bool flipFrames = false;
   QPixmap itemSprite = QPixmap(32, 32);

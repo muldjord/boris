@@ -108,6 +108,7 @@ Boris::Boris(Settings &settings)
     }
   }
 
+  /*
   behavTimer.setSingleShot(true);
   connect(&behavTimer, &QTimer::timeout, this, &Boris::nextBehaviour);
 
@@ -123,10 +124,14 @@ Boris::Boris(Settings &settings)
   acknowledgeItemsTimer.setInterval(60 * 1000); // When dragging an object close to Boris he will still always interact with it
   acknowledgeItemsTimer.setSingleShot(true);
   connect(&acknowledgeItemsTimer, &QTimer::timeout, [this]() { ignoreItems = false; });
+  */
 
   reconfBoris();
 
-  animTimer.start(0, Qt::PreciseTimer, this);
+  // Make sure were up to speed
+  oldElapsed = mainWindow->getElapsed();
+
+  QTimer::singleShot(0, this, &Boris::nextFrame);
 }
 
 Boris::~Boris()
@@ -141,6 +146,87 @@ void Boris::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
 QRectF Boris::boundingRect() const
 {
   return QRectF(0, 0, rendered.width(), rendered.height());
+}
+
+void Boris::tick()
+{
+  qint64 elapsed = mainWindow->getElapsed() - oldElapsed;
+  oldElapsed = mainWindow->getElapsed();
+
+  frameTime += elapsed;
+  physicsTime += elapsed;
+  behavTime += elapsed;
+  interactionsTime += elapsed;
+  acknowledgeItemTime += elapsed;
+  acknowledgeBorisTime += elapsed;
+
+  if(frameTimer) {
+    if(frameTime >= frameTimeMax) {
+      frameTime = frameTime - frameTimeMax;
+      if(frameTime > frameTimeMax) {
+	frameTime = 0;
+      }
+      nextFrame();
+    }
+  } else {
+    frameTime = 0;
+  }
+  if(physicsTimer) {
+    if(physicsTime >= physicsTimeMax) {
+      physicsTime = physicsTime - physicsTimeMax;
+      if(physicsTime > physicsTimeMax) {
+	physicsTime = 0;
+      }
+      handlePhysics();
+    }
+  } else {
+    physicsTime = 0;
+  }
+  if(behavTimer) {
+    if(behavTime >= behavTimeMax) {
+      behavTime = behavTime - behavTimeMax;
+      if(behavTime > behavTimeMax) {
+	behavTime = 0;
+      }
+      nextBehaviour();
+    }
+  } else {
+    behavTime = 0;
+  }
+  if(interactionsTimer) {
+    if(interactionsTime >= interactionsTimeMax) {
+      interactionsTime = interactionsTime - interactionsTimeMax;
+      if(interactionsTime > interactionsTimeMax) {
+	interactionsTime = 0;
+      }
+      checkInteractions();
+    }
+  } else {
+    interactionsTime = 0;
+  }
+  if(acknowledgeItemTimer) {
+    if(acknowledgeItemTime >= acknowledgeItemTimeMax) {
+      acknowledgeItemTime = acknowledgeItemTime - acknowledgeItemTimeMax;
+      if(acknowledgeItemTime > acknowledgeItemTimeMax) {
+	acknowledgeItemTime = 0;
+      }
+      ignoreItems = false;
+    }
+  } else {
+    acknowledgeItemTime = 0;
+  }
+  if(acknowledgeBorisTimer) {
+    if(acknowledgeBorisTime >= acknowledgeBorisTimeMax) {
+      acknowledgeBorisTime = acknowledgeBorisTime - acknowledgeBorisTimeMax;
+      if(acknowledgeBorisTime > acknowledgeBorisTimeMax) {
+	acknowledgeBorisTime = 0;
+      }
+      ignoreBorises = false;
+      borisFriend = nullptr;
+    }
+  } else {
+    acknowledgeBorisTime = 0;
+  }
 }
 
 void Boris::createBehavioursMenu()
@@ -249,8 +335,8 @@ void Boris::changeBehaviour(QString behav, int time)
     return;
   }
 
-  // Always stop behavTimer, just in case. At this point we never want it to be running
-  behavTimer.stop();
+  // Always stop behavTimer here as it should never run at this point
+  behavTimer = false;
 
   // Reset all script variables
   scriptVars.clear();
@@ -344,8 +430,8 @@ void Boris::changeBehaviour(QString behav, int time)
       time = QRandomGenerator::global()->bounded(7000) + 5000;
     }
     time = time - (time / 100.0 * stats->getHyper());
-    behavTimer.setInterval(time);
-    behavTimer.start();
+    behavTimeMax = time;
+    behavTimer = true;
   }
 
   curFrame = 0;
@@ -355,7 +441,7 @@ void Boris::changeBehaviour(QString behav, int time)
     runScript(stop, true);
   }
 
-  animTimer.start(0, Qt::PreciseTimer, this);
+  QTimer::singleShot(0, this, &Boris::nextFrame);
 }
 
 void Boris::runScript(int &stop, const bool &init)
@@ -515,11 +601,11 @@ int Boris::getDirectionTo(const QPointF &p)
   return pointSector;
 }
 
-void Boris::timerEvent(QTimerEvent *)
+void Boris::nextFrame()
 {
   if(stopNextBehaviour) {
     stopNextBehaviour = false;
-    behavTimer.stop();
+    behavTimer = false;
     nextBehaviour();
     return;
   }
@@ -572,11 +658,11 @@ void Boris::timerEvent(QTimerEvent *)
               flipFrames);
   }
 
-  int frameTime = settings.behaviours.at(curBehav).frames.at(curFrame).time;
-  if(frameTime != 0) { // Allow frameTime at 0 if it is specifically set in the script frame. This is to allow 'invisible' frames, such as used in 'mazegame'
-    frameTime -= (frameTime / 100.0 * stats->getHyper());
-    if(frameTime <= 5) {
-      frameTime = 5;
+  qint64 newFrameTime = settings.behaviours.at(curBehav).frames.at(curFrame).time;
+  if(newFrameTime != 0) { // Allow newFrameTime at 0 if it is specifically set in the script frame. This is to allow 'invisible' frames, such as used in 'mazegame'
+    newFrameTime -= (newFrameTime / 100.0 * stats->getHyper());
+    if(newFrameTime < 15) {
+      newFrameTime = 15;
     }
   }
 
@@ -610,14 +696,19 @@ void Boris::timerEvent(QTimerEvent *)
     stopNextBehaviour = true;
   } else if(stop == 3) {
     // In case of 'stop' it will cease any frame and animation progression
-    behavTimer.stop();
-    animTimer.stop();
+    behavTimer = false;
+    frameTimer = false;
     return;
   } else {
     curFrame++;
   }
 
-  animTimer.start(frameTime, Qt::PreciseTimer, this);
+  if(newFrameTime == 0) {
+    QTimer::singleShot(0, this, &Boris::nextFrame);
+  } else {
+    frameTimer = true;
+    frameTimeMax = newFrameTime;
+  }
 }
 
 void Boris::moveBoris(int dX, int dY, const bool &flipped)
@@ -1069,13 +1160,13 @@ void Boris::checkInteractions()
   if(settings.idkfa) {
     updateDebugInfo();
   }
-
-  interactionsTimer.start();
 }
 
 void Boris::borisInteract(Boris *otherBoris)
 {
   ignoreBorises = true;
+  acknowledgeBorisTime = 0;
+
   if(borisFriend != nullptr || falling || grabbed || settings.behaviours.at(curBehav).doNotDisturb) {
     return;
   }
@@ -1090,12 +1181,13 @@ void Boris::borisInteract(Boris *otherBoris)
   } else {
     changeBehaviour("_wave");
   }
-  acknowledgeBorisesTimer.start();
 }
 
 void Boris::itemInteract(Item * item)
 {
   ignoreItems = true;
+  acknowledgeItemTime = 0;
+
   interactItemPos = item->pos().toPoint();
 
   if(!item->getReactionBehaviour().isEmpty()) {
@@ -1104,7 +1196,6 @@ void Boris::itemInteract(Item * item)
   } else if(item->isGrabbed()) {
     bubble->initBubble(stats->getHyper(), "I don't know what to do with that.", "_thought");
   }
-  acknowledgeItemsTimer.start();
 }
 
 // Used by scripthandler to immediately switch to behav using file

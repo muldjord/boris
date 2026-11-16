@@ -88,7 +88,9 @@ Item::Item(const QString &item, Settings &settings, const int &xPos, const int&y
     }
   }
 
-  animTimer.start(0, Qt::PreciseTimer, this);
+  oldElapsed = mainWindow->getElapsed();
+
+  QTimer::singleShot(0, this, &Item::nextFrame);
 }
 
 Item::~Item()
@@ -161,7 +163,39 @@ void Item::runScript(int &stop, const bool &init)
   }
 }
 
-void Item::timerEvent(QTimerEvent *)
+void Item::tick()
+{
+  qint64 elapsed = mainWindow->getElapsed() - oldElapsed;
+  oldElapsed = mainWindow->getElapsed();
+
+  frameTime += elapsed;
+  physicsTime += elapsed;
+
+  if(frameTimer) {
+    if(frameTime >= frameTimeMax) {
+      frameTime = frameTime - frameTimeMax;
+      if(frameTime > frameTimeMax) {
+	frameTime = 0;
+      }
+      nextFrame();
+    }
+  } else {
+    frameTime = 0;
+  }
+  if(physicsTimer) {
+    if(physicsTime >= physicsTimeMax) {
+      physicsTime = physicsTime - physicsTimeMax;
+      if(physicsTime > physicsTimeMax) {
+	physicsTime = 0;
+      }
+      handlePhysics();
+    }
+  } else {
+    physicsTime = 0;
+  }
+}
+
+void Item::nextFrame()
 {
   if(stopAndDestroy) {
     stopAndDestroy = false;
@@ -200,11 +234,11 @@ void Item::timerEvent(QTimerEvent *)
               flipFrames);
   }
 
-  int frameTime = settings.itemBehaviours.at(curItem).frames.at(curFrame).time;
-  frameTime -= (frameTime / 100.0 * borisHyper);
-  if(frameTime != 0) { // Allow frameTime at 0 if it is specifically set in the script frame. This is to allow 'invisible' frames, such as used in 'mazegame'
-    if(frameTime <= 5) {
-      frameTime = 5;
+  int newFrameTime = settings.itemBehaviours.at(curItem).frames.at(curFrame).time;
+  newFrameTime -= (newFrameTime / 100.0 * borisHyper);
+  if(newFrameTime != 0) { // Allow newFrameTime at 0 if it is specifically set in the script frame. This is to allow 'invisible' frames, such as used in 'mazegame'
+    if(newFrameTime <= 15) {
+      newFrameTime = 15;
     }
   }
 
@@ -233,13 +267,18 @@ void Item::timerEvent(QTimerEvent *)
     stopAndDestroy = true;
   } else if(stop == 3) {
     // In case of 'stop' it will cease any frame and animation progression
-    animTimer.stop();
+    frameTimer = false;
     return;
   } else {
     curFrame++;
   }
 
-  animTimer.start(frameTime, Qt::PreciseTimer, this);
+  if(newFrameTime == 0) {
+    QTimer::singleShot(0, this, &Item::nextFrame);
+  } else {
+    frameTimer = true;
+    frameTimeMax = newFrameTime;
+  }
 }
 
 void Item::moveItem(int dX, int dY, const bool &flipped)
@@ -394,7 +433,7 @@ void Item::mousePressEvent(QGraphicsSceneMouseEvent* event)
                  event->scenePos().y() - (getHeight() / 2));
     if(!settings.itemBehaviours.at(curItem).reactions.isEmpty()) {
       curFrame = 0;
-      animTimer.start(0, Qt::PreciseTimer, this);
+      QTimer::singleShot(0, this, &Item::nextFrame);
     }
   } else if(event->button() == Qt::MiddleButton) {
     destroy();
@@ -511,7 +550,7 @@ void Item::interact(Boris *boris)
   }
   if(settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel() != "nil") {
     curFrame = settings.itemBehaviours.at(curItem).labels[settings.itemBehaviours.at(curItem).reactions.at(interactReaction).getLabel()];
-    animTimer.start(0, Qt::PreciseTimer, this);
+    QTimer::singleShot(0, this, &Item::nextFrame);
   }
 }
 
