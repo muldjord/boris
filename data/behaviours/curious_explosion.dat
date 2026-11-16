@@ -31,7 +31,7 @@ if thought = 4 think "Acme? What's that?"
 14;75;0;0;;
 13;1500;0;0;;
 14;75;0;0;;
-13;1925;0;0;;
+13;2025;0;0;;
 15;50;0;0;flee2.wav;stat hygiene -= 75,stat health -= 25,stat fun -= 30
 16;50;0;0;;
 17;50;0;0;;
