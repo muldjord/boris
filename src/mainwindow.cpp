@@ -177,20 +177,12 @@ void MainWindow::init()
 
   addBoris((settings.clones == 0?QRandomGenerator::global()->bounded(99) + 1:settings.clones));
 
-  /*
   itemTimer.setInterval(settings.itemSpawnInterval * 1000);
   itemTimer.setSingleShot(true);
   connect(&itemTimer, &QTimer::timeout, this, &MainWindow::spawnRandomItem);
   if(settings.items && settings.itemSpawnInterval) {
     itemTimer.start();
   }
-  */
-
-  /*
-  physicsTimer.setInterval(30);
-  connect(&physicsTimer, &QTimer::timeout, this, &MainWindow::progressPhysics);
-  physicsTimer.start();
-  */
 
   tickTimer.setInterval(15);
   tickTimer.setSingleShot(false);
@@ -478,15 +470,13 @@ void MainWindow::aboutBox()
 
   netComm->updateAll();
 
-  //itemTimer.setInterval(settings.itemSpawnInterval * 1000);
+  itemTimer.setInterval(settings.itemSpawnInterval * 1000);
   itemSpawnTime = settings.itemSpawnInterval * 1000;
-  /*
   if(settings.items && settings.itemSpawnInterval) {
     itemTimer.start();
   } else {
     itemTimer.stop();
   }
-  */
 }
 
 void MainWindow::handlePhysics()
@@ -654,11 +644,9 @@ void MainWindow::spawnRandomItem()
   scene()->addItem(spawnedItem);
   settings.itemList.append(spawnedItem);
 
-  /*
   if(settings.items && settings.itemSpawnInterval) {
     itemTimer.start();
   }
-  */
 }
 
 void MainWindow::spawnItem(QAction* action)

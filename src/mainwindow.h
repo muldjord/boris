@@ -81,8 +81,7 @@ private:
   QIcon *icon = nullptr;
   QIcon *coinIcon = nullptr;
 
-  //QTimer itemTimer;
-  //QTimer physicsTimer;
+  QTimer itemTimer;
 
   qint64 physicsTime = 0;
   qint64 physicsTimeMax = 30;
