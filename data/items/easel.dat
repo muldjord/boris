@@ -8,40 +8,38 @@ bounce=2
 
 doNotDisturb
 
-define init:var cycles = 3,var stepbacks = 1,draw begin
-
-define paintsomething:
+define init:draw begin
 
 #Frames
 0;3000;0;0;;stop
 
 # Turn around
 0;50;0;0;;label initpaint
-0;50;0;0;;
-0;50;0;0;;
+0;50;0;0;;var stepbacks = 1
+0;50;0;0;;var cycles = 4
 0;400;0;0;;
 
 # Reach in to paint
-0;50;0;0;;label initstrokes,var strokes = 8
-0;50;0;0;;
+0;50;0;0;;label initstrokes
+0;50;0;0;;var strokes = 8
 0;50;0;0;;
 
 0;50;0;0;;label nextstroke,
-var stroke = [@64 - 1],
+var stroke = [@86 - 1],
 draw sprite paint stroke [6 + (@14 - 1)] [@15 - 1],
 draw transparent rectangle 6 0 20 25,
 draw transparent rectangle 7 0 18 24
 
-0;50;0;0;;var strokes -= 1,if strokes >= 0 goto nextstroke else goto wait
+0;50;0;0;;var strokes -= 1,if strokes > 0 goto nextstroke else goto wait
 
-0;50;0;0;;label wait,var cycles -= 1
+0;50;0;0;;label wait
+0;50;0;0;;var cycles -= 1
 0;50;0;0;;
-0;50;0;0;;
-0;1000;0;0;;if cycles >= 0 goto initstrokes else { if stepbacks >= 0 goto stepback else goto endpaint }
+0;1000;0;0;;if cycles > 0 goto initstrokes else { if stepbacks > 0 goto stepback else goto endpaint }
 
-0;50;0;0;;label stepback,var stepbacks -= 1,var strokes = 8
-0;50;0;0;;
-0;50;0;0;;
+0;50;0;0;;label stepback
+0;50;0;0;;var stepbacks -= 1
+0;50;0;0;;var cycles = 4
 0;50;0;0;;
 0;50;0;0;;
 0;50;0;0;;
