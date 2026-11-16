@@ -1091,10 +1091,7 @@ void Boris::triggerWeather()
 
 void Boris::setWeather(QString &behav)
 {
-  weather->resetWeather();
-
-  weather->show();
-  QTimer::singleShot(30000, [this]() { weather->hide(); });
+  weather->showWeather();
 
   if(!falling && !grabbed) {
     if(settings.weatherType == "01d") {

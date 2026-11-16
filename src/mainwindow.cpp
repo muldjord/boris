@@ -680,7 +680,9 @@ void MainWindow::spawnItem(QAction* action)
             unlockItem(action);
           }
         } else {
-          soundMixer->playSoundFile("nocoin.wav", 0, 1);
+	  if(settings.sound) {
+	    soundMixer->playSoundFile("nocoin.wav", 0, 1);
+	  }
           QMessageBox::information(nullptr, "Not enough coins!", "You can't afford the '" + item.title + "' " + "item.\n\nInitiate behaviours that corresponds to Boris' needs to earn coins. You can then use those coins to unlock new items.");
         }
       }
@@ -704,10 +706,12 @@ void MainWindow::unlockItem(QAction *action)
 
 void MainWindow::deltaCoins(const int &coins)
 {
-  soundMixer->playSoundFile("coinup.wav", 0, 1);
+  if(settings.sound) {
+    soundMixer->playSoundFile("coinup.wav", 0, 1);
+  }
   settings.coins += coins;
   coinsAction->setText(QString::number(settings.coins) + " " + "coins" + " (" + QString::number(coins) + ")");
   trayIcon->setIcon(*coinIcon);
-  QTimer::singleShot(10000, [this]() { coinsAction->setText(QString::number(settings.coins) + " coins"); trayIcon->setIcon(*icon); });
+  QTimer::singleShot(10000, this, [this]() { coinsAction->setText(QString::number(settings.coins) + " coins"); trayIcon->setIcon(*icon); });
   iniSettings->setValue("coins", settings.coins);
 }
