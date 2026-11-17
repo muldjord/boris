@@ -6,11 +6,16 @@ weight=3
 bounce=0
 
 define init:var lives = 3,
+call initlife,
 var dir = @2,
 if dir = 1 goto walkwest,
 if dir = 2 goto walkeast
 
-define decide:var nextmove = @8,
+define initlife:var lifetime = [42 + @15]
+
+define decide:var lifetime -= 1,
+if lifetime <= 0 goto gameover,
+var nextmove = @8,
 if nextmove = 1 goto walkwest,
 if nextmove = 2 goto walkeast,
 if nextmove = 3 goto bublwest,
@@ -144,4 +149,4 @@ if nextmove = 8 goto jumpeastdn
 35;250;0;0;;
 36;250;0;0;;if lives > 0 { var lives -= 1,goto nextlife } else break
 
-35;50;rand;rand;;label nextlife,call decide
+35;50;rand;rand;;label nextlife,call initlife,call decide
