@@ -47,73 +47,74 @@ The last command copies all necessary files to the `release` folder. You can the
 ## Release notes
 #### Known issues:
 * Linux: For security reasons modern Wayland compositors don't support `Qt::WindowStaysOnTopHint` and click-through behaviour. The non-free OS called Windows (which apparently people still use for some bizarre reason) still support this, but it is probably only a matter of time before they catch up and stop supporting it as well
-* Boris will interact with an object instantly when he spawns it himself (eg. through 'Social->Place a gift')
-* 'noIgnore' item flag is probably broken right now
+* Boris will interact with an object instantly when he spawns it himself (eg. through `Social->Place a gift`)
 
 #### Ideas (that I might / might not implement):
-* Add a 'usec' that points towards any direction the arrow keys are currently pressed
-* Add Boris 'memory'. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
-* Make a 'bowling' behaviour with a 'bowlingball' item and spawned 'pin' items (which might need syncronization as well?)
-* Make a big round 'candy' item for Boris to eat. He will get round and roll around when he encounters it
+* Add a `usec` that points towards any direction the arrow keys are currently pressed
+* Add Boris `memory`. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
+* Make a `bowling` behaviour with a `bowlingball` item and spawned `pin` items (which might need syncronization as well?)
+* Make a big round `candy` item for Boris to eat. He will get round and roll around when he encounters it
 * Create a Bub or Bob item that will put Boris in a bubble on interaction
 * Create a shark item that moves around the desktop for a little while. It should make Boris flee
 * Allow setting the colors of Boris' clothes in the About dialog that will overwrite the season colors
-* Create 'Advanced options' in About dialog with 'script_output', 'idkfa' and so on
+* Create `Advanced options` in About dialog with `script_output`, `idkfa` and so on
 * The item interaction initiation system should be redesigned / improved
 
 #### Version 4.0.5 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
 * Rewired entire project to work with modern Wayland compositors under Linux using a maximized QGraphicsView instead of individual windows per Boris
 * Switched to a tick system instead of individual timers resulting in much improved performance and synchronization on reactions
-* Added 'anxiety' stat which causes Boris to flee the mouse cursor if he has been tossed around too much
-* Added 'debug' textedit to right-click menu when 'idkfa' is enabled
+* Renamed all `.dat` files to `.brs` files
+* Added `anxiety` stat which causes Boris to flee the mouse cursor if he has been tossed around too much
+* Added `debug` textedit to right-click menu when `idkfa` is enabled
 * Fixed Boris' weird legs on coffee reading and steak eating behaviours
 * Added new splash screen with loading sequence
 * Shadows now stays visible on the ground when Boris and items are airborne
 * Shadows now have dynamic width depending on the altitude of Boris and items
 * Fixed eternal bouncing bug
 * About dialog has been vastly improved
-* Added 'candle' item
-* Added 'sit_and_relax' behaviour for 'energy' category
-* Added 'acme_gift' item for 'fun' category (negative impact)
-* Added 'curious_explosion' behaviour reaction for 'acme_gift'
-* Added 'farting' behaviour!
-* Added 'pie' item
-* Added a 'television' item
-* If Boris encounters a 'pie' item and have recently encuntered another Boris, he will now throw the pie in the direction of the other Boris instead of eating it
-* Added an 'easel' item that will cause Boris to paint a random picture when he interacts with it
+* Added `candle` item
+* Added `sit_and_relax` behaviour for `energy` category
+* Added `acme_gift` item for `fun` category (negative impact)
+* Added `curious_explosion` behaviour reaction for `acme_gift`
+* Added `farting` behaviour!
+* Added `pie` item
+* Added a `television` item
+* If Boris encounters a `pie` item and have recently encuntered another Boris, he will now throw the pie in the direction of the other Boris instead of eating it
+* Added an `easel` item that will cause Boris to paint a random picture when he interacts with it
 * Updated inflate balloon behaviour so the balloon sometimes starts farting around instead of popping
-* Now allows 'nil' for frame to go to in item reactions
+* Now allows `nil` for frame to go to in item reactions
 * Moved all documentation into `docs` path
 * Updated / rewrote a lot of the documentation
 * When changing the size of Boris all Borises are now moved randomly around the desktop to avoid some Borises being at the edge
-* Lower-case behaviour category will now automatically be made uppercase when loading (eg. 'hunger' becomes 'Hunger')
+* Lower-case behaviour category will now automatically be made uppercase when loading (eg. `hunger` becomes `Hunger`)
 * `xvel` and `yvel` scriptVars have been renamed `hvel` and `vvel` and can no longer be used to set velocity with `var hvel = 4`. Use `setvel` instead
 * `throw` has been deprecated in favor of `setvel`. Now allows expressions as VELOCITY
 * Random variable set with `@INT` can now also be a random value within the range of a variable by using `@VARIABLE`
 * Now allows expressions to begin with `[` and end with `]` in `getValue` to make parameters more useful in commands that require several one after the other
 * All `draw` routines now uses QPen only to avoid infill of rectangles and ellipsees
+* Added `draw` routines `rectanglef` and `ellipsef` which draws a filled ellipse
 * Items moving beyond the horizontal edges now appears at the opposite unless they are thrown upwards out of sight in which case they will simply drop back down after a while
-* Added 'bub' and 'bob' item with bubbles that can encompass Boris when he encounters them
-* Added '_curious' behaviour that will be initiated when Boris encounters non-interactive objects
+* Added `bub` and `bob` item with bubbles that can encompass Boris when he encounters them
+* Added `_curious` behaviour that will be initiated when Boris encounters non-interactive objects
 * Improved interacted items handling
 
 #### Version 3.6.1 (30 November 2022):
-* Added 'mazegame'
+* Added `mazegame`
 
 #### Version 3.6.0 (4th December 2021):
 * Reversed coin concept. You now buy items instead of behaviours
 * About text adjusted to reflect changes in coin system
 * Boris will now kick the football
 * Items are now linked to the Boris that interacts with it, allowing for interesting synchronized animations
-** Boris 'hyper' is applied to the item when an interaction occurs to ensure sync between animations
-** It is possible to set several reaction behaviours each containing x and y coordinates for moving the item into position before initiating the interaction. Each reaction also contains a label that tells the item where to 'goto' inside the item frames when the interaction is initiated
+** Boris `hyper` is applied to the item when an interaction occurs to ensure sync between animations
+** It is possible to set several reaction behaviours each containing x and y coordinates for moving the item into position before initiating the interaction. Each reaction also contains a label that tells the item where to `goto` inside the item frames when the interaction is initiated
 ** If only a reaction behaviour file is defined the item will simply be destroyed when the interaction initiates
-* Items now have physics and can be thrown using Boris script by using 'throw' or by manipulating variables 'xvel' and 'yvel'
-* Items now have 'weight' and 'bounce' variables
-* Added 'tennisball' item
+* Items now have physics and can be thrown using Boris script by using `throw` or by manipulating variables `xvel` and `yvel`
+* Items now have `weight` and `bounce` variables
+* Added `tennisball` item
 * Changed visual stat layout to make it less confusing
-* Added 'banana' item
+* Added `banana` item
 * Fixed mouse scriptVars
 * Various bugfixes
 * Improved the graphics for a number of behaviours
@@ -122,33 +123,33 @@ The last command copies all necessary files to the `release` folder. You can the
 * A LOT of code refactoring and optimizations
 * Reworked chatter / speech bubble class
 * Boris will now think about how he feels when stats are down
-* Added 'script_output' variable to config.ini to allow disabling script output in terminal
+* Added `script_output` variable to config.ini to allow disabling script output in terminal
 * Replaced deprecated qrand with QRandomGenerator (which unfortunately has the side-effect of now requiring Qt 5.10)
-* Added '_thought' chatter type
-* Added 'Dance' idle behaviour
+* Added `_thought` chatter type
+* Added `Dance` idle behaviour
 * Gave Boris a bed to sleep in
-* Improved / reworked '_fun' behaviour used when fun stat is low
-* Improved / reworked '_social' behaviour used when social stat is low
-* Added 'say' BorisScript command
-* Added 'think' BorisScript command
+* Improved / reworked `_fun` behaviour used when fun stat is low
+* Improved / reworked `_social` behaviour used when social stat is low
+* Added `say` BorisScript command
+* Added `think` BorisScript command
 * All speech bubbles are now in scripts instead of being hardcoded
 * RSS feed functionality is now imlemented through BorisScript instead of being hardcoded
-* Added 'Tell me the news' Social behaviour which will show rss feed output
-* Added 'What are you thinking?' Social behaviour which shows a more philosophical side of Boris
+* Added `Tell me the news` Social behaviour which will show rss feed output
+* Added `What are you thinking?` Social behaviour which shows a more philosophical side of Boris
 * Added conditional speech bubbles to several behaviours (For instance: Boris now keeps score when using the hula hoop)
-* Added 'How are you?" Social behaviour which will assess Boris' stats and give a response in a speech bubble
-* Added a few missing wall hit sounds to 'Pong' game
-* Improved BorisScript arithmetic expressions considerably, now using 'tinyexpr.c' by Lewis Van Winkle
+* Added `How are you?` Social behaviour which will assess Boris' stats and give a response in a speech bubble
+* Added a few missing wall hit sounds to `Pong` game
+* Improved BorisScript arithmetic expressions considerably, now using `tinyexpr.c` by Lewis Van Winkle
 * Added user item spawning using the tray icon menu
-* Added item interactions using the BorisScript 'reaction' header option
-* Added 'draw sprite' BorisScript command that uses sprites from 'data/sprites'
+* Added item interactions using the BorisScript `reaction` header option
+* Added `draw sprite` BorisScript command that uses sprites from `data/sprites`
 * Added random item spawn interval to about box
-* Now always runs code from 'define init' before first frame is shown from a behaviour
-* Added 'Coins' that can be spend on unlocking behaviours (no real money involved, it's just to add a sense of progression)
-* Added 'queued' script variable that tells how many behaviours are currently queued
-* Moved all '_flee' behaviours into a single behaviour that checks 'msec' variable to determine direction
-* Moved all '_sad' behaviours into a single behaviour that checks 'fsec' variable to determine direction
-* Moved all '_wave' behaviours into a single behaviour that checks 'fsec' and 'msec' variables to determine direction
+* Now always runs code from `define init` before first frame is shown from a behaviour
+* Added `Coins` that can be spend on unlocking behaviours (no real money involved, it's just to add a sense of progression)
+* Added `queued` script variable that tells how many behaviours are currently queued
+* Moved all `_flee` behaviours into a single behaviour that checks `msec` variable to determine direction
+* Moved all `_sad` behaviours into a single behaviour that checks `fsec` variable to determine direction
+* Moved all `_wave` behaviours into a single behaviour that checks `fsec` and `msec` variables to determine direction
 * Reversed hunger and toilet stats visually to avoid confusion in connection with behaviours which check or manipulate those stats
 
 #### Version 3.0.1 (15th September 2020):
@@ -174,7 +175,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Added scripting to many existing behaviours for more interesting outcomes
 * Added a bunch of new dynamic behaviours
 * Added drawing routines to scripting language
-* Added scoping to 'if' sentences in scripting language
+* Added scoping to `if` sentences in scripting language
 * Boris is now ticklish (scroll mouse wheel on him)
 * Boris now less likely to pick a "social" behav when moving mouse over him
 * Refactored speech bubble class
@@ -182,12 +183,12 @@ The last command copies all necessary files to the `release` folder. You can the
 * Added items that can be spawned from boris scripts. The items are even scriptable themselves and can spawn new items
 
 #### Version 2.0.2 (4th December 2018):
-* Added 'allowFlip' flag to behaviours giving those a 50% of being flipped horizontally
+* Added `allowFlip` flag to behaviours giving those a 50% of being flipped horizontally
 
 #### Version 2.0.1 (4th December 2017):
-* Added 'casual_standing_looking' behaviour
-* Added 'casual_standing_hatpull' behaviour
-* Added 'casual_standing_tassel' behaviour
+* Added `casual_standing_looking` behaviour
+* Added `casual_standing_hatpull` behaviour
+* Added `casual_standing_tassel` behaviour
 * Updated directional walk behaviours
 * Fixed somewhat glitchy stat flasher
 * Balanced a lot of behaviours and main stat deltas
@@ -197,7 +198,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Added RSS feed support
 * Added wind support. Boris will now be blown around the desktop in strong winds.
 * Made it so Boris much more often just relaxes or walks around.
-* Boris now has a chance of, erm, having an accident if 'toilet' reaches 0.
+* Boris now has a chance of, erm, having an accident if `toilet` reaches 0.
 * Boris can now go to the toilet.
 * Boris now sometimes spins the yoyo.
 * Boris can now wash his hands.
@@ -205,7 +206,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Fixed a nasty sound bug that made Pulseaudio crash when exiting Boris under Linux.
 * Fixed looping animation bug when showing weather.
 * Code updated with Qt5 style signal/slots.
-* Added icons for 'teleport' and 'earthquake' in tray menu.
+* Added icons for `teleport` and `earthquake` in tray menu.
 
 #### Version 1.9.4 (07th November 2016):
 * Added complain behaviour, and added sound to all chatter behaviours.
