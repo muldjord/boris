@@ -4,6 +4,8 @@ category=Hunger
 energy=10
 
 oneShot
+# This HAS to be doNotDisturb or else he will hit himself with it instantly before it flies away
+doNotDisturb
 
 define init:if bdir != -1 { if bdir = 0 goto north,
 if bdir = 1 goto northeast,
