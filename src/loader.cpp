@@ -79,8 +79,8 @@ bool Loader::loadBehaviours(const Settings &settings,
          QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
   QList<QFileInfo> infoList = d.entryInfoList();
   for(const auto &info: infoList) {
-    QFile dat(info.absoluteFilePath().left(info.absoluteFilePath().length() - 4) + ".dat");
-    if(dat.open(QIODevice::ReadOnly)) {
+    QFile brs(info.absoluteFilePath().left(info.absoluteFilePath().length() - 4) + ".brs");
+    if(brs.open(QIODevice::ReadOnly)) {
       // Load all sprites from png
       QList<QPixmap> sprites;
 
@@ -104,8 +104,8 @@ bool Loader::loadBehaviours(const Settings &settings,
       b.file = info.completeBaseName();
       b.title = info.completeBaseName();
 
-      while(!dat.atEnd()) {
-        QByteArray line = dat.readLine().simplified();
+      while(!brs.atEnd()) {
+        QByteArray line = brs.readLine().simplified();
         if(line.isEmpty()) {
           continue;
         }
@@ -115,7 +115,7 @@ bool Loader::loadBehaviours(const Settings &settings,
         if(line.left(6) == "define" && line.contains(":")) {
           QString script = QString(line);
           while(script.right(1) == ",") {
-            script.append(QString(dat.readLine().simplified()));
+            script.append(QString(brs.readLine().simplified()));
           }
           script = script.simplified();
           b.defines[script.split(":").first().split(" ").at(1)] = parseScript(script.split(":").at(1));
@@ -230,8 +230,8 @@ bool Loader::loadBehaviours(const Settings &settings,
         }
       }
       int frames = 0;
-      while(!dat.atEnd()) {
-        QString line = QString(dat.readLine().simplified());
+      while(!brs.atEnd()) {
+        QString line = QString(brs.readLine().simplified());
         if(line.isEmpty() || line.left(1) == "#") {
           continue;
         }
@@ -259,7 +259,7 @@ bool Loader::loadBehaviours(const Settings &settings,
         if(!snippets.at(5).isEmpty()) {
           QString script = snippets.at(5).simplified();
           while(script.right(1) == ",") {
-            script.append(QString(dat.readLine().simplified()));
+            script.append(QString(brs.readLine().simplified()));
           }
           script = script.simplified();
           f.script = parseScript(script);
@@ -275,7 +275,7 @@ bool Loader::loadBehaviours(const Settings &settings,
         b.frames.append(f);
         frames++;
       }
-      dat.close();
+      brs.close();
       qInfo("  Added behaviour: %s\n", qPrintable(b.title));
       splash.showMessage("Loaded behaviour: " + b.title, Qt::AlignBottom, QColor(78, 92, 106));
       qApp->processEvents();

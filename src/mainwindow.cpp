@@ -104,7 +104,7 @@ MainWindow::MainWindow(QSplashScreen &splash)
   if(Loader::loadBehaviours(settings, settings.behavioursPath, settings.behaviours, soundMixer->soundFxs, splash)) {
     qInfo("Behaviours loaded ok... :)\n");
   } else {
-    qInfo("Error when loading some behaviours, please check your png and dat files\n");
+    qInfo("Error when loading some behaviours, please check your png and brs files\n");
   }
 
   splash.showMessage("Loading " + QString::number(weathersSize) + " kilobytes of weather types, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
@@ -112,7 +112,7 @@ MainWindow::MainWindow(QSplashScreen &splash)
   if(Loader::loadBehaviours(settings, settings.weathersPath, settings.weathers, soundMixer->soundFxs, splash)) {
     qInfo("Weather types loaded ok... :)\n");
   } else {
-    qInfo("Error when loading some weather types, please check your png and dat files\n");
+    qInfo("Error when loading some weather types, please check your png and brs files\n");
   }
 
   splash.showMessage("Loading " + QString::number(itemsSize) + " kilobytes of interaction items, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
@@ -120,7 +120,7 @@ MainWindow::MainWindow(QSplashScreen &splash)
   if(Loader::loadBehaviours(settings, settings.itemsPath, settings.itemBehaviours, soundMixer->soundFxs, splash)) {
     qInfo("Items loaded ok... :)\n");
   } else {
-    qInfo("Error when loading some items, please check your png and dat files\n");
+    qInfo("Error when loading some items, please check your png and brs files\n");
   }
 
   splash.showMessage("Loading cursors, please wait...", Qt::AlignBottom, QColor(78, 92, 106));
