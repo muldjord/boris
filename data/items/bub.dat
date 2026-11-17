@@ -35,12 +35,12 @@ if nextmove = 8 goto jumpeastdn
 
 10;50;0;0;;label bublwest
 11;50;0;0;;
-12;50;0;0;;spawn bubble_w -7 0 green
+12;50;0;0;;spawn bubble_w_green -7 0
 13;50;0;0;;call decide
 
 14;50;0;0;;label bubleast
 15;50;0;0;;
-16;50;0;0;;spawn bubble_e 7 0 green
+16;50;0;0;;spawn bubble_e_green 7 0
 17;50;0;0;;call decide
 
 18;50;-1;-4;jump.wav;label jumpwestup
