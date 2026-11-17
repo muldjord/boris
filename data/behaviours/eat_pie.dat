@@ -4,7 +4,6 @@ category=Hunger
 energy=10
 
 oneShot
-doNotDisturb
 
 define init:if bdir != -1 { if bdir = 0 goto north,
 if bdir = 1 goto northeast,
