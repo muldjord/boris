@@ -375,26 +375,16 @@ void ScriptHandler::handleDraw(QList<QString> &parameters)
         int f = getValue(parameters); // Sprite frame
         int x = getValue(parameters);
         int y = getValue(parameters);
-        if(settings.scriptOutput) {
-          printf("Drawing frame %d from sprite '%s' at %d,%d\n", f, qPrintable(sprite), x, y);
-        }
-        if(f < settings.sprites[sprite].length()) {
-          painter.drawImage(x, y, settings.sprites[sprite].at(f));
-        }
-      }        
-      return;
-    } else if(parameters.first() == "spritepart") {
-      parameters.removeFirst(); // Remove 'spritepart'
-      if(parametersCount(parameters) >= 8) {
-        QString sprite = parameters.first();
-        parameters.removeFirst(); // Remove sprite name
-        int f = getValue(parameters); // Sprite frame
-        int x = getValue(parameters);
-        int y = getValue(parameters);
-	int sx = getValue(parameters);
-	int sy = getValue(parameters);
-	int sw = getValue(parameters);
-	int sh = getValue(parameters);
+	int sx = 0;
+	int sy = 0;
+	int sw = settings.sprites[sprite].at(f).width();
+	int sh = settings.sprites[sprite].at(f).height();
+	if(parametersCount(parameters) == 4) {
+	  sx = getValue(parameters);
+	  sy = getValue(parameters);
+	  sw = getValue(parameters);
+	  sh = getValue(parameters);
+	}
         if(settings.scriptOutput) {
           printf("Drawing frame %d from sprite '%s' at %d,%d\n", f, qPrintable(sprite), x, y);
         }
@@ -971,6 +961,11 @@ int ScriptHandler::parametersCount(const QList<QString> &parameters)
 	actualParameters++;
 	continue;
       }
+    }
+
+    if(parameter == "else" ||
+       parameter == "then") {
+      break;
     }
 
     actualParameters++;
