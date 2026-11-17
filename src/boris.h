@@ -126,7 +126,6 @@ private:
 
   Settings &settings;
 
-  bool ignoreBorises = false;
   QList<Item *> interactingItems;
   QPoint interactingItemPos = QPoint(); // This HAS to be separate from interactingItem due to items often getting deleted causing us to then ask for pos from a deleted object... crash!
 
@@ -209,5 +208,5 @@ private:
   bool isAlive = true;
   bool flipFrames = false;
 
-  bool stopNextBehaviour = false;
+  bool breakToNextBehaviour = false;
 };

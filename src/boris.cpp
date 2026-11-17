@@ -221,7 +221,6 @@ void Boris::tick()
       if(acknowledgeBorisTime > acknowledgeBorisTimeMax) {
 	acknowledgeBorisTime = 0;
       }
-      ignoreBorises = false;
       borisFriends.clear();
     }
   } else {
@@ -346,31 +345,34 @@ void Boris::changeBehaviour(QString behav, int time)
   drawing = false;
 
   bool coinCheck = false;
+
   // Check if there are behaviours in queue, these are prioritized
-  if(behav == "" && !behavQueue.isEmpty()) {
+  if(behav.isEmpty() && !behavQueue.isEmpty()) {
     behav = behavQueue.takeFirst();
     coinCheck = true;
   }
 
   // Process the AI if no forced behaviour is set
-  if(behav == "") {
+  if(behav.isEmpty()) {
     processAi(behav);
   }
 
   // Bias towards behaviours from 'Idle' and 'Locomotion' categories to make Boris less erratic
-  if(QRandomGenerator::global()->bounded(10) >= 3) {
-    if(QRandomGenerator::global()->bounded(70) >= stats->getEnergy()) {
-      curBehav = getIdxFromCategory("Idle");
+  if(behav.isEmpty()) {
+    if(QRandomGenerator::global()->bounded(10) >= 3) {
+      if(QRandomGenerator::global()->bounded(70) >= stats->getEnergy()) {
+	curBehav = getIdxFromCategory("Idle");
+      } else {
+	curBehav = getIdxFromCategory("Locomotion"); // This category DOES exist. See data/behaviours/README.md
+      }
     } else {
-      curBehav = getIdxFromCategory("Locomotion"); // This category DOES exist. See data/behaviours/README.md
+      // No behaviour has been set so far, so just choose one at random that's not:
+      // 1. A part of the static behaviours (ones with '_' at the beginning of the filename)
+      // 3. In the 'Reaction' category
+      do {
+	curBehav = QRandomGenerator::global()->bounded(settings.behaviours.size() - staticBehaviours) + staticBehaviours;
+      } while(settings.behaviours.at(curBehav).category == "Reaction");
     }
-  } else {
-    // No behaviour has been set so far, so just choose one at random that's not:
-    // 1. A part of the static behaviours (ones with '_' at the beginning of the filename)
-    // 3. In the 'Reaction' category
-    do {
-      curBehav = QRandomGenerator::global()->bounded(settings.behaviours.size() - staticBehaviours) + staticBehaviours;
-    } while(settings.behaviours.at(curBehav).category == "Reaction");
   }
 
   // If a specific behaviour is requested, use that
@@ -603,8 +605,8 @@ int Boris::getDirectionTo(const QPointF &p)
 
 void Boris::nextFrame()
 {
-  if(stopNextBehaviour) {
-    stopNextBehaviour = false;
+  if(breakToNextBehaviour) {
+    breakToNextBehaviour = false;
     behavTimer = false;
     nextBehaviour();
     return;
@@ -693,7 +695,7 @@ void Boris::nextFrame()
     // In case of 'return' will simply advance to the next frame
   } else if(stop == 2) {
     // In case of 'break' it will change to the next behaviour when the frame times out
-    stopNextBehaviour = true;
+    breakToNextBehaviour = true;
   } else if(stop == 3) {
     // In case of 'stop' it will cease any frame and animation progression
     behavTimer = false;
@@ -1123,15 +1125,14 @@ void Boris::checkInteractions()
 {
   // Check if there are other Borises nearby to interact with
   for(auto *boris: settings.borisList) {
-    if(boris != this) {
-      if(!falling &&
-	 !grabbed &&
-	 !settings.behaviours.at(curBehav).doNotDisturb &&
-	 getDistance(boris->getGlobalCenter()) < getWidth() * 4) {
-	if(!borisFriends.contains(boris)) {
-	  borisInteract(boris);
-	  break;
-	}
+    if(boris != this &&
+       !falling &&
+       !grabbed &&
+       !settings.behaviours.at(curBehav).doNotDisturb &&
+       getDistance(boris->getGlobalCenter()) < getWidth() * 4) {
+      if(!borisFriends.contains(boris)) {
+	borisInteract(boris);
+	break;
       }
     }
   }
@@ -1170,10 +1171,8 @@ void Boris::borisInteract(Boris *otherBoris)
   borisFriends.append(otherBoris);
   acknowledgeBorisTime = 0;
 
-  ignoreBorises = true;
-  
   // Prepend current behaviour to queue so it isn't 'forgotten'
-  behavQueue.prepend(settings.behaviours.at(curBehav).file);
+  //behavQueue.prepend(settings.behaviours.at(curBehav).file);
 
   if(settings.behaviours.at(borisFriends.last()->getCurBehav()).file == "_drop_dead") {
     changeBehaviour("_sad");
@@ -1194,7 +1193,7 @@ void Boris::itemInteract(Item * item)
   if(!item->getReactionBehaviour().isEmpty()) {
     changeBehaviour(item->getReactionBehaviour());
     item->interact(this);
-  } else if(item->isGrabbed()) {
+  } else {
     changeBehaviour("_curious");
   }
 }
