@@ -31,7 +31,7 @@ class InternalSlider : public QSlider
   Q_OBJECT
 
 public:
-  explicit InternalSlider(const QList<int> &allowedValues, QWidget *parent = nullptr);
+  explicit InternalSlider(const QList<int> &allowedValues, QWidget *parent = nullptr, const int &step = 1);
 
 protected:
   void mousePressEvent(QMouseEvent *event) override;
@@ -52,7 +52,7 @@ signals:
   void valueChanged(int value);
 
 public:
-  explicit StepSlider(const QList<int> &allowedValues, QWidget *parent = nullptr);
+  explicit StepSlider(const QList<int> &allowedValues, QWidget *parent = nullptr, const int &step = 1);
   void setValue(const int &value);
   int value();
 

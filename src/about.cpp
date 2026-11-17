@@ -441,12 +441,12 @@ QToolTip {
   }
 
   QLabel *itemSpawnIntervalLabel = new QLabel("Seconds between random item spawn (5-3600):");
-  itemSpawnIntervalSlider = new StepSlider({5, 3600}, this);
+  itemSpawnIntervalSlider = new StepSlider({10, 3600}, this, 10);
   itemSpawnIntervalSlider->setValue(settings.itemSpawnInterval);
   itemSpawnIntervalSlider->setToolTip("If items are enabled random items will be spawned around the desktop at this interval.");
 
   QLabel *itemTimeoutLabel = new QLabel("Item timeout in seconds (10-3600):");
-  itemTimeoutSlider = new StepSlider({10, 3600}, this);
+  itemTimeoutSlider = new StepSlider({10, 3600}, this, 10);
   itemTimeoutSlider->setValue(settings.itemTimeout);
   itemTimeoutSlider->setToolTip("Items will disappear after this amount of time.");
 

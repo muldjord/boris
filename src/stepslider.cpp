@@ -28,13 +28,13 @@
 #include <QStyle>
 #include <QStyleOptionSlider>
 
-InternalSlider::InternalSlider(const QList<int> &allowedValues, QWidget *parent)
+InternalSlider::InternalSlider(const QList<int> &allowedValues, QWidget *parent, const int &step)
   : QSlider(Qt::Horizontal, parent)
 {
   this->allowedValues = allowedValues;
   if(allowedValues.length() == 2) {
     this->allowedValues.clear();
-    for(int a = allowedValues.first(); a <= allowedValues.last(); ++a) {
+    for(int a = allowedValues.first(); a <= allowedValues.last(); a += step) {
       this->allowedValues.append(a);
     }
   }
@@ -85,10 +85,10 @@ void InternalSlider::keyPressEvent(QKeyEvent *event)
   event->accept();
 }
 
-StepSlider::StepSlider(const QList<int> &allowedValues, QWidget *parent)
+StepSlider::StepSlider(const QList<int> &allowedValues, QWidget *parent, const int &step)
   : QWidget(parent)
 {
-  slider = new InternalSlider(allowedValues, parent);
+  slider = new InternalSlider(allowedValues, parent, step);
   connect(slider, &QSlider::valueChanged, this, &StepSlider::setValue);
   slider->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
