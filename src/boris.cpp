@@ -1142,7 +1142,7 @@ void Boris::checkInteractions()
        !grabbed &&
        !settings.behaviours.at(curBehav).doNotDisturb &&
        getDistance(item->getGlobalCenter()) < (item->getRange() == -1?getWidth():item->getRange())) {
-      if(!interactingItems.contains(item) || item->isGrabbed()) {
+      if(!interactingItems.contains(item)) {
 	itemInteract(item);
 	break;
       }
@@ -1195,7 +1195,7 @@ void Boris::itemInteract(Item * item)
     changeBehaviour(item->getReactionBehaviour());
     item->interact(this);
   } else if(item->isGrabbed()) {
-    bubble->initBubble(stats->getHyper(), "I don't know what to do with that.", "_thought");
+    changeBehaviour("_curious");
   }
 }
 

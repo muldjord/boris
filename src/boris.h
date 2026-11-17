@@ -157,11 +157,11 @@ private:
   bool physicsTimer = true;
 
   qint64 acknowledgeItemTime = 0;
-  qint64 acknowledgeItemTimeMax = 240 * 1000; // This timeout can be quite long as it simply clears the list of all interacted items to make Boris interact with them again
+  qint64 acknowledgeItemTimeMax = 90 * 1000; // This timeout can be quite long as it simply clears the list of all interacted items to make Boris interact with them again
   bool acknowledgeItemTimer = true;
 
   qint64 acknowledgeBorisTime = 0;
-  qint64 acknowledgeBorisTimeMax = 240 * 1000; // This timeout can be quite long as it simply clears the list of all interacted Borises to make Boris interact with them again
+  qint64 acknowledgeBorisTimeMax = 90 * 1000; // This timeout can be quite long as it simply clears the list of all interacted Borises to make Boris interact with them again
   bool acknowledgeBorisTimer = true;
 
   qint64 oldElapsed = 0;
