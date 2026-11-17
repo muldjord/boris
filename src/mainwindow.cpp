@@ -405,10 +405,10 @@ void MainWindow::removeBoris(int clones)
 {
   // Reset all Boris collide pointers within all existing clones to prevent crash
   for(const auto &boris: settings.borisList) {
-    boris->borisFriend = nullptr;
+    boris->borisFriends.clear();
   }
   while(clones--) {
-    delete settings.borisList.takeLast();
+    settings.borisList.takeLast()->deleteLater();
   }
 }
 
@@ -496,7 +496,7 @@ void MainWindow::killAll()
   QTimer::singleShot(2000, qApp, &QApplication::quit);
   // Reset all Boris collide pointers within all existing clones to prevent crash
   for(const auto &boris: settings.borisList) {
-    boris->borisFriend = nullptr;
+    boris->borisFriends.clear();
   }
   for(auto &boris: settings.borisList) {
     boris->changeBehaviour("_wave");
