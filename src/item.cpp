@@ -495,7 +495,7 @@ void Item::destroy()
       settings.itemList.removeAt(a);
     }
   }
-  delete this;
+  this->deleteLater();
 }
 
 void Item::handlePhysics()
