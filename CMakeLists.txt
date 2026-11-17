@@ -90,7 +90,7 @@ install(DIRECTORY
   DESTINATION .
   FILES_MATCHING
   PATTERN "*.png"
-  PATTERN "*.dat"
+  PATTERN "*.brs"
   PATTERN "*.wav"
 )
 
