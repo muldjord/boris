@@ -1,6 +1,6 @@
 category=Reaction
 
-doNoDisturb
+doNotDisturb
 oneShot
 
 #Frames
