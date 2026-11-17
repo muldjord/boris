@@ -1123,31 +1123,31 @@ int Boris::getCurBehav()
 
 void Boris::checkInteractions()
 {
-  // Check if there are other Borises nearby to interact with
-  for(auto *boris: settings.borisList) {
-    if(boris != this &&
-       !falling &&
-       !grabbed &&
-       !settings.behaviours.at(curBehav).doNotDisturb &&
-       getDistance(boris->getGlobalCenter()) < getWidth() * 4) {
-      if(!borisFriends.contains(boris)) {
-	borisInteract(boris);
-	break;
-      }
-    }
-  }
+  if(!settings.behaviours.at(curBehav).doNotDisturb &&
+     !falling &&
+     !grabbed) {
 
-  // Check if an item is close by
-  for(auto *item: settings.itemList) {
-    if(!falling &&
-       !grabbed &&
-       !settings.behaviours.at(curBehav).doNotDisturb &&
-       getDistance(item->getGlobalCenter()) < (item->getRange() == -1?getWidth():item->getRange())) {
-      if(!interactingItems.contains(item)) {
-	itemInteract(item);
-	break;
+    // Check if there are other Borises nearby to interact with
+    for(auto *boris: settings.borisList) {
+      if(boris != this &&
+	 getDistance(boris->getGlobalCenter()) < getWidth() * 3) {
+	if(!borisFriends.contains(boris)) {
+	  borisInteract(boris);
+	  break;
+	}
       }
     }
+
+    // Check if an item is close by
+    for(auto *item: settings.itemList) {
+      if(getDistance(item->getGlobalCenter()) < (item->getRange() == -1?getWidth():item->getRange())) {
+	if(!interactingItems.contains(item)) {
+	  itemInteract(item);
+	  break;
+	}
+      }
+    }
+
   }
 
   if((settings.stats == STATS_MOUSEOVER || settings.stats == STATS_CRITICAL) &&

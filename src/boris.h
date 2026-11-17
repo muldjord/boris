@@ -148,7 +148,7 @@ private:
   bool frameTimer = true;
 
   qint64 interactionsTime = 0;
-  qint64 interactionsTimeMax = 250;
+  qint64 interactionsTimeMax = 150;
   bool interactionsTimer = true;
 
   qint64 physicsTime = 0;
