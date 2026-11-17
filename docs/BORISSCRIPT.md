@@ -373,23 +373,15 @@ This will draw the yellow text `sometext` at 2, 2 using the internal minimal pix
 ###### Example
 ```
 draw sprite test 0 8 4
-```
-This examples will draw frame 0 from the sprite `test` at the coordinates 8, 4.
-
-All sprites are loaded from the `data/sprites` folder. The sprite names are the basename of the files contained within that folder (only lower case letters allowed and spaces *not* allowed). Each frame is cut from horizontal sprite sheets separated by the *exact* color R:255, G:0, B:0(known as magenta). See the example sprites in the folder.
-
-NOTE: The `draw sprite` command is very useful if you want to have different facial expressions for Boris within a single behaviour. Then you can simply have the base Boris frame in the behaviour, and use sprites to apply different facial expressions to that same base frame.
-
-##### spritepart
-###### Definition
-`draw spritepart NAME FRAME x y cx cy cw ch`
-###### Example
-```
 draw sprite test 0 8 4 1 2 4 4
 ```
-This draws only a part of a sprite. The example will draw frame 0 from the sprite `test` at the coordinates 8, 4. But it will make a cutout of the sprite before drawing it leading to only part of it being drawn. It will copy the part from the x coordinate 1, y coordinate 2 with a width of 4 and height of 4.
+The first examples will draw frame 0 from the sprite `test` at the coordinates 8, 4.
 
-All sprites are loaded from the `data/sprites` folder. The sprite names are the basename of the files contained within that folder (only lower case letters allowed and spaces *not* allowed). Each frame is cut from horizontal sprite sheets separated by the *exact* color R:255, G:0, B:0(known as magenta). See the example sprites in the folder.
+The second example draws only a part of a sprite. The example will draw frame 0 from the sprite `test` at the coordinates 8, 4. But it will make a cutout of the sprite before drawing it leading to only part of it being drawn. It will copy the part from the x coordinate 1, y coordinate 2 with a width of 4 and height of 4.
+
+All sprites are loaded from the `data/sprites` folder. The sprite names are the basename of the files contained within that folder (only lower case letters allowed and spaces *not* allowed). Each frame is cut from horizontal sprite sheets separated by the *exact* color R:255, G:0, B:0 (known as magenta). Check the existing sprites in the folder for an overview.
+
+NOTE! The `draw sprite` command is very useful if you want to have different facial expressions for Boris within a single behaviour. Then you can simply have the base Boris frame in the behaviour, and use sprites to apply different facial expressions to that same base frame.
 
 ##### value
 ###### Definition
