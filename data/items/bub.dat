@@ -5,7 +5,8 @@ reaction=scare,gameover
 weight=3
 bounce=0
 
-define init:var dir = @2,
+define init:var lives = 3,
+var dir = @2,
 if dir = 1 goto walkwest,
 if dir = 2 goto walkeast
 
@@ -34,12 +35,12 @@ if nextmove = 8 goto jumpeastdn
 
 10;50;0;0;;label bublwest
 11;50;0;0;;
-12;50;0;0;;spawn bubble_w -7 0
+12;50;0;0;;spawn bubble_w -7 0 green
 13;50;0;0;;call decide
 
 14;50;0;0;;label bubleast
 15;50;0;0;;
-16;50;0;0;;spawn bubble_e 7 0
+16;50;0;0;;spawn bubble_e 7 0 green
 17;50;0;0;;call decide
 
 18;50;-1;-4;jump.wav;label jumpwestup
@@ -141,4 +142,6 @@ if nextmove = 8 goto jumpeastdn
 33;50;0;0;;if stars >= 0 goto morestars
 34;250;0;0;;
 35;250;0;0;;
-36;250;0;0;;break
+36;250;0;0;;if lives > 0 { var lives -= 1,goto nextlife } else break
+
+35;50;rand;rand;;label nextlife,call decide

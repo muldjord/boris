@@ -1,0 +1,147 @@
+title=Bob
+category=Fun
+reaction=scare,gameover
+
+weight=3
+bounce=0
+
+define init:var lives = 3,
+var dir = @2,
+if dir = 1 goto walkwest,
+if dir = 2 goto walkeast
+
+define decide:var nextmove = @8,
+if nextmove = 1 goto walkwest,
+if nextmove = 2 goto walkeast,
+if nextmove = 3 goto bublwest,
+if nextmove = 4 goto bubleast,
+if nextmove = 5 goto jumpwestup,
+if nextmove = 6 goto jumpwestdn,
+if nextmove = 7 goto jumpeastup,
+if nextmove = 8 goto jumpeastdn
+
+#Frames
+0;50;-2;0;;label walkwest
+1;50;-2;0;;
+2;50;-2;0;;
+3;50;-2;0;;
+4;50;-2;0;;if @5 >= 2 goto walkwest else call decide
+
+5;50;2;0;;label walkeast
+6;50;2;0;;
+7;50;2;0;;
+8;50;2;0;;
+9;50;2;0;;if @5 >= 2 goto walkeast else call decide
+
+10;50;0;0;;label bublwest
+11;50;0;0;;
+12;50;0;0;;spawn bubble_w -7 0 blue
+13;50;0;0;;call decide
+
+14;50;0;0;;label bubleast
+15;50;0;0;;
+16;50;0;0;;spawn bubble_e 7 0 blue
+17;50;0;0;;call decide
+
+18;50;-1;-4;jump.wav;label jumpwestup
+18;50;-1;-4;;
+18;50;-1;-4;;
+18;50;-1;-4;;
+19;50;-1;-3;;
+19;50;-1;-3;;
+18;50;-1;-2;;
+18;50;-1;-2;;
+19;50;-1;-1;;
+19;50;-1;-1;;
+18;50;-1;-1;;
+18;50;-1;0;;
+19;50;-1;-1;;
+19;50;-1;0;;
+22;50;-1;0;;
+22;50;-1;1;;
+23;50;-1;0;;
+23;50;-1;1;;
+22;50;-1;1;;
+22;50;-1;2;;
+23;50;-1;2;;call decide
+
+20;50;1;-4;jump.wav;label jumpeastup
+20;50;1;-4;;
+20;50;1;-4;;
+20;50;1;-4;;
+21;50;1;-3;;
+21;50;1;-3;;
+20;50;1;-2;;
+20;50;1;-2;;
+21;50;1;-1;;
+21;50;1;-1;;
+20;50;1;-1;;
+20;50;1;0;;
+21;50;1;-1;;
+21;50;1;0;;
+24;50;1;0;;
+24;50;1;1;;
+25;50;1;0;;
+25;50;1;1;;
+24;50;1;1;;
+24;50;1;2;;
+25;50;1;2;;call decide
+
+18;50;-1;-2;jump.wav;label jumpwestdn
+19;50;-1;-2;;
+19;50;-1;-1;;
+18;50;-1;-1;;
+18;50;-1;0;;
+19;50;-1;-1;;
+19;50;-1;0;;
+22;50;-1;0;;
+22;50;-1;1;;
+23;50;-1;0;;
+23;50;-1;1;;
+22;50;-1;1;;
+22;50;-1;1;;
+23;50;-1;2;;
+23;50;-1;2;;
+22;50;-1;3;;
+22;50;-1;3;;
+23;50;-1;4;;
+23;50;-1;4;;
+23;50;-1;4;;
+23;50;-1;4;;call decide
+
+20;50;1;-2;jump.wav;label jumpeastdn
+21;50;1;-2;;
+21;50;1;-1;;
+20;50;1;-1;;
+20;50;1;0;;
+21;50;1;-1;;
+21;50;1;0;;
+24;50;1;0;;
+24;50;1;1;;
+25;50;1;0;;
+25;50;1;1;;
+24;50;1;1;;
+24;50;1;1;;
+25;50;1;2;;
+25;50;1;2;;
+24;50;1;3;;
+24;50;1;3;;
+25;50;1;4;;
+25;50;1;4;;
+25;50;1;4;;
+25;50;1;4;;call decide
+
+29;50;0;0;;label gameover,var spins = 4,var stars = 6
+26;50;0;0;;label morespin
+27;50;0;0;;var spins -= 1
+28;50;0;0;;
+29;50;0;0;;if spins >= 0 goto morespin
+30;50;0;0;;label morestars
+31;50;0;0;;var stars -= 1
+32;50;0;0;;
+33;50;0;0;;if stars >= 0 goto morestars
+34;250;0;0;;
+35;250;0;0;;
+36;250;0;0;;if lives > 0 { var lives -= 1,goto nextlife } else break
+
+35;50;rand;rand;;label nextlife,call decide
