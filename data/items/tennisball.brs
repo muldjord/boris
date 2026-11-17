@@ -5,6 +5,7 @@ reaction=hitball_w,hitballw,0,6;hitball_e,hitballe,2,6
 
 weight=4
 bounce=7
+range=16
 
 doNotDisturb
 

@@ -5,6 +5,7 @@ reaction=kickball_w,kickballw,-22,6;kickball_e,kickballe,22,6
 
 weight=5
 bounce=7
+range=16
 
 doNotDisturb
 

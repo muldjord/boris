@@ -2,7 +2,7 @@ reaction=pie_hit
 
 weight=5
 bounce=2
-range=24
+range=16
 
 define init:var airtime = [18 + @5]
 
