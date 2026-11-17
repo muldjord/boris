@@ -59,7 +59,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Create a shark item that moves around the desktop for a little while. It should make Boris flee
 * Allow setting the colors of Boris' clothes in the About dialog that will overwrite the season colors
 * Create 'Advanced options' in About dialog with 'script_output', 'idkfa' and so on
-* Create an 'easel' item that will cause Boris to paint a random picture when he interacts with it
+* The item interaction initiation system should be redesigned / improved
 
 #### Version 4.0.5 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
@@ -81,6 +81,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Added 'pie' item
 * Added a 'television' item
 * If Boris encounters a 'pie' item and have recently encuntered another Boris, he will now throw the pie in the direction of the other Boris instead of eating it
+* Added an 'easel' item that will cause Boris to paint a random picture when he interacts with it
 * Updated inflate balloon behaviour so the balloon sometimes starts farting around instead of popping
 * Now allows 'nil' for frame to go to in item reactions
 * Moved all documentation into `docs` path
