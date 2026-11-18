@@ -878,16 +878,15 @@ void Boris::handlePhysics()
     }
   }
 
-  
   QPointF cursorPos = mainWindow->mapToScene(mainWindow->viewport()->mapFromGlobal(QCursor::pos()));
   if(!falling && !grabbed) {
     if(getDistance(cursorPos) < getWidth() * 4) {
       if(!mouseHovering) {
-        interactions += 4;
+        interactions += 20;
         if(!settings.behaviours.at(curBehav).doNotDisturb) {
           if(stats->getAnxiety() >= QRandomGenerator::global()->bounded(20) + 10) {
             changeBehaviour("_flee");
-          } else if(stats->getSocial() < (interactions * 10)) {
+          } else if(stats->getSocial() < interactions) {
             interactions = 0;
             changeBehaviour("_mouse_interact");
           }
