@@ -1,6 +1,6 @@
 title=Shower brush
 category=Hygiene
-reaction=_shower
+reaction=shower
 allowFlip
 weight=7
 bounce=3

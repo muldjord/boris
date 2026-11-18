@@ -1,6 +1,6 @@
 title=Toilet roll
 category=Toilet
-reaction=_toilet_visit;_weewee
+reaction=toilet_visit;weewee
 weight=5
 bounce=3
 allowFlip

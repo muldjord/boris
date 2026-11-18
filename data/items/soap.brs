@@ -1,6 +1,6 @@
 title=Soap
 category=Hygiene
-reaction=_wash_hands
+reaction=wash_hands
 allowFlip
 weight=5
 bounce=2
