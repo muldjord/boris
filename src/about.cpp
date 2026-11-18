@@ -334,6 +334,8 @@ QToolTip {
   aboutWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   aboutWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+  aboutWidget->setSearchPaths({ QCoreApplication::applicationDirPath() + "/data/graphics" });
+  
   QString aboutText = R"(
 
 <h3>Boris bids you welcome!</h3>
@@ -345,20 +347,20 @@ QToolTip {
 <li>Using the mouse scroll-wheel on Boris will tickle him if he's not busy.</li>
 <li>Right-clicking the Boris system tray icon brings up a menu that gives you access to information and important functions that will help you configure and take care of Boris. This is also where you can unlock items that Boris can interact with.</li>
 </ul>
-<h4>Health stats:</h4>
+<h4><img src="health.png">Health stats:</h4>
 <ul>
-<li>The 'Zz' icon signifies Boris' energy level.</li>
-<li>The 'Speech bubble' icon shows Boris' need for social interaction.</li>
-<li>The 'Smiley' icon indicates whether Boris is in a good mood and having fun.</li>
-<li>The 'Knife and fork' icon shows how hungry Boris currently is.</li>
-<li>The 'Toilet' icon is an indicator of Boris' need to go to the bathroom.</li>
+<li>The <img src="energy.png"> icon signifies Boris' energy level.</li>
+<li>The <img src="social.png"> icon shows Boris' need for social interaction.</li>
+<li>The <img src="fun.png"> icon indicates whether Boris is in a good mood and having fun.</li>
+<li>The <img src="hunger.png"> icon shows how hungry Boris currently is.</li>
+<li>The <img src="toilet.png"> icon is an indicator of Boris' need to go to the bathroom.</li>
 </ul>
-<h4>Other stats:</h4>
+<h4><img src="question.png">Other stats:</h4>
 <ul>
 <li>Boris can get dirty if he eats messy food or goes to the toilet without washing his hands.</li>
 <li>He can also get bruised if you thrown him around too much.</li>
 </ul>
-<h4>How to get coins:</h4>
+<h4><img src="coin.png">How to get coins:</h4>
 <p>It's just for fun! No real money involved. You can earn Boris coins by right-clicking Boris and choosing a behaviour from a category that corresponds to his current needs. The more needy Boris is for the particular category you select, the more coins you receive.</p>
 <p>You can then spend the coins by right-clicking the Boris system tray icon, selecting the 'Items' submenu and choose the item you want to unlock. The item then becomes unlocked and can be selected any time you want.</p>
 <h4>Where to get Boris:</h4>
