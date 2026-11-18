@@ -838,7 +838,7 @@ void Boris::handlePhysics()
 {
   // Update opacity of dirt and bruises if Boris is alive
   if(isAlive) {
-    dirtOpacity = 0.50 - ((qreal)stats->getHygiene()) * 0.01;
+    dirtOpacity = 0.65 - ((qreal)stats->getHygiene()) * 0.01;
     bruisesOpacity = 0.75 - ((qreal)stats->getHealth()) * 0.01;
   }
 
