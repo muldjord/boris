@@ -60,6 +60,8 @@ The last command copies all necessary files to the `release` folder. You can the
 * Create `Advanced options` in About dialog with `script_output`, `idkfa` and so on
 * The item interaction initiation system should be redesigned / improved
 * When a Boris is interacting with an item it shouldn't be able for a different Boris to also interact with the item - it needs a cooldown if `doNotDisturb` is set on the item
+* Improve `play_piano` so it uses `sound` command and sprites for hits
+* Improve `play_drums` so it uses `sound` command and sprites for hits
 
 #### Version 4.0.5 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
