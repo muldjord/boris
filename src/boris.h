@@ -180,11 +180,9 @@ private:
   bool drawing = false;
 
   QPixmap dirtSprite = QPixmap(32, 32);;
-  QPixmap origDirt = QPixmap(32, 32);;
   qreal dirtOpacity = 0.0;
 
   QPixmap bruisesSprite = QPixmap(32, 32);;
-  QPixmap origBruises = QPixmap(32, 32);;
   qreal bruisesOpacity = 0.0;
 
   QPixmap rendered = QPixmap(32, 32);

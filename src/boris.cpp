@@ -62,8 +62,10 @@ Boris::Boris(Settings &settings)
   setPos(QRandomGenerator::global()->bounded(settings.desktopWidth), QRandomGenerator::global()->bounded(settings.desktopHeight));
 
   rendered.fill(Qt::transparent);
-  origDirt = settings.getPixmap("dirt.png");
-  origBruises = settings.getPixmap("bruises.png");
+
+  dirtSprite = settings.getPixmap("dirt.png");
+  bruisesSprite = settings.getPixmap("bruises.png");
+
   scriptSprite.fill(Qt::transparent);
   scriptImage.fill(Qt::transparent);
 
@@ -624,21 +626,20 @@ void Boris::nextFrame()
 
   QBitmap mask = settings.behaviours.at(curBehav).frames.at(curFrame).sprite.mask();
 
-  QPixmap dirtPixmap(origDirt);
-  dirtPixmap.setMask(mask);
+  QPixmap dirtMasked(dirtSprite);
+  dirtMasked.setMask(mask);
 
-  QPixmap bruisesPixmap(origBruises);
-  bruisesPixmap.setMask(mask);
+  QPixmap bruisesMasked(bruisesSprite);
+  bruisesMasked.setMask(mask);
+
+  borisSprite = settings.behaviours.at(curBehav).frames.at(curFrame).sprite;
 
   if(flipFrames) {
-    QImage flipped = settings.behaviours.at(curBehav).frames.at(curFrame).sprite.toImage().flipped(Qt::Horizontal);
-    borisSprite = QPixmap::fromImage(flipped);
-    dirtSprite = QPixmap::fromImage(dirtPixmap.toImage().flipped(Qt::Horizontal));
-    bruisesSprite = QPixmap::fromImage(bruisesPixmap.toImage().flipped(Qt::Horizontal));
+    borisSprite = QPixmap::fromImage(borisSprite.toImage().flipped(Qt::Horizontal));
+    dirtMasked = QPixmap::fromImage(dirtMasked.toImage().flipped(Qt::Horizontal));
+    bruisesMasked = QPixmap::fromImage(bruisesMasked.toImage().flipped(Qt::Horizontal));
   } else {
     borisSprite = settings.behaviours.at(curBehav).frames.at(curFrame).sprite;
-    dirtSprite = dirtPixmap;
-    bruisesSprite = bruisesPixmap;
   }
 
   if(settings.sound && settings.behaviours.at(curBehav).frames.at(curFrame).soundBuffer != nullptr) {
@@ -668,7 +669,7 @@ void Boris::nextFrame()
     }
   }
 
-  int stop = 0; // Will be > 0 if a goto, behav or break command is run
+  int stop = 0; // Will become > 0 if a goto, behav or break command is run
   runScript(stop);
 
   // Assemble the Boris sprite from parts
@@ -679,12 +680,16 @@ void Boris::nextFrame()
   painter.drawPixmap(0, 0, borisSprite);
   painter.drawPixmap(0, 0, scriptSprite);
   painter.setOpacity(dirtOpacity);
-  painter.drawPixmap(0, 0, dirtSprite);
+  painter.setCompositionMode(QPainter::CompositionMode_Darken);
+  painter.drawPixmap(0, 0, dirtMasked);
+  painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
   painter.setOpacity(bruisesOpacity);
-  painter.drawPixmap(0, 0, bruisesSprite);
+  painter.setCompositionMode(QPainter::CompositionMode_HardLight);
+  painter.drawPixmap(0, 0, bruisesMasked);
+  painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
   painter.end();
 
-  // ALso update the shadow here in case the sprite doesn't move which misaligns it
+  // Also update the shadow here in case the sprite doesn't move which misaligns it
   shadow->updateShadow(rendered, groundY - pos().y(), falling);
   // Make sure 'paint()' is called
   update();
