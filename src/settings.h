@@ -84,14 +84,13 @@ public:
 
   // Weather
   bool forceWeatherType = false;
-  QString weatherType = "11d";
-  int weatherIdx = -1;
+  QString weatherType = "01d";
   bool forceTemperature = false;
-  double temperature = -42;
+  double temperature = -1;
   bool forceWindDirection = false;
   QString windDirection = "N";
   bool forceWindSpeed = false;
-  double windSpeed = 0.0;
+  double windSpeed = -1.0;
   QString city = "";
   QString key = "";
 

@@ -47,6 +47,7 @@ protected:
 private:
   Settings &settings;
   QTimer weatherTimer;
+  int weatherIdx = 0;
   int curFrame = 0;
   QPixmap rendered = QPixmap(32, 32);
 };

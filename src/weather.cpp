@@ -47,7 +47,14 @@ QRectF Weather::boundingRect() const
 
 void Weather::showWeather()
 {
-  curFrame = 0; 
+  for(int a = 0; a < settings.weathers.count(); ++a) {
+    if(settings.weathers.at(a).file == settings.weatherType) {
+      weatherIdx = a;
+      break;
+    }
+  }
+
+  curFrame = 0;
   weatherTimer.setInterval(0);
   weatherTimer.start();
   show();
@@ -56,10 +63,10 @@ void Weather::showWeather()
 
 void Weather::updateWeather()
 {
-  rendered = settings.weathers.at(settings.weatherIdx).frames.at(curFrame).sprite;
-  weatherTimer.setInterval(settings.weathers.at(settings.weatherIdx).frames.at(curFrame).time);
+  rendered = settings.weathers.at(weatherIdx).frames.at(curFrame).sprite;
+  weatherTimer.setInterval(settings.weathers.at(weatherIdx).frames.at(curFrame).time);
   curFrame++;
-  if(curFrame >= settings.weathers.at(settings.weatherIdx).frames.length()) {
+  if(curFrame >= settings.weathers.at(weatherIdx).frames.length()) {
     curFrame = 0;
   }
 
