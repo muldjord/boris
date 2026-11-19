@@ -418,10 +418,10 @@ QToolTip {
   }
   licenseWidget->setHtml(licenseText);
 
-  QTabWidget *tabWidget = new QTabWidget;
-  tabWidget->addTab(aboutWidget, "About");
-  tabWidget->addTab(authorWidget, "Author");
-  tabWidget->addTab(licenseWidget, "License");
+  QTabWidget *infoTabs = new QTabWidget;
+  infoTabs->addTab(aboutWidget, "About");
+  infoTabs->addTab(authorWidget, "Author");
+  infoTabs->addTab(licenseWidget, "License");
 
   QPushButton *okButton = new QPushButton("Close and save");
   okButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -436,35 +436,35 @@ QToolTip {
   clonesSlider = new StepSlider({0, 100}, this);
   clonesSlider->setValue(settings.clones);
 
-  enableItems = new QCheckBox("Allow items");
-  enableItems->setToolTip("Boris will sometimes place various items around the desktop. Items will also be randomly spawned or created using the tray icon menu.");
+  enableItemsCheckBox = new QCheckBox("Allow items and thingamabobs");
+  enableItemsCheckBox->setToolTip("Boris will sometimes place various items around the desktop. Items will also be randomly spawned or created using the tray icon menu.");
   if(settings.items) {
-    enableItems->setCheckState(Qt::Checked);
+    enableItemsCheckBox->setCheckState(Qt::Checked);
   }
 
-  QLabel *itemSpawnIntervalLabel = new QLabel("Seconds between random item spawn (5-3600):");
-  itemSpawnIntervalSlider = new StepSlider({10, 3600}, this, 10);
+  QLabel *itemSpawnIntervalLabel = new QLabel("Seconds between random item spawn (20-3600):");
+  itemSpawnIntervalSlider = new StepSlider({20, 3600}, this, 20);
   itemSpawnIntervalSlider->setValue(settings.itemSpawnInterval);
   itemSpawnIntervalSlider->setToolTip("If items are enabled random items will be spawned around the desktop at this interval.");
 
-  QLabel *itemTimeoutLabel = new QLabel("Item timeout in seconds (10-3600):");
-  itemTimeoutSlider = new StepSlider({10, 3600}, this, 10);
+  QLabel *itemTimeoutLabel = new QLabel("Item timeout in seconds (20-3600):");
+  itemTimeoutSlider = new StepSlider({20, 3600}, this, 20);
   itemTimeoutSlider->setValue(settings.itemTimeout);
   itemTimeoutSlider->setToolTip("Items will disappear after this amount of time.");
 
   QLabel *weatherLabel = new QLabel("Show weather for city (mouse over for help):");
   weatherLineEdit = new QLineEdit();
-  weatherLineEdit->setToolTip("Type in a nearby city name or the openweathermap city id. Using a city id is the most stable method. To find the id for your city go to openweathermap.org and do a city lookup. The city id will be the last part of the website address.");
+  weatherLineEdit->setToolTip("Type in a nearby city name or the OpenWeatherMap city id. Using a city id is the most stable method. To find the id for your city go to openweathermap.org and do a city lookup. The city id will be the last part of the website address.");
   weatherLineEdit->setText(settings.city);
 
   QLabel *weatherKeyLabel = new QLabel("OpenWeatherMap key (mouse over for help):");
   weatherKeyLineEdit = new QLineEdit();
-  weatherKeyLineEdit->setToolTip("The weather functionality needs an API key to function. The default one should work.<br/>In case it doesn't, get a new one for free at openweathermap.org/appid.");
+  weatherKeyLineEdit->setToolTip("The weather functionality needs an API key to function. Get one for free at openweathermap.org/appid.");
   weatherKeyLineEdit->setText(settings.key);
 
   QLabel *feedUrlLabel = new QLabel("RSS feed url (mouse over for help):");
   feedUrlLineEdit = new QLineEdit();
-  feedUrlLineEdit->setToolTip("Type in any RSS feed url. Boris will sometimes update you on a title from this feed. You can click it to open it in the default browser.");
+  feedUrlLineEdit->setToolTip("Type in any RSS feed url. Boris will sometimes update you on a title from this feed. When he does you can click it to open it in the default browser.");
   feedUrlLineEdit->setText(settings.feedUrl);
 
   QLabel *statsLabel = new QLabel("Vitality stats:");
@@ -479,19 +479,20 @@ QToolTip {
   independenceSlider = new StepSlider({0, 100}, this);
   independenceSlider->setValue(settings.independence);
 
-  makeInvincible = new QCheckBox("Make Boris invincible");
+  makeInvincibleCheckBox = new QCheckBox("Make Boris invincible");
   if(settings.isInvincible) {
-    makeInvincible->setCheckState(Qt::Checked);
+    makeInvincibleCheckBox->setCheckState(Qt::Checked);
   }
 
-  enableSound = new QCheckBox("Enable sound (applied when dialog closes)");
+  enableSoundCheckBox = new QCheckBox("Enable sound");
   if(settings.sound) {
-    enableSound->setCheckState(Qt::Checked);
+    enableSoundCheckBox->setCheckState(Qt::Checked);
   }
+  connect(enableSoundCheckBox, &QCheckBox::clicked, this, &About::enableSound);
 
-  enableBubbles = new QCheckBox("Enable Boris speech bubbles");
+  enableBubblesCheckBox = new QCheckBox("Allow Boris speech bubbles");
   if(settings.bubbles) {
-    enableBubbles->setCheckState(Qt::Checked);
+    enableBubblesCheckBox->setCheckState(Qt::Checked);
   }
 
   QLabel *volumeLabel = new QLabel("Sound volume:");
@@ -499,50 +500,64 @@ QToolTip {
   volumeSlider->setValue(settings.volume);
   connect(volumeSlider, &StepSlider::valueChanged, this, &About::volumeChanged);
 
-  showWelcome = new QCheckBox("Always show this dialog on startup");
+  showWelcomeCheckBox = new QCheckBox("Always show this dialog on startup");
   if(settings.showWelcome) {
-    showWelcome->setCheckState(Qt::Checked);
+    showWelcomeCheckBox->setCheckState(Qt::Checked);
   }
 
-  QVBoxLayout *configLayout = new QVBoxLayout();
-  configLayout->addWidget(sizeLabel);
-  configLayout->addWidget(sizeSlider);
-  configLayout->addWidget(clonesLabel);
-  configLayout->addWidget(clonesSlider);
-  configLayout->addWidget(enableItems);
-  configLayout->addWidget(itemSpawnIntervalLabel);
-  configLayout->addWidget(itemSpawnIntervalSlider);
-  configLayout->addWidget(itemTimeoutLabel);
-  configLayout->addWidget(itemTimeoutSlider);
-  configLayout->addWidget(statsLabel);
-  configLayout->addWidget(statsComboBox);
-  configLayout->addWidget(independenceLabel);
-  configLayout->addWidget(independenceSlider);
-  configLayout->addWidget(makeInvincible);
-  configLayout->addWidget(enableSound);
-  configLayout->addWidget(volumeLabel);
-  configLayout->addWidget(volumeSlider);
-  configLayout->addWidget(weatherLabel);
-  configLayout->addWidget(weatherLineEdit);
-  configLayout->addWidget(weatherKeyLabel);
-  configLayout->addWidget(weatherKeyLineEdit);
-  configLayout->addWidget(enableBubbles);
-  configLayout->addWidget(feedUrlLabel);
-  configLayout->addWidget(feedUrlLineEdit);
+  QVBoxLayout *generalLayout = new QVBoxLayout();
+  generalLayout->addWidget(sizeLabel);
+  generalLayout->addWidget(sizeSlider);
+  generalLayout->addWidget(clonesLabel);
+  generalLayout->addWidget(clonesSlider);
+  generalLayout->addWidget(enableBubblesCheckBox);
+  generalLayout->addWidget(enableItemsCheckBox);
+  generalLayout->addWidget(itemSpawnIntervalLabel);
+  generalLayout->addWidget(itemSpawnIntervalSlider);
+  generalLayout->addWidget(itemTimeoutLabel);
+  generalLayout->addWidget(itemTimeoutSlider);
+  generalLayout->addWidget(statsLabel);
+  generalLayout->addWidget(statsComboBox);
+  generalLayout->addWidget(independenceLabel);
+  generalLayout->addWidget(independenceSlider);
+  generalLayout->addWidget(enableSoundCheckBox);
+  generalLayout->addWidget(volumeLabel);
+  generalLayout->addWidget(volumeSlider);
+  generalLayout->addStretch(1);
 
-  QHBoxLayout *hLayout1 = new QHBoxLayout;
-  hLayout1->addLayout(configLayout);
-  hLayout1->addWidget(tabWidget);
+  QWidget *generalWidget = new QWidget;
+  generalWidget->setLayout(generalLayout);
 
-  QHBoxLayout *hLayout2 = new QHBoxLayout;
-  hLayout2->addStretch(2);
-  hLayout2->addWidget(showWelcome, 0);
-  hLayout2->addWidget(okButton, 0);
-  hLayout2->addStretch(2);
+  QVBoxLayout *advancedLayout = new QVBoxLayout();
+  advancedLayout->addWidget(makeInvincibleCheckBox);
+  advancedLayout->addWidget(weatherLabel);
+  advancedLayout->addWidget(weatherLineEdit);
+  advancedLayout->addWidget(weatherKeyLabel);
+  advancedLayout->addWidget(weatherKeyLineEdit);
+  advancedLayout->addWidget(feedUrlLabel);
+  advancedLayout->addWidget(feedUrlLineEdit);
+  advancedLayout->addStretch(1);
+
+  QWidget *advancedWidget = new QWidget;
+  advancedWidget->setLayout(advancedLayout);
+
+  QTabWidget *configTabs = new QTabWidget;
+  configTabs->addTab(generalWidget, "General");
+  configTabs->addTab(advancedWidget, "Advanced");
+
+  QHBoxLayout *horizLayout = new QHBoxLayout;
+  horizLayout->addWidget(configTabs);
+  horizLayout->addWidget(infoTabs);
+
+  QHBoxLayout *bottomLayout = new QHBoxLayout;
+  bottomLayout->addStretch(2);
+  bottomLayout->addWidget(showWelcomeCheckBox, 0);
+  bottomLayout->addWidget(okButton, 0);
+  bottomLayout->addStretch(2);
 
   QVBoxLayout *vLayout = new QVBoxLayout;
-  vLayout->addLayout(hLayout1);
-  vLayout->addLayout(hLayout2);
+  vLayout->addLayout(horizLayout);
+  vLayout->addLayout(bottomLayout);
 
   setLayout(vLayout);
 }
@@ -556,9 +571,14 @@ void About::volumeChanged(int value)
   soundMixer->setGlobalVolume(value);
 }
 
+void About::enableSound(bool value)
+{
+  settings.sound = value;
+}
+
 void About::saveAll()
 {
-  if(showWelcome->isChecked()) {
+  if(showWelcomeCheckBox->isChecked()) {
     settings.showWelcome = true;
   } else {
     settings.showWelcome = false;
@@ -577,24 +597,24 @@ void About::saveAll()
   settings.feedUrl = feedUrlLineEdit->text();
   settings.stats = statsComboBox->currentData().toInt();
   settings.independence = independenceSlider->value();
-  if(makeInvincible->isChecked()) {
+  if(makeInvincibleCheckBox->isChecked()) {
     settings.isInvincible = true;
   } else {
     settings.isInvincible = false;
   }
-  if(enableSound->isChecked()) {
+  if(enableSoundCheckBox->isChecked()) {
     settings.sound = true;
   } else {
     settings.sound = false;
   }
   settings.volume = volumeSlider->value();
 
-  if(enableBubbles->isChecked()) {
+  if(enableBubblesCheckBox->isChecked()) {
     settings.bubbles = true;
   } else {
     settings.bubbles = false;
   }
-  if(enableItems->isChecked()) {
+  if(enableItemsCheckBox->isChecked()) {
     settings.items = true;
   } else {
     settings.items = false;
@@ -607,7 +627,7 @@ void About::saveAll()
   iniSettings->setValue("item_timeout", settings.itemTimeout);
   iniSettings->setValue("item_spawn_timer", settings.itemSpawnInterval);
   iniSettings->setValue("independence", settings.independence);
-  iniSettings->setValue("makeInvincible", settings.isInvincible);
+  iniSettings->setValue("make_invincible", settings.isInvincible);
   iniSettings->setValue("bubbles", settings.bubbles);
   iniSettings->setValue("sound", settings.sound);
   iniSettings->setValue("volume", settings.volume);

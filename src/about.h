@@ -38,6 +38,7 @@ public:
 
 private slots:
   void volumeChanged(int value);
+  void enableSound(bool value);
   void saveAll();
 
 private:
@@ -52,11 +53,11 @@ private:
   QLineEdit *weatherKeyLineEdit = nullptr;
   QLineEdit *feedUrlLineEdit = nullptr;
   QComboBox *statsComboBox = nullptr;
-  QCheckBox *makeInvincible = nullptr;
-  QCheckBox *enableSound = nullptr;
-  QCheckBox *enableItems = nullptr;
-  QCheckBox *enableBubbles = nullptr;
-  QCheckBox *showWelcome = nullptr;
+  QCheckBox *makeInvincibleCheckBox = nullptr;
+  QCheckBox *enableSoundCheckBox = nullptr;
+  QCheckBox *enableItemsCheckBox = nullptr;
+  QCheckBox *enableBubblesCheckBox = nullptr;
+  QCheckBox *showWelcomeCheckBox = nullptr;
   StepSlider *independenceSlider = nullptr;
   StepSlider *volumeSlider = nullptr;
 };
