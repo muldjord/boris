@@ -92,8 +92,8 @@ public:
   QString windDirection = "N";
   bool forceWindSpeed = false;
   double windSpeed = 0.0;
-  QString city = "Copenhagen";
-  QString key = "fe9fe6cf47c03d2640d5063fbfa053a2";
+  QString city = "City or City ID";
+  QString key = "youneedtogetakey";
 
   // Chatlines
   QList<RssLine> rssLines;
