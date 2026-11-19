@@ -33,8 +33,6 @@ NetComm::NetComm(Settings &settings) : settings(settings)
   netTimer.setInterval(3600000);
   netTimer.setSingleShot(true);
   connect(&netTimer, &QTimer::timeout, this, &NetComm::updateAll);
-
-  QTimer::singleShot(0, this, &NetComm::updateAll);
 }
 
 NetComm::~NetComm()
@@ -43,14 +41,25 @@ NetComm::~NetComm()
 
 void NetComm::updateAll()
 {
-  if(settings.city.toInt()) {
-    weatherRequest.setUrl(QUrl("http://api.openweathermap.org/data/2.5/weather?id=" + settings.city + "&mode=xml&units=metric&appid=" + settings.key));
-  } else {
-    weatherRequest.setUrl(QUrl("http://api.openweathermap.org/data/2.5/weather?q=" + settings.city + "&mode=xml&units=metric&appid=" + settings.key));
+  if(!settings.city.trimmed().isEmpty() &&
+     !settings.key.trimmed().isEmpty()) {
+    bool isId = false;
+    int cityId = settings.city.toInt(&isId);
+    
+    if(isId) {
+      weatherRequest.setUrl(QUrl("http://api.openweathermap.org/data/2.5/weather?id=" + QString::number(cityId) + "&mode=xml&units=metric&appid=" + settings.key));
+    } else {
+      weatherRequest.setUrl(QUrl("http://api.openweathermap.org/data/2.5/weather?q=" + settings.city + "&mode=xml&units=metric&appid=" + settings.key));
+    }
+    get(weatherRequest);
   }
-  get(weatherRequest);
-  feedRequest.setUrl(QUrl(settings.feedUrl));
-  get(feedRequest);
+
+  if(!settings.feedUrl.trimmed().isEmpty()) {
+    feedRequest.setUrl(QUrl(settings.feedUrl));
+    get(feedRequest);
+  } else {
+    settings.rssLines.clear();
+  }
 }
 
 void NetComm::netReply(QNetworkReply *reply)
@@ -59,7 +68,7 @@ void NetComm::netReply(QNetworkReply *reply)
   doc.setContent(reply->readAll());
   reply->close();
   if(reply->request() == weatherRequest) {
-    qInfo("Updating weather:\n");
+    qInfo("Setting weather:\n");
     if(!settings.forceWeatherType) {
       settings.weatherType = doc.elementsByTagName("weather").at(0).toElement().attribute("icon");
     }
@@ -81,14 +90,6 @@ void NetComm::netReply(QNetworkReply *reply)
     }
     if(settings.windDirection.isEmpty()) {
       settings.windDirection = "E";
-    }
-
-    // Set weatherIdx for use in Weather class
-    for(int a = 0; a < settings.weathers.count(); ++a) {
-      if(settings.weathers.at(a).file == settings.weatherType) {
-        settings.weatherIdx = a;
-        break;
-      }
     }
 
     //qInfo("%s\n", rawData.data());
