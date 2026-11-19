@@ -88,6 +88,7 @@ Item::Item(const QString &item, Settings &settings, const int &xPos, const int&y
     }
   }
 
+  // Make sure were up to speed
   oldElapsed = mainWindow->getElapsed();
 
   QTimer::singleShot(0, this, &Item::nextFrame);
