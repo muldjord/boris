@@ -54,6 +54,7 @@ private:
   QLineEdit *feedUrlLineEdit = nullptr;
   QComboBox *statsComboBox = nullptr;
   QCheckBox *makeInvincibleCheckBox = nullptr;
+  QCheckBox *idkfaCheckBox = nullptr;
   QCheckBox *enableSoundCheckBox = nullptr;
   QCheckBox *enableItemsCheckBox = nullptr;
   QCheckBox *enableBubblesCheckBox = nullptr;

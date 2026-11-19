@@ -227,7 +227,8 @@ void Boris::createBehavioursMenu()
     // Find correct menu to put behaviour into
     if((behaviour.file.left(1) == "_" && behaviour.category.isEmpty()) ||
        behaviour.category == "Other" ||
-       behaviour.category == "Locomotion") {
+       behaviour.category == "Locomotion" ||
+       behaviour.category == "Reaction") {
       menu = idkfaMenu;
     }
     if(menu == nullptr) {

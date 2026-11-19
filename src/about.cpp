@@ -442,6 +442,12 @@ QToolTip {
     enableItemsCheckBox->setCheckState(Qt::Checked);
   }
 
+  idkfaCheckBox = new QCheckBox("Enable 'idkfa' behaviour menu (requires restart)");
+  idkfaCheckBox->setToolTip("This adds all behaviours that are usually hidden to a special 'idkfa' menu.");
+  if(settings.idkfa) {
+    idkfaCheckBox->setCheckState(Qt::Checked);
+  }
+  
   QLabel *itemSpawnIntervalLabel = new QLabel("Seconds between random item spawn (20-3600):");
   itemSpawnIntervalSlider = new StepSlider({20, 3600}, this, 20);
   itemSpawnIntervalSlider->setValue(settings.itemSpawnInterval);
@@ -536,6 +542,7 @@ QToolTip {
   advancedLayout->addWidget(weatherKeyLineEdit);
   advancedLayout->addWidget(feedUrlLabel);
   advancedLayout->addWidget(feedUrlLineEdit);
+  advancedLayout->addWidget(idkfaCheckBox);
   advancedLayout->addStretch(1);
 
   QWidget *advancedWidget = new QWidget;
@@ -602,6 +609,11 @@ void About::saveAll()
   } else {
     settings.isInvincible = false;
   }
+  if(idkfaCheckBox->isChecked()) {
+    settings.idkfa = true;
+  } else {
+    settings.idkfa = false;
+  }
   if(enableSoundCheckBox->isChecked()) {
     settings.sound = true;
   } else {
@@ -628,6 +640,7 @@ void About::saveAll()
   iniSettings->setValue("item_spawn_timer", settings.itemSpawnInterval);
   iniSettings->setValue("independence", settings.independence);
   iniSettings->setValue("make_invincible", settings.isInvincible);
+  iniSettings->setValue("idkfa", settings.idkfa);
   iniSettings->setValue("bubbles", settings.bubbles);
   iniSettings->setValue("sound", settings.sound);
   iniSettings->setValue("volume", settings.volume);
