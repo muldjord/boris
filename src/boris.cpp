@@ -353,7 +353,7 @@ void Boris::changeBehaviour(QString behav, int time)
     } else {
       // No behaviour has been set so far, so just choose one at random that's not:
       // 1. A part of the static behaviours (ones with '_' at the beginning of the filename)
-      // 3. In the 'Reaction' category
+      // 2. In the 'Reaction' category
       do {
 	curBehav = QRandomGenerator::global()->bounded(settings.behaviours.size() - staticBehaviours) + staticBehaviours;
       } while(settings.behaviours.at(curBehav).category == "Reaction");
