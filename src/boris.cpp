@@ -141,8 +141,6 @@ void Boris::tick()
   physicsTime += elapsed;
   behavTime += elapsed;
   interactionsTime += elapsed;
-  acknowledgeItemTime += elapsed;
-  acknowledgeBorisTime += elapsed;
 
   if(frameTimer) {
     if(frameTime >= frameTimeMax) {
@@ -188,27 +186,27 @@ void Boris::tick()
   } else {
     interactionsTime = 0;
   }
-  if(acknowledgeItemTimer) {
-    if(acknowledgeItemTime >= acknowledgeItemTimeMax) {
-      acknowledgeItemTime = acknowledgeItemTime - acknowledgeItemTimeMax;
-      if(acknowledgeItemTime > acknowledgeItemTimeMax) {
-	acknowledgeItemTime = 0;
+
+  {
+    QMutableMapIterator<Boris *,int> i(borisFriends);
+    while(i.hasNext()) {
+      i.next();
+      borisFriends[i.key()] -= elapsed;
+      if(borisFriends[i.key()] <= 0) {
+	borisFriends.remove(i.key());
       }
-      interactingItems.clear();
     }
-  } else {
-    acknowledgeItemTime = 0;
   }
-  if(acknowledgeBorisTimer) {
-    if(acknowledgeBorisTime >= acknowledgeBorisTimeMax) {
-      acknowledgeBorisTime = acknowledgeBorisTime - acknowledgeBorisTimeMax;
-      if(acknowledgeBorisTime > acknowledgeBorisTimeMax) {
-	acknowledgeBorisTime = 0;
+
+  {
+    QMutableMapIterator<Item *, int> i(interactedItems);
+    while(i.hasNext()) {
+      i.next();
+      interactedItems[i.key()] -= elapsed;
+      if(interactedItems[i.key()] <= 0) {
+	interactedItems.remove(i.key());
       }
-      borisFriends.clear();
     }
-  } else {
-    acknowledgeBorisTime = 0;
   }
 }
 
@@ -456,9 +454,9 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["mvvel"] = settings.mouseVVel;
   scriptVars["mdist"] = getDistance(cursorPos);
   scriptVars["mdir"] = getDirectionTo(cursorPos); // Mouse direction in relation to Boris
-  if(!borisFriends.isEmpty() && borisFriends.last() != nullptr) {
-    scriptVars["bdir"] = getDirectionTo(QPoint(borisFriends.last()->pos().x() + (borisFriends.last()->getWidth() / 2),
-                                               borisFriends.last()->pos().y() + (borisFriends.last()->getHeight() / 2))); // Boris friend direction in relation to Boris
+  if(!borisFriends.isEmpty() && borisFriend != nullptr) {
+    scriptVars["bdir"] = getDirectionTo(QPoint(borisFriend->pos().x() + (borisFriend->getWidth() / 2),
+                                               borisFriend->pos().y() + (borisFriend->getHeight() / 2))); // Boris friend direction in relation to Boris
   } else {
     scriptVars["bdir"] = -1;
   }
@@ -1060,6 +1058,7 @@ void Boris::reconfBoris()
 {
   // Reset Boris pointer
   borisFriends.clear();
+  borisFriend = nullptr;
 
   // Set new independence level
   stats->setIndependence(settings.independence);
@@ -1117,7 +1116,7 @@ void Boris::checkInteractions()
     // Check if there are other Borises nearby to interact with
     for(auto *boris: settings.borisList) {
       if(boris != this &&
-	 getDistance(boris->getGlobalCenter()) < getWidth() * 3) {
+	 getDistance(boris->getGlobalCenter()) < getWidth() * 4) {
 	if(!borisFriends.contains(boris)) {
 	  borisInteract(boris);
 	  break;
@@ -1128,7 +1127,7 @@ void Boris::checkInteractions()
     // Check if an item is close by
     for(auto *item: settings.itemList) {
       if(getDistance(item->getGlobalCenter()) < (item->getRange() == -1?getWidth():item->getRange())) {
-	if(!interactingItems.contains(item)) {
+	if(!interactedItems.contains(item)) {
 	  itemInteract(item);
 	  break;
 	}
@@ -1155,15 +1154,15 @@ void Boris::checkInteractions()
 
 void Boris::borisInteract(Boris *otherBoris)
 {
-  borisFriends.append(otherBoris);
-  acknowledgeBorisTime = 0;
+  borisFriends[otherBoris] = 240 * 1000; // The amount of time any encountered Boris will be ignored after greeting him
+  borisFriend = otherBoris;
 
   // Prepend current behaviour to queue so it isn't 'forgotten'
   //behavQueue.prepend(settings.behaviours.at(curBehav).file);
 
-  if(settings.behaviours.at(borisFriends.last()->getCurBehav()).file == "_drop_dead") {
+  if(settings.behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
     changeBehaviour("_sad");
-  } else if(borisFriends.last()->stats->getHygiene() <= 22) {
+  } else if(borisFriend->stats->getHygiene() <= 22) {
     changeBehaviour("_hygiene");
   } else {
     changeBehaviour("_wave");
@@ -1172,9 +1171,7 @@ void Boris::borisInteract(Boris *otherBoris)
 
 void Boris::itemInteract(Item * item)
 {
-  interactingItems.append(item);
-  acknowledgeItemTime = 0;
-
+  interactedItems[item] = 120 * 1000; // The amount of time any interacted item will be ignored after interacting with it
   interactingItemPos = item->pos().toPoint();
 
   if(!item->getReactionBehaviour().isEmpty()) {

@@ -75,7 +75,8 @@ public:
   int curFrame = 0;
   int curBehav = 0;
 
-  QList<Boris *> borisFriends;
+  QMap<Boris *, int> borisFriends;
+  Boris *borisFriend = nullptr;
   Stats *stats = nullptr;
 
 public slots:
@@ -126,9 +127,6 @@ private:
 
   Settings &settings;
 
-  QList<Item *> interactingItems;
-  QPoint interactingItemPos = QPoint(); // This HAS to be separate from interactingItem due to items often getting deleted causing us to then ask for pos from a deleted object... crash!
-
   bool falling = false;
   bool grabbed = false;
   int staticBehaviours = 0;
@@ -155,13 +153,8 @@ private:
   qint64 physicsTimeMax = 30;
   bool physicsTimer = true;
 
-  qint64 acknowledgeItemTime = 0;
-  qint64 acknowledgeItemTimeMax = 90 * 1000; // This timeout can be quite long as it simply clears the list of all interacted items to make Boris interact with them again
-  bool acknowledgeItemTimer = true;
-
-  qint64 acknowledgeBorisTime = 0;
-  qint64 acknowledgeBorisTimeMax = 90 * 1000; // This timeout can be quite long as it simply clears the list of all interacted Borises to make Boris interact with them again
-  bool acknowledgeBorisTimer = true;
+  QMap<Item *, int> interactedItems;
+  QPoint interactingItemPos = QPoint(); // This HAS to be separate from interactingItem due to items often getting deleted causing us to then ask for pos from a deleted object... crash!
 
   qint64 oldElapsed = 0;
   //QTimer behavTimer;
