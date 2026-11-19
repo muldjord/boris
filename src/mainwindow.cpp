@@ -157,7 +157,7 @@ MainWindow::MainWindow(QSplashScreen &splash)
   show();
 
   netComm = new NetComm(settings);
-  connect(netComm, &NetComm::weatherUpdated, this, &MainWindow::updateWeather);
+  connect(netComm, &NetComm::weatherUpdated, this, &MainWindow::updateTrayWeather);
 
   elapsedTimer.start();
   QTimer::singleShot(0, this, &MainWindow::init);
@@ -177,17 +177,16 @@ void MainWindow::init()
 
   addBoris((settings.clones == 0?QRandomGenerator::global()->bounded(99) + 1:settings.clones));
 
-  itemTimer.setInterval(settings.itemSpawnInterval * 1000);
-  itemTimer.setSingleShot(true);
-  connect(&itemTimer, &QTimer::timeout, this, &MainWindow::spawnRandomItem);
-  if(settings.items && settings.itemSpawnInterval) {
-    itemTimer.start();
-  }
-
   tickTimer.setInterval(15);
   tickTimer.setSingleShot(false);
   connect(&tickTimer, &QTimer::timeout, this, &MainWindow::tick);
   tickTimer.start();
+
+  itemSpawnTimeMax = settings.itemSpawnInterval * 1000;
+  itemSpawnTime = 0;
+
+  updateTrayWeather(); // Set initial state in case no weather is configured
+  netComm->updateAll();
 }
 
 void MainWindow::tick()
@@ -195,15 +194,26 @@ void MainWindow::tick()
   qint64 elapsed = getElapsed() - oldElapsed;
 
   physicsTime += elapsed;
+  itemSpawnTime += elapsed;
 
-  if(physicsTimer && physicsTime > physicsTimeMax) {
-    physicsTime = physicsTime - physicsTimeMax;
-    handlePhysics();
+  if(physicsTimer) {
+    if(physicsTime > physicsTimeMax) {
+      physicsTime = physicsTime - physicsTimeMax;
+      if(physicsTime > physicsTimeMax) {
+	physicsTime = 0;
+      }
+      handlePhysics();
+    }
   }
 
-  if(itemSpawnTimer && itemSpawnTime > itemSpawnTimeMax) {
-    itemSpawnTime = itemSpawnTime - itemSpawnTimeMax;
-    spawnRandomItem();
+  if(itemSpawnTimer) {
+    if(itemSpawnTime > itemSpawnTimeMax) {
+      itemSpawnTime = itemSpawnTime - itemSpawnTimeMax;
+      if(itemSpawnTime > itemSpawnTimeMax) {
+	itemSpawnTime = 0;
+      }
+      spawnRandomItem();
+    }
   }
 
   oldElapsed = getElapsed();
@@ -332,10 +342,10 @@ void MainWindow::loadFromConfig()
   }
   settings.sound = iniSettings->value("sound").toBool();
 
-  if(!iniSettings->contains("makeInvincible")) {
-    iniSettings->setValue("makeInvincible", false);
+  if(!iniSettings->contains("make_invincible")) {
+    iniSettings->setValue("make_invincible", false);
   }
-  settings.isInvincible = iniSettings->value("makeInvincible").toBool();
+  settings.isInvincible = iniSettings->value("make_invincible").toBool();
 
   if(!iniSettings->contains("volume")) {
     iniSettings->setValue("volume", 50);
@@ -417,7 +427,7 @@ void MainWindow::createActions()
   earthquakeAction = new QAction("&Earthquake!!!", this);
   earthquakeAction->setIcon(QIcon(settings.getPixmap("earthquake.png")));
 
-  weatherAction = new QAction("Updating weather...", this);
+  weatherAction = new QAction("No weather set...", this);
 
   coinsAction = new QAction(QString::number(settings.coins) + " coins", this);
   coinsAction->setIcon(QIcon(settings.getPixmap("coin.png")));
@@ -468,15 +478,11 @@ void MainWindow::aboutBox()
     addBoris(newClones - settings.borisList.count());
   }
 
+  updateTrayWeather(); // Set initial state in case no weather is configured
   netComm->updateAll();
 
-  itemTimer.setInterval(settings.itemSpawnInterval * 1000);
-  itemSpawnTime = settings.itemSpawnInterval * 1000;
-  if(settings.items && settings.itemSpawnInterval) {
-    itemTimer.start();
-  } else {
-    itemTimer.stop();
-  }
+  itemSpawnTimeMax = settings.itemSpawnInterval * 1000;
+  itemSpawnTime = 0;
 }
 
 void MainWindow::handlePhysics()
@@ -503,13 +509,9 @@ void MainWindow::killAll()
   }
 }
 
-void MainWindow::updateWeather()
+void MainWindow::updateTrayWeather()
 {
-  if(settings.temperature != -42) {
-    weatherAction->setText(QString::number(settings.temperature) + "°C, " + QString::number(settings.windSpeed) + "m/s " + settings.windDirection);
-  } else {
-    weatherAction->setText("Couldn't find city");
-  }
+  weatherAction->setText(QString::number(settings.temperature) + "°C, " + QString::number(settings.windSpeed) + "m/s " + settings.windDirection);
   weatherAction->setIcon(QIcon(settings.getPixmap(settings.weatherType + ".png")));
 }
 
@@ -632,6 +634,10 @@ void MainWindow::triggerBehaviour(QAction* action)
 
 void MainWindow::spawnRandomItem()
 {
+  if(!settings.items) {
+    return;
+  }
+
   int randomItem = 0;
   do {
     randomItem = QRandomGenerator::global()->bounded(settings.itemBehaviours.count());
@@ -643,14 +649,15 @@ void MainWindow::spawnRandomItem()
   connect(&tickTimer, &QTimer::timeout, spawnedItem, &Item::tick);
   scene()->addItem(spawnedItem);
   settings.itemList.append(spawnedItem);
-
-  if(settings.items && settings.itemSpawnInterval) {
-    itemTimer.start();
-  }
 }
 
 void MainWindow::spawnItem(QAction* action)
 {
+  if(!settings.items) {
+    QMessageBox::information(nullptr, "Items disabled!", "Items are disabled! Please enable them in the configuration in order to spawn them.");
+    return;
+  }
+
   QString itemFile = action->objectName();
   for(const auto &item: settings.itemBehaviours) {
     if(item.file == itemFile) {

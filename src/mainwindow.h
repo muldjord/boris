@@ -57,7 +57,7 @@ private slots:
   void handlePhysics();
   void aboutBox();
   void killAll();
-  void updateWeather();
+  void updateTrayWeather();
   void triggerBehaviour(QAction *action);
   void spawnRandomItem();
   void spawnItem(QAction *action);
@@ -80,8 +80,6 @@ private:
   Settings settings;
   QIcon *icon = nullptr;
   QIcon *coinIcon = nullptr;
-
-  QTimer itemTimer;
 
   qint64 physicsTime = 0;
   qint64 physicsTimeMax = 30;
