@@ -63,7 +63,8 @@ The last command copies all necessary files to the `release` folder. You can the
 * Improve `play_piano` so it uses `sound` command and sprites for hits
 * Improve `play_drums` so it uses `sound` command and sprites for hits
 * Make a `clear_throat` idle behaviour that make boris cough more or less to get attention based on social stat and interactions
-* Consider making more 'get user attention' behaviours that keeps going until interactions != 0
+* Consider making more "get user attention" behaviours that keeps going until interactions != 0
+* Make a `bobsled` behaviour that moves Boris downward to balance out `inflate_balloon`. Sometimes he'll fall out on the way down which will spawn a bobsled that will keep moving
 
 #### Version 4.0.5 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
