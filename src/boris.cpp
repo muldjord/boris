@@ -188,6 +188,7 @@ void Boris::tick()
   }
 
   {
+    // Clean up Borises that Boris needs to greet again
     QMutableMapIterator<Boris *,int> i(borisFriends);
     while(i.hasNext()) {
       i.next();
@@ -199,6 +200,7 @@ void Boris::tick()
   }
 
   {
+    // Clean up items that Boris needs to pay attention to again
     QMutableMapIterator<Item *, int> i(interactedItems);
     while(i.hasNext()) {
       i.next();
@@ -1169,7 +1171,7 @@ void Boris::borisInteract(Boris *otherBoris)
   }
 }
 
-void Boris::itemInteract(Item * item)
+void Boris::itemInteract(Item *item)
 {
   interactedItems[item] = 120 * 1000; // The amount of time any interacted item will be ignored after interacting with it
   interactingItemPos = item->pos().toPoint();
