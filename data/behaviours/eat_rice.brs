@@ -18,7 +18,7 @@ oneShot
 7;75;0;0;;if @4 = 1 {if @2 = 1 think "Nice and mushy." else think "Just the way I like it."}
 8;75;0;0;;stat hygience -= 2
 9;75;0;0;;stat toilet += 2
-10;75;0;0;eating.wav;
+10;75;0;0;eating.wav;stat hyper += 1
 11;75;0;0;;
 12;75;0;0;;
 13;75;0;0;;

@@ -29,7 +29,7 @@ var slubbers = [@3 + 3]
 7;75;0;0;;stat hygiene += 5
 8;75;0;0;;if hunger <= 0 { think "No more!",goto endeat }
 9;75;0;0;;stat toilet += 1
-10;75;0;0;;
+10;75;0;0;;stat hyper += 3
 11;75;0;0;;if slubbers >= 0 goto slubber
 
 12;75;0;0;;label endeat
