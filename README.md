@@ -62,6 +62,8 @@ The last command copies all necessary files to the `release` folder. You can the
 * When a Boris is interacting with an item it shouldn't be able for a different Boris to also interact with the item - it needs a cooldown if `doNotDisturb` is set on the item
 * Improve `play_piano` so it uses `sound` command and sprites for hits
 * Improve `play_drums` so it uses `sound` command and sprites for hits
+* Make a `clear_throat` idle behaviour that make boris cough more or less to get attention based on social stat and interactions
+* Consider making more 'get user attention' behaviours that keeps going until interactions != 0
 
 #### Version 4.0.5 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
