@@ -391,7 +391,7 @@ bool Loader::loadSprites(Settings &settings)
       allGood = false;
       continue;
     }
-    QList<QImage> sprite;
+    QList<QImage> sprites;
     QImage spriteSheet(info.absoluteFilePath());
     int x1 = 0;
     int x2 = 0;
@@ -403,7 +403,11 @@ bool Loader::loadSprites(Settings &settings)
           continue;
         }
         if(x2 > x1) {
-          sprite.append(spriteSheet.copy(x1, 0, x2 - x1, spriteSheet.height()));
+	  QImage sprite = spriteSheet.copy(x1, 0, x2 - x1, spriteSheet.height());
+	  if(sprite.format() == QImage::Format_Indexed8) {
+	    setClothesColor(settings, sprite);
+	  }
+          sprites.append(sprite);
         }
         inSprite = false;
       } else {
@@ -414,8 +418,8 @@ bool Loader::loadSprites(Settings &settings)
       }
       x1 = x2;
     }
-    qInfo("  Added sprite: %s (%llu frames)\n", qPrintable(info.baseName()), sprite.count());
-    settings.sprites[info.baseName()] = sprite;
+    qInfo("  Added sprite: %s (%llu frames)\n", qPrintable(info.baseName()), sprites.count());
+    settings.sprites[info.baseName()] = sprites;
   }
   return allGood;
 }
