@@ -644,9 +644,10 @@ void MainWindow::spawnRandomItem()
     randomItem = QRandomGenerator::global()->bounded(settings.itemBehaviours.count());
   } while(settings.itemBehaviours.at(randomItem).reactions.isEmpty());
 
+  // Spawn in a random location with a span of settings.baseSize so it doesn't spawn right at the edges
   Item *spawnedItem = new Item(settings.itemBehaviours.at(randomItem).file, settings,
-			       QRandomGenerator::global()->bounded(settings.desktopWidth),
-			       QRandomGenerator::global()->bounded(settings.desktopHeight));
+			       QRandomGenerator::global()->bounded(settings.desktopWidth - (settings.baseSize * 3)) + settings.baseSize,
+			       QRandomGenerator::global()->bounded(settings.desktopHeight - (settings.baseSize * 3)) + settings.baseSize);
   connect(&tickTimer, &QTimer::timeout, spawnedItem, &Item::tick);
   scene()->addItem(spawnedItem);
   settings.itemList.append(spawnedItem);
@@ -663,9 +664,10 @@ void MainWindow::spawnItem(QAction* action)
   for(const auto &item: settings.itemBehaviours) {
     if(item.file == itemFile) {
       if(settings.unlocked.contains(item.file)) {
+	// Spawn in a random location with a span of settings.baseSize so it doesn't spawn right at the edges
         Item *spawnedItem = new Item(item.file, settings,
-				     QRandomGenerator::global()->bounded(settings.desktopWidth),
-				     QRandomGenerator::global()->bounded(settings.desktopHeight));
+				     QRandomGenerator::global()->bounded(settings.desktopWidth - (settings.baseSize * 3)) + settings.baseSize,
+				     QRandomGenerator::global()->bounded(settings.desktopHeight - (settings.baseSize * 3)) + settings.baseSize);
 	connect(&tickTimer, &QTimer::timeout, spawnedItem, &Item::tick);
         scene()->addItem(spawnedItem);
         settings.itemList.append(spawnedItem);
