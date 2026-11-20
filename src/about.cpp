@@ -497,6 +497,7 @@ QToolTip {
   connect(enableSoundCheckBox, &QCheckBox::clicked, this, &About::enableSound);
 
   enableBubblesCheckBox = new QCheckBox("Allow Boris speech bubbles");
+  enableBubblesCheckBox->setToolTip("When Boris has something to say or think he will do so using speech or think bubbles.");
   if(settings.bubbles) {
     enableBubblesCheckBox->setCheckState(Qt::Checked);
   }
