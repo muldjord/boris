@@ -229,35 +229,41 @@ int Stats::getIndependence()
   return independence;
 }
 
+void Stats::setIndependence(const int &value)
+{
+  independence = value;
+}
+
 void Stats::setStat(const StatType &stat, const int &value)
 {
+  // These should be 1 to 99 as we use it in randomizer QRandomGenerator::global()->bounded(n) where it MUST NOT be 0
   switch(stat) {
   case ENERGY:
-    energy = std::clamp(value, 0, 99);
+    energy = std::clamp(value, 1, 99);
     break;
   case SOCIAL:
-    social = std::clamp(value, 0, 99);
+    social = std::clamp(value, 1, 99);
     break;
   case FUN:
-    fun = std::clamp(value, 0, 99);
+    fun = std::clamp(value, 1, 99);
     break;
   case HUNGER:
-    hunger = std::clamp(value, 0, 99);
+    hunger = std::clamp(value, 1, 99);
     break;
   case TOILET:
-    toilet = std::clamp(value, 0, 99);
+    toilet = std::clamp(value, 1, 99);
     break;
   case ANXIETY:
-    anxiety = std::clamp(value, 0, 99);
+    anxiety = std::clamp(value, 1, 99);
     break;
   case HEALTH:
-    health = std::clamp(value, 0, 99);
+    health = std::clamp(value, 1, 99);
     break;
   case HYGIENE:
-    hygiene = std::clamp(value, 0, 99);
+    hygiene = std::clamp(value, 1, 99);
     break;
   case HYPER:
-    hyper = std::clamp(value, 0, 99);
+    hyper = std::clamp(value, 1, 99);
     break;
   default:
     qWarning("setStat: Unknown stat type: %d\n", stat);
@@ -267,33 +273,34 @@ void Stats::setStat(const StatType &stat, const int &value)
 
 void Stats::deltaStat(const StatType &stat, const int &value)
 {
+  // These should be 1 to 99 as we use it in randomizer QRandomGenerator::global()->bounded(n) where it MUST NOT be 0
   switch(stat) {
   case ENERGY:
-    energy = std::clamp(energy + value, 0, 99);
+    energy = std::clamp(energy + value, 1, 99);
     break;
   case SOCIAL:
-    social = std::clamp(social + value, 0, 99);
+    social = std::clamp(social + value, 1, 99);
     break;
   case FUN:
-    fun = std::clamp(fun + value, 0, 99);
+    fun = std::clamp(fun + value, 1, 99);
     break;
   case HUNGER:
-    hunger = std::clamp(hunger + value, 0, 99);
+    hunger = std::clamp(hunger + value, 1, 99);
     break;
   case TOILET:
-    toilet = std::clamp(toilet + value, 0, 99);
+    toilet = std::clamp(toilet + value, 1, 99);
     break;
   case ANXIETY:
-    anxiety = std::clamp(anxiety + value, 0, 99);
+    anxiety = std::clamp(anxiety + value, 1, 99);
     break;
   case HEALTH:
-    health = std::clamp(health + value, 0, 99);
+    health = std::clamp(health + value, 1, 99);
     break;
   case HYGIENE:
-    hygiene = std::clamp(hygiene + value, 0, 99);
+    hygiene = std::clamp(hygiene + value, 1, 99);
     break;
   case HYPER:
-    hyper = std::clamp(hyper + value, 0, 99);
+    hyper = std::clamp(hyper + value, 1, 99);
     break;
   default:
     qWarning("deltaStat: Unknown stat type: %d\n", stat);
@@ -335,11 +342,6 @@ void Stats::queueStatChange(const StatType &stat, const int &value)
     qWarning("queueStatChange: Unknown stat type: %d\n", stat);
     break;
   };
-}
-
-void Stats::setIndependence(const int &value)
-{
-  independence = value;
 }
 
 void Stats::updateStats()
