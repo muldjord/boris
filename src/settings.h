@@ -100,8 +100,8 @@ public:
 
   // Items
   bool items = true;
-  int itemSpawnInterval = 240; // Seconds between random item spawn. 0 for never
-  int itemTimeout = 300; // Seconds before items disappear. 0 for never
+  int itemSpawnInterval = 120; // Seconds between random item spawn. 0 for never
+  int itemTimeout = 480; // Seconds before items disappear. 0 for never
 
   // Unlock related
   int coins = 0;

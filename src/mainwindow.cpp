@@ -305,12 +305,12 @@ void MainWindow::loadFromConfig()
   settings.items = iniSettings->value("items").toBool();
 
   if(!iniSettings->contains("item_spawn_timer")) {
-    iniSettings->setValue("item_spawn_timer", 240);
+    iniSettings->setValue("item_spawn_timer", 120);
   }
   settings.itemSpawnInterval = iniSettings->value("item_spawn_timer").toInt();
 
   if(!iniSettings->contains("item_timeout")) {
-    iniSettings->setValue("item_timeout", 900);
+    iniSettings->setValue("item_timeout", 480);
   }
   settings.itemTimeout = iniSettings->value("item_timeout").toInt();
 
