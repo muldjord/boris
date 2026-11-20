@@ -4,16 +4,16 @@ oneShot
 
 define init:var steps = [8 + @24],
 var straight = @6,
-if fun > 60 and health > 60 and social > 60 and anxiety < 20 var mood = 1 else if fun > 40 and health > 40 and social > 40 and anxiety < 40 var mood = 2 else if fun > 20 and health > 20 and social > 20 and anxiety < 80 var mood = 3 else var mood = 4
-var dir = @8 - 1,
-if dir = 0 goto north,
-if dir = 1 goto northeast,
-if dir = 2 goto east,
-if dir = 3 goto southeast,
-if dir = 4 goto south,
-if dir = 5 goto southwest,
-if dir = 6 goto west,
-if dir = 7 goto northwest
+if fun > 60 and health > 60 and social > 60 and anxiety < 20 var mood = 1 else if fun > 40 and health > 40 and social > 40 and anxiety < 40 var mood = 2 else if fun > 20 and health > 20 and social > 20 and anxiety < 80 var mood = 3 else var mood = 4,
+var direction = @8,
+if direction = 1 goto north,
+if direction = 2 goto northeast,
+if direction = 3 goto east,
+if direction = 4 goto southeast,
+if direction = 5 goto south,
+if direction = 6 goto southwest,
+if direction = 7 goto west,
+if direction = 8 goto northwest
 
 define progress:var steps -= 1,var straight -= 1,if @32 = 1 break,if queued > 0 break
 
