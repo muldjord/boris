@@ -426,7 +426,8 @@ void Stats::statProgress()
   queueStatChange(StatType::ANXIETY, -(QRandomGenerator::global()->bounded(8) + 8));
   queueStatChange(StatType::HYGIENE, -QRandomGenerator::global()->bounded(1));
   queueStatChange(StatType::HYPER, -QRandomGenerator::global()->bounded(7));
-  // Nothing needed for 'health' and 'toilet'
+  queueStatChange(StatType::HEALTH, 4); // Boris will slowly heal over time
+  // Nothing needed for 'toilet'
 }
 
 void Stats::stopTimers()
