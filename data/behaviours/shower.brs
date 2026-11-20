@@ -1,7 +1,6 @@
 title=Shower
 category=Hygiene
 
-hygiene=100
 social=-5
 fun=3
 
@@ -54,7 +53,7 @@ allowFlip
 40;75;0;0;;
 41;75;0;0;;
 42;150;0;0;;
-43;50;0;0;;
+43;50;0;0;;stat hygiene += 100
 44;50;0;0;;
 43;50;0;0;;
 44;50;0;0;;
