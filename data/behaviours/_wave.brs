@@ -1,5 +1,5 @@
 fun=5
-social=30
+social=20
 
 oneShot
 
