@@ -457,7 +457,7 @@ void Item::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     falling = true;
     hVel = settings.mouseHVel;
     vVel = settings.mouseVVel;
-    groundY = pos().y();
+    groundY = std::clamp((int)pos().y(), 0, (int)(settings.desktopHeight - getHeight()));
   }
 }
 
