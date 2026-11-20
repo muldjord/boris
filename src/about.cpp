@@ -482,7 +482,7 @@ QToolTip {
   statsComboBox->setCurrentIndex(statsComboBox->findData(settings.stats));
 
   QLabel *independenceLabel = new QLabel("Independence:");
-  independenceSlider = new StepSlider({0, 100}, this);
+  independenceSlider = new StepSlider({1, 100}, this);
   independenceSlider->setValue(settings.independence);
 
   makeInvincibleCheckBox = new QCheckBox("Make Boris invincible");
