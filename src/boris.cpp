@@ -59,7 +59,7 @@ Boris::Boris(Settings &settings)
 
   setCursor(settings.getCursor("hover.png"));
 
-  setPos(QRandomGenerator::global()->bounded(settings.desktopWidth), QRandomGenerator::global()->bounded(settings.desktopHeight));
+  setPos(QRandomGenerator::global()->bounded(settings.desktopWidth - (settings.baseSize * 3)) + settings.baseSize, QRandomGenerator::global()->bounded(settings.desktopHeight - (settings.baseSize * 3)) + settings.baseSize);
 
   rendered.fill(Qt::transparent);
 
@@ -101,14 +101,6 @@ Boris::Boris(Settings &settings)
   shadow = new Shadow(settings);
   shadow->setParentItem(this);
   shadow->setPos(0, 1);
-
-  staticBehaviours = 0;
-  // Figure out how many static behaviours there are
-  for(const auto &behaviour: settings.behaviours) {
-    if(behaviour.file.left(1) == "_") {
-      staticBehaviours++;
-    }
-  }
 
   reconfBoris();
 
@@ -319,7 +311,7 @@ void Boris::changeBehaviour(QString behav, int time)
     return;
   }
 
-  // Always stop behavTimer here as it should never run at this point
+  // Always stop and reset behavTimer here as it should never run at this point. We will start it later if necessary
   behavTimer = false;
 
   // Reset all script variables
@@ -348,15 +340,16 @@ void Boris::changeBehaviour(QString behav, int time)
       if(QRandomGenerator::global()->bounded(70) >= stats->getEnergy()) {
 	curBehav = getIdxFromCategory("Idle");
       } else {
-	curBehav = getIdxFromCategory("Locomotion"); // This category DOES exist. See data/behaviours/README.md
+	curBehav = getIdxFromCategory("Locomotion"); // This category contains behaviours with 360 degree movement cycles to move Boris around a bit
       }
     } else {
       // No behaviour has been set so far, so just choose one at random that's not:
       // 1. A part of the static behaviours (ones with '_' at the beginning of the filename)
       // 2. In the 'Reaction' category
       do {
-	curBehav = QRandomGenerator::global()->bounded(settings.behaviours.size() - staticBehaviours) + staticBehaviours;
-      } while(settings.behaviours.at(curBehav).category == "Reaction");
+	curBehav = QRandomGenerator::global()->bounded(settings.behaviours.size());
+      } while(settings.behaviours.at(curBehav).category == "Reaction" ||
+	      settings.behaviours.at(curBehav).file.left(1) == "_");
     }
   }
 
@@ -438,14 +431,14 @@ void Boris::runScript(int &stop, const bool &init)
   // Update current stat variables for scripting use
   scriptVars["bsize"] = getWidth();
   scriptVars["energy"] = stats->getEnergy();
-  scriptVars["health"] = stats->getHealth();
-  scriptVars["hyper"] = stats->getHyper();
-  scriptVars["hunger"] = stats->getHunger();
-  scriptVars["toilet"] = stats->getToilet();
   scriptVars["social"] = stats->getSocial();
   scriptVars["fun"] = stats->getFun();
-  scriptVars["hygiene"] = stats->getHygiene();
+  scriptVars["hunger"] = stats->getHunger();
+  scriptVars["toilet"] = stats->getToilet();
   scriptVars["anxiety"] = stats->getAnxiety();
+  scriptVars["health"] = stats->getHealth();
+  scriptVars["hygiene"] = stats->getHygiene();
+  scriptVars["hyper"] = stats->getHyper();
   scriptVars["xpos"] = pos().x() + (getWidth() / 2);
   scriptVars["ypos"] = pos().y() + (getHeight() / 2);
   scriptVars["hvel"] = hVel;
