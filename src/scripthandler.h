@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QPointF>
 #include <QString>
 
+class Boris;
 class Bubble;
 class QImage;
 class QPainter;
@@ -45,7 +46,8 @@ public:
                 const QMap<QString, int> &labels,
                 const QMap<QString, Script> &defines,
                 QMap<QString, int> &scriptVars,
-                const QPointF parentPos);
+                const QPointF parentPos,
+		Boris *boris = nullptr);
   void runScript(int &stop, const Script &script);
 
 signals:
@@ -57,18 +59,6 @@ signals:
   void setCurFrame(const int &frame);
 
 private:
-  te_parser tep;
-
-  QImage *image = nullptr;
-  bool *drawing = nullptr;
-  Settings &settings;
-  Bubble *bubble = nullptr;
-
-  const QMap<QString, int> &labels;
-  const QMap<QString, Script> &defines;
-  QMap<QString, int> &scriptVars;
-  const QPointF parentPos;
-
   // Main command handler
   void runCommand(QList<QString> &parameters, int &stop, const Script &script);
 
@@ -95,5 +85,18 @@ private:
   void drawText(QPainter &painter, const int &x, const int &y, const QString &text);
   int getValue(QList<QString> &parameters);
   int parametersCount(const QList<QString> &parameters); // Tells you how many parameters are left by also parsing "" and []
-  
+
+  te_parser tep;
+
+  QImage *image = nullptr;
+  bool *drawing = nullptr;
+  Settings &settings;
+  Bubble *bubble = nullptr;
+
+  const QMap<QString, int> &labels;
+  const QMap<QString, Script> &defines;
+  QMap<QString, int> &scriptVars;
+  const QPointF parentPos;
+
+  Boris *boris = nullptr;
 };

@@ -70,6 +70,7 @@ public:
   int getCurBehav();
   void changeBehaviour(QString behav = "", int time = -1);
   QPoint getGlobalCenter();
+  void addToInteractedItems(Item *item, const int &timeout);
   QMap<QString, int> scriptVars;
 
   int curFrame = 0;

@@ -475,7 +475,7 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["temp"] = settings.temperature;
   scriptVars["queued"] = behavQueue.count();
 
-  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, bubble, settings.behaviours.at(curBehav).labels, settings.behaviours.at(curBehav).defines, scriptVars, pos());
+  ScriptHandler scriptHandler(&scriptImage, &drawing, settings, bubble, settings.behaviours.at(curBehav).labels, settings.behaviours.at(curBehav).defines, scriptVars, pos(), this);
   connect(&scriptHandler, &ScriptHandler::behavFromFile, this, &Boris::behavFromFile);
   connect(&scriptHandler, &ScriptHandler::setCurFrame, this, &Boris::setCurFrame);
   connect(&scriptHandler, &ScriptHandler::queueStatChange, stats, &Stats::queueStatChange);
@@ -1192,4 +1192,9 @@ void Boris::queueBehavFromFile(const QString &file)
 void Boris::setCurFrame(const int &frame)
 {
   curFrame = frame;
+}
+
+void Boris::addToInteractedItems(Item *item, const int &timeout)
+{
+  interactedItems[item] = timeout; // The amount of time any interacted item will be ignored after interacting with it
 }

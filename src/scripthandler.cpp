@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "scripthandler.h"
 
 #include "behaviour.h"
+#include "boris.h"
 #include "bubble.h"
 #include "item.h"
 #include "mainwindow.h"
@@ -43,7 +44,8 @@ ScriptHandler::ScriptHandler(QImage *image,
                              const QMap<QString, int> &labels,
                              const QMap<QString, Script> &defines,
                              QMap<QString, int> &scriptVars,
-                             const QPointF parentPos)
+                             const QPointF parentPos,
+			     Boris *boris)
   : image(image),
     drawing(drawing),
     settings(settings),
@@ -51,7 +53,8 @@ ScriptHandler::ScriptHandler(QImage *image,
     labels(labels),
     defines(defines),
     scriptVars(scriptVars),
-    parentPos(parentPos)
+    parentPos(parentPos),
+    boris(boris)
 {
 }
 
@@ -335,6 +338,9 @@ void ScriptHandler::handleSpawn(QList<QString> &parameters)
     connect(&mainWindow->tickTimer, &QTimer::timeout, spawnedItem, &Item::tick);
     mainWindow->scene()->addItem(spawnedItem);
     settings.itemList.append(spawnedItem);
+    if(boris != nullptr) {
+      boris->addToInteractedItems(spawnedItem, 30 * 1000); // Make item inactive for a bit to avoid instant-interact while the Boris behaviour is still running
+    }
   } else {
     if(settings.scriptOutput) {
       printf("Items disabled, ignoring spawn\n");
