@@ -85,9 +85,7 @@ Boris::Boris(Settings &settings)
   int hygiene = 100;
   int hyper = 0;
 
-  int independence = settings.independence;
-
-  stats = new Stats(settings, energy, social, fun, hunger, toilet, anxiety, health, hygiene, hyper, independence);
+  stats = new Stats(settings, energy, social, fun, hunger, toilet, anxiety, health, hygiene, hyper, settings.independence);
   stats->setParentItem(this);
   stats->setPos((getWidth() / 2) - 40, -100);
 
@@ -323,6 +321,13 @@ void Boris::changeBehaviour(QString behav, int time)
 
   bool coinCheck = false;
 
+  // Check if it is time to show the weather again
+  timeForWeather++;
+  if(timeForWeather >= 50) {
+    timeForWeather = 0;
+    setWeather(behav);
+  }
+  
   // Check if there are behaviours in queue, these are prioritized
   if(behav.isEmpty() && !behavQueue.isEmpty()) {
     behav = behavQueue.takeFirst();
@@ -334,57 +339,36 @@ void Boris::changeBehaviour(QString behav, int time)
     processAi(behav);
   }
 
-  // Bias towards behaviours from 'Idle' and 'Locomotion' categories to make Boris less erratic
-  if(behav.isEmpty()) {
-    if(QRandomGenerator::global()->bounded(10) >= 3) {
-      if(QRandomGenerator::global()->bounded(70) >= stats->getEnergy()) {
-	curBehav = getIdxFromCategory("Idle");
-      } else {
-	curBehav = getIdxFromCategory("Locomotion"); // This category contains behaviours with 360 degree movement cycles to move Boris around a bit
-      }
-    } else {
-      // No behaviour has been set so far, so just choose one at random that's not:
-      // 1. A part of the static behaviours (ones with '_' at the beginning of the filename)
-      // 2. In the 'Reaction' category
-      do {
-	curBehav = QRandomGenerator::global()->bounded(settings.behaviours.size());
-      } while(settings.behaviours.at(curBehav).category == "Reaction" ||
-	      settings.behaviours.at(curBehav).file.left(1) == "_");
-    }
-  }
+  // At this point behav MUST be non-empty
+  for(int a = 0; a < settings.behaviours.size(); ++a) {
+    if(settings.behaviours.at(a).file == behav) {
+      curBehav = a;
+      if(coinCheck) {
+	int coins = 0;
+	if(settings.behaviours.at(curBehav).category.toLower() == "health") {
+	  coins = (100 - stats->getHealth());
+	} else if(settings.behaviours.at(curBehav).category.toLower() == "energy") {
+	  coins = (100 - stats->getEnergy());
+	} else if(settings.behaviours.at(curBehav).category.toLower() == "hunger") {
+	  coins = stats->getHunger();
+	} else if(settings.behaviours.at(curBehav).category.toLower() == "toilet") {
+	  coins = stats->getToilet();
+	} else if(settings.behaviours.at(curBehav).category.toLower() == "social") {
+	  coins = (100 - stats->getSocial());
+	} else if(settings.behaviours.at(curBehav).category.toLower() == "fun") {
+	  coins = (100 - stats->getFun());
+	} else if(settings.behaviours.at(curBehav).category.toLower() == "hygiene") {
+	  coins = (100 - stats->getHygiene());
+	} else if(settings.behaviours.at(curBehav).category.toLower() == "anxiety") {
+	  coins = stats->getAnxiety();
+	}
+	coins /= 10;
 
-  // If a specific behaviour is requested, use that
-  if(!behav.isEmpty()) {
-    for(int a = 0; a < settings.behaviours.size(); ++a) {
-      if(settings.behaviours.at(a).file == behav) {
-        curBehav = a;
-        if(coinCheck) {
-          int coins = 0;
-          if(settings.behaviours.at(curBehav).category.toLower() == "health") {
-            coins = (100 - stats->getHealth());
-          } else if(settings.behaviours.at(curBehav).category.toLower() == "energy") {
-            coins = (100 - stats->getEnergy());
-          } else if(settings.behaviours.at(curBehav).category.toLower() == "hunger") {
-            coins = stats->getHunger();
-          } else if(settings.behaviours.at(curBehav).category.toLower() == "toilet") {
-            coins = stats->getToilet();
-          } else if(settings.behaviours.at(curBehav).category.toLower() == "social") {
-            coins = (100 - stats->getSocial());
-          } else if(settings.behaviours.at(curBehav).category.toLower() == "fun") {
-            coins = (100 - stats->getFun());
-          } else if(settings.behaviours.at(curBehav).category.toLower() == "hygiene") {
-            coins = (100 - stats->getHygiene());
-          } else if(settings.behaviours.at(curBehav).category.toLower() == "anxiety") {
-            coins = stats->getAnxiety();
-          }
-          coins /= 10;
-
-          if(coins) {
-            emit deltaCoins(coins);
-          }
-        }
-        break;
+	if(coins) {
+	  emit deltaCoins(coins);
+	}
       }
+      break;
     }
   }
 
@@ -969,24 +953,17 @@ int Boris::getHeight() const
 
 void Boris::processAi(QString &behav)
 {
-  // Check if it is time to show the weather again
-  timeForWeather++;
-  if(timeForWeather >= 50) {
-    timeForWeather = 0;
-    setWeather(behav);
-  }
-
-  if(behav == "" && QRandomGenerator::global()->bounded(2)) {
+  if(behav.isEmpty() && QRandomGenerator::global()->bounded(3) == 0) {
     // Stat check
     QList<QString> potentials;
-    if(stats->getFun() <= 50) {
-      // Clamping here to avoid value being 0 which throws an assert
-      if(QRandomGenerator::global()->bounded(std::clamp(stats->getFun(), 1, 100)) > stats->getIndependence()) {
-        potentials.append("_fun");
+    if(stats->getEnergy() <= 50) {
+      if(QRandomGenerator::global()->bounded(stats->getIndependence()) > stats->getEnergy()) {
+        potentials.append(getFileFromCategory("Energy"));
       } else {
-        potentials.append(getFileFromCategory("Fun"));
+        potentials.append("_energy");
       }
     }
+    /*
     if(stats->getEnergy() <= 50) {
       if(QRandomGenerator::global()->bounded(100) > stats->getIndependence()) {
         potentials.append("_energy");
@@ -994,39 +971,50 @@ void Boris::processAi(QString &behav)
         potentials.append(getFileFromCategory("Energy"));
       }
     }
-    if(stats->getSocial() <= 50) {
-      if(QRandomGenerator::global()->bounded(100) > stats->getIndependence()) {
-        potentials.append("_social");
+    */
+    if(stats->getFun() <= 50) {
+      if(QRandomGenerator::global()->bounded(stats->getIndependence()) > stats->getFun()) {
+	potentials.append(getFileFromCategory("Fun"));
       } else {
+        potentials.append("_fun"); 
+      }
+    }
+    if(stats->getSocial() <= 50) {
+      if(QRandomGenerator::global()->bounded(stats->getIndependence()) > stats->getSocial()) {
         potentials.append(getFileFromCategory("Social"));
+      } else {
+        potentials.append("_social");
       }
     }
     if(stats->getHygiene() <= 50) {
-      if(QRandomGenerator::global()->bounded(100) > stats->getIndependence()) {
-        potentials.append("_hygiene");
-      } else {
+      if(QRandomGenerator::global()->bounded(stats->getIndependence()) > stats->getHygiene()) {
         potentials.append(getFileFromCategory("Hygiene"));
+      } else {
+        potentials.append("_hygiene");
       }
     }
     if(stats->getHealth() <= 50) {
-      if(QRandomGenerator::global()->bounded(150 - stats->getHealth()) < stats->getIndependence()) {
+      // Make this harder to get as Boris doesn't show signs of bruises until quite low on health
+      if(QRandomGenerator::global()->bounded(stats->getIndependence()) > stats->getHealth() + 25) {
+	// Boris slowly heals through stat progression so don't do anything here
+      } else {
         potentials.append("_health");
       }
     }
     // This one is 'inverted' compared to the others. High 'hunger' means Boris is starving.
     if(stats->getHunger() >= 50) {
-      if(QRandomGenerator::global()->bounded(100) > stats->getIndependence()) {
-        potentials.append("_hunger");
-      } else {
+      if(QRandomGenerator::global()->bounded(stats->getIndependence()) > 100 - stats->getHunger()) {
         potentials.append(getFileFromCategory("Hunger"));
+      } else {
+        potentials.append("_hunger");
       }
     }
     // This one is 'inverted' compared to the others. High 'toilet' means Boris has to go to the bathroom.
     if(stats->getToilet() >= 50) {
-      if(QRandomGenerator::global()->bounded(100) > stats->getIndependence()) {
-        potentials.append("_toilet");
-      } else {
+      if(QRandomGenerator::global()->bounded(stats->getIndependence()) > 100 - stats->getToilet()) {
         potentials.append(getFileFromCategory("Toilet"));
+      } else {
+        potentials.append("_toilet");
       }
     }
     // Now choose one from the potentials
@@ -1045,6 +1033,26 @@ void Boris::processAi(QString &behav)
         stats->flashStat("social");
       }
       // Nothing needed for other stat types as they aren't in the stats widget
+    }
+  }
+
+  // If behav is still empty choose a random behaviour but bias towards behaviours
+  // from 'Idle' and 'Locomotion' categories to make Boris less erratic
+  if(behav.isEmpty()) {
+    if(QRandomGenerator::global()->bounded(10) >= 1) {
+      if(QRandomGenerator::global()->bounded(70) >= stats->getEnergy()) {
+	curBehav = getIdxFromCategory("Idle");
+      } else {
+	curBehav = getIdxFromCategory("Locomotion"); // This category contains behaviours with 360 degree movement cycles to move Boris around a bit
+      }
+    } else {
+      // No behaviour has been set so far, so just choose one at random that's not:
+      // 1. A part of the static behaviours (ones with '_' at the beginning of the filename)
+      // 2. In the 'Reaction' category
+      do {
+	curBehav = QRandomGenerator::global()->bounded(settings.behaviours.size());
+      } while(settings.behaviours.at(curBehav).category == "Reaction" ||
+	      settings.behaviours.at(curBehav).file.left(1) == "_");
     }
   }
 }
