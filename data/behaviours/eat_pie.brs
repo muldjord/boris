@@ -4,8 +4,6 @@ category=Hunger
 energy=10
 
 oneShot
-# This HAS to be doNotDisturb or else he will hit himself with it instantly before it flies away
-doNotDisturb
 
 define init:if bdir != -1 { if bdir = 0 goto north,
 if bdir = 1 goto northeast,
@@ -25,11 +23,11 @@ var slubbers = [@3 + 3]
 
 4;75;0;0;;label slubber,if @2 = 1 sound slurp1.wav else sound slurp2.wav,if hunger <= 0 { think "That's enough.",goto endeat }
 5;75;0;0;;var slubbers -= 1
-6;75;0;0;;stat hunger -= 5
-7;75;0;0;;stat hygiene += 5
+6;75;0;0;;stat hunger -= 5,stat hygiene -= 5,stat toilet += 1,stat hyper += 3,stat energy += 1
+7;75;0;0;;
 8;75;0;0;;if hunger <= 0 { think "No more!",goto endeat }
-9;75;0;0;;stat toilet += 1
-10;75;0;0;;stat hyper += 3
+9;75;0;0;;
+10;75;0;0;;
 11;75;0;0;;if slubbers >= 0 goto slubber
 
 12;75;0;0;;label endeat
