@@ -429,16 +429,14 @@ void Item::mousePressEvent(QGraphicsSceneMouseEvent* event)
     setCursor(settings.getCursor("grab.png"));
     this->setPos(event->scenePos().x() - (getWidth() / 2), 
                  event->scenePos().y() - (getHeight() / 2));
-    /*
-    if(!settings.itemBehaviours.at(curItem).reactions.isEmpty()) {
-      QTimer::singleShot(0, this, &Item::nextFrame);
-    }
-    */
   } else if(event->button() == Qt::MiddleButton) {
     destroy();
-  } else if(event->button() == Qt::RightButton) {
+  } /*else if(event->button() == Qt::RightButton) {
     curFrame = 0;
+    frameTimer = true;
+    frameTime = frameTimeMax;
   }
+  */
 }
 
 void Item::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
