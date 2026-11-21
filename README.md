@@ -50,7 +50,6 @@ The last command copies all necessary files to the `release` folder. You can the
 * Boris will interact with an object instantly when he spawns it himself (eg. through `Social->Place a gift`)
 
 #### Ideas (that I might / might not implement):
-* Add a `usec` that points towards any direction the arrow keys are currently pressed
 * Add Boris `memory`. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
 * Make a `bowling` behaviour with a `bowlingball` item and spawned `pin` items (which might need syncronization as well?)
 * Make a big round `candy` item for Boris to eat. He will get round and roll around when he encounters it
@@ -64,7 +63,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Improve `play_drums` so it uses `sound` command and sprites for hits
 * Make a `clear_throat` idle behaviour that make boris cough more or less to get attention based on social stat and interactions
 * Consider making more "get user attention" behaviours that keeps going until interactions != 0
-* Make a `bobsled` behaviour that moves Boris downward to balance out `inflate_balloon`. Sometimes he'll fall out on the way down which will spawn a bobsled that will keep moving
+* Make a `bobsled` behaviour that moves Boris downward to balance out `inflate_balloon`. Sometimes he'll fall out on the way down which will spawn a bobsled
 
 #### Version 4.0.5 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
@@ -104,6 +103,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Added `bub` and `bob` item with bubbles that can encompass Boris when he encounters them
 * Added `_curious` behaviour that will be initiated when Boris encounters non-interactive objects
 * Perfected interacted items and Borises handling
+* Added 'kdir' (key direction) BorisScript variable that enables controlling behaviours using the arrow keys on the keyboard as the usual 0-7 and -1
 
 #### Version 3.6.1 (30 November 2022):
 * Added `mazegame`
