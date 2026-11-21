@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class NetComm;
 class QIcon;
+class QKeyEvent;
 class QMenu;
 class QResizeEvent;
 class QSettings;
@@ -41,11 +42,14 @@ public:
   MainWindow(QSplashScreen &splash);
   ~MainWindow();
   qint64 getElapsed();
+  int getKeyDirection();
   QTimer tickTimer;
 
 protected:
   void resizeEvent(QResizeEvent *) override;
-
+  void keyPressEvent(QKeyEvent *event) override;
+  void keyReleaseEvent(QKeyEvent *event) override;
+  
 signals:
   void reconfBoris();
   void queueBehavFromFile(const QString &file);
@@ -104,4 +108,7 @@ private:
   QAction *coinsAction = nullptr;
   QSystemTrayIcon *trayIcon = nullptr;
   QMenu *trayIconMenu = nullptr;
+
+  QMap<int, bool> pressedKeys;
+  int keyDirection = -1;
 };

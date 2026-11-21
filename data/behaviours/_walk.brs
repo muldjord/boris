@@ -17,6 +17,15 @@ if direction = 8 goto northwest
 
 define progress:var steps -= 1,var straight -= 1,if @32 = 1 break,if queued > 0 break
 
+define userdir:if kdir = 0 goto north,
+if kdir = 1 goto northeast,
+if kdir = 2 goto east,
+if kdir = 3 goto southeast,
+if kdir = 4 goto south,
+if kdir = 5 goto southwest,
+if kdir = 6 goto west,
+if kdir = 7 goto northwest
+
 define drawe1:if mood = 1 draw sprite faces 0 12 9 else if mood = 2 draw sprite faces 1 12 9 else if mood = 3 draw sprite faces 2 12 9 else draw sprite faces 3 12 9
 
 define drawe2:if mood = 1 draw sprite faces 0 12 8 else if mood = 2 draw sprite faces 1 12 8 else if mood = 3 draw sprite faces 2 12 8 else draw sprite faces 3 12 8
@@ -51,7 +60,7 @@ define draww2:if mood = 1 draw sprite faces 16 9 8 else if mood = 2 draw sprite 
 69;75;0;-1;;if steps <= 0 break,
 if straight > 0 goto north,
 var straight = @6,
-if @2 = 1 goto northeast else goto northwest
+if kdir != -1 call userdir else { if @2 = 1 goto northeast else goto northwest }
 
 # Walk north-east
 70;75;1;0;;label northeast
@@ -66,7 +75,7 @@ if @2 = 1 goto northeast else goto northwest
 79;75;1;-1;;if steps <= 0 break,
 if straight > 0 goto northeast,
 var straight = @6,
-if @2 = 1 goto east else goto north
+if kdir != -1 call userdir else { if @2 = 1 goto east else goto north }
 
 # Walk east
 0;75;1;0;;label east,call drawe1
@@ -81,7 +90,7 @@ if @2 = 1 goto east else goto north
 9;75;1;0;;call drawe1,if steps <= 0 break,
 if straight > 0 goto east,
 var straight = @6,
-if @2 = 1 goto southeast else goto northeast
+if kdir != -1 call userdir else { if @2 = 1 goto southeast else goto northeast }
 
 # Walk south-east
 10;75;1;0;;label southeast,call drawse1
@@ -96,7 +105,7 @@ if @2 = 1 goto southeast else goto northeast
 19;75;1;1;;call drawse1,if steps <= 0 break,
 if straight > 0 goto southeast,
 var straight = @6,
-if @2 = 1 goto south else goto east
+if kdir != -1 call userdir else { if @2 = 1 goto south else goto east }
 
 # Walk south
 20;75;0;0;;label south,call draws1
@@ -111,7 +120,7 @@ if @2 = 1 goto south else goto east
 29;75;0;0;;call draws1,if steps <= 0 break,
 if straight > 0 goto south,
 var straight = @6,
-if @2 = 1 goto southeast else goto southwest
+if kdir != -1 call userdir else { if @2 = 1 goto southeast else goto southwest }
 
 # Walk south-west
 30;75;-1;0;;label southwest,call drawsw1
@@ -126,7 +135,7 @@ if @2 = 1 goto southeast else goto southwest
 39;75;-1;1;;call drawsw1,if steps <= 0 break,
 if straight > 0 goto southwest,
 var straight = @6,
-if @2 = 1 goto west else goto south
+if kdir != -1 call userdir else { if @2 = 1 goto west else goto south }
 
 # Walk west
 40;75;-1;0;;label west,call draww1
@@ -141,7 +150,7 @@ if @2 = 1 goto west else goto south
 49;75;-1;0;;call draww1,if steps <= 0 break,
 if straight > 0 goto west,
 var straight = @6,
-if @2 = 1 goto northwest else goto southwest
+if kdir != -1 call userdir else { if @2 = 1 goto northwest else goto southwest }
 
 # Walk north-west
 50;75;-1;0;;label northwest
@@ -156,4 +165,5 @@ if @2 = 1 goto northwest else goto southwest
 59;75;-1;-1;;if steps <= 0 break,
 if straight > 0 goto northwest,
 var straight = @6,
-if @2 = 1 goto north else goto west
+if kdir != -1 call userdir else { if @2 = 1 goto north else goto west }
+

@@ -432,6 +432,7 @@ void Boris::runScript(int &stop, const bool &init)
   scriptVars["mhvel"] = settings.mouseHVel;
   scriptVars["mvvel"] = settings.mouseVVel;
   scriptVars["mdist"] = getDistance(cursorPos);
+  scriptVars["kdir"] = mainWindow->getKeyDirection(); // The currently pressed direction keys on the keyboard as the usual 0-7 and -1 if none
   scriptVars["mdir"] = getDirectionTo(cursorPos); // Mouse direction in relation to Boris
   if(!borisFriends.isEmpty() && borisFriend != nullptr) {
     scriptVars["bdir"] = getDirectionTo(QPoint(borisFriend->pos().x() + (borisFriend->getWidth() / 2),

@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QEventLoop>
 #include <QGraphicsScene>
 #include <QIcon>
+#include <QKeyEvent>
 #include <QList>
 #include <QMenu>
 #include <QMessageBox>
@@ -191,6 +192,33 @@ void MainWindow::init()
 
 void MainWindow::tick()
 {
+  // These are used in BorisScript as 'kdir' to allow keyboard control of Boris behaviours (eg. "_walk")
+  keyDirection = -1;
+  if(pressedKeys[0] == true && pressedKeys[2] == false && pressedKeys[4] == false && pressedKeys[6] == false) {
+    keyDirection = 0;
+  }
+  if(pressedKeys[0] == true && pressedKeys[2] == true && pressedKeys[4] == false && pressedKeys[6] == false) {
+    keyDirection = 1;
+  }
+  if(pressedKeys[0] == false && pressedKeys[2] == true && pressedKeys[4] == false && pressedKeys[6] == false) {
+    keyDirection = 2;
+  }
+  if(pressedKeys[0] == false && pressedKeys[2] == true && pressedKeys[4] == true && pressedKeys[6] == false) {
+    keyDirection = 3;
+  }
+  if(pressedKeys[0] == false && pressedKeys[2] == false && pressedKeys[4] == true && pressedKeys[6] == false) {
+    keyDirection = 4;
+  }
+  if(pressedKeys[0] == false && pressedKeys[2] == false && pressedKeys[4] == true && pressedKeys[6] == true) {
+    keyDirection = 5;
+  }
+  if(pressedKeys[0] == false && pressedKeys[2] == false && pressedKeys[4] == false && pressedKeys[6] == true) {
+    keyDirection = 6;
+  }
+  if(pressedKeys[0] == true && pressedKeys[2] == false && pressedKeys[4] == false && pressedKeys[6] == true) {
+    keyDirection = 7;
+  }
+  
   qint64 elapsed = getElapsed() - oldElapsed;
 
   physicsTime += elapsed;
@@ -497,6 +525,40 @@ void MainWindow::resizeEvent(QResizeEvent *)
   resetView();
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+  if(event->key() == Qt::Key_Up) {
+    pressedKeys[0] = true;
+  }
+  if(event->key() == Qt::Key_Right) {
+    pressedKeys[2] = true;
+  }
+  if(event->key() == Qt::Key_Down) {
+    pressedKeys[4] = true;
+  }
+  if(event->key() == Qt::Key_Left) {
+    pressedKeys[6] = true;
+  }
+  event->accept();
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event)
+{
+  if(event->key() == Qt::Key_Up) {
+    pressedKeys[0] = false;
+  }
+  if(event->key() == Qt::Key_Right) {
+    pressedKeys[2] = false;
+  }
+  if(event->key() == Qt::Key_Down) {
+    pressedKeys[4] = false;
+  }
+  if(event->key() == Qt::Key_Left) {
+    pressedKeys[6] = false;
+  }
+  event->accept();
+}
+
 void MainWindow::killAll()
 {
   QTimer::singleShot(2000, qApp, &QApplication::quit);
@@ -712,4 +774,9 @@ void MainWindow::deltaCoins(const int &coins)
   trayIcon->setIcon(*coinIcon);
   QTimer::singleShot(10000, this, [this]() { coinsAction->setText(QString::number(settings.coins) + " coins"); trayIcon->setIcon(*icon); });
   iniSettings->setValue("coins", settings.coins);
+}
+
+int MainWindow::getKeyDirection()
+{
+  return keyDirection;
 }

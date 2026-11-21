@@ -346,6 +346,7 @@ QToolTip {
 <li>Right-clicking any Boris brings up a menu where you can select from a plethora of Boris behaviours from categories that correspond to his current needs.</li>
 <li>Using the mouse scroll-wheel on Boris will tickle him if he's not busy.</li>
 <li>Right-clicking the Boris system tray icon brings up a menu that gives you access to information and important functions that will help you configure and take care of Boris. This is also where you can unlock items that Boris can interact with.</li>
+<li>When Boris is moving around the desktop you can control him using the arrow keys on the keyboard.</li>
 </ul>
 <h4><img src="health.png">Health stats:</h4>
 <ul>
