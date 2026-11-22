@@ -6,7 +6,7 @@ fun=15
 oneShot
 doNotDisturb
 
-define init:var fuel = [100 + @30]
+define init:var fuel = [150 + @30]
 
 define nextride:if kdir = 0 goto ridenorth,
 if kdir = 1 goto ridenortheast,
