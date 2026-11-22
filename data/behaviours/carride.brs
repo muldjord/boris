@@ -227,4 +227,4 @@ if kdir = 6 goto ridewest,
 if kdir = 7 goto ridenorthwest
 
 # End ride
-4;1500;0;0;car_turnoff.wav;label endride,break
+4;2500;0;0;car_turnoff.wav;label endride,break
