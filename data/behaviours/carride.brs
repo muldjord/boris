@@ -6,7 +6,7 @@ fun=15
 oneShot
 doNotDisturb
 
-define init:sound car_start.wav,var fuel = [100 + @30]
+define init:var fuel = [100 + @30]
 
 define nextride:if kdir = 0 goto ridenorth,
 if kdir = 1 goto ridenortheast,
@@ -21,6 +21,17 @@ define usefuel:var fuel -= 1,
 if fuel <= 0 goto endride
 
 #Frames
+# STARTING
+4;300;0;0;car_start.wav;label carstart
+5;200;0;0;;
+4;100;0;0;;
+5;100;0;0;;
+4;200;0;0;;
+5;100;0;0;;
+4;100;0;0;;
+5;100;0;0;;
+4;100;0;0;car_honks.wav;goto idleeast
+
 # IDLING
 # Idle north
 0;50;0;0;car_idle.wav;label idlenorth,call usefuel
