@@ -244,7 +244,7 @@ hidden
 17;50;-1;0;;
 18;50;-1;0;;
 19;50;-1;0;;
-3;3000;-2;0;;think "Nice!"
+3;3000;-2;0;;var opinion = @4,if opinion = 1 { think "Nice!",stat fun += 15 } else if opinion = 2 { think "Not bad...",stat fun += 10 } else if opinion = 3 { think "It's ok...",stat fun += 5 } else if opinion = 4 { think "Love it!",stat fun += 15 }
 
 # Turn around reverse
 3;50;0;0;;
