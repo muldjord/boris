@@ -583,23 +583,34 @@ void MainWindow::createItemsMenu()
   itemsMenu->setTitle("Items");
   connect(itemsMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
 
+  QMenu *idkfaMenu = new QMenu("Idkfa", itemsMenu);
+  idkfaMenu->setIcon(QIcon(settings.getPixmap("idkfa.png")));
+
   QList<QMenu*> subMenus;
 
   for(const auto &item: settings.itemBehaviours) {
-    if(item.hidden) {
-      continue;
-    }
     QString title = item.title;
-    QPixmap iconPixmap(settings.getPixmap(item.category.toLower() + ".png"));
+    QPixmap iconPixmap(item.category.isEmpty()?settings.getPixmap("other.png"):settings.getPixmap(item.category.toLower() + ".png"));
     QMenu *menu = nullptr;
 
     // Find correct menu to put item into
+
+    // Item that doesn't belong anywhere
+    if((item.file.left(1) == "_" && (item.category.isEmpty() || item.hidden)) ||
+       item.category.isEmpty() ||
+       item.hidden) {
+      menu = idkfaMenu;
+    }
+
+    // Item with an ordinary category such as "Fun", Hunger", "Social" and so on
     for(auto &subMenu: subMenus) {
       if(subMenu->title() == item.category && !item.hidden) {
         menu = subMenu;
         break;
       }
     }
+
+    // If no menu exists for this item category create it
     if(menu == nullptr) {
       menu = new QMenu(item.category, itemsMenu);
       menu->setIcon(QIcon(iconPixmap));
@@ -624,6 +635,14 @@ void MainWindow::createItemsMenu()
       itemsMenu->addMenu(subMenu);
     }
   }
+
+  if(settings.idkfa && !idkfaMenu->isEmpty()) {
+    itemsMenu->addMenu(idkfaMenu);
+  }
+
+  if(itemsMenu->isEmpty()) {
+    itemsMenu->addAction(QIcon(settings.getPixmap("idkfa.png")), "No behaviours!");
+  }
 }
 
 void MainWindow::createBehavioursMenu()
@@ -639,24 +658,28 @@ void MainWindow::createBehavioursMenu()
 
   for(const auto &behaviour: settings.behaviours) {
     QString title = behaviour.title;
-    QPixmap iconPixmap(settings.getPixmap(behaviour.category.toLower() + ".png"));
+    QPixmap iconPixmap(behaviour.category.isEmpty()?settings.getPixmap("other.png"):settings.getPixmap(behaviour.category.toLower() + ".png"));
     QMenu *menu = nullptr;
 
-    // Find correct menu to put behaviour into
-    if((behaviour.file.left(1) == "_" && behaviour.category.isEmpty()) ||
-       behaviour.category == "Other" ||
-       behaviour.category == "Locomotion" ||
-       behaviour.category == "Reaction") {
+    // Behaviour that don't belong anywhere
+    if((behaviour.file.left(1) == "_" && (behaviour.category.isEmpty() || behaviour.hidden)) ||
+       behaviour.category.isEmpty() ||
+       behaviour.hidden ||
+       behaviour.category == "Locomotion") {
       menu = idkfaMenu;
     }
+
+    // Behaviour with an ordinary category such as "Hunger", "Social" and so on
     if(menu == nullptr) {
       for(auto &subMenu: subMenus) {
-        if(subMenu->title() == behaviour.category && behaviour.category != "Hidden") {
+        if(subMenu->title() == behaviour.category) {
           menu = subMenu;
           break;
         }
       }
     }
+
+    // If no menu exists for this behaviour category create it
     if(menu == nullptr) {
       menu = new QMenu(behaviour.category, behavioursMenu);
       menu->setIcon(QIcon(iconPixmap));
@@ -704,7 +727,8 @@ void MainWindow::spawnRandomItem()
   int randomItem = 0;
   do {
     randomItem = QRandomGenerator::global()->bounded(settings.itemBehaviours.count());
-  } while(settings.itemBehaviours.at(randomItem).reactions.isEmpty());
+  } while(settings.itemBehaviours.at(randomItem).reactions.isEmpty() ||
+	  settings.itemBehaviours.at(randomItem).hidden);
 
   // Spawn in a random location with a span of settings.baseSize so it doesn't spawn right at the edges
   Item *spawnedItem = new Item(settings.itemBehaviours.at(randomItem).file, settings,
