@@ -6,22 +6,16 @@ All behaviours are located in the `data/behaviours` folder. There are 3 differen
 ### Common behaviours
 These are the self-contained behaviours Boris uses when he's just going about his day on your desktop. If you want to create your own behaviours this is probably the type you are looking for.
 
-What defines a common behaviour? It has a category set of either `Energy`, `Social`, `Fun`, `Hunger`, `Toilet`, `Hygiene` or `Health`. That means Boris will choose from it when his vitality stats require something from one of these categories.
+What defines a common behaviour? It has a category set of either `Energy`, `Social`, `Fun`, `Hunger`, `Toilet`, `Hygiene` or `Health`. That means Boris will choose from it when his vitality stats require something from one of these categories (except for 'Health').
 
 ### Reaction behaviours
-These behaviours are *only* used as reactions to Boris encountering [items](ITEMS.md) that requests them. Items can be spawned on the desktop either by you or at random. When Boris encounters these items a specific reaction behaviour can be initiated.
-
-It's important to note that a behaviour that is *not* a reaction behaviour can still be used as a reaction when encountering an item. The difference being that a behaviour specifically set with the `Reaction` category will *only* ever be used as a reaction to encountering an item that requests it.
-
-What defines a reaction behaviour? It has its category set to `Reaction`.
+These are behaviours that are initiated when Boris encounters an item while roaming the desktop. Usually it is a good idea to set the `hidden` tag (documented below) if you are creating a reaction behaviour as Boris will otherwise sometimes exhibit this behaviour randomly which looks odd outside the context of encoutering an item.
 
 ### Static behaviours
-These are the hardcoded behaviours that must exist for Boris to function at all. They can be identified by the `_` in front of the filenames. If one or more of these are deleted Boris might stop functioning and even crash (so don't do that). You can create a static behaviour yourself simply by adding a `_` in front of the filename.
-
-Usually there is no reason for you to create static behaviours yourself except for one instance: Boris sometimes chooses a behaviour completely at random if all of his needs are met. If you want your behaviour to be excluded from this roster you can create it as a static behaviour. Boris might still choose it if he has a need that is fulfilled by the category set in the behaviour though. This is the only functional difference between a static behaviour and a common behaviour.
+These are the hardcoded behaviours that must exist for Boris to function at all. They can be identified by the `_` in front of the filenames. If one or more of these are deleted Boris might stop functioning and even crash (so don't do that).
 
 ### Other notes
-If you want to enable *all* behaviours in the menus including the ones you wouldn't usually select manually you can add `idkfa=true` to the `config.ini` file. This will add the invisible behaviours to an `idkfa` behaviour submenu.
+If you want to enable *all* behaviours in the menus including the ones you wouldn't usually select manually you can add `idkfa=true` to the `config.ini` file. This will add the invisible behaviours to an `idkfa` behaviour submenu. This is great for debugging behaviours that are otherwise hidden.
 
 ## How to create a behaviour
 A single behaviour is made up of two files. A 32x32 horizontal PNG sprite sheet and a `.dat` file (you can edit these with any text editor) that describes all aspects of the behaviour. Both files must have the same base filename and be placed in the `data/behaviours` folder.
@@ -97,6 +91,7 @@ define other:var loop -= 1,if loop <= 0 goto end
 * `pitchLock`: Set this to disable the slight pitch randomness otherwise used when playing the sounds in this behaviour
 * `oneShot`: Set this to tell the behaviour to move on to a different behaviour when the end of the frame definitions are reached. If this is unset it will instead loop back to the first frame definition and keep playing for a randomly chosen amount of time before moving on to the next behaviour.
 * `doNotDisturb`: Set this to make sure Boris cannot be disturbed while this behaviour is playing (eg. when encountering another Boris or if the Mouse moves close to him)
+* `hidden`: If this is set the behaviour won't be added to the Boris right-click and tray icon behaviour menus and Boris exhibit it randomly
 
 ### BorisScript defines
 BorisScript supports blocks of code to be defined which can be called from the frame definitions to avoid repeating the same code over and over again. They can be seen as parameter-less functions. See the `call` command specification in the [BorisScript](BORISSCRIPT.md) documentation for more details.
