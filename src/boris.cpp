@@ -211,24 +211,30 @@ void Boris::createBehavioursMenu()
 
   for(const auto &behaviour: settings.behaviours) {
     QString title = behaviour.title;
-    QPixmap iconPixmap(settings.getPixmap(behaviour.category.toLower() + ".png"));
+    QPixmap iconPixmap(behaviour.category.isEmpty()?settings.getPixmap("other.png"):settings.getPixmap(behaviour.category.toLower() + ".png"));
     QMenu *menu = nullptr;
 
     // Find correct menu to put behaviour into
-    if((behaviour.file.left(1) == "_" && behaviour.category.isEmpty()) ||
-       behaviour.category == "Other" ||
-       behaviour.category == "Locomotion" ||
-       behaviour.category == "Reaction") {
+
+    // Behaviour that doesn't belong anywhere (statics, category-less and hidden)
+    if((behaviour.file.left(1) == "_" && (behaviour.category.isEmpty() || behaviour.hidden)) ||
+       behaviour.category.isEmpty() ||
+       behaviour.hidden ||
+       behaviour.category == "Locomotion") {
       menu = idkfaMenu;
     }
+
+    // Behaviour with an ordinary category such as "Hunger", "Social" and so on
     if(menu == nullptr) {
       for(auto &subMenu: subMenus) {
-        if(subMenu->title() == behaviour.category && behaviour.category != "Hidden") {
+        if(subMenu->title() == behaviour.category) {
           menu = subMenu;
           break;
         }
       }
     }
+
+    // If no menu exists for this behaviour category create it
     if(menu == nullptr) {
       menu = new QMenu(behaviour.category, behavioursMenu);
       menu->setIcon(QIcon(iconPixmap));
@@ -1047,12 +1053,14 @@ void Boris::processAi(QString &behav)
 	curBehav = getIdxFromCategory("Locomotion"); // This category contains behaviours with 360 degree movement cycles to move Boris around a bit
       }
     } else {
-      // No behaviour has been set so far, so just choose one at random that's not:
-      // 1. A part of the static behaviours (ones with '_' at the beginning of the filename)
-      // 2. In the 'Reaction' category
+      // No behaviour has been set so far, so just choose one at random given these rules:
+      // 1. Must be in a category ("Hunger", "Fun" etc.)
+      // 2. Must NOT be part of the static behaviours (ones with '_' at the beginning of the filename)
+      // 3. Must NOT have the 'hidden' flag set
       do {
 	curBehav = QRandomGenerator::global()->bounded(settings.behaviours.size());
-      } while(settings.behaviours.at(curBehav).category == "Reaction" ||
+      } while(settings.behaviours.at(curBehav).category.isEmpty() ||
+	      settings.behaviours.at(curBehav).hidden ||
 	      settings.behaviours.at(curBehav).file.left(1) == "_");
     }
   }
