@@ -1166,7 +1166,7 @@ void Boris::checkInteractions()
 
 void Boris::borisInteract(Boris *otherBoris)
 {
-  borisFriends[otherBoris] = 240 * 1000; // The amount of time any encountered Boris will be ignored after greeting him
+  borisFriends[otherBoris] = 60 * 1000; // The amount of time any encountered Boris will be ignored after greeting him
   borisFriend = otherBoris;
 
   // Prepend current behaviour to queue so it isn't 'forgotten'
