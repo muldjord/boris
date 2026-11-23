@@ -4,6 +4,8 @@ weight=5
 bounce=2
 range=16
 
+hidden
+
 define init:var airtime = [18 + @5]
 
 define dropped:spawn pie 0 0,
