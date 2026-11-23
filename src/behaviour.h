@@ -84,7 +84,7 @@ public:
   QString absoluteFilePath;
   QString file;
   QString title;
-  QString category = "Other";
+  QString category = "";
   QList<Reaction> reactions;
   int hyper = 0;
   int health = 0;
