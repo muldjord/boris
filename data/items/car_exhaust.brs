@@ -2,7 +2,7 @@ reaction=_hygiene,nil
 
 weight=2
 bounce=0
-range=64
+range=96
 
 hidden
 allowFlip

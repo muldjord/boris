@@ -60,7 +60,7 @@ if kdir = 0 goto ridenorth,
 if kdir = 1 goto ridenortheast,
 if kdir = 2 goto ridenortheast,
 if kdir = 3 goto ridenortheast,
-if kdir = 4 goto ridenortheast,
+if kdir = 4 { sound car_skidding.wav,goto ridenortheast },
 if kdir = 5 goto ridenorthwest,
 if kdir = 6 goto ridenorthwest,
 if kdir = 7 goto ridenorthwest
@@ -73,7 +73,7 @@ if kdir = 1 goto ridenortheast,
 if kdir = 2 goto rideeast,
 if kdir = 3 goto rideeast,
 if kdir = 4 goto rideeast,
-if kdir = 5 goto rideeast,
+if kdir = 5 { sound car_skidding.wav,goto rideeast },
 if kdir = 6 goto ridenorth,
 if kdir = 7 goto ridenorth
 
@@ -86,7 +86,7 @@ if kdir = 2 goto rideeast,
 if kdir = 3 goto ridesoutheast,
 if kdir = 4 goto ridesoutheast,
 if kdir = 5 goto ridesoutheast,
-if kdir = 6 goto ridesoutheast,
+if kdir = 6 { sound car_skidding.wav,goto ridesoutheast },
 if kdir = 7 goto ridenortheast
 
 # Idle southeast
@@ -99,12 +99,12 @@ if kdir = 3 goto ridesoutheast,
 if kdir = 4 goto ridesouth,
 if kdir = 5 goto ridesouth,
 if kdir = 6 goto ridesouth,
-if kdir = 7 goto ridesouth
+if kdir = 7 { sound car_skidding.wav,goto ridesouth }
 
 # Idle south
 8;50;0;0;car_idle.wav;label idlesouth,call usefuel,if @8 > 7 spawn car_exhaust 0 -6
 9;50;0;0;;if kdir = -1 goto idlesouth,
-if kdir = 0 goto ridesouthwest,
+if kdir = 0 { sound car_skidding.wav,goto ridesouthwest },
 if kdir = 1 goto ridesoutheast,
 if kdir = 2 goto ridesoutheast,
 if kdir = 3 goto ridesoutheast,
@@ -117,7 +117,7 @@ if kdir = 7 goto ridesouthwest
 10;50;0;0;car_idle.wav;label idlesouthwest,call usefuel,if @8 > 7 spawn car_exhaust 10 -6
 11;50;0;0;;if kdir = -1 goto idlesouthwest,
 if kdir = 0 goto ridewest,
-if kdir = 1 goto ridewest,
+if kdir = 1 { sound car_skidding.wav,goto ridewest },
 if kdir = 2 goto ridesouth,
 if kdir = 3 goto ridesouth,
 if kdir = 4 goto ridesouth,
@@ -130,7 +130,7 @@ if kdir = 7 goto ridewest
 13;50;0;0;;if kdir = -1 goto idlewest,
 if kdir = 0 goto ridenorthwest,
 if kdir = 1 goto ridenorthwest,
-if kdir = 2 goto ridenorthwest,
+if kdir = 2 { sound car_skidding.wav,goto ridenorthwest },
 if kdir = 3 goto ridesouthwest,
 if kdir = 4 goto ridesouthwest,
 if kdir = 5 goto ridesouthwest,
@@ -143,7 +143,7 @@ if kdir = 7 goto ridenorthwest
 if kdir = 0 goto ridenorth,
 if kdir = 1 goto ridenorth,
 if kdir = 2 goto ridenorth,
-if kdir = 3 goto ridenorth,
+if kdir = 3 { sound car_skidding.wav,goto ridenorth },
 if kdir = 4 goto ridewest,
 if kdir = 5 goto ridewest,
 if kdir = 6 goto ridewest,
@@ -157,7 +157,7 @@ if kdir = 0 goto ridenorth,
 if kdir = 1 goto ridenortheast,
 if kdir = 2 goto ridenortheast,
 if kdir = 3 goto ridenortheast,
-if kdir = 4 goto ridenortheast,
+if kdir = 4 { sound car_skidding.wav,goto ridenortheast },
 if kdir = 5 goto ridenorthwest,
 if kdir = 6 goto ridenorthwest,
 if kdir = 7 goto ridenorthwest
@@ -170,7 +170,7 @@ if kdir = 1 goto ridenortheast,
 if kdir = 2 goto rideeast,
 if kdir = 3 goto rideeast,
 if kdir = 4 goto rideeast,
-if kdir = 5 goto rideeast,
+if kdir = 5 { sound car_skidding.wav,goto rideeast },
 if kdir = 6 goto ridenorth,
 if kdir = 7 goto ridenorth
 
@@ -183,7 +183,7 @@ if kdir = 2 goto rideeast,
 if kdir = 3 goto ridesoutheast,
 if kdir = 4 goto ridesoutheast,
 if kdir = 5 goto ridesoutheast,
-if kdir = 6 goto ridesoutheast,
+if kdir = 6 { sound car_skidding.wav,goto ridesoutheast },
 if kdir = 7 goto ridenortheast
 
 # Ride southeast
@@ -196,12 +196,12 @@ if kdir = 3 goto ridesoutheast,
 if kdir = 4 goto ridesouth,
 if kdir = 5 goto ridesouth,
 if kdir = 6 goto ridesouth,
-if kdir = 7 goto ridesouth
+if kdir = 7 { sound car_skidding.wav,goto ridesouth }
 
 # Ride south
 24;50;0;3;car_driving.wav;label ridesouth,call usefuel,if @8 > 7 spawn car_exhaust 0 -5,spawn car_front 0 0
 25;50;0;3;;if kdir = -1 goto idlesouth,
-if kdir = 0 goto ridesouthwest,
+if kdir = 0 { sound car_skidding.wav,goto ridesouthwest },
 if kdir = 1 goto ridesoutheast,
 if kdir = 2 goto ridesoutheast,
 if kdir = 3 goto ridesoutheast,
@@ -214,7 +214,7 @@ if kdir = 7 goto ridesouthwest
 26;50;-3;2;car_driving.wav;label ridesouthwest,call usefuel,if @8 > 7 spawn car_exhaust 8 -4,spawn car_front 0 0
 27;50;-3;2;;if kdir = -1 goto idlesouthwest,
 if kdir = 0 goto ridewest,
-if kdir = 1 goto ridewest,
+if kdir = 1 { sound car_skidding.wav,goto ridewest },
 if kdir = 2 goto ridesouth,
 if kdir = 3 goto ridesouth,
 if kdir = 4 goto ridesouth,
@@ -227,7 +227,7 @@ if kdir = 7 goto ridewest
 29;50;-4;0;;if kdir = -1 goto idlewest,
 if kdir = 0 goto ridenorthwest,
 if kdir = 1 goto ridenorthwest,
-if kdir = 2 goto ridenorthwest,
+if kdir = 2 { sound car_skidding.wav,goto ridenorthwest },
 if kdir = 3 goto ridesouthwest,
 if kdir = 4 goto ridesouthwest,
 if kdir = 5 goto ridesouthwest,
@@ -240,7 +240,7 @@ if kdir = 7 goto ridenorthwest
 if kdir = 0 goto ridenorth,
 if kdir = 1 goto ridenorth,
 if kdir = 2 goto ridenorth,
-if kdir = 3 goto ridenorth,
+if kdir = 3 { sound car_skidding.wav,goto ridenorth },
 if kdir = 4 goto ridewest,
 if kdir = 5 goto ridewest,
 if kdir = 6 goto ridewest,
