@@ -1,6 +1,4 @@
 # This game is initiated from 'play_computer'
-category=Reaction
-
 energy=-3
 hunger=1
 social=-8
@@ -9,6 +7,7 @@ hygiene=-3
 oneShot
 doNotDisturb
 pitchLock
+hidden
 
 define init:var place = 0,var segs = 16,var segs += @8
 

@@ -1,5 +1,3 @@
-category=Reaction
-
 fun=-10
 social=5
 energy=-5
@@ -7,6 +5,7 @@ hygiene=-20
 
 oneShot
 doNotDisturb
+hidden
 
 define init:sound flee2.wav,
 var dir = @2,

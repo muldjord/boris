@@ -1,11 +1,10 @@
-category=Reaction
-
 fun=5
 energy=-3
 social=20
 
 oneShot
 allowFlip
+hidden
 
 #Frames
 0;50;0;0;highfive.wav;say "Highfive!"

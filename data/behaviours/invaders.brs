@@ -1,6 +1,4 @@
 # This game is initiated from 'play_computer'
-category=Reaction
-
 energy=-3
 hunger=1
 social=-8
@@ -8,6 +6,7 @@ hygiene=-3
 
 oneShot
 doNotDisturb
+hidden
 
 define init:var level = 1,var lives = 3
 

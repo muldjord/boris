@@ -1,6 +1,7 @@
 title=Pacman portal
-category=Idle
+category=Fun
 
+fun=5
 social=-2
 fun=-2
 

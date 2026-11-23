@@ -1,6 +1,5 @@
-category=Reaction
-
 oneShot
+hidden
 
 define init:var sitloop = [@5 + 5],
 if idir = -1 var sdir = [@8 - 1] else var sdir = idir,

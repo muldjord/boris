@@ -1,10 +1,9 @@
-category=Reaction
-
 fun=15
 energy=-4
 
 oneShot
 doNotDisturb
+hidden
 
 #Frames
 0;75;1;0;;

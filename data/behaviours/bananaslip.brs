@@ -1,11 +1,10 @@
-category=Reaction
-
 fun=-15
 energy=-10
 health=-10
 
 oneShot
 doNotDisturb
+hidden
 
 #Frames
 0;75;0;0;;if @2 = 1 sound flee1.wav else sound flee2.wav

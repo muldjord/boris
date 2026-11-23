@@ -1,7 +1,6 @@
-category=Reaction
-
 oneShot
 doNotDisturb
+hidden
 
 #Frames
 0;75;0;0;;

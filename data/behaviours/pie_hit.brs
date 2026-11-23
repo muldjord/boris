@@ -1,5 +1,3 @@
-category=Reaction
-
 fun=-15
 social=15
 energy=-4
@@ -8,6 +6,7 @@ hygiene=20
 
 oneShot
 doNotDisturb
+hidden
 
 #Frames
 0;75;0;0;splat.wav;
