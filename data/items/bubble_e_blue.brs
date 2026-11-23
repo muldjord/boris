@@ -5,6 +5,7 @@ range=24
 reaction=bubble_boris_blue
 
 oneShot
+hidden
 
 define init:var life = @10 + 25
 

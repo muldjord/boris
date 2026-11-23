@@ -1,7 +1,11 @@
 title=Pacman
+category=Fun
+
 reaction=pacman
+
 weight=10
 bounce=0
+
 #Frames
 0;50;1;0;;label right
 1;50;1;0;;

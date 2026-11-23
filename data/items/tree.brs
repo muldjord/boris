@@ -1,7 +1,11 @@
 title=Trees
+category=Energy
+
 reaction=sit_and_relax,nil
+
 weight=100
 bounce=0
+
 allowFlip
 
 define init:if month = 12 and @4 > 1 goto christmaspine,if @2 = 1 goto pine else goto oak

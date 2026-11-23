@@ -1,8 +1,11 @@
-reaction=_annoyed
+reaction=_hygiene,nil
 
 weight=2
 bounce=0
-range=24
+range=64
+
+hidden
+allowFlip
 
 #Frames
 0;100;0;0;;if @2 = 1 sound fart2.wav else sound fart6.wav
