@@ -141,6 +141,10 @@ bool Loader::loadBehaviours(const Settings &settings,
           b.hidden = true;
           continue;
         }
+        if(line == "noShadow") {
+          b.noShadow = true;
+          continue;
+        }
         if(line.left(5) == "title") {
           b.title = line.mid(6,line.length());
           continue;

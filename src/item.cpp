@@ -59,6 +59,10 @@ Item::Item(const QString &item, Settings &settings, const int &xPos, const int&y
   shadow->setParentItem(this);
   shadow->setPos(0, 1);
 
+  if(settings.itemBehaviours.at(curItem).noShadow) {
+    shadow->hide();
+  }
+
   if(settings.itemTimeout > 0) {
     QTimer::singleShot(settings.itemTimeout * 1000, this, &Item::destroy);
   }

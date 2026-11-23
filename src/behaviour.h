@@ -102,6 +102,7 @@ public:
   bool allowFlip = false;
   bool pitchLock = false;
   bool hidden = false; // Show in menus?
+  bool noShadow = false; // Only for items. Hides shadow entirely
 
   int coins = 50;
   int weight = 50; // Used by items

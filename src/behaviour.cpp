@@ -143,6 +143,7 @@ Behaviour::Behaviour(const Behaviour &behaviour)
   this->allowFlip = behaviour.allowFlip;
   this->pitchLock = behaviour.pitchLock;
   this->hidden = behaviour.hidden;
+  this->noShadow = behaviour.noShadow;
   this->frames = behaviour.frames;
   this->labels = behaviour.labels;
   this->defines = behaviour.defines;
@@ -173,6 +174,7 @@ void Behaviour::operator=(const Behaviour &behaviour)
   this->allowFlip = behaviour.allowFlip;
   this->pitchLock = behaviour.pitchLock;
   this->hidden = behaviour.hidden;
+  this->noShadow = behaviour.noShadow;
   this->frames = behaviour.frames;
   this->labels = behaviour.labels;
   this->defines = behaviour.defines;
