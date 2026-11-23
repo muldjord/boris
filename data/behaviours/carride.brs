@@ -22,16 +22,16 @@ if fuel <= 0 goto endride
 
 #Frames
 # STARTING
-4;50;0;0;car_start.wav;label carstart
-5;250;0;0;;
+4;150;0;0;car_turnon.wav;label carstart
+5;200;0;0;;
 4;50;0;0;;
-5;100;0;0;;spawn car_exhaust -20 -1
-4;50;0;0;;
-5;200;0;0;;spawn car_exhaust -20 -1
-4;100;0;0;;
 5;100;0;0;;
+4;75;0;0;;
+5;100;0;0;;
+4;50;0;0;;
+5;75;0;0;;
 4;80;0;0;;
-5;80;0;0;;spawn car_exhaust -20 -1
+5;100;0;0;;spawn car_exhaust -20 -1
 4;80;0;0;;
 5;80;0;0;;
 4;80;0;0;;
@@ -46,11 +46,11 @@ if fuel <= 0 goto endride
 5;50;0;0;;
 4;50;0;0;;
 5;50;0;0;;
-24;50;0;0;;
-25;100;0;0;car_honks.wav;
-24;100;0;0;;
-25;100;0;0;;
-24;100;0;0;;goto idleeast
+32;50;0;0;;
+33;100;0;0;car_honks.wav;
+32;100;0;0;;
+33;100;0;0;;
+32;100;0;0;;goto idleeast
 
 # IDLING
 # Idle north
@@ -152,7 +152,7 @@ if kdir = 7 goto ridenorthwest
 # RIDING
 # Ride north
 16;50;0;-3;car_driving.wav;label ridenorth,call usefuel,if @8 > 7 spawn car_exhaust 0 1
-16;50;0;-3;;if kdir = -1 goto idlenorth,
+17;50;0;-3;;if kdir = -1 goto idlenorth,
 if kdir = 0 goto ridenorth,
 if kdir = 1 goto ridenortheast,
 if kdir = 2 goto ridenortheast,
@@ -163,8 +163,8 @@ if kdir = 6 goto ridenorthwest,
 if kdir = 7 goto ridenorthwest
 
 # Ride northeast
-17;50;3;-2;car_driving.wav;label ridenortheast,call usefuel,if @8 > 7 spawn car_exhaust 0 1
-17;50;3;-2;;if kdir = -1 goto idlenortheast,
+18;50;3;-2;car_driving.wav;label ridenortheast,call usefuel,if @8 > 7 spawn car_exhaust 0 1
+19;50;3;-2;;if kdir = -1 goto idlenortheast,
 if kdir = 0 goto ridenorth,
 if kdir = 1 goto ridenortheast,
 if kdir = 2 goto rideeast,
@@ -175,8 +175,8 @@ if kdir = 6 goto ridenorth,
 if kdir = 7 goto ridenorth
 
 # Ride east
-18;50;4;0;car_driving.wav;label rideeast,call usefuel,if @8 > 7 spawn car_exhaust -16 -1
-18;50;4;0;;if kdir = -1 goto idleeast,
+20;50;4;0;car_driving.wav;label rideeast,call usefuel,if @8 > 7 spawn car_exhaust -16 -1
+21;50;4;0;;if kdir = -1 goto idleeast,
 if kdir = 0 goto ridenortheast,
 if kdir = 1 goto ridenortheast,
 if kdir = 2 goto rideeast,
@@ -187,8 +187,8 @@ if kdir = 6 goto ridesoutheast,
 if kdir = 7 goto ridenortheast
 
 # Ride southeast
-19;50;3;2;car_driving.wav;label ridesoutheast,call usefuel,if @8 > 7 spawn car_exhaust -8 -4
-19;50;3;2;;if kdir = -1 goto idlesoutheast,
+22;50;3;2;car_driving.wav;label ridesoutheast,call usefuel,if @8 > 7 spawn car_exhaust -8 -4
+23;50;3;2;;if kdir = -1 goto idlesoutheast,
 if kdir = 0 goto rideeast,
 if kdir = 1 goto rideeast,
 if kdir = 2 goto rideeast,
@@ -199,8 +199,8 @@ if kdir = 6 goto ridesouth,
 if kdir = 7 goto ridesouth
 
 # Ride south
-20;50;0;3;car_driving.wav;label ridesouth,call usefuel,if @8 > 7 spawn car_exhaust 0 -5
-20;50;0;3;;if kdir = -1 goto idlesouth,
+24;50;0;3;car_driving.wav;label ridesouth,call usefuel,if @8 > 7 spawn car_exhaust 0 -5
+25;50;0;3;;if kdir = -1 goto idlesouth,
 if kdir = 0 goto ridesouthwest,
 if kdir = 1 goto ridesoutheast,
 if kdir = 2 goto ridesoutheast,
@@ -211,8 +211,8 @@ if kdir = 6 goto ridesouthwest,
 if kdir = 7 goto ridesouthwest
 
 # Ride southwest
-21;50;-3;2;car_driving.wav;label ridesouthwest,call usefuel,if @8 > 7 spawn car_exhaust 8 -4
-21;50;-3;2;;if kdir = -1 goto idlesouthwest,
+26;50;-3;2;car_driving.wav;label ridesouthwest,call usefuel,if @8 > 7 spawn car_exhaust 8 -4
+27;50;-3;2;;if kdir = -1 goto idlesouthwest,
 if kdir = 0 goto ridewest,
 if kdir = 1 goto ridewest,
 if kdir = 2 goto ridesouth,
@@ -223,8 +223,8 @@ if kdir = 6 goto ridewest,
 if kdir = 7 goto ridewest
 
 # Ride west
-22;50;-4;0;car_driving.wav;label ridewest,call usefuel,if @8 > 7 spawn car_exhaust 16 -1
-22;50;-4;0;;if kdir = -1 goto idlewest,
+28;50;-4;0;car_driving.wav;label ridewest,call usefuel,if @8 > 7 spawn car_exhaust 16 -1
+29;50;-4;0;;if kdir = -1 goto idlewest,
 if kdir = 0 goto ridenorthwest,
 if kdir = 1 goto ridenorthwest,
 if kdir = 2 goto ridenorthwest,
@@ -235,8 +235,8 @@ if kdir = 6 goto ridewest,
 if kdir = 7 goto ridenorthwest
 
 # Ride northwest
-23;50;-3;-2;car_driving.wav;label ridenorthwest,call usefuel,if @8 > 7 spawn car_exhaust 0 1
-23;50;-3;-2;;if kdir = -1 goto idlenorthwest,
+30;50;-3;-2;car_driving.wav;label ridenorthwest,call usefuel,if @8 > 7 spawn car_exhaust 0 1
+31;50;-3;-2;;if kdir = -1 goto idlenorthwest,
 if kdir = 0 goto ridenorth,
 if kdir = 1 goto ridenorth,
 if kdir = 2 goto ridenorth,
