@@ -47,7 +47,7 @@ The last command copies all necessary files to the `release` folder. You can the
 ## Release notes
 #### Known issues:
 * Linux: For security reasons modern Wayland compositors don't support `Qt::WindowStaysOnTopHint` and click-through behaviour. The non-free OS called Windows (which apparently people still use for some bizarre reason) still support this, but it is probably only a matter of time before they catch up and stop supporting it as well
-* Boris will interact with an object instantly when he spawns it himself (eg. through `Social->Place a gift`)
+* Boris sometimes won't interact with a newly spawned object even if he didn't spawn it himself or it was spawned randomly...
 
 #### Ideas (that I might / might not implement):
 * Add Boris `memory`. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
