@@ -1,5 +1,6 @@
 fun=-100
 reaction=_sad
+range=64
 
 oneShot
 doNotDisturb
