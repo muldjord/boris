@@ -71,6 +71,7 @@ public:
   void changeBehaviour(QString behav = "", int time = -1);
   QPoint getGlobalCenter();
   void addToInteractedItems(Item *item, const int &timeout);
+  int getRange();
   QMap<QString, int> scriptVars;
 
   int curFrame = 0;
@@ -125,6 +126,8 @@ private:
   void runScript(int &stop, const bool &init = false);
   void sanityCheck();
   void setWeather(QString &behav);
+  QString getReactionBehaviour();
+  //void interact(Boris *boris);
 
   Settings &settings;
 
@@ -184,6 +187,9 @@ private:
   double vVel = 0.0;
   double hVel = 0.0;
   int groundY = 0;
+
+  int range = -1;
+  int interactReaction = -1;
 
   Bubble *bubble = nullptr;
 

@@ -349,6 +349,7 @@ void Boris::changeBehaviour(QString behav, int time)
   for(int a = 0; a < settings.behaviours.size(); ++a) {
     if(settings.behaviours.at(a).file == behav) {
       curBehav = a;
+      range = settings.behaviours.at(curBehav).range == -1?getWidth() * 4:settings.behaviours.at(curBehav).range;
       if(coinCheck) {
 	int coins = 0;
 	if(settings.behaviours.at(curBehav).category.toLower() == "health") {
@@ -1126,19 +1127,18 @@ void Boris::checkInteractions()
      !grabbed) {
 
     // Check if there are other Borises nearby to interact with
+    //getDistance(boris->getGlobalCenter()) < getWidth() * 4) {
+
     for(auto *boris: settings.borisList) {
       if(boris != this &&
-	 getDistance(boris->getGlobalCenter()) < getWidth() * 4) {
-	if(!borisFriends.contains(boris)) {
-	  borisInteract(boris);
-	  break;
-	}
+	 getDistance(boris->getGlobalCenter()) < boris->getRange()) {
+	borisInteract(boris);
       }
     }
 
     // Check if an item is close by
     for(auto *item: settings.itemList) {
-      if(getDistance(item->getGlobalCenter()) < (item->getRange() == -1?getWidth():item->getRange())) {
+      if(getDistance(item->getGlobalCenter()) < item->getRange()) {
 	if(!interactedItems.contains(item)) {
 	  itemInteract(item);
 	  break;
@@ -1166,19 +1166,22 @@ void Boris::checkInteractions()
 
 void Boris::borisInteract(Boris *otherBoris)
 {
-  borisFriends[otherBoris] = 60 * 1000; // The amount of time any encountered Boris will be ignored after greeting him
   borisFriend = otherBoris;
+
+  // If a reaction is set in behaviour ALWAYS do it even though otherBoris is on cooldown
+  if(!borisFriend->getReactionBehaviour().isEmpty()) {
+    changeBehaviour(otherBoris->getReactionBehaviour());
+  } else if(!borisFriends.contains(otherBoris)) {
+    borisFriends[otherBoris] = 60 * 1000; // The amount of time any encountered Boris will be ignored after greeting him
+    if(borisFriend->stats->getHygiene() <= 22) {
+      changeBehaviour("_hygiene");
+    } else {
+      changeBehaviour("_wave");
+    }
+  }
 
   // Prepend current behaviour to queue so it isn't 'forgotten'
   //behavQueue.prepend(settings.behaviours.at(curBehav).file);
-
-  if(settings.behaviours.at(borisFriend->getCurBehav()).file == "_drop_dead") {
-    changeBehaviour("_sad");
-  } else if(borisFriend->stats->getHygiene() <= 22) {
-    changeBehaviour("_hygiene");
-  } else {
-    changeBehaviour("_wave");
-  }
 }
 
 void Boris::itemInteract(Item *item)
@@ -1215,3 +1218,53 @@ void Boris::addToInteractedItems(Item *item, const int &timeout)
 {
   interactedItems[item] = timeout; // The amount of time any interacted item will be ignored after interacting with it
 }
+
+QString Boris::getReactionBehaviour()
+{
+  if(!settings.behaviours.at(curBehav).reactions.isEmpty()) {
+    interactReaction = QRandomGenerator::global()->bounded(settings.behaviours.at(curBehav).reactions.count());
+    return settings.behaviours.at(curBehav).reactions.at(interactReaction).getBehaviour();
+  }
+  return QString();
+}
+
+int Boris::getRange()
+{
+  return range;
+}
+
+/*
+void Boris::interact(Boris *boris)
+{
+  scriptVars["energy"] = boris->stats->getEnergy();
+  scriptVars["health"] = boris->stats->getHealth();
+  scriptVars["hyper"] = boris->stats->getHyper();
+  scriptVars["hunger"] = boris->stats->getHunger();
+  scriptVars["toilet"] = boris->stats->getToilet();
+  scriptVars["social"] = boris->stats->getSocial();
+  scriptVars["fun"] = boris->stats->getFun();
+  scriptVars["hygiene"] = boris->stats->getHygiene();
+  scriptVars["bdir"] = getDirectionTo(boris->pos());
+
+  borisHyper = boris->stats->getHyper();
+
+  if(settings.behaviours.at(curBehav).reactions.at(interactReaction).doMoveItem()) {
+    falling = false;
+    grabbed = false;
+    hVel = 0.0;
+    vVel = 0.0;
+    setPos(boris->pos().x() + settings.behaviours.at(curBehav).reactions.at(interactReaction).getXCoord(),
+	   boris->pos().y() + settings.behaviours.at(curBehav).reactions.at(interactReaction).getYCoord());
+    setCursor(settings.getCursor("hover.png"));
+  }
+
+  if(settings.behaviours.at(curBehav).reactions.at(interactReaction).getLabel().isEmpty()) {
+    destroy();
+    return;
+  }
+  if(settings.behaviours.at(curBehav).reactions.at(interactReaction).getLabel() != "nil") {
+    curFrame = settings.behaviours.at(curBehav).labels[settings.behaviours.at(curBehav).reactions.at(interactReaction).getLabel()];
+    QTimer::singleShot(0, this, &Item::nextFrame);
+  }
+}
+*/
