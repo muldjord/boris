@@ -316,7 +316,7 @@ void Boris::changeBehaviour(QString behav, int time)
     return;
   }
 
-  // Always stop and reset behavTimer here as it should never run at this point. We will start it later if necessary
+  // Always stop behavTimer here as it should never run at this point. We will start it later if necessary.
   behavTimer = false;
 
   // Reset all script variables
@@ -350,7 +350,6 @@ void Boris::changeBehaviour(QString behav, int time)
   for(int a = 0; a < settings.behaviours.size(); ++a) {
     if(settings.behaviours.at(a).file == behav) {
       curBehav = a;
-      range = settings.behaviours.at(curBehav).range == -1?getWidth() * 4:settings.behaviours.at(curBehav).range;
       if(coinCheck) {
 	int coins = 0;
 	if(settings.behaviours.at(curBehav).category.toLower() == "health") {
@@ -379,6 +378,9 @@ void Boris::changeBehaviour(QString behav, int time)
       break;
     }
   }
+
+  // Set reaction range
+  range = settings.behaviours.at(curBehav).range == -1?getWidth() * 4:settings.behaviours.at(curBehav).range;
 
   // Applying behaviour stats to Boris
   stats->queueStatChange(StatType::HYPER, settings.behaviours.at(curBehav).hyper);
@@ -1140,10 +1142,7 @@ void Boris::checkInteractions()
     // Check if an item is close by
     for(auto *item: settings.itemList) {
       if(getDistance(item->getGlobalCenter()) < item->getRange()) {
-	if(!interactedItems.contains(item)) {
-	  itemInteract(item);
-	  break;
-	}
+	itemInteract(item);
       }
     }
 
@@ -1187,6 +1186,9 @@ void Boris::borisInteract(Boris *otherBoris)
 
 void Boris::itemInteract(Item *item)
 {
+  if(interactedItems.contains(item)) {
+    return;
+  }
   interactedItems[item] = 120 * 1000; // The amount of time any interacted item will be ignored after interacting with it
   interactingItemPos = item->pos().toPoint();
 
