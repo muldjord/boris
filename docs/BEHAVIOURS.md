@@ -74,7 +74,8 @@ define other:var loop -= 1,if loop <= 0 goto end
   * `Idle`: When Boris is feeling well and satisfied he will often choose from this category when idling
   * `Movement`: These are only used entirely at random when Boris is feeling well and satisfied. These usually move Boris around somehow (eg. when taking the elevator or teleporting). Note that this is different from the `Locomotion` category that should only be used for behaviours that contain a full 360 movement cycle of some kind
   * `Locomotion`: These behaviours are fully scripted 360 degree locomotion behaviours used to move Boris around the desktop (eg. when Boris walks around)
-  * `Reaction`: This marks the behaviour as a `Reaction` behaviour that is *only* used when an encountered item requests it
+* `reaction=REACTION`: Any other Boris encountering this Boris while this behaviour is running will initiate this behaviour. The `REACTION` is just the basename of the filename of the behaviour such as `flattened`.
+* `range=INTEGER`: This sets the reaction range for the behaviour in pixels. If another Boris comes closer than this he will initiate his `reaction` behaviour
 
 ### Stat changes
 * `energy=INTEGER`: The amount of Boris' energy this behaviour will increase or decrease when starting the behaviour
