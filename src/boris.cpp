@@ -195,7 +195,6 @@ void Boris::tick()
     while(i.hasNext()) {
       i.next();
       interactedItems[i.key()] -= elapsed;
-      printf("%p: Boris friend: %p, %d\n", this, i.key(), i.value());
       if(!settings.itemList.contains(i.key()) ||
 	 interactedItems[i.key()] <= 0) {
 	interactedItems.remove(i.key());
