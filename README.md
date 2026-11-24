@@ -105,6 +105,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Perfected interacted items and Borises handling
 * Added `kdir` (key direction) BorisScript variable that enables controlling behaviours using the arrow keys on the keyboard as the usual 0-7 and -1
 * Added `carride` behaviour that can be controlled using the arrow keys
+* Boris' reaction to other Borises can now also be set using `reaction` and `range` (as seen in `carride`)
 
 #### Version 3.6.1 (30 November 2022):
 * Added `mazegame`
