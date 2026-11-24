@@ -190,7 +190,8 @@ private:
 
   int range = -1;
   int interactReaction = -1;
-
+  bool reacting = false;
+  
   Bubble *bubble = nullptr;
 
   bool showStats = false;

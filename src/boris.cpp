@@ -319,6 +319,9 @@ void Boris::changeBehaviour(QString behav, int time)
   // Always stop behavTimer here as it should never run at this point. We will start it later if necessary.
   behavTimer = false;
 
+  // Reset to false so Boris will once again react to a behaviour that has a 'reaction' option
+  reacting = false;
+  
   // Reset all script variables
   scriptVars.clear();
 
@@ -1169,8 +1172,9 @@ void Boris::borisInteract(Boris *otherBoris)
   borisFriend = otherBoris;
 
   // If a reaction is set in behaviour ALWAYS do it even though otherBoris is on cooldown
-  if(!borisFriend->getReactionBehaviour().isEmpty()) {
+  if(!reacting && !borisFriend->getReactionBehaviour().isEmpty()) {
     changeBehaviour(otherBoris->getReactionBehaviour());
+    reacting = true; // Will be reset upon next behaviour change
   } else if(!borisFriends.contains(otherBoris)) {
     borisFriends[otherBoris] = 60 * 1000; // The amount of time any encountered Boris will be ignored after greeting him
     if(borisFriend->stats->getHygiene() <= 22) {
