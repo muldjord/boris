@@ -52,7 +52,7 @@ if canvas = 8 goto paintpurple
 # Reach in to paint
 0;50;0;0;;label initstrokeswhite
 0;50;0;0;;var strokes = 6
-0;50;0;0;;var element = [@64 - 1],
+0;50;0;0;;var element = [@68 - 1],
 var progress = 0,
 var xcoord = [6 + (@14 - 1)],
 var ycoord = [@15 - 1]
@@ -98,7 +98,7 @@ var ycoord = [@15 - 1]
 # Reach in to paint
 1;50;0;0;;label initstrokesred
 1;50;0;0;;var strokes = 6
-1;50;0;0;;var element = [@64 - 1],
+1;50;0;0;;var element = [@68 - 1],
 var progress = 0,
 var xcoord = [6 + (@14 - 1)],
 var ycoord = [@15 - 1]
@@ -144,7 +144,7 @@ var ycoord = [@15 - 1]
 # Reach in to paint
 2;50;0;0;;label initstrokesorange
 2;50;0;0;;var strokes = 6
-2;50;0;0;;var element = [@64 - 1],
+2;50;0;0;;var element = [@68 - 1],
 var progress = 0,
 var xcoord = [6 + (@14 - 1)],
 var ycoord = [@15 - 1]
@@ -190,7 +190,7 @@ var ycoord = [@15 - 1]
 # Reach in to paint
 3;50;0;0;;label initstrokesyellow
 3;50;0;0;;var strokes = 6
-3;50;0;0;;var element = [@64 - 1],
+3;50;0;0;;var element = [@68 - 1],
 var progress = 0,
 var xcoord = [6 + (@14 - 1)],
 var ycoord = [@15 - 1]
@@ -236,7 +236,7 @@ var ycoord = [@15 - 1]
 # Reach in to paint
 4;50;0;0;;label initstrokesgreen
 4;50;0;0;;var strokes = 6
-4;50;0;0;;var element = [@64 - 1],
+4;50;0;0;;var element = [@68 - 1],
 var progress = 0,
 var xcoord = [6 + (@14 - 1)],
 var ycoord = [@15 - 1]
@@ -282,7 +282,7 @@ var ycoord = [@15 - 1]
 # Reach in to paint
 5;50;0;0;;label initstrokescyan
 5;50;0;0;;var strokes = 6
-5;50;0;0;;var element = [@64 - 1],
+5;50;0;0;;var element = [@68 - 1],
 var progress = 0,
 var xcoord = [6 + (@14 - 1)],
 var ycoord = [@15 - 1]
@@ -328,7 +328,7 @@ var ycoord = [@15 - 1]
 # Reach in to paint
 6;50;0;0;;label initstrokesblue
 6;50;0;0;;var strokes = 6
-6;50;0;0;;var element = [@64 - 1],
+6;50;0;0;;var element = [@68 - 1],
 var progress = 0,
 var xcoord = [6 + (@14 - 1)],
 var ycoord = [@15 - 1]
@@ -374,7 +374,7 @@ var ycoord = [@15 - 1]
 # Reach in to paint
 7;50;0;0;;label initstrokespurple
 7;50;0;0;;var strokes = 6
-7;50;0;0;;var element = [@64 - 1],
+7;50;0;0;;var element = [@68 - 1],
 var progress = 0,
 var xcoord = [6 + (@14 - 1)],
 var ycoord = [@15 - 1]
