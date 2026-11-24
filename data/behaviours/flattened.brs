@@ -1,7 +1,7 @@
-health=-30
+health=-18
 fun=-20
 hygiene=-15
-anxiety=25
+anxiety=10
 
 doNotDisturb
 oneShot
