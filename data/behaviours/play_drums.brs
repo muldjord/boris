@@ -1,5 +1,7 @@
 title=Play drums
 category=Fun
+reaction=dance
+range=64
 
 energy=-8
 hunger=5

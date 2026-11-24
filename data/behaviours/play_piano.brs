@@ -1,5 +1,7 @@
 title=Play piano
 category=Fun
+reaction=dance
+range=64
 
 energy=-3
 hunger=1
