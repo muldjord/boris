@@ -44,7 +44,7 @@ Item::Item(const QString &item, Settings &settings, const int &xPos, const int&y
   for(int a = 0; a < settings.itemBehaviours.count(); ++a) {
     if(settings.itemBehaviours.at(a).file == item) {
       curItem = a;
-      range = settings.itemBehaviours.at(a).range;
+      range = settings.itemBehaviours.at(a).range == -1?getWidth():settings.itemBehaviours.at(a).range;
       break;
     }
   }
