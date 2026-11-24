@@ -425,7 +425,7 @@ void Stats::statProgress()
   queueStatChange(StatType::SOCIAL, -QRandomGenerator::global()->bounded(2));
   queueStatChange(StatType::FUN, -QRandomGenerator::global()->bounded(3));
   queueStatChange(StatType::HUNGER, QRandomGenerator::global()->bounded(2)); // This one is opposite in the stats overview
-  queueStatChange(StatType::ANXIETY, -(QRandomGenerator::global()->bounded(8) + 8));
+  queueStatChange(StatType::ANXIETY, -(QRandomGenerator::global()->bounded(10) + 10));
   queueStatChange(StatType::HYGIENE, -QRandomGenerator::global()->bounded(1));
   queueStatChange(StatType::HYPER, -QRandomGenerator::global()->bounded(7));
   queueStatChange(StatType::HEALTH, 4); // Boris will slowly heal over time
