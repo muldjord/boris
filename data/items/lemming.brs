@@ -1,7 +1,7 @@
 title=Lemming
 category=Fun
 
-weight=2
+weight=8
 bounce=2
 range=24
 
@@ -140,13 +140,13 @@ goto dropleft
 31;75;0;-1;;if @5 > 1 goto crawlright,goto endcrawlright
 
 # End crawl right
-32;75;0;0;;label endcrawlright
-33;75;0;0;;
-34;75;0;0;;
+32;75;0;-4;;label endcrawlright
+33;75;0;-2;;
+34;75;0;-1;;
 35;75;0;0;;
 36;75;0;0;;
 37;75;0;0;;
-38;75;1;0;;
+38;75;0;0;;
 39;75;1;0;;goto walkright
 
 # Crawl left
@@ -160,14 +160,14 @@ goto dropleft
 47;75;0;-1;;if @5 > 1 goto crawlleft,goto endcrawlleft
 
 # End crawl left
-48;75;0;0;;label endcrawlleft
-49;75;0;0;;
-50;75;0;0;;
+48;75;0;-4;;label endcrawlleft
+49;75;0;-2;;
+50;75;0;-1;;
 51;75;0;0;;
 52;75;0;0;;
 53;75;0;0;;
-54;75;-1;0;;
-55;75;0;-1;;goto walkleft
+54;75;0;0;;
+55;75;-1;0;;goto walkleft
 
 # Blocker
 99;75;0;0;;label blocker
