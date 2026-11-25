@@ -4,6 +4,7 @@ category=Fun
 weight=8
 bounce=2
 range=24
+ttl=300
 
 noShadow
 

@@ -45,6 +45,7 @@ Item::Item(const QString &item, Settings &settings, const int &xPos, const int&y
     if(settings.itemBehaviours.at(a).file == item) {
       curItem = a;
       range = settings.itemBehaviours.at(a).range == -1?getWidth():settings.itemBehaviours.at(a).range;
+      ttlTimeMax = settings.itemBehaviours.at(a).ttl == -1?settings.itemTimeout * 1000:settings.itemBehaviours.at(a).ttl * 1000;
       break;
     }
   }
@@ -61,10 +62,6 @@ Item::Item(const QString &item, Settings &settings, const int &xPos, const int&y
 
   if(settings.itemBehaviours.at(curItem).noShadow) {
     shadow->hide();
-  }
-
-  if(settings.itemTimeout > 0) {
-    QTimer::singleShot(settings.itemTimeout * 1000, this, &Item::destroy);
   }
 
   if(settings.itemBehaviours.at(curItem).allowFlip && QRandomGenerator::global()->bounded(2)) {
@@ -175,6 +172,7 @@ void Item::tick()
 
   frameTime += elapsed;
   physicsTime += elapsed;
+  ttlTime += elapsed;
 
   if(frameTimer) {
     if(frameTime >= frameTimeMax) {
@@ -197,6 +195,10 @@ void Item::tick()
     }
   } else {
     physicsTime = 0;
+  }
+
+  if(ttlTime >= ttlTimeMax) {
+    destroy();
   }
 }
 

@@ -87,6 +87,9 @@ private:
   qint64 physicsTimeMax = 30;
   bool physicsTimer = true;
 
+  qint64 ttlTime = 0;
+  qint64 ttlTimeMax = -1;
+  
   qint64 oldElapsed = 0;
 
   bool flipFrames = false;
@@ -105,7 +108,7 @@ private:
   Shadow *shadow = nullptr;
 
   int range = -1;
-  
+ 
   double vVel = 0.0;
   double hVel = 0.0;
   int groundY = 0;

@@ -129,6 +129,7 @@ Behaviour::Behaviour(const Behaviour &behaviour)
   this->weight = behaviour.weight;
   this->bounce = behaviour.bounce;
   this->range = behaviour.range;
+  this->ttl = behaviour.ttl;
   this->hyper = behaviour.hyper;
   this->health = behaviour.health;
   this->energy = behaviour.energy;
@@ -160,6 +161,7 @@ void Behaviour::operator=(const Behaviour &behaviour)
   this->weight = behaviour.weight;
   this->bounce = behaviour.bounce;
   this->range = behaviour.range;
+  this->ttl = behaviour.ttl;
   this->hyper = behaviour.hyper;
   this->health = behaviour.health;
   this->energy = behaviour.energy;

@@ -191,6 +191,11 @@ bool Loader::loadBehaviours(const Settings &settings,
 	  b.range = std::clamp(b.range, 1, 512);
           continue;
         }
+        if(line.left(3) == "ttl") {
+          b.ttl = line.mid(4,line.length()).toInt();
+	  b.ttl = std::clamp(b.ttl, 1, 3600);
+          continue;
+        }
         if(line.left(6) == "bounce") {
           b.bounce = line.mid(7,line.length()).toInt();
 	  b.bounce = std::clamp(b.bounce, 0, 10);

@@ -108,6 +108,7 @@ public:
   int weight = 50; // Used by items
   int bounce = 50; // Used by items
   int range = -1; // Used by items. This is the interaction range when Boris passes nearby.
+  int ttl = -1; // Used by items. Item will despan when this many seconds have passed.
   QList<Frame> frames;
   QMap<QString, int> labels; // Used for scripts when goto'ing
   QMap<QString, Script> defines; // Used for defines of reusable scripting blocks

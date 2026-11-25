@@ -35,6 +35,7 @@ coins=50
 weight=2
 bounce=7
 range=64
+ttl=60
 
 reaction=kickball_w,kickballw,-12,7;kickball_e,kickballe,12,7
 
@@ -60,6 +61,7 @@ define other:var loop -= 1,if loop <= 0 goto end
 * `weight=INTEGER`: Set the weight of the item. Value can be from 0-10. 0 means floating. 10 means really heavy
 * `bounce=INTEGER`: Sets the bounce factor of the object. Value can be from 0-10. 0 means no bounce. 10 means bounce forever
 * `range=INTEGER`: This set the reaction range for the item in pixels. If Boris comes closer than this he will react with the item
+* `ttl=INTEGER`: This forces a non-default ttl (time to live) for the item. The item will despawn when this many seconds have passed
 
 ### Item reaction
 #### Definition
