@@ -2,6 +2,7 @@ energy=-4
 fun=-10
 social=-8
 
+# Adding 'doNotDisturb' to this one will cause Boris to be unflattenable when a car runs him over
 oneShot
 allowFlip
 
