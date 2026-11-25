@@ -64,6 +64,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Make a `clear_throat` idle behaviour that make boris cough more or less to get attention based on social stat and interactions
 * Consider making more "get user attention" behaviours that keeps going until interactions != 0
 * Make a `bobsled` behaviour that moves Boris downward to balance out `inflate_balloon`. Sometimes he'll fall out on the way down which will spawn a bobsled
+* Add a background QGraphicsObject that covers the entirety of the screen. It should be transparent initially but can be used to add stuff into that should just be "part of the background" after some behaviour has completed. It could also be manipulated by items and behaviours later for "digging through" or "blocking stuff". Larger objects could also be rendered into it.
 
 #### Version 4.0.5 (In progress, unreleased):
 * Ported codebase to Qt6 and cmake
@@ -101,6 +102,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Added `draw` routines `rectanglef` and `ellipsef` which draws a filled ellipse
 * Items moving beyond the horizontal edges now appears at the opposite unless they are thrown upwards out of sight in which case they will simply drop back down after a while
 * Added `bub` and `bob` item with bubbles that can encompass Boris when he encounters them
+* Added 'lemming' item
 * Added `_curious` behaviour that will be initiated when Boris encounters non-interactive objects
 * Perfected interacted items and Borises handling
 * Added `kdir` (key direction) BorisScript variable that enables controlling behaviours using the arrow keys on the keyboard as the usual 0-7 and -1
