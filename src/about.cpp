@@ -384,10 +384,13 @@ QToolTip {
 <p>Lars Muldjord</p>
 
 <h3>Graphics</h3>
-<p>Lars Muldjord</p>
+<p>All graphics by Lars Muldjord with the following exceptions:</p>
+<p>Lemming originally created by Mike Dailly (not affiliated with this project)</p>
+<p>Bub and Bob characters originally created by Fukio "MTJ" Mitsuji (not affiliated with this project)</p>
 
 <h3>Sound</h3>
-<p>Lars Muldjord</p>
+<p>All sound by Lars Muldjord with the following exceptions:</p>
+<p>Lemmings sound effects originally created by Brian Johnston (not affiliated with this project)</p>
 
 <h4>Other notes</h4>
 <p>Boris was programmed using the Qt framework (<a href="http://www.qt.io">http://www.qt.io</a>), SFML framework (<a href="https://www.sfml-dev.org">https://www.sfml-dev.org</a>) and C++.</p>
