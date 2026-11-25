@@ -232,8 +232,8 @@ void Item::nextFrame()
     }
   }
 
-  if(settings.itemBehaviours.at(curItem).frames.at(curFrame).dx != 0 ||
-     settings.itemBehaviours.at(curItem).frames.at(curFrame).dy != 0) {
+  if(!grabbed && (settings.itemBehaviours.at(curItem).frames.at(curFrame).dx != 0 ||
+		  settings.itemBehaviours.at(curItem).frames.at(curFrame).dy != 0)) {
     moveItem(settings.itemBehaviours.at(curItem).frames.at(curFrame).dx,
               settings.itemBehaviours.at(curItem).frames.at(curFrame).dy,
               flipFrames);
