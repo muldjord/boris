@@ -102,13 +102,15 @@ The last command copies all necessary files to the `release` folder. You can the
 * Added `draw` routines `rectanglef` and `ellipsef` which draws a filled ellipse
 * Items moving beyond the horizontal edges now appears at the opposite unless they are thrown upwards out of sight in which case they will simply drop back down after a while
 * Added `bub` and `bob` item with bubbles that can encompass Boris when he encounters them
-* Added 'lemming' item
+* Added `lemming` item
+* Added `trapdoor` item
 * Added `_curious` behaviour that will be initiated when Boris encounters non-interactive objects
 * Perfected interacted items and Borises handling
 * Added `kdir` (key direction) BorisScript variable that enables controlling behaviours using the arrow keys on the keyboard as the usual 0-7 and -1
-* Added `carride` behaviour that can be controlled using the arrow keys
-* Boris' reaction to other Borises can now also be set using `reaction` and `range` (as seen in `carride`)
+* Added `carride` behaviour that can be controlled using the arrow keys. Please drive safely!
+* Boris' reaction to other Borises can now also be set using `reaction` and `range` (as seen in the `carride` behaviour)
 * Added `ttl` to item behaviour options to allow setting specific time-to-live in place of the default. Item will despawn when this many seconds have passed
+* Added `rss_clickable` config option
 
 #### Version 3.6.1 (30 November 2022):
 * Added `mazegame`
