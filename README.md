@@ -29,7 +29,7 @@ muldjordlars@gmail.com.
 Copyright 2026 Lars Muldjord. This program is distributed under the terms of the GNU General Public License. Be sure to read the license in COPYING.TXT or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.
 
 ## Windows
-Just download the latest release from the [releases](releases) page. Run the `Boris.exe` contained within. Given that the executable is not signed by Microsoft you will probably get a warning when running it. Boris is open source. I urge you to look through the code if you want. There are no ads, viruses or malware included. Just pure Boris retro fun!
+Just download the latest release from the [releases](https://github.com/muldjord/boris/releases) page. Run the `Boris.exe` contained within. Given that the executable is not signed by Microsoft you will probably get a warning when running it. Boris is open source. I urge you to look through the code if you want. There are no ads, viruses or malware included. Just pure Boris retro fun!
 
 ## Linux
 I might make an AppImage of Boris sometime soon. But I don't have much experience with doing so. So for the time being you can simply build Boris from source using the instructions below.
