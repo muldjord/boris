@@ -397,12 +397,12 @@ void MainWindow::loadFromConfig()
   settings.rssClickable = iniSettings->value("rss_clickable").toBool();
 
   if(!iniSettings->contains("weather_city")) {
-    iniSettings->setValue("weather_city", "Copenhagen");
+    iniSettings->setValue("weather_city", "");
   }
   settings.city = iniSettings->value("weather_city").toString();
 
   if(!iniSettings->contains("weather_key")) {
-    iniSettings->setValue("weather_key", "fe9fe6cf47c03d2640d5063fbfa053a2");
+    iniSettings->setValue("weather_key", "");
   }
   settings.key = iniSettings->value("weather_key").toString();
 }
