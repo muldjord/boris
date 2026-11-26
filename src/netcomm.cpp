@@ -54,8 +54,8 @@ void NetComm::updateAll()
     get(weatherRequest);
   }
 
-  if(!settings.feedUrl.trimmed().isEmpty()) {
-    feedRequest.setUrl(QUrl(settings.feedUrl));
+  if(!settings.rssUrl.trimmed().isEmpty()) {
+    feedRequest.setUrl(QUrl(settings.rssUrl));
     get(feedRequest);
   } else {
     settings.rssLines.clear();

@@ -472,11 +472,17 @@ QToolTip {
   weatherKeyLineEdit->setToolTip("The weather functionality needs an API key to function. Get one for free at openweathermap.org/appid.");
   weatherKeyLineEdit->setText(settings.key);
 
-  QLabel *feedUrlLabel = new QLabel("RSS feed url (mouse over for help):");
-  feedUrlLineEdit = new QLineEdit();
-  feedUrlLineEdit->setToolTip("Type in any RSS feed url. Boris will sometimes update you on a title from this feed. When he does you can click it to open it in the default browser.");
-  feedUrlLineEdit->setText(settings.feedUrl);
+  QLabel *rssUrlLabel = new QLabel("RSS feed url (mouse over for help):");
+  rssUrlLineEdit = new QLineEdit();
+  rssUrlLineEdit->setToolTip("Type in any RSS feed url. Boris will sometimes update you on a title from this feed.");
+  rssUrlLineEdit->setText(settings.rssUrl);
 
+  rssClickableCheckBox = new QCheckBox("Make RSS headlines clickable");
+  rssClickableCheckBox->setToolTip("Enable this to make RSS headlines open in the default browser when clicked.");
+  if(settings.rssClickable) {
+    rssClickableCheckBox->setCheckState(Qt::Checked);
+  }
+  
   QLabel *statsLabel = new QLabel("Vitality stats:");
   statsComboBox = new QComboBox();
   statsComboBox->addItem("Always show", STATS_ALWAYS);
@@ -545,8 +551,9 @@ QToolTip {
   advancedLayout->addWidget(weatherLineEdit);
   advancedLayout->addWidget(weatherKeyLabel);
   advancedLayout->addWidget(weatherKeyLineEdit);
-  advancedLayout->addWidget(feedUrlLabel);
-  advancedLayout->addWidget(feedUrlLineEdit);
+  advancedLayout->addWidget(rssUrlLabel);
+  advancedLayout->addWidget(rssUrlLineEdit);
+  advancedLayout->addWidget(rssClickableCheckBox);
   advancedLayout->addWidget(idkfaCheckBox);
   advancedLayout->addStretch(1);
 
@@ -606,7 +613,7 @@ void About::saveAll()
 
   settings.city = weatherLineEdit->text();
   settings.key = weatherKeyLineEdit->text();
-  settings.feedUrl = feedUrlLineEdit->text();
+  settings.rssUrl = rssUrlLineEdit->text();
   settings.stats = statsComboBox->currentData().toInt();
   settings.independence = independenceSlider->value();
   if(makeInvincibleCheckBox->isChecked()) {
@@ -618,6 +625,11 @@ void About::saveAll()
     settings.idkfa = true;
   } else {
     settings.idkfa = false;
+  }
+  if(rssClickableCheckBox->isChecked()) {
+    settings.rssClickable = true;
+  } else {
+    settings.rssClickable = false;
   }
   if(enableSoundCheckBox->isChecked()) {
     settings.sound = true;
@@ -649,7 +661,8 @@ void About::saveAll()
   iniSettings->setValue("bubbles", settings.bubbles);
   iniSettings->setValue("sound", settings.sound);
   iniSettings->setValue("volume", settings.volume);
-  iniSettings->setValue("feed_url", settings.feedUrl);
+  iniSettings->setValue("rss_url", settings.rssUrl);
+  iniSettings->setValue("rss_clickable", settings.rssClickable);
   iniSettings->setValue("weather_city", settings.city);
   iniSettings->setValue("weather_key", settings.key);
   if(settings.stats == STATS_ALWAYS) {

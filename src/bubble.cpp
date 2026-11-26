@@ -155,7 +155,9 @@ void Bubble::initBubble(const int &hyper,
 
 void Bubble::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-  if(event->button() == Qt::LeftButton && rssUrl.isValid()) {
+  if(settings.rssClickable &&
+     event->button() == Qt::LeftButton &&
+     rssUrl.isValid()) {
     QDesktopServices::openUrl(rssUrl);
   }
   event->ignore();

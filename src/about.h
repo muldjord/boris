@@ -51,7 +51,8 @@ private:
   StepSlider *itemTimeoutSlider = nullptr;
   QLineEdit *weatherLineEdit = nullptr;
   QLineEdit *weatherKeyLineEdit = nullptr;
-  QLineEdit *feedUrlLineEdit = nullptr;
+  QLineEdit *rssUrlLineEdit = nullptr;
+  QCheckBox *rssClickableCheckBox = nullptr;
   QComboBox *statsComboBox = nullptr;
   QCheckBox *makeInvincibleCheckBox = nullptr;
   QCheckBox *idkfaCheckBox = nullptr;

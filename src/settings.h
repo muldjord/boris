@@ -96,7 +96,8 @@ public:
 
   // Chatlines
   QList<RssLine> rssLines;
-  QString feedUrl = "http://rss.slashdot.org/Slashdot/slashdotMain";
+  QString rssUrl = "http://rss.slashdot.org/Slashdot/slashdotMain";
+  bool rssClickable = true;
 
   // Items
   bool items = true;

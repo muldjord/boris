@@ -386,10 +386,15 @@ void MainWindow::loadFromConfig()
   }
   settings.lemmyMode = iniSettings->value("lemmy_mode").toBool();
 
-  if(!iniSettings->contains("feed_url")) {
-    iniSettings->setValue("feed_url", "http://rss.slashdot.org/Slashdot/slashdotMain");
+  if(!iniSettings->contains("rss_url")) {
+    iniSettings->setValue("rss_url", "http://rss.slashdot.org/Slashdot/slashdotMain");
   }
-  settings.feedUrl = iniSettings->value("feed_url").toString();
+  settings.rssUrl = iniSettings->value("rss_url").toString();
+
+  if(!iniSettings->contains("rss_clickable")) {
+    iniSettings->setValue("rss_clickable", true);
+  }
+  settings.rssClickable = iniSettings->value("rss_clickable").toBool();
 
   if(!iniSettings->contains("weather_city")) {
     iniSettings->setValue("weather_city", "Copenhagen");
