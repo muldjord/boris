@@ -22,7 +22,7 @@ Use them to make some interesting behaviours.
 * `my`: Current mouse pointer x coordinate
 * `mhvel`: The horizontal velocity of the mouse during the last 30 ms
 * `mvvel`: The vertical velocity of the mouse during the last 30 ms
-* `mdist`: The current pixel distance from Boris to the mouse cursor
+* `mdist`: The current pixel distance from the entity to the mouse cursor
 * `mdir`: The direction the mouse is in relative to Boris. Directions are 0-7 clockwise where 0 is north. 1 is northeast and so on.
 * `bsize`: The current size of Boris in pixels (After Boris 4.0.0 this is always 32 pixels. I might remove it in future versions.)
 * `bdir`: The direction a close Boris friend is located in relative to Boris. If no Boris is close by it will be `-1`. Otherwise directions are 0-7 clockwise where 0 is north. 1 is northeast and so on.
