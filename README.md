@@ -14,6 +14,8 @@ It brings me great joy to work on this project. I hope Boris will bring joy to y
 * Boris supports weather visualization using the OpenWeatherMap API
 * Boris supports RSS feed speech bubbles using custom RSS feeds
 
+Note!!! Boris requires network access to fetch RSS feeds and weather updates from OpenWeatherMap. It uses networking for nothing else! Feel free to look through the code to verify this if you want to.
+
 ## About
 * Programming: Lars Muldjord
 * Graphics: Lars Muldjord
@@ -26,28 +28,32 @@ muldjordlars@gmail.com.
 
 Copyright 2026 Lars Muldjord. This program is distributed under the terms of the GNU General Public License. Be sure to read the license in COPYING.TXT or check out the web page http://www.gnu.org/licenses/gpl-3.0.html.
 
-## Building from source (Ubuntu Linux and Debian derivatives)
-### Prerequisites
-Boris requires Qt6. Install all prerequisites with the following commands:
+## Windows
+Just download the latest release from the [releases](releases) page. Run the `Boris.exe` contained within. Given that the executable is not signed by Microsoft you will probably get a warning when running it. Boris is open source. I urge you to look through the code if you want. There are no ads, viruses or malware included. Just pure Boris retro fun!
+
+## Linux
+I might make an AppImage of Boris sometime soon. But I don't have much experience with doing so. So for the time being you can simply build Boris from source using the instructions below.
+
+### Building from source (Ubuntu Linux and Debian derivatives)
+#### Prerequisites
+Install all prerequisites with the following commands:
 ```
 $ sudo apt update
 $ sudo apt install build-essential cmake libsfml-dev qt6-base-dev
 ```
 
-### Compiles Boris
+#### Compile Boris
 ```
 $ mkdir build
 $ cd build
-$ cmake -DCMAKE_BUILD_TYPE=Release ..
-$ make
+$ cmake ..
 $ make install
 ```
-The last command copies all necessary files to the `release` folder. You can then run Boris using the `Boris` executable.
+The last command copies all necessary files to the `../release` folder. You can then run Boris using the `Boris` executable.
 
 ## Release notes
 #### Known issues:
-* Linux: For security reasons modern Wayland compositors don't support `Qt::WindowStaysOnTopHint` and click-through behaviour. The non-free OS called Windows (which apparently people still use for some bizarre reason) still support this, but it is probably only a matter of time before they catch up and stop supporting it as well
-* Boris sometimes won't interact with a newly spawned object even if he didn't spawn it himself or it was spawned randomly...
+* Linux: For security reasons modern Wayland compositors don't support `Qt::WindowStaysOnTopHint` and click-through behaviour. This is still supported under Windows though.
 
 #### Ideas (that I might / might not implement):
 * Add Boris `memory`. If he uses an item that causes him trouble (lowers his health), he should learn to avoid it
@@ -66,7 +72,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Make a `bobsled` behaviour that moves Boris downward to balance out `inflate_balloon`. Sometimes he'll fall out on the way down which will spawn a bobsled
 * Add a background QGraphicsObject that covers the entirety of the screen. It should be transparent initially but can be used to add stuff into that should just be "part of the background" after some behaviour has completed. It could also be manipulated by items and behaviours later for "digging through" or "blocking stuff". Larger objects could also be rendered into it.
 
-#### Version 4.0.5 (In progress, unreleased):
+#### Version 4.0.5 (26nov2026):
 * Ported codebase to Qt6 and cmake
 * Rewired entire project to work with modern Wayland compositors under Linux using a maximized QGraphicsView instead of individual windows per Boris
 * Switched to a tick system instead of individual timers resulting in much improved performance and synchronization on reactions
@@ -99,7 +105,7 @@ The last command copies all necessary files to the `release` folder. You can the
 * Random variable set with `@INT` can now also be a random value within the range of a variable by using `@VARIABLE`
 * Now allows expressions to begin with `[` and end with `]` in `getValue` to make parameters more useful in commands that require several one after the other
 * All `draw` routines now uses QPen only to avoid infill of rectangles and ellipsees
-* Added `draw` routines `rectanglef` and `ellipsef` which draws a filled ellipse
+* Added `draw` routines `rectanglef` and `ellipsef` which draws a filled rectanble and ellipse
 * Items moving beyond the horizontal edges now appears at the opposite unless they are thrown upwards out of sight in which case they will simply drop back down after a while
 * Added `bub` and `bob` item with bubbles that can encompass Boris when he encounters them
 * Added `lemming` item
