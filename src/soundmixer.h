@@ -32,7 +32,7 @@ class SoundMixer : public QObject
   Q_OBJECT;
 
 public:
-  SoundMixer();
+  SoundMixer(QObject *parent = nullptr);
   ~SoundMixer();
   void setGlobalVolume(const int &volume);
   void playSoundFile(const std::string &fileName,

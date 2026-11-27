@@ -26,7 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QNetworkReply>
 #include <QUrl>
 
-NetComm::NetComm(Settings &settings) : settings(settings)
+NetComm::NetComm(Settings &settings, QObject *parent)
+  : settings(settings), QNetworkAccessManager(parent)
 {
   connect(this, &NetComm::finished, this, &NetComm::netReply);
 

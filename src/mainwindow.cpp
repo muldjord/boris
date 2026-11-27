@@ -50,11 +50,11 @@ MainWindow::MainWindow(QSplashScreen &splash)
 {
   mainWindow = this;
 
-  soundMixer = new SoundMixer();
+  soundMixer = new SoundMixer(this);
 
   loadFromConfig();
 
-  setScene(new QGraphicsScene());
+  setScene(new QGraphicsScene(this));
 
   scene()->setBackgroundBrush(Qt::transparent);
   setStyleSheet("background:transparent");
@@ -254,7 +254,7 @@ qint64 MainWindow::getElapsed()
 
 void MainWindow::loadFromConfig()
 {
-  iniSettings = new QSettings("config.ini", QSettings::IniFormat);
+  iniSettings = new QSettings("config.ini", QSettings::IniFormat, this);
 
   if(!iniSettings->contains("show_welcome")) {
     iniSettings->setValue("show_welcome", true);
@@ -470,7 +470,7 @@ void MainWindow::createTrayIcon()
 {
   trayIcon = new QSystemTrayIcon(this);
 
-  trayIconMenu = new QMenu();
+  trayIconMenu = new QMenu(this);
   trayIconMenu->addAction(QIcon(settings.getPixmap("about.png")), "&Config / about...", this, &MainWindow::aboutBox);
   trayIconMenu->addSeparator();
   trayIconMenu->addMenu(behavioursMenu);
@@ -584,7 +584,7 @@ void MainWindow::updateTrayWeather()
 
 void MainWindow::createItemsMenu()
 {
-  itemsMenu = new QMenu();
+  itemsMenu = new QMenu(this);
   itemsMenu->setTitle("Items");
   connect(itemsMenu, &QMenu::triggered, this, &MainWindow::spawnItem);
 
@@ -628,7 +628,7 @@ void MainWindow::createItemsMenu()
       iconPixmap = settings.getPixmap("coin.png");
     }
 
-    QAction *itemAction = new QAction(QIcon(iconPixmap), title);
+    QAction *itemAction = new QAction(QIcon(iconPixmap), title, menu);
     itemAction->setObjectName(item.file);
     itemAction->setData(item.category.toLower());
 
@@ -652,7 +652,7 @@ void MainWindow::createItemsMenu()
 
 void MainWindow::createBehavioursMenu()
 {
-  behavioursMenu = new QMenu();
+  behavioursMenu = new QMenu(this);
   behavioursMenu->setTitle("Behaviours");
   connect(behavioursMenu, &QMenu::triggered, this, &MainWindow::triggerBehaviour);
 
@@ -691,7 +691,7 @@ void MainWindow::createBehavioursMenu()
       subMenus.append(menu);
     }
 
-    QAction *behavAction = new QAction(QIcon(iconPixmap), title);
+    QAction *behavAction = new QAction(QIcon(iconPixmap), title, menu);
     behavAction->setObjectName(behaviour.file);
 
     menu->addAction(behavAction);

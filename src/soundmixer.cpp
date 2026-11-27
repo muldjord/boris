@@ -24,7 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 constexpr int numOfChannels = 64;
 
-SoundMixer::SoundMixer()
+SoundMixer::SoundMixer(QObject *parent)
+  : QObject(parent)
 {
   sf::SoundBuffer buffer;
   for(int a = 0; a < numOfChannels; ++a) {
