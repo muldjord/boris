@@ -451,14 +451,20 @@ QToolTip {
   if(settings.idkfa) {
     idkfaCheckBox->setCheckState(Qt::Checked);
   }
-  
-  QLabel *itemSpawnIntervalLabel = new QLabel("Seconds between random item spawn (20-3600):");
-  itemSpawnIntervalSlider = new StepSlider({20, 3600}, this, 20);
+
+  scriptOutputCheckBox = new QCheckBox("Enable BorisScript terminal debug output");
+  scriptOutputCheckBox->setToolTip("When enabled all BoriScript command parsing will be output to the terminal for easier debugging.");
+  if(settings.scriptOutput) {
+    scriptOutputCheckBox->setCheckState(Qt::Checked);
+  }
+
+  QLabel *itemSpawnIntervalLabel = new QLabel("Seconds between random item spawn (10-600):");
+  itemSpawnIntervalSlider = new StepSlider({10, 600}, this, 10);
   itemSpawnIntervalSlider->setValue(settings.itemSpawnInterval);
   itemSpawnIntervalSlider->setToolTip("If items are enabled random items will be spawned around the desktop at this interval.");
 
-  QLabel *itemTimeoutLabel = new QLabel("Item timeout in seconds (20-3600):");
-  itemTimeoutSlider = new StepSlider({20, 3600}, this, 20);
+  QLabel *itemTimeoutLabel = new QLabel("Item timeout in seconds (60-1800):");
+  itemTimeoutSlider = new StepSlider({60, 1800}, this, 10);
   itemTimeoutSlider->setValue(settings.itemTimeout);
   itemTimeoutSlider->setToolTip("Items will disappear after this amount of time.");
 
@@ -555,6 +561,7 @@ QToolTip {
   advancedLayout->addWidget(rssUrlLineEdit);
   advancedLayout->addWidget(rssClickableCheckBox);
   advancedLayout->addWidget(idkfaCheckBox);
+  advancedLayout->addWidget(scriptOutputCheckBox);
   advancedLayout->addStretch(1);
 
   QWidget *advancedWidget = new QWidget;
@@ -626,6 +633,11 @@ void About::saveAll()
   } else {
     settings.idkfa = false;
   }
+  if(scriptOutputCheckBox->isChecked()) {
+    settings.scriptOutput = true;
+  } else {
+    settings.scriptOutput = false;
+  }
   if(rssClickableCheckBox->isChecked()) {
     settings.rssClickable = true;
   } else {
@@ -658,6 +670,7 @@ void About::saveAll()
   iniSettings->setValue("independence", settings.independence);
   iniSettings->setValue("make_invincible", settings.isInvincible);
   iniSettings->setValue("idkfa", settings.idkfa);
+  iniSettings->setValue("script_output", settings.scriptOutput);
   iniSettings->setValue("bubbles", settings.bubbles);
   iniSettings->setValue("sound", settings.sound);
   iniSettings->setValue("volume", settings.volume);

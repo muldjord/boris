@@ -56,6 +56,7 @@ private:
   QComboBox *statsComboBox = nullptr;
   QCheckBox *makeInvincibleCheckBox = nullptr;
   QCheckBox *idkfaCheckBox = nullptr;
+  QCheckBox *scriptOutputCheckBox = nullptr;
   QCheckBox *enableSoundCheckBox = nullptr;
   QCheckBox *enableItemsCheckBox = nullptr;
   QCheckBox *enableBubblesCheckBox = nullptr;
