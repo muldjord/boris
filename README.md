@@ -62,8 +62,6 @@ The last command copies all necessary files to the `../release` folder. You can 
 * Create a Bub or Bob item that will put Boris in a bubble on interaction
 * Create a shark item that moves around the desktop for a little while. It should make Boris flee
 * Allow setting the colors of Boris' clothes in the About dialog that will overwrite the season colors
-* Create `Advanced options` in About dialog with `script_output`, `idkfa` and so on
-* The item interaction initiation system should be redesigned / improved
 * When a Boris is interacting with an item it shouldn't be able for a different Boris to also interact with the item - it needs a cooldown if `doNotDisturb` is set on the item
 * Improve `play_piano` so it uses `sound` command and sprites for hits
 * Improve `play_drums` so it uses `sound` command and sprites for hits
@@ -71,6 +69,10 @@ The last command copies all necessary files to the `../release` folder. You can 
 * Consider making more "get user attention" behaviours that keeps going until interactions != 0
 * Make a `bobsled` behaviour that moves Boris downward to balance out `inflate_balloon`. Sometimes he'll fall out on the way down which will spawn a bobsled
 * Add a background QGraphicsObject that covers the entirety of the screen. It should be transparent initially but can be used to add stuff into that should just be "part of the background" after some behaviour has completed. It could also be manipulated by items and behaviours later for "digging through" or "blocking stuff". Larger objects could also be rendered into it.
+
+#### Version 4.0.6 (In progress, unreleased)
+* Added `script_output` checkbox to Advanced tab in About dialog
+* Changed slider min-max for item spawning and timeout
 
 #### Version 4.0.5 (26nov2026):
 * Ported codebase to Qt6 and cmake
